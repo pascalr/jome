@@ -1,0 +1,497 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Jome",
+  "scopeName": "source.jome",
+  "fileTypes": [".jome"],
+	"patterns": [
+    {"include": "#statement"},
+    {"include": "#expression"}
+  ],
+	"repository": {
+    "statement": {
+      "patterns": [
+        {
+          "name": "meta.class.jome",
+          "match": "(?<=\\s|^|)(class|classe)\\s+([a-zA-Z_][\\w]*)\\s*",
+          "captures": {
+            "1": {
+              "name": "keyword.control.jome"
+            },
+            "2": {
+              "name": "entity.name.type.class.jome"
+            }
+          }
+        },
+        {
+          "name": "meta.statement.import.jome",
+          "begin": "^import",
+          "beginCaptures": {
+            "0": {
+              "name": "keyword.control.jome"
+            }
+          },
+          "end": "\\n|$",
+          "patterns": [
+            { "include": "#keywords" },
+            { "include": "#strings" },
+            { "include": "#variable" }
+          ]
+        }
+      ]
+    },
+    "expression": {
+      "patterns": [
+        { "include": "#comment" },
+        { "include": "#keywords" },
+        { "include": "#paren-expression" },
+        { "include": "#strings" },
+        { "include": "#script-js" },
+        { "include": "#script-sh" },
+        { "include": "#script-html" },
+        { "include": "#script-css" },
+        { "include": "#obj-block" },
+        { "include": "#path" },
+        { "include": "#arrow" },
+        { "include": "#arrow_getter" },
+        { "include": "#operators" },
+        { "include": "#function" },
+        { "include": "#parameter" },
+        { "include": "#attribute" },
+        { "include": "#square-bracket" },
+        { "include": "#standalone-obj" },
+        { "include": "#constants" },
+        { "include": "#function_call" },
+        { "include": "#support-variable" },
+        { "include": "#variable" },
+        { "include": "#getter" },
+        { "include": "#dictionary" },
+        {
+          "match": ";",
+          "name": "punctuation.terminator.statement.jome"
+        },
+        {
+          "match": ",",
+          "name": "punctuation.separator.delimiter.jome"
+        }
+      ]
+    },
+    "support-variable": {
+			"patterns": [{
+        "name": "support.variable.jome",
+        "match": "\\b(console|window|global|document)\\b"
+      }]
+		},
+		"keywords": {
+			"patterns": [
+        {
+          "name": "keyword.control.conditional.jome",
+          "match": "(?:^|\\G)\\s*\\b(if|si)\\b"
+			  },
+        {
+          "name": "keyword.control.conditional.jome",
+          "match": "\\b(elseif|elsif|sinon si|else if)\\b"
+			  },
+        {
+          "name": "keyword.control.conditional.else.jome",
+          "match": "\\b(else|sinon)\\b"
+			  },
+        {
+          "name": "keyword.control.inline-conditional.jome",
+          "match": "\\b(if|si)\\b"
+			  },
+        {
+          "name": "keyword.control.jome",
+          "match": "\\b(yield|while|for|return|from|import|retourne|ret|export)\\b"
+			  },
+        {
+          "name": "keyword.other.debugger.jome",
+          "match": "\\b(debugger)\\b"
+			  }
+      ]
+		},
+    "arrow": {
+			"patterns": [{
+				"name": "keyword.arrow.jome",
+				"match": "=>"
+			}]
+		},
+    "path": {
+			"patterns": [{
+				"name": "support.variable.path.jome",
+				"match": "\\$[\\w\\/]*"
+			}]
+		},
+    "parameter": {
+			"patterns": [{
+				"name": "support.type.property-name.parameter.jome",
+				"match": "\\&\\w*"
+			}]
+		},
+    "function": {
+      "patterns": [
+        {
+          "name": "meta.function.jome",
+          "match": "([a-zA-Z_]\\w*)\\s*(=>)",
+          "captures": {
+            "1": {
+              "name": "variable.parameter.jome"
+            },
+            "2": {
+              "name": "keyword.arrow.jome"
+            }
+          }
+        },
+        {
+          "name": "meta.function.jome",
+          "begin": "\\|",
+          "beginCaptures": {"0": {"name": "punctuation.definition.args.begin.jome"}},
+          "end": "(\\|)\\s*(=>)",
+          "endCaptures": {
+            "1": {"name": "punctuation.definition.args.end.jome"},
+            "2": {"name": "keyword.arrow.jome"}
+          },
+          "patterns": [{ "include": "#expression" }]
+        }
+      ]
+    },
+    "function_call": {
+			"patterns": [{
+				"name": "support.function-call.jome",
+        "begin": "(\\.)?(\\w+)\\(",
+        "beginCaptures": {
+          "1": {"name": "punctuation.dot.jome"},
+          "2": { "name": "entity.name.function.jome" }
+        },
+        "end": "\\)",
+        "patterns": [{ "include": "#expression" }]
+			}]
+		},
+    "variable": {
+			"patterns": [{
+				"name": "variable.other.jome",
+				"match": "\\w+"
+			}]
+		},
+    "getter": {
+			"patterns": [{
+				"name": "meta.getter.jome",
+				"match": "(\\.)(\\w+)",
+        "captures": {
+          "1": {"name": "punctuation.dot.jome"},
+          "2": {"name": "variable.other.property.jome"}
+        }
+			}]
+		},
+    "arrow_getter": {
+			"patterns": [{
+				"name": "meta.arrow-getter.jome",
+				"match": "(->)(\\w+)",
+        "captures": {
+          "1": {"name": "punctuation.arrow.jome"},
+          "2": {"name": "variable.other.jome"}
+        }
+			}]
+		},
+    "attribute": {
+			"patterns": [{
+				"name": "support.type.property-name.attribute.jome",
+				"match": "\\@\\w*"
+			}]
+		},
+    "operators": {
+			"patterns": [
+				{
+          "match": "([a-zA-Z_]\\w*)?\\s*(\\+=|-=|\\*=|&&=|\\|\\|=|(?<!\\()/=)",
+					"captures": {
+						"1": {
+							"name": "variable.assignment.jome"
+						},
+						"2": {
+							"name": "keyword.operator.assignment.compound.jome"
+						}
+					}
+				},
+				{
+					"match": "!=|<=|>=|==|<|>",
+					"name": "keyword.operator.comparison.jome"
+				},
+				{
+					"match": "&&|!|\\|\\|",
+					"name": "keyword.operator.logical.jome"
+				},
+				{
+					"match": "([a-zA-Z$_][\\w$]*)?\\s*(=)(?![>=])",
+					"captures": {
+						"1": {"name": "variable.assignment.jome"},
+						"2": {"name": "keyword.operator.assignment.jome"}
+					}
+				},
+				{
+					"match": "--",
+					"name": "keyword.operator.decrement.jome"
+				},
+				{
+					"match": "\\+\\+",
+					"name": "keyword.operator.increment.jome"
+				},
+				{
+					"match": "\\.\\.\\.",
+					"name": "keyword.operator.splat.jome"
+				},
+				{
+					"match": "\\?",
+					"name": "keyword.operator.existential.jome"
+				},
+        {
+					"match": ":",
+					"name": "keyword.operator.colon.jome"
+				},
+				{
+					"match": "\\*|/|-|\\+|\\^",
+					"name": "keyword.operator.jome"
+				}
+			]
+		},
+    "strings": {
+			"patterns": [
+        {
+          "name": "string.quoted.double.jome",
+          "begin": "\"",
+          "beginCaptures": {"0": {"name": "punctuation.definition.string.begin.jome"}},
+          "end": "\"",
+          "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}},
+          "patterns": [
+            {
+              "name": "constant.character.escape.jome",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.jome",
+          "begin": "'",
+          "beginCaptures": {"0": {"name": "punctuation.definition.string.begin.jome"}},
+          "end": "'",
+          "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}},
+          "patterns": [
+            {
+              "name": "constant.character.escape.jome",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.backtick.jome",
+          "begin": "`",
+          "end": "`",
+          "patterns": [
+            {
+              "name": "meta.string-template-literal.jome",
+              "begin": "\\{",
+              "beginCaptures": {"0": {"name": "punctuation.definition.template-literal.begin.jome"}},
+              "end": "\\}",
+              "endCaptures": {"0": {"name": "punctuation.definition.template-literal.end.jome"}},
+              "patterns": [{ "include": "#expression" }]
+            },
+            {
+              "name": "constant.character.escape.jome",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+		},
+    "paren-expression": {
+      "begin": "\\(",
+      "end": "\\)",
+      "beginCaptures": {
+        "0": { "name": "punctuation.paren.open" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.paren.close" }
+      },
+      "name": "expression.group",
+      "patterns": [{ "include": "#expression" }]
+    },
+    "dictionary": {
+      "begin": "\\{",
+      "end": "\\}",
+      "beginCaptures": {
+        "0": { "name": "punctuation.curly-braces.open" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.curly-braces.close" }
+      },
+      "name": "meta.dictionary.jome",
+      "patterns": [
+        {
+          "match": "(\\s*)([\\p{L}~]\\w*)\\s*:\\s*",
+          "name": "meta.dictionary-key.jome",
+          "captures": {
+            "1": { "name": "ignore" },
+            "2": { "name": "support.type.property-name.jome" }
+          }
+        },
+        {
+          "match": "\\s*,\\s*",
+          "name": "punctuation.separator.delimiter.jome"
+        },
+        {"include": "#expression"}
+      ]
+    },
+    "script-js": {
+      "begin": "\\<js\\>",
+      "end": "\\<\\/js\\>",
+      "beginCaptures": {"0": { "name": "punctuation.definition.template-expression.begin.punctuation.script.js.open" }},
+      "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
+      "name": "meta.embedded.block.javascript",
+      "patterns": [{ "include": "source.js" }]
+    },
+    "script-sh": {
+      "begin": "\\<sh\\>",
+      "end": "\\<\\/sh\\>",
+      "beginCaptures": {"0": { "name": "punctuation.definition.template-expression.begin.punctuation.script.js.open" }},
+      "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
+      "name": "meta.embedded.block.shell",
+      "patterns": [{ "include": "source.shell" }]
+    },
+    "script-css": {
+      "begin": "\\<css\\>",
+      "end": "\\<\\/css\\>",
+      "beginCaptures": {"0": { "name": "punctuation.definition.template-expression.begin.punctuation.script.js.open" }},
+      "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
+      "name": "meta.embedded.block.css",
+      "patterns": [{ "include": "source.css" }]
+    },
+    "script-html": {
+      "begin": "\\<html\\>",
+      "end": "\\<\\/html\\>",
+      "beginCaptures": {"0": { "name": "punctuation.definition.template-expression.begin.punctuation.script.js.open" }},
+      "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
+      "name": "meta.embedded.block.html",
+      "patterns": [{ "include": "text.html.derivative" }]
+    },
+    "standalone-obj": {
+      "begin": "«",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.template-expression.begin.punctuation.standalone.obj.open" }
+      },
+      "end": "»",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.template-expression.end.punctuation.standalone.obj.close" }
+      },
+      "name": "meta.standalone-obj.jome",
+      "patterns": [{"include": "#jome_object"}]
+    },
+    "obj-block": {
+      "begin": "<<",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.template-expression.begin.punctuation.obj.block.open" }
+      },
+      "end": ">>",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.template-expression.end.punctuation.obj.block.close" }
+      },
+      "name": "meta.obj-block.jome",
+      "patterns": [{"include": "#jome_object"}]
+    },
+    "square-bracket": {
+      "name": "meta.square-bracket.jome",
+      "begin": "\\[",
+      "beginCaptures": {"0": {"name": "punctuation.definition.square-bracket.begin.bracket.square.jome"}},
+      "end": "\\]",
+      "endCaptures": {"0": {"name": "punctuation.definition.square-bracket.end.bracket.square.jome"}},
+      "patterns": [
+        {
+          "match": "(?<!\\.)\\.{3}",
+          "name": "keyword.operator.slice.exclusive.jome"
+        },
+        {
+          "match": "(?<!\\.)\\.{2}",
+          "name": "keyword.operator.slice.inclusive.jome"
+        },
+        {"include": "#expression"}
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "match": "\\b(0|(0[dD]\\d|[1-9])(?>_?\\d)*)r?i?\\b",
+          "name": "constant.numeric.integer.jome"
+        },
+        {
+          "match": "\\b\\d(?>_?\\d)*(?=\\.\\d|[eE])(\\.\\d(?>_?\\d)*)?([eE][-+]?\\d(?>_?\\d)*)?r?i?\\b",
+          "name": "constant.numeric.float.jome"
+        },
+        {
+          "name": "constant.language.jome",
+          "match": "\\b(true|false|vrai|faux|null|undefined|nul|indéfini|on|marche|off|arrêt|yes|oui|no|non)\\b"
+        }
+      ]
+    },
+    "jome_object": {
+      "patterns": [
+        {
+          "match": "(\\s*)\\b(tutor|tuteur)\\b",
+          "captures": {
+            "1": {"name": "punctuation.whitespace.indent.jome"},
+						"2": {"name": "keyword.control.tutor.jome"}
+					}
+        },
+        {
+					"match": "(\\s*)([a-zA-Z$_][\\w$]*)?\\s*(=)(?![>=])",
+					"captures": {
+            "1": {"name": "punctuation.whitespace.indent.jome"},
+						"2": {"name": "variable.assignment.jome"},
+						"3": {"name": "keyword.operator.assignment.jome"}
+					}
+				},
+        {
+          "match": "(?:^|\\G)(\\s*)(\\$\\w+)\\s*([\\p{L}]\\w*)?",
+          "captures": {
+            "1": {"name": "punctuation.whitespace.indent.jome"},
+						"2": {"name": "entity.name.tag.jome-obj.jome"},
+            "3": {"name": "entity.name.type.jome-obj.jome"}
+					}
+        },
+        {
+          "match": "(?:^|\\G)(\\s*)([\\p{Lu}]\\w*)",
+          "captures": {
+            "1": {"name": "punctuation.whitespace.indent.jome"},
+            "2": {"name": "entity.name.type.jome-obj.jome"}
+					}
+        },
+        {
+          "match": "(?:^|\\G)(\\s*)([\\p{L}]\\w*)",
+          "captures": {
+            "1": {"name": "punctuation.whitespace.indent.jome"},
+            "2": {"name": "entity.name.function.jome"}
+					}
+        },
+        {"include": "#expression"}
+      ]
+    },
+    "comment": {
+      "patterns": [
+        {
+          "match": "(^[ \\t]+)?((//)(?:\\s*((@)internal)(?=\\s|$))?).*(?:\n|$)",
+          "name": "comment.line.double-slash.jome"
+        },
+        {
+          "begin": "\\/\\*\\*",
+          "beginCaptures": {"0": {"name": "punctuation.definition.comment.jome"}},
+          "end": "\\*\\/",
+          "endCaptures": {"0": {"name": "punctuation.definition.comment.jome"}},
+          "name": "comment.block.documentation.jome"
+        },
+        {
+          "begin": "\\/\\*",
+          "beginCaptures": {"0": {"name": "punctuation.definition.comment.jome"}},
+          "end": "\\*\\/",
+          "endCaptures": {"0": {"name": "punctuation.definition.comment.jome"}},
+          "name": "comment.block.jome"
+        }
+      ]
+    }
+	}
+}

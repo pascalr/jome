@@ -1,0 +1,34 @@
+{
+  "name": "jome",
+  "displayName": "Jome",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.81.0"
+  },
+  "scripts": {
+    "install": "cp -R . ~/.vscode/extensions/jome"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "jome",
+      "aliases": ["Jome", "jome"],
+      "extensions": [".jome"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "jome",
+      "scopeName": "source.jome",
+      "path": "./syntaxes/jome.tmLanguage.json",
+      "embeddedLanguages": {
+        "meta.embedded.block.html": "text.html.derivative",
+        "meta.embedded.block.css": "css",
+        "meta.embedded.block.javascript": "javascript",
+        "meta.embedded.block.shell": "shell"
+      }
+    }]
+  }
+}
