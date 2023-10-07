@@ -18,7 +18,10 @@ export default class Jome {
 
   static createObj(parent=null, obj={}, meta={}) {
     if (!obj.$) {
-      obj.$ = {childrenCount: 0, signals: [], ...meta}
+      obj.$ = {childrenCount: 0, signals: [], ...meta, chain: (func) => {
+        func(obj)
+        return obj
+      }}
       if (parent) {
         this.addChild(parent, obj)
       }

@@ -1,7 +1,7 @@
 import express from 'express'
 
 export class ExpressServer |
-  &port = 3000
+  &port = 3000 // FIXME: This should be @port instead of &port, it should behave the same way, except I could do server.port to get the port
 | => {
 
   constructor: => (
@@ -12,16 +12,11 @@ export class ExpressServer |
   )
 
   run: => (
-    // Simple route
-    @app.get('/', |req, res| => (
-      res.send('Hello, World!')
-    ))
-
     // Start the server
     @app.listen(port, => (
       console.log(`Server is listening on port {port}`)
     ))
   )
 
-  get: |req, res, next| => (@app.get(req, res, next))
+  get: |path, func| => (@app.get(path, func))
 }

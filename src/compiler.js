@@ -194,10 +194,15 @@ function _buildJomeObjs(nodes, ctx, isRoot = true) {
     })
     let args = compileFunctionCallArgs(argTokens, ctx)
     let childrenNodes = []
+    let funcCalls = []
     node.children.forEach(child => {
       let tok = child.array[0]
       if (tok.type === 'keyword.control.tutor.jome') {
         ctx.tutor = meta.name
+      } else if (tok.type === 'entity.name.function.jome') { // Func call
+        let name = tok.text()
+        let args = compileFunctionCallArgs(child.array.slice(1), ctx)
+        funcCalls.push(name+args)
       } else {
         childrenNodes.push(child)
       }
@@ -207,7 +212,7 @@ function _buildJomeObjs(nodes, ctx, isRoot = true) {
       meta.tutorPath = ctx.tutor
     }
     if (type || Object.keys(meta).length) {
-      result.push({type, args, attrs, meta, children})
+      result.push({type, args, attrs, meta, children, funcCalls})
     }
       // $$.newObj({}, {name: 'container', children: [$$.newObj({}, {name: 'subcontainer'})], tutor: 'subcontainer'})
     // } else if (tok.type === 'keyword.control.tutor.jome') {
@@ -289,12 +294,16 @@ function buildDict(node, ctx, func) {
 }
 
 function _compileJomeObj(obj, ctx) {
-  let {type, attrs, meta, args, children} = obj
+  let {type, attrs, meta, args, children, funcCalls} = obj
   if (children.length) {
     meta.children = `[${children.map(c => _compileJomeObj(c, ctx)).join(', ')}]`
   }
   let s1 = type ? `new ${type}${args}` : compileJsObj(attrs)
-  return `${JOME_LIB}.createObj(${ctx.currentObjPath}, ${s1}, ${compileJsObj(meta)})`
+  let r = `${JOME_LIB}.createObj(${ctx.currentObjPath}, ${s1}, ${compileJsObj(meta)})`
+  if (funcCalls.length) {
+    r += '\n'+funcCalls.map(call => `.$.chain(o => o.${call})`).join('\n')
+  }
+  return r
 }
 
 function compileJomeObjBlock(list, ctx) {
@@ -519,9 +528,9 @@ const PROCESSES = {
   // « $someName SomeType »
   "meta.standalone-obj.jome": (node, ctx) => {
     let r = compileJomeObjBlock(node.children.slice(1, -1), ctx) // remove '«' and '»'
-    if (r.includes("\n")) {
-      console.error('A standalone object can only contain a single jome object')
-    }
+    // if (r.includes("\n")) {
+    //   console.error('A standalone object can only contain a single jome object')
+    // }
     return r
   },
   // $some/path << $someName SomeType >>
@@ -667,7 +676,7 @@ const PROCESSES = {
         next.captured = true
       }
       if (constructorLines.length) {
-        if (methods['constructor']) {
+        if (methods.hasOwnProperty('constructor')) {
           let lines = methods['constructor'].slice(4, -1).split('\n').map(e => e.trim())
           constructorLines = [...constructorLines, ...lines]
           delete methods['constructor']
