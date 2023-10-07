@@ -115,9 +115,13 @@ function compileScope(node, array, ctx, addReturnStatement = false) {
   return r
 }
 
+function filterSpaces(array) {
+  return array.filter(e => !/^\s*$/.test(e)) // filter spaces
+}
+
 function compileBlock(array, ctx, addReturnStatement = false) {
   let r = []
-  array = array.filter(e => !/^\s*$/.test(e)) // filter spaces
+  array = filterSpaces(array)
   for (let i = 0; i < array.length; i++) {
     if (array[i].captured) {continue} // skip already processed
     if (array[i].type === 'newline' && (r[r.length-1]?.slice(-1) === '\n' || i === 0 || i === array.length-1)) {
@@ -222,7 +226,13 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
   //let args = cutGroup(node.children, 'punctuation.definition.array.begin.jome', 'punctuation.definition.array.end.jome', 'punctuation.separator.delimiter.jome')
   let hasParams = false
   let args = {}
-  node.children.forEach(child => {
+  let children = filterSpaces(node.children).filter(child => {
+    let t = child.type
+    return t !== 'keyword.arrow.jome' && t !== 'punctuation.definition.args.begin.jome' && t !== 'punctuation.definition.args.end.jome'
+  })
+  let list = parseList(children)
+  list.forEach(arr => {
+    let child = arr[0]
     if (child.type === 'support.type.property-name.parameter.jome') {
       let value = child.text().slice(1) // remove the ampersand
       ctx.addBinding(value, {type: 'parameter'})
