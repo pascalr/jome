@@ -226,6 +226,7 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
   //let args = cutGroup(node.children, 'punctuation.definition.array.begin.jome', 'punctuation.definition.array.end.jome', 'punctuation.separator.delimiter.jome')
   let hasParams = false
   let args = {}
+  let paramsValues = {}
   let children = filterSpaces(node.children).filter(child => {
     let t = child.type
     return t !== 'keyword.arrow.jome' && t !== 'punctuation.definition.args.begin.jome' && t !== 'punctuation.definition.args.end.jome'
@@ -237,6 +238,9 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
       let value = child.text().slice(1) // remove the ampersand
       ctx.addBinding(value, {type: 'parameter'})
       hasParams = true
+      if (arr[1] && arr[1].type === 'keyword.operator.assignment.jome') {
+        paramsValues[value] = compileNode(arr[2], ctx)
+      }
     } else if (child.type === 'support.type.property-name.attribute.jome') {
       let value = child.text().slice(1)
       ctx.addBinding(value, {type: 'attribute-argument'})
@@ -250,7 +254,7 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
   })
   let argNames = Object.keys(args)
   argNames = hasParams ? ['__params__', ...argNames] : argNames
-  return {result: `(${argNames.join(', ')})`, args}
+  return {result: `(${argNames.join(', ')})`, args, paramsValues}
 }
 
 function compileFunctionArgs(node, ctx) {
@@ -622,12 +626,7 @@ const PROCESSES = {
       if (next?.type === 'meta.function.jome') {
         let details = compileFunctionArgsDetailed(next, ctx, true)
         constructorLines = Object.keys(details.args).map(arg => {
-          // if (details.args[arg].type === 'argument') {
-          //   console.warn('Argument for class function with @ is not supported for not. Not sure what I want to do with it yet...')
-          //   return `let ${arg} = ${arg}`
-          // } else {
-            return `this.${arg} = ${arg}`
-          // }
+          return `this.${arg} = ${arg}`
         })
         constructorArgs = details.result
         next.captured = true
