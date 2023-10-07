@@ -7,6 +7,8 @@ const JOME_LIB = 'jome'
 const JOME_ROOT = '$'
 const JOME_ATTRS = '$'
 
+// TODO: I should use a nesting index for params __params__, __params1__, __params2__, ...
+
 // FIXME: Mon truc de prev ne fonctionne pas avec: meta.square-bracket.jome
 // Parce que je ne sais pas si square-bracket est pour un array ou pour l'opérateur
 // Donc je devrais regarder le précédent, mais je ne devrais pas nécessairement
@@ -483,7 +485,7 @@ const PROCESSES = {
     } catch (err) {
       throw new Error("Error trying to require file.", err)
     }
-    return 'let '+varName+` = (() => ${data})()`
+    return 'let '+varName+` = ((__params__ = {}) => ${data})`
   },
   // import {$$} from 'jome_lib'
   "meta.statement.import.jome": (node, ctx) => {
@@ -550,9 +552,12 @@ const PROCESSES = {
       return (ctx.paramsIsClassVariable ? 'this.' : '')+'__params__.'+value
     } else if (binding.type === 'argument-class-function' && !ctx.isInsideClassSuperObject) {
       return 'this.'+value
+    } else if (binding.type === 'require-variable') {
+      return value+'()'
     }
     return value
   },
+  "support.type.property-name.parameter.jome": (node, ctx) => '__params__.'+node.text().slice(1),
   // fooBar(...)
   "support.function-call.jome": (node, ctx) => {
     let i = 0;

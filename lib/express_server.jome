@@ -18,5 +18,8 @@ export class ExpressServer |
     ))
   )
 
+  use: |middleware| => (@app.use(middleware))
   get: |path, func| => (@app.get(path, func))
+  put: |path, func| => (@app.put(path, func))
+  post: |path, func| => (@app.post(path, func))
 }
