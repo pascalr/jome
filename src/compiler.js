@@ -237,6 +237,7 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
     if (child.type === 'support.type.property-name.parameter.jome') {
       let value = child.text().slice(1) // remove the ampersand
       ctx.addBinding(value, {type: 'parameter'})
+      ctx.paramsIsClassVariable = insideClassFunction
       hasParams = true
       if (arr[1] && arr[1].type === 'keyword.operator.assignment.jome') {
         paramsValues[value] = compileNode(arr[2], ctx)
@@ -484,7 +485,7 @@ const PROCESSES = {
       return ''
     }
     if (binding.type === 'parameter') {
-      return '__params__.'+value
+      return (ctx.paramsIsClassVariable ? 'this.' : '')+'__params__.'+value
     } else if (binding.type === 'argument-class-function' && !ctx.isInsideClassSuperObject) {
       return 'this.'+value
     }
