@@ -1,4 +1,4 @@
-import {H1} from './docs/src/html.jome'
+import {H1} from './lib/html.jome'
 
 // TODO: Test Use <HTML> to add an html tag inside <html><HTML></HTML></html>
 

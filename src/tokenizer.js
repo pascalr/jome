@@ -1,8 +1,8 @@
 import FirstMate from 'first-mate'
 
 const registry = new FirstMate.GrammarRegistry()
-registry.loadGrammarSync('./vscode-jome-lang/syntaxes/JavaScript.tmLanguage.json')
-const grammar = registry.loadGrammarSync('./vscode-jome-lang/syntaxes/jome.tmLanguage.json')
+registry.loadGrammarSync('./grammar/syntaxes/JavaScript.tmLanguage.json')
+const grammar = registry.loadGrammarSync('./grammar/syntaxes/jome.tmLanguage.json')
 
 export const POST_PROCESSES = new Set([
   "keyword.control.inline-conditional.jome",

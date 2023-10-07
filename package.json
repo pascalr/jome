@@ -1,0 +1,38 @@
+{
+  "name": "jome-src",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pascalr/jome.git"
+  },
+  "scripts": {
+    "run": "NODE_ENV=production node ./server.js",
+    "dev": "NODE_ENV=development nodemon ./server.js",
+    "build": "node ./build.js"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/pascalr/jome/issues"
+  },
+  "homepage": "https://github.com/pascalr/jome#readme",
+  "dependencies": {
+    "ace-builds": "^1.23.4",
+    "chokidar": "^3.5.3",
+    "connect-livereload": "^0.6.1",
+    "ejs": "^3.1.8",
+    "esbuild": "^0.15.18",
+    "express": "^4.18.2",
+    "first-mate": "^7.4.3",
+    "livereload": "^0.9.3",
+    "morgan": "^1.10.0",
+    "node-fetch": "^3.3.0",
+    "node-html-parser": "^6.1.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vscode-oniguruma": "^2.0.0",
+    "vscode-textmate": "^9.0.0"
+  }
+}

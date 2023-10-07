@@ -1,4 +1,4 @@
-import { POST_PROCESSES, tokenize } from './firstmate_tokenizer.js'
+import { POST_PROCESSES, tokenize } from './tokenizer.js'
 import { CompileContext } from './compile_context.js'
 
 const JOME_LIB = 'jome'

@@ -1,0 +1,177 @@
+renderHTMLAttrs = |obj| => (
+  r = obj->signals->keys.map(n =>
+    `on{n}="jome.run('${obj->path}.{n}()')"`
+  ).join(" ")
+
+  // FIXME: Needs a space between signals and props
+
+  r = r + (obj->props->entries.filter(entry => (entry[0] != 'css')).map(entry =>
+    `{entry[0]}="{entry[1]}"`
+  ).join(" "))
+
+  r = r + (obj->hasOwnProperty('css') ? ('style="'+obj.css->entries.map(entry => `{entry[0]}: {entry[1]}`).join('; ')+'"') : '')
+
+  r ? (' '+r) : r
+)
+
+renderHTMLChildren = |obj| => (
+  obj->children.map(c => (c.toHTML ? c.toHTML() : '')).join("")
+)
+
+renderHTML = |obj, &target| => (
+  elem = document.getElementById(target)
+  children = []
+  html = ''
+  obj->children.forEach(child => (
+    if (child.createElem) (
+      e = child.createElem()
+      children.push(e)
+    ) else if (child.toHTML) (
+      html += child.toHTML()
+    )
+  ))
+  elem.innerHTML = html
+  children.forEach(child => (
+    elem.appendChild(child)
+  ))
+)
+
+// FIXME: List given by LLM and not verified
+HTML_EVENTS = [
+  "click",
+  "dblclick",
+  "mouseover",
+  "mouseout",
+  "mousedown",
+  "mouseup",
+  "mousemove",
+  "contextmenu",
+  "keydown",
+  "keyup",
+  "keypress",
+  "submit",
+  "reset",
+  "change",
+  "focus",
+  "blur",
+  "input",
+  "touchstart",
+  "touchend",
+  "touchmove",
+  "touchcancel",
+  "load",
+  "unload",
+  "resize",
+  "scroll",
+  "play",
+  "pause",
+  "ended",
+  "volumechange",
+  "timeupdate",
+  "dragstart",
+  "drag",
+  "dragenter",
+  "dragleave",
+  "dragover",
+  "drop",
+  "dragend",
+  "animationstart",
+  "animationend",
+  "animationiteration",
+  "transitionstart",
+  "transitionend"
+]
+
+class Html {
+  ~run: => (
+    document.getElementById(target).innerHTML = renderHTMLChildren(@)
+  )
+}
+
+// ns: namespace for createElementNS
+createElem = |obj, tag, content, ns| => (
+  el = (ns ? document.createElementNS(ns, tag) : document.createElement(tag))
+  if (content) (
+    el.appendChild(document.createTextNode(content))
+  )
+  obj->props->entries.filter(entry => (entry[0] != 'css')).forEach(entry => (
+    el.setAttribute(entry[0], entry[1])
+  ))
+  if (obj.css) (
+    el.style= obj.css->entries.map(entry => `{entry[0]}: {entry[1]}`).join('; ')
+  )
+  obj->children.forEach(child => (
+    if (child.createElem) (
+      el.appendChild(child.createElem())
+    ) else if (child.toHTML) (
+      tmp = document.createElement("div")
+      tmp.innerHTML = child.toHTML()
+      console.log('here', tmp.innerHTML)
+      el.appendChild(tmp.firstElementChild)
+    )
+  ))
+  obj->signals->keys.forEach(n => (
+    if (HTML_EVENTS.includes(n)) (
+      el.addEventListener(n, obj['~'+n])
+    )
+  ))
+  el
+)
+
+class Tag |tag, content| => {
+  toHTML: => `<{tag}{renderHTMLAttrs(@)}>{content||''}{renderHTMLChildren(@)}</{tag}>`
+  createElem: => createElem(@, tag, content)
+}
+class InlineTag |tag| => {
+  toHTML: => `<{tag}{renderHTMLAttrs(@)} />`
+  createElem: => createElem(@, tag)
+}
+class Fragment => {
+  toHTML: => `{renderHTMLChildren(@)}`
+  createElem: => (
+    el = document.createDocumentFragment()
+    @->children.forEach(child => (
+      if (child.createElem) (
+        el.appendChild(child.createElem())
+      )
+    ))
+    el
+  )
+}
+
+export class H1 text => « Tag "h1", text »
+class H2 text => « Tag "h2", text »
+class H3 text => « Tag "h3", text »
+class P text => « Tag "p", text »
+class Li text => « Tag "li", text »
+class Span text => « Tag "span", text »
+class Div text => « Tag "div", text »
+class Pre text => « Tag "pre", text »
+class Code text => « Tag "code", text »
+
+class Form « Tag "form" »
+class Ul « Tag "ul" »
+class Ol « Tag "ol" »
+class HtmlObject « Tag "object" »
+class Canvas « Tag "canvas" »
+
+class Br « InlineTag "br" »
+class Hr « InlineTag "hr" »
+
+class Txt text => {
+  toHTML: [] => (
+    attrs = renderHTMLAttrs(@)
+    attrs ? "<span{attrs}>{text}</span>" : "{text}"
+  )
+  createElem: [] => (
+    document.createTextNode(text)
+  )
+}
+class Btn text => « Tag "button", text »
+Button = Btn
+class Link |url, name| => « Tag "a", name, href: url »
+
+class Label |name, text| => « Tag "label", text, htmlFor: text »
+
+class Input |name| => « InlineTag "input", id: name, name: name, autocomplete: name »
+class Img |url, alt| => « InlineTag "img", src: url, alt: alt »

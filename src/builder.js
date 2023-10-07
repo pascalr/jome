@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { CompileContext } from './compile_context.js';
-import { compile, compileGetContext } from './firstmate_compiler.js';
+import { compile, compileGetContext } from './compiler.js';
 
 const JOME_LIB = 'jome'
 const JOME_ROOT = '$'
@@ -48,7 +48,7 @@ export function buildFile(fullPath, dependencies = [], run=false) {
              `if (typeof window !== 'undefined') {window.${JOME_ROOT} = ${JOME_ROOT};}\n\n` +
              result
   }
-  result = `import ${JOME_LIB} from 'jome_lib'\n\n` + result;
+  result = `import ${JOME_LIB} from 'jome'\n\n` + result;
 
   // Generate the build file name
   const buildFileName = fullPath.replace(/\.jome$/, '.built.js');

@@ -1,7 +1,7 @@
 {
-  "name": "jome_lib",
+  "name": "jome",
   "version": "0.0.1",
-  "main": "jome_lib.js",
+  "main": "index.js",
   "type": "module"
 }
 
