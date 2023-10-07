@@ -7,6 +7,16 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Run server",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "runtimeArgs": ["jome.js", "server.jome"],
+      "program": "${workspaceFolder}/jome.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Run tests",
       "skipFiles": [
         "<node_internals>/**"

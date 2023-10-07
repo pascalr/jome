@@ -421,12 +421,19 @@ const PROCESSES = {
   // import {$$} from 'jome_lib'
   "meta.statement.import.jome": (node, ctx) => {
     // FIXME: Handle all possible import types
+    let defaultImport = ''
     let namedImports = []
-    node.children.forEach(child => {
+    node.children.forEach((child, i) => {
       if (child.type === 'variable.other.jome') {
         let name = child.text()
-        namedImports.push(name)
-        ctx.addBinding(name, {type: 'named-import'})
+        let p = node.children[i-1]
+        if (p && typeof p === 'string' && p.includes('{')) {
+          namedImports.push(name)
+          ctx.addBinding(name, {type: 'named-import'})
+        } else {
+          defaultImport = name+' '
+          ctx.addBinding(name, {type: 'default-import'})
+        }
       }
     })
     let fileName = node.children.slice(-1)[0].children[1]
@@ -436,7 +443,7 @@ const PROCESSES = {
       ctx.dependencies.push(fileName)
       fileName = fileName.slice(0, fileName.length-4)+"built.js"
     }
-    return `import ${namedImports.length ? `{${namedImports.join(', ')}}`:''} from "${fileName}"\n\n`
+    return `import ${defaultImport}${namedImports.length ? `{${namedImports.join(', ')}}`:''} from "${fileName}"\n\n`
   },
   // fooBar =
   "variable.assignment.jome": (node, ctx) => {

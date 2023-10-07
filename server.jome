@@ -1,0 +1,4 @@
+import {ExpressServer} from './lib/express_server.jome'
+
+server = « ExpressServer »
+server.run()

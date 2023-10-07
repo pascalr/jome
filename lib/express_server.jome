@@ -1,0 +1,25 @@
+import express from 'express'
+
+export class ExpressServer |
+  &port = 3000
+| => {
+
+  constructor: => (
+    app = express()
+
+    // Middleware to parse JSON requests
+    app.use(express.json())
+
+    // Simple route
+    app.get('/', |req, res| => (
+      res.send('Hello, World!')
+    ))
+  )
+
+  run: => (
+    // Start the server
+    app.listen(port, => (
+      console.log(`Server is listening on port ${port}`)
+    ))
+  )
+}
