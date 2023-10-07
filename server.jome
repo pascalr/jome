@@ -1,4 +1,13 @@
 import {ExpressServer} from './lib/express_server.jome'
 
+// server = « ExpressServer
+//   get '/', |req, res| => (
+//     res.send('Hello, world!')
+//   )
+// »
+
 server = « ExpressServer »
+
+// LA SYNTAXE SERT À CRÉER DES OBJETS ET FAIRE DES CHAINES DE FONCTIONS!!!
+
 server.run()

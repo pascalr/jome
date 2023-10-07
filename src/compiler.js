@@ -666,8 +666,12 @@ const PROCESSES = {
         methods = {...methods, ...buildDict(next, ctx, compileMethod)}
         next.captured = true
       }
-      // FIXME: Merge constructor!!!
       if (constructorLines.length) {
+        if (methods['constructor']) {
+          let lines = methods['constructor'].slice(4, -1).split('\n').map(e => e.trim())
+          constructorLines = [...constructorLines, ...lines]
+          delete methods['constructor']
+        }
         constructor = '\n  constructor'+constructorArgs+' '+jsBlock(constructorLines.join('\n'+'  '.repeat(ctx.depth+1)), ctx)
       }
     })
