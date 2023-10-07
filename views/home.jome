@@ -1,3 +1,14 @@
+// FIXME: The part should be relative so it should be './partials/navbar.jome'
+requiert navbar from './views/partials/navbar.jome'
+// navbar = require './views/partials/navbar.jome'
+
+// TODO: Utiliser <css></css>
+// Pour css peut-être <css local></css> vs <css></css> la différence est où mettre le code
+// De base, le css est mis dans un fichier maitre du même nom que le programme principal jome
+// mais avec l'extension .css. Quand c'est local, mettre dans un nouveau fichier du même nom
+// que le fichier dans lequel le tag <css></css> a été déclaré
+// FIXME: Le CSS de navbar devrait être dans le partials de navbar
+
 <html>
 <!DOCTYPE html>
 <HTML lang="en">
@@ -49,13 +60,7 @@
     </style>
   </head>
   <body>
-      <!-- Navbar -->
-      <div class="navbar">
-        <span class="navbrand" href="#">Jome</span>
-        <a href="#">Home</a>
-        <a href="#">Documentation</a>
-        <a href="#">Examples</a>
-      </div>
+      <%= navbar %>
 
       <!-- Main content -->
       <div class="content">

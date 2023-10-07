@@ -195,3 +195,4 @@ JavaScript's distinction between expressions and statements makes the language v
 
 - Support <haml></haml>
 - Include all the lodash functions that make sense
+- Require other file formats, for example, require images. SVG is the easiest as a string. How to handle other images?

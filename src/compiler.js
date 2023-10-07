@@ -483,7 +483,8 @@ const PROCESSES = {
       //data = compileGetContext(raw, ctx).result
       ctx.addBinding(varName, {type: 'require-variable'})
     } catch (err) {
-      throw new Error("Error trying to require file.", err)
+      console.error("Error trying to require file.")
+      throw err
     }
     return 'let '+varName+` = ((__params__ = {}) => ${data})`
   },
