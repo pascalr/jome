@@ -364,9 +364,24 @@
       "patterns": [{ "include": "source.css" }]
     },
     "script-html": {
-      "begin": "\\<html\\>",
+      "begin": "\\<html(\\s+|\\w+|\\w+\\s*=\"\\w+\")*\\>",
       "end": "\\<\\/html\\>",
-      "beginCaptures": {"0": { "name": "punctuation.definition.template-expression.begin.punctuation.script.js.open" }},
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.template-expression.begin.punctuation.script.js.open" },
+        "1": {
+          "patterns": [
+            {"match": "\\s+"},
+            {
+              "match": "\\w+",
+              "name": "entity.other.attribute-name.jome"
+            },
+            {
+              "match": "\"\\w+\"",
+              "name": "string.quoted.double.jome"
+            }
+          ]
+        }
+      },
       "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
       "name": "meta.embedded.block.html",
       "patterns": [{ "include": "text.html.derivative" }]

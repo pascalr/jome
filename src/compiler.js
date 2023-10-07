@@ -446,6 +446,15 @@ function variableNameForPath(name, ctx) {
   return '$'+s.join('.$.$')
 }
 
+function parseScriptTagArgs(node) {
+  let args = {}
+  let list = node.children.slice(1, -1).map(e => e.text())
+  // TODO: parse args with values
+  list.forEach(e => args[e] = null)
+  return args
+}
+
+
 // Using an hashmap here because it is easier to debug,
 // a bunch of if else if else is annoying to go through step by step
 // and switch case is really annoying because it does not scope the variables
@@ -499,7 +508,16 @@ const PROCESSES = {
   },
   // <>1+1</>
   "meta.embedded.block.javascript": (node, ctx) => compileRaw(node.children.slice(1,-1)),
-  "meta.embedded.block.html": (node, ctx) => '`'+compileInterpolate(compileRaw(node.children.slice(1,-1)), ctx)+'`',
+  "meta.embedded.block.html": (node, ctx) => {
+    let args = parseScriptTagArgs(node.children[0])
+    let b = ''
+    let a = ''
+    if ('root' in args) {
+      b = '<!DOCTYPE html>\n<html>'
+      a = '</html>'
+    }
+    return '`'+b+compileInterpolate(compileRaw(node.children.slice(1,-1)), ctx)+a+'`'
+  },
   // fooBar
   "variable.other.jome": (node, ctx) => {
     let value = node.text()
