@@ -188,3 +188,10 @@ The distinction between expressions and statements is important because of how J
     Statements perform actions: Statements are instructions that carry out specific actions or tasks. They control the flow of your program, like conditionals and loops. While statements may have side effects, they don't produce values that can be directly used.
 
 JavaScript's distinction between expressions and statements makes the language versatile. You can use expressions to build complex computations and then use the resulting values in statements to control the flow of your program. This separation also helps in understanding the intent of different parts of your code and makes it possible for JavaScript engines to optimize execution based on these distinctions.
+
+
+
+## TODO
+
+- Support <haml></haml>
+- Include all the lodash functions that make sense
