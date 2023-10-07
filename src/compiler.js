@@ -254,7 +254,7 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
   })
   let argNames = Object.keys(args)
   argNames = hasParams ? ['__params__', ...argNames] : argNames
-  return {result: `(${argNames.join(', ')})`, args, paramsValues}
+  return {result: `(${argNames.join(', ')})`, args, paramsValues, hasParams}
 }
 
 function compileFunctionArgs(node, ctx) {
@@ -622,12 +622,20 @@ const PROCESSES = {
     let extension = ''
     let constructorLines = []
     let constructorArgs = '()'
+    let constructor = ''
     ctx.nest(() => {
       if (next?.type === 'meta.function.jome') {
         let details = compileFunctionArgsDetailed(next, ctx, true)
         constructorLines = Object.keys(details.args).map(arg => {
           return `this.${arg} = ${arg}`
         })
+        if (details.hasParams) {
+          if (Object.keys(details.paramsValues).length) {
+            constructorLines.push(`this.__params__ = {...${compileJsObj(details.paramsValues)}, ...__params__}`)
+          } else {
+            constructorLines.push(`this.__params__ = __params__`)
+          }
+        }
         constructorArgs = details.result
         next.captured = true
         next = next.next()
@@ -659,10 +667,10 @@ const PROCESSES = {
       }
       // FIXME: Merge constructor!!!
       if (constructorLines.length) {
-        methods['constructor'] = constructorArgs+' '+jsBlock(constructorLines.join('\n'+'  '.repeat(ctx.depth+1)), ctx)
+        constructor = '\n  constructor'+constructorArgs+' '+jsBlock(constructorLines.join('\n'+'  '.repeat(ctx.depth+1)), ctx)
       }
     })
-    return `class ${name}${extension} {
+    return `class ${name}${extension} {${constructor}
   ${Object.keys(methods).map(key => {
     return `${compileName(key)}${methods[key]}`
   }).join('\n  ')}
