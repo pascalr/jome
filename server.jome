@@ -1,18 +1,10 @@
 import {ExpressServer} from './lib/express_server.jome'
 
+requiert homePage from './views/home.jome'
+
 « ExpressServer port: 3001
   get '/', |req, res| => (
-    name = "John"
-    res.send(<html root>
-      <head>
-          <meta charset="UTF-8">
-          <title>Tiny HTML Example</title>
-      </head>
-      <body>
-          <h1>Hello, <%= name %>!</h1>
-          <p>This is a tiny HTML file.</p>
-      </body>
-    </html>)
+    res.send(homePage)
   )
   get '/john', |req, res| => (
     res.send('Hello, john!')

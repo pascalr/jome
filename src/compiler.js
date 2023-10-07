@@ -1,6 +1,8 @@
 import { POST_PROCESSES, tokenize } from './tokenizer.js'
 import { CompileContext } from './compile_context.js'
 
+import fs from 'fs'
+
 const JOME_LIB = 'jome'
 const JOME_ROOT = '$'
 const JOME_ATTRS = '$'
@@ -95,6 +97,8 @@ function jsBlock(node, ctx, addReturnStatement = false) {
   let r = `{\n${'  '.repeat(ctx.depth)}`
   if (node.type === 'expression.group') {
     r += compileScope(node, node.children.slice(1,-1), ctx, addReturnStatement)
+  } else if (node.type === 'source.jome') { // Used by require
+    r += compileScope(node, node.children, ctx, addReturnStatement)
   } else {
     r += (addReturnStatement ? 'return ' : '')+compileNode(node, ctx)
   }
@@ -464,6 +468,22 @@ const PROCESSES = {
   "source.jome": (node, ctx) => {
     let r = compileScope(node, node.children, ctx)
     return ctx.headers.join('\n')+'\n'+r
+  },
+  "meta.statement.require.jome": (node, ctx) => {
+    let list = filterSpaces(node.children).slice(1) // remove require keyword
+    let varName = list[0].text()
+    let filePath = list[2].children[1]
+    let data
+    try {
+      let raw = fs.readFileSync(filePath, 'utf8');
+      let root = tokenize(raw)
+      data = jsBlock(root, ctx, true)
+      //data = compileGetContext(raw, ctx).result
+      ctx.addBinding(varName, {type: 'require-variable'})
+    } catch (err) {
+      throw new Error("Error trying to require file.", err)
+    }
+    return 'let '+varName+` = (() => ${data})()`
   },
   // import {$$} from 'jome_lib'
   "meta.statement.import.jome": (node, ctx) => {

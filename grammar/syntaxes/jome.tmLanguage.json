@@ -36,6 +36,21 @@
             { "include": "#strings" },
             { "include": "#variable" }
           ]
+        },
+        {
+          "name": "meta.statement.require.jome",
+          "begin": "^require|^requiert",
+          "beginCaptures": {
+            "0": {
+              "name": "keyword.control.jome"
+            }
+          },
+          "end": "\\n|$",
+          "patterns": [
+            { "include": "#keywords" },
+            { "include": "#strings" },
+            { "include": "#variable" }
+          ]
         }
       ]
     },
