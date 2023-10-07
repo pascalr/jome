@@ -425,6 +425,20 @@ function parseList(list, ctx) {
   return results
 }
 
+function compileInterpolate(str, ctx) {
+  // FIXME: This is a simplify method that does not allow "%>" to be for example inside a string
+  // FIXME: <html><%= "%>" %></html> // DOES NOT WORK
+  // A proper solution would be to have all the tmLanguage files to tokenize properly, and inject
+  // into the grammar files my interpolation tag.
+  // But this does not fix the problem that syntax highlighting does not work...
+  // So keep it simple for now
+  return str.replace(/<%=(.*?)%>/g, (match, group) => {
+    let raw = group.trim()
+    let out = compileGetContext(raw, ctx)
+    return '${'+out.result.trim()+'}'
+  });
+}
+
 function variableNameForPath(name, ctx) {
   let s = name.split('/')
   let root =  '$'+s[0]
@@ -485,6 +499,7 @@ const PROCESSES = {
   },
   // <>1+1</>
   "meta.embedded.block.javascript": (node, ctx) => compileRaw(node.children.slice(1,-1)),
+  "meta.embedded.block.html": (node, ctx) => '`'+compileInterpolate(compileRaw(node.children.slice(1,-1)), ctx)+'`',
   // fooBar
   "variable.other.jome": (node, ctx) => {
     let value = node.text()

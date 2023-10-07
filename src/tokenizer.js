@@ -1,7 +1,7 @@
 import FirstMate from 'first-mate'
 
 const registry = new FirstMate.GrammarRegistry()
-registry.loadGrammarSync('./grammar/syntaxes/JavaScript.tmLanguage.json')
+//registry.loadGrammarSync('./grammar/syntaxes/JavaScript.tmLanguage.json')
 const grammar = registry.loadGrammarSync('./grammar/syntaxes/jome.tmLanguage.json')
 
 export const POST_PROCESSES = new Set([

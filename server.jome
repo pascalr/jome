@@ -2,7 +2,20 @@ import {ExpressServer} from './lib/express_server.jome'
 
 server = « ExpressServer
   get '/', |req, res| => (
-    res.send('Hello, world!')
+    name = "John"
+    res.send(<html>
+      <!DOCTYPE html>
+      <HTML>
+        <head>
+            <meta charset="UTF-8">
+            <title>Tiny HTML Example</title>
+        </head>
+        <body>
+            <h1>Hello, <%= name %>!</h1>
+            <p>This is a tiny HTML file.</p>
+        </body>
+      </HTML>
+    </html>)
   )
   get '/john', |req, res| => (
     res.send('Hello, john!')
