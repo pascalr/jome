@@ -1,6 +1,6 @@
 import {ExpressServer} from './lib/express_server.jome'
 
-server = « ExpressServer
+« ExpressServer port: 3001
   get '/', |req, res| => (
     name = "John"
     res.send(<html root>
@@ -17,6 +17,5 @@ server = « ExpressServer
   get '/john', |req, res| => (
     res.send('Hello, john!')
   )
+  run
 »
-
-server.run()
