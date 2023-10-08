@@ -1,0 +1,7 @@
+import {AppPage} from './app.jome'
+
+«
+  AppPage title: 'Jome documentation', content: <html>
+    <h2 class="title">Jome documentation</h2>
+  </html>
+».print()

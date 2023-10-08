@@ -1,4 +1,3 @@
-// FIXME: The part should be relative so it should be './app.jome'
 import {AppPage} from './app.jome'
 
 «
