@@ -2,6 +2,10 @@ import fs from 'fs';
 import path from 'path';
 import { CompileContext } from './compile_context.js';
 import { compile, compileGetContext } from './compiler.js';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const JOME_LIB = 'jome'
 const JOME_ROOT = '$'
@@ -25,8 +29,11 @@ export function buildFile(fullPath, dependencies = [], run=false) {
   // Read the contents of the file synchronously
   const data = fs.readFileSync(fullPath, 'utf8');
 
-  //let { result, context } = jome.buildGetContext(data, new CompileContext(run ? {} : {module: true}));
-  let { result, context } = compileGetContext(data, new CompileContext(run ? {} : {module: true}));
+  let ctx = new CompileContext(run ? {} : {module: true})
+  ctx.currentFile = fullPath // For import relative paths
+  ctx.rootDir = __dirname.slice(0, -3) // FIXME
+
+  let { result, context } = compileGetContext(data, ctx);
 
   // Handle dependencies relative to the path of the file
   const directoryPart = path.dirname(fullPath);

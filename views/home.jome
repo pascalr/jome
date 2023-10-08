@@ -1,5 +1,5 @@
 // FIXME: The part should be relative so it should be './app.jome'
-import {AppPage} from './views/app.jome'
+import {AppPage} from './app.jome'
 
 «
   AppPage title: 'Simple HTML Page', content: <html>

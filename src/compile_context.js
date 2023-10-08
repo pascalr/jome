@@ -19,6 +19,8 @@ export class CompileContext {
     this.headers = [] // Things added at the beginning of the file
     this.stylesheets = {} // For <css></css> tags
     this.imports = {} // All the import statements found
+    this.currentFile = null // For import relative paths
+    this.rootDir = null // For imports
   }
 
   spacing() {

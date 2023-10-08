@@ -2,6 +2,7 @@ import { POST_PROCESSES, tokenize } from './tokenizer.js'
 import { CompileContext } from './compile_context.js'
 
 import fs from 'fs'
+import path from 'path'
 
 const JOME_LIB = 'jome'
 const JOME_ROOT = '$'
@@ -460,6 +461,24 @@ function parseScriptTagArgs(node) {
   return args
 }
 
+// Takes a relative path and make it relative to what? I'm confused...
+// FIXME: forRequire...............................
+// I have a bug and this is an ugly tmp fix
+function getRelativePath(relPath, ctx, forRequire) {
+  if (relPath[0] !== '.') {return relPath} // It is not a relative path
+  let curFolder = path.dirname(ctx.currentFile)
+  // FIXME: Ugly as ****
+  if (curFolder[0] !== '/') {
+    return './'+path.join(curFolder, relPath)
+  } else {
+    let rel = ctx.currentFile.slice(ctx.rootDir.length)
+    let relDir = path.dirname(rel)
+    if (forRequire && relDir && relDir !== '.') {
+      return path.join(relDir, relPath)
+    }
+  }
+  return relPath
+}
 
 // Using an hashmap here because it is easier to debug,
 // a bunch of if else if else is annoying to go through step by step
@@ -471,7 +490,9 @@ const PROCESSES = {
   "meta.statement.require.jome": (node, ctx) => {
     let list = filterSpaces(node.children).slice(1) // remove require keyword
     let varName = list[0].text()
-    let filePath = list[2].children[1]
+    let filePath = getRelativePath(list[2].children[1], ctx, true)
+    let before = ctx.currentFile
+    ctx.currentFile = filePath
     let data
     try {
       let raw = fs.readFileSync(filePath, 'utf8');
@@ -483,6 +504,7 @@ const PROCESSES = {
       console.error("Error trying to require file.")
       throw err
     }
+    ctx.currentFile = before
     return 'let '+varName+` = ((__params__ = {}) => ${data})`
   },
   // import {$$} from 'jome_lib'
@@ -503,14 +525,14 @@ const PROCESSES = {
         }
       }
     })
-    let fileName = node.children.slice(-1)[0].children[1]
-    let ext = fileName.match(/\.([^.]+)$/)
-    let extName = ext && ext[1]
-    if (extName === 'jome') {
-      ctx.dependencies.push(fileName)
-      fileName = fileName.slice(0, fileName.length-4)+"built.js"
+    let relPath = getRelativePath(node.children.slice(-1)[0].children[1], ctx)
+    //let ext = relPath.match(/\.([^.]+)$/)
+    let ext = path.extname(relPath)
+    if (ext === '.jome') {
+      ctx.dependencies.push(relPath)
+      relPath = relPath.slice(0, relPath.length-4)+"built.js"
     }
-    ctx.imports[fileName] = {
+    ctx.imports[relPath] = {
       default: defaultImport,
       namedImports
     }
