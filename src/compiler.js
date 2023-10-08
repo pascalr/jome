@@ -530,6 +530,10 @@ const PROCESSES = {
     return r.length ? `this.${r}` : 'this'
   },
   // <>1+1</>
+  "meta.embedded.block.css": (node, ctx) => {
+    let raw = compileRaw(node.children.slice(1,-1))
+    ctx.stylesheets['__main__'] = (ctx.stylesheets['__main__'] || '') + raw
+  },
   "meta.embedded.block.javascript": (node, ctx) => compileRaw(node.children.slice(1,-1)),
   "meta.embedded.block.html": (node, ctx) => {
     let args = parseScriptTagArgs(node.children[0])

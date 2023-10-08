@@ -93,7 +93,7 @@
     "support-variable": {
 			"patterns": [{
         "name": "support.variable.jome",
-        "match": "\\b(console|window|global|document)\\b"
+        "match": "\\b(console|window|global|document|__dirname|__filename)\\b"
       }]
 		},
 		"keywords": {

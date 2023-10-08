@@ -1,0 +1,7 @@
+path = 'foobar'
+
+files = <sh>ls <%= path %></sh>
+
+files.forEach(|file| => (
+  console.log(file, <sh>dh -hs <%= file %></sh>)
+))

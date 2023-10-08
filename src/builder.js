@@ -56,6 +56,15 @@ export function buildFile(fullPath, dependencies = [], run=false) {
   try {
     // Write the result to the file synchronously
     fs.writeFileSync(buildFileName, result);
+
+    if (run) {
+      Object.keys(context.stylesheets).forEach(name => {
+        let cssPath = fullPath.replace(/\.jome$/, '.css');
+        fs.writeFileSync(cssPath, context.stylesheets[name]);
+        console.log(`Successfully wrote to '${cssPath}'.`);
+      })
+    }
+
     console.log(`Successfully wrote to '${buildFileName}'.`);
   } catch (err) {
     console.error('Error writing to the file:', err);
