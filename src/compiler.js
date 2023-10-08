@@ -1,6 +1,10 @@
 import { POST_PROCESSES, tokenize } from './tokenizer.js'
 import { CompileContext } from './compile_context.js'
 
+// For Markdown
+import MarkdownIt from 'markdown-it'
+let markdownIt = new MarkdownIt()
+
 import fs from 'fs'
 import path from 'path'
 
@@ -162,21 +166,24 @@ function compileBlock(array, ctx, addReturnStatement = false) {
   }
 }
 
-// Ugly implementation, it's because of inside _printJomeObj, I want to print children directly as a string
+function compileJsValue(v) {
+  if (typeof v === 'string') {
+    //return '"'+v+'"'
+    return v
+  } else if (Array.isArray(v)) {
+    return '['+v.map(e => compileJsValue(e)).join(', ')+']'
+  } else if (typeof v === 'object') {
+    return compileJsObj(v)
+  }
+  return ''+v
+}
+
 function compileJsObj(obj) {
-  let v = JSON.stringify(obj, (key, value) => {
-    if (typeof value === 'object' && value !== null) {
-      return `{${Object.keys(value).map(v => {
-        let val = typeof value[v] === 'function' ? `${key}: [func]` : value[v]
-        //val = typeof value[v] === 'string' ? `'${val}'` : val
-        return `${v}: ${val}`
-      }).join(', ')}}`
-    // } else if (typeof value === 'string') {
-    //   return "'"+value+"'"
-    }
-    return value;
-  });
-  return v.slice(1, v.length-1).replace(/\\n/g, '\n')
+  let r = []
+  Object.keys(obj).forEach(key => {
+    r.push(key+': '+compileJsValue(obj[key]))
+  })
+  return '{'+r.join(', ')+'}'
 }
 
 function _buildJomeObjs(nodes, ctx, isRoot = true) {
@@ -480,6 +487,10 @@ function getRelativePath(relPath, ctx, forRequire) {
   return relPath
 }
 
+function escapeBackticks(inputString) {
+  return inputString.replace(/`/g, '\u005c`').replace(/\$\{/g, '\u005c\$\{')
+}
+
 // Using an hashmap here because it is easier to debug,
 // a bunch of if else if else is annoying to go through step by step
 // and switch case is really annoying because it does not scope the variables
@@ -558,6 +569,9 @@ const PROCESSES = {
     ctx.stylesheets['__main__'] = (ctx.stylesheets['__main__'] || '') + raw
   },
   "meta.embedded.block.javascript": (node, ctx) => compileRaw(node.children.slice(1,-1)),
+  "meta.embedded.block.markdown": (node, ctx) => {
+    return '`'+escapeBackticks(markdownIt.render(compileRaw(node.children.slice(1,-1))))+'`'
+  },
   "meta.embedded.block.html": (node, ctx) => {
     let args = parseScriptTagArgs(node.children[0])
     let b = ''

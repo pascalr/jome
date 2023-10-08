@@ -377,7 +377,7 @@
         {
           "begin": "\\<js(\\s+|\\w+|\\w+\\s*=\"\\w+\")*\\>",
           "end": "\\<\\/js\\>",
-          "beginCaptures": {"0": { "patterns": [{ "include": "#script-params" }]}},
+          "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
           "name": "meta.embedded.block.javascript",
           "patterns": [{ "include": "source.js" }]
@@ -385,7 +385,7 @@
         {
           "begin": "\\<md(\\s+|\\w+|\\w+\\s*=\"\\w+\")*\\>",
           "end": "\\<\\/md\\>",
-          "beginCaptures": {"0": { "patterns": [{ "include": "#script-params" }]}},
+          "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
           "name": "meta.embedded.block.markdown",
           "patterns": [{ "include": "text.html.markdown" }]
@@ -393,7 +393,7 @@
         {
           "begin": "\\<sh(\\s+|\\w+|\\w+\\s*=\"\\w+\")*\\>",
           "end": "\\<\\/sh\\>",
-          "beginCaptures": {"0": { "patterns": [{ "include": "#script-params" }]}},
+          "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
           "name": "meta.embedded.block.shell",
           "patterns": [{ "include": "source.shell" }]
@@ -401,7 +401,7 @@
         {
           "begin": "\\<css(\\s+|\\w+|\\w+\\s*=\"\\w+\")*\\>",
           "end": "\\<\\/css\\>",
-          "beginCaptures": {"0": { "patterns": [{ "include": "#script-params" }]}},
+          "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
           "name": "meta.embedded.block.css",
           "patterns": [{ "include": "source.css" }]
@@ -409,7 +409,7 @@
         {
           "begin": "\\<html(\\s+|\\w+|\\w+\\s*=\"\\w+\")*\\>",
           "end": "\\<\\/html\\>",
-          "beginCaptures": {"0": { "patterns": [{ "include": "#script-params" }]}},
+          "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
           "name": "meta.embedded.block.html",
           "patterns": [{ "include": "text.html.derivative" }]

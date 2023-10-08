@@ -194,8 +194,11 @@ JavaScript's distinction between expressions and statements makes the language v
 ## TODO
 
 - Finalement, j'aimerais utiliser let x = ... au lieu de juste x = ...
+- Pour l'instant c'est plus simple de tout installer, mais idéalement markdown, haml, etc serait optionel
+ou peut-être jome-base qui a juste jome, et jome qui regroupe beaucoup d'autres sous language, j'aime ça en avoir beaucoup par défault
 - Support <haml></haml>
 - Support <md></md>
+- Support <json></json>
 - Include all the lodash functions that make sense
 - Require other file formats, for example, require images. SVG is the easiest as a string. How to handle other images?
 
