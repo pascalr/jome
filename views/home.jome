@@ -9,6 +9,23 @@ requiert navbar from './views/partials/navbar.jome'
 // que le fichier dans lequel le tag <css></css> a été déclaré
 // FIXME: Le CSS de navbar devrait être dans le partials de navbar
 
+// «
+//   HtmlPage (
+//     title: 'Simple HTML Page'
+//     navbar: navbar
+//     body: <html>
+//       <div class="content">
+//         <h2 class="title">Welcome to My Simple Website</h2>
+//         <p>
+//             This is a basic HTML file with a navbar, a title, and some text. You can customize it further
+//             by adding more HTML elements and styles as needed.
+//         </p>
+//       </div>
+//     </html>
+//   )
+//     toString
+// »
+
 <html>
 <!DOCTYPE html>
 <HTML lang="en">
