@@ -193,6 +193,7 @@ JavaScript's distinction between expressions and statements makes the language v
 
 ## TODO
 
+- Finalement, j'aimerais utiliser let x = ... au lieu de juste x = ...
 - Support <haml></haml>
 - Include all the lodash functions that make sense
 - Require other file formats, for example, require images. SVG is the easiest as a string. How to handle other images?

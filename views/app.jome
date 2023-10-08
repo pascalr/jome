@@ -1,0 +1,35 @@
+import {HtmlPage} from '../lib/html-page.jome'
+
+// FIXME: The part should be relative so it should be './partials/navbar.jome'
+requiert navbar from './views/partials/navbar.jome'
+// navbar = require './views/partials/navbar.jome'
+
+<css>
+  body {
+    margin: 0;
+  }
+
+  /* Style the title and text */
+  .title {
+    font-size: 24px;
+    margin-top: 20px;
+  }
+
+  .content {
+    font-size: 16px;
+    max-width: 60em;
+    margin: auto;
+  }
+</css>
+
+export class AppPage |&title, &content| => {
+  print: => (
+    «
+      HtmlPage title: title, navbar: navbar, body: <html>
+        <div class="content">
+          <%= content %>
+        </div>
+      </html>
+    ».print()
+  )
+}

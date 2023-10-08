@@ -1,35 +1,12 @@
-import {HtmlPage} from './lib/html-page.jome'
-
-// FIXME: The part should be relative so it should be './partials/navbar.jome'
-requiert navbar from './views/partials/navbar.jome'
-// navbar = require './views/partials/navbar.jome'
-
-<css>
-  body {
-    margin: 0;
-  }
-
-  /* Style the title and text */
-  .title {
-    font-size: 24px;
-    margin-top: 20px;
-  }
-
-  .content {
-    font-size: 16px;
-    max-width: 60em;
-    margin: auto;
-  }
-</css>
+// FIXME: The part should be relative so it should be './app.jome'
+import {AppPage} from './views/app.jome'
 
 «
-  HtmlPage title: 'Simple HTML Page', navbar: navbar, body: <html>
-    <div class="content">
-      <h2 class="title">Welcome to My Simple Website!!!</h2>
-      <p>
-          This is a basic HTML file with a navbar, a title, and some text. You can customize it further
-          by adding more HTML elements and styles as needed.
-      </p>
-    </div>
+  AppPage title: 'Simple HTML Page', content: <html>
+    <h2 class="title">Welcome to My Simple Website!</h2>
+    <p>
+        This is a basic HTML file with a navbar, a title, and some text. You can customize it further
+        by adding more HTML elements and styles as needed.
+    </p>
   </html>
 ».print()
