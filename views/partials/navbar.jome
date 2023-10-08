@@ -1,3 +1,30 @@
+<css>
+  /* Add some basic CSS for the navbar */
+  .navbar {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+  }
+
+  /* Style for navbar links */
+  .navbar a {
+    color: #fff;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+
+  /* Change the color of navbar links on hover */
+  .navbar a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  .navbrand {
+    font-size: 1.4em;
+    padding: 14px 16px;
+  }
+</css>
+
 <html>
   <div class="navbar">
     <span class="navbrand" href="#">Jome</span>

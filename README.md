@@ -196,3 +196,7 @@ JavaScript's distinction between expressions and statements makes the language v
 - Support <haml></haml>
 - Include all the lodash functions that make sense
 - Require other file formats, for example, require images. SVG is the easiest as a string. How to handle other images?
+
+## FIXME
+
+- Présentement, je dois mettre <css> avant <html>, ça serait le fun que ce ne soit pas nécessaire

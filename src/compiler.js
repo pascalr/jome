@@ -468,8 +468,26 @@ const PROCESSES = {
   "newline": () => "\n",
   // The whole source code
   "source.jome": (node, ctx) => {
-    let r = compileScope(node, node.children, ctx)
-    return ctx.headers.join('\n')+'\n'+r
+    let r0 = compileScope(node, node.children, ctx)
+    let r = ctx.headers.join('\n')+'\n'
+    if (ctx.usesDirname) {
+      // FIXME: don't import path and fileURLToPath multiple times...
+      r += `
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+let __filename = fileURLToPath(import.meta.url)
+let __dirname = path.dirname(__filename)
+      `
+    } else if (ctx.usesFilename) {
+      // FIXME: don't import path and fileURLToPath multiple times...
+      r += `
+import { fileURLToPath } from 'url'
+
+__filename = fileURLToPath(import.meta.url)
+      `
+    }
+    return r + r0
   },
   "meta.statement.require.jome": (node, ctx) => {
     let list = filterSpaces(node.children).slice(1) // remove require keyword
@@ -789,7 +807,15 @@ const PROCESSES = {
   "keyword.operator.assignment.jome": compileWithSpaces,
   "keyword.operator.comparison.jome": compileWithSpaces,
   "keyword.operator.assignment.compound.jome": compileWithSpaces,
-  "support.variable.jome": compileAsIs,
+  "support.variable.jome": (node, ctx) => {
+    let name = node.text()
+    if (name === '__dirname') {
+      ctx.usesDirname = true
+    } else if (name === '__filename') {
+      ctx.usesFilename = true
+    }
+    return name
+  },
   "constant.numeric.integer.jome": compileAsIs,
   "comment.line.double-slash.jome": () => '',
   "comment.block.jome": () => '',

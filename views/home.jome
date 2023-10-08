@@ -2,29 +2,7 @@
 requiert navbar from './views/partials/navbar.jome'
 // navbar = require './views/partials/navbar.jome'
 
-// FIXME: Le CSS de navbar devrait être dans le partials de navbar
-
 <css>
-  /* Add some basic CSS for the navbar */
-  .navbar {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-  }
-
-  /* Style for navbar links */
-  .navbar a {
-    color: #fff;
-    padding: 14px 16px;
-    text-decoration: none;
-  }
-
-  /* Change the color of navbar links on hover */
-  .navbar a:hover {
-    background-color: #ddd;
-    color: black;
-  }
-
   body {
     margin: 0;
   }
@@ -39,11 +17,6 @@ requiert navbar from './views/partials/navbar.jome'
     font-size: 16px;
     max-width: 60em;
     margin: auto;
-  }
-
-  .navbrand {
-    font-size: 1.4em;
-    padding: 14px 16px;
   }
 </css>
 

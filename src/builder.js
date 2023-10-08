@@ -60,6 +60,7 @@ export function buildFile(fullPath, dependencies = [], run=false) {
     if (run) {
       Object.keys(context.stylesheets).forEach(name => {
         let cssPath = fullPath.replace(/\.jome$/, '.css');
+        // TODO: Insert a comment into the stylesheet that says what the source file is
         fs.writeFileSync(cssPath, context.stylesheets[name]);
         console.log(`Successfully wrote to '${cssPath}'.`);
       })

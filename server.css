@@ -18,6 +18,11 @@
     background-color: #ddd;
     color: black;
   }
+  
+  .navbrand {
+    font-size: 1.4em;
+    padding: 14px 16px;
+  }
 
   body {
     margin: 0;
@@ -33,9 +38,4 @@
     font-size: 16px;
     max-width: 60em;
     margin: auto;
-  }
-
-  .navbrand {
-    font-size: 1.4em;
-    padding: 14px 16px;
   }

@@ -2,12 +2,6 @@ import {ExpressServer} from './lib/express_server.jome'
 
 requiert homePage from './views/home.jome'
 
-// import path from 'path'
-// import { fileURLToPath } from 'url'
-
-// __filename = fileURLToPath(import.meta.url)
-// __dirname = path.dirname(__filename)
-
 « ExpressServer port: 3001
   get '/', |req, res| => (
     res.send(homePage(lastName: 'Doe'))
