@@ -58,7 +58,7 @@ import {AppPage} from './app.jome'
 
   TODO: Expliquer comment compiler du code .jome en code JavaScript.
 
-  ## Language Reference
+  ## Documentation
 
   There is two main modes in the language.
 
@@ -76,6 +76,18 @@ import {AppPage} from './app.jome'
   ### Functions
 
   TODO: Ajouter les functions -> à jome. Il doit y avoir un espace avant le -> pour que ce soit une fonction. Sinon, c'est le meta accessor.
+
+  ### Scripts
+
+  In jome, the idea is that you could include most other programming languages directly using xml tags.
+
+  ```
+  // Execute a shell command in a script
+  <sh>ls -A</sh>
+
+  // Ruby is a pretty nice language for scripts too 
+  <rb>puts (1..10).select(&:even?).sum</rb>
+  ```
 
 </md>)
 ».print()
