@@ -1,5 +1,11 @@
 import {AppPage} from './app.jome'
 
+// txt = <md render="html">
+//   # Jome
+
+//   Jome is a language that compiles in JavaScript. It is simliar to CoffeeScript in this way.
+// </md>
+
 «
   AppPage title: 'Simple HTML Page', content: <html>
     <h2 class="title">Welcome to My Simple Website!</h2>
@@ -9,9 +15,3 @@ import {AppPage} from './app.jome'
     </p>
   </html>
 ».print()
-
-// <md>
-//   # Jome
-
-//   Jome is a language that compiles in JavaScript. It is simliar to CoffeeScript in this way.
-// </md>
