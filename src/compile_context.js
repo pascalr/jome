@@ -18,6 +18,7 @@ export class CompileContext {
     this.declarations = [] // used for declaring variable per scope
     this.headers = [] // Things added at the beginning of the file
     this.stylesheets = {} // For <css></css> tags
+    this.imports = {} // All the import statements found
   }
 
   spacing() {

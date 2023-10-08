@@ -440,7 +440,7 @@ function compileInterpolate(str, ctx) {
   // So keep it simple for now
   return str.replace(/<%=(.*?)%>/g, (match, group) => {
     let raw = group.trim()
-    let out = compileGetContext(raw, ctx)
+    let out = compileGetContext(raw, ctx, true)
     return '${'+out.result.trim()+'}'
   });
 }
@@ -467,28 +467,7 @@ function parseScriptTagArgs(node) {
 const PROCESSES = {
   "newline": () => "\n",
   // The whole source code
-  "source.jome": (node, ctx) => {
-    let r0 = compileScope(node, node.children, ctx)
-    let r = ctx.headers.join('\n')+'\n'
-    if (ctx.usesDirname) {
-      // FIXME: don't import path and fileURLToPath multiple times...
-      r += `
-import path from 'path'
-import { fileURLToPath } from 'url'
-
-let __filename = fileURLToPath(import.meta.url)
-let __dirname = path.dirname(__filename)
-      `
-    } else if (ctx.usesFilename) {
-      // FIXME: don't import path and fileURLToPath multiple times...
-      r += `
-import { fileURLToPath } from 'url'
-
-__filename = fileURLToPath(import.meta.url)
-      `
-    }
-    return r + r0
-  },
+  "source.jome": (node, ctx) => compileScope(node, node.children, ctx),
   "meta.statement.require.jome": (node, ctx) => {
     let list = filterSpaces(node.children).slice(1) // remove require keyword
     let varName = list[0].text()
@@ -531,7 +510,11 @@ __filename = fileURLToPath(import.meta.url)
       ctx.dependencies.push(fileName)
       fileName = fileName.slice(0, fileName.length-4)+"built.js"
     }
-    return `import ${defaultImport}${namedImports.length ? `{${namedImports.join(', ')}}`:''} from "${fileName}"\n\n`
+    ctx.imports[fileName] = {
+      default: defaultImport,
+      namedImports
+    }
+    return ''
   },
   // fooBar =
   "variable.assignment.jome": (node, ctx) => {
@@ -855,14 +838,41 @@ function compileNode(node, context) {
   return result
 }
 
+function compileHeaders(ctx) {
+  let r = ctx.headers.join('\n')+'\n'
+  Object.keys(ctx.imports).forEach(fileName => {
+    let imp = ctx.imports[fileName]
+    r += `import ${imp.default}${imp.namedImports.length ? `{${imp.namedImports.join(', ')}}`:''} from "${fileName}";\n`
+  })
+  if (ctx.usesDirname) {
+    // FIXME: don't import path and fileURLToPath multiple times...
+    r += `
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+let __filename = fileURLToPath(import.meta.url)
+let __dirname = path.dirname(__filename)
+    `
+  } else if (ctx.usesFilename) {
+    // FIXME: don't import path and fileURLToPath multiple times...
+    r += `
+import { fileURLToPath } from 'url'
+
+__filename = fileURLToPath(import.meta.url)
+    `
+  }
+  return r
+}
+
 export function compile(text) {
   return compileGetContext(text).result
 }
 
-export function compileGetContext(text, ctx) {
+export function compileGetContext(text, ctx, isNested = false) {
   let root = tokenize(text)
   let context = ctx || new CompileContext()
   // console.log('tokenized:', root.print())
-  let result = compileNode(root, context)
-  return {result, context}
+  let r1 = compileNode(root, context)
+  let r0 = isNested ? '' : compileHeaders(context)
+  return {result: r0 + r1, context}
 }
