@@ -2,15 +2,15 @@
   "name": "jome-src",
   "version": "0.0.1",
   "description": "",
-  "main": "server.js",
+  "main": "jome.js",
   "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/pascalr/jome.git"
   },
   "scripts": {
-    "run": "NODE_ENV=production node ./server.js",
-    "dev": "NODE_ENV=development nodemon ./server.js",
+    "run": "NODE_ENV=production node jome.js server.jome",
+    "dev": "NODE_ENV=development nodemon jome.js server.jome",
     "build": "node ./build.js"
   },
   "author": "",

@@ -1,0 +1,15 @@
+{
+  "verbose": true,
+  "watch": ["*.jome"],
+  "ignore": ["*.built.js"],
+  "execMap": {
+    "js": "node",
+    "jome": "jome-node"
+  },
+  "ignore": [
+    ".built.js",
+    ".git",
+    "node_modules/**/node_modules"
+  ],
+  "ext": "jome,json"
+}
