@@ -1,3 +1,5 @@
+//import {HtmlPage} from './lib/html-page.jome'
+
 // FIXME: The part should be relative so it should be './partials/navbar.jome'
 requiert navbar from './views/partials/navbar.jome'
 // navbar = require './views/partials/navbar.jome'
@@ -34,7 +36,7 @@ requiert navbar from './views/partials/navbar.jome'
 //       </div>
 //     </html>
 //   )
-//     toString
+//     print
 // »
 
 <html>

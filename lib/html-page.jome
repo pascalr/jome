@@ -1,0 +1,22 @@
+export class HtmlPage |
+  &title = '',
+  &navbar,
+  &body
+| => {
+  print: => <html>
+    <!DOCTYPE html>
+    <HTML lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title><%= &title %></title>
+        <link rel="stylesheet" type="text/css" href="server.css">
+      </head>
+      <body>
+          <%= &navbar %>
+
+          <%= &body %>
+      </body>
+    </HTML>
+  </html>
+}
