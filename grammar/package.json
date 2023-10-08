@@ -24,6 +24,7 @@
       "scopeName": "source.jome",
       "path": "./syntaxes/jome.tmLanguage.json",
       "embeddedLanguages": {
+        "meta.embedded.block.markdown": "text.html.markdown",
         "meta.embedded.block.html": "text.html.derivative",
         "meta.embedded.block.css": "css",
         "meta.embedded.block.javascript": "javascript",

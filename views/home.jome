@@ -9,3 +9,9 @@ import {AppPage} from './app.jome'
     </p>
   </html>
 ».print()
+
+// <md>
+//   # Jome
+
+//   Jome is a language that compiles in JavaScript. It is simliar to CoffeeScript in this way.
+// </md>
