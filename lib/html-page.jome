@@ -11,6 +11,7 @@ export class HtmlPage |
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><%= title %></title>
         <link rel="stylesheet" type="text/css" href="server.built.css">
+        <link rel="stylesheet" type="text/css" href="highlight.js.min.css">
       </head>
       <body>
           <%= navbar %>

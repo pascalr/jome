@@ -13,5 +13,8 @@ requiert examplePage from './views/examples.jome'
   get '/server.built.css', |req, res| => (
     res.sendFile(__dirname+'/server.built.css');
   )
+  get '/highlight.js.min.css', |req, res| => (
+    res.sendFile(__dirname+'/node_modules/highlight.js/styles/default.min.css');
+  )
   run
 »

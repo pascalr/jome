@@ -148,6 +148,7 @@ ou peut-être jome-base qui a juste jome, et jome qui regroupe beaucoup d'autres
 - Support <md></md>
 - Support <json></json>
 - Support <rb></rb>
+- Support <txt></txt> qui serait simplement du texte. Intéressant pour afficher du code juste en texte.
 - Support custom language (il n'y aurait juste pas de syntax highlight pour)
 - Configuration file to decide how to process the script tags found.
 - Include all the lodash functions that make sense
@@ -157,5 +158,8 @@ ou peut-être jome-base qui a juste jome, et jome qui regroupe beaucoup d'autres
 
 ## FIXME
 
+- Les css de html-page devrait être des arguments
+- A semicolon at the end of an import does not work
+- A comment at the end of a required file does not work
 - Présentement, je dois mettre <css> avant <html>, ça serait le fun que ce ne soit pas nécessaire
 - Don't import multiple times the same css script...

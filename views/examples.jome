@@ -1,7 +1,22 @@
 import {AppPage} from './app.jome'
 
+import hljs from 'highlight.js/lib/core'
+import jomeHljs from '../highlight.js/jome.js'
+
+hljs.registerLanguage('jome', jomeHljs)
+
+codeBlock = |code| => <html>
+  <pre>
+    <code>
+      <%= hljs.highlight(code, {language: 'jome'}).value %>
+    </code>
+  </pre>
+</html>
+
 «
   AppPage title: 'Jome examples', content: <html>
     <h2 class="title">Jome examples</h2>
+
+    <%= codeBlock(`import hljs from 'highlight.js/lib/core'`) %>
   </html>
 ».print()

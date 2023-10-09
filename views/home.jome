@@ -2,12 +2,12 @@ import {AppPage} from './app.jome'
 
 <css>
   pre {
-    background-color: #cbd0dd;
+    background-color: #dce0e8;
     padding: 1em;
     border-radius: 8px;
   }
   code:not(pre code) {
-    background-color: #cbd0dd;
+    background-color: #dce0e8;
     padding: 0.5em;
     border-radius: 8px;
   }
