@@ -1,5 +1,10 @@
 import {AppPage} from './app.jome'
 
+import hljs from 'highlight.js/lib/core'
+import jomeHljs from '../highlight.js/jome.js'
+
+hljs.registerLanguage('jome', jomeHljs)
+
 <css>
   pre {
     background-color: #dce0e8;
@@ -12,6 +17,14 @@ import {AppPage} from './app.jome'
     border-radius: 8px;
   }
 </css>
+
+codeBlock = |code| => <html>
+  <pre>
+    <code>
+      <%= hljs.highlight(code, {language: 'jome'}).value %>
+    </code>
+  </pre>
+</html>
 
 «
   AppPage title: 'Simple HTML Page', content: (<md>
@@ -30,6 +43,7 @@ import {AppPage} from './app.jome'
   ## Overview
 
   Example Jome code:
+</md>+codeBlock(`import Btn, Txt, renderHTML} from "html"`)+<md>
   ```
   import {Btn, Txt, renderHTML} from "html"
 
