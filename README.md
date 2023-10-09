@@ -1,6 +1,6 @@
 # Jome
 
-Jome is a language that compiles in JavaScript. It is simliar to CoffeeScript in this way.
+Jome is a little language that compiles in JavaScript. It is simliar to CoffeeScript in this way.
 
 The main idea is what I call instance driven development. It's the same thing as object oriented, but the focus is on the concrete object
 instead of the abstract class.
@@ -8,42 +8,6 @@ instead of the abstract class.
 Instance driven development is like in Godot. Most of the time you control objects directly inside the editor.
 
 It's intented main purpose is to be used for prototyping or small projects. It is usefull for concrete applications like making something visual.
-
-## Overview
-
-Example Jome code:
-```
-import {Btn, Txt, renderHTML} from "html"
-
-// Add a button to the main scene ($) which has a text as a children
-$ <<
-  Btn @count: 0, ~click: => (@count += 1)
-    Txt => "Clicked {@count} {@count == 1 ? 'time' : 'times'}"
->>
-
-// Compile all the objects of the scene and write the html to #jome-placeholder div
-renderHTML($, target: 'jome-placeholder')
-```
-
-Example compiled JavaScript output:
-```
-import jome from 'jome_lib'
-import {Btn, Txt, renderHTML} from "html"
-
-var $ = jome.createObj()
-var btn
-
-// Add a button to the scene which has a text as a children
-btn = new Btn({__signal__click: () => {this.count += 1}})
-btn.count = 0
-jome.createObj($, btn)
-jome.createObj($.$.$btn, new Txt(() => (
-  `Clicked ${this.count} ${this.count == 1 ? 'time' : 'times'}`
-)))
-
-// Compile all the objects of the scene and write the html to #jome-placeholder div
-renderHTML({target: 'jome-placeholder'}, $)
-```
 
 ## Installation
 
@@ -53,24 +17,6 @@ TODO
 
 TODO: Expliquer comment compiler du code .jome en code JavaScript.
 
-## Language Reference
-
-There is two main modes in the language.
-
-Code mode: This is very similar to JavaScript, with a few distinction. Blocks are delimited using parentheses instead of curly braces {}. Curly
-braces are only used for dictionaries (JavaScript objects) and in some others cases like imports.
-
-Object mode: Object blocks delimited by « » or << >> use indentation to make a tree of objects. «» is for an orphan object which has not parent.
-<< >> is used to push objects as a children to an existing object.
-
-$ is the main object
-$foo/bar is a path to get the children of the main object named foo, and then get it's children named bar
-
-`$ << $foo >>` => add an object named foo inside the main object '$'
-
-### Functions
-
-TODO: Ajouter les functions -> à jome. Il doit y avoir un espace avant le -> pour que ce soit une fonction. Sinon, c'est le meta accessor.
 
 
 
@@ -193,15 +139,23 @@ JavaScript's distinction between expressions and statements makes the language v
 
 ## TODO
 
+- Créer un fichier de syntax pour highlight.js
+- Implémenter de l'intelligence avec Visual Studio Code (code completion, bug detection...)
 - Finalement, j'aimerais utiliser let x = ... au lieu de juste x = ...
 - Pour l'instant c'est plus simple de tout installer, mais idéalement markdown, haml, etc serait optionel
 ou peut-être jome-base qui a juste jome, et jome qui regroupe beaucoup d'autres sous language, j'aime ça en avoir beaucoup par défault
 - Support <haml></haml>
 - Support <md></md>
 - Support <json></json>
+- Support <rb></rb>
+- Support custom language (il n'y aurait juste pas de syntax highlight pour)
+- Configuration file to decide how to process the script tags found.
 - Include all the lodash functions that make sense
 - Require other file formats, for example, require images. SVG is the easiest as a string. How to handle other images?
+- Faire quelques exemples sur le site
+- Faire la documentation sur le site
 
 ## FIXME
 
 - Présentement, je dois mettre <css> avant <html>, ça serait le fun que ce ne soit pas nécessaire
+- Don't import multiple times the same css script...

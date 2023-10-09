@@ -46,7 +46,12 @@ export function buildFile(fullPath, dependencies = [], run=false) {
   })
 
   missings.forEach(missing => {
-    buildFile(path.join(directoryPart, missing), dependencies)
+    let out = buildFile(path.join(directoryPart, missing), dependencies)
+    let css = out?.context?.stylesheets||{}
+    Object.keys(css).forEach(key => {
+      // FIXME: Don't import multiple times the same css script...
+      context.stylesheets[key] = context.stylesheets[key] + css[key]
+    })
   })
 
   // Modify 'result' as needed
@@ -66,7 +71,7 @@ export function buildFile(fullPath, dependencies = [], run=false) {
 
     if (run) {
       Object.keys(context.stylesheets).forEach(name => {
-        let cssPath = fullPath.replace(/\.jome$/, '.css');
+        let cssPath = fullPath.replace(/\.jome$/, '.built.css');
         // TODO: Insert a comment into the stylesheet that says what the source file is
         fs.writeFileSync(cssPath, context.stylesheets[name]);
         console.log(`Successfully wrote to '${cssPath}'.`);
@@ -79,7 +84,7 @@ export function buildFile(fullPath, dependencies = [], run=false) {
     return null
   }
 
-  return buildFileName
+  return {buildFileName, context}
 }
 
 // // FIXME: This makes a whole lot of ugly assomptions for paths.........
@@ -145,7 +150,7 @@ export function buildFile(fullPath, dependencies = [], run=false) {
 // }
 
 export async function buildAndRunFile(fullPath, dependencies=[]) {
-  let buildFileName = buildFile(fullPath, dependencies, true)
+  let buildFileName = buildFile(fullPath, dependencies, true)?.buildFileName
   if (buildFileName) {
     console.log('Running built')
     await import(buildFileName);

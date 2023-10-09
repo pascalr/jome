@@ -29,7 +29,7 @@
   <div class="navbar">
     <span class="navbrand" href="#">Jome</span>
     <a href="/">Home</a>
-    <a href="/doc">Documentation</a>
+    <a href="/doc">Language Reference</a>
     <a href="/ex">Examples</a>
   </div>
 </html>

@@ -14,8 +14,8 @@ requiert examplePage from './views/examples.jome'
   get '/ex', |req, res| => (
     res.send(examplePage)
   )
-  get '/server.css', |req, res| => (
-    res.sendFile(__dirname+'/server.css');
+  get '/server.built.css', |req, res| => (
+    res.sendFile(__dirname+'/server.built.css');
   )
   run
 »

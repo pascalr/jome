@@ -1,5 +1,18 @@
 import {AppPage} from './app.jome'
 
+<css>
+  pre {
+    background-color: #cbd0dd;
+    padding: 1em;
+    border-radius: 8px;
+  }
+  code:not(pre code) {
+    background-color: #cbd0dd;
+    padding: 0.5em;
+    border-radius: 8px;
+  }
+</css>
+
 «
   AppPage title: 'Simple HTML Page', content: (<md>
 
@@ -58,7 +71,7 @@ import {AppPage} from './app.jome'
 
   TODO: Expliquer comment compiler du code .jome en code JavaScript.
 
-  ## Documentation
+  ## Language Reference
 
   There is two main modes in the language.
 

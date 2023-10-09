@@ -2,5 +2,6 @@
 *.swp
 *~
 .~*
+*.built.css
 *.built.js
 *.bundle.js
