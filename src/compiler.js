@@ -3,7 +3,7 @@ import { CompileContext } from './compile_context.js'
 
 // For Markdown
 import MarkdownIt from 'markdown-it'
-let markdownIt = new MarkdownIt()
+let markdownIt = new MarkdownIt({html: true})
 
 import fs from 'fs'
 import path from 'path'

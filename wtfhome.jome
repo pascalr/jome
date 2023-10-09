@@ -1,5 +1,0 @@
-(`<pre><code>jome.createObj($.$.$btn, new Txt(() =&gt; (
-  \`Clicked ${this.count} ${this.count == 1 ? 'time' : 'times'}\`
-)))
-</code></pre>
-`)

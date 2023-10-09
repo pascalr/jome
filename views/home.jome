@@ -71,7 +71,7 @@ import {AppPage} from './app.jome'
 
   TODO: Expliquer comment compiler du code .jome en code JavaScript.
 
-  ## Language Reference
+  <h2 id="lang-ref">Language Reference</h2>
 
   There is two main modes in the language.
 
