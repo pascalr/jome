@@ -139,6 +139,7 @@ JavaScript's distinction between expressions and statements makes the language v
 
 ## TODO
 
+- Prendre les syntaxes actuelles de html et css et injecter mon code dedans pour l'interpolation jome <%= %>
 - Créer un fichier de syntax pour highlight.js
 - Implémenter de l'intelligence avec Visual Studio Code (code completion, bug detection...)
 - Finalement, j'aimerais utiliser let x = ... au lieu de juste x = ...
