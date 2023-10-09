@@ -102,5 +102,25 @@ import {AppPage} from './app.jome'
   <rb>puts (1..10).select(&:even?).sum</rb>
   ```
 
+  #### Scripts interpolation
+
+  You can add data inside the scripts using the < % =    % > syntax.
+
+  The behavior will depend on the kind of script.
+
+  On html, it will insert a template literal interpolation.
+
+  On markdown what do I want to do?
+
+  Logically, it would include markdown. But this mean that some markdown would be compiled at compile time,
+  and that the text inside the interpolation would be compiled at run time. I don't like this because I don't
+  want the built file to include the javascript of markdown-it. But this could be a feature if that is actually
+  what the user want.
+
+  But right now, I am the user and this is not what I want. So what I want is that the text to be interpolated
+  be removed from the markdown compile, and that inserted compiled using a template literal.
+
+  Basically, I want to inject html and not inject markdown directly.
+
 </md>)
 ».print()

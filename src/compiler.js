@@ -446,6 +446,11 @@ function compileInterpolate(str, ctx, escSeqBeg = '${', escSeqEnd = '}') {
   // into the grammar files my interpolation tag.
   // But this does not fix the problem that syntax highlighting does not work...
   // So keep it simple for now
+
+  // One part of the solution I think is to tokenize and check that if all the groups were close
+  // In order to handle <% if (true) ( %> Blah blah <% ) %>
+  // TODO: Checker comment ils font dans eta.js
+
   return str.replace(/<%=((.|\n)*?)%>/g, (match, group) => {
     let raw = group.trim()
     let out = compileGetContext(raw, ctx, true)
