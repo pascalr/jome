@@ -106,6 +106,20 @@ import {AppPage} from './app.jome'
 
   You can add data inside the scripts using the < % =    % > syntax.
 
+  Contrary to other template languages like ejs, you must finish the expression given inside the interpolation tag.
+
+  If you want to do a condition for example, you use a nesting tag < > ... < / >
+
+  < % = if true < >
+    <div class="content">
+      < % = content % >
+    </div>
+  else < >
+    <div class="content">
+      < % = content % >
+    </div>
+  < / > % >
+
   The behavior will depend on the kind of script.
 
   On html, it will insert a template literal interpolation.
