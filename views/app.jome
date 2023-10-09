@@ -6,6 +6,7 @@ requiert navbar from './partials/navbar.jome'
 <css>
   body {
     margin: 0;
+    background-color: #f9f4f4;
   }
 
   /* Style the title and text */
