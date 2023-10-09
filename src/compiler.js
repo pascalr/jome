@@ -439,7 +439,7 @@ function parseList(list, ctx) {
   return results
 }
 
-function compileInterpolate(str, ctx) {
+function compileInterpolate(str, ctx, escSeqBeg = '${', escSeqEnd = '}') {
   // FIXME: This is a simplify method that does not allow "%>" to be for example inside a string
   // FIXME: <html><%= "%>" %></html> // DOES NOT WORK
   // A proper solution would be to have all the tmLanguage files to tokenize properly, and inject
@@ -449,7 +449,7 @@ function compileInterpolate(str, ctx) {
   return str.replace(/<%=(.*?)%>/g, (match, group) => {
     let raw = group.trim()
     let out = compileGetContext(raw, ctx, true)
-    return '${'+out.result.trim()+'}'
+    return escSeqBeg+out.result.trim()+escSeqEnd
   });
 }
 
@@ -570,7 +570,10 @@ const PROCESSES = {
   },
   "meta.embedded.block.javascript": (node, ctx) => compileRaw(node.children.slice(1,-1)),
   "meta.embedded.block.markdown": (node, ctx) => {
-    return '`'+escapeBackticks(markdownIt.render(compileRaw(node.children.slice(1,-1))))+'`'
+    let r = compileInterpolate(compileRaw(node.children.slice(1,-1)), ctx, "$$escSeqBeg$$", "$$escSeqEnd$$")
+    r = escapeBackticks(markdownIt.render(r))
+    r = r.replaceAll(/\$\$escSeqBeg\$\$/g, '${').replaceAll(/\$\$escSeqEnd\$\$/g, '}')
+    return '`'+r+'`'
   },
   "meta.embedded.block.html": (node, ctx) => {
     let args = parseScriptTagArgs(node.children[0])
