@@ -43,7 +43,7 @@ codeBlock = |code| => <html>
   ## Overview
 
   Example Jome code:
-</md>+codeBlock(`import Btn, Txt, renderHTML} from "html"`)+<md>
+</md>+codeBlock(@`import {Btn, Txt, renderHTML} from "html"`)+<md>
   ```
   import {Btn, Txt, renderHTML} from "html"
 
@@ -149,6 +149,10 @@ codeBlock = |code| => <html>
   be removed from the markdown compile, and that inserted compiled using a template literal.
 
   Basically, I want to inject html and not inject markdown directly.
+
+  ## Verbatim strings
+
+  Like in C#. @"foo \ $ blahblah bar" => directly with no interpolation
 
 </md>)
 ».print()

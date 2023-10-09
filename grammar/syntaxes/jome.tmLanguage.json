@@ -267,17 +267,29 @@
     "strings": {
 			"patterns": [
         {
+          "name": "string.quoted.double.verbatim.jome",
+          "begin": "@\"",
+          "beginCaptures": {"0": {"name": "punctuation.definition.string.begin.jome"}},
+          "end": "\"",
+          "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}}
+        },
+        {
+          "name": "string.quoted.backtick.verbatim.jome",
+          "begin": "@`",
+          "beginCaptures": {"0": {"name": "punctuation.definition.string.begin.jome"}},
+          "end": "`",
+          "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}}
+        },
+        {
           "name": "string.quoted.double.jome",
           "begin": "\"",
           "beginCaptures": {"0": {"name": "punctuation.definition.string.begin.jome"}},
           "end": "\"",
           "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}},
-          "patterns": [
-            {
-              "name": "constant.character.escape.jome",
-              "match": "\\\\."
-            }
-          ]
+          "patterns": [{
+            "name": "constant.character.escape.jome",
+            "match": "\\\\."
+          }]
         },
         {
           "name": "string.quoted.single.jome",
@@ -285,12 +297,10 @@
           "beginCaptures": {"0": {"name": "punctuation.definition.string.begin.jome"}},
           "end": "'",
           "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}},
-          "patterns": [
-            {
-              "name": "constant.character.escape.jome",
-              "match": "\\\\."
-            }
-          ]
+          "patterns": [{
+            "name": "constant.character.escape.jome",
+            "match": "\\\\."
+          }]
         },
         {
           "name": "string.quoted.backtick.jome",
