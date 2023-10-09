@@ -18,17 +18,14 @@ export default function(hljs) {
         scope: 'string',
         begin: "`", end: "`"
       },
-      hljs.COMMENT(
-        '/\\*', // begin
-        '\\*/', // end
-        {
-          contains: [
-            {
-              scope: 'doc', begin: '@\\w+'
-            }
-          ]
-        }
-      )
+      {
+        className: "comment",
+        variants: [
+          // JSDOC_COMMENT,
+          hljs.C_BLOCK_COMMENT_MODE,
+          hljs.C_LINE_COMMENT_MODE
+        ]
+      }
     ]
   }
 }

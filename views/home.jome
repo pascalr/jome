@@ -43,7 +43,16 @@ codeBlock = |code| => <html>
   ## Overview
 
   Example Jome code:
-</md>+codeBlock(@`import {Btn, Txt, renderHTML} from "html"`)+<md>
+</md>+codeBlock(@`import {Btn, Txt, renderHTML} from "html"
+
+  // Add a button to the main scene ($) which has a text as a children
+  $ <<
+    Btn @count: 0, ~click: => (@count += 1)
+      Txt => "Clicked {@count} {@count == 1 ? 'time' : 'times'}"
+  >>
+
+  // Compile all the objects of the scene and write the html to #jome-placeholder div
+  renderHTML($, target: 'jome-placeholder')`)+<md>
   ```
   import {Btn, Txt, renderHTML} from "html"
 
