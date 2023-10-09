@@ -446,7 +446,7 @@ function compileInterpolate(str, ctx, escSeqBeg = '${', escSeqEnd = '}') {
   // into the grammar files my interpolation tag.
   // But this does not fix the problem that syntax highlighting does not work...
   // So keep it simple for now
-  return str.replace(/<%=(.*?)%>/g, (match, group) => {
+  return str.replace(/<%=((.|\n)*?)%>/g, (match, group) => {
     let raw = group.trim()
     let out = compileGetContext(raw, ctx, true)
     return escSeqBeg+out.result.trim()+escSeqEnd
@@ -570,7 +570,8 @@ const PROCESSES = {
   },
   "meta.embedded.block.javascript": (node, ctx) => compileRaw(node.children.slice(1,-1)),
   "meta.embedded.block.markdown": (node, ctx) => {
-    let r = compileInterpolate(compileRaw(node.children.slice(1,-1)), ctx, "$$escSeqBeg$$", "$$escSeqEnd$$")
+    let r = compileRaw(node.children.slice(1,-1))
+    r = compileInterpolate(r, ctx, "$$escSeqBeg$$", "$$escSeqEnd$$")
     r = escapeBackticks(markdownIt.render(r))
     r = r.replaceAll(/\$\$escSeqBeg\$\$/g, '${').replaceAll(/\$\$escSeqEnd\$\$/g, '}')
     return '`'+r+'`'
