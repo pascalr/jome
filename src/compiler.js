@@ -1,12 +1,9 @@
 import { POST_PROCESSES, tokenize } from './tokenizer.js'
 import { CompileContext } from './compile_context.js'
 
-// For Markdown
-import MarkdownIt from 'markdown-it'
-let markdownIt = new MarkdownIt({html: true})
-
 import fs from 'fs'
 import path from 'path'
+import compileMarkdown from './compilers/markdown.js'
 
 const JOME_LIB = 'jome'
 const JOME_ROOT = '$'
@@ -71,7 +68,7 @@ execute()
 if true // PAS VALIDE
 */
 
-function compileRaw(node) {
+export function compileRaw(node) {
   if (Array.isArray(node)) {
     return node.map(n => compileRaw(n)).join('')
   } else if (node.type === 'newline') {
@@ -439,7 +436,7 @@ function parseList(list, ctx) {
   return results
 }
 
-function compileInterpolate(str, ctx, escSeqBeg = '${', escSeqEnd = '}') {
+export function compileInterpolate(str, ctx, escSeqBeg = '${', escSeqEnd = '}') {
   // FIXME: This is a simplify method that does not allow "%>" to be for example inside a string
   // FIXME: <html><%= "%>" %></html> // DOES NOT WORK
   // A proper solution would be to have all the tmLanguage files to tokenize properly, and inject
@@ -492,7 +489,7 @@ function getRelativePath(relPath, ctx, forRequire) {
   return relPath
 }
 
-function escapeBackticks(inputString) {
+export function escapeBackticks(inputString) {
   return inputString.replace(/`/g, '\u005c`').replace(/\$\{/g, '\u005c\$\{')
 }
 
@@ -574,13 +571,7 @@ const PROCESSES = {
     ctx.stylesheets['__main__'] = (ctx.stylesheets['__main__'] || '') + raw
   },
   "meta.embedded.block.javascript": (node, ctx) => compileRaw(node.children.slice(1,-1)),
-  "meta.embedded.block.markdown": (node, ctx) => {
-    let r = compileRaw(node.children.slice(1,-1))
-    r = compileInterpolate(r, ctx, "$$escSeqBeg$$", "$$escSeqEnd$$")
-    r = escapeBackticks(markdownIt.render(r))
-    r = r.replaceAll(/\$\$escSeqBeg\$\$/g, '${').replaceAll(/\$\$escSeqEnd\$\$/g, '}')
-    return '`'+r+'`'
-  },
+  "meta.embedded.block.markdown": compileMarkdown,
   "meta.embedded.block.html": (node, ctx) => {
     let args = parseScriptTagArgs(node.children[0])
     let b = ''

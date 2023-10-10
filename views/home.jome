@@ -1,10 +1,5 @@
 import {AppPage} from './app.jome'
 
-import hljs from 'highlight.js/lib/core'
-import jomeHljs from '../highlight.js/jome.js'
-
-hljs.registerLanguage('jome', jomeHljs)
-
 <css>
   pre {
     background-color: #dce0e8;
@@ -17,14 +12,6 @@ hljs.registerLanguage('jome', jomeHljs)
     border-radius: 8px;
   }
 </css>
-
-codeBlock = |code| => <html>
-  <pre>
-    <code>
-      <%= hljs.highlight(code, {language: 'jome'}).value %>
-    </code>
-  </pre>
-</html>
 
 «
   AppPage title: 'Simple HTML Page', content: (<md>
@@ -43,17 +30,7 @@ codeBlock = |code| => <html>
   ## Overview
 
   Example Jome code:
-</md>+codeBlock(@`import {Btn, Txt, renderHTML} from "html"
-
-  // Add a button to the main scene ($) which has a text as a children
-  $ <<
-    Btn @count: 0, ~click: => (@count += 1)
-      Txt => "Clicked {@count} {@count == 1 ? 'time' : 'times'}"
-  >>
-
-  // Compile all the objects of the scene and write the html to #jome-placeholder div
-  renderHTML($, target: 'jome-placeholder')`)+<md>
-  ```
+  ```jome
   import {Btn, Txt, renderHTML} from "html"
 
   // Add a button to the main scene ($) which has a text as a children
@@ -67,7 +44,7 @@ codeBlock = |code| => <html>
   ```
 
   Example compiled JavaScript output:
-  ```
+  ```jome
   import jome from 'jome_lib'
   import {Btn, Txt, renderHTML} from "html"
 
@@ -117,7 +94,7 @@ codeBlock = |code| => <html>
 
   In jome, the idea is that you could include most other programming languages directly using xml tags.
 
-  ```
+  ```jome
   // Execute a shell command in a script
   <sh>ls -A</sh>
 
