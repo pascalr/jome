@@ -44,7 +44,7 @@ import {AppPage} from './app.jome'
   ```
 
   Example compiled JavaScript output:
-  ```jome
+  ```js
   import jome from 'jome_lib'
   import {Btn, Txt, renderHTML} from "html"
 

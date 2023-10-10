@@ -1,7 +1,7 @@
 import MarkdownIt from 'markdown-it'
 import { compileInterpolate, compileRaw, escapeBackticks } from '../compiler.js'
 
-import hljs from 'highlight.js/lib/core'
+import hljs from 'highlight.js'
 import jomeHljs from '../../highlight.js/jome.js'
 
 hljs.registerLanguage('jome', jomeHljs)
