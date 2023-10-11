@@ -20,12 +20,26 @@ import {AppPage} from './app.jome'
 
   Jome is a language that compiles in JavaScript. It is simliar to CoffeeScript in this way.
 
-  The main idea is what I call instance driven development. It's the same thing as object oriented, but the focus is on the concrete object
-  instead of the abstract class.
+  The main ideas are instance driven development, integrated scripts, named parameters and a bunch of goodies/syntaxic sugar.
 
-  Instance driven development is like in Godot. Most of the time you control objects directly inside the editor.
+  You can read from top to bottom to learn the language, or you can jump to any section if you are only curious.
 
-  It's intented main purpose is to be used for prototyping or small projects. It is usefull for concrete applications like making something visual.
+  ## Features
+
+  Main ideas:
+  - [Instance driven development](#instance-driven-dev)
+  - [Integrated scripts](#integrated-scripts)
+  - [Named parameters](#named-parameters)
+
+  Goodies / Syntaxic sugar:
+  - Arrow getter - Allows to easily use most of underscore.js features directly. ex: obj->keys => Object.keys(obj)
+  - Optional let - Not sure about that one...
+  - Verbatim string literals - @\`This is a string that does ${not} interpolate\`
+  - Units - You can add units to numbers. ex: "density = 105g / 98mL"
+
+  ## Disclaimer
+
+  The language is very, very young and still contains a log of bugs. Also, I did not study in computer science. I am just a random hvac technician that somehow ended up writing a programming language. I may be doing a lot of things stupidly. Please correct me in a constructive manner if so.
 
   ## Overview
 
@@ -136,9 +150,61 @@ import {AppPage} from './app.jome'
 
   Basically, I want to inject html and not inject markdown directly.
 
-  ## Verbatim strings
+  <h2 id="verbatim-strings">Verbatim Strings</h2>
 
   Like in C#. @"foo \ $ blahblah bar" => directly with no interpolation
+
+  <h2 id="instance-driven-dev">Instance driven development</h2>
+  Instance driven development is what I call when the focus is working on concrete objects in Godot software.
+  Most of the time you control objects directly inside the editor and simply modify parameters.
+  
+  It's the same thing as object oriented, but the focus is on the concrete object rather than the abstract class.
+
+  <h2 id="integrated-scripts">Integrated scripts</h2>
+
+  <h2 id="named-parameters">Named parameters</h2>
+
+  <h2 id="units">Units</h2>
+
+  You can add units at the end of numbers like 100g. You can also add units at the end of variables using the middle dot.
+
+  This feature is not yet implemented. Right now, it does nothing. The idea, is that if you have a function for example sleep
+  that takes a time, then you can give it 1s or 1000ms or 0.000ks and it would all do the same thing.
+
+  I want everything to be handled at compile time. I don't want to create a datastructure for this.
+
+  Also, it's just nice to be able to write a unit beside a number.
+
+  An idea also is that I would like to add an operator like variable->unit => which gives the unit has a string.
+  So this way, you have the number for the variable directly, but if the program can infer the unit of the variable,
+  you can also get it's unit.
+
+  density = 105g / 98mL
+  density->unit => "g/mL"
+
+  area = 2m * 3m
+  area->unit => "m^2"
+
+  maybe, for an argument to a function, well it could be anything, so you either specify what unit you are expecting,
+  or maybe have a special construct that means that you want the variable and it's unit
+
+  func = |anything| => anything->unit
+  func(10g)
+  // because we are asking for unit here, it means that two args must actually be passed to the function, anything and __unit__anything
+  so it would be compiled to
+  function func(anything, __unit__anything) {
+
+  }
+  func(10, "g")
+
+
+
+
+
+
+  ## Thrash
+
+  It's intented main purpose is to be used for prototyping or small projects. It is usefull for concrete applications like making something visual.
 
 </md>)
 ».print()
