@@ -112,6 +112,10 @@
           "match": "\\b(if|si)\\b"
 			  },
         {
+          "name": "keyword.control.declaration.jome",
+          "match": "\\b(var|let|soit)\\b"
+			  },
+        {
           "name": "keyword.control.jome",
           "match": "\\b(yield|while|for|return|from|import|retourne|ret|export)\\b"
 			  },
