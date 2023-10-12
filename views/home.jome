@@ -206,5 +206,19 @@ import {AppPage} from './app.jome'
 
   It's intented main purpose is to be used for prototyping or small projects. It is usefull for concrete applications like making something visual.
 
+  ## Acknowledgements
+
+  TODO: Explain why
+
+  - CoffeeScript: I was kinda lost at some point. I did not have a clear direction for my language. Until I thought, hey, coffeescript did something similar! So it gave me a lot of guidance.
+  - underscore.js: A great library full of goodies.
+  - vscode: Escpecially thank you for creating custom grammar. It is really nice to create a grammar and see live the tokenization.
+
+  Thank you to everyone who contributed to any open-sourced library. Escpecially under a license like MIT license. You are awesome!
+
+  Librairies used:
+  - express
+  - markdown-it
+
 </md>)
 ».print()
