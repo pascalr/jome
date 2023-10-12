@@ -20,26 +20,21 @@ import {AppPage} from './app.jome'
 
   Jome is a language that compiles in JavaScript. It is simliar to CoffeeScript in this way.
 
-  The main ideas are instance driven development, integrated scripts, named parameters and a bunch of goodies/syntaxic sugar.
-
   You can read from top to bottom to learn the language, or you can jump to any section if you are only curious.
 
   ## Features
 
   Main ideas:
-  - [Instance driven development](#instance-driven-dev)
-  - [Integrated scripts](#integrated-scripts)
-  - [Named parameters](#named-parameters)
+  - [Nodes](#nodes) - An object in a tree structure
+  - [Integrated scripts](#integrated-scripts) - Incoroporate code from other languages
+  - [Named parameters](#named-parameters) - Add optional parameters easily
+  - [Instance driven development](#instance-driven-dev) - A more approchable way to programming
 
   Goodies / Syntaxic sugar:
-  - Arrow getter - Allows to easily use most of underscore.js features directly. ex: obj->keys => Object.keys(obj)
+  - [Arrow getter](#arrow-getter) - Allows to save keystrokes and is easier to type. ex: obj->keys => Object.keys(obj)
   - Optional let - Not sure about that one...
-  - Verbatim string literals - @\`This is a string that does ${not} interpolate\`
-  - Units - You can add units to numbers. ex: "density = 105g / 98mL"
-
-  ## Disclaimer
-
-  The language is very, very young and still contains a log of bugs. Also, I did not study in computer science. I am just a random hvac technician that somehow ended up writing a programming language. I may be doing a lot of things stupidly. Please correct me in a constructive manner if so.
+  - [Verbatim string literals](#verbatim) - @\`This is a string that does ${not} interpolate\`
+  - [Units](#units) - You can add units to numbers. ex: "density = 105g / 98mL"
 
   ## Overview
 
@@ -76,6 +71,11 @@ import {AppPage} from './app.jome'
   // Compile all the objects of the scene and write the html to #jome-placeholder div
   renderHTML({target: 'jome-placeholder'}, $)
   ```
+
+  ## Disclaimer
+
+  The language is very, very young and still contains a log of bugs. Also, I did not study in computer science. I am just a random hvac technician that somehow ended up writing a programming language. I may be doing a lot of things stupidly. Please correct me in a constructive manner if so.
+
 
   ## Installation
 
@@ -154,6 +154,46 @@ import {AppPage} from './app.jome'
 
   Like in C#. @"foo \ $ blahblah bar" => directly with no interpolation
 
+  <h2 id="nodes">Nodes</h2>
+
+  A node is an object that can have children. It is a nice structure to build trees. It is often useful for example when working with HTML. 
+
+  ```jome
+  import {Btn, Txt, renderHTML} from "html"
+
+  // Add a button to the main scene ($) which has a text as a children
+  $ <<
+    Btn @count: 0, ~click: => (@count += 1)
+      Txt => "Clicked {@count} {@count == 1 ? 'time' : 'times'}"
+  >>
+
+  // Compile all the objects of the scene and write the html to #jome-placeholder div
+  renderHTML($, target: 'jome-placeholder')
+  ```
+
+  <h2 id="arrow-getter">Arrow getter</h2>
+
+  Allows to save keystrokes and is easier to type.
+  Allows to easily use most of underscore.js features directly.
+
+  ```jome
+  // Arrow getter is useful for objects
+  dict = {x: 10, y: 20}
+  dict->keys // Object.keys(obj)
+  dict->size // Object.keys(obj).length
+
+  // Arrow getter is useful for nodes
+  node = «
+    $parent
+      $child1
+      $child2
+  »
+  node->children
+
+  // Arrow getter is useful for arrays
+  TODO
+  ```
+
   <h2 id="instance-driven-dev">Instance driven development</h2>
   Instance driven development is what I call when the focus is working on concrete objects in Godot software.
   Most of the time you control objects directly inside the editor and simply modify parameters.
@@ -197,6 +237,9 @@ import {AppPage} from './app.jome'
   }
   func(10, "g")
 
+  <h2 id="verbatim">Verbatim string literals</h2>
+
+  Verbatim string literals - @\`This is a string that does ${not} interpolate\`
 
 
 
