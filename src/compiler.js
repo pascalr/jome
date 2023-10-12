@@ -612,14 +612,29 @@ const PROCESSES = {
   },
   // =>
   "keyword.arrow.jome": (node, ctx) => {
+    let arrow = node.text()
     let next = node.captureNext()
-    return `() => ${jsBlock(next, ctx, true)}`
+    if (arrow === '=>') {
+      return `() => ${jsBlock(next, ctx, true)}`
+    } else if (arrow === ' -> ') {
+      return `function() ${jsBlock(next, ctx, true)}`
+    } else {
+      throw new Error("Error 5601293567")
+    }
   },
   // arg1 =>
   // |arg1, arg2| =>
   "meta.function.jome": (node, ctx) => {
+    let arrow = node.children[node.children.length-1].text()
     let next = node.captureNext()
-    return `${compileFunctionArgs(node, ctx)} => ${jsBlock(next, ctx, true)}`
+    let args = compileFunctionArgs(node, ctx)
+    if (arrow === '=>') {
+      return `${args} => ${jsBlock(next, ctx, true)}`
+    } else if (arrow === ' -> ') {
+      return `function${args} ${jsBlock(next, ctx, true)}`
+    } else {
+      throw new Error("Error 982349614921")
+    }
   },
   // (fooBar + 1)
   "expression.group": (node, ctx) => { // TODO: Rename expression.group. Maybe meta.parenthesis.jome?

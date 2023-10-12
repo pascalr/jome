@@ -124,7 +124,7 @@
     "arrow": {
 			"patterns": [{
 				"name": "keyword.arrow.jome",
-				"match": "=>"
+				"match": "=>| -> "
 			}]
 		},
     "path": {
@@ -143,7 +143,7 @@
       "patterns": [
         {
           "name": "meta.function.jome",
-          "match": "([a-zA-Z_]\\w*)\\s*(=>)",
+          "match": "([a-zA-Z_]\\w*)\\s*?(=>| -> )",
           "captures": {
             "1": {
               "name": "variable.parameter.jome"
@@ -157,7 +157,7 @@
           "name": "meta.function.jome",
           "begin": "\\|",
           "beginCaptures": {"0": {"name": "punctuation.definition.args.begin.jome"}},
-          "end": "(\\|)\\s*(=>)",
+          "end": "(\\|)\\s*?(=>| -> )",
           "endCaptures": {
             "1": {"name": "punctuation.definition.args.end.jome"},
             "2": {"name": "keyword.arrow.jome"}
