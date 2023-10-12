@@ -145,14 +145,15 @@ $tests <<
   TestEq addAXs(5, x1: 10, x2: 20), 35, "addAXs(5, x1: 10, x2: 20)"
 >>
 
-// $tests <<
-//   Titre 'Test des unités'
-//   TestEq 1kW*h, <js>new Quantity(1, 'kW·h')</js>, "1kW*h"
+$tests <<
+  titre 'Test des unités'
+  TestEq 10.2km/h, 10.2, "10.2km/h"
+  TestEq 0.5W * 2h, 1, "0.5W * 2h"
 //   TestEq 1kW·h, <js>new Quantity(1, 'kW·h')</js>, "1kW·h"
 //   TestEq 1km/h, <js>new Quantity(1, 'km/h')</js>, "1km/h"
 //   TestEq 1km^2, <js>new Quantity(1, 'km²')</js>, "1km^2"
 //   TestEq 1km², <js>new Quantity(1, 'km²')</js>, "1km²"
-// >>
+>>
 
 // Container = «
 //   $container

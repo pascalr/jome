@@ -735,6 +735,12 @@ const PROCESSES = {
       default: throw new Error("FIXME constant: " + node.text())
     }
   },
+  // 10g
+  "meta.number-with-unit.jome": (node, ctx) => {
+    let nb = node.children[0].text()
+    let unit = node.children[1].text()
+    return nb
+  },
   // class SomeType
   "meta.class.jome": (node, ctx) => {
     // if (node.children[0].type !== 'storage.type.class.jome') {
@@ -851,6 +857,7 @@ const PROCESSES = {
     return name
   },
   "constant.numeric.integer.jome": compileAsIs,
+  "constant.numeric.float.jome": compileAsIs,
   "comment.line.double-slash.jome": () => '',
   "comment.block.jome": () => '',
   "string.quoted.backtick.verbatim.jome": (node) => `\`${compileRaw(node.children.slice(1,-1))}\``,
