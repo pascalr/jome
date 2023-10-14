@@ -159,6 +159,7 @@ ou peut-être jome-base qui a juste jome, et jome qui regroupe beaucoup d'autres
 
 ## FIXME
 
+- Le css devrait être scope à la page, du moins avoir la possibilité de le faire
 - Les css de html-page devrait être des arguments
 - A semicolon at the end of an import does not work
 - A comment at the end of a required file does not work
