@@ -63,9 +63,52 @@ import {AppPage} from './app.jome'
 //         Item "Snake", url: "#"
 // »
 
+<css>
+  .example {
+
+  }
+
+  .onglets {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .onglets > * {
+    padding: 10px;
+    background-color: #eee;
+    cursor: pointer;
+  }
+
+  .onglets > *.active {
+    background-color: #cdcdcd;
+  }
+
+  .example-content {
+    border: 1px solid black;
+    padding: 1em;
+  }
+</css>
+
+// jome tag should do three things
+// give string of jome code
+// give string of compiled js code
+// give a function of jome code (or simply eval js code?)
+// jomeCode = <jome>
+//   x = 10
+// </jome>
+
 class Example {
-  toString: <html>
-    <div>Test 1212</div>
+  toString: => <html>
+    <div class='example'>
+      <div class='onglets'>
+        <div class='active'>Code</div>
+        <div>Compilé</div>
+        <div>Résultat</div>
+      </div>
+      <div class='example-content'>
+        Test 1212
+      </div>
+    </div>
   </html>
 }
 
@@ -89,10 +132,6 @@ htmlLibrary = <md>
   ```
 </md>
 
-
-        // <h3 id="snake">Snake</h3>
-        // <%= « Example » %>
-
 «
   AppPage title: 'Jome examples', className: "examples-page", content: <html>
     <div class="d-flex" style="height: 100%;">
@@ -110,6 +149,8 @@ htmlLibrary = <md>
         <%= helloWorld %>
         <h3 id="html-library">Html library</h3>
         <%= htmlLibrary %>
+        <h3 id="snake">Snake</h3>
+        <%= « Example » %>
       </div>
     </div>
   </html>
