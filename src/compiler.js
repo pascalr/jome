@@ -471,9 +471,17 @@ function variableNameForPath(name, ctx) {
 
 function parseScriptTagArgs(node) {
   let args = {}
-  let list = node.children.slice(1, -1).map(e => e.text())
-  // TODO: parse args with values
-  list.forEach(e => args[e] = null)
+  filterSpaces(node.children.slice(1,-1)).forEach(child => {
+    if (child.type === 'entity.other.attribute-name.jome') {
+      let n = child.text()
+      args[n] = null // FIXME: try true
+    } else if (child.type === 'meta.script-param-assign.jome') {
+      let n = child.children[0].text()
+      args[n] = child.children[2].text().slice(1, -1) // remove quotes
+    } else {
+      throw new Error("Error 965047124965")
+    }
+  })
   return args
 }
 
@@ -574,8 +582,10 @@ const PROCESSES = {
   },
   // <>1+1</>
   "meta.embedded.block.css": (node, ctx) => {
+    let args = parseScriptTagArgs(node.children[0])
     let raw = compileRaw(node.children.slice(1,-1))
-    ctx.stylesheets['__main__'] = (ctx.stylesheets['__main__'] || '') + raw
+    let out = args.out || '__main__'
+    ctx.stylesheets[out] = (ctx.stylesheets[out] || '') + raw
   },
   "meta.embedded.block.javascript": (node, ctx) => compileRaw(node.children.slice(1,-1)),
   "meta.embedded.block.markdown": compileMarkdown,
@@ -694,6 +704,7 @@ const PROCESSES = {
           return '.slice('+val+')[0]'
         }
         return '['+val+']'
+      } else if (t === 'keyword.operator.colon.jome') {
       } else {
         // TODO: List all the types so I am sure I am not missing any cases
         console.warn('Warning 95412')

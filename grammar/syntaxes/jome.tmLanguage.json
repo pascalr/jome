@@ -373,12 +373,16 @@
         },
         {"match": "\\s+"},
         {
-          "match": "\\w+",
-          "name": "entity.other.attribute-name.jome"
+          "name": "meta.script-param-assign.jome",
+          "match": "(\\w+)\\s*=\\s*(\"[^\"]*\")",
+          "captures": {
+            "1": {"name": "entity.other.attribute-name.jome"},
+            "2": {"name": "string.quoted.double.jome"}
+          }
         },
         {
-          "match": "\"\\w+\"",
-          "name": "string.quoted.double.jome"
+          "match": "\\w+",
+          "name": "entity.other.attribute-name.jome"
         },
         {
           "match": ">$",
@@ -389,7 +393,7 @@
     "scripts": {
       "patterns": [
         {
-          "begin": "\\<js(\\s+|\\w+|\\w+\\s*=\"\\w+\")*\\>",
+          "begin": "\\<js(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
           "end": "\\<\\/js\\>",
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
@@ -397,7 +401,7 @@
           "patterns": [{ "include": "source.js" }]
         },
         {
-          "begin": "\\<md(\\s+|\\w+|\\w+\\s*=\"\\w+\")*\\>",
+          "begin": "\\<md(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
           "end": "\\<\\/md\\>",
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
@@ -405,7 +409,7 @@
           "patterns": [{ "include": "text.html.markdown" }]
         },
         {
-          "begin": "\\<sh(\\s+|\\w+|\\w+\\s*=\"\\w+\")*\\>",
+          "begin": "\\<sh(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
           "end": "\\<\\/sh\\>",
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
@@ -413,7 +417,7 @@
           "patterns": [{ "include": "source.shell" }]
         },
         {
-          "begin": "\\<css(\\s+|\\w+|\\w+\\s*=\"\\w+\")*\\>",
+          "begin": "\\<css(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
           "end": "\\<\\/css\\>",
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
@@ -421,7 +425,7 @@
           "patterns": [{ "include": "source.css" }]
         },
         {
-          "begin": "\\<html(\\s+|\\w+|\\w+\\s*=\"\\w+\")*\\>",
+          "begin": "\\<html(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
           "end": "\\<\\/html\\>",
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},

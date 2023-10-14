@@ -50,7 +50,7 @@ export function buildFile(fullPath, dependencies = [], run=false) {
     let css = out?.context?.stylesheets||{}
     Object.keys(css).forEach(key => {
       // FIXME: Don't import multiple times the same css script...
-      context.stylesheets[key] = context.stylesheets[key] + css[key]
+      context.stylesheets[key] = (context.stylesheets[key]||'') + css[key]
     })
   })
 
@@ -71,7 +71,12 @@ export function buildFile(fullPath, dependencies = [], run=false) {
 
     if (run) {
       Object.keys(context.stylesheets).forEach(name => {
-        let cssPath = fullPath.replace(/\.jome$/, '.built.css');
+        let cssPath;
+        if (name === '__main__') {
+          cssPath = fullPath.replace(/\.jome$/, '.built.css');
+        } else {
+          cssPath = path.join(path.dirname(fullPath), name)
+        }
         // TODO: Insert a comment into the stylesheet that says what the source file is
         fs.writeFileSync(cssPath, context.stylesheets[name]);
         console.log(`Successfully wrote to '${cssPath}'.`);

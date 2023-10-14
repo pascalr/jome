@@ -1,6 +1,12 @@
-<css>
+<css out="jome-html.built.css">
+  .screen {
+    min-height: 100vh;
+    width: 100vw;
+  }
   .jome-html.panel {
-
+    background-color: #ddd;
+    width: 100%;
+    height: 100%;
   }
 </css>
 
@@ -15,6 +21,15 @@ export class VBox {
 //constructor: |content| => @content = content
 export class Txt |@content| => {
   toString: => <html><span><%= content%></span></html>
+}
+
+// Take a least the width and height of the screen
+export class Screen {
+  toString: => <html>
+    <div class="jome-html screen">
+      <%= @->children.map(c => (c.toString())).join('\n') %>
+    </div>
+  </html>
 }
 
 export class Panel {

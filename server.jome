@@ -14,6 +14,9 @@ requiert editorPage from './views/editor.jome'
   get '/editor', |req, res| => (
     res.send(editorPage)
   )
+  get '/jome-html.css', |req, res| => (
+    res.sendFile(__dirname+'/jome-html.built.css');
+  )
   get '/server.built.css', |req, res| => (
     res.sendFile(__dirname+'/server.built.css');
   )
