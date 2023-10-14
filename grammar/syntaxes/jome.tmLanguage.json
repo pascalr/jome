@@ -24,17 +24,54 @@
         },
         {
           "name": "meta.statement.import.jome",
-          "begin": "^import",
+          "begin": "^(import)( \\w+)?",
           "beginCaptures": {
-            "0": {
-              "name": "keyword.control.jome"
-            }
+            "1": {"name": "keyword.control.jome"},
+            "2": {"name": "variable.other.readwrite.alias.default-import.jome"}
           },
           "end": "\\n|$",
           "patterns": [
-            { "include": "#keywords" },
-            { "include": "#strings" },
-            { "include": "#variable" }
+            { "match": "\\s*" },
+            {
+              "name": "meta.namespace-import.jome",
+              "match": "\\* (as) (\\w+)",
+              "captures": {
+                "1": {"name": "keyword.control.jome"},
+                "2": {"name": "variable.other.readwrite.alias.namespace-import.jome"}
+              }
+            },
+            {
+              "name": "meta.import-file.jome",
+              "match": "(from) (\"[^\"]*\"|'[^']*')",
+              "captures": {
+                "1": {"name": "keyword.control.jome"},
+                "2": {"name": "string.quoted.import-file.jome"}
+              }
+            },
+            {
+              "name": "meta.named-imports.jome",
+              "begin": "\\{",
+              "end": "\\}",
+              "patterns": [
+                {
+                  "name": "variable.other.readwrite.named-import.jome",
+                  "match": "(\\w+) (as) (\\w+)",
+                  "captures": {
+                    "1": {"name": "variable.other.readwrite.jome"},
+                    "2": {"name": "keyword.control.jome"},
+                    "3": {"name": "variable.other.readwrite.alias.jome"}
+                  }
+                },
+                {
+                  "name": "variable.other.readwrite.named-import.jome",
+                  "match": "\\w+"
+                },
+                {
+                  "match": ",",
+                  "name": "punctuation.separator.delimiter.jome"
+                }
+              ]
+            }
           ]
         },
         {
