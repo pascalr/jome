@@ -154,4 +154,4 @@ htmlLibrary = <md>
       </div>
     </div>
   </html>
-».print()
+».toString()

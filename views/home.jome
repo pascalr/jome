@@ -266,4 +266,4 @@ import {AppPage} from './app.jome'
   - markdown-it
 
 </md>)
-».print()
+».toString()

@@ -3,7 +3,7 @@ export class HtmlPage |
   &stylesheets = [],
   &body
 | => {
-  print: => <html>
+  toString: => <html>
     <!DOCTYPE html>
     <HTML lang="en">
       <head>

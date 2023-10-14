@@ -31,7 +31,7 @@ requiert navbar from './partials/navbar.jome'
 </css>
 
 export class AppPage |&title, &content, &className = "content"| => {
-  print: => (
+  toString: => (
     «
       HtmlPage title: title, body: <html>
         <div class="d-flex flex-column" style="min-height: 100vh;">
@@ -41,6 +41,6 @@ export class AppPage |&title, &content, &className = "content"| => {
           </div>
         </div>
       </html>, stylesheets: ["server.built.css", "highlight.js.min.css"]
-    ».print()
+    ».toString()
   )
 }

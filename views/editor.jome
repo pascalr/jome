@@ -9,4 +9,4 @@ import {HtmlPage} from '../lib/html-page.jome'
       </div>
     </div>
   </html>
-».print()
+».toString()
