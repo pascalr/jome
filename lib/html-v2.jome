@@ -1,0 +1,26 @@
+<css>
+  .jome-html.panel {
+
+  }
+</css>
+
+export class HBox {
+
+}
+
+export class VBox {
+  
+}
+
+//constructor: |content| => @content = content
+export class Txt |@content| => {
+  toString: => <html><span><%= content%></span></html>
+}
+
+export class Panel {
+  toString: => <html>
+    <div class="jome-html panel">
+      <%= @->children.map(c => (c.toString())).join('\n') %>
+    </div>
+  </html>
+}

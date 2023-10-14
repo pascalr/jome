@@ -1,12 +1,14 @@
 import {HtmlPage} from '../lib/html-page.jome'
+import {Panel} from '../lib/html-v2.jome'
+
+bgColor1 = "#ded9d1"
+bgColor2 = "#c9c2b5"
+bgColorSelected = "#c8b099"
+bgColor3 = "#bfbbb3"
+bgColor4 = "#b2b2b2"
 
 «
-  HtmlPage title: 'Jome editor', body: <html>
-    <div class="d-flex flex-column" style="min-height: 100vh;">
-      Navbar
-      <div style="flex-grow: 1;">
-        Content
-      </div>
-    </div>
-  </html>
+  HtmlPage title: 'Jome editor', body: «
+    Panel color: '#ded9d1'
+  ».toString()
 ».toString()
