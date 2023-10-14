@@ -8,7 +8,7 @@ bgColor3 = "#bfbbb3"
 bgColor4 = "#b2b2b2"
 
 «
-  HtmlPage title: 'Jome editor', stylesheets: ['jome-html.css'], body: «
+  HtmlPage title: 'Jome editor', stylesheets: ['reset.css', 'jome-html.css'], body: «
     Screen
       Panel color: '#ded9d1'
   ».toString()

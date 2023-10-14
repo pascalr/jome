@@ -23,5 +23,8 @@ requiert editorPage from './views/editor.jome'
   get '/highlight.js.min.css', |req, res| => (
     res.sendFile(__dirname+'/node_modules/highlight.js/styles/default.min.css');
   )
+  get '/reset.css', |req, res| => (
+    res.sendFile(__dirname+'/reset.css')
+  )
   run
 »

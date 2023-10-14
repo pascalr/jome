@@ -18,10 +18,14 @@ export default class Jome {
 
   static createObj(parent=null, obj={}, meta={}) {
     if (!obj.$) {
-      obj.$ = {childrenCount: 0, signals: [], ...meta, chain: (func) => {
+      let {children, ...otherMeta} = meta
+      obj.$ = {childrenCount: 0, signals: [], ...otherMeta, chain: (func) => {
         func(obj)
         return obj
       }}
+      if (children) {
+        this.addChildren(obj, children)
+      }
       if (parent) {
         this.addChild(parent, obj)
       }
@@ -72,6 +76,7 @@ export default class Jome {
     return o
   }
 
+  // Children are attached directly to the $ property.
   static getChildren(obj) {
     let list = []
     Object.keys(obj.$).forEach(key => {
