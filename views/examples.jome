@@ -30,7 +30,9 @@ import {AppPage} from './app.jome'
 
   #left-nav {
     width: 10em;
-    background-color: #fff;
+    background-color: #e6e1df;;
+    min-height: 96vh; /* FIXME */
+    margin-right: 1em;
   }
 </css>
 
@@ -50,20 +52,37 @@ import {AppPage} from './app.jome'
 //   </Row>
 // </Container>
 
+// «
+//   Row
+//     Div
+//       List
+//         Item "Snake", url: "#"
+//         Item t("Snake"), url: "#"
+//         Item "Snake", url: "#"
+//         Item "Snake", url: "#"
+//         Item "Snake", url: "#"
+// »
+
+helloWorld = <md>
+  ```jome
+  console.log("Hello world!") // jome compiles to javascript, so you can use javascript
+  ```
+</md>
+
 «
   AppPage title: 'Jome examples', className: "examples-page", content: <html>
     <div class="d-flex" style="height: 100%;">
       <div id="left-nav">
         <ul class="nav-list">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Services</a></li>
-          <li><a href="#">Portfolio</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="#hello-world">Hello world</a></li>
+          <li><a href="#">Snake</a></li>
+          <li><a href="#">Script</a></li>
         </ul>
       </div>
       <div class="examples-content">
         <h2 class="title">Jome examples</h2>
+        <h3 id="hello-world">Hello world</h3>
+        <%= helloWorld %>
       </div>
     </div>
   </html>

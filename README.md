@@ -179,6 +179,11 @@ idee = <Container>
   </Row>
 </Container>
 
+Dans les scripts, pouvoir rajouter des nodes compilés avec la syntaxe du genre:
+
+<%Obj "arg", param: 'val' %>
+<%T "Text à traduire" %>
+
 
 
 PAS D'INTERPOLATION EN MARKDOWN, simplement faire <md>...</md>+"something"+<md>...</md>
