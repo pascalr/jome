@@ -1,6 +1,6 @@
 export class HtmlPage |
   &title = '',
-  &navbar,
+  &stylesheets = [],
   &body
 | => {
   print: => <html>
@@ -10,13 +10,10 @@ export class HtmlPage |
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><%= title %></title>
-        <link rel="stylesheet" type="text/css" href="server.built.css">
-        <link rel="stylesheet" type="text/css" href="highlight.js.min.css">
+        <%= stylesheets.map(f => `<link rel="stylesheet" type="text/css" href="{f}">`).join('\n') %>
       </head>
       <body>
-          <%= navbar %>
-
-          <%= body %>
+        <%= body %>
       </body>
     </HTML>
   </html>

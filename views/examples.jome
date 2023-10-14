@@ -23,14 +23,36 @@ import {AppPage} from './app.jome'
     background-color: #f0f0f0;
   }
 
-  .d-flex {
-    display: flex;
+  .examples-content {
+    font-size: 16px;
+    max-width: 60em;
+  }
+
+  #left-nav {
+    width: 10em;
+    background-color: #fff;
   }
 </css>
 
+// class Row {
+//   // TODO
+//   print: => <html>
+//     <div class="d-flex">
+//       <%= @->children.map(c => c.print()).join('\n') %>
+//     </div>
+//   </html>
+// }
+
+// idee = <Container>
+//   <Row>
+//     <Col></Col>
+//     <Col></Col>
+//   </Row>
+// </Container>
+
 «
-  AppPage title: 'Jome examples', content: <html>
-    <div class="d-flex">
+  AppPage title: 'Jome examples', className: "examples-page", content: <html>
+    <div class="d-flex" style="height: 100%;">
       <div id="left-nav">
         <ul class="nav-list">
           <li><a href="#">Home</a></li>
@@ -40,7 +62,7 @@ import {AppPage} from './app.jome'
           <li><a href="#">Contact</a></li>
         </ul>
       </div>
-      <div>
+      <div class="examples-content">
         <h2 class="title">Jome examples</h2>
       </div>
     </div>

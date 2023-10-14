@@ -168,6 +168,18 @@ ou peut-être jome-base qui a juste jome, et jome qui regroupe beaucoup d'autres
 
 
 
+## IDEE
+
+Permettre d'utiliser la syntaxe style xml. Si le truc commence par une majuscule, alors c'est une
+classe, sinon c'est un language.
+idee = <Container>
+  <Row>
+    <Col></Col>
+    <Col></Col>
+  </Row>
+</Container>
+
+
 
 PAS D'INTERPOLATION EN MARKDOWN, simplement faire <md>...</md>+"something"+<md>...</md>
 
