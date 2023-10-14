@@ -170,6 +170,8 @@ ou peut-être jome-base qui a juste jome, et jome qui regroupe beaucoup d'autres
 
 ## IDEE
 
+Peut-être le keyword main pour faire comme export default au lieu de retourner la dernière chose du fichier.
+
 Permettre d'utiliser la syntaxe style xml. Si le truc commence par une majuscule, alors c'est une
 classe, sinon c'est un language.
 idee = <Container>

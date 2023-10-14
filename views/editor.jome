@@ -1,0 +1,12 @@
+import {HtmlPage} from '../lib/html-page.jome'
+
+«
+  HtmlPage title: 'Jome editor', body: <html>
+    <div class="d-flex flex-column" style="min-height: 100vh;">
+      Navbar
+      <div style="flex-grow: 1;">
+        Content
+      </div>
+    </div>
+  </html>
+».print()

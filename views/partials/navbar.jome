@@ -29,6 +29,7 @@
 <html>
   <div class="navbar">
     <span class="navbrand" href="#">Jome</span>
+    <a href="/editor">Editor</a>
     <a href="/">Home</a>
     <a href="/#lang-ref">Language Reference</a>
     <a href="/ex">Examples</a>
