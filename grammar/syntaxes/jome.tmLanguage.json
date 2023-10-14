@@ -27,17 +27,18 @@
           "begin": "^(import)( \\w+)?",
           "beginCaptures": {
             "1": {"name": "keyword.control.jome"},
-            "2": {"name": "variable.other.readwrite.alias.default-import.jome"}
+            "2": {"name": "variable.other.default-import.jome"}
           },
           "end": "\\n|$",
           "patterns": [
-            { "match": "\\s*" },
+            { "match": "\\s+" },
             {
               "name": "meta.namespace-import.jome",
-              "match": "\\* (as) (\\w+)",
+              "match": "(\\*) (as) (\\w+)",
               "captures": {
-                "1": {"name": "keyword.control.jome"},
-                "2": {"name": "variable.other.readwrite.alias.namespace-import.jome"}
+                "1": {"name": "constant.language.import-export-all.jome"},
+                "2": {"name": "keyword.control.jome"},
+                "3": {"name": "variable.other.namespace-import.jome"}
               }
             },
             {
@@ -45,7 +46,7 @@
               "match": "(from) (\"[^\"]*\"|'[^']*')",
               "captures": {
                 "1": {"name": "keyword.control.jome"},
-                "2": {"name": "string.quoted.import-file.jome"}
+                "2": {"name": "string.quoted.jome"}
               }
             },
             {
@@ -54,7 +55,7 @@
               "end": "\\}",
               "patterns": [
                 {
-                  "name": "variable.other.readwrite.named-import.jome",
+                  "name": "meta.import-alias.jome",
                   "match": "(\\w+) (as) (\\w+)",
                   "captures": {
                     "1": {"name": "variable.other.readwrite.jome"},
@@ -63,13 +64,23 @@
                   }
                 },
                 {
-                  "name": "variable.other.readwrite.named-import.jome",
+                  "name": "meta.import-alias.jome",
+                  "match": "(\"[^\"]*\"|'[^']*') (as) (\\w+)",
+                  "captures": {
+                    "1": {"name": "string.quoted.jome"},
+                    "2": {"name": "keyword.control.jome"},
+                    "3": {"name": "variable.other.readwrite.alias.jome"}
+                  }
+                },
+                {
+                  "name": "variable.other.named-import.jome",
                   "match": "\\w+"
                 },
                 {
                   "match": ",",
                   "name": "punctuation.separator.delimiter.jome"
-                }
+                },
+                { "include": "#block-comment" }
               ]
             }
           ]
@@ -587,6 +598,15 @@
         {"include": "#expression"}
       ]
     },
+    "block-comment": {
+      "patterns": [{
+        "begin": "\\/\\*",
+        "beginCaptures": {"0": {"name": "punctuation.definition.comment.jome"}},
+        "end": "\\*\\/",
+        "endCaptures": {"0": {"name": "punctuation.definition.comment.jome"}},
+        "name": "comment.block.jome"
+      }]
+    },
     "comment": {
       "patterns": [
         {
@@ -600,13 +620,7 @@
           "endCaptures": {"0": {"name": "punctuation.definition.comment.jome"}},
           "name": "comment.block.documentation.jome"
         },
-        {
-          "begin": "\\/\\*",
-          "beginCaptures": {"0": {"name": "punctuation.definition.comment.jome"}},
-          "end": "\\*\\/",
-          "endCaptures": {"0": {"name": "punctuation.definition.comment.jome"}},
-          "name": "comment.block.jome"
-        }
+        { "include": "#block-comment" }
       ]
     }
 	}

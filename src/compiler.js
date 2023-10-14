@@ -535,26 +535,45 @@ const PROCESSES = {
     ctx.currentFile = before
     return 'let '+varName+` = ((__params__ = {}) => ${data})`
   },
-  // import {$$} from 'jome_lib'
+  // import defaultExport from "module-name";
+  // import * as name from "module-name";
+  // import { export1 } from "module-name";
+  // import { export1 as alias1 } from "module-name";
+  // import { default as alias } from "module-name";
+  // import { export1, export2 } from "module-name";
+  // import { export1, export2 as alias2, /* … */ } from "module-name";
+  // import { "string name" as alias } from "module-name";
+  // import defaultExport, { export1, /* … */ } from "module-name";
+  // import defaultExport, * as name from "module-name";
+  // // import "module-name"; TODO: Not written yet in the parser
   "meta.statement.import.jome": (node, ctx) => {
-    // FIXME: Handle all possible import types
+    let file;
     let defaultImport = ''
     let namedImports = []
-    node.children.forEach((child, i) => {
-      if (child.type === 'variable.other.jome') {
-        let name = child.text()
-        let p = node.children[i-1]
-        if (p && typeof p === 'string' && p.includes('{')) {
-          namedImports.push(name)
-          ctx.addBinding(name, {type: 'named-import'})
-        } else {
-          defaultImport = name+' '
-          ctx.addBinding(name, {type: 'default-import'})
-        }
+    let list = filterSpaces(node.children.slice(1)) // remove import keyword
+    list.forEach(item => {
+      if (item.type === 'meta.named-imports.jome') {
+        filterSpaces(item.children.slice(1, -1)).forEach(imp => {
+          if (imp.type === 'variable.other.named-import.jome') {
+            let name = imp.text()
+            namedImports.push(name)
+            ctx.addBinding(name, {type: 'named-import'})
+          } else if (imp.type === 'meta.import-alias.jome') {
+            throw new Error("TODO: import {foo as bar} syntax")
+          }
+        })
+      } else if (item.type === 'meta.import-file.jome') {
+        let cs = filterSpaces(item.children)
+        file = cs[cs.length-1].text().slice(1,-1)
+      } else if (item.type === 'variable.other.default-import.jome') {
+        defaultImport = item.text().trim()
+        ctx.addBinding(defaultImport, {type: 'default-import'})
+      } else {
+        throw new Error("Error 234j90s7adfg1")
       }
     })
-    let relPath = getRelativePath(node.children.slice(-1)[0].children[1], ctx)
-    //let ext = relPath.match(/\.([^.]+)$/)
+
+    let relPath = getRelativePath(file, ctx)
     let ext = path.extname(relPath)
     if (ext === '.jome') {
       ctx.dependencies.push(relPath)
