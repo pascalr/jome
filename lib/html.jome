@@ -159,11 +159,11 @@ class Br « InlineTag "br" »
 class Hr « InlineTag "hr" »
 
 class Txt text => {
-  toHTML: [] => (
+  toHTML: => (
     attrs = renderHTMLAttrs(@)
     attrs ? "<span{attrs}>{text}</span>" : "{text}"
   )
-  createElem: [] => (
+  createElem: => (
     document.createTextNode(text)
   )
 }

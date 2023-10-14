@@ -63,11 +63,35 @@ import {AppPage} from './app.jome'
 //         Item "Snake", url: "#"
 // »
 
+class Example {
+  toString: <html>
+    <div>Test 1212</div>
+  </html>
+}
+
 helloWorld = <md>
   ```jome
   console.log("Hello world!") // jome compiles to javascript, so you can use javascript
   ```
 </md>
+
+htmlLibrary = <md>
+  ```jome
+  html = «
+    IFrame // for demo only
+      Html title: 'My html page'
+        $page Col
+          $navbar Row
+            Link 'Some page'
+            Link 'Another page'
+            Link 'Yet another page'
+  »
+  ```
+</md>
+
+
+        // <h3 id="snake">Snake</h3>
+        // <%= « Example » %>
 
 «
   AppPage title: 'Jome examples', className: "examples-page", content: <html>
@@ -75,7 +99,8 @@ helloWorld = <md>
       <div id="left-nav">
         <ul class="nav-list">
           <li><a href="#hello-world">Hello world</a></li>
-          <li><a href="#">Snake</a></li>
+          <li><a href="#html-library">Html library</a></li>
+          <li><a href="#snake">Snake</a></li>
           <li><a href="#">Script</a></li>
         </ul>
       </div>
@@ -83,6 +108,8 @@ helloWorld = <md>
         <h2 class="title">Jome examples</h2>
         <h3 id="hello-world">Hello world</h3>
         <%= helloWorld %>
+        <h3 id="html-library">Html library</h3>
+        <%= htmlLibrary %>
       </div>
     </div>
   </html>

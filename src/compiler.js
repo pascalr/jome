@@ -97,6 +97,9 @@ function compileName(name) {
 // In jome, { ... } is always a dict and never a block
 // This function compile a jome statement into a javascript block
 function jsBlock(node, ctx, addReturnStatement = false) {
+  if (!node) {
+    throw new Error("Error 607127593")
+  }
   ctx.depth += 1
   let r = `{\n${'  '.repeat(ctx.depth)}`
   if (node.type === 'expression.group') {
@@ -278,13 +281,17 @@ function compileFunctionArgs(node, ctx) {
   return compileFunctionArgsDetailed(node, ctx).result
 }
 
-function compileMethod(arr, ctx, key) {
+// Used inside the context of a class
+function compileDictValOrMethod(arr, ctx, key) {
   let r = '', r0 = '()', r1
   if (arr[0].type === 'meta.function.jome') {
     r0 = compileFunctionArgs(arr[0], ctx)
   }
-  r = r0+' '+jsBlock(arr[1], ctx, key !== 'constructor')
-  return r
+  if (arr[0].type === 'meta.function.jome' || arr[0].type === 'keyword.arrow.jome') {
+    r = r0+' '+jsBlock(arr[1], ctx, key !== 'constructor')
+    return r
+  }
+  return ' = '+compileBlock(arr, ctx)
 }
 
 function buildDict(node, ctx, func) {
@@ -793,7 +800,7 @@ const PROCESSES = {
         next = next.next()
       }
       if (next?.type === 'meta.dictionary.jome') {
-        methods = {...methods, ...buildDict(next, ctx, compileMethod)}
+        methods = {...methods, ...buildDict(next, ctx, compileDictValOrMethod)}
         next.captured = true
       }
       if (constructorLines.length) {
