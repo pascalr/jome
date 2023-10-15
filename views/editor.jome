@@ -7,14 +7,18 @@ bgColorSelected = "#c8b099"
 bgColor3 = "#bfbbb3"
 bgColor4 = "#b2b2b2"
 
+    // Screen
+    //   Col
+    //     $navbar Panel color: '#ded9d1'
+    //     Row
+    //       $left_navbar Panel color: '#55aa77', width: 200px
+    //       $main_panel Panel color: '#99dd11', flex_grow: 1
+    //       $desc_panel Panel color: '#dd5511', width: 200px
+
+// $navbar Panel color: '#ded9d1'
+
 «
   HtmlPage title: 'Jome editor', stylesheets: ['reset.css', 'jome-html.css'], body: «
     Screen
-      Col
-        $navbar Panel color: '#ded9d1'
-        Row
-          $left_navbar Panel color: '#55aa77', width: 200px
-          $main_panel Panel color: '#99dd11', flex_grow: 1
-          $desc_panel Panel color: '#dd5511', width: 200px
   ».toString()
 ».toString()

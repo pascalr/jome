@@ -1,5 +1,7 @@
+import {Div} from './html.jome'
+
 <css out="jome-html.built.css">
-  .screen {
+  .jome-html.screen {
     min-height: 100vh;
     width: 100vw;
     display: grid; /* grid is decently supported now: https://caniuse.com/css-grid */
@@ -42,13 +44,18 @@ export class Screen {
   </html>
 }
 
-export class Panel {
-  toString: => <html>
-    <div class="jome-html panel">
-      <%= @->children.map(c => (c.toString())).join('\n') %>
-    </div>
-  </html>
-}
+// export class Panel {
+//   toString: => <html>
+//     <div class="jome-html panel">
+//       <%= @->children.map(c => (c.toString())).join('\n') %>
+//     </div>
+//   </html>
+// }
+
+export class Panel « Div » // css: {width: 100%, height: 100%}
+
+//class Row « Div css: {display: 'flex'} »
+//class Row « Div css.display: 'flex' »
 
 export class Row {
   toString: => <html>

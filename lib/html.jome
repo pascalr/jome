@@ -145,7 +145,7 @@ class H3 text => « Tag "h3", text »
 class P text => « Tag "p", text »
 class Li text => « Tag "li", text »
 class Span text => « Tag "span", text »
-class Div text => « Tag "div", text »
+export class Div text => « Tag "div", text »
 class Pre text => « Tag "pre", text »
 class Code text => « Tag "code", text »
 
