@@ -1,6 +1,6 @@
 import {AppPage} from './app.jome'
 
-requiert libSidebar from './partials/lib_sidebar.jome'
+requiert sidebar from './partials/sidebar.jome'
 
 // jome tag should do three things
 // give string of jome code
@@ -23,7 +23,7 @@ text = <md>
 «
   AppPage title: 'Jome examples', className: "examples-page", content: <html>
     <div class="d-flex" style="height: 100%;">
-      <%= libSidebar %>
+      <%= sidebar %>
       <div class="examples-content">
         <%= text %>
       </div>

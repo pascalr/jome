@@ -39,7 +39,7 @@
     border-radius: 8px;
   }
 
-    ul.nav-list {
+  ul.nav-list {
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -57,6 +57,12 @@
     display: block;
   }
 
+  ul.nav-list.nav-sub li a {
+    margin-top: -7px;
+    padding: 7px 10px 7px 25px;
+    font-size: 0.9em;
+  }
+
   ul.nav-list li a:hover {
     background-color: #f0f0f0;
   }
@@ -71,10 +77,6 @@
     background-color: #e6e1df;;
     min-height: 96vh; /* FIXME */
     margin-right: 1em;
-  }
-
-  .example {
-
   }
 
   .onglets {

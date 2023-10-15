@@ -1,0 +1,17 @@
+<html>
+  <div id="left-nav">
+    <ul class="nav-list">
+      <li><a href="/">Home</a></li>
+      <li><a href="/lib">Librairies</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/lib/html">Html</a></li>
+      </ul>
+      <li><a href="/ex">Examples</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/ex#hello-world">Hello world</a></li>
+        <li><a href="/ex#snake">Snake</a></li>
+        <li><a href="/ex">Script</a></li>
+      </ul>
+    </ul>
+  </div>
+</html>
