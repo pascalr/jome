@@ -229,7 +229,20 @@ import {AppPage} from './app.jome'
 
   Verbatim string literals - @\`This is a string that does ${not} interpolate\`
 
+  ## Declarations
 
+  When you declare a variable without a keyword, the variable will be a constant. To declare a variable, use the var keyword.
+  To declare a function, use de def function.
+
+  ```jome
+  PI = 3.1415
+  PI = 10 // ERROR. PI is not allowed to be redeclared anywhere nested inside the scope
+  var x = 10
+  x = 20
+  def add10 = x => x + 10
+  add10(20)
+  add10 = x => x + 20 // ERROR. add10 can only be redeclared in a nested scope
+  ```
 
 
 

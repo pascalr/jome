@@ -161,7 +161,7 @@
 			  },
         {
           "name": "keyword.control.declaration.jome",
-          "match": "\\b(var|let|soit)\\b"
+          "match": "\\b(var|def)\\b"
 			  },
         {
           "name": "keyword.control.jome",
