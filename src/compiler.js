@@ -384,7 +384,7 @@ function parseIndent(list, ctx) {
       // ignore
     } else {
       let j = list.slice(i).findIndex(e => e.type === 'newline')
-      let arr = list.slice(i, j === -1 ? -1 : i+j)
+      let arr = (j === -1) ? list.slice(i) : list.slice(i, i+j)
       i = (j === -1) ? list.length - 1 : i+j-1
       let node = new IndentNode(indent, arr)
       while (stack.length && (stack[stack.length-1].indent) >= indent) {

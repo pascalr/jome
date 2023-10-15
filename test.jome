@@ -17,7 +17,15 @@ import {H1} from './lib/html.jome'
 
 // TODO: Test Use <HTML> to add an html tag inside <html><HTML></HTML></html>
 
+class ClassForTesting |&prop| => {
+}
+
+// new ClassForTesting(prop: 'Hello')
+console.log(« ClassForTesting prop: 'Hello' »->props)
+
 <sh>echo "Starting tests!"</sh>
+
+console.log('There')
 
 var person = "John"
 
@@ -76,7 +84,7 @@ $html <<
 
 $tests <<
   TestEq $html/titre.toString(), "<h1>Un titre</h1>", "$html/titre.toString()"
-  TestEq «H1 "Un titre"».toString(), "<h1>Un titre</h1>", "«H1 \"Un titre\"».toString()"
+  TestEq « H1 "Un titre" ».toString(), "<h1>Un titre</h1>", "«H1 \"Un titre\"».toString()"
 >>
 
 titre = |texte| => (
