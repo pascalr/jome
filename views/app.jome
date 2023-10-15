@@ -40,7 +40,7 @@ export class AppPage |&title, &content, &className = "content"| => {
             <%= content %>
           </div>
         </div>
-      </html>, stylesheets: ["server.built.css", "highlight.js.min.css"]
+      </html>, stylesheets: ["/server.built.css", "/highlight.js.min.css"]
     ».toString()
   )
 }
