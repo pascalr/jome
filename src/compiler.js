@@ -148,7 +148,9 @@ function compileBlock(array, ctx, addReturnStatement = false) {
       }
     }
   }
-  if (addReturnStatement) {
+  if (!r.length) {
+    return ''
+  } else if (addReturnStatement) {
     let t;
     const lastIndex = r.lastIndexOf('\n');
     if (lastIndex !== -1) {

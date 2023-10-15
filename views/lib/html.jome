@@ -2,19 +2,6 @@ import {AppPage} from '../app.jome'
 
 requiert libSidebar from '../partials/lib_sidebar.jome'
 
-<css>
-  pre {
-    background-color: #dce0e8;
-    padding: 1em;
-    border-radius: 8px;
-  }
-  code:not(pre code) {
-    background-color: #dce0e8;
-    padding: 0.5em;
-    border-radius: 8px;
-  }
-</css>
-
 text23 = <md>
 
   # Jome lib html

@@ -3,33 +3,6 @@ import {HtmlPage} from '../lib/html-page.jome'
 requiert navbar from './partials/navbar.jome'
 // navbar = require './views/partials/navbar.jome'
 
-<css>
-  body {
-    margin: 0;
-    background-color: #f9f4f4;
-  }
-
-  /* Style the title and text */
-  .title {
-    font-size: 24px;
-    margin-top: 20px;
-  }
-
-  .content {
-    font-size: 16px;
-    max-width: 60em;
-    margin: auto;
-  }
-
-  .d-flex {
-    display: flex;
-  }
-
-  .flex-column {
-    flex-direction: column;
-  }
-</css>
-
 export class AppPage |&title, &content, &className = "content"| => {
   toString: => (
     «
