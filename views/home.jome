@@ -14,7 +14,7 @@ import {AppPage} from './app.jome'
   Main ideas:
   - [Nodes](#nodes) - An object in a tree structure
   - [Integrated scripts](#integrated-scripts) - Incoroporate code from other languages
-  - [Named parameters](#named-parameters) - Add optional parameters easily
+  - [Named parameters and props](#named-parameters) - Add optional parameters easily
   - [Instance driven development](#instance-driven-dev) - A more approchable way to programming
 
   Goodies / Syntaxic sugar:
@@ -190,9 +190,40 @@ import {AppPage} from './app.jome'
 
   <h2 id="integrated-scripts">Integrated scripts</h2>
 
-  <h2 id="named-parameters">Named parameters</h2>
+  <h2 id="named-parameters">Named parameters and props</h2>
+
+  When calling a function, you can add paramters.
+
+  ```jome
+  someFunc(someParam: 10, otherParam: 'Jean')
+  ```
+
+  To define parameters when creating a function, you add the & symbol before the variable name.
+
+  ```jome
+  def someFunc = |&someParam, &otherParam = 'Pierre', &optionalParam| => (
+    console.log(someParam) // No need to add & when refering to a parameter
+  )
+  ```
+
+  Props are the specific case of object creation. When you pass parameters when creating an object, we call them props.
+
+  ```jome
+  « Obj someProp: 10, otherProp: 'Paul' »
+  ```
+
+  You can pass a parameter that was not defined in the list.
+
+  BUT YOU CAN'T PASS a parameter to a function if the function does not take any parameter. Because under the hood,
+  we add a params argument to the function, so we need at least one to add the argument, then you can pass as many as you want.
 
   <h2 id="units">Units</h2>
+
+  ```jome
+  debug = |arg, unit argUnit| => (
+    /* ... */
+  )
+  ```
 
   You can add units at the end of numbers like 100g. You can also add units at the end of variables using the middle dot.
 
@@ -244,7 +275,19 @@ import {AppPage} from './app.jome'
   add10 = x => x + 20 // ERROR. add10 can only be redeclared in a nested scope
   ```
 
+  ## Capture de code
 
+  TODO: Quelque chose que j'aimerais beaucoup avoir. Un système pour capturer le code.
+
+  Par exemple,
+
+  ```jome
+  nomDeVariable = 10
+  debug = |arg, code argCode| => (
+    console.log("Debugging {argCode}: Value {arg}")
+  )
+  debug(nomDeVariable) // => Debugging nomDeVariable: Value 10
+  ```
 
   ## Thrash
 

@@ -15,7 +15,7 @@ def renderHTMLAttrs = |obj| => (
 )
 
 def renderHTMLChildren = |obj| => (
-  obj->children.map(c => (c.toHTML ? c.toHTML() : '')).join("")
+  obj->children.map(c => (c.toString ? c.toString() : '')).join("")
 )
 
 def renderHTML = |obj, &target| => (
@@ -26,8 +26,8 @@ def renderHTML = |obj, &target| => (
     if (child.createElem) (
       var e = child.createElem()
       children.push(e)
-    ) else if (child.toHTML) (
-      html += child.toHTML()
+    ) else if (child.toString) (
+      html += child.toString()
     )
   ))
   elem.innerHTML = html
@@ -103,9 +103,9 @@ def createElem = |obj, tag, content, ns| => (
   obj->children.forEach(child => (
     if (child.createElem) (
       el.appendChild(child.createElem())
-    ) else if (child.toHTML) (
+    ) else if (child.toString) (
       tmp = document.createElement("div")
-      tmp.innerHTML = child.toHTML()
+      tmp.innerHTML = child.toString()
       console.log('here', tmp.innerHTML)
       el.appendChild(tmp.firstElementChild)
     )
@@ -119,15 +119,15 @@ def createElem = |obj, tag, content, ns| => (
 )
 
 class Tag |tag, content| => {
-  toHTML: => `<{tag}{renderHTMLAttrs(@)}>{content||''}{renderHTMLChildren(@)}</{tag}>`
+  toString: => `<{tag}{renderHTMLAttrs(@)}>{content||''}{renderHTMLChildren(@)}</{tag}>`
   createElem: => createElem(@, tag, content)
 }
 class InlineTag |tag| => {
-  toHTML: => `<{tag}{renderHTMLAttrs(@)} />`
+  toString: => `<{tag}{renderHTMLAttrs(@)} />`
   createElem: => createElem(@, tag)
 }
 class Fragment => {
-  toHTML: => `{renderHTMLChildren(@)}`
+  toString: => `{renderHTMLChildren(@)}`
   createElem: => (
     var el = document.createDocumentFragment()
     @->children.forEach(child => (
@@ -159,7 +159,7 @@ class Br « InlineTag "br" »
 class Hr « InlineTag "hr" »
 
 class Txt text => {
-  toHTML: => (
+  toString: => (
     attrs = renderHTMLAttrs(@)
     attrs ? "<span{attrs}>{text}</span>" : "{text}"
   )

@@ -78,7 +78,7 @@
   }
 
   #left-nav {
-    width: 15em;
+    width: 18em;
     background-color: #e6e1df;;
     margin-right: 1.5em;
     flex-shrink: 0;

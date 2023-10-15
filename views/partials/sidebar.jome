@@ -13,7 +13,7 @@
       <ul class="nav-list nav-sub">
         <li><a href="/#nodes">Nodes</a></li>
         <li><a href="/#integrated-scripts">Integrated scripts</a></li>
-        <li><a href="/#named-parameters">Named parameters</a></li>
+        <li><a href="/#named-parameters">Named parameters and props</a></li>
         <li><a href="/#instance-driven-dev">Instance driven development</a></li>
         <li><a href="/#arrow-getter">Arrow getter</a></li>
         <li><a href="/#todo">Optional let</a></li>
