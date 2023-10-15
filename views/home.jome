@@ -9,57 +9,38 @@ import {AppPage} from './app.jome'
 
   You can read from top to bottom to learn the language, or you can jump to any section if you are only curious.
 
-  ## Features
-
-  Main ideas:
-  - [Nodes](#nodes) - An object in a tree structure
-  - [Integrated scripts](#integrated-scripts) - Incoroporate code from other languages
-  - [Named parameters and props](#named-parameters) - Add optional parameters easily
-  - [Instance driven development](#instance-driven-dev) - A more approchable way to programming
-
-  Goodies / Syntaxic sugar:
-  - [Arrow getter](#arrow-getter) - Allows to save keystrokes and is easier to type. ex: obj->keys => Object.keys(obj)
-  - Optional let - Not sure about that one...
-  - [Verbatim string literals](#verbatim) - @\`This is a string that does ${not} interpolate\`
-  - [Units](#units) - You can add units to numbers. ex: "density = 105g / 98mL"
-  - [Hyphen](#hyphens) - You can use hyphens in variable names like left-panel. The minus operator should always be surrounded by spaces.
-
   ## Overview
 
-  Example Jome code:
+  Example Jome code: TODO: Make this like the examples so you can click see compiled and result
+
   ```jome
-  import {Btn, Txt, renderHTML} from "html"
+  // Classes
+  class Character |@name, @weapon?| => {
+    attack: |enemy| => (
 
-  // Add a button to the main scene ($) which has a text as a children
-  $ <<
-    Btn @count: 0, ~click: => (@count += 1)
-      Txt => "Clicked {@count} {@count == 1 ? 'time' : 'times'}"
-  >>
+    )
+  }
+  class Weapon |damage?, range?| => {}
 
-  // Compile all the objects of the scene and write the html to #jome-placeholder div
-  renderHTML($, target: 'jome-placeholder')
+  // Inheritence and properties
+  class Dagger « Weapon range: 50 »
+  class WeakDagger « Dagger damage: 50 »
+  class StrongDagger « Dagger damage: 200 »
+
+  // Instantiation
+  var startingWeapon = « WeakDagger »
+  var hero = « Character "Paul", weapon: startingWeapon »
+
+  // Scripts (any language, here shell)
+  var gameSaved = <sh>cat "saved-gamed.json"</sh>
+
+  // Functions
+  def announceGameIsStarted = -> (
+    console.log('Game started!')
+  )
+  announceGameIsStarted()
   ```
-
-  Example compiled JavaScript output:
-  ```js
-  import jome from 'jome_lib'
-  import {Btn, Txt, renderHTML} from "html"
-
-  var $ = jome.createObj()
-  var btn
-
-  // Add a button to the scene which has a text as a children
-  btn = new Btn({__signal__click: () => {this.count += 1}})
-  btn.count = 0
-  jome.createObj($, btn)
-  jome.createObj($.$.$btn, new Txt(() => (
-    `Clicked ${this.count} ${this.count == 1 ? 'time' : 'times'}`
-  )))
-
-  // Compile all the objects of the scene and write the html to #jome-placeholder div
-  renderHTML({target: 'jome-placeholder'}, $)
-  ```
-
+  
   ## Disclaimer
 
   The language is very, very young and still contains a log of bugs. Also, I did not study in computer science. I am just a random hvac technician that somehow ended up writing a programming language. I may be doing a lot of things stupidly. Please be nice and correct me in a constructive manner if so.
@@ -87,6 +68,12 @@ import {AppPage} from './app.jome'
   $foo/bar is a path to get the children of the main object named foo, and then get it's children named bar
 
   `$ << $foo >>` => add an object named foo inside the main object '$'
+
+  ## Classes
+
+  ### Inheritence
+
+  Classes inherit using the « » syntax. It is usefull
 
   ### Functions
 
@@ -147,17 +134,30 @@ import {AppPage} from './app.jome'
   A node is an object that can have children. It is a nice structure to build trees. It is often useful for example when working with HTML. 
 
   ```jome
-  import {Btn, Txt, renderHTML} from "html"
-
-  // Add a button to the main scene ($) which has a text as a children
-  $ <<
-    Btn @count: 0, ~click: => (@count += 1)
-      Txt => "Clicked {@count} {@count == 1 ? 'time' : 'times'}"
-  >>
-
-  // Compile all the objects of the scene and write the html to #jome-placeholder div
-  renderHTML($, target: 'jome-placeholder')
+  «
+    Page
+      Navbar
+        List
+          Link "Musics", to: '/musics'
+          Link "Sports", to: '/sports'
+          Link "Arts", to: '/arts'
+      Body
+        Txt < md >
+          # Welcome
+          Welcome to this website! You can browse links at the top.
+        < / md>
+  »
   ```
+
+  Underneath, nodes are objects with a property named '$'. The idea of doing it this way is in order to not clash with user defined properties for
+  example name.
+
+  The property includes the following attributes:
+  - name: The name of the node
+  - children: The list of children of the node. FIXME: No this is not dont this way anymore. Is this ok? It should be this way...
+  - parent: A link to the node who is it's parent
+  - signals: A list of the signals the node listens to
+  - childrenCount: The number of children of the node. Not sure about this one. Depends on the way I implement children.
 
   <h2 id="arrow-getter">Arrow getter</h2>
 
@@ -258,7 +258,29 @@ import {AppPage} from './app.jome'
 
   <h2 id="verbatim">Verbatim string literals</h2>
 
-  Verbatim string literals - @\`This is a string that does ${not} interpolate\`
+  Verbatim string literals are strings that do not interpolate. The idea is taken from C#. But in C# it also includes backslashes without escaping
+  them I don't know if I want to do that. Or I want to offer multiple possibilities.
+  
+  ```jome
+  str = @"This is a string that does ${not} interpolate"
+  ```
+
+  ## signals
+  
+  Signals are used for events. They are not very much implemented yet. TODO: Check how Godot handles events, check how js handles events.
+
+  In Jome, signals start with a tilde.
+
+  ```jome
+  class Button {
+    ~click() {
+      console.log('Button clicked!')
+    }
+  }
+
+  btn = « Button »
+  btn.click()
+  ```
 
   ## Declarations
 
@@ -289,10 +311,6 @@ import {AppPage} from './app.jome'
   debug(nomDeVariable) // => Debugging nomDeVariable: Value 10
   ```
 
-  ## Thrash
-
-  It's intented main purpose is to be used for prototyping or small projects. It is usefull for concrete applications like making something visual.
-
   ## Acknowledgements
 
   TODO: Explain why
@@ -309,6 +327,62 @@ import {AppPage} from './app.jome'
   Librairies used:
   - express
   - markdown-it
+
+  ## Thrash  
+
+  It's intented main purpose is to be used for prototyping or small projects. It is usefull for concrete applications like making something visual.
+
+  ## Features
+
+  Main ideas:
+  - [Nodes](#nodes) - An object in a tree structure
+  - [Integrated scripts](#integrated-scripts) - Incoroporate code from other languages
+  - [Named parameters and props](#named-parameters) - Add optional parameters easily
+  - [Instance driven development](#instance-driven-dev) - A more approchable way to programming
+
+  Goodies / Syntaxic sugar:
+  - [Arrow getter](#arrow-getter) - Allows to save keystrokes and is easier to type. ex: obj->keys => Object.keys(obj)
+  - Optional let - Not sure about that one...
+  - [Verbatim string literals](#verbatim) - @\`This is a string that does ${not} interpolate\`
+  - [Units](#units) - You can add units to numbers. ex: "density = 105g / 98mL"
+  - [Hyphen](#hyphens) - You can use hyphens in variable names like left-panel. The minus operator should always be surrounded by spaces.
+
+  ## Overview
+
+  Example Jome code:
+  ```jome
+  import {Btn, Txt, renderHTML} from "html"
+
+  // Add a button to the main scene ($) which has a text as a children
+  $ <<
+    Btn @count: 0, ~click: => (@count += 1)
+      Txt => "Clicked {@count} {@count == 1 ? 'time' : 'times'}"
+  >>
+
+  // Compile all the objects of the scene and write the html to #jome-placeholder div
+  renderHTML($, target: 'jome-placeholder')
+  ```
+
+  Example compiled JavaScript output:
+  ```js
+  import jome from 'jome_lib'
+  import {Btn, Txt, renderHTML} from "html"
+
+  var $ = jome.createObj()
+  var btn
+
+  // Add a button to the scene which has a text as a children
+  btn = new Btn({__signal__click: () => {this.count += 1}})
+  btn.count = 0
+  jome.createObj($, btn)
+  jome.createObj($.$.$btn, new Txt(() => (
+    `Clicked ${this.count} ${this.count == 1 ? 'time' : 'times'}`
+  )))
+
+  // Compile all the objects of the scene and write the html to #jome-placeholder div
+  renderHTML({target: 'jome-placeholder'}, $)
+  ```
+
 
 </md>)
 ».toString()
