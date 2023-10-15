@@ -35,6 +35,7 @@ import {AppPage} from './app.jome'
   - Optional let - Not sure about that one...
   - [Verbatim string literals](#verbatim) - @\`This is a string that does ${not} interpolate\`
   - [Units](#units) - You can add units to numbers. ex: "density = 105g / 98mL"
+  - [Hyphen](#hyphens) - You can use hyphens in variable names like left-panel. The minus operator should always be surrounded by spaces.
 
   ## Overview
 
@@ -256,6 +257,7 @@ import {AppPage} from './app.jome'
   - CoffeeScript: I was kinda lost at some point. I did not have a clear direction for my language. Until I thought, hey, coffeescript did something similar! So it gave me a lot of guidance.
   - underscore.js: A great library full of goodies.
   - vscode: Escpecially thank you for creating custom grammar. It is really nice to create a grammar and see live the tokenization.
+  - ChatGPT: I probably never would have had to courage to go through with writing a programming language if I did not have the help from ChatGPT.
 
   Thank you to everyone who contributed to any open-sourced library. Escpecially under a license like MIT license. You are awesome!
 

@@ -7,6 +7,13 @@
   .jome-html.panel {
     background-color: #aaa;
   }
+  .jome-html.row {
+    display: flex;
+  }
+  .jome-html.column {
+    display: flex;
+    flex-direction: column;
+  }
 </css>
 
 export class HBox {
@@ -15,6 +22,10 @@ export class HBox {
 
 export class VBox {
   
+}
+
+class Tag |tag, content| => {
+  toString: => `<{tag}{renderHTMLAttrs(@)}>{content||''}{renderHTMLChildren(@)}</{tag}>`
 }
 
 //constructor: |content| => @content = content
@@ -34,6 +45,22 @@ export class Screen {
 export class Panel {
   toString: => <html>
     <div class="jome-html panel">
+      <%= @->children.map(c => (c.toString())).join('\n') %>
+    </div>
+  </html>
+}
+
+export class Row {
+  toString: => <html>
+    <div class="jome-html row">
+      <%= @->children.map(c => (c.toString())).join('\n') %>
+    </div>
+  </html>
+}
+
+export class Col {
+  toString: => <html>
+    <div class="jome-html column">
       <%= @->children.map(c => (c.toString())).join('\n') %>
     </div>
   </html>
