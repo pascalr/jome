@@ -8,6 +8,11 @@
     background-color: #f9f4f4;
   }
 
+  .scrollable {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
   /* Style the title and text */
   .title {
     font-size: 24px;
@@ -75,7 +80,6 @@
   #left-nav {
     width: 15em;
     background-color: #e6e1df;;
-    min-height: 96vh; /* FIXME */
     margin-right: 1.5em;
     flex-shrink: 0;
   }
@@ -105,6 +109,7 @@
     background-color: #333;
     color: #fff;
     padding: 10px;
+    height: 30px;
   }
 
   /* Style for navbar links */

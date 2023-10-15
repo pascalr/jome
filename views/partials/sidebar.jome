@@ -6,7 +6,7 @@
   // - [](#) - You can use hyphens in variable names like left-panel. The minus operator should always be surrounded by spaces.
 
 <html>
-  <div id="left-nav">
+  <div id="left-nav" class="scrollable">
     <ul class="nav-list">
       <li><a href="/">Home</a></li>
       <li><a href="/#lang-ref">Language Reference</a></li>

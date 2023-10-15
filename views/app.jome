@@ -9,11 +9,13 @@ export class AppPage |&title, &content| => {
       HtmlPage title: title, body: <html>
         <div class="d-flex flex-column" style="min-height: 100vh;">
           <%= navbar %>
-          <div style="flex-grow: 1;">
+          <div style="flex-grow: 1; height: calc(100vh - 50px);">
             <div class="d-flex" style="height: 100%;">
             <%= sidebar %>
-            <div class="app-content">
-              <%= content %>
+            <div class="scrollable" style="width: 100%;">
+              <div class="app-content">
+                <%= content %>
+              </div>
             </div>
           </div>
           </div>
