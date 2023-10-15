@@ -72,24 +72,12 @@ htmlLibrary = <md>
 
 «
   AppPage title: 'Jome examples', className: "examples-page", content: <html>
-    <div class="d-flex" style="height: 100%;">
-      <div id="left-nav">
-        <ul class="nav-list">
-          <li><a href="#hello-world">Hello world</a></li>
-          <li><a href="#html-library">Html library</a></li>
-          <li><a href="#snake">Snake</a></li>
-          <li><a href="#">Script</a></li>
-        </ul>
-      </div>
-      <div class="examples-content">
-        <h2 class="title">Jome examples</h2>
-        <h3 id="hello-world">Hello world</h3>
-        <%= helloWorld %>
-        <h3 id="html-library">Html library</h3>
-        <%= htmlLibrary %>
-        <h3 id="snake">Snake</h3>
-        <%= « Example » %>
-      </div>
-    </div>
+    <h2 class="title">Jome examples</h2>
+    <h3 id="hello-world">Hello world</h3>
+    <%= helloWorld %>
+    <h3 id="html-library">Html library</h3>
+    <%= htmlLibrary %>
+    <h3 id="snake">Snake</h3>
+    <%= « Example » %>
   </html>
 ».toString()

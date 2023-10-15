@@ -1,7 +1,5 @@
 import {AppPage} from './app.jome'
 
-requiert sidebar from './partials/sidebar.jome'
-
 // jome tag should do three things
 // give string of jome code
 // give string of compiled js code
@@ -10,7 +8,7 @@ requiert sidebar from './partials/sidebar.jome'
 //   x = 10
 // </jome>
 
-text = <md>
+content = <md>
   ## Jome librairies
 
   Librairies should be distributed the same way as CoffeeScript librairies. So I think it is mainly through npm.
@@ -21,12 +19,5 @@ text = <md>
 </md>
 
 «
-  AppPage title: 'Jome examples', className: "examples-page", content: <html>
-    <div class="d-flex" style="height: 100%;">
-      <%= sidebar %>
-      <div class="examples-content">
-        <%= text %>
-      </div>
-    </div>
-  </html>
+  AppPage title: 'Jome examples', className: "examples-page", content: content
 ».toString()

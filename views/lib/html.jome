@@ -39,12 +39,5 @@ text23 = <md>
 
 
 «
-  AppPage title: 'Jome lib html', className: "examples-page", content: <html>
-    <div class="d-flex" style="height: 100%;">
-      <%= libSidebar %>
-      <div class="examples-content">
-        <%= text23 %>
-      </div>
-    </div>
-  </html>
+  AppPage title: 'Jome lib html', content: text23
 ».toString()
