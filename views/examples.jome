@@ -50,13 +50,19 @@ class Example {
   </html>
 }
 
-helloWorld = <md>
+ex = « Example »
+
+conten = <md>
+  ## Jome examples
+
+  <h3 id="hello-world">Hello world</h3>
+
   ```jome
   console.log("Hello world!") // jome compiles to javascript, so you can use javascript
   ```
-</md>
 
-htmlLibrary = <md>
+  <h3 id="html-library">Html library</h3>
+  
   ```jome
   html = «
     IFrame // for demo only
@@ -68,16 +74,12 @@ htmlLibrary = <md>
             Link 'Yet another page'
   »
   ```
+
+  <h3 id="snake">Snake</h3>
+  <%= ex %>
+
 </md>
 
 «
-  AppPage title: 'Jome examples', className: "examples-page", content: <html>
-    <h2 class="title">Jome examples</h2>
-    <h3 id="hello-world">Hello world</h3>
-    <%= helloWorld %>
-    <h3 id="html-library">Html library</h3>
-    <%= htmlLibrary %>
-    <h3 id="snake">Snake</h3>
-    <%= « Example » %>
-  </html>
+  AppPage title: 'Jome examples', content: conten
 ».toString()
