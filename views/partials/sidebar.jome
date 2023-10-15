@@ -1,7 +1,26 @@
+  // Goodies / Syntaxic sugar:
+  // - [](#) - Allows to save keystrokes and is easier to type. ex: obj->keys => Object.keys(obj)
+  // -  - Not sure about that one...
+  // - []() - @\`This is a string that does ${not} interpolate\`
+  // - []() - You can add units to numbers. ex: "density = 105g / 98mL"
+  // - [](#) - You can use hyphens in variable names like left-panel. The minus operator should always be surrounded by spaces.
+
 <html>
   <div id="left-nav">
     <ul class="nav-list">
       <li><a href="/">Home</a></li>
+      <li><a href="/#lang-ref">Language Reference</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/#nodes">Nodes</a></li>
+        <li><a href="/#integrated-scripts">Integrated scripts</a></li>
+        <li><a href="/#named-parameters">Named parameters</a></li>
+        <li><a href="/#instance-driven-dev">Instance driven development</a></li>
+        <li><a href="/#arrow-getter">Arrow getter</a></li>
+        <li><a href="/#todo">Optional let</a></li>
+        <li><a href="/#verbatim">Verbatim string literals</a></li>
+        <li><a href="/#units">Units</a></li>
+        <li><a href="/#hyphens">Hyphen</a></li>
+      </ul>
       <li><a href="/lib">Librairies</a></li>
       <ul class="nav-list nav-sub">
         <li><a href="/lib/html">Html</a></li>

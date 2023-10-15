@@ -73,10 +73,11 @@
   }
 
   #left-nav {
-    width: 10em;
+    width: 15em;
     background-color: #e6e1df;;
     min-height: 96vh; /* FIXME */
     margin-right: 1em;
+    flex-shrink: 0;
   }
 
   .onglets {
