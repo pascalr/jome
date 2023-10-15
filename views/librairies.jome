@@ -1,93 +1,6 @@
 import {AppPage} from './app.jome'
 
-<css>
-  ul.nav-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  ul.nav-list li {
-    margin: 0;
-    padding: 0;
-  }
-
-  ul.nav-list li a {
-    text-decoration: none;
-    color: #333;
-    padding: 10px;
-    display: block;
-  }
-
-  ul.nav-list li a:hover {
-    background-color: #f0f0f0;
-  }
-
-  .examples-content {
-    font-size: 16px;
-    max-width: 60em;
-  }
-
-  #left-nav {
-    width: 10em;
-    background-color: #e6e1df;;
-    min-height: 96vh; /* FIXME */
-    margin-right: 1em;
-  }
-</css>
-
-// class Row {
-//   // TODO
-//   print: => <html>
-//     <div class="d-flex">
-//       <%= @->children.map(c => c.print()).join('\n') %>
-//     </div>
-//   </html>
-// }
-
-// idee = <Container>
-//   <Row>
-//     <Col></Col>
-//     <Col></Col>
-//   </Row>
-// </Container>
-
-// «
-//   Row
-//     Div
-//       List
-//         Item "Snake", url: "#"
-//         Item t("Snake"), url: "#"
-//         Item "Snake", url: "#"
-//         Item "Snake", url: "#"
-//         Item "Snake", url: "#"
-// »
-
-<css>
-  .example {
-
-  }
-
-  .onglets {
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .onglets > * {
-    padding: 10px;
-    background-color: #eee;
-    cursor: pointer;
-  }
-
-  .onglets > *.active {
-    background-color: #cdcdcd;
-  }
-
-  .example-content {
-    border: 1px solid black;
-    padding: 1em;
-  }
-</css>
+requiert libSidebar from './partials/lib_sidebar.jome'
 
 // jome tag should do three things
 // give string of jome code
@@ -110,13 +23,7 @@ text = <md>
 «
   AppPage title: 'Jome examples', className: "examples-page", content: <html>
     <div class="d-flex" style="height: 100%;">
-      <div id="left-nav">
-        <ul class="nav-list">
-          <li><a href="/lib">Home</a></li>
-          <b>Librairies</b>
-          <li><a href="/lib/html">Html</a></li>
-        </ul>
-      </div>
+      <%= libSidebar %>
       <div class="examples-content">
         <%= text %>
       </div>

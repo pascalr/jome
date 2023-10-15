@@ -139,6 +139,7 @@ JavaScript's distinction between expressions and statements makes the language v
 
 ## TODO
 
+- Pouvoir faire: func(nested.arg: 10) // func({nested: {arg: 10}})
 - Prendre les syntaxes actuelles de html et css et injecter mon code dedans pour l'interpolation jome <%= %>
 - Créer un fichier de syntax pour highlight.js
 - Implémenter de l'intelligence avec Visual Studio Code (code completion, bug detection...)

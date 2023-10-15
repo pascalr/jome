@@ -1,5 +1,7 @@
 import {AppPage} from '../app.jome'
 
+requiert libSidebar from '../partials/lib_sidebar.jome'
+
 <css>
   pre {
     background-color: #dce0e8;
@@ -13,11 +15,49 @@ import {AppPage} from '../app.jome'
   }
 </css>
 
-«
-  AppPage title: 'Jome lib html', content: (<md>
+text23 = <md>
 
   # Jome lib html
 
+  FIXME: This should be generated automatically from the source code.
 
-</md>)
+  ## Objects
+  - Screen: A div that has at a minimum the page size, but can be taller
+  - Fullscreen: Takes the full size of the page and hides the overflow
+  - Row: Children are place side by side
+  - Col: Children are place one on top of the other
+
+  ## Html attributes
+
+  Every parameters passed onto the object will be assigned to the html tag.
+
+  ```jome
+  « Div class: 'd-flex' » // <div class='d-flex'></div>
+  « Div width: 100px » // <div width='100px'></div>
+  ```
+
+  ```jome
+  « Div style: {width: 100px, color: 'red'} » // <div style='width: 100px; color: red;'></div>
+  « Div style.width: 100px, style.color: 'red' » // <div style='width: 100px; color: red;'></div>
+  ```
+
+  ou bien
+
+  ```jome
+  « Div css: {width: 100px, color: 'red'} » // <div style='width: 100px; color: red;'></div>
+  « Div css.width: 100px, css.color: 'red' » // <div style='width: 100px; color: red;'></div>
+  ```
+
+</md>
+
+
+«
+  AppPage title: 'Jome lib html', className: "examples-page", content: <html>
+    <div class="d-flex" style="height: 100%;">
+      <%= libSidebar %>
+      <div class="examples-content">
+        <%= text23 %>
+      </div>
+    </div>
+  </html>
 ».toString()
