@@ -1,5 +1,5 @@
-renderHTMLAttrs = |obj| => (
-  r = obj->signals->keys.map(n =>
+def renderHTMLAttrs = |obj| => (
+  var r = obj->signals->keys.map(n =>
     `on{n}="jome.run('${obj->path}.{n}()')"`
   ).join(" ")
 
@@ -14,17 +14,17 @@ renderHTMLAttrs = |obj| => (
   r ? (' '+r) : r
 )
 
-renderHTMLChildren = |obj| => (
+def renderHTMLChildren = |obj| => (
   obj->children.map(c => (c.toHTML ? c.toHTML() : '')).join("")
 )
 
-renderHTML = |obj, &target| => (
-  elem = document.getElementById(target)
+def renderHTML = |obj, &target| => (
+  var elem = document.getElementById(target)
   children = []
   html = ''
   obj->children.forEach(child => (
     if (child.createElem) (
-      e = child.createElem()
+      var e = child.createElem()
       children.push(e)
     ) else if (child.toHTML) (
       html += child.toHTML()
@@ -89,8 +89,8 @@ class Html {
 }
 
 // ns: namespace for createElementNS
-createElem = |obj, tag, content, ns| => (
-  el = (ns ? document.createElementNS(ns, tag) : document.createElement(tag))
+def createElem = |obj, tag, content, ns| => (
+  var el = (ns ? document.createElementNS(ns, tag) : document.createElement(tag))
   if (content) (
     el.appendChild(document.createTextNode(content))
   )
@@ -129,7 +129,7 @@ class InlineTag |tag| => {
 class Fragment => {
   toHTML: => `{renderHTMLChildren(@)}`
   createElem: => (
-    el = document.createDocumentFragment()
+    var el = document.createDocumentFragment()
     @->children.forEach(child => (
       if (child.createElem) (
         el.appendChild(child.createElem())

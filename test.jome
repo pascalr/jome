@@ -19,8 +19,10 @@ import {H1} from './lib/html.jome'
 
 <sh>echo "Starting tests!"</sh>
 
-f = => (
-  x = 10
+var person = "John"
+
+def f = -> (
+  var x = 10
   x = x + 20
   x    
 )

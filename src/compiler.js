@@ -510,6 +510,33 @@ export function escapeBackticks(inputString) {
   return inputString.replace(/`/g, '\u005c`').replace(/\$\{/g, '\u005c\$\{')
 }
 
+// keyword can be 'var', 'def' or null (null means const)
+function assignVariable(node, ctx, keyword) {
+  let value = node.text()
+  let next = node.captureNext() // The = sign (keyword.operator.assignment.compound.jome)
+  next = next.captureNext()
+  if (next.type === 'keyword.arrow.jome' && next.text() === ' -> ') {
+    // TODO: Check if already defined inside the SAME scope, throw an Error if so
+    let func = next.captureNext()
+    return `function ${value}() ${jsBlock(func, ctx, true)}`
+  }
+  if (keyword === 'var') {
+    // TODO: Check if already defined inside the SAME scope, throw an Error if so
+    ctx.addBinding(value, {type: 'variable'})
+    return 'var '+value+' = '+compileNode(next, ctx)
+  } else if (keyword === 'def') {
+    // TODO: Check if already defined inside the SAME scope, throw an Error if so
+    ctx.addBinding(value, {type: 'definition'})
+    return 'const '+value+' = '+compileNode(next, ctx)
+  } else {
+    if (ctx.hasBinding(value)) {
+      return value+' = '+compileNode(next, ctx)
+    }
+    ctx.addBinding(value, {type: 'global-constant'})
+    return 'var '+value+' = '+compileNode(next, ctx)
+  }
+}
+
 // Using an hashmap here because it is easier to debug,
 // a bunch of if else if else is annoying to go through step by step
 // and switch case is really annoying because it does not scope the variables
@@ -587,14 +614,17 @@ const PROCESSES = {
     }
     return ''
   },
+  "keyword.control.declaration.jome": (node, ctx) => {
+    let keyword = node.text()
+    let next = node.captureNext()
+    if (next.type !== 'variable.assignment.jome') {
+      throw new Error('Error bnjs98124u9sdb92')
+    }
+    return assignVariable(next, ctx, keyword)
+  },
   // fooBar =
   "variable.assignment.jome": (node, ctx) => {
-    let value = node.text()
-    let next = node.captureNext() // The = sign (keyword.operator.assignment.compound.jome)
-    next = next.captureNext()
-    if (ctx.hasBinding(value)) {return value}
-    ctx.addBinding(value, {type: 'variable'})
-    return 'let '+value+' = '+compileNode(next, ctx)
+    return assignVariable(node, ctx)
   },
   // @name => this.name
   "support.type.property-name.attribute.jome": (node, ctx) => {
