@@ -66,18 +66,45 @@ import {AppPage} from './app.jome'
 
   <h2 id="lang-ref">Language Reference</h2>
 
+  This documentation assumes the reader is familiar with javascript.
+
+  Jome is similar to JavaScript, but there are a few distinctions that you must be aware of:
+  - Syntax
+  - Node blocks
+  - Named parameters / props
+
   There is two main modes in the language.
-
-  Code mode: This is very similar to JavaScript, with a few distinction. Blocks are delimited using parentheses instead of curly braces {}. Curly
-  braces are only used for dictionaries (JavaScript objects) and in some others cases like imports.
-
-  Object mode: Object blocks delimited by « » or << >> use indentation to make a tree of objects. «» is for an orphan object which has not parent.
-  << >> is used to push objects as a children to an existing object.
 
   $ is the main object
   $foo/bar is a path to get the children of the main object named foo, and then get it's children named bar
 
   `$ << $foo >>` => add an object named foo inside the main object '$'
+
+  ## Syntax
+
+  Parentheses are used for statement blocks.
+
+  ```jome
+  if (someCondition) (
+    /* Notice the usage of parentheses and not curly braces */
+  )
+  ```
+
+  Curly braces are used for javascript objects. In Jome, they are used for dictionaries (js objects) and classes.
+
+  Code mode: This is very similar to JavaScript, with a few distinction. Blocks are delimited using parentheses instead of curly braces {}. Curly
+  braces are only used for dictionaries (JavaScript objects) and in some others cases like imports.
+
+  ```jome
+  def someFunction = -> (return 10 + 20) // ok
+  def someFunction = -> {return 10 + 20} // WRONG!
+  def someFunction = -> {x: 10} // ok
+  ```
+
+  ## Node blocks
+
+  Object mode: Object blocks delimited by « » or << >> use indentation to make a tree of objects. «» is for an orphan object which has not parent.
+  << >> is used to push objects as a children to an existing object.
 
   ## Classes
 
