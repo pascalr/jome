@@ -11,6 +11,7 @@
       <li><a href="/">Home</a></li>
       <li><a href="/#lang-ref">Language Reference</a></li>
       <ul class="nav-list nav-sub">
+        <li><a href="/#syntax">Syntax</a></li>
         <li><a href="/#nodes">Nodes</a></li>
         <li><a href="/#integrated-scripts">Integrated scripts</a></li>
         <li><a href="/#named-parameters">Named parameters and props</a></li>

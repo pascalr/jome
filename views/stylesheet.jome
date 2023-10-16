@@ -40,7 +40,7 @@
   }
   code:not(pre code) {
     background-color: #dce0e8;
-    padding: 0.5em;
+    padding: 0.2em;
     border-radius: 8px;
   }
 

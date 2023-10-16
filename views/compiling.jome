@@ -1,5 +1,34 @@
 import {AppPage} from './app.jome'
 
+// {
+//   // Use IntelliSense to learn about possible attributes.
+//   // Hover to view descriptions of existing attributes.
+//   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+//   "version": "0.2.0",
+//   "configurations": [
+//     {
+//       "type": "node",
+//       "request": "launch",
+//       "name": "Run server",
+//       "skipFiles": [
+//         "<node_internals>/**"
+//       ],
+//       "runtimeArgs": ["jome.js", "server.jome"],
+//       "program": "${workspaceFolder}/jome.js"
+//     },
+//     {
+//       "type": "node",
+//       "request": "launch",
+//       "name": "Run tests",
+//       "skipFiles": [
+//         "<node_internals>/**"
+//       ],
+//       "runtimeArgs": ["jome.js", "test.jome"],
+//       "program": "${workspaceFolder}/jome.js"
+//     },
+//   ]
+// }
+
 content2 = <md>
   ## Compiling
 
@@ -14,7 +43,26 @@ content2 = <md>
   jomec "views/*.jome" # compile all the files that matches the path and their dependencies
   ```
 
-  <h3 id="jomeconfig">jomeconfig.json</h3>
+  <h3 id="jomeconfig">jomeconfig.jome</h3>
+
+  Example config file:
+  ```jome
+  import {JomeConfig} from 'jome-config'
+
+  «
+    JomeConfig
+      compilerOptions:
+        outDir = "docs"
+        removeComments = true
+        sourceMap = true
+        addReturnStatements = true
+      files = [
+        "views/*.jome"
+      ]
+  »
+  ```
+
+  <h3>jomeconfig.json</h3>
 
   Example config file:
   

@@ -68,19 +68,9 @@ import {AppPage} from './app.jome'
 
   This documentation assumes the reader is familiar with javascript.
 
-  Jome is similar to JavaScript, but there are a few distinctions that you must be aware of:
-  - Syntax
-  - Node blocks
-  - Named parameters / props
+  Jome is similar to JavaScript, but there are a few distinctions that you must be aware of. Mainly, the syntax is a bit different, there are nodes, named parameters and scripts.
 
-  There is two main modes in the language.
-
-  $ is the main object
-  $foo/bar is a path to get the children of the main object named foo, and then get it's children named bar
-
-  `$ << $foo >>` => add an object named foo inside the main object '$'
-
-  ## Syntax
+  <h2 id="syntax">Syntax</h2>
 
   Parentheses are used for statement blocks.
 
@@ -90,10 +80,7 @@ import {AppPage} from './app.jome'
   )
   ```
 
-  Curly braces are used for javascript objects. In Jome, they are used for dictionaries (js objects) and classes.
-
-  Code mode: This is very similar to JavaScript, with a few distinction. Blocks are delimited using parentheses instead of curly braces {}. Curly
-  braces are only used for dictionaries (JavaScript objects) and in some others cases like imports.
+  Curly braces are used for javascript objects (aka dictionaries).
 
   ```jome
   def someFunction = -> (return 10 + 20) // ok
@@ -101,10 +88,149 @@ import {AppPage} from './app.jome'
   def someFunction = -> {x: 10} // ok
   ```
 
-  ## Node blocks
+  The advantage is that there is never confusion. You never have an error that tells you you have to add parentheses. For example, in javascript:
 
-  Object mode: Object blocks delimited by « » or << >> use indentation to make a tree of objects. «» is for an orphan object which has not parent.
-  << >> is used to push objects as a children to an existing object.
+  ```js
+  let someFunction = () => ({x: 10}) // you often have to add extra parentheses around objects in js
+  ```
+
+  ### Keywords
+
+  You use `var` for variables and `def` for functions.
+
+  TODO: Say more
+
+  Maybe allow the let keyword that works for both var and def?
+
+  The advantage of def and var is that you know what the thing is.
+
+  But when prototyping, who cares, you can just use let.
+
+  I think def is nice to use for functions.
+
+  <h2 id="nodes">Nodes</h2>
+
+  Nodes are objects in a tree structure. They can have a parent and they can have children.
+
+  `$` is the root node. There is one root node by file.
+
+  `$someNode` is a short syntax to get the child of the root node named "someNode".
+
+  You create nodes by using node blocks. You can create them alone using guillemets `« »` or by adding them as children of an existing node using `<< >>`
+
+  Important: Node blocks use indentation to build the nodes.
+
+  ### Standalone node block
+
+  You can create a single node by surrounding with guillements. There must be a single object at the top, and then children are created based on indentation.
+
+  ```jome
+  alone = « Volleyball "Wilson", age: 2 »
+
+  «
+    Obj (
+      prop: 'val',
+      prop2: 'val2'
+    )
+      @attr = 'val3'
+      @attr2 = 'val4'
+      child: 'val5'
+      child2: 'val6'
+  »
+  ```
+
+  Idea: If adding guillemets is too hard for people with english keyboards, then allow the syntax:
+  _<< >> which would be the same as « ».
+
+  ### Children node block
+
+  You can create and add directly children an existing node by surrounding with `<< >>`. The children are created based on indentation.
+
+  ```jome
+  $inventory <<
+    Sword damage: 10, weight: 500g
+    Shield armor: 8, weight: 400g
+    Scroll "Scroll of wisdom"
+    Belt
+      HealingPotion life: 200
+      ManaPotion mana: 100
+  >>
+  ```
+
+  ### Node names
+
+  FIXME: Pour le nom des objets, au lieu de $nomDeLobjet, je propose nomDeLobjet: ...
+ 
+  ```jome
+  $ <<
+    someVar = 10
+    page: Page
+      navbar: Navbar
+        list: List
+          Link "Musics", to: '/musics'
+          Link "Sports", to: '/sports'
+          Link "Arts", to: '/arts'
+      Body
+        Txt < md >
+          # Welcome
+          Welcome to this website! You can browse links at the top.
+        < / md>
+  >>
+  var navLinks = $page.navbar.list->children
+  ```
+
+  ### Under the hood
+
+  Underneath, nodes are objects with a property named '$'. The idea of doing it this way is in order to not clash with user defined properties for
+  example name.
+
+  The property includes the following attributes:
+  - name: The name of the node
+  - children: The list of children of the node.
+  - parent: A link to the node who is it's parent
+  - signals: A list of the signals the node listens to
+  - childrenCount: The number of children of the node. Not sure about this one. TODO: Remove this since I can do children.length
+
+  <h2 id="named-parameters">Named parameters and props</h2>
+
+  When calling a function, you can add paramters.
+
+  ```jome
+  someFunc(someParam: 10, otherParam: 'Jean')
+  ```
+
+  To define parameters when creating a function, you add the & symbol before the variable name.
+
+  ```jome
+  def someFunc = |&someParam, &otherParam = 'Pierre', &optionalParam| => (
+    console.log(someParam) // No need to add & when refering to a parameter
+  )
+  ```
+
+  Je me demandais si ça ne serait pas mieux la syntaxe avec un point d'interogation à la fin au lieu de & au début.
+  L'avantage est de pouvoir combiner élégament avec les attributs. Comme ça dans une class tu peux spécifier que tu
+  veux que la variable soit à donner dans le constructeur ou pas selon s'il y a un point d'interrogation.
+
+  ```jome
+  def someFunc = |someParam?, otherParam? = 'Pierre', optionalParam?| => (
+    console.log(someParam) // No need to add & when refering to a parameter
+  )
+  ```
+
+  Props are the specific case of object creation. When you pass parameters when creating an object, we call them props.
+
+  ```jome
+  « Obj someProp: 10, otherProp: 'Paul' »
+  ```
+
+  You can pass a parameter that was not defined in the list.
+
+  BUT YOU CAN'T PASS a parameter to a function if the function does not take any parameter. Because under the hood,
+  we add a params argument to the function, so we need at least one to add the argument, then you can pass as many as you want.
+
+  ### Under the hood
+
+  TODO: Explain how it works
 
   ## Classes
 
@@ -112,9 +238,19 @@ import {AppPage} from './app.jome'
 
   Classes inherit using the « » syntax. It is usefull
 
+  ## Interfaces
+
+  An interface is a list of props. When you declare a class, you can give an interface so you don't have to specify every time the list of
+  possible parameters that can be given.
+
   ### Functions
 
   TODO: Ajouter les functions -> à jome. Il doit y avoir un espace avant le -> pour que ce soit une fonction. Sinon, c'est le meta accessor.
+
+  By default, Jome adds returns statements to functions. This setting can be disabled in the config file.
+
+  It is very nice when prototyping to not have to write return statements. But for production code, it is safer to always write them, this
+  way you never return by accident a sensitive value that should be hiden from users.
 
   ### Scripts
 
@@ -127,6 +263,13 @@ import {AppPage} from './app.jome'
   // Ruby is a pretty nice language for scripts too 
   <rb>puts (1..10).select(&:even?).sum</rb>
   ```
+
+  ### .jobj extension
+
+  Files with a .jobj extension would start already in a node block.
+
+  It think this would be pratical for example for config files.
+
 
   #### Scripts interpolation
 
@@ -166,56 +309,6 @@ import {AppPage} from './app.jome'
 
   Like in C#. @"foo \ $ blahblah bar" => directly with no interpolation
 
-  <h2 id="nodes">Nodes</h2>
-
-  A node is an object that can have children. It is a nice structure to build trees. It is often useful for example when working with HTML. 
-
-  ```jome
-  «
-    Page
-      Navbar
-        List
-          Link "Musics", to: '/musics'
-          Link "Sports", to: '/sports'
-          Link "Arts", to: '/arts'
-      Body
-        Txt < md >
-          # Welcome
-          Welcome to this website! You can browse links at the top.
-        < / md>
-  »
-  ```
-
-  Underneath, nodes are objects with a property named '$'. The idea of doing it this way is in order to not clash with user defined properties for
-  example name.
-
-  The property includes the following attributes:
-  - name: The name of the node
-  - children: The list of children of the node. FIXME: No this is not dont this way anymore. Is this ok? It should be this way...
-  - parent: A link to the node who is it's parent
-  - signals: A list of the signals the node listens to
-  - childrenCount: The number of children of the node. Not sure about this one. Depends on the way I implement children.
-
-  Pour le nom des objets, au lieu de $nomDeLobjet, je propose nomDeLobjet: ...
-
-  ```jome
-  $ <<
-    someVar = 10
-    page: Page
-      navbar: Navbar
-        list: List
-          Link "Musics", to: '/musics'
-          Link "Sports", to: '/sports'
-          Link "Arts", to: '/arts'
-      Body
-        Txt < md >
-          # Welcome
-          Welcome to this website! You can browse links at the top.
-        < / md>
-  >>
-  var navLinks = $page.navbar.list->children
-  ```
-
   <h2 id="arrow-getter">Arrow getter</h2>
 
   Allows to save keystrokes and is easier to type.
@@ -246,33 +339,6 @@ import {AppPage} from './app.jome'
   It's the same thing as object oriented, but the focus is on the concrete object rather than the abstract class.
 
   <h2 id="integrated-scripts">Integrated scripts</h2>
-
-  <h2 id="named-parameters">Named parameters and props</h2>
-
-  When calling a function, you can add paramters.
-
-  ```jome
-  someFunc(someParam: 10, otherParam: 'Jean')
-  ```
-
-  To define parameters when creating a function, you add the & symbol before the variable name.
-
-  ```jome
-  def someFunc = |&someParam, &otherParam = 'Pierre', &optionalParam| => (
-    console.log(someParam) // No need to add & when refering to a parameter
-  )
-  ```
-
-  Props are the specific case of object creation. When you pass parameters when creating an object, we call them props.
-
-  ```jome
-  « Obj someProp: 10, otherProp: 'Paul' »
-  ```
-
-  You can pass a parameter that was not defined in the list.
-
-  BUT YOU CAN'T PASS a parameter to a function if the function does not take any parameter. Because under the hood,
-  we add a params argument to the function, so we need at least one to add the argument, then you can pass as many as you want.
 
   <h2 id="units">Units</h2>
 
@@ -388,6 +454,20 @@ import {AppPage} from './app.jome'
   ## Thrash  
 
   It's intented main purpose is to be used for prototyping or small projects. It is usefull for concrete applications like making something visual.
+
+    «
+    Page
+      Navbar
+        List
+          Link "Musics", to: '/musics'
+          Link "Sports", to: '/sports'
+          Link "Arts", to: '/arts'
+      Body
+        Txt < md >
+          # Welcome
+          Welcome to this website! You can browse links at the top.
+        < / md>
+  »
 
   ## Features
 
