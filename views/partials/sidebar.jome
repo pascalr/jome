@@ -21,6 +21,11 @@
         <li><a href="/#units">Units</a></li>
         <li><a href="/#hyphens">Hyphen</a></li>
       </ul>
+      <li><a href="/compiling">Compiling</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/compiling#jomec">jomec</a></li>
+        <li><a href="/compiling#jomeconfig">jomeconfig.json</a></li>
+      </ul>
       <li><a href="/lib">Librairies</a></li>
       <ul class="nav-list nav-sub">
         <li><a href="/lib/html">Html</a></li>

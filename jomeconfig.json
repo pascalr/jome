@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "outDir": "docs",
+    "removeComments": true,
+    "sourceMap": true
+  },
+  "files": [
+    "views/*.jome"
+  ]
+}

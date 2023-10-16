@@ -929,6 +929,7 @@ const PROCESSES = {
   "constant.numeric.float.jome": compileAsIs,
   "comment.line.double-slash.jome": () => '',
   "comment.block.jome": () => '',
+  "comment.block.documentation.jome": () => '',
   "string.quoted.backtick.verbatim.jome": (node) => `\`${compileRaw(node.children.slice(1,-1))}\``,
   "string.quoted.double.verbatim.jome": (node) => `"${compileRaw(node.children.slice(1,-1))}"`,
   "string.quoted.single.jome": (node) => `'${compileRaw(node.children.slice(1,-1))}'`,

@@ -1,0 +1,39 @@
+import {AppPage} from './app.jome'
+
+content2 = <md>
+  ## Compiling
+
+  For compiling you need jomec.
+
+  <h3 id="jomec">jomec</h3>
+
+  ```sh
+  # Usage
+  jomec # compiles based on jomeconfig.json
+  jomec "file.jome" # compile the given file and it's dependencies
+  jomec "views/*.jome" # compile all the files that matches the path and their dependencies
+  ```
+
+  <h3 id="jomeconfig">jomeconfig.json</h3>
+
+  Example config file:
+  
+  ```json
+  {
+    "compilerOptions": {
+      "outDir": "docs",
+      "removeComments": true,
+      "sourceMap": true
+    },
+    "files": [
+      "views/*.jome"
+    ]
+  }
+  ```
+
+  TODO: List all the possible options
+</md>
+
+«
+  AppPage title: 'Compiling Jome', content: content2
+».toString()

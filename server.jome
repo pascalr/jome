@@ -5,6 +5,7 @@ requiert examplePage from './views/examples.jome'
 requiert editorPage from './views/editor.jome'
 requiert librairiesPage from './views/librairies.jome'
 requiert libHtmlPage from './views/lib/html.jome'
+requiert compilingPage from './views/compiling.jome'
 
 requiert stylesheet from './views/stylesheet.jome'
 
@@ -23,6 +24,9 @@ requiert stylesheet from './views/stylesheet.jome'
   )
   get '/lib/html', |req, res| => (
     res.send(libHtmlPage)
+  )
+  get '/compiling', |req, res| => (
+    res.send(compilingPage)
   )
   get '/jome-html.css', |req, res| => (
     res.sendFile(__dirname+'/jome-html.built.css');
