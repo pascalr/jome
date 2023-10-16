@@ -196,6 +196,26 @@ import {AppPage} from './app.jome'
   - signals: A list of the signals the node listens to
   - childrenCount: The number of children of the node. Not sure about this one. Depends on the way I implement children.
 
+  Pour le nom des objets, au lieu de $nomDeLobjet, je propose nomDeLobjet: ...
+
+  ```jome
+  $ <<
+    someVar = 10
+    page: Page
+      navbar: Navbar
+        list: List
+          Link "Musics", to: '/musics'
+          Link "Sports", to: '/sports'
+          Link "Arts", to: '/arts'
+      Body
+        Txt < md >
+          # Welcome
+          Welcome to this website! You can browse links at the top.
+        < / md>
+  >>
+  var navLinks = $page.navbar.list->children
+  ```
+
   <h2 id="arrow-getter">Arrow getter</h2>
 
   Allows to save keystrokes and is easier to type.
