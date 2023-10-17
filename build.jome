@@ -1,0 +1,31 @@
+// Here, I want to take all the files directly inside views with a .jome extension and compile them into docs.
+
+// "runtimeArgs": ["jome.js", "server.jome"],
+
+// At first, I will just do everything I need to do here, after I will abstract it to be used by jomec.
+
+import {globSync} from 'glob'
+
+let files = globSync('views/*.jome')
+console.log(files);
+
+// stlesheet.jome I want to compile with a css extension
+// app.jome I don't want to put inside docs
+// 
+
+/*
+
+«
+  config:
+    files:
+      css:
+        'stylesheet.jome'
+      html:
+        'librairies.jome'
+        'home.jome'
+        'examples.jome'
+        'editor.jome'
+        'compiling.jome'
+»
+
+*/

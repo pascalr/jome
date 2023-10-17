@@ -94,6 +94,11 @@ import {AppPage} from './app.jome'
   let someFunction = () => ({x: 10}) // you often have to add extra parentheses around objects in js
   ```
 
+  Vertical bars are used for function parameters.
+  ```jome
+  def addXY = |x, y| -> (x + y)
+  ```
+
   ### Keywords
 
   You use `var` for variables and `def` for functions.
@@ -107,6 +112,9 @@ import {AppPage} from './app.jome'
   But when prototyping, who cares, you can just use let.
 
   I think def is nice to use for functions.
+
+  Oui accepter le keyword let, il est beaucoup plus beau que var. C'est
+  juste que j'aimais que var soit multilingue. Mais let est plus beau.
 
   <h2 id="nodes">Nodes</h2>
 

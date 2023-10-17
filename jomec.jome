@@ -13,3 +13,13 @@
 // folder of the source file, be here I want the export folder to be /docs
 
 
+// {
+//   "compilerOptions": {
+//     "outDir": "docs",
+//     "removeComments": true,
+//     "sourceMap": true
+//   },
+//   "files": [
+//     "views/*.jome"
+//   ]
+// }

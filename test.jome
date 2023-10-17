@@ -28,6 +28,7 @@ console.log(« ClassForTesting prop: 'Hello' »->props)
 console.log('There')
 
 var person = "John"
+let woman = 'Jane'
 
 def f = -> (
   var x = 10
