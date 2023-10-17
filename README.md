@@ -139,6 +139,8 @@ JavaScript's distinction between expressions and statements makes the language v
 
 ## TODO
 
+- Faire de quoi comme des imports map pour éviter à avoir à spécifier où sont les fichiers. J'aimerais simplement rajouter le dossier
+de lib/ ou src/ dans le fichier de configuration, et ensuite il les recherche là et les trouvent.
 - Utiliser la syntaxe |param1?, param2?| au lieu de |&param1, &param2|, c'est cool parce que ça fonctionne avec @ |@attr1, @attr2?|, ici
 @attr1 doit être passer au constructeur. @attr2 est setté à travers un paramètre (attr2: 'valeur')
 - Ne pas avoir à runner de serveur express. Simplement compiler les fichiers pour avoir des fichiers .html dans /docs pour être vu sur github pages

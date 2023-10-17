@@ -1,4 +1,4 @@
-import {AppPage} from '../app.jome'
+import {AppPage} from '../../lib/app.jome'
 
 requiert libSidebar from '../partials/lib_sidebar.jome'
 

@@ -1,13 +1,13 @@
 import {ExpressServer} from './lib/express_server.jome'
 
-requiert homePage from './views/home.jome'
-requiert examplePage from './views/examples.jome'
-requiert editorPage from './views/editor.jome'
-requiert librairiesPage from './views/librairies.jome'
-requiert libHtmlPage from './views/lib/html.jome'
-requiert compilingPage from './views/compiling.jome'
+requiert homePage from './app/views/home.jome'
+requiert examplePage from './app/views/examples.jome'
+requiert editorPage from './app/views/editor.jome'
+requiert librairiesPage from './app/views/librairies.jome'
+requiert libHtmlPage from './app/views/lib/html.jome'
+requiert compilingPage from './app/views/compiling.jome'
 
-requiert stylesheet from './views/stylesheet.jome'
+requiert stylesheet from './app/css/stylesheet.jome'
 
 « ExpressServer port: 3001
   get '/', |req, res| => (

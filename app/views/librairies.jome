@@ -1,4 +1,4 @@
-import {AppPage} from './app.jome'
+import {AppPage} from '../lib/app.jome'
 
 // jome tag should do three things
 // give string of jome code

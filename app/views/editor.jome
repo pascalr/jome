@@ -1,5 +1,5 @@
-import {HtmlPage} from '../lib/html-page.jome'
-import {Col, Row, Screen, Panel} from '../lib/jome-html.jome'
+import {HtmlPage} from '../../lib/html-page.jome'
+import {Col, Row, Screen, Panel} from '../../lib/jome-html.jome'
 
 bgColor1 = "#ded9d1"
 bgColor2 = "#c9c2b5"

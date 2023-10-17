@@ -1,4 +1,4 @@
-import {AppPage} from './app.jome'
+import {AppPage} from '../lib/app.jome'
 
 «
   AppPage title: 'Simple HTML Page', content: (<md>
