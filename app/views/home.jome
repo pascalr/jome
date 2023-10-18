@@ -128,6 +128,91 @@ import {AppPage} from '../lib/app.jome'
 
   Important: Node blocks use indentation to build the nodes.
 
+  <h2 id="blocks">Blocks</h2>
+
+  This is an idea that merges dictionaries and node blocks « »
+
+  Blocks are surrounded by curly braces and use indentation. The result of a block can be an object, a list or a node.
+
+  ```jome
+  // objects
+  obj1 = {x: 10, y: 20}
+  obj2 = {
+    x: 10
+    y: 20
+  }
+
+  // lists
+  list1 = {1,2,3,4}
+  list2 = {
+    "Jean"
+    "Jacques"
+    "Paul"
+  }
+  list3 = {
+    {x: 10, y: 20}
+    "Some string"
+    Obj some: 'obj'
+  }
+  list4 = {
+    Obj some: 'obj'
+    Obj some: 'obj'
+    Obj some: 'obj'
+  }
+
+  // nodes
+  node = {
+    Obj some: 'obj'
+      'String child'
+  }
+
+  // combination
+  combined = {
+    objKey: Node prop: 'val'
+      child: Child prop: 'val'
+        'String child'
+        GrandChild prop: 'val'
+      @attr: NotAChildButStillANode prop: 'val'
+        'String child'
+        Child prop: 'val'
+    someList: 1,2,3,4,5
+    someOtherList:
+      'Some string'
+      'Another string'
+    someKey: someFunc 'arg1', 'arg2'
+  }
+
+  // LES NODES N'ONT PAS DE NOM, MAIS TU PEUX LES ATTACHER AVEC UNE CLÉ À UN PARENT
+  // QUAND TU ATTACHES UN CHILDREN AVEC UNE CLÉ, il est là ET il est dans la liste de children.
+  // si tu veux mettre à un attribute, mais pas children, alors utiliser @attr
+
+  ```
+
+  Des childrens c'est une liste sous un node.
+  Si tu as une liste sous une clé, alors c'est simplement une liste.  
+
+  The short key syntax is different that in javascript, because it could be confused with list. In Jome, it would start with a colon
+  ```jome
+  obj = {:content, :value}
+  // same as
+  obj = {content: content, value: value}
+  ```
+
+  Avoir un keyword new ou ben simplement toujours utiliser les blocks?
+  ```jome
+  obj = new Obj(/* ... */) // Supporter new?
+  obj = {Obj /* ... */}
+  ```
+
+  Si je fais ça comme ça, alors est-ce que je veux modifier l'autre syntaxe tant qu'à faire.
+  ```jome
+  $ << {
+    Obj prop: 'val'
+    Obj prop: 'val'
+    Obj prop: 'val'
+  }
+  ```
+
   ### Standalone node block
 
   You can create a single node by surrounding with guillements. There must be a single object at the top, and then children are created based on indentation.
