@@ -11,7 +11,7 @@ export default function(hljs) {
   // https://tc39.es/ecma262/#sec-additional-syntax-numeric-literals
   const decimalInteger = `0|[1-9](_?[0-9])*|0[0-7]*[89][0-9]*`;
   const NUMBER = {
-    className: 'number',
+    scope: 'number',
     variants: [
       // DecimalLiteral
       { begin: `(\\b(${decimalInteger})((${frac})|\\.)?|(${frac}))` +
@@ -33,15 +33,51 @@ export default function(hljs) {
     relevance: 0
   };
 
-  // https://github.com/highlightjs/highlight.js/blob/main/src/languages/ruby.js
+  // // https://github.com/highlightjs/highlight.js/blob/main/src/languages/ruby.js
+  // const VARIABLE = {
+  //   // negative-look forward attempts to prevent false matches like:
+  //   // @ident@ or $ident$ that might indicate this is not ruby at all
+  //   scope: "variable",
+  //   begin: '(\\$\\W)|((\\$|@@?)(\\w+))(?=[^@$?])' + `(?![A-Za-z])(?![@$?'])`
+  // }
+
   const VARIABLE = {
-    // negative-look forward attempts to prevent false matches like:
-    // @ident@ or $ident$ that might indicate this is not ruby at all
-    className: "variable",
-    begin: '(\\$\\W)|((\\$|@@?)(\\w+))(?=[^@$?])' + `(?![A-Za-z])(?![@$?'])`
+    scope: "variable",
+    begin: '@?\\w+'
   }
 
+  const KEYWORD = {
+    scope: "keyword",
+    begin: '\\b(if|si|class|classe|export|import|from|def|var|let|code|unit|false|true|null|vrai|faux|nul|oui|non|yes|no|return)\\b'
+  }
 
+  const CLASS_NAME = {
+    scope: "title class_",
+    begin: "[A-Z]\\w*" //    FIXME: not working... begin: "\\p{Lu}\\w*"
+  }
+
+  const FUNC_CALL = {
+    scope: "title function_",
+    begin: '\\w+(?=\\()'
+  }
+
+  const OBJ_KEY = {
+    begin: '\\w+(?=:)'
+  }
+
+  // const SCRIPT_TAG_MD = {
+  //   begin: '<md>', end: '<\\/md>'
+  // }
+
+  const SCRIPT_TAG_SH = {
+    begin: '<sh>', end: '<\\/sh>',
+    subLanguage: 'shell'
+  }
+
+  const SCRIPT_TAG_HTML = {
+    begin: '<html>', end: '<\\/html>',
+    subLanguage: 'html'
+  }
 
   return {
     case_insensitive: false, // language is case sensitive
@@ -63,7 +99,7 @@ export default function(hljs) {
         begin: "`", end: "`"
       },
       {
-        className: "comment",
+        scope: "comment",
         variants: [
           // JSDOC_COMMENT,
           hljs.C_BLOCK_COMMENT_MODE,
@@ -71,7 +107,13 @@ export default function(hljs) {
         ]
       },
       NUMBER,
-      VARIABLE
+      KEYWORD,
+      FUNC_CALL,
+      OBJ_KEY,
+      CLASS_NAME,
+      VARIABLE,
+      SCRIPT_TAG_SH,
+      SCRIPT_TAG_HTML
     ]
   }
 }
