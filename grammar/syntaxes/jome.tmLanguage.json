@@ -124,7 +124,7 @@
         { "include": "#support-variable" },
         { "include": "#variable" },
         { "include": "#getter" },
-        { "include": "#dictionary" },
+        { "include": "#block" },
         {
           "match": ";",
           "name": "punctuation.terminator.statement.jome"
@@ -387,7 +387,7 @@
       "name": "expression.group",
       "patterns": [{ "include": "#expression" }]
     },
-    "dictionary": {
+    "block": {
       "begin": "\\{",
       "end": "\\}",
       "beginCaptures": {
@@ -396,7 +396,7 @@
       "endCaptures": {
         "0": { "name": "punctuation.curly-braces.close" }
       },
-      "name": "meta.dictionary.jome",
+      "name": "meta.block.jome",
       "patterns": [
         {
           "match": "(\\s*)([\\p{L}~]\\w*)\\s*:\\s*",

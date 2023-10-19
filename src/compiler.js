@@ -118,7 +118,7 @@ function compileScope(node, array, ctx, addReturnStatement = false) {
   let prev = ctx.currentScopeNode
   ctx.currentScopeNode = node
   node.declarations = new Set()
-  let r = compileBlock(array, ctx, addReturnStatement)
+  let r = compileJsBlock(array, ctx, addReturnStatement)
   if (node.declarations.size) {
     return 'var '+Array.from(node.declarations).join(', ')+'\n'+r
   }
@@ -130,7 +130,7 @@ function filterSpaces(array) {
   return array.filter(e => !/^\s*$/.test(e)) // filter spaces
 }
 
-function compileBlock(array, ctx, addReturnStatement = false) {
+function compileJsBlock(array, ctx, addReturnStatement = false) {
   let r = []
   array = filterSpaces(array)
   for (let i = 0; i < array.length; i++) {
@@ -293,7 +293,7 @@ function compileDictValOrMethod(arr, ctx, key) {
     r = r0+' '+jsBlock(arr[1], ctx, key !== 'constructor')
     return r
   }
-  return ' = '+compileBlock(arr, ctx)
+  return ' = '+compileJsBlock(arr, ctx)
 }
 
 function buildDict(node, ctx, func) {
@@ -304,7 +304,7 @@ function buildDict(node, ctx, func) {
   list.forEach(arr => {
     //if (arr[0].type === 'newline') {return;}
     if (arr[0].type !== 'meta.dictionary-key.jome') {
-      return console.error('Error processing expected meta.dictionary-key.jome inside meta.dictionary.jome but was', arr[0].type)
+      return console.error('Error processing expected meta.dictionary-key.jome inside meta.block.jome but was', arr[0].type)
     }
     let key = arr[0].children[0].text()
     let value = func(arr.slice(1), ctx, key)
@@ -339,7 +339,7 @@ function compileJomeObjBlock(list, ctx) {
       let args = compileFunctionCallArgs(node.array.slice(1), ctx)
       result.push(name+args)
     } else if (t === 'variable.assignment.jome') {
-      result.push(compileBlock(node.array, ctx))
+      result.push(compileJsBlock(node.array, ctx))
     } else {
       console.error('Error 91283')
     }
@@ -411,9 +411,9 @@ function compileFunctionCallArgs(array, ctx) {
   args.forEach(array => {
     if (array[1]?.type === 'keyword.operator.colon.jome') {
       let name = array[0].text()
-      params[name] = compileBlock(array.slice(2), ctx)
+      params[name] = compileJsBlock(array.slice(2), ctx)
     } else {
-      actualArgs.push(compileBlock(array, ctx))
+      actualArgs.push(compileJsBlock(array, ctx))
     }
   })
   if (Object.keys(params).length) {
@@ -706,7 +706,7 @@ const PROCESSES = {
   },
   // (fooBar + 1)
   "expression.group": (node, ctx) => { // TODO: Rename expression.group. Maybe meta.parenthesis.jome?
-    return `(${compileBlock(node.children.slice(1, -1), ctx)})`
+    return `(${compileJsBlock(node.children.slice(1, -1), ctx)})`
   },
   // « $someName SomeType »
   "meta.standalone-obj.jome": (node, ctx) => {
@@ -730,8 +730,8 @@ const PROCESSES = {
     return prev + '\n' + compileJomeObjBlock(node.children.slice(1, -1), ctx) + '\n\n' // remove '«' and '»'
   },
   // {x: 20, y: 30}
-  "meta.dictionary.jome": (node, ctx) => {
-    let dict = buildDict(node, ctx, (arr) => compileBlock(arr, ctx))
+  "meta.block.jome": (node, ctx) => {
+    let dict = buildDict(node, ctx, (arr) => compileJsBlock(arr, ctx))
     return compileJsObj(dict)
   },
   // fooBar.x
@@ -750,7 +750,7 @@ const PROCESSES = {
       let t = prev?.type
       if (t && (t.startsWith('variable') || t === 'meta.square-bracket.jome')) {
         // Check if it is an accessor like fooBar[10], check for fooBar[-1]
-        let val = compileBlock(list[0], ctx)
+        let val = compileJsBlock(list[0], ctx)
         if (/^-\d+$/.test(val.replaceAll(/ /g, ''))) {
           return '.slice('+val+')[0]'
         }
@@ -761,7 +761,7 @@ const PROCESSES = {
         console.warn('Warning 95412')
       }
     }
-    return '['+list.map(e => compileBlock(e, ctx)).join(', ')+']'
+    return '['+list.map(e => compileJsBlock(e, ctx)).join(', ')+']'
     // let prev = node.prev()
     // let before = prev ? compileNode(prev, ctx) : ''
     // let list = parseList(node.children.slice(1,-1))
@@ -861,7 +861,7 @@ const PROCESSES = {
         next.captured = true
         next = next.next()
       }
-      if (next?.type === 'meta.dictionary.jome') {
+      if (next?.type === 'meta.block.jome') {
         methods = {...methods, ...buildDict(next, ctx, compileDictValOrMethod)}
         next.captured = true
       }
@@ -936,7 +936,7 @@ const PROCESSES = {
   "string.quoted.double.jome": (node) => `"${compileRaw(node.children.slice(1,-1))}"`,
   "string.quoted.backtick.jome": (node, ctx) => {
     return '`'+node.children.slice(1,-1).map(
-      c => typeof c === 'string' ? c : '${'+compileBlock(c.children.slice(1,-1), ctx)+'}'
+      c => typeof c === 'string' ? c : '${'+compileJsBlock(c.children.slice(1,-1), ctx)+'}'
     ).join('')+'`'
   },
   "keyword.control.jome": (node, ctx) => {
