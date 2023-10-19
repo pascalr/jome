@@ -201,3 +201,14 @@ $tests <<
 //   TestEq $testContainer/container->children.length, 1, "$testContainer/container->children.length"
 //   TestEq $testContainer/container/subcontainer->children.length, 1, "$testContainer/container/subcontainer->children.length"
 // >>
+
+$tests <<
+  titre 'Test des blocks'
+  // TestEq {x: 10}, <js>{x: 10}</js>, "{x: 10}"
+  // TestEq { 1, 2, 3}, <js>[1,2,3]</js>, "{1,2,3}"
+  // TestEq {
+  //   1
+  //   2
+  //   3
+  // }, <js>[1,2,3]</js>, "{\n1\n2\n3\n}"
+>>

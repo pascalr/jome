@@ -390,24 +390,25 @@
     "block": {
       "begin": "\\{",
       "end": "\\}",
-      "beginCaptures": {
-        "0": { "name": "punctuation.curly-braces.open" }
-      },
-      "endCaptures": {
-        "0": { "name": "punctuation.curly-braces.close" }
-      },
+      "beginCaptures": {"0": { "name": "punctuation.curly-braces.open" }},
+      "endCaptures": {"0": { "name": "punctuation.curly-braces.close" }},
       "name": "meta.block.jome",
       "patterns": [
+        {"match": "(?:\\G)\\s+"},
         {
-          "match": "(\\s*)([\\p{L}~]\\w*)\\s*:\\s*",
+          "match": "(?:^|\n)\\s+",
+          "name": "punctuation.whitespace.indent.jome"
+        },
+        {"match": "\\s+"},
+        {
+          "match": "([\\p{L}~]\\w*)\\s*:",
           "name": "meta.dictionary-key.jome",
           "captures": {
-            "1": { "name": "ignore" },
-            "2": { "name": "support.type.property-name.jome" }
+            "1": { "name": "support.type.property-name.jome" }
           }
         },
         {
-          "match": "\\s*,\\s*",
+          "match": ",",
           "name": "punctuation.separator.delimiter.jome"
         },
         {"include": "#expression"}

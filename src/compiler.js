@@ -302,12 +302,13 @@ function buildDict(node, ctx, func) {
   //for (let i = 0; i < list.length; i++) {
     //let j = list.slice(i).findIndex(e => e.type === 'newline')
   list.forEach(arr => {
+    let i = arr[0].type === 'punctuation.whitespace.indent.jome' ? 1 : 0
     //if (arr[0].type === 'newline') {return;}
-    if (arr[0].type !== 'meta.dictionary-key.jome') {
+    if (arr[i].type !== 'meta.dictionary-key.jome') {
       return console.error('Error processing expected meta.dictionary-key.jome inside meta.block.jome but was', arr[0].type)
     }
-    let key = arr[0].children[0].text()
-    let value = func(arr.slice(1), ctx, key)
+    let key = arr[i].children[0].text()
+    let value = func(arr.slice(i+1), ctx, key)
     dict[key] = value
   })
   return dict
@@ -537,7 +538,12 @@ function assignVariable(node, ctx, keyword) {
   }
 }
 
+
+// If the first children of the node is a key, then ...
 function compileBlock(node, ctx) {
+  let list = filterSpaces(node.children.slice(1, -1))
+  let nodes = parseIndent(list)
+  // To make this work, let's try starting with objects and lists first only
   let dict = buildDict(node, ctx, (arr) => compileJsBlock(arr, ctx))
   return compileJsObj(dict)
 }
