@@ -182,10 +182,34 @@ import {AppPage} from '../lib/app.jome'
     someKey: someFunc 'arg1', 'arg2'
   }
 
+  // tu peux aussi appeler des fonctions
+  {
+    Obj prop: 'val'
+      child: Obj prop: 'val'
+      .parentRun()
+  }
+
+  // WAIT: Comment faire la distinction entre une fonction et une classe (new)?
+  obj = {Obj prop: 'val'} // classe
+  // let obj = new Obj({prop: 'val'})
+  obj = {func 'val'} // fonction
+  présentement je le fais avec minuscule / majuscule
+  obj = {=Func 'val'} // fonction
+  // Peut-être que optionel selon contexte, et si pas clair, doit mettre = en avant pour appeler une fonction qui commence par une lettre majuscule
+
   // LES NODES N'ONT PAS DE NOM, MAIS TU PEUX LES ATTACHER AVEC UNE CLÉ À UN PARENT
   // QUAND TU ATTACHES UN CHILDREN AVEC UNE CLÉ, il est là ET il est dans la liste de children.
   // si tu veux mettre à un attribute, mais pas children, alors utiliser @attr
 
+  ```
+
+  Il est aussi possible de définir des variables dans un bloc. Les variables sont simplement sorties du block et exécuter avant le bloc.
+
+  ```
+  x = 10
+  y = 20
+  x
+  y
   ```
 
   Des childrens c'est une liste sous un node.

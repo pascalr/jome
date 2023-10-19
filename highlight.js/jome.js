@@ -45,7 +45,10 @@ export default function(hljs) {
 
   return {
     case_insensitive: false, // language is case sensitive
-    keywords: 'if si class classe export import from def var code unit',
+    keywords: {
+      keyword: 'if si class classe export import from def var let code unit',
+      literal: 'false true null vrai faux nul oui non yes no'
+    },
     contains: [
       {
         scope: 'string',
