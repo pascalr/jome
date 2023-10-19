@@ -537,6 +537,11 @@ function assignVariable(node, ctx, keyword) {
   }
 }
 
+function compileBlock(node, ctx) {
+  let dict = buildDict(node, ctx, (arr) => compileJsBlock(arr, ctx))
+  return compileJsObj(dict)
+}
+
 // Using an hashmap here because it is easier to debug,
 // a bunch of if else if else is annoying to go through step by step
 // and switch case is really annoying because it does not scope the variables
@@ -730,10 +735,7 @@ const PROCESSES = {
     return prev + '\n' + compileJomeObjBlock(node.children.slice(1, -1), ctx) + '\n\n' // remove '«' and '»'
   },
   // {x: 20, y: 30}
-  "meta.block.jome": (node, ctx) => {
-    let dict = buildDict(node, ctx, (arr) => compileJsBlock(arr, ctx))
-    return compileJsObj(dict)
-  },
+  "meta.block.jome": compileBlock,
   // fooBar.x
   "meta.getter.jome": (node, ctx) => {
     let prev = compileNode(node.prev(), ctx)
