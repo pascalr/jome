@@ -414,6 +414,10 @@
           }
         },
         {
+          "match": ":([\\p{L}~]\\w*)",
+          "name": "variable.dict-symbol.jome"
+        },
+        {
           "match": ",",
           "name": "punctuation.separator.delimiter.jome"
         },

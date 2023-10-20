@@ -304,12 +304,16 @@ function buildDict(node, ctx, func) {
   list.forEach(arr => {
     let i = arr[0].type === 'punctuation.whitespace.indent.jome' ? 1 : 0
     //if (arr[0].type === 'newline') {return;}
-    if (arr[i].type !== 'meta.dictionary-key.jome') {
-      return console.error('Error processing expected meta.dictionary-key.jome inside meta.block.jome but was', arr[0].type)
+    if (arr[i].type === 'variable.dict-symbol.jome') {
+      let key = arr[i].text().slice(1) // remove the colon
+      dict[key] = key
+    } else if (arr[i].type !== 'meta.dictionary-key.jome') {
+      return console.error('Error processing expected meta.dictionary-key.jome inside meta.block.jome but was', arr[i].type)
+    } else {
+      let key = arr[i].children[0].text()
+      let value = func(arr.slice(i+1), ctx, key)
+      dict[key] = value
     }
-    let key = arr[i].children[0].text()
-    let value = func(arr.slice(i+1), ctx, key)
-    dict[key] = value
   })
   return dict
 }
@@ -541,7 +545,10 @@ function assignVariable(node, ctx, keyword) {
 function buildBlock(node, ctx) {
   let list = filterSpaces(node.children.slice(1, -1))
   let topLevelNodes = parseIndent(list)
-  let topsIsKey = topLevelNodes.map(n => n.array[0].type === 'meta.dictionary-key.jome')
+  let topsIsKey = topLevelNodes.map(n => {
+    let t = n.array[0].type
+    return t === 'meta.dictionary-key.jome' || t === 'variable.dict-symbol.jome'
+  })
   // If all top level nodes are keys (or symbols latter on), then it is an object
   if (topsIsKey.every(b => b)) {
     return buildDict(node, ctx, (arr) => compileJsBlock(arr, ctx))
