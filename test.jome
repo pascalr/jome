@@ -206,13 +206,15 @@ $tests <<
 //   TestEq $testContainer/container/subcontainer->children.length, 1, "$testContainer/container/subcontainer->children.length"
 // >>
 
+ten = 10
 $tests <<
   titre 'Test des blocks'
   TestEq {x: 10}, <js>{x: 10}</js>, "{x: 10}"
+  TestEq {x: 10, :ten}, <js>{x: 10, ten: 10}</js>, "{x: 10, :ten}"
   TestEq { 1, 2, 3}, <js>[1,2,3]</js>, "{1,2,3}"
-  // TestEq {
-  //   1, 2, 3
-  //   4, 5, 6
-  //   7, 8, 9
-  // }, <js>[[1,2,3],[4,5,6],[7,8,9]]</js>, "{\n1\n2\n3\n}"
+  TestEq {
+    1, 2, 3
+    4, 5, 6
+    7, 8, 9
+  }, <js>[[1,2,3],[4,5,6],[7,8,9]]</js>, "Matrice 1 à 9"
 >>

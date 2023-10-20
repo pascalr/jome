@@ -566,7 +566,7 @@ function compileBlock(node, ctx) {
     if (built.length === 1) {
       return built[0]
     } else {
-      throw new Error('345679061235089y2')
+      return '['+built.join(', ')+']'
     }
   } else if (typeof built === 'object') {
     return compileJsObj(built)  

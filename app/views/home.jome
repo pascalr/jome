@@ -201,6 +201,13 @@ import {AppPage} from '../lib/app.jome'
   // QUAND TU ATTACHES UN CHILDREN AVEC UNE CLÉ, il est là ET il est dans la liste de children.
   // si tu veux mettre à un attribute, mais pas children, alors utiliser @attr
 
+
+  matrix = {
+    1, 0, 0
+    0, 1, 0
+    0, 0, 1
+  }
+
   ```
 
   Il est aussi possible de définir des variables dans un bloc. Les variables sont simplement sorties du block et exécuter avant le bloc.
