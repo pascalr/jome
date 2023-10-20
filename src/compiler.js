@@ -952,6 +952,7 @@ const PROCESSES = {
   "keyword.operator.jome": (node, ctx) => (
     node.text() === '^' ? ' ** ' : compileWithSpaces(node, ctx)
   ),
+  "keyword.operator.typeof.jome": compileWithSpaces,
   "keyword.operator.logical.jome": compileWithSpaces,
   "keyword.operator.assignment.jome": compileWithSpaces,
   "keyword.operator.comparison.jome": compileWithSpaces,

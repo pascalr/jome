@@ -70,7 +70,7 @@ class TestSyntaxe2 extends TestSyntaxe1 {
 
 class TestEq {
   constructor: |actual, expected, message| => (
-    if (Array.isArray(expected)) (
+    if (Array.isArray(expected) || typeof expected === 'object') (
       @pass = JSON.stringify(actual) === JSON.stringify(expected);
     ) else (
       @pass = actual == expected
@@ -211,7 +211,7 @@ $tests <<
   titre 'Test des blocks'
   TestEq {x: 10}, <js>{x: 10}</js>, "{x: 10}"
   TestEq {x: 10, :ten}, <js>{x: 10, ten: 10}</js>, "{x: 10, :ten}"
-  TestEq { 1, 2, 3}, <js>[1,2,3]</js>, "{1,2,3}"
+  TestEq {1, 2, 3}, <js>[1,2,3]</js>, "{1,2,3}"
   TestEq {
     1, 2, 3
     4, 5, 6
