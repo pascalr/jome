@@ -121,7 +121,7 @@
         { "include": "#standalone-obj" },
         { "include": "#constants" },
         { "include": "#function_call" },
-        { "include": "#support-variable" },
+        { "include": "#support-items" },
         { "include": "#variable" },
         { "include": "#getter" },
         { "include": "#block" },
@@ -135,11 +135,17 @@
         }
       ]
     },
-    "support-variable": {
-			"patterns": [{
+    "support-items": {
+			"patterns": [
+        {
         "name": "support.variable.jome",
         "match": "\\b(console|window|global|document|__dirname|__filename)\\b"
-      }]
+        },
+        {
+          "name": "support.class.jome",
+          "match": "\\b(Array|JSON)\\b"
+        }
+      ]
 		},
 		"keywords": {
 			"patterns": [
@@ -276,7 +282,7 @@
 					}
 				},
 				{
-					"match": "!=|<=|>=|==|<|>",
+					"match": "!=|<=|>=|===|==|<|>",
 					"name": "keyword.operator.comparison.jome"
 				},
 				{

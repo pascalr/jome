@@ -538,14 +538,39 @@ function assignVariable(node, ctx, keyword) {
   }
 }
 
+function buildBlock(node, ctx) {
+  let list = filterSpaces(node.children.slice(1, -1))
+  let topLevelNodes = parseIndent(list)
+  let topsIsKey = topLevelNodes.map(n => n.array[0].type === 'meta.dictionary-key.jome')
+  // If all top level nodes are keys (or symbols latter on), then it is an object
+  if (topsIsKey.every(b => b)) {
+    return buildDict(node, ctx, (arr) => compileJsBlock(arr, ctx))
+  // If any top level nodes are keys, then it is an error
+  } else if (topsIsKey.some(b => b)) {
+    throw new Error("You cannot combine an object with something else inside a block.")
+  } else {
+    return topLevelNodes.map(top => {
+      if (top.array[0].type === 'entity.name.fixme.jome') {
+
+      } else {
+        return '['+parseList(top.array, ctx).map(e => compileJsBlock(e, ctx)).join(', ')+']'
+      }
+    })
+  }
+}
 
 // If the first children of the node is a key, then ...
 function compileBlock(node, ctx) {
-  let list = filterSpaces(node.children.slice(1, -1))
-  let nodes = parseIndent(list)
-  // To make this work, let's try starting with objects and lists first only
-  let dict = buildDict(node, ctx, (arr) => compileJsBlock(arr, ctx))
-  return compileJsObj(dict)
+  let built = buildBlock(node, ctx)
+  if (Array.isArray(built)) {
+    if (built.length === 1) {
+      return built[0]
+    } else {
+      throw new Error('345679061235089y2')
+    }
+  } else if (typeof built === 'object') {
+    return compileJsObj(built)  
+  }
 }
 
 // Using an hashmap here because it is easier to debug,
@@ -933,6 +958,7 @@ const PROCESSES = {
     }
     return name
   },
+  "support.class.jome": compileAsIs,
   "constant.numeric.integer.jome": compileAsIs,
   "constant.numeric.float.jome": compileAsIs,
   "comment.line.double-slash.jome": () => '',

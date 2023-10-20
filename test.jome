@@ -70,7 +70,11 @@ class TestSyntaxe2 extends TestSyntaxe1 {
 
 class TestEq {
   constructor: |actual, expected, message| => (
-    @pass = actual == expected
+    if (Array.isArray(expected)) (
+      @pass = JSON.stringify(actual) === JSON.stringify(expected);
+    ) else (
+      @pass = actual == expected
+    )
     if (@pass) (
       console.log("\x1b[32mRÉUSSI\x1b[0m", message || expected)
     ) else (
@@ -204,11 +208,11 @@ $tests <<
 
 $tests <<
   titre 'Test des blocks'
-  // TestEq {x: 10}, <js>{x: 10}</js>, "{x: 10}"
-  // TestEq { 1, 2, 3}, <js>[1,2,3]</js>, "{1,2,3}"
+  TestEq {x: 10}, <js>{x: 10}</js>, "{x: 10}"
+  TestEq { 1, 2, 3}, <js>[1,2,3]</js>, "{1,2,3}"
   // TestEq {
-  //   1
-  //   2
-  //   3
-  // }, <js>[1,2,3]</js>, "{\n1\n2\n3\n}"
+  //   1, 2, 3
+  //   4, 5, 6
+  //   7, 8, 9
+  // }, <js>[[1,2,3],[4,5,6],[7,8,9]]</js>, "{\n1\n2\n3\n}"
 >>
