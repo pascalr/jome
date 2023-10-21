@@ -8,7 +8,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const JOME_LIB = 'jome'
-const JOME_ROOT = '$'
 
 export function buildFile(fullPath, dependencies = [], run=false) {
   if (!fullPath.endsWith('.jome')) {
@@ -55,11 +54,6 @@ export function buildFile(fullPath, dependencies = [], run=false) {
   })
 
   // Modify 'result' as needed
-  if (run) {
-    result = `const ${JOME_ROOT} = ${JOME_LIB}.createObj()\n` +
-             `if (typeof window !== 'undefined') {window.${JOME_ROOT} = ${JOME_ROOT};}\n\n` +
-             result
-  }
   result = `import ${JOME_LIB} from 'jome'\n\n` + result;
 
   // Generate the build file name

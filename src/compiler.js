@@ -470,12 +470,12 @@ export function compileInterpolate(str, ctx, escSeqBeg = '${', escSeqEnd = '}') 
   });
 }
 
-function variableNameForPath(name, ctx) {
-  let s = name.split('/')
-  let root =  '$'+s[0]
-  ctx.declareVariable(root)
-  return '$'+s.join('.$.$')
-}
+// function variableNameForPath(name, ctx) {
+//   let s = name.split('/')
+//   let root =  '$'+s[0]
+//   ctx.declareVariable(root)
+//   return '$'+s.join('.$.$')
+// }
 
 function parseScriptTagArgs(node) {
   let args = {}
@@ -935,18 +935,6 @@ const PROCESSES = {
       default: throw new Error('Error 84023')
     }
     return `${label} ${compileNode(cond, ctx)} ${jsBlock(val, ctx)}`
-  },
-  "support.variable.path.jome": (node, ctx) => {
-    //let o = ctx.isInsideClass ? 'this' : '$'
-    let obj = '$'
-    let path = node.text()
-    if (path === JOME_ROOT) {return obj}
-    let name = path.slice(1)
-    let v = variableNameForPath(name, ctx)
-    // if (/^\d+$/.test(name)) {
-    //   return `${v} = ${JOME_LIB}.getNthChild(${obj}, ${parseInt(name)})`
-    // }
-    return `${v} = ${JOME_LIB}.getOrCreateChild(${obj}, '${name}')`
   },
   "punctuation.separator.delimiter.jome": () => ', ',
   "punctuation.terminator.statement.jome": () => ';',

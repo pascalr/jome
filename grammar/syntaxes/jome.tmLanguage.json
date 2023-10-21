@@ -110,7 +110,6 @@
         { "include": "#strings" },
         { "include": "#scripts" },
         { "include": "#obj-block" },
-        { "include": "#path" },
         { "include": "#arrow" },
         { "include": "#arrow_getter" },
         { "include": "#operators" },
@@ -187,12 +186,6 @@
 			"patterns": [{
 				"name": "keyword.arrow.jome",
 				"match": "=>| -> "
-			}]
-		},
-    "path": {
-			"patterns": [{
-				"name": "support.variable.path.jome",
-				"match": "\\$[\\w\\/]*"
 			}]
 		},
     "parameter": {

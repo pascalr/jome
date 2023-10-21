@@ -1,19 +1,5 @@
 import {H1} from './lib/html.jome'
 
-
-
-
-
-// TODO: 
-// Replace "$tests <<"
-// by
-// tests = []
-// tests << { ... } everywhere
-
-
-
-
-
 // Testing imports, all these should be parse properly:
 // import defaultExport from "module-name";
 // import * as name from "module-name";
@@ -96,17 +82,12 @@ class TestEq {
   )
 }
 
-$html <<
-  $titre H1 "Un titre"
->>
-
 var obj = « H1 "Un titre", css: {color: 'red'} »
 
-$tests <<
-  TestEq $html/titre.toString(), "<h1>Un titre</h1>", "$html/titre.toString()"
+«
   TestEq « H1 "Un titre" ».toString(), "<h1>Un titre</h1>", "«H1 \"Un titre\"».toString()"
   TestEq obj.toString(), "<h1 style='color: red;'>Un titre</h1>", "« H1 \"Un titre\", css: {color: 'red'} ».toString()"
->>
+»
 
 titre = |texte| => (
   console.log('%c' + texte, 'color: yellow')
@@ -116,8 +97,7 @@ titre = |texte| => (
 // TODO: TestEq [1,2,3][0...2], [1,2], "Test range exclusif"
 // 0..1 => $$.range(0, 1)
 
-$tests <<
-
+«
   // TODO: Supporter cela, mais seulement quand le chiffre est direct. Ne pas supporter quand c'est une variable négative.
   // Comme ça pas besoin de toujours regarder si c'est négatif.
   TestEq [1,2,3][-1], 3, "Un index négatif devrait prendre l'élément en partant de la fin. -1 devrait être le dernier élément."
@@ -179,10 +159,9 @@ $tests <<
   //   x = x + 20
   //   x    
   // ))()), 30, "Testing multiple lines inside a function"
->>
+»
 
-$tests <<
-
+«
   titre 'Test paramètres de fonctions'
 
   addXs = |&x1, &x2| -> (x1 + x2)
@@ -190,9 +169,7 @@ $tests <<
 
   TestEq addXs(x1: 10, x2: 20), 30, "addXs(x1: 10, x2: 20)"
   TestEq addAXs(5, x1: 10, x2: 20), 35, "addAXs(5, x1: 10, x2: 20)"
->>
 
-$tests <<
   titre 'Test des unités'
   TestEq 10.2km/h, 10.2, "10.2km/h"
   TestEq 0.5W * 2h, 1, "0.5W * 2h"
@@ -200,7 +177,7 @@ $tests <<
 //   TestEq 1km/h, <js>new Quantity(1, 'km/h')</js>, "1km/h"
 //   TestEq 1km^2, <js>new Quantity(1, 'km²')</js>, "1km^2"
 //   TestEq 1km², <js>new Quantity(1, 'km²')</js>, "1km²"
->>
+»
 
 // Container = «
 //   $container
@@ -220,7 +197,7 @@ $tests <<
 // >>
 
 ten = 10
-$tests <<
+«
   titre 'Test des blocks'
   TestEq {x: 10}, <js>{x: 10}</js>, "{x: 10}"
   TestEq {x: 10, :ten}, <js>{x: 10, ten: 10}</js>, "{x: 10, :ten}"
@@ -235,4 +212,4 @@ $tests <<
     4, 5, 6
     7, 8, 9
   }, <js>[[1,2,3],[4,5,6],[7,8,9]]</js>, "Matrice 1 à 9"
->>
+»
