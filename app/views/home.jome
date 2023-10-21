@@ -80,7 +80,7 @@ import {AppPage} from '../lib/app.jome'
   )
   ```
 
-  Curly braces are used for javascript objects (aka dictionaries).
+  Curly braces are used for [blocks](#blocks).
 
   ```jome
   def someFunction = -> (return 10 + 20) // ok
@@ -88,11 +88,7 @@ import {AppPage} from '../lib/app.jome'
   def someFunction = -> {x: 10} // ok
   ```
 
-  The advantage is that there is never confusion. You never have an error that tells you you have to add parentheses. For example, in javascript:
 
-  ```js
-  let someFunction = () => ({x: 10}) // you often have to add extra parentheses around objects in js
-  ```
 
   Vertical bars are used for function parameters.
   ```jome
@@ -115,6 +111,17 @@ import {AppPage} from '../lib/app.jome'
 
   Oui accepter le keyword let, il est beaucoup plus beau que var. C'est
   juste que j'aimais que var soit multilingue. Mais let est plus beau.
+
+  ### Bilingual
+
+  Jome is bilingual in french and english. There are french keywords equivalent to english keywords.
+
+  - vrai: true
+  - faux: false
+  - si: if
+  - sinon: else
+  - requiert: require
+  - ...
 
   <h2 id="blocks">Blocks</h2>
 
@@ -182,17 +189,6 @@ import {AppPage} from '../lib/app.jome'
     }
   ```
 
-  ### Adding children to nodes
-  
-  In order to add children to nodes, you can use the << operator.
-
-  ```jome
-  $ << {
-    Obj prop: 'val'
-    Obj prop: 'val'
-  }
-  ```
-
   ### List with single element
 
   In a block, you can't have a list with a single element because it that case it returns the element directly.
@@ -223,39 +219,26 @@ import {AppPage} from '../lib/app.jome'
   »
   ```
 
-  ### Children attached with key
-
-  LES NODES N'ONT PAS DE NOM, MAIS TU PEUX LES ATTACHER AVEC UNE CLÉ À UN PARENT
-  QUAND TU ATTACHES UN CHILDREN AVEC UNE CLÉ, il est là ET il est dans la liste de children.
-  si tu veux mettre à un attribute, mais pas children, alors utiliser @attr
-
-  ### Standalone node block
-
-  You can create a single node by surrounding with guillements. There must be a single object at the top, and then children are created based on indentation.
-
+  ### Adding children to nodes
   
-
-  Idea: If adding guillemets is too hard for people with english keyboards, then allow the syntax:
-  _<< >> which would be the same as « ».
-
-  ### Children node block
-
-  You can create and add directly children an existing node by surrounding with `<< >>`. The children are created based on indentation.
+  In order to add children to nodes, you can use the << operator.
 
   ```jome
-  $inventory <<
+  $inventory << {
     Sword damage: 10, weight: 500g
     Shield armor: 8, weight: 400g
     Scroll "Scroll of wisdom"
     Belt
       HealingPotion life: 200
       ManaPotion mana: 100
-  >>
+  }
   ```
 
-  ### Node names
+  ### Children attached with key
 
-  FIXME: Pour le nom des objets, au lieu de $nomDeLobjet, je propose nomDeLobjet: ...
+  LES NODES N'ONT PAS DE NOM, MAIS TU PEUX LES ATTACHER AVEC UNE CLÉ À UN PARENT
+  QUAND TU ATTACHES UN CHILDREN AVEC UNE CLÉ, il est là ET il est dans la liste de children.
+  si tu veux mettre à un attribute, mais pas children, alors utiliser @attr
  
   ```jome
   $ <<
@@ -281,7 +264,6 @@ import {AppPage} from '../lib/app.jome'
   example name.
 
   The property includes the following attributes:
-  - name: The name of the node
   - children: The list of children of the node.
   - parent: A link to the node who is it's parent
   - signals: A list of the signals the node listens to
@@ -308,10 +290,12 @@ import {AppPage} from '../lib/app.jome'
   veux que la variable soit à donner dans le constructeur ou pas selon s'il y a un point d'interrogation.
 
   ```jome
-  def someFunc = |someParam?, otherParam? = 'Pierre', optionalParam?| => (
+  def someFunc = |someParam?, otherParam? = 'Pierre', optionalParam?, requiredParam!| => (
     console.log(someParam) // No need to add & when refering to a parameter
   )
   ```
+
+  Un point d'interogation serait un paramètre optionel, et un point d'exclamation serait un paramètre obligatoire?
 
   Props are the specific case of object creation. When you pass parameters when creating an object, we call them props.
 
@@ -572,6 +556,12 @@ import {AppPage} from '../lib/app.jome'
   ```jome
   obj = new Obj(/* ... */) // Supporter new?
   obj = {Obj /* ... */}
+  ```
+
+  The advantage is that there is never confusion. You never have an error that tells you you have to add parentheses. For example, in javascript:
+
+  ```js
+  let someFunction = () => ({x: 10}) // you often have to add extra parentheses around objects in js
   ```
 
   ## Features
