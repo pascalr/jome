@@ -306,7 +306,15 @@ import {AppPage} from '../lib/app.jome'
 
   ### Inheritence
 
-  Classes inherit using the « » syntax. It is usefull
+  FIXME: How to handle class inheritence since I don't use the « » syntax anymore???
+
+  By using a key called super?
+
+  ```jome
+    class Base {
+      super: Abstract prop: 'val'
+    }
+  ```
 
   ## Interfaces
 
@@ -322,7 +330,7 @@ import {AppPage} from '../lib/app.jome'
   It is very nice when prototyping to not have to write return statements. But for production code, it is safer to always write them, this
   way you never return by accident a sensitive value that should be hiden from users.
 
-  ### Scripts
+  <h2 id="scripts">Scripts</h2>
 
   In jome, the idea is that you could include most other programming languages directly using xml tags.
 
@@ -334,14 +342,7 @@ import {AppPage} from '../lib/app.jome'
   <rb>puts (1..10).select(&:even?).sum</rb>
   ```
 
-  ### .jobj extension
-
-  Files with a .jobj extension would start already in a node block.
-
-  It think this would be pratical for example for config files.
-
-
-  #### Scripts interpolation
+  ### Scripts interpolation
 
   You can add data inside the scripts using the < % =    % > syntax.
 
@@ -375,6 +376,12 @@ import {AppPage} from '../lib/app.jome'
 
   Basically, I want to inject html and not inject markdown directly.
 
+  ### .jobj extension
+
+  Files with a .jobj extension would start already in a block.
+
+  It think this would be pratical for example for config files.
+
   <h2 id="verbatim-strings">Verbatim Strings</h2>
 
   Like in C#. @"foo \ $ blahblah bar" => directly with no interpolation
@@ -407,8 +414,6 @@ import {AppPage} from '../lib/app.jome'
   Most of the time you control objects directly inside the editor and simply modify parameters.
   
   It's the same thing as object oriented, but the focus is on the concrete object rather than the abstract class.
-
-  <h2 id="integrated-scripts">Integrated scripts</h2>
 
   <h2 id="units">Units</h2>
 
