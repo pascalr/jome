@@ -3,6 +3,8 @@ import {AppPage} from '../lib/app.jome'
 «
   AppPage title: 'Simple HTML Page', content: (<md>
 
+  TODO: The whole $... syntax is useless...
+
   # Jome
 
   Jome is a language that compiles in JavaScript. It is simliar to CoffeeScript in this way.
@@ -23,13 +25,13 @@ import {AppPage} from '../lib/app.jome'
   class Weapon |damage?, range?| => {}
 
   // Inheritence and properties
-  class Dagger « Weapon range: 50 »
-  class WeakDagger « Dagger damage: 50 »
-  class StrongDagger « Dagger damage: 200 »
+  class Dagger { super: Weapon range: 50 }
+  class WeakDagger { super: Dagger damage: 50 }
+  class StrongDagger { super: Dagger damage: 200 }
 
   // Instantiation
   var startingWeapon = « WeakDagger »
-  var hero = « Character "Paul", weapon: startingWeapon »
+  var hero = { Character "Paul", weapon: startingWeapon }
 
   // Scripts (any language, here shell)
   var gameSaved = <sh>cat "saved-gamed.json"</sh>
@@ -43,7 +45,7 @@ import {AppPage} from '../lib/app.jome'
   
   ## Disclaimer
 
-  The language is very, very young and still contains a log of bugs. Also, I did not study in computer science. I am just a random hvac technician that somehow ended up writing a programming language. I may be doing a lot of things stupidly. Please be nice and correct me in a constructive manner if so.
+  The language is very, very young and still contains a log of bugs. Also, I don't work and I did not study in computer science. I may be doing a lot of things stupidly. Please be nice and correct me in a constructive manner if so.
 
 
   ## Installation
@@ -97,20 +99,10 @@ import {AppPage} from '../lib/app.jome'
 
   ### Keywords
 
-  You use `var` for variables and `def` for functions.
-
-  TODO: Say more
-
-  Maybe allow the let keyword that works for both var and def?
-
-  The advantage of def and var is that you know what the thing is.
-
-  But when prototyping, who cares, you can just use let.
-
-  I think def is nice to use for functions.
-
-  Oui accepter le keyword let, il est beaucoup plus beau que var. C'est
-  juste que j'aimais que var soit multilingue. Mais let est plus beau.
+  Declaration keywords:
+  - [var](#declaration): To declare variables
+  - [def](#declaration): To declare functions
+  - [let](#declaration): To declare anything
 
   ### Bilingual
 
@@ -125,7 +117,10 @@ import {AppPage} from '../lib/app.jome'
 
   <h2 id="blocks">Blocks</h2>
 
-  Blocks are surrounded by curly braces and use indentation. The result of a block can be an object, a list, a node or a value.
+  Blocks are a key component of Jome. They use indentation to build objects in a short and subjectively pretty way.
+  It is also the syntax required to build [nodes](#nodes).
+
+  Blocks are surrounded by curly braces. The result of a block can be an object, a list, a node or a value.
 
   ```jome
   // objects
@@ -198,10 +193,6 @@ import {AppPage} from '../lib/app.jome'
 
   Nodes are objects in a tree structure. They can have a parent and they can have children.
 
-  `$` is the root node. There is one root node by file.
-
-  `$someNode` is a short syntax to get the child of the root node named "someNode".
-
   You create nodes by using blocks.
 
   ```jome
@@ -224,7 +215,8 @@ import {AppPage} from '../lib/app.jome'
   In order to add children to nodes, you can use the << operator.
 
   ```jome
-  $inventory << {
+  inventory = {Inventory}
+  inventory << {
     Sword damage: 10, weight: 500g
     Shield armor: 8, weight: 400g
     Scroll "Scroll of wisdom"
@@ -485,10 +477,12 @@ import {AppPage} from '../lib/app.jome'
   btn.click()
   ```
 
-  ## Declarations
+  <h2 id="declaration">Declaration</h2>
 
   When you declare a variable without a keyword, the variable will be a constant. To declare a variable, use the var keyword.
   To declare a function, use de def function.
+
+  TODO: Keywords, var, def, let
 
   ```jome
   PI = 3.1415
