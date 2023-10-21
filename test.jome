@@ -212,6 +212,11 @@ $tests <<
   TestEq {x: 10}, <js>{x: 10}</js>, "{x: 10}"
   TestEq {x: 10, :ten}, <js>{x: 10, ten: 10}</js>, "{x: 10, :ten}"
   TestEq {1, 2, 3}, <js>[1,2,3]</js>, "{1,2,3}"
+  // TestEq {
+  //   SomeObj 'SomeVal', prop: 'val'
+  //   someFunc('SomeVal')
+  //   someVar
+  // }, <js>[1,2,3]</js>, "{1,2,3}"
   TestEq {
     1, 2, 3
     4, 5, 6

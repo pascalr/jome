@@ -303,6 +303,7 @@ function buildDict(node, ctx, func) {
     //let j = list.slice(i).findIndex(e => e.type === 'newline')
   list.forEach(arr => {
     let i = arr[0].type === 'punctuation.whitespace.indent.jome' ? 1 : 0
+    if (!arr[i]) {return;}
     //if (arr[0].type === 'newline') {return;}
     if (arr[i].type === 'variable.dict-symbol.jome') {
       let key = arr[i].text().slice(1) // remove the colon

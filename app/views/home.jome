@@ -116,6 +116,88 @@ import {AppPage} from '../lib/app.jome'
   Oui accepter le keyword let, il est beaucoup plus beau que var. C'est
   juste que j'aimais que var soit multilingue. Mais let est plus beau.
 
+  <h2 id="blocks">Blocks</h2>
+
+  Blocks are surrounded by curly braces and use indentation. The result of a block can be an object, a list, a node or a value.
+
+  ```jome
+  // objects
+  position = {x: 10, y: 10}
+  destination = {
+    x: 40
+    y: 50
+  }
+  details = {
+    distanceX: 30, distanceY: 40 // comma is optional
+    totalDistance: 50, eta: 10min
+  }
+
+  // lists
+  numbers = {1,2,3,4} // but [1,2,3,4] is preferred when on a single line
+  names = {
+    "Jean"
+    "Jacques"
+    "Paul"
+  }
+  matrix = {
+    1, 0, 0
+    0, 1, 0
+    0, 0, 1
+  }
+
+  // nodes
+  node = {
+    Obj some: 'obj'
+      'String child'
+      Nested prop: 'val'
+  }
+
+  // values
+  singleObj = {Obj prop: 'val'}
+  chainResult = {
+    Obj prop: 'val'
+      Nested prop: 'val'
+        Nested prop: 'val'
+      .run()
+  } // The value will be the result of the function run of the object created.
+  ```
+
+  ### Shorthand key syntax
+
+  The short key syntax is different that in javascript, because it could be confused with list. In Jome, it starts with a colon
+  ```jome
+  obj = {:content, :value}
+  // same as
+  obj = {content: content, value: value}
+  ```
+
+  ### Functions inside blocks
+
+  To call a function inside a block, you either call it with parentheses or you add an equal sign at the beginning.
+
+  ```jome
+    names = {
+      generateRandomName(seed: 546072384425) // functions can be called with parentheses
+      =generateRandomName seed: 945701924554 // functions can be called with an equal sign
+    }
+  ```
+
+  ### Adding children to nodes
+  
+  In order to add children to nodes, you can use the << operator.
+
+  ```jome
+  $ << {
+    Obj prop: 'val'
+    Obj prop: 'val'
+  }
+  ```
+
+  ### List with single element
+
+  In a block, you can't have a list with a single element because it that case it returns the element directly.
+  You have to use the square brackets syntax then.
+
   <h2 id="nodes">Nodes</h2>
 
   Nodes are objects in a tree structure. They can have a parent and they can have children.
@@ -124,129 +206,7 @@ import {AppPage} from '../lib/app.jome'
 
   `$someNode` is a short syntax to get the child of the root node named "someNode".
 
-  You create nodes by using node blocks. You can create them alone using guillemets `« »` or by adding them as children of an existing node using `<< >>`
-
-  Important: Node blocks use indentation to build the nodes.
-
-  <h2 id="blocks">Blocks</h2>
-
-  This is an idea that merges dictionaries and node blocks « »
-
-  Blocks are surrounded by curly braces and use indentation. The result of a block can be an object, a list or a node.
-
-  ```jome
-  // objects
-  obj1 = {x: 10, y: 20}
-  obj2 = {
-    x: 10
-    y: 20
-  }
-
-  // lists
-  list1 = {1,2,3,4}
-  list2 = {
-    "Jean"
-    "Jacques"
-    "Paul"
-  }
-  list3 = {
-    {x: 10, y: 20}
-    "Some string"
-    Obj some: 'obj'
-  }
-  list4 = {
-    Obj some: 'obj'
-    Obj some: 'obj'
-    Obj some: 'obj'
-  }
-
-  // nodes
-  node = {
-    Obj some: 'obj'
-      'String child'
-  }
-
-  // combination
-  combined = {
-    objKey: Node prop: 'val'
-      child: Child prop: 'val'
-        'String child'
-        GrandChild prop: 'val'
-      @attr: NotAChildButStillANode prop: 'val'
-        'String child'
-        Child prop: 'val'
-    someList: 1,2,3,4,5
-    someOtherList:
-      'Some string'
-      'Another string'
-    someKey: someFunc 'arg1', 'arg2'
-  }
-
-  // tu peux aussi appeler des fonctions
-  {
-    Obj prop: 'val'
-      child: Obj prop: 'val'
-      .parentRun()
-  }
-
-  // WAIT: Comment faire la distinction entre une fonction et une classe (new)?
-  obj = {Obj prop: 'val'} // classe
-  // let obj = new Obj({prop: 'val'})
-  obj = {func 'val'} // fonction
-  présentement je le fais avec minuscule / majuscule
-  obj = {=Func 'val'} // fonction
-  // Peut-être que optionel selon contexte, et si pas clair, doit mettre = en avant pour appeler une fonction qui commence par une lettre majuscule
-
-  // LES NODES N'ONT PAS DE NOM, MAIS TU PEUX LES ATTACHER AVEC UNE CLÉ À UN PARENT
-  // QUAND TU ATTACHES UN CHILDREN AVEC UNE CLÉ, il est là ET il est dans la liste de children.
-  // si tu veux mettre à un attribute, mais pas children, alors utiliser @attr
-
-
-  matrix = {
-    1, 0, 0
-    0, 1, 0
-    0, 0, 1
-  }
-
-  ```
-
-  Il est aussi possible de définir des variables dans un bloc. Les variables sont simplement sorties du block et exécuter avant le bloc.
-
-  ```
-  x = 10
-  y = 20
-  x
-  y
-  ```
-
-  Des childrens c'est une liste sous un node.
-  Si tu as une liste sous une clé, alors c'est simplement une liste.  
-
-  The short key syntax is different that in javascript, because it could be confused with list. In Jome, it would start with a colon
-  ```jome
-  obj = {:content, :value}
-  // same as
-  obj = {content: content, value: value}
-  ```
-
-  Avoir un keyword new ou ben simplement toujours utiliser les blocks?
-  ```jome
-  obj = new Obj(/* ... */) // Supporter new?
-  obj = {Obj /* ... */}
-  ```
-
-  Si je fais ça comme ça, alors est-ce que je veux modifier l'autre syntaxe tant qu'à faire.
-  ```jome
-  $ << {
-    Obj prop: 'val'
-    Obj prop: 'val'
-    Obj prop: 'val'
-  }
-  ```
-
-  ### Standalone node block
-
-  You can create a single node by surrounding with guillements. There must be a single object at the top, and then children are created based on indentation.
+  You create nodes by using blocks.
 
   ```jome
   alone = « Volleyball "Wilson", age: 2 »
@@ -262,6 +222,18 @@ import {AppPage} from '../lib/app.jome'
       child2: 'val6'
   »
   ```
+
+  ### Children attached with key
+
+  LES NODES N'ONT PAS DE NOM, MAIS TU PEUX LES ATTACHER AVEC UNE CLÉ À UN PARENT
+  QUAND TU ATTACHES UN CHILDREN AVEC UNE CLÉ, il est là ET il est dans la liste de children.
+  si tu veux mettre à un attribute, mais pas children, alors utiliser @attr
+
+  ### Standalone node block
+
+  You can create a single node by surrounding with guillements. There must be a single object at the top, and then children are created based on indentation.
+
+  
 
   Idea: If adding guillemets is too hard for people with english keyboards, then allow the syntax:
   _<< >> which would be the same as « ».
@@ -592,6 +564,15 @@ import {AppPage} from '../lib/app.jome'
           Welcome to this website! You can browse links at the top.
         < / md>
   »
+
+    Il est aussi possible de définir des variables dans un bloc. Les variables sont simplement sorties du block et exécuter avant le bloc.
+
+
+  Avoir un keyword new ou ben simplement toujours utiliser les blocks?
+  ```jome
+  obj = new Obj(/* ... */) // Supporter new?
+  obj = {Obj /* ... */}
+  ```
 
   ## Features
 
