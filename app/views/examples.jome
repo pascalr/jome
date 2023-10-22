@@ -78,6 +78,36 @@ conten = <md>
   <h3 id="snake">Snake</h3>
   <%= ex %>
 
+  <h3 id="html-button">Html button</h3>
+  
+  ```jome
+  import {Btn, Txt, renderHTML} from "html"
+
+  renderHTML(target: '#div-id', {
+    Btn @count: 0, ~click: => (@count += 1)
+      Txt => "Clicked {@count} {@count == 1 ? 'time' : 'times'}"
+  })
+  ```
+
+  Example compiled JavaScript output:
+  ```js
+  import jome from 'jome_lib'
+  import {Btn, Txt, renderHTML} from "html"
+
+  var btn
+
+  // Add a button to the scene which has a text as a children
+  btn = new Btn({__signal__click: () => {this.count += 1}})
+  btn.count = 0
+  jome.createObj($, btn)
+  jome.createObj($.$.$btn, new Txt(() => (
+    `Clicked ${this.count} ${this.count == 1 ? 'time' : 'times'}`
+  )))
+
+  // Compile all the objects of the scene and write the html to #jome-placeholder div
+  renderHTML({target: 'jome-placeholder'}, $)
+  ```
+
 </md>
 
 «

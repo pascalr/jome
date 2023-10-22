@@ -13,6 +13,8 @@ import {AppPage} from '../lib/app.jome'
 
   Example Jome code: TODO: Make this like the examples so you can click see compiled and result
 
+  Here is some code to show what Jome looks like. You can look at [examples](/examples) too to see more.
+
   ```jome
   // Classes
   class Character |@name, @weapon?| => {
@@ -28,7 +30,7 @@ import {AppPage} from '../lib/app.jome'
   class StrongDagger { super: Dagger damage: 200 }
 
   // Instantiation
-  var startingWeapon = « WeakDagger »
+  var startingWeapon = { WeakDagger }
   var hero = { Character "Paul", weapon: startingWeapon }
 
   // Scripts (any language, here shell)
@@ -267,36 +269,28 @@ import {AppPage} from '../lib/app.jome'
   someFunc(someParam: 10, otherParam: 'Jean')
   ```
 
-  To define parameters when creating a function, you add the & symbol before the variable name.
-
-  ```jome
-  def someFunc = |&someParam, &otherParam = 'Pierre', &optionalParam| => (
-    console.log(someParam) // No need to add & when refering to a parameter
-  )
-  ```
-
-  Je me demandais si ça ne serait pas mieux la syntaxe avec un point d'interogation à la fin au lieu de & au début.
-  L'avantage est de pouvoir combiner élégament avec les attributs. Comme ça dans une class tu peux spécifier que tu
-  veux que la variable soit à donner dans le constructeur ou pas selon s'il y a un point d'interrogation.
+  To define parameters when creating a function, you either add ? at the end for an optional parameter, or you add ! for a required parameter.
 
   ```jome
   def someFunc = |someParam?, otherParam? = 'Pierre', optionalParam?, requiredParam!| => (
-    console.log(someParam) // No need to add & when refering to a parameter
+    console.log(someParam) // No need to add ? or ! when refering to a parameter
   )
-  ```
-
-  Un point d'interogation serait un paramètre optionel, et un point d'exclamation serait un paramètre obligatoire?
-
-  Props are the specific case of object creation. When you pass parameters when creating an object, we call them props.
-
-  ```jome
-  « Obj someProp: 10, otherProp: 'Paul' »
   ```
 
   You can pass a parameter that was not defined in the list.
 
   BUT YOU CAN'T PASS a parameter to a function if the function does not take any parameter. Because under the hood,
   we add a params argument to the function, so we need at least one to add the argument, then you can pass as many as you want.
+
+  When calling a function with named parameters, the order does not matter. You can put them before arguments, after or even in the middle.
+
+  ### Props
+
+  Props are the specific case of object creation. When you pass parameters when creating an object, we call them props.
+
+  ```jome
+  « Obj someProp: 10, otherProp: 'Paul' »
+  ```
 
   ### Under the hood
 
@@ -320,6 +314,18 @@ import {AppPage} from '../lib/app.jome'
 
   An interface is a list of props. When you declare a class, you can give an interface so you don't have to specify every time the list of
   possible parameters that can be given.
+
+  To refer to an interface, you add an ampersand before the name.
+
+  ```jome
+  interface HtmlOptions [
+    width?,
+    height?
+  ]
+
+  class Div &HtmlOptions => {/* ... */}
+  class Span |arg, &HtmlOptions| => {/* ... */}
+  ```
 
   ### Functions
 
@@ -575,43 +581,6 @@ import {AppPage} from '../lib/app.jome'
   - [Verbatim string literals](#verbatim) - @\`This is a string that does ${not} interpolate\`
   - [Units](#units) - You can add units to numbers. ex: "density = 105g / 98mL"
   - [Hyphen](#hyphens) - You can use hyphens in variable names like left-panel. The minus operator should always be surrounded by spaces.
-
-  ## Overview
-
-  Example Jome code:
-  ```jome
-  import {Btn, Txt, renderHTML} from "html"
-
-  // Add a button to the main scene ($) which has a text as a children
-  $ <<
-    Btn @count: 0, ~click: => (@count += 1)
-      Txt => "Clicked {@count} {@count == 1 ? 'time' : 'times'}"
-  >>
-
-  // Compile all the objects of the scene and write the html to #jome-placeholder div
-  renderHTML($, target: 'jome-placeholder')
-  ```
-
-  Example compiled JavaScript output:
-  ```js
-  import jome from 'jome_lib'
-  import {Btn, Txt, renderHTML} from "html"
-
-  var $ = jome.createObj()
-  var btn
-
-  // Add a button to the scene which has a text as a children
-  btn = new Btn({__signal__click: () => {this.count += 1}})
-  btn.count = 0
-  jome.createObj($, btn)
-  jome.createObj($.$.$btn, new Txt(() => (
-    `Clicked ${this.count} ${this.count == 1 ? 'time' : 'times'}`
-  )))
-
-  // Compile all the objects of the scene and write the html to #jome-placeholder div
-  renderHTML({target: 'jome-placeholder'}, $)
-  ```
-
 
 </md>)
 ».toString()
