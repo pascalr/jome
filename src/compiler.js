@@ -334,10 +334,12 @@ function buildDict(node, ctx, func) {
 
 function _compileJomeObj(obj, ctx) {
   let {type, attrs, meta, args, children, funcCalls} = obj
-  if (children.length) {
-    meta.children = `[${children.map(c => _compileJomeObj(c, ctx)).join(', ')}]`
-  }
   let s1 = type ? `new ${type}${args}` : compileJsObj(attrs)
+  // If it is not a node (no children)
+  if (!children.length && !funcCalls.length) { // FIXME: Func calls should not make it a node...
+    return s1
+  }
+  meta.children = `[${children.map(c => _compileJomeObj(c, ctx)).join(', ')}]`
   let r = `${JOME_LIB}.createObj(${ctx.currentObjPath}, ${s1}, ${compileJsObj(meta)})`
   if (funcCalls.length) {
     r += '\n'+funcCalls.map(call => `.$.chain(o => o.${call})`).join('\n')
@@ -830,14 +832,14 @@ const PROCESSES = {
     let prev = compileNode(node.prev(), ctx)
     switch (val) {
       case 'keys': case 'values': case 'entries':
-        return `Object.${val}(${prev})`
+        return `Object.${val}(${prev} || {})`
       case 'props':
         return `${JOME_LIB}.props(${prev})`
       case 'hasOwnProperty':
       case 'path': // Good?
       case 'name':
       case 'signals':
-        return `${prev}.${JOME_ATTRS}.${val}`
+        return `${prev}?.${JOME_ATTRS}?.${val}`
       case 'children':
         return `${JOME_LIB}.getChildren(${prev})`
       case 'removeChildren':

@@ -80,7 +80,7 @@ export default class Jome {
   // Children are attached directly to the $ property.
   static getChildren(obj) {
     let list = []
-    Object.keys(obj.$).forEach(key => {
+    Object.keys(obj.$||{}).forEach(key => {
       if (key[0] === '$') {
         list.push(obj.$[key])
       }
