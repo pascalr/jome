@@ -108,6 +108,22 @@ conten = <md>
   renderHTML({target: 'jome-placeholder'}, $)
   ```
 
+  ## Recipe?
+
+  ```jome
+  {
+    Recipe (
+      name: 'Chickpea balls'
+      ingredients:
+        1cup, "dry chickpeas"
+        2cup, "water"
+        2tbsp, "parmesan"
+      instructions:
+        "Put ..."
+    )
+  }
+  ```
+
 </md>
 
 main {
