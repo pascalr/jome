@@ -428,10 +428,17 @@
 					}
         },
         {
-          "match": "(?:^|\\G)(\\s*)([\\p{Lu}]\\w*)(?!\\s*:)",
+          "match": "(?:^|\\G)(\\s*)([\\p{Lu}]\\w*)(?!\\w*\\s*:)",
           "captures": {
             "1": {"name": "punctuation.whitespace.indent.jome"},
             "2": {"name": "entity.name.type.jome-obj.jome"}
+					}
+        },
+        {
+          "match": "(?:^|\\G)(\\s*)([\\p{L}]\\w*)(?!\\w*\\s*:)",
+          "captures": {
+            "1": {"name": "punctuation.whitespace.indent.jome"},
+            "2": {"name": "entity.name.function.jome"}
 					}
         },
         {"match": "(?:\\G)\\s+"},

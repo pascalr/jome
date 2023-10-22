@@ -17,6 +17,14 @@ import {H1} from './lib/html.jome'
 // TODO: Test Use <HTML> to add an html tag inside <html><HTML></HTML></html>
 
 
+class TestFuncCall {
+  getFive: => 5
+}
+testFuncCall = {
+  TestFuncCall
+    getFive
+}
+
 class ParentClass {
   getTen: => 10
 }
@@ -110,7 +118,7 @@ titre = |texte| => (
 var obj = { H1 "Un titre", css: {color: 'red'} };
 
 {
-  titre('Test avec objects html')
+  titre 'Test avec objects html'
   TestEq { H1 "Un titre" }.toString(), "<h1>Un titre</h1>", "«H1 \"Un titre\"».toString()"
   TestEq obj.toString(), "<h1 style='color: red;'>Un titre</h1>", "« H1 \"Un titre\", css: {color: 'red'} ».toString()"
 
@@ -123,7 +131,7 @@ var obj = { H1 "Un titre", css: {color: 'red'} };
   TestEq [1,2,3][-1], 3, "Un index négatif devrait prendre l'élément en partant de la fin. -1 devrait être le dernier élément."
   TestEq [1,2,3][-2], 2, "Un index négatif devrait prendre l'élément en partant de la fin. -2 devrait être avant dernier élément."
 
-  titre('Vérification des opérations')
+  titre 'Vérification des opérations'
 
   TestEq (1+1), <js>1+1</js>, "1+1"
   TestEq (2*2), <js>2*2</js>, "2 * 2"
@@ -157,7 +165,7 @@ var obj = { H1 "Un titre", css: {color: 'red'} };
   TestEq (2*2+1+2*2), <js>2*2+1+2*2</js>, "2 * 2 + 1 + 2 * 2"
   TestEq (2*2*2+1+2*2*2), <js>2*2*2+1+2*2*2</js>, "2 * 2 * 2 + 1 + 2 * 2 * 2"
 
-  titre('Vérification des conditions')
+  titre 'Vérification des conditions'
 
   TestEq true, <js>true</js>, "true"
   TestEq vrai, <js>true</js>, "vrai"
@@ -172,7 +180,7 @@ var obj = { H1 "Un titre", css: {color: 'red'} };
   // TestEq (if 0 10 elsif 0 30), <js>null</js>, "faux"
   // TestEq (if 0 10 elsif 0 30 else 20), <js>20</js>, "faux"
 
-  titre('Vérification des fonctions')
+  titre 'Vérification des fonctions'
 
   // TestEq ((=> (
   //   x = 10
@@ -184,12 +192,12 @@ var obj = { H1 "Un titre", css: {color: 'red'} };
 addXs = |x1!, x2!| -> (x1 + x2)
 addAXs = |arg0, x1!, x2!| -> (arg0 + x1 + x2);
 {
-  titre('Test paramètres de fonctions')
+  titre 'Test paramètres de fonctions'
 
   TestEq addXs(x1: 10, x2: 20), 30, "addXs(x1: 10, x2: 20)"
   TestEq addAXs(5, x1: 10, x2: 20), 35, "addAXs(5, x1: 10, x2: 20)"
 
-  titre('Test des unités')
+  titre 'Test des unités'
   TestEq 10.2km/h, 10.2, "10.2km/h"
   TestEq 0.5W * 2h, 1, "0.5W * 2h"
 //   TestEq 1kW·h, <js>new Quantity(1, 'kW·h')</js>, "1kW·h"
@@ -217,7 +225,7 @@ addAXs = |arg0, x1!, x2!| -> (arg0 + x1 + x2);
 
 ten = 10;
 {
-  titre('Test des blocks')
+  titre 'Test des blocks'
   TestEq {x: 10}, <js>{x: 10}</js>, "{x: 10}"
   TestEq {x: 10, :ten}, <js>{x: 10, ten: 10}</js>, "{x: 10, :ten}"
   TestEq {1, 2, 3}, <js>[1,2,3]</js>, "{1,2,3}"
@@ -244,4 +252,6 @@ ten = 10;
   TestEq testObjNested.key2.getProp(), "propVal2", "class prop 2"
 
   TestEq {ChildClass}.getTen(), 10, "testing inheritence"
+
+  TestEq testFuncCall, 5, "testFuncCall"
 }

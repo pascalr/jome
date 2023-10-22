@@ -201,7 +201,7 @@ function _buildJomeObjs(nodes, ctx, isRoot = true) {
     let argTokens = []
     let type
     node.array.forEach(part => {
-      if (part.type === 'entity.name.tag.jome-obj.jome') {
+      if (part.type === 'entity.name.tag.jome-obj.jome') { // FIXME: Deprecated
         meta.name = `'${part.text().slice(1)}'`
       } else if (part.type === 'entity.name.type.jome-obj.jome') {
         type = part.text()
@@ -634,6 +634,14 @@ function buildBlock(node, ctx) {
     return topLevelNodes.map(top => {
       if (top.array[0].type === 'entity.name.type.jome-obj.jome') {
         return _compileJomeObj(_buildJomeObjs([top], ctx)[0], ctx)
+
+      } else if (top.array[0].type === 'entity.name.function.jome') { // Func call
+        let name = top.array[0].text()
+        if (top.array[1].type === 'expression.group') {
+          return name+compileNode(top.array[1])
+        } else {
+          return name+'('+compileFunctionCallArgs(top.array.slice(1), ctx)+')'
+        }
       } else {
         let list = parseList(top.array, ctx)
         if (list.length > 1) {
