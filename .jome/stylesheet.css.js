@@ -2,7 +2,7 @@ import jome from 'jome'
 
 
 
-export default 
+export default `
   body {
     margin: 0;
     background-color: #f9f4f4;
@@ -130,3 +130,4 @@ export default
     padding: 14px 16px;
     font-weight: bold;
   }
+`

@@ -3,7 +3,7 @@ import jome from 'jome'
 
 import {Div} from "./lib/html.built.js";
 
-
+`
   .jome-html.screen {
     min-height: 100vh;
     width: 100vw;
@@ -19,6 +19,7 @@ import {Div} from "./lib/html.built.js";
     display: flex;
     flex-direction: column;
   }
+`
 export class HBox {
   
 }

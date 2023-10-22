@@ -31,7 +31,8 @@ let code = ''
 
 files.forEach(|file, i| => (
   buildFileV2(file.file, tmpDir, file.ext)
-  code = code + `import imp{i} from "./{file.file}"`+'\n' // FIXME parse newline at the end
+  let f = path.basename(file.file).slice(0, -5)+file.ext
+  code = code + `import imp{i} from "./.jome/{f}"`+'\n' // FIXME parse newline at the end
   "FIXME"
 ))
 
@@ -52,7 +53,8 @@ function saveFile(name, content) {
 `
 
 files.forEach(|file, i| => (
-  code = code + `saveFile("{file.file}", imp{i})`+'\n' // FIXME parse newline at the end
+  let f2 = outDir+path.basename(file.file).slice(0, -5)+file.ext.slice(0,-3)
+  code = code + `saveFile("{f2}", imp{i})`+'\n' // FIXME parse newline at the end
   "FIXME"
 ))
 

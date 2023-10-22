@@ -756,7 +756,7 @@ const PROCESSES = {
   //   let out = args.out || '__main__'
   //   ctx.stylesheets[out] = (ctx.stylesheets[out] || '') + raw
   // },
-  "meta.embedded.block.css": (node, ctx) => compileRaw(node.children.slice(1,-1)),
+  "meta.embedded.block.css": (node, ctx) => '`'+compileRaw(node.children.slice(1,-1))+'`',
   "meta.embedded.block.javascript": (node, ctx) => compileRaw(node.children.slice(1,-1)),
   "meta.embedded.block.markdown": compileMarkdown,
   "meta.embedded.block.html": (node, ctx) => {
