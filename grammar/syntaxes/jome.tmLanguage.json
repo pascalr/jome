@@ -414,6 +414,20 @@
       "name": "meta.block.jome",
       "patterns": [
         {
+          "match": "(?:^|\\G)(\\s*)([\\p{L}~]\\w*)\\s*:\\s*([\\p{Lu}]\\w*)",
+          "captures": {
+            "1": {"name": "punctuation.whitespace.indent.jome"},
+            "2": {
+              "name": "meta.dictionary-key.jome",
+              "patterns": [{
+                "match": "([\\p{L}~]\\w*)",
+                "name": "support.type.property-name.jome"
+              }]
+            },
+            "3": {"name": "entity.name.type.jome-obj.jome"}
+					}
+        },
+        {
           "match": "(?:^|\\G)(\\s*)([\\p{Lu}]\\w*)(?!\\s*:)",
           "captures": {
             "1": {"name": "punctuation.whitespace.indent.jome"},

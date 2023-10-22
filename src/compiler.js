@@ -325,7 +325,12 @@ function buildDict(node, ctx, func) {
       return console.error('Error processing expected meta.dictionary-key.jome inside meta.block.jome but was', arr[i].type)
     } else {
       let key = arr[i].children[0].text()
-      let value = func(arr.slice(i+1), ctx, key)
+      let value;
+      if (arr[i+1].type === 'entity.name.type.jome-obj.jome') {
+        value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: [/* FIXME */]}], ctx)[0], ctx)
+      } else {
+        value = func(arr.slice(i+1), ctx, key)
+      }
       dict[key] = value
     }
   })

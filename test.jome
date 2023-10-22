@@ -26,6 +26,11 @@ testObjList = {
   ClassForTesting "arg2", attr: "attr2", prop: "propVal2"
   ClassForTesting "arg3", attr: "attr3", prop: "propVal3"
 }
+testObjNested = {
+  key1: ClassForTesting "arg1", attr: "attr1", prop: "propVal1"
+  key2: ClassForTesting "arg1", attr: "attr1", prop: "propVal1"
+  key3: ClassForTesting "arg1", attr: "attr1", prop: "propVal1"
+}
 
 // new ClassForTesting(prop: 'Hello')
 console.log(« ClassForTesting prop: 'Hello' »->props)
@@ -225,4 +230,8 @@ ten = 10;
   TestEq testObjList[1].getArg(), "arg2", "class arg 2"
   TestEq testObjList[1].attr, "attr2", "class attr 2"
   TestEq testObjList[1].getProp(), "propVal2", "class prop 2"
+
+  TestEq testObjNested.key2.getArg(), "arg2", "class arg 2"
+  TestEq testObjNested.key2.attr, "attr2", "class attr 2"
+  TestEq testObjNested.key2.getProp(), "propVal2", "class prop 2"
 }
