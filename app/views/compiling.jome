@@ -82,6 +82,6 @@ content2 = <md>
   TODO: List all the possible options
 </md>
 
-«
+{
   AppPage title: 'Compiling Jome', content: content2
-».toString()
+}.toString()
