@@ -2,7 +2,7 @@
 // Une librairie pour le CSS?
 // Genre pour gérer le nested comme SCSS.
 
-<css>
+main <css>
   body {
     margin: 0;
     background-color: #f9f4f4;

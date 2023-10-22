@@ -1002,6 +1002,7 @@ const PROCESSES = {
     }
     return `${label} ${compileNode(cond, ctx)} ${jsBlock(val, ctx)}`
   },
+  "keyword.control.main.jome": () => "export default ",
   "punctuation.separator.delimiter.jome": () => ', ',
   "punctuation.terminator.statement.jome": () => ';',
   "keyword.operator.jome": (node, ctx) => (
@@ -1042,6 +1043,10 @@ const PROCESSES = {
       return 'return '
     } else if (word === 'export') {
       return 'export '
+    } else if (word === 'await') {
+      return 'await '
+    } else if (word === 'import') {
+      return 'import '
     }
     console.error('Error 745912')
   },

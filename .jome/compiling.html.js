@@ -42,4 +42,4 @@ jomec <span class="hljs-string">&quot;views/*.jome&quot;</span> <span class="hlj
 </code></pre>
 <p>TODO: List all the possible options</p>
 `
-new AppPage({title: 'Compiling Jome', content: content2}).toString()
+export default new AppPage({title: 'Compiling Jome', content: content2}).toString()

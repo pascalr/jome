@@ -10,4 +10,4 @@ var content = `<h2>Jome librairies</h2>
 <li><a href="/lib/html">Html</a></li>
 </ul>
 `
-new AppPage({title: 'Jome examples', className: "examples-page", content: content}).toString()
+export default new AppPage({title: 'Jome examples', className: "examples-page", content: content}).toString()

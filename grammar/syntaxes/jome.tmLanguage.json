@@ -167,8 +167,12 @@
           "match": "\\b(var|def|let)\\b"
 			  },
         {
+          "name": "keyword.control.main.jome",
+          "match": "\\b(main)\\b"
+			  },
+        {
           "name": "keyword.control.jome",
-          "match": "\\b(yield|while|for|return|from|import|retourne|ret|export)\\b"
+          "match": "\\b(yield|while|for|return|from|import|retourne|ret|export|await|async)\\b"
 			  },
         {
           "name": "keyword.operator.typeof.jome",

@@ -1,6 +1,8 @@
 // At first, I will just do everything I need to do here, after I will abstract it to be used by jomec.
 
 import {globSync} from 'glob'
+import fs from 'fs'
+import path from 'path'
 
 import { buildFileV2 } from './src/builder.js';
 
@@ -25,6 +27,35 @@ htmlFiles.forEach(file => (
   files.push({:file, ext: '.html.js'})
 ))
 
-files.forEach(file => (
+let code = ''
+
+files.forEach(|file, i| => (
   buildFileV2(file.file, tmpDir, file.ext)
+  code = code + `import imp{i} from "./{file.file}"`+'\n' // FIXME parse newline at the end
+  "FIXME"
 ))
+
+// FIXME: imports, import should not be a keyword here...
+
+code = code + @`
+
+function saveFile(name, content) {
+  fs.writeFileSync(content, content, (err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log('File has been written.', name);
+    }
+  });
+}
+
+`
+
+files.forEach(|file, i| => (
+  code = code + `saveFile("{file.file}", imp{i})`+'\n' // FIXME parse newline at the end
+  "FIXME"
+))
+
+let linker = './__linkAll.built.js'
+fs.writeFileSync(linker, code)
+await import(linker);

@@ -38,6 +38,6 @@ text23 = <md>
 </md>
 
 
-{
+main {
   AppPage title: 'Jome lib html', content: text23
 }.toString()

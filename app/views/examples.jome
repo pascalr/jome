@@ -110,6 +110,6 @@ conten = <md>
 
 </md>
 
-{
+main {
   AppPage title: 'Jome examples', content: conten
 }.toString()

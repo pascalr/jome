@@ -17,7 +17,7 @@ bgColor4 = "#b2b2b2"
 
 // $navbar Panel color: '#ded9d1'
 
-{
+main {
   HtmlPage title: 'Jome editor', stylesheets: ['reset.css', 'jome-html.css'], body: {
     Screen
   }.toString()

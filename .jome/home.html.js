@@ -3,7 +3,7 @@ import jome from 'jome'
 
 import {AppPage} from "./app/lib/app.built.js";
 
-new AppPage({title: 'Simple HTML Page', content: (`<h1>Jome</h1>
+export default new AppPage({title: 'Simple HTML Page', content: (`<h1>Jome</h1>
 <p>Jome is a language that compiles in JavaScript. It is simliar to CoffeeScript in this way.</p>
 <p>You can read from top to bottom to learn the language, or you can jump to any section if you are only curious.</p>
 <h2>Overview</h2>
@@ -303,6 +303,9 @@ Allows to easily use most of underscore.js features directly.</p>
 
 <span class="hljs-comment">// Arrow getter is useful for arrays</span>
 <span class="hljs-title class_">TODO</span>
+
+<span class="hljs-comment">// TODO</span>
+<span class="hljs-number">10</span>-&gt;<span class="hljs-title function_">times</span>(<span class="hljs-variable">i</span> =&gt; <span class="hljs-comment">/* ... */</span>)
 </code></pre>
   <h2 id="instance-driven-dev">Instance driven development</h2>
   Instance driven development is what I call when the focus is working on concrete objects in Godot software.
@@ -372,6 +375,8 @@ To declare a function, use de def function.</p>
 )
 <span class="hljs-title function_">debug</span>(<span class="hljs-variable">nomDeVariable</span>) <span class="hljs-comment">// =&gt; Debugging nomDeVariable: Value 10</span>
 </code></pre>
+<h2>Main</h2>
+<p>The <code>main</code> keyword is compiled to <code>export default</code>.</p>
 <h2>Contributing</h2>
 <p>I recommend using visual studio code for now because it is super usefull for debugging tokenization. You hit Ctrl+Shift+P,
 &quot;inspect editor token and scope&quot;, and you see if it is correct. Also you see using syntax highlighting.</p>

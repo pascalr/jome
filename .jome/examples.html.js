@@ -64,4 +64,4 @@ jome.<span class="hljs-title function_">createObj</span>($.$.$btn, <span class="
 <span class="hljs-title function_">renderHTML</span>({<span class="hljs-attr">target</span>: <span class="hljs-string">&#x27;jome-placeholder&#x27;</span>}, $)
 </code></pre>
 `
-new AppPage({title: 'Jome examples', content: conten}).toString()
+export default new AppPage({title: 'Jome examples', content: conten}).toString()
