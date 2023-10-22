@@ -28,8 +28,8 @@ testObjList = {
 }
 testObjNested = {
   key1: ClassForTesting "arg1", attr: "attr1", prop: "propVal1"
-  key2: ClassForTesting "arg1", attr: "attr1", prop: "propVal1"
-  key3: ClassForTesting "arg1", attr: "attr1", prop: "propVal1"
+  key2: ClassForTesting "arg2", attr: "attr2", prop: "propVal2"
+  key3: ClassForTesting "arg3", attr: "attr3", prop: "propVal3"
 }
 
 // new ClassForTesting(prop: 'Hello')

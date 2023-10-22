@@ -602,7 +602,7 @@ function compileBlock(node, ctx) {
     if (built.length === 1) {
       return built[0]
     } else {
-      return '['+built.join(', ')+']'
+      return '[\n  '+built.join(',\n  ')+'\n]'
     }
   } else if (typeof built === 'object') {
     return compileJsObj(built)  
