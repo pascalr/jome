@@ -263,12 +263,21 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
       if (arr[1] && arr[1].type === 'keyword.operator.assignment.jome') {
         paramsValues[value] = compileNode(arr[2], ctx)
       }
-    } else if (child.type.startsWith('support.type.property-name.attribute')) {
+
+    } else if (child.type === 'support.type.property-name.attribute.jome') {
       let value = child.text().slice(1)
-      let end = value[value.length-1]
-      if (end === '?' || end === '!') {value = value.slice(0, -1)}
       ctx.addBinding(value, {type: 'attribute-argument'})
       args[value] = {type: 'attribute-argument'}
+
+    } else if (child.type.startsWith('support.type.property-name.attribute')) {
+      let value = child.text().slice(1, -1) // remove the ? or !
+      ctx.addBinding(value, {type: 'attribute-parameter'})
+      ctx.paramsIsClassVariable = insideClassFunction
+      hasParams = true
+      if (arr[1] && arr[1].type === 'keyword.operator.assignment.jome') {
+        paramsValues[value] = compileNode(arr[2], ctx)
+      }
+
     } else if (child.type === 'variable.other.jome' || child.type === 'variable.parameter.jome') {
       let value = child.text()
       let type = insideClassFunction ? 'argument-class-function' : 'argument'
