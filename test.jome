@@ -232,6 +232,7 @@ ten = 10;
   titre 'Test des blocks'
   TestEq {x: 10}, <js>{x: 10}</js>, "{x: 10}"
   TestEq {x: 10, :ten}, <js>{x: 10, ten: 10}</js>, "{x: 10, :ten}"
+  TestEq {:ten, x: 10}, <js>{ten: 10, x: 10}</js>, "{x: 10, :ten}"
   TestEq {1, 2, 3}, <js>[1,2,3]</js>, "{1,2,3}"
   // TestEq {
   //   SomeObj 'SomeVal', prop: 'val'

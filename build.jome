@@ -1,42 +1,30 @@
-// Here, I want to take all the files directly inside views with a .jome extension and compile them into docs.
-
-// "runtimeArgs": ["jome.js", "server.jome"],
-
 // At first, I will just do everything I need to do here, after I will abstract it to be used by jomec.
 
 import {globSync} from 'glob'
 
-let files = globSync('views/*.jome')
-console.log(files);
+import { buildFileV2 } from './src/builder.js';
 
-// stlesheet.jome I want to compile with a css extension
-// app.jome I don't want to put inside docs
-// 
+// THE FILES MUST NOT ONLY BE COMPILED, THEY MUST BE RUN...
 
-/*
+// Take the files, compile them as .js files inside a hidden .jome folder
+// Then write a build.jome file inside the hidden .jome folder that simply imports
+// the default from every compiled file, and write the result into the out directory.
 
-C'est un peu niaiseux et gossant d'avoir à spécifier tous les fichiers. À la place, les fichiers devraient être séparer par dossier par type,
-après tu fais juste spécifier quoi faire avec le dossier.
+let cssFiles = globSync('app/css/*.jome')
+let htmlFiles = globSync('app/views/*.jome')
 
-Structure de dossier à faire: (au lieu de views)
+let tmpDir = '.jome/'
+let outDir = 'docs/'
 
-app/
-  views/ -- Everything to compile as an html file
-  css/ -- Everything to compile as a css file
-  src/ -- Everything to compile as a js file
-  lib/ -- Everything to compile as a js file
+let files = []
+cssFiles.forEach(file => (
+  files.push({:file, ext: '.css.js'})
+))
 
-«
-  config:
-    files:
-      css:
-        'stylesheet.jome'
-      html:
-        'librairies.jome'
-        'home.jome'
-        'examples.jome'
-        'editor.jome'
-        'compiling.jome'
-»
+htmlFiles.forEach(file => (
+  files.push({:file, ext: '.html.js'})
+))
 
-*/
+files.forEach(file => (
+  buildFileV2(file.file, tmpDir, file.ext)
+))

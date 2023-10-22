@@ -311,6 +311,23 @@ function compileDictValOrMethod(arr, ctx, key) {
   return ' = '+compileJsBlock(arr, ctx)
 }
 
+function buildDictV2ParseKeys(dict, arr, ctx, func) {
+  let list = parseList(arr)
+  list.forEach(nested => {
+    // FIXME: Repeated above
+    if (nested[0].type === 'variable.dict-symbol.jome') {
+      let key = nested[0].text().slice(1) // remove the colon
+      dict[key] = key
+    } else if (nested[0].type !== 'meta.dictionary-key.jome') {
+      return console.error('Error processing expected meta.dictionary-key.jome inside meta.block.jome but was', nested[0].type)
+    } else {
+      let key = nested[0].children[0].text()
+      dict[key] = func(nested.slice(1), ctx, key)
+    }
+  })
+  return dict
+}
+
 function buildDictV2(topLevelNodes, ctx, func) {
   let dict = {}
   //for (let i = 0; i < list.length; i++) {
@@ -321,8 +338,7 @@ function buildDictV2(topLevelNodes, ctx, func) {
     if (!arr[i]) {return;}
     //if (arr[0].type === 'newline') {return;}
     if (arr[i].type === 'variable.dict-symbol.jome') {
-      let key = arr[i].text().slice(1) // remove the colon
-      dict[key] = key
+      dict = buildDictV2ParseKeys(dict, arr, ctx, func)
     } else if (arr[i].type !== 'meta.dictionary-key.jome') {
       return console.error('Error processing expected meta.dictionary-key.jome inside meta.block.jome but was', arr[i].type)
     } else {
@@ -336,19 +352,7 @@ function buildDictV2(topLevelNodes, ctx, func) {
         value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: [/* FIXME */]}], ctx)[0], ctx)
         dict[key] = value
       } else {
-        let list = parseList(arr)
-        list.forEach(nested => {
-          // FIXME: Repeated above
-          if (nested[0].type === 'variable.dict-symbol.jome') {
-            let key = nested[0].text().slice(1) // remove the colon
-            dict[key] = key
-          } else if (nested[0].type !== 'meta.dictionary-key.jome') {
-            return console.error('Error processing expected meta.dictionary-key.jome inside meta.block.jome but was', nested[0].type)
-          } else {
-            let key = nested[0].children[0].text()
-            dict[key] = func(nested.slice(1), ctx, key)
-          }
-        })
+        dict = buildDictV2ParseKeys(dict, arr, ctx, func)
       }
     }
   })
@@ -622,7 +626,7 @@ function buildBlock(node, ctx, func) {
       } else if (top.array[0].type === 'entity.name.function.jome') { // Func call
         let name = top.array[0].text()
         if (top.array[1].type === 'expression.group') {
-          return name+compileNode(top.array[1])
+          return name+compileNode(top.array[1], ctx)
         } else {
           return name+'('+compileFunctionCallArgs(top.array.slice(1), ctx)+')'
         }
@@ -693,7 +697,7 @@ const PROCESSES = {
     let file;
     let defaultImport = ''
     let namedImports = []
-    let list = filterSpaces(node.children.slice(1)) // remove import keyword
+    let list = filterStrings(node.children.slice(1)) // remove import keyword
     list.forEach(item => {
       if (item.type === 'meta.named-imports.jome') {
         filterSpaces(item.children.slice(1, -1)).forEach(imp => {
@@ -746,12 +750,13 @@ const PROCESSES = {
     return r.length ? `this.${r}` : 'this'
   },
   // <>1+1</>
-  "meta.embedded.block.css": (node, ctx) => {
-    let args = parseScriptTagArgs(node.children[0])
-    let raw = compileRaw(node.children.slice(1,-1))
-    let out = args.out || '__main__'
-    ctx.stylesheets[out] = (ctx.stylesheets[out] || '') + raw
-  },
+  // "meta.embedded.block.css": (node, ctx) => {
+  //   let args = parseScriptTagArgs(node.children[0])
+  //   let raw = compileRaw(node.children.slice(1,-1))
+  //   let out = args.out || '__main__'
+  //   ctx.stylesheets[out] = (ctx.stylesheets[out] || '') + raw
+  // },
+  "meta.embedded.block.css": (node, ctx) => compileRaw(node.children.slice(1,-1)),
   "meta.embedded.block.javascript": (node, ctx) => compileRaw(node.children.slice(1,-1)),
   "meta.embedded.block.markdown": compileMarkdown,
   "meta.embedded.block.html": (node, ctx) => {

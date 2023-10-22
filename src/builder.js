@@ -86,6 +86,71 @@ export function buildFile(fullPath, dependencies = [], run=false) {
   return {buildFileName, context}
 }
 
+export function buildFileV2(fullPath, outDir, ext) {
+  if (!fullPath.endsWith('.jome')) {
+    console.warn('Cannot build file without .jome extension', fullPath);
+    return;
+  }
+
+  console.log('Building File', fullPath);
+
+  try {
+    // Check if the file exists
+    fs.accessSync(fullPath, fs.constants.F_OK);
+  } catch (err) {
+    console.error(`File '${fullPath}' does not exist.`);
+    return null
+  }
+
+  // Read the contents of the file synchronously
+  const data = fs.readFileSync(fullPath, 'utf8');
+
+  let ctx = new CompileContext({})
+  ctx.currentFile = fullPath // For import relative paths
+  ctx.rootDir = __dirname.slice(0, -3) // FIXME
+
+  let { result, context } = compileGetContext(data, ctx);
+
+  // // Handle dependencies relative to the path of the file
+  // const directoryPart = path.dirname(fullPath);
+  // let missings = []
+  // context.dependencies.forEach(dependency => {
+  //   if (!(dependency in dependencies)) {
+  //     dependencies.push(dependency)
+  //     missings.push(dependency)
+  //   }
+  // })
+
+  // missings.forEach(missing => {
+  //   let out = buildFile(path.join(directoryPart, missing), dependencies)
+  //   let css = out?.context?.stylesheets||{}
+  //   Object.keys(css).forEach(key => {
+  //     // FIXME: Don't import multiple times the same css script...
+  //     context.stylesheets[key] = (context.stylesheets[key]||'') + css[key]
+  //   })
+  // })
+
+  if (ext.endsWith('.js')) {
+    result = `import ${JOME_LIB} from 'jome'\n\n` + result;
+  }
+
+  // Generate the build file name
+  const buildFileName = path.basename(fullPath.replace(/\.jome$/, ext));
+  const outFileName = path.join(outDir, buildFileName)
+
+  try {
+    // Write the result to the file synchronously
+    fs.writeFileSync(outFileName, result);
+
+    console.log(`Successfully wrote to '${buildFileName}'.`);
+  } catch (err) {
+    console.error('Error writing to the file:', err);
+    return null
+  }
+
+  return {buildFileName, context}
+}
+
 // // FIXME: This makes a whole lot of ugly assomptions for paths.........
 // // FIXME: This currently does not work because it is building asynchronously files I think
 // /** @deprecated Use buildFile instead */
