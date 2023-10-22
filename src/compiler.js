@@ -420,6 +420,9 @@ function compileFunctionCallArgs(array, ctx) {
     if (array[1]?.type === 'keyword.operator.colon.jome') {
       let name = array[0].text()
       params[name] = compileJsBlock(array.slice(2), ctx)
+    } else if (array[0]?.type === 'meta.dictionary-key.jome') {
+      let name = array[0].children[0].text()
+      params[name] = compileJsBlock(array.slice(1), ctx)
     } else {
       actualArgs.push(compileJsBlock(array, ctx))
     }
