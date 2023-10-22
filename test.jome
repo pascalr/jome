@@ -90,28 +90,27 @@ class TestEq {
   )
 }
 
-var obj = { H1 "Un titre", css: {color: 'red'} };
-
-{
-  TestEq { H1 "Un titre" }.toString(), "<h1>Un titre</h1>", "«H1 \"Un titre\"».toString()"
-  TestEq obj.toString(), "<h1 style='color: red;'>Un titre</h1>", "« H1 \"Un titre\", css: {color: 'red'} ».toString()"
-}
-
 titre = |texte| => (
   console.log('%c' + texte, 'color: yellow')
 );
 
-// TODO: TestEq [1,2,3][0..1], [1,2], "Test range inclusif"
-// TODO: TestEq [1,2,3][0...2], [1,2], "Test range exclusif"
-// 0..1 => $$.range(0, 1)
+var obj = { H1 "Un titre", css: {color: 'red'} };
 
-«
+{
+  titre('Test avec objects html')
+  TestEq { H1 "Un titre" }.toString(), "<h1>Un titre</h1>", "«H1 \"Un titre\"».toString()"
+  TestEq obj.toString(), "<h1 style='color: red;'>Un titre</h1>", "« H1 \"Un titre\", css: {color: 'red'} ».toString()"
+
+  // TODO: TestEq [1,2,3][0..1], [1,2], "Test range inclusif"
+  // TODO: TestEq [1,2,3][0...2], [1,2], "Test range exclusif"
+  // 0..1 => $$.range(0, 1)
+
   // TODO: Supporter cela, mais seulement quand le chiffre est direct. Ne pas supporter quand c'est une variable négative.
   // Comme ça pas besoin de toujours regarder si c'est négatif.
   TestEq [1,2,3][-1], 3, "Un index négatif devrait prendre l'élément en partant de la fin. -1 devrait être le dernier élément."
   TestEq [1,2,3][-2], 2, "Un index négatif devrait prendre l'élément en partant de la fin. -2 devrait être avant dernier élément."
 
-  titre 'Vérification des opérations'
+  titre('Vérification des opérations')
 
   TestEq (1+1), <js>1+1</js>, "1+1"
   TestEq (2*2), <js>2*2</js>, "2 * 2"
@@ -145,7 +144,7 @@ titre = |texte| => (
   TestEq (2*2+1+2*2), <js>2*2+1+2*2</js>, "2 * 2 + 1 + 2 * 2"
   TestEq (2*2*2+1+2*2*2), <js>2*2*2+1+2*2*2</js>, "2 * 2 * 2 + 1 + 2 * 2 * 2"
 
-  titre 'Vérification des conditions'
+  titre('Vérification des conditions')
 
   TestEq true, <js>true</js>, "true"
   TestEq vrai, <js>true</js>, "vrai"
@@ -160,32 +159,31 @@ titre = |texte| => (
   // TestEq (if 0 10 elsif 0 30), <js>null</js>, "faux"
   // TestEq (if 0 10 elsif 0 30 else 20), <js>20</js>, "faux"
 
-  titre 'Vérification des fonctions'
+  titre('Vérification des fonctions')
 
   // TestEq ((=> (
   //   x = 10
   //   x = x + 20
   //   x    
   // ))()), 30, "Testing multiple lines inside a function"
-»
+}
 
-«
-  titre 'Test paramètres de fonctions'
-
-  addXs = |x1!, x2!| -> (x1 + x2)
-  addAXs = |arg0, x1!, x2!| -> (arg0 + x1 + x2)
+addXs = |x1!, x2!| -> (x1 + x2)
+addAXs = |arg0, x1!, x2!| -> (arg0 + x1 + x2);
+{
+  titre('Test paramètres de fonctions')
 
   TestEq addXs(x1: 10, x2: 20), 30, "addXs(x1: 10, x2: 20)"
   TestEq addAXs(5, x1: 10, x2: 20), 35, "addAXs(5, x1: 10, x2: 20)"
 
-  titre 'Test des unités'
+  titre('Test des unités')
   TestEq 10.2km/h, 10.2, "10.2km/h"
   TestEq 0.5W * 2h, 1, "0.5W * 2h"
 //   TestEq 1kW·h, <js>new Quantity(1, 'kW·h')</js>, "1kW·h"
 //   TestEq 1km/h, <js>new Quantity(1, 'km/h')</js>, "1km/h"
 //   TestEq 1km^2, <js>new Quantity(1, 'km²')</js>, "1km^2"
 //   TestEq 1km², <js>new Quantity(1, 'km²')</js>, "1km²"
-»
+}
 
 // Container = «
 //   $container
@@ -204,9 +202,9 @@ titre = |texte| => (
 //   TestEq $testContainer/container/subcontainer->children.length, 1, "$testContainer/container/subcontainer->children.length"
 // >>
 
-ten = 10
-«
-  titre 'Test des blocks'
+ten = 10;
+{
+  titre('Test des blocks')
   TestEq {x: 10}, <js>{x: 10}</js>, "{x: 10}"
   TestEq {x: 10, :ten}, <js>{x: 10, ten: 10}</js>, "{x: 10, :ten}"
   TestEq {1, 2, 3}, <js>[1,2,3]</js>, "{1,2,3}"
@@ -227,4 +225,4 @@ ten = 10
   TestEq testObjList[1].getArg(), "arg2", "class arg 2"
   TestEq testObjList[1].attr, "attr2", "class attr 2"
   TestEq testObjList[1].getProp(), "propVal2", "class prop 2"
-»
+}

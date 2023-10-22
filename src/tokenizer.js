@@ -38,7 +38,8 @@ class ScopeNode {
   }
   text() {
     if (this.children.length !== 1 || (typeof this.children[0] !== 'string')) {
-      console.error('Error reading node text() expected a simple string token but got', this)
+      return ''
+      // console.error('Error reading node text() expected a simple string token but got', this)
     }
     return this.children[0]
   }

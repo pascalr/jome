@@ -391,6 +391,7 @@ function parseIndent(list, ctx) {
   for (let i = 0; i < list.length-1; i++) {
     let c = list[i]
     let n = list[i+1]
+    if (!c.type) {continue; /* Was only spaces, FIXME */}
     if (c.type === 'newline') {
       if (n.type === 'punctuation.whitespace.indent.jome') {
         indent = n.text().length
