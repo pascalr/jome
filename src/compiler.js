@@ -579,7 +579,12 @@ function buildBlock(node, ctx) {
       if (top.array[0].type === 'entity.name.type.jome-obj.jome') {
         return _compileJomeObj(_buildJomeObjs([top], ctx)[0], ctx)
       } else {
-        return '['+parseList(top.array, ctx).map(e => compileJsBlock(e, ctx)).join(', ')+']'
+        let list = parseList(top.array, ctx)
+        if (list.length > 1) {
+          return '['+list.map(e => compileJsBlock(e, ctx)).join(', ')+']'
+        } else {
+          return compileJsBlock(list[0], ctx)
+        }
       }
     })
   }
