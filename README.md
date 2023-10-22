@@ -163,6 +163,7 @@ ou peut-être jome-base qui a juste jome, et jome qui regroupe beaucoup d'autres
 - Require other file formats, for example, require images. SVG is the easiest as a string. How to handle other images?
 - Faire quelques exemples sur le site
 - Faire la documentation sur le site
+- Comment faire pour mettre les paramètre d'un node sur plusieurs lignes?
 
 ## FIXME
 

@@ -16,6 +16,14 @@ import {H1} from './lib/html.jome'
 
 // TODO: Test Use <HTML> to add an html tag inside <html><HTML></HTML></html>
 
+
+class ParentClass {
+  getTen: => 10
+}
+class ChildClass {
+  super: ParentClass
+}
+
 class ClassForTesting |arg, @attr?, prop?| => {
   getArg: => arg
   getProp: => prop
@@ -234,4 +242,6 @@ ten = 10;
   TestEq testObjNested.key2.getArg(), "arg2", "class arg 2"
   TestEq testObjNested.key2.attr, "attr2", "class attr 2"
   TestEq testObjNested.key2.getProp(), "propVal2", "class prop 2"
+
+  TestEq {ChildClass}.getTen(), 10, "testing inheritence"
 }

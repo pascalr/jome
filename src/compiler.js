@@ -371,12 +371,16 @@ function buildDict(node, ctx, func) {
     } else {
       let key = arr[i].children[0].text()
       let value;
-      if (arr[i+1].type === 'entity.name.type.jome-obj.jome') {
-        value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: [/* FIXME */]}], ctx)[0], ctx)
+      if (key === 'super') { // FIXME: only if inside class block
+        ctx.superClass = {key, array: arr.slice(i+1)}
       } else {
-        value = func(arr.slice(i+1), ctx, key)
+        if (arr[i+1].type === 'entity.name.type.jome-obj.jome') {
+          value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: [/* FIXME */]}], ctx)[0], ctx)
+        } else {
+          value = func(arr.slice(i+1), ctx, key)
+        }
+        dict[key] = value
       }
-      dict[key] = value
     }
   })
   return dict
@@ -438,12 +442,12 @@ function parseIndent(list, ctx) {
   let nodes = []
   let stack = []
   let indent = 0;
-  for (let i = 0; i < list.length-1; i++) {
+  for (let i = 0; i < list.length; i++) {
     let c = list[i]
     let n = list[i+1]
     if (!c.type) {continue; /* Was only spaces, FIXME */}
     if (c.type === 'newline') {
-      if (n.type === 'punctuation.whitespace.indent.jome') {
+      if (n && n.type === 'punctuation.whitespace.indent.jome') {
         indent = n.text().length
         i++;
       } else {
@@ -993,6 +997,10 @@ const PROCESSES = {
         constructor = '\n  constructor'+constructorArgs+' '+jsBlock(constructorLines.join('\n'+'  '.repeat(ctx.depth+1)), ctx)
       }
     })
+    if (ctx.superClass) {
+      extension = ` extends ${ctx.superClass.array[0].text()}`
+      ctx.superClass = null
+    }
     return `class ${name}${extension} {${constructor}
   ${Object.keys(methods).map(key => {
     return `${compileName(key)}${methods[key]}`
