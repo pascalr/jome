@@ -329,8 +329,11 @@ function buildDictV2(topLevelNodes, ctx, func) {
       return console.error('Error processing expected meta.dictionary-key.jome inside meta.block.jome but was', arr[i].type)
     } else {
       let value;
-      if (arr[i+1].type === 'entity.name.type.jome-obj.jome') {
-        let key = arr[i].children[0].text()
+      let key = arr[i].children[0].text()
+      if (key === 'super') { // FIXME: only if inside class block
+        ctx.superClass = {key, array: arr.slice(i+1)}
+        
+      } else if (arr[i+1].type === 'entity.name.type.jome-obj.jome') {
         //value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: node.children}], ctx)[0], ctx)
         value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: [/* FIXME */]}], ctx)[0], ctx)
         dict[key] = value
@@ -354,37 +357,37 @@ function buildDictV2(topLevelNodes, ctx, func) {
   return dict
 }
 
-function buildDict(node, ctx, func) {
-  let list = parseList(node.children.slice(1, -1).flat())
-  let dict = {}
-  //for (let i = 0; i < list.length; i++) {
-    //let j = list.slice(i).findIndex(e => e.type === 'newline')
-  list.forEach(arr => {
-    let i = arr[0].type === 'punctuation.whitespace.indent.jome' ? 1 : 0
-    if (!arr[i]) {return;}
-    //if (arr[0].type === 'newline') {return;}
-    if (arr[i].type === 'variable.dict-symbol.jome') {
-      let key = arr[i].text().slice(1) // remove the colon
-      dict[key] = key
-    } else if (arr[i].type !== 'meta.dictionary-key.jome') {
-      return console.error('Error processing expected meta.dictionary-key.jome inside meta.block.jome but was', arr[i].type)
-    } else {
-      let key = arr[i].children[0].text()
-      let value;
-      if (key === 'super') { // FIXME: only if inside class block
-        ctx.superClass = {key, array: arr.slice(i+1)}
-      } else {
-        if (arr[i+1].type === 'entity.name.type.jome-obj.jome') {
-          value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: [/* FIXME */]}], ctx)[0], ctx)
-        } else {
-          value = func(arr.slice(i+1), ctx, key)
-        }
-        dict[key] = value
-      }
-    }
-  })
-  return dict
-}
+// function buildDict(node, ctx, func) {
+//   let list = parseList(node.children.slice(1, -1).flat())
+//   let dict = {}
+//   //for (let i = 0; i < list.length; i++) {
+//     //let j = list.slice(i).findIndex(e => e.type === 'newline')
+//   list.forEach(arr => {
+//     let i = arr[0].type === 'punctuation.whitespace.indent.jome' ? 1 : 0
+//     if (!arr[i]) {return;}
+//     //if (arr[0].type === 'newline') {return;}
+//     if (arr[i].type === 'variable.dict-symbol.jome') {
+//       let key = arr[i].text().slice(1) // remove the colon
+//       dict[key] = key
+//     } else if (arr[i].type !== 'meta.dictionary-key.jome') {
+//       return console.error('Error processing expected meta.dictionary-key.jome inside meta.block.jome but was', arr[i].type)
+//     } else {
+//       let key = arr[i].children[0].text()
+//       let value;
+//       if (key === 'super') { // FIXME: only if inside class block
+//         ctx.superClass = {key, array: arr.slice(i+1)}
+//       } else {
+//         if (arr[i+1].type === 'entity.name.type.jome-obj.jome') {
+//           value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: [/* FIXME */]}], ctx)[0], ctx)
+//         } else {
+//           value = func(arr.slice(i+1), ctx, key)
+//         }
+//         dict[key] = value
+//       }
+//     }
+//   })
+//   return dict
+// }
 
 function _compileJomeObj(obj, ctx) {
   let {type, attrs, meta, args, children, funcCalls} = obj
@@ -620,7 +623,7 @@ function assignVariable(node, ctx, keyword) {
   }
 }
 
-function buildBlock(node, ctx) {
+function buildBlock(node, ctx, func) {
   let list = filterSpaces(node.children.slice(1, -1))
   let topLevelNodes = parseIndent(list)
   let topsIsKey = topLevelNodes.map(n => {
@@ -629,7 +632,7 @@ function buildBlock(node, ctx) {
   })
   // If all top level nodes are keys or symbols, then it is an object
   if (topsIsKey.every(b => b)) {
-    return buildDictV2(topLevelNodes, ctx, (arr) => compileJsBlock(arr, ctx))
+    return buildDictV2(topLevelNodes, ctx, func)
 
   // If any top level nodes are keys, then it is an error
   } else if (topsIsKey.some(b => b)) {
@@ -659,7 +662,7 @@ function buildBlock(node, ctx) {
 }
 
 function compileBlock(node, ctx) {
-  let built = buildBlock(node, ctx)
+  let built = buildBlock(node, ctx, (arr) => compileJsBlock(arr, ctx))
   if (Array.isArray(built)) {
     if (built.length === 1) {
       return built[0]
@@ -997,7 +1000,7 @@ const PROCESSES = {
         next = next.next()
       }
       if (next?.type === 'meta.block.jome') {
-        methods = {...methods, ...buildDict(next, ctx, compileDictValOrMethod)}
+        methods = {...methods, ...buildBlock(next, ctx, compileDictValOrMethod)}
         next.captured = true
       }
       if (constructorLines.length) {

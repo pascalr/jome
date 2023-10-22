@@ -5,7 +5,7 @@ requiert sidebar from '../views/partials/sidebar.jome'
 
 export class AppPage |title?, content!| => {
   toString: => (
-    «
+    {
       HtmlPage title: title, body: <html>
         <div class="d-flex flex-column" style="min-height: 100vh;">
           <%= navbar %>
@@ -21,6 +21,6 @@ export class AppPage |title?, content!| => {
           </div>
         </div>
       </html>, stylesheets: ["/server.built.css", "/highlight.js.min.css"]
-    ».toString()
+    }.toString()
   )
 }

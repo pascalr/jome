@@ -16,6 +16,12 @@ import {H1} from './lib/html.jome'
 
 // TODO: Test Use <HTML> to add an html tag inside <html><HTML></HTML></html>
 
+class ParentClass {
+  getTen: => 10
+}
+class ChildClass {
+  super: ParentClass
+}
 
 class TestFuncCall {
   getFive: => 5
@@ -28,13 +34,6 @@ testChainFuncCall = {
   TestFuncCall
     getFive
     getFive
-}
-
-class ParentClass {
-  getTen: => 10
-}
-class ChildClass {
-  super: ParentClass
 }
 
 class ClassForTesting |arg, @attr?, prop?| => {

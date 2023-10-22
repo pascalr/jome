@@ -50,7 +50,7 @@ class Example {
   </html>
 }
 
-ex = « Example »
+ex = { Example }
 
 conten = <md>
   ## Jome examples
@@ -110,6 +110,6 @@ conten = <md>
 
 </md>
 
-«
+{
   AppPage title: 'Jome examples', content: conten
-».toString()
+}.toString()

@@ -1,6 +1,6 @@
 import {AppPage} from '../lib/app.jome'
 
-«
+{
   AppPage title: 'Simple HTML Page', content: (<md>
 
   # Jome
@@ -606,4 +606,4 @@ import {AppPage} from '../lib/app.jome'
   - [Hyphen](#hyphens) - You can use hyphens in variable names like left-panel. The minus operator should always be surrounded by spaces.
 
 </md>)
-».toString()
+}.toString()

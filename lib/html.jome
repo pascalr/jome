@@ -139,24 +139,24 @@ class Fragment => {
   )
 }
 
-export class H1 text => « Tag "h1", text »
-class H2 text => « Tag "h2", text »
-class H3 text => « Tag "h3", text »
-class P text => « Tag "p", text »
-class Li text => « Tag "li", text »
-class Span text => « Tag "span", text »
-export class Div text => « Tag "div", text »
-class Pre text => « Tag "pre", text »
-class Code text => « Tag "code", text »
+export class H1 text => { super: Tag "h1", text }
+class H2 text => { super: Tag "h2", text }
+class H3 text => { super: Tag "h3", text }
+class P text => { super: Tag "p", text }
+class Li text => { super: Tag "li", text }
+class Span text => { super: Tag "span", text }
+export class Div text => { super: Tag "div", text }
+class Pre text => { super: Tag "pre", text }
+class Code text => { super: Tag "code", text }
 
-class Form « Tag "form" »
-class Ul « Tag "ul" »
-class Ol « Tag "ol" »
-class HtmlObject « Tag "object" »
-class Canvas « Tag "canvas" »
+class Form { super: Tag "form" }
+class Ul { super: Tag "ul" }
+class Ol { super: Tag "ol" }
+class HtmlObject { super: Tag "object" }
+class Canvas { super: Tag "canvas" }
 
-class Br « InlineTag "br" »
-class Hr « InlineTag "hr" »
+class Br { super: InlineTag "br" }
+class Hr { super: InlineTag "hr" }
 
 class Txt text => {
   toString: => (
@@ -167,11 +167,11 @@ class Txt text => {
     document.createTextNode(text)
   )
 }
-class Btn text => « Tag "button", text »
+class Btn text => { super: Tag "button", text }
 Button = Btn
-class Link |url, name| => « Tag "a", name, href: url »
+class Link |url, name| => { super: Tag "a", name, href: url }
 
-class Label |name, text| => « Tag "label", text, htmlFor: text »
+class Label |name, text| => { super: Tag "label", text, htmlFor: text }
 
-class Input |name| => « InlineTag "input", id: name, name: name, autocomplete: name »
-class Img |url, alt| => « InlineTag "img", src: url, alt: alt »
+class Input |name| => { super: InlineTag "input", id: name, name: name, autocomplete: name }
+class Img |url, alt| => { super: InlineTag "img", src: url, alt: alt }
