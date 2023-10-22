@@ -332,7 +332,7 @@ function buildDictV2(topLevelNodes, ctx, func) {
       let key = arr[i].children[0].text()
       if (key === 'super') { // FIXME: only if inside class block
         ctx.superClass = {key, array: arr.slice(i+1)}
-        
+
       } else if (arr[i+1].type === 'entity.name.type.jome-obj.jome') {
         //value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: node.children}], ctx)[0], ctx)
         value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: [/* FIXME */]}], ctx)[0], ctx)
@@ -1003,6 +1003,14 @@ const PROCESSES = {
         methods = {...methods, ...buildBlock(next, ctx, compileDictValOrMethod)}
         next.captured = true
       }
+      if (ctx.superClass) {
+        extension = ` extends ${ctx.superClass.array[0].text()}`
+        ctx.isInsideClassSuperObject = true
+        let line = `super${compileFunctionCallArgs(ctx.superClass.array.slice(1), ctx)}`
+        ctx.isInsideClassSuperObject = false
+        constructorLines = [line, ...constructorLines]
+        ctx.superClass = null
+      }
       if (constructorLines.length) {
         if (methods.hasOwnProperty('constructor')) {
           let lines = methods['constructor'].slice(4, -1).split('\n').map(e => e.trim())
@@ -1012,10 +1020,6 @@ const PROCESSES = {
         constructor = '\n  constructor'+constructorArgs+' '+jsBlock(constructorLines.join('\n'+'  '.repeat(ctx.depth+1)), ctx)
       }
     })
-    if (ctx.superClass) {
-      extension = ` extends ${ctx.superClass.array[0].text()}`
-      ctx.superClass = null
-    }
     return `class ${name}${extension} {${constructor}
   ${Object.keys(methods).map(key => {
     return `${compileName(key)}${methods[key]}`
