@@ -328,15 +328,27 @@ function buildDictV2(topLevelNodes, ctx, func) {
     } else if (arr[i].type !== 'meta.dictionary-key.jome') {
       return console.error('Error processing expected meta.dictionary-key.jome inside meta.block.jome but was', arr[i].type)
     } else {
-      let key = arr[i].children[0].text()
       let value;
       if (arr[i+1].type === 'entity.name.type.jome-obj.jome') {
+        let key = arr[i].children[0].text()
         //value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: node.children}], ctx)[0], ctx)
         value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: [/* FIXME */]}], ctx)[0], ctx)
+        dict[key] = value
       } else {
-        value = func(arr.slice(i+1), ctx, key)
+        let list = parseList(arr)
+        list.forEach(nested => {
+          // FIXME: Repeated above
+          if (nested[0].type === 'variable.dict-symbol.jome') {
+            let key = nested[0].text().slice(1) // remove the colon
+            dict[key] = key
+          } else if (nested[0].type !== 'meta.dictionary-key.jome') {
+            return console.error('Error processing expected meta.dictionary-key.jome inside meta.block.jome but was', nested[0].type)
+          } else {
+            let key = nested[0].children[0].text()
+            dict[key] = func(nested.slice(1), ctx, key)
+          }
+        })
       }
-      dict[key] = value
     }
   })
   return dict
