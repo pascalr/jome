@@ -552,7 +552,7 @@ function buildBlock(node, ctx) {
     let t = n.array[0].type
     return t === 'meta.dictionary-key.jome' || t === 'variable.dict-symbol.jome'
   })
-  // If all top level nodes are keys (or symbols latter on), then it is an object
+  // If all top level nodes are keys or symbols, then it is an object
   if (topsIsKey.every(b => b)) {
     return buildDict(node, ctx, (arr) => compileJsBlock(arr, ctx))
   // If any top level nodes are keys, then it is an error
@@ -560,8 +560,8 @@ function buildBlock(node, ctx) {
     throw new Error("You cannot combine an object with something else inside a block.")
   } else {
     return topLevelNodes.map(top => {
-      if (top.array[0].type === 'entity.name.fixme.jome') {
-
+      if (top.array[0].type === 'entity.name.type.jome-obj.jome') {
+        return _compileJomeObj(_buildJomeObjs([top], ctx)[0], ctx)
       } else {
         return '['+parseList(top.array, ctx).map(e => compileJsBlock(e, ctx)).join(', ')+']'
       }
@@ -569,7 +569,6 @@ function buildBlock(node, ctx) {
   }
 }
 
-// If the first children of the node is a key, then ...
 function compileBlock(node, ctx) {
   let built = buildBlock(node, ctx)
   if (Array.isArray(built)) {

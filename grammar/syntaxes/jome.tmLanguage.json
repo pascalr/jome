@@ -413,6 +413,13 @@
       "endCaptures": {"0": { "name": "punctuation.curly-braces.close" }},
       "name": "meta.block.jome",
       "patterns": [
+        {
+          "match": "(?:^|\\G)(\\s*)([\\p{Lu}]\\w*)(?!\\s*:)",
+          "captures": {
+            "1": {"name": "punctuation.whitespace.indent.jome"},
+            "2": {"name": "entity.name.type.jome-obj.jome"}
+					}
+        },
         {"match": "(?:\\G)\\s+"},
         {
           "match": "(?:^|\n)\\s+",

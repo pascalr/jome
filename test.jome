@@ -20,6 +20,7 @@ class ClassForTesting |arg, @attr?, prop?| => {
   getArg: => arg
   getProp: => prop
 }
+testObj = {ClassForTesting "arg", attr: "attr", prop: "propVal"}
 
 // new ClassForTesting(prop: 'Hello')
 console.log(« ClassForTesting prop: 'Hello' »->props)
@@ -214,5 +215,7 @@ ten = 10
     4, 5, 6
     7, 8, 9
   }, <js>[[1,2,3],[4,5,6],[7,8,9]]</js>, "Matrice 1 à 9"
-  // TestEq {ClassForTesting "arg", prop: "val"}, 
+  TestEq testObj.getArg(), "arg", "class arg"
+  TestEq testObj.attr, "attr", "class attr"
+  TestEq testObj.getProp(), "propVal", "class prop"
 »
