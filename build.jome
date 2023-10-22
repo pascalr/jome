@@ -32,10 +32,11 @@ let code = ''
 files.forEach(|file, i| => (
   console.log('here -------------- ', file.file)
   let dir = path.dirname(file.file)
-  if (!fs.existsSync(dir)) (
-    fs.mkdirSync(dir, { recursive: true })
+  let tmp = path.join(tmpDir, dir)
+  if (!fs.existsSync(tmp)) (
+    fs.mkdirSync(tmp, { recursive: true })
   )
-  buildFileV2(file.file, dir, file.ext)
+  buildFileV2(file.file, tmp, file.ext)
   let f = path.basename(file.file).slice(0, -5)+file.ext
   code = code + `import imp{i} from "./{dir}/{f}"`+'\n' // FIXME parse newline at the end
   "FIXME"
