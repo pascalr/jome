@@ -160,7 +160,7 @@ import {AppPage} from '../lib/app.jome'
     Obj prop: 'val'
       Nested prop: 'val'
         Nested prop: 'val'
-      .run()
+      run
   } // The value will be the result of the function run of the object created.
   ```
 
@@ -175,13 +175,25 @@ import {AppPage} from '../lib/app.jome'
 
   ### Functions inside blocks
 
-  To call a function inside a block, you either call it with parentheses or you add an equal sign at the beginning.
+  By default, a variable name nested under node is a function call.
+
+  If you want to refer to the variable, you use the = sign at the beginning.
 
   ```jome
-    names = {
-      generateRandomName(seed: 546072384425) // functions can be called with parentheses
-      =generateRandomName seed: 945701924554 // functions can be called with an equal sign
-    }
+  // Create a server, add a get handler and start it
+  server = {
+    ExpressServer port: 3000
+      get '/', |req, res| => (
+        res.send(homePage)
+      )
+      start
+  }
+
+  obj = {
+    Obj prop: 'val'
+      =addChild('arg')
+      executeFunction()
+  }
   ```
 
   ### List with single element
