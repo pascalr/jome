@@ -201,9 +201,7 @@ function _buildJomeObjs(nodes, ctx, isRoot = true) {
     let argTokens = []
     let type
     node.array.forEach(part => {
-      if (part.type === 'entity.name.tag.jome-obj.jome') { // FIXME: Deprecated
-        meta.name = `'${part.text().slice(1)}'`
-      } else if (part.type === 'entity.name.type.jome-obj.jome') {
+      if (part.type === 'entity.name.type.jome-obj.jome') {
         type = part.text()
       } else if (part.type === 'keyword.control.tutor.jome') {
         // Ignore handled elsewhere
@@ -406,27 +404,6 @@ function _compileJomeObj(obj, ctx) {
     r += `.${funcCalls[funcCalls.length-1]}`
   }
   return r
-}
-
-function compileJomeObjBlock(list, ctx) {
-  let nodes = parseIndent(list)
-  ctx.tutor = null
-  let result = []
-  nodes.forEach(node => {
-    let t = node.array[0].type
-    if (t === 'entity.name.type.jome-obj.jome' || t === 'entity.name.tag.jome-obj.jome') {
-      result.push(_compileJomeObj(_buildJomeObjs([node], ctx)[0], ctx))
-    } else if (t === 'entity.name.function.jome') {
-      let name = node.array[0].text()
-      let args = compileFunctionCallArgs(node.array.slice(1), ctx)
-      result.push(name+args)
-    } else if (t === 'variable.assignment.jome') {
-      result.push(compileJsBlock(node.array, ctx))
-    } else {
-      console.error('Error 91283')
-    }
-  })
-  return ctx.spacing()+result.join('\n'+ctx.spacing())
 }
 
 function buildJomeObjs(node, ctx) {
@@ -843,27 +820,6 @@ const PROCESSES = {
   // (fooBar + 1)
   "expression.group": (node, ctx) => { // TODO: Rename expression.group. Maybe meta.parenthesis.jome?
     return `(${compileJsBlock(node.children.slice(1, -1), ctx)})`
-  },
-  // « $someName SomeType »
-  "meta.standalone-obj.jome": (node, ctx) => {
-    let r = compileJomeObjBlock(node.children.slice(1, -1), ctx) // remove '«' and '»'
-    // if (r.includes("\n")) {
-    //   console.error('A standalone object can only contain a single jome object')
-    // }
-    return r
-  },
-  // $some/path << $someName SomeType >>
-  "meta.obj-block.jome": (node, ctx) => {
-    let prevNode = node.prev()
-    let path = prevNode.text().slice(1)
-    ctx.currentObjPath = variableNameForPath(path, ctx)
-    let prev = compileNode(prevNode, ctx)
-    // let r = `${JOME_LIB}.addChildren(${prev}, [\n`
-    // ctx.nest(() => {
-    //   r += compileJomeObjBlock(node.children.slice(1, -1), ctx) // remove '«' and '»'
-    // })
-    // return r+'\n])\n\n'
-    return prev + '\n' + compileJomeObjBlock(node.children.slice(1, -1), ctx) + '\n\n' // remove '«' and '»'
   },
   // {x: 20, y: 30}
   "meta.block.jome": compileBlock,
