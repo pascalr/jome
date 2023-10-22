@@ -86,7 +86,7 @@ export function buildFile(fullPath, dependencies = [], run=false) {
   return {buildFileName, context}
 }
 
-export function buildFileV2(fullPath, outDir, ext) {
+export function buildFileV2(fullPath, outDir, ext, dependencies=[]) {
   if (!fullPath.endsWith('.jome')) {
     console.warn('Cannot build file without .jome extension', fullPath);
     return;
@@ -111,24 +111,20 @@ export function buildFileV2(fullPath, outDir, ext) {
 
   let { result, context } = compileGetContext(data, ctx);
 
-  // // Handle dependencies relative to the path of the file
-  // const directoryPart = path.dirname(fullPath);
-  // let missings = []
-  // context.dependencies.forEach(dependency => {
-  //   if (!(dependency in dependencies)) {
-  //     dependencies.push(dependency)
-  //     missings.push(dependency)
-  //   }
-  // })
+  // Handle dependencies relative to the path of the file
+  const directoryPart = path.dirname(fullPath);
+  let missings = []
+  context.dependencies.forEach(dependency => {
+    if (!(dependency in dependencies)) {
+      dependencies.push(dependency)
+      missings.push(dependency)
+    }
+  })
 
-  // missings.forEach(missing => {
-  //   let out = buildFile(path.join(directoryPart, missing), dependencies)
-  //   let css = out?.context?.stylesheets||{}
-  //   Object.keys(css).forEach(key => {
-  //     // FIXME: Don't import multiple times the same css script...
-  //     context.stylesheets[key] = (context.stylesheets[key]||'') + css[key]
-  //   })
-  // })
+  missings.forEach(missing => {
+    // buildFileV2(path.join(directoryPart, missing), outDir, ext, dependencies)
+    buildFileV2(missing, outDir, ext, dependencies)
+  })
 
   if (ext.endsWith('.js')) {
     result = `import ${JOME_LIB} from 'jome'\n\n` + result;
