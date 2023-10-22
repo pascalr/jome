@@ -139,6 +139,7 @@ JavaScript's distinction between expressions and statements makes the language v
 
 ## TODO
 
+- Ajouter des ; à la fin de toute les lignes compilées pour éviter des erreurs (avec [] entre autre)
 - Faire de quoi comme des imports map pour éviter à avoir à spécifier où sont les fichiers. J'aimerais simplement rajouter le dossier
 de lib/ ou src/ dans le fichier de configuration, et ensuite il les recherche là et les trouvent.
 - Utiliser la syntaxe |param1?, param2?| au lieu de |&param1, &param2|, c'est cool parce que ça fonctionne avec @ |@attr1, @attr2?|, ici

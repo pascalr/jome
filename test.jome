@@ -90,16 +90,16 @@ class TestEq {
   )
 }
 
-var obj = « H1 "Un titre", css: {color: 'red'} »
+var obj = { H1 "Un titre", css: {color: 'red'} };
 
-«
-  TestEq « H1 "Un titre" ».toString(), "<h1>Un titre</h1>", "«H1 \"Un titre\"».toString()"
+{
+  TestEq { H1 "Un titre" }.toString(), "<h1>Un titre</h1>", "«H1 \"Un titre\"».toString()"
   TestEq obj.toString(), "<h1 style='color: red;'>Un titre</h1>", "« H1 \"Un titre\", css: {color: 'red'} ».toString()"
-»
+}
 
 titre = |texte| => (
   console.log('%c' + texte, 'color: yellow')
-)
+);
 
 // TODO: TestEq [1,2,3][0..1], [1,2], "Test range inclusif"
 // TODO: TestEq [1,2,3][0...2], [1,2], "Test range exclusif"
