@@ -67,8 +67,8 @@ conten = <md>
   html = «
     IFrame // for demo only
       Html title: 'My html page'
-        $page Col
-          $navbar Row
+        page: Col
+          navbar: Row
             Link 'Some page'
             Link 'Another page'
             Link 'Yet another page'

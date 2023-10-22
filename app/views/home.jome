@@ -13,7 +13,7 @@ import {AppPage} from '../lib/app.jome'
 
   Example Jome code: TODO: Make this like the examples so you can click see compiled and result
 
-  Here is some code to show what Jome looks like. You can look at [examples](/examples) too to see more.
+  Here is some code to show what Jome looks like. You can look at the [examples](/examples) page to see more.
 
   ```jome
   // Classes
@@ -45,7 +45,7 @@ import {AppPage} from '../lib/app.jome'
   
   ## Disclaimer
 
-  The language is very, very young and still contains a log of bugs. Also, I don't work and I did not study in computer science. I may be doing a lot of things stupidly. Please be nice and correct me in a constructive manner if so.
+  The language is very, very young and still contains a log of bugs. I don't recommend using yet for any real project.
 
 
   ## Installation
@@ -175,13 +175,13 @@ import {AppPage} from '../lib/app.jome'
 
   ### Functions inside blocks
 
-  By default, a variable name nested under node is a function call.
+  A variable name nested under a node is a function call.
 
-  If you want to refer to the variable, you use the = sign at the beginning.
+  If you want to refer to the variable to add it as a children, you use the = sign at the beginning.
 
   ```jome
   // Create a server, add a get handler and start it
-  server = {
+  {
     ExpressServer port: 3000
       get '/', |req, res| => (
         res.send(homePage)
@@ -192,7 +192,7 @@ import {AppPage} from '../lib/app.jome'
   obj = {
     Obj prop: 'val'
       =addChild('arg')
-      executeFunction()
+      executeFunction
   }
   ```
 
@@ -208,9 +208,7 @@ import {AppPage} from '../lib/app.jome'
   You create nodes by using blocks.
 
   ```jome
-  alone = « Volleyball "Wilson", age: 2 »
-
-  «
+  node = {
     Obj (
       prop: 'val',
       prop2: 'val2'
@@ -219,7 +217,7 @@ import {AppPage} from '../lib/app.jome'
       @attr2 = 'val4'
       child: 'val5'
       child2: 'val6'
-  »
+  }
   ```
 
   ### Adding children to nodes
@@ -227,8 +225,7 @@ import {AppPage} from '../lib/app.jome'
   In order to add children to nodes, you can use the << operator.
 
   ```jome
-  inventory = {Inventory}
-  inventory << {
+  hero.inventory << {
     Sword damage: 10, weight: 500g
     Shield armor: 8, weight: 400g
     Scroll "Scroll of wisdom"
@@ -312,10 +309,6 @@ import {AppPage} from '../lib/app.jome'
 
   ### Inheritence
 
-  FIXME: How to handle class inheritence since I don't use the « » syntax anymore???
-
-  By using a key called super?
-
   ```jome
     class Base {
       super: Abstract prop: 'val'
@@ -330,10 +323,10 @@ import {AppPage} from '../lib/app.jome'
   To refer to an interface, you add an ampersand before the name.
 
   ```jome
-  interface HtmlOptions [
+  interface HtmlOptions |
     width?,
     height?
-  ]
+  |
 
   class Div &HtmlOptions => {/* ... */}
   class Span |arg, &HtmlOptions| => {/* ... */}
@@ -341,7 +334,7 @@ import {AppPage} from '../lib/app.jome'
 
   ### Functions
 
-  TODO: Ajouter les functions -> à jome. Il doit y avoir un espace avant le -> pour que ce soit une fonction. Sinon, c'est le meta accessor.
+  Il doit y avoir un espace avant le -> pour que ce soit une fonction. Sinon, c'est le meta accessor.
 
   By default, Jome adds returns statements to functions. This setting can be disabled in the config file.
 
@@ -368,6 +361,7 @@ import {AppPage} from '../lib/app.jome'
 
   If you want to do a condition for example, you use a nesting tag < > ... < / >
 
+  ```jome
   < % = if true < >
     <div class="content">
       < % = content % >
@@ -377,6 +371,7 @@ import {AppPage} from '../lib/app.jome'
       < % = content % >
     </div>
   < / > % >
+  ```
 
   The behavior will depend on the kind of script.
 
@@ -399,10 +394,6 @@ import {AppPage} from '../lib/app.jome'
   Files with a .jobj extension would start already in a block.
 
   It think this would be pratical for example for config files.
-
-  <h2 id="verbatim-strings">Verbatim Strings</h2>
-
-  Like in C#. @"foo \ $ blahblah bar" => directly with no interpolation
 
   <h2 id="arrow-getter">Arrow getter</h2>
 
