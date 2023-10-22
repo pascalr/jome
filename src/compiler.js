@@ -255,8 +255,8 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
   let list = parseList(children)
   list.forEach(arr => {
     let child = arr[0]
-    if (child.type === 'support.type.property-name.parameter.jome') {
-      let value = child.text().slice(1) // remove the ampersand
+    if (child.type.startsWith('support.type.property-name.parameter')) {
+      let value = child.text().slice(0, -1) // remove the ? or !
       ctx.addBinding(value, {type: 'parameter'})
       ctx.paramsIsClassVariable = insideClassFunction
       hasParams = true
@@ -711,7 +711,6 @@ const PROCESSES = {
     }
     return value
   },
-  "support.type.property-name.parameter.jome": (node, ctx) => '__params__.'+node.text().slice(1),
   // fooBar(...)
   "support.function-call.jome": (node, ctx) => {
     let i = 0;

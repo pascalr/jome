@@ -189,10 +189,16 @@
 			}]
 		},
     "parameter": {
-			"patterns": [{
-				"name": "support.type.property-name.parameter.jome",
-				"match": "\\&\\w*"
-			}]
+			"patterns": [
+        {
+          "name": "support.type.property-name.parameter.optional.jome",
+          "match": "\\w+\\?"
+        },
+        {
+          "name": "support.type.property-name.parameter.required.jome",
+          "match": "\\w+\\!"
+        }
+      ]
 		},
     "function": {
       "patterns": [
