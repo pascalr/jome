@@ -266,10 +266,20 @@
 			}]
 		},
     "attribute": {
-			"patterns": [{
-				"name": "support.type.property-name.attribute.jome",
-				"match": "\\@\\w*"
-			}]
+			"patterns": [
+        {
+          "name": "support.type.property-name.attribute.optional.jome",
+          "match": "\\@\\w+\\?"
+        },
+        {
+          "name": "support.type.property-name.attribute.required.jome",
+          "match": "\\@\\w+\\!"
+        },
+        {
+          "name": "support.type.property-name.attribute.jome",
+          "match": "\\@\\w*"
+        }
+      ]
 		},
     "operators": {
 			"patterns": [

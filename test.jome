@@ -16,7 +16,9 @@ import {H1} from './lib/html.jome'
 
 // TODO: Test Use <HTML> to add an html tag inside <html><HTML></HTML></html>
 
-class ClassForTesting |prop?| => {
+class ClassForTesting |arg, @attr?, prop?| => {
+  getArg: => arg
+  getProp: => prop
 }
 
 // new ClassForTesting(prop: 'Hello')
@@ -212,4 +214,5 @@ ten = 10
     4, 5, 6
     7, 8, 9
   }, <js>[[1,2,3],[4,5,6],[7,8,9]]</js>, "Matrice 1 à 9"
+  // TestEq {ClassForTesting "arg", prop: "val"}, 
 »
