@@ -1,7 +1,7 @@
 export class HtmlPage |
-  &title = '',
-  &stylesheets = [],
-  &body
+  title? = '',
+  stylesheets? = [],
+  body!
 | => {
   toString: => <html>
     <!DOCTYPE html>

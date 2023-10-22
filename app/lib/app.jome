@@ -3,7 +3,7 @@ import {HtmlPage} from '../../lib/html-page.jome'
 requiert navbar from '../views/partials/navbar.jome'
 requiert sidebar from '../views/partials/sidebar.jome'
 
-export class AppPage |&title, &content| => {
+export class AppPage |title?, content!| => {
   toString: => (
     «
       HtmlPage title: title, body: <html>

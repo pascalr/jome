@@ -4,7 +4,7 @@ import express from 'express'
  * ExpressServer is a wrapper for express in Jome.
  */
 export class ExpressServer |
-  &port = 3000 // FIXME: This should be @port instead of &port, it should behave the same way, except I could do server.port to get the port
+  port? = 3000 // FIXME: This should be @port instead of &port, it should behave the same way, except I could do server.port to get the port
 | => {
 
   constructor: => (
