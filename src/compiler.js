@@ -130,6 +130,10 @@ function filterSpaces(array) {
   return array.filter(e => !/^\s*$/.test(e)) // filter spaces
 }
 
+function filterStrings(array) {
+  return array.filter(e => typeof e !== 'string')
+}
+
 function compileJsBlock(array, ctx, addReturnStatement = false) {
   let r = []
   array = filterSpaces(array)
@@ -307,6 +311,35 @@ function compileDictValOrMethod(arr, ctx, key) {
     return r
   }
   return ' = '+compileJsBlock(arr, ctx)
+}
+
+function buildDictV2(topLevelNodes, ctx, func) {
+  let dict = {}
+  //for (let i = 0; i < list.length; i++) {
+    //let j = list.slice(i).findIndex(e => e.type === 'newline')
+  topLevelNodes.forEach(node => {
+    let arr = filterStrings(node.array)
+    let i = arr[0].type === 'punctuation.whitespace.indent.jome' ? 1 : 0
+    if (!arr[i]) {return;}
+    //if (arr[0].type === 'newline') {return;}
+    if (arr[i].type === 'variable.dict-symbol.jome') {
+      let key = arr[i].text().slice(1) // remove the colon
+      dict[key] = key
+    } else if (arr[i].type !== 'meta.dictionary-key.jome') {
+      return console.error('Error processing expected meta.dictionary-key.jome inside meta.block.jome but was', arr[i].type)
+    } else {
+      let key = arr[i].children[0].text()
+      let value;
+      if (arr[i+1].type === 'entity.name.type.jome-obj.jome') {
+        //value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: node.children}], ctx)[0], ctx)
+        value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: [/* FIXME */]}], ctx)[0], ctx)
+      } else {
+        value = func(arr.slice(i+1), ctx, key)
+      }
+      dict[key] = value
+    }
+  })
+  return dict
 }
 
 function buildDict(node, ctx, func) {
@@ -576,7 +609,8 @@ function buildBlock(node, ctx) {
   })
   // If all top level nodes are keys or symbols, then it is an object
   if (topsIsKey.every(b => b)) {
-    return buildDict(node, ctx, (arr) => compileJsBlock(arr, ctx))
+    return buildDictV2(topLevelNodes, ctx, (arr) => compileJsBlock(arr, ctx))
+
   // If any top level nodes are keys, then it is an error
   } else if (topsIsKey.some(b => b)) {
     throw new Error("You cannot combine an object with something else inside a block.")
