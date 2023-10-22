@@ -24,6 +24,11 @@ testFuncCall = {
   TestFuncCall
     getFive
 }
+testChainFuncCall = {
+  TestFuncCall
+    getFive
+    getFive
+}
 
 class ParentClass {
   getTen: => 10
@@ -254,4 +259,5 @@ ten = 10;
   TestEq {ChildClass}.getTen(), 10, "testing inheritence"
 
   TestEq testFuncCall, 5, "testFuncCall"
+  TestEq testChainFuncCall, 5, "testChainFuncCall"
 }

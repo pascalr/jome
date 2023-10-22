@@ -396,7 +396,11 @@ function _compileJomeObj(obj, ctx) {
   meta.children = `[${children.map(c => _compileJomeObj(c, ctx)).join(', ')}]`
   let r = `${JOME_LIB}.createObj(${ctx.currentObjPath}, ${s1}, ${compileJsObj(meta)})`
   if (funcCalls.length) {
-    r += '\n'+funcCalls.map(call => `.$.chain(o => o.${call})`).join('\n')
+    let chained = funcCalls.slice(0,-1)
+    if (chained.length) {
+      r += '\n'+chained.map(call => `.$.chain(o => o.${call})`).join('\n')
+    }
+    r += `.${funcCalls[funcCalls.length-1]}`
   }
   return r
 }
