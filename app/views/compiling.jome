@@ -49,7 +49,7 @@ content2 = <md>
   ```jome
   import {JomeConfig} from 'jome-config'
 
-  «
+  {
     JomeConfig
       compilerOptions:
         outDir = "docs"
@@ -59,7 +59,7 @@ content2 = <md>
       files = [
         "views/*.jome"
       ]
-  »
+  }
   ```
 
   <h3>jomeconfig.json</h3>

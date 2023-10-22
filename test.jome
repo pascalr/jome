@@ -53,7 +53,7 @@ testObjNested = {
 }
 
 // new ClassForTesting(prop: 'Hello')
-console.log(« ClassForTesting prop: 'Hello' »->props)
+console.log({ ClassForTesting prop: 'Hello' }->props)
 
 <sh>echo "Starting tests!"</sh>
 

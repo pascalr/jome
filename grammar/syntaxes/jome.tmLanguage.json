@@ -109,7 +109,6 @@
         { "include": "#paren-expression" },
         { "include": "#strings" },
         { "include": "#scripts" },
-        { "include": "#obj-block" },
         { "include": "#arrow" },
         { "include": "#arrow_getter" },
         { "include": "#operators" },
@@ -117,7 +116,6 @@
         { "include": "#parameter" },
         { "include": "#attribute" },
         { "include": "#square-bracket" },
-        { "include": "#standalone-obj" },
         { "include": "#constants" },
         { "include": "#function_call" },
         { "include": "#support-items" },
@@ -534,30 +532,6 @@
         }
       ]
     },
-    "standalone-obj": {
-      "begin": "«",
-      "beginCaptures": {
-        "0": { "name": "punctuation.definition.template-expression.begin.punctuation.standalone.obj.open" }
-      },
-      "end": "»",
-      "endCaptures": {
-        "0": { "name": "punctuation.definition.template-expression.end.punctuation.standalone.obj.close" }
-      },
-      "name": "meta.standalone-obj.jome",
-      "patterns": [{"include": "#jome_object"}]
-    },
-    "obj-block": {
-      "begin": "<<",
-      "beginCaptures": {
-        "0": { "name": "punctuation.definition.template-expression.begin.punctuation.obj.block.open" }
-      },
-      "end": ">>",
-      "endCaptures": {
-        "0": { "name": "punctuation.definition.template-expression.end.punctuation.obj.block.close" }
-      },
-      "name": "meta.obj-block.jome",
-      "patterns": [{"include": "#jome_object"}]
-    },
     "square-bracket": {
       "name": "meta.square-bracket.jome",
       "begin": "\\[",
@@ -606,48 +580,6 @@
           "name": "constant.language.jome",
           "match": "\\b(true|false|vrai|faux|null|undefined|nul|indéfini|on|marche|off|arrêt|yes|oui|no|non)\\b"
         }
-      ]
-    },
-    "jome_object": {
-      "patterns": [
-        {
-          "match": "(\\s*)\\b(tutor|tuteur)\\b",
-          "captures": {
-            "1": {"name": "punctuation.whitespace.indent.jome"},
-						"2": {"name": "keyword.control.tutor.jome"}
-					}
-        },
-        {
-					"match": "(\\s*)([a-zA-Z$_][\\w$]*)?\\s*(=)(?![>=])",
-					"captures": {
-            "1": {"name": "punctuation.whitespace.indent.jome"},
-						"2": {"name": "variable.assignment.jome"},
-						"3": {"name": "keyword.operator.assignment.jome"}
-					}
-				},
-        {
-          "match": "(?:^|\\G)(\\s*)(\\$\\w+)\\s*([\\p{L}]\\w*)?",
-          "captures": {
-            "1": {"name": "punctuation.whitespace.indent.jome"},
-						"2": {"name": "entity.name.tag.jome-obj.jome"},
-            "3": {"name": "entity.name.type.jome-obj.jome"}
-					}
-        },
-        {
-          "match": "(?:^|\\G)(\\s*)([\\p{Lu}]\\w*)",
-          "captures": {
-            "1": {"name": "punctuation.whitespace.indent.jome"},
-            "2": {"name": "entity.name.type.jome-obj.jome"}
-					}
-        },
-        {
-          "match": "(?:^|\\G)(\\s*)([\\p{L}]\\w*)",
-          "captures": {
-            "1": {"name": "punctuation.whitespace.indent.jome"},
-            "2": {"name": "entity.name.function.jome"}
-					}
-        },
-        {"include": "#expression"}
       ]
     },
     "block-comment": {

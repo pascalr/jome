@@ -52,7 +52,7 @@ export class Screen {
 //   </html>
 // }
 
-export class Panel « Div » // css: {width: 100%, height: 100%}
+export class Panel { super: Div } // css: {width: 100%, height: 100%}
 
 //class Row « Div css: {display: 'flex'} »
 //class Row « Div css.display: 'flex' »
