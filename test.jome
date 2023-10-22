@@ -21,6 +21,11 @@ class ClassForTesting |arg, @attr?, prop?| => {
   getProp: => prop
 }
 testObj = {ClassForTesting "arg", attr: "attr", prop: "propVal"}
+testObjList = {
+  ClassForTesting "arg1", attr: "attr1", prop: "propVal1"
+  ClassForTesting "arg2", attr: "attr2", prop: "propVal2"
+  ClassForTesting "arg3", attr: "attr3", prop: "propVal3"
+}
 
 // new ClassForTesting(prop: 'Hello')
 console.log(« ClassForTesting prop: 'Hello' »->props)
@@ -218,4 +223,8 @@ ten = 10
   TestEq testObj.getArg(), "arg", "class arg"
   TestEq testObj.attr, "attr", "class attr"
   TestEq testObj.getProp(), "propVal", "class prop"
+
+  TestEq testObjList[1].getArg(), "arg2", "class arg 2"
+  TestEq testObjList[1].attr, "attr2", "class attr 2"
+  TestEq testObjList[1].getProp(), "propVal2", "class prop 2"
 »
