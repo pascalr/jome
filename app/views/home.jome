@@ -517,6 +517,17 @@ import {AppPage} from '../lib/app.jome'
   debug(nomDeVariable) // => Debugging nomDeVariable: Value 10
   ```
 
+  ## Contributing
+
+  I recommend using visual studio code for now because it is super usefull for debugging tokenization. You hit Ctrl+Shift+P,
+  "inspect editor token and scope", and you see if it is correct. Also you see using syntax highlighting.
+
+  You can make pull requests on github.
+
+  You can simply make constructive comments on github.
+
+  Keep in mind I am working only 10 hours a week on this project for now.
+
   ## Acknowledgements
 
   TODO: Explain why

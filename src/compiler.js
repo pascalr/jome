@@ -248,6 +248,7 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
   let hasParams = false
   let args = {}
   let paramsValues = {}
+  let attrParams = []
   let children = filterSpaces(node.children).filter(child => {
     let t = child.type
     return t !== 'keyword.arrow.jome' && t !== 'punctuation.definition.args.begin.jome' && t !== 'punctuation.definition.args.end.jome'
@@ -277,6 +278,7 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
       if (arr[1] && arr[1].type === 'keyword.operator.assignment.jome') {
         paramsValues[value] = compileNode(arr[2], ctx)
       }
+      attrParams.push(value)
 
     } else if (child.type === 'variable.other.jome' || child.type === 'variable.parameter.jome') {
       let value = child.text()
@@ -287,7 +289,7 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
   })
   let argNames = Object.keys(args)
   argNames = hasParams ? ['__params__', ...argNames] : argNames
-  return {result: `(${argNames.join(', ')})`, args, paramsValues, hasParams}
+  return {result: `(${argNames.join(', ')})`, args, paramsValues, hasParams, attrParams}
 }
 
 function compileFunctionArgs(node, ctx) {
@@ -888,6 +890,11 @@ const PROCESSES = {
           } else {
             constructorLines.push(`this.__params__ = __params__`)
           }
+        }
+        if (details.attrParams) {
+          details.attrParams.forEach(attr => {
+            constructorLines.push(`this.${attr} = __params__.${attr}`)
+          })
         }
         constructorArgs = details.result
         next.captured = true
