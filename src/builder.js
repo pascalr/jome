@@ -108,6 +108,7 @@ export function buildFileV2(fullPath, outDir, ext, dependencies=[]) {
   let ctx = new CompileContext({})
   ctx.currentFile = fullPath // For import relative paths
   ctx.rootDir = __dirname.slice(0, -3) // FIXME
+  console.log('debug $$$$$$$$$$$$$$ ', ctx.rootDir)
 
   let { result, context } = compileGetContext(data, ctx);
 

@@ -30,9 +30,14 @@ htmlFiles.forEach(file => (
 let code = ''
 
 files.forEach(|file, i| => (
-  buildFileV2(file.file, tmpDir, file.ext)
+  console.log('here -------------- ', file.file)
+  let dir = path.dirname(file.file)
+  if (!fs.existsSync(dir)) (
+    fs.mkdirSync(dir, { recursive: true })
+  )
+  buildFileV2(file.file, dir, file.ext)
   let f = path.basename(file.file).slice(0, -5)+file.ext
-  code = code + `import imp{i} from "./.jome/{f}"`+'\n' // FIXME parse newline at the end
+  code = code + `import imp{i} from "./{dir}/{f}"`+'\n' // FIXME parse newline at the end
   "FIXME"
 ))
 
@@ -58,6 +63,6 @@ files.forEach(|file, i| => (
   "FIXME"
 ))
 
-let linker = './__linkAll.built.js'
+let linker = './.jome/__linkAll.built.js'
 fs.writeFileSync(linker, code)
 await import(linker);
