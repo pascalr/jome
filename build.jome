@@ -4,7 +4,7 @@ import {globSync} from 'glob'
 import fs from 'fs'
 import path from 'path'
 
-import { buildFileV2 } from './src/builder.js';
+import { JomeBuilder } from './src/builder.js';
 
 // THE FILES MUST NOT ONLY BE COMPILED, THEY MUST BE RUN...
 
@@ -28,6 +28,7 @@ htmlFiles.forEach(file => (
 ))
 
 let code = ''
+let builder = {JomeBuilder sourceDir: __dirname, compileDir: path.join(__dirname, 'tmp')}
 
 files.forEach(|file, i| => (
   console.log('here -------------- ', file.file)
@@ -36,7 +37,7 @@ files.forEach(|file, i| => (
   if (!fs.existsSync(tmp)) (
     fs.mkdirSync(tmp, { recursive: true })
   )
-  buildFileV2(file.file, tmp, file.ext)
+  builder.buildFile(file.file, tmp, file.ext)
   let f = path.basename(file.file).slice(0, -5)+file.ext
   code = code + `import imp{i} from "./{dir}/{f}"`+'\n' // FIXME parse newline at the end
   "FIXME"

@@ -200,3 +200,32 @@ PAS D'INTERPOLATION EN MARKDOWN, simplement faire <md>...</md>+"something"+<md>.
 
 MAIS OUI INTERPOLATION EN CSS, HTML, SHELL, etc... mais carrement prendre leur tmLanguage et
 injecter dedans <%= %>
+
+
+
+
+
+
+
+
+
+
+
+On jase à voix haute:
+Si j'ai un path
+./fichier
+veux dire fichier à partir du dossier courant
+j'aimerais avoir de quoi pour dire à la base du projet
+/ veut dire à la base de root
+~/ veut dire à la base de home
+ça serait quoi pour project path?
+
+aussi,
+admettons que je veux rajouter des directory dans le path
+ensuite pour référer les dossiers
+ben c'est simple je fais juste spécifier le nom du fichier dans le path de base
+
+admettons, que dans app/views/home.jome, je veux référencer
+import ... from "lib/something.jome"
+
+Ben simplement il faut que le PROJECT_ROOT_DIR soit dans le path de recherche

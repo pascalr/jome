@@ -86,66 +86,73 @@ export function buildFile(fullPath, dependencies = [], run=false) {
   return {buildFileName, context}
 }
 
-export function buildFileV2(fullPath, outDir, ext, dependencies=[]) {
-  if (!fullPath.endsWith('.jome')) {
-    console.warn('Cannot build file without .jome extension', fullPath);
-    return;
+export class JomeBuilder {
+  constructor(params={}) {
+    this.sourceDir = params.sourceDir
+    this.compileDir = params.compileDir
+    this.dependencies = []
   }
 
-  console.log('Building File', fullPath);
-
-  try {
-    // Check if the file exists
-    fs.accessSync(fullPath, fs.constants.F_OK);
-  } catch (err) {
-    console.error(`File '${fullPath}' does not exist.`);
-    return null
-  }
-
-  // Read the contents of the file synchronously
-  const data = fs.readFileSync(fullPath, 'utf8');
-
-  let ctx = new CompileContext({})
-  ctx.currentFile = fullPath // For import relative paths
-  ctx.rootDir = __dirname.slice(0, -3) // FIXME
-  console.log('debug $$$$$$$$$$$$$$ ', ctx.rootDir)
-
-  let { result, context } = compileGetContext(data, ctx);
-
-  // Handle dependencies relative to the path of the file
-  const directoryPart = path.dirname(fullPath);
-  let missings = []
-  context.dependencies.forEach(dependency => {
-    if (!(dependency in dependencies)) {
-      dependencies.push(dependency)
-      missings.push(dependency)
+  buildFile(fullPath, outDir, ext) {
+    if (!fullPath.endsWith('.jome')) {
+      console.warn('Cannot build file without .jome extension', fullPath);
+      return;
     }
-  })
-
-  missings.forEach(missing => {
-    // buildFileV2(path.join(directoryPart, missing), outDir, ext, dependencies)
-    buildFileV2(missing, outDir, ext, dependencies)
-  })
-
-  if (ext.endsWith('.js')) {
-    result = `import ${JOME_LIB} from 'jome'\n\n` + result;
+  
+    console.log('Building File', fullPath);
+  
+    try {
+      // Check if the file exists
+      fs.accessSync(fullPath, fs.constants.F_OK);
+    } catch (err) {
+      console.error(`File '${fullPath}' does not exist.`);
+      return null
+    }
+  
+    // Read the contents of the file synchronously
+    const data = fs.readFileSync(fullPath, 'utf8');
+  
+    let ctx = new CompileContext({})
+    ctx.currentFile = fullPath // For import relative paths
+    ctx.rootDir = __dirname.slice(0, -3) // FIXME
+    console.log('debug $$$$$$$$$$$$$$ ', ctx.rootDir)
+  
+    let { result, context } = compileGetContext(data, ctx);
+  
+    // Handle dependencies relative to the path of the file
+    const directoryPart = path.dirname(fullPath);
+    let missings = []
+    context.dependencies.forEach(dependency => {
+      if (!(dependency in this.dependencies)) {
+        this.dependencies.push(dependency)
+        missings.push(dependency)
+      }
+    })
+  
+    missings.forEach(missing => {
+      this.buildFile(missing, outDir, ext)
+    })
+  
+    if (ext.endsWith('.js')) {
+      result = `import ${JOME_LIB} from 'jome'\n\n` + result;
+    }
+  
+    // Generate the build file name
+    const buildFileName = path.basename(fullPath.replace(/\.jome$/, ext));
+    const outFileName = path.join(outDir, buildFileName)
+  
+    try {
+      // Write the result to the file synchronously
+      fs.writeFileSync(outFileName, result);
+  
+      console.log(`Successfully wrote to '${buildFileName}'.`);
+    } catch (err) {
+      console.error('Error writing to the file:', err);
+      return null
+    }
+  
+    return {buildFileName, context}
   }
-
-  // Generate the build file name
-  const buildFileName = path.basename(fullPath.replace(/\.jome$/, ext));
-  const outFileName = path.join(outDir, buildFileName)
-
-  try {
-    // Write the result to the file synchronously
-    fs.writeFileSync(outFileName, result);
-
-    console.log(`Successfully wrote to '${buildFileName}'.`);
-  } catch (err) {
-    console.error('Error writing to the file:', err);
-    return null
-  }
-
-  return {buildFileName, context}
 }
 
 // // FIXME: This makes a whole lot of ugly assomptions for paths.........
