@@ -1016,8 +1016,11 @@ const PROCESSES = {
   "support.variable.jome": (node, ctx) => {
     let name = node.text()
     if (name === '__dirname') {
+      ctx.imports['path'] = {default: 'path'}
+      ctx.imports['url'] = {namedImports: ['fileURLToPath']}
       ctx.usesDirname = true
     } else if (name === '__filename') {
+      ctx.imports['url'] = {namedImports: ['fileURLToPath']}
       ctx.usesFilename = true
     }
     return name
@@ -1074,22 +1077,17 @@ function compileHeaders(ctx) {
   let r = ctx.headers.join('\n')+'\n'
   Object.keys(ctx.imports).forEach(fileName => {
     let imp = ctx.imports[fileName]
-    r += `import ${imp.default}${imp.namedImports.length ? `{${imp.namedImports.join(', ')}}`:''} from "${fileName}";\n`
+    r += `import ${imp.default||''}${(imp.namedImports||[]).length ? `{${imp.namedImports.join(', ')}}`:''} from "${fileName}";\n`
   })
   if (ctx.usesDirname) {
     // FIXME: don't import path and fileURLToPath multiple times...
     r += `
-import path from 'path'
-import { fileURLToPath } from 'url'
-
 let __filename = fileURLToPath(import.meta.url)
 let __dirname = path.dirname(__filename)
     `
   } else if (ctx.usesFilename) {
     // FIXME: don't import path and fileURLToPath multiple times...
     r += `
-import { fileURLToPath } from 'url'
-
 __filename = fileURLToPath(import.meta.url)
     `
   }
