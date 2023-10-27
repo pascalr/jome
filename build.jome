@@ -16,6 +16,7 @@ let cssFiles = globSync('app/css/*.jome')
 let htmlFiles = globSync('app/views/*.jome')
 
 let tmpDir = '.jome/'
+let buildDir = path.join(tmpDir, 'build')
 let outDir = 'docs/'
 
 let files = []
@@ -33,7 +34,7 @@ let builder = {JomeBuilder sourceDir: __dirname, compileDir: path.join(__dirname
 files.forEach(|file, i| => (
   console.log('here -------------- ', file.file)
   let dir = path.dirname(file.file)
-  let tmp = path.join(tmpDir, dir)
+  let tmp = path.join(buildDir, dir)
   if (!fs.existsSync(tmp)) (
     fs.mkdirSync(tmp, { recursive: true })
   )
@@ -65,6 +66,6 @@ files.forEach(|file, i| => (
   "FIXME"
 ))
 
-let linker = './.jome/__linkAll.built.js'
+let linker = './.jome/build.js'
 fs.writeFileSync(linker, code)
 await import(linker);
