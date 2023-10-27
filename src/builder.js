@@ -93,13 +93,25 @@ export class JomeBuilder {
     this.dependencies = []
   }
 
-  buildFile(relPath, ext) {
-    if (!relPath.endsWith('.jome')) {
-      console.warn('Cannot build file without .jome extension', relPath);
+  buildFile(absPath, ext) {
+    if (!absPath.endsWith('.jome')) {
+      console.warn('Cannot build file without .jome extension', absPath);
       return;
     }
   
+    if (!absPath.startsWith(this.projectAbsPath)) {
+      throw new Error("Only building files inside the project folder supported for now.")
+    }
+    let relPath = absPath.slice(this.projectAbsPath.length+1)
     console.log('Building File', relPath);
+  
+    try {
+      // Check if the file exists
+      fs.accessSync(absPath, fs.constants.F_OK);
+    } catch (err) {
+      console.error(`File '${absPath}' does not exist.`);
+      return null
+    }
 
     let dir = path.dirname(relPath)
     let buildDir = path.join(this.buildAbsPath, dir)
@@ -108,35 +120,28 @@ export class JomeBuilder {
       fs.mkdirSync(buildDir, { recursive: true })
     )
   
-    try {
-      // Check if the file exists
-      fs.accessSync(relPath, fs.constants.F_OK);
-    } catch (err) {
-      console.error(`File '${relPath}' does not exist.`);
-      return null
-    }
-  
     // Read the contents of the file synchronously
-    const data = fs.readFileSync(relPath, 'utf8');
+    const data = fs.readFileSync(absPath, 'utf8');
   
     let ctx = new CompileContext({})
-    ctx.currentFile = relPath // For import relative paths
-    ctx.rootDir = __dirname.slice(0, -3) // FIXME
+    ctx.currentFile = absPath // For import relative paths
+    ctx.rootDir = this.projectAbsPath
   
     let { result, context } = compileGetContext(data, ctx);
   
     // Handle dependencies relative to the path of the file
-    const directoryPart = path.dirname(relPath);
+    const directoryPart = path.dirname(absPath);
     let missings = []
     context.dependencies.forEach(dependency => {
       if (!(dependency in this.dependencies)) {
         this.dependencies.push(dependency)
-        missings.push(dependency)
+        let depAbsPath = path.join(directoryPart, dependency)
+        missings.push(depAbsPath)
       }
     })
   
     missings.forEach(missing => {
-      this.buildFile(missing, ext)
+      this.buildFile(missing, '.built.js') // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEE. I could import a file of any type...
     })
   
     if (ext.endsWith('.js')) {
@@ -144,7 +149,7 @@ export class JomeBuilder {
     }
   
     // Generate the build file name
-    const buildFileName = path.basename(relPath.replace(/\.jome$/, ext));
+    const buildFileName = path.basename(absPath.replace(/\.jome$/, ext));
     const outFileName = path.join(buildDir, buildFileName)
   
     try {

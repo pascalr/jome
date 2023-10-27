@@ -563,11 +563,11 @@ function getRelativePath(relPath, ctx, forRequire) {
   // FIXME: Ugly as ****
   if (curFolder[0] !== '/') {
     return './'+path.join(curFolder, relPath)
-  } else {
-    let rel = ctx.currentFile.slice(ctx.rootDir.length)
+  } else if (forRequire) {
+    let rel = ctx.currentFile.slice(ctx.rootDir.length+1) // FIXME: +1 for slash
     let relDir = path.dirname(rel)
-    if (forRequire && relDir && relDir !== '.') {
-      return path.join(relDir, relPath)
+    if (relDir && relDir !== '.') {
+      return './' + path.join(relDir, relPath)
     }
   }
   return relPath

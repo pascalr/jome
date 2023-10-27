@@ -37,12 +37,13 @@ htmlFiles.forEach(file => (
   files.push({relPath: file, ext: '.html.js'})
 ))
 
-let code = ''
+let code = 'import fs from "fs";\n'
 let builder = {JomeBuilder projectAbsPath: __dirname, buildAbsPath: buildDir}
 
 files.forEach(|file, i| => (
   let dir = path.dirname(file.relPath)
-  builder.buildFile(file.relPath, file.ext)
+  let fileAbsPath = path.join(__dirname, file.relPath)
+  builder.buildFile(fileAbsPath, file.ext)
   let f = path.basename(file.relPath).slice(0, -5)+file.ext
   code = code + `import imp{i} from "./{path.join(buildDirName, dir)}/{f}"`+'\n' // FIXME parse newline at the end
   "FIXME"
@@ -53,7 +54,7 @@ files.forEach(|file, i| => (
 code = code + @`
 
 function saveFile(name, content) {
-  fs.writeFileSync(content, content, (err) => {
+  fs.writeFileSync(name, content, (err) => {
     if (err) {
       console.error(err);
     } else {
