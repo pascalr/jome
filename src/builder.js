@@ -88,39 +88,45 @@ export function buildFile(fullPath, dependencies = [], run=false) {
 
 export class JomeBuilder {
   constructor(params={}) {
-    this.sourceDir = params.sourceDir
-    this.compileDir = params.compileDir
+    this.projectAbsPath = params.projectAbsPath
+    this.buildAbsPath = params.buildAbsPath
     this.dependencies = []
   }
 
-  buildFile(fullPath, outDir, ext) {
-    if (!fullPath.endsWith('.jome')) {
-      console.warn('Cannot build file without .jome extension', fullPath);
+  buildFile(relPath, ext) {
+    if (!relPath.endsWith('.jome')) {
+      console.warn('Cannot build file without .jome extension', relPath);
       return;
     }
   
-    console.log('Building File', fullPath);
+    console.log('Building File', relPath);
+
+    let dir = path.dirname(relPath)
+    let buildDir = path.join(this.buildAbsPath, dir)
+    // Reproduce the directory structure inside the build directory.
+    if (!fs.existsSync(buildDir)) (
+      fs.mkdirSync(buildDir, { recursive: true })
+    )
   
     try {
       // Check if the file exists
-      fs.accessSync(fullPath, fs.constants.F_OK);
+      fs.accessSync(relPath, fs.constants.F_OK);
     } catch (err) {
-      console.error(`File '${fullPath}' does not exist.`);
+      console.error(`File '${relPath}' does not exist.`);
       return null
     }
   
     // Read the contents of the file synchronously
-    const data = fs.readFileSync(fullPath, 'utf8');
+    const data = fs.readFileSync(relPath, 'utf8');
   
     let ctx = new CompileContext({})
-    ctx.currentFile = fullPath // For import relative paths
+    ctx.currentFile = relPath // For import relative paths
     ctx.rootDir = __dirname.slice(0, -3) // FIXME
-    console.log('debug $$$$$$$$$$$$$$ ', ctx.rootDir)
   
     let { result, context } = compileGetContext(data, ctx);
   
     // Handle dependencies relative to the path of the file
-    const directoryPart = path.dirname(fullPath);
+    const directoryPart = path.dirname(relPath);
     let missings = []
     context.dependencies.forEach(dependency => {
       if (!(dependency in this.dependencies)) {
@@ -130,7 +136,7 @@ export class JomeBuilder {
     })
   
     missings.forEach(missing => {
-      this.buildFile(missing, outDir, ext)
+      this.buildFile(missing, ext)
     })
   
     if (ext.endsWith('.js')) {
@@ -138,8 +144,8 @@ export class JomeBuilder {
     }
   
     // Generate the build file name
-    const buildFileName = path.basename(fullPath.replace(/\.jome$/, ext));
-    const outFileName = path.join(outDir, buildFileName)
+    const buildFileName = path.basename(relPath.replace(/\.jome$/, ext));
+    const outFileName = path.join(buildDir, buildFileName)
   
     try {
       // Write the result to the file synchronously

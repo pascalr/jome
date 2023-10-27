@@ -15,32 +15,36 @@ import { JomeBuilder } from './src/builder.js';
 let cssFiles = globSync('app/css/*.jome')
 let htmlFiles = globSync('app/views/*.jome')
 
-let tmpDir = '.jome/'
-let buildDir = path.join(tmpDir, 'build')
-let outDir = 'docs/'
+console.log('htmlFiles', htmlFiles)
+
+// The absolute path to the directory to contain the intermediary build files and and build runtime file.
+let tmpDir = path.join(__dirname, '.jome/')
+// The name of the build directory inside the temporary directy
+let buildDirName = 'build'
+// The absolute path of the intermediary build directory
+let buildDir = path.join(tmpDir, buildDirName)
+// The absolute path of the output directory
+let outDir = path.join(__dirname, 'docs/')
 
 let files = []
 cssFiles.forEach(file => (
-  files.push({:file, ext: '.css.js'})
+  // Ext is required here to tell how to compile these files
+  files.push({relPath: file, ext: '.css.js'})
 ))
 
 htmlFiles.forEach(file => (
-  files.push({:file, ext: '.html.js'})
+  // Ext is required here to tell how to compile these files
+  files.push({relPath: file, ext: '.html.js'})
 ))
 
 let code = ''
-let builder = {JomeBuilder sourceDir: __dirname, compileDir: path.join(__dirname, 'tmp')}
+let builder = {JomeBuilder projectAbsPath: __dirname, buildAbsPath: buildDir}
 
 files.forEach(|file, i| => (
-  console.log('here -------------- ', file.file)
-  let dir = path.dirname(file.file)
-  let tmp = path.join(buildDir, dir)
-  if (!fs.existsSync(tmp)) (
-    fs.mkdirSync(tmp, { recursive: true })
-  )
-  builder.buildFile(file.file, tmp, file.ext)
-  let f = path.basename(file.file).slice(0, -5)+file.ext
-  code = code + `import imp{i} from "./{dir}/{f}"`+'\n' // FIXME parse newline at the end
+  let dir = path.dirname(file.relPath)
+  builder.buildFile(file.relPath, file.ext)
+  let f = path.basename(file.relPath).slice(0, -5)+file.ext
+  code = code + `import imp{i} from "./{path.join(buildDirName, dir)}/{f}"`+'\n' // FIXME parse newline at the end
   "FIXME"
 ))
 
@@ -61,7 +65,7 @@ function saveFile(name, content) {
 `
 
 files.forEach(|file, i| => (
-  let f2 = outDir+path.basename(file.file).slice(0, -5)+file.ext.slice(0,-3)
+  let f2 = outDir+path.basename(file.relPath).slice(0, -5)+file.ext.slice(0,-3)
   code = code + `saveFile("{f2}", imp{i})`+'\n' // FIXME parse newline at the end
   "FIXME"
 ))
