@@ -29,13 +29,15 @@ let outDir = path.join(__dirname, 'docs/')
 let files = []
 cssFiles.forEach(file => (
   // Ext is required here to tell how to compile these files
-  files.push({relPath: file, ext: '.css.js'})
+  files.push({relPath: file, type: 'css'})
 ))
 
 htmlFiles.forEach(file => (
   // Ext is required here to tell how to compile these files
-  files.push({relPath: file, ext: '.html.js'})
+  files.push({relPath: file, type: 'html'})
 ))
+
+let useIndexHtmlFiles = true
 
 let code = 'import fs from "fs";\n'
 let builder = {JomeBuilder projectAbsPath: __dirname, buildAbsPath: buildDir}
@@ -43,8 +45,9 @@ let builder = {JomeBuilder projectAbsPath: __dirname, buildAbsPath: buildDir}
 files.forEach(|file, i| => (
   let dir = path.dirname(file.relPath)
   let fileAbsPath = path.join(__dirname, file.relPath)
-  builder.buildFile(fileAbsPath, file.ext)
-  let f = path.basename(file.relPath).slice(0, -5)+file.ext
+  let ext = `.{file.type}.js`
+  builder.buildFile(fileAbsPath, ext)
+  let f = path.basename(file.relPath).slice(0, -5)+ext
   code = code + `import imp{i} from "./{path.join(buildDirName, dir)}/{f}"`+'\n' // FIXME parse newline at the end
   "FIXME"
 ))
@@ -66,7 +69,8 @@ function saveFile(name, content) {
 `
 
 files.forEach(|file, i| => (
-  let f2 = outDir+path.basename(file.relPath).slice(0, -5)+file.ext.slice(0,-3)
+  let ext2 = `.{file.type}.js`
+  let f2 = outDir+path.basename(file.relPath).slice(0, -5)+ext2.slice(0,-3)
   code = code + `saveFile("{f2}", imp{i})`+'\n' // FIXME parse newline at the end
   "FIXME"
 ))
