@@ -26,6 +26,11 @@ let buildDir = path.join(tmpDir, buildDirName)
 // The absolute path of the output directory
 let outDir = path.join(__dirname, 'docs/')
 
+<sh>
+  rm .jome/* # FIXME: Use the variables above 
+  rm docs/* # FIXME: Use the variables above
+</sh>
+
 let files = []
 cssFiles.forEach(file => (
   // Ext is required here to tell how to compile these files
@@ -41,6 +46,16 @@ let useIndexHtmlFiles = true
 
 let code = 'import fs from "fs";\n'
 let builder = {JomeBuilder projectAbsPath: __dirname, buildAbsPath: buildDir}
+
+/*
+{
+  JomeBuilder
+    html 'views/'
+    css 'css/'
+    js 'lib/'
+    root '/home'
+}
+*/
 
 files.forEach(|file, i| => (
   let dir = path.dirname(file.relPath)
@@ -71,7 +86,11 @@ function saveFile(name, content) {
 files.forEach(|file, i| => (
   let ext2 = `.{file.type}.js`
   let f2 = outDir+path.basename(file.relPath).slice(0, -5)+ext2.slice(0,-3)
-  code = code + `saveFile("{f2}", imp{i})`+'\n' // FIXME parse newline at the end
+  if (file.type === 'html' && useIndexHtmlFiles) (
+    let f3 = outDir+path.basename(file.relPath).slice(0, -5)+'/index.html'
+  ) else (
+    code = code + `saveFile("{f2}", imp{i})`+'\n' // FIXME parse newline at the end
+  )
   "FIXME"
 ))
 
