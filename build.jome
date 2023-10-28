@@ -85,12 +85,13 @@ function saveFile(name, content) {
 
 files.forEach(|file, i| => (
   let ext2 = `.{file.type}.js`
-  let f2 = outDir+path.basename(file.relPath).slice(0, -5)+ext2.slice(0,-3)
+  let f2
   if (file.type === 'html' && useIndexHtmlFiles) (
-    let f3 = outDir+path.basename(file.relPath).slice(0, -5)+'/index.html'
+    f2 = outDir+path.basename(file.relPath).slice(0, -5)+'/index.html'
   ) else (
-    code = code + `saveFile("{f2}", imp{i})`+'\n' // FIXME parse newline at the end
+    f2 = outDir+path.basename(file.relPath).slice(0, -5)+ext2.slice(0,-3)
   )
+  code = code + `saveFile("{f2}", imp{i})`+'\n' // FIXME parse newline at the end
   "FIXME"
 ))
 

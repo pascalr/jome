@@ -580,6 +580,29 @@ export function escapeBackticks(inputString) {
 // keyword can be 'var', 'def' or null (null means const)
 function assignVariable(node, ctx, keyword) {
   let value = node.text()
+  let outKeyword = ''
+  let isAssignment = node.type === 'variable.assignment.jome'
+  if (keyword === 'var') {
+    // TODO: Check if already defined inside the SAME scope, throw an Error if so
+    ctx.addBinding(value, {type: 'variable'})
+    outKeyword = 'var '
+  } else if (keyword === 'def') {
+    // TODO: Check if already defined inside the SAME scope, throw an Error if so
+    ctx.addBinding(value, {type: 'definition'})
+    outKeyword = 'const '
+  } else {
+    if (ctx.hasBinding(value)) {
+      if (!isAssignment) {
+        throw new Error('Variable was already declared previously', value)
+      }
+    } else {
+      outKeyword = 'var '
+      ctx.addBinding(value, {type: 'global-constant'})
+    }
+  }
+  if (node.type === 'variable.other.jome') {
+    return outKeyword+value+';'
+  }
   let next = node.captureNext() // The = sign (keyword.operator.assignment.compound.jome)
   next = next.captureNext()
   if (next.type === 'keyword.arrow.jome' && next.text() === ' -> ') {
@@ -587,21 +610,7 @@ function assignVariable(node, ctx, keyword) {
     let func = next.captureNext()
     return `function ${value}() ${jsBlock(func, ctx, true)}`
   }
-  if (keyword === 'var') {
-    // TODO: Check if already defined inside the SAME scope, throw an Error if so
-    ctx.addBinding(value, {type: 'variable'})
-    return 'var '+value+' = '+compileNode(next, ctx)
-  } else if (keyword === 'def') {
-    // TODO: Check if already defined inside the SAME scope, throw an Error if so
-    ctx.addBinding(value, {type: 'definition'})
-    return 'const '+value+' = '+compileNode(next, ctx)
-  } else {
-    if (ctx.hasBinding(value)) {
-      return value+' = '+compileNode(next, ctx)
-    }
-    ctx.addBinding(value, {type: 'global-constant'})
-    return 'var '+value+' = '+compileNode(next, ctx)
-  }
+  return outKeyword+value+' = '+compileNode(next, ctx)
 }
 
 function buildBlock(node, ctx, func) {
@@ -735,7 +744,7 @@ const PROCESSES = {
   "keyword.control.declaration.jome": (node, ctx) => {
     let keyword = node.text()
     let next = node.captureNext()
-    if (next.type !== 'variable.assignment.jome') {
+    if (next.type !== 'variable.assignment.jome' && next.type !== 'variable.other.jome') {
       throw new Error('Error bnjs98124u9sdb92')
     }
     return assignVariable(next, ctx, keyword)
@@ -768,6 +777,11 @@ const PROCESSES = {
       a = '</html>'
     }
     return '`'+b+compileInterpolate(compileRaw(node.children.slice(1,-1)), ctx)+a+'`'
+  },
+  "meta.embedded.block.shell": (node, ctx) => {
+    let raw = compileRaw(node.children.slice(1,-1))
+    ctx.imports['child_process'] = {namedImports: ['execSync']}
+    return "execSync(`"+escapeBackticks(raw)+"`)"
   },
   // fooBar
   "variable.other.jome": (node, ctx) => {
@@ -1052,11 +1066,6 @@ const PROCESSES = {
       return 'import '
     }
     console.error('Error 745912')
-  },
-  "meta.embedded.block.shell": (node, ctx) => {
-    // FIXME: Use ctx.imports and not headers, because I never want to import multiple times the same thing.
-+    ctx.headers.push(`import { exec } from "child_process"`)
-    return `exec("${node.children[1].replaceAll(/"/g, '\\"')}")`
   }
 }
 
