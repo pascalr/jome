@@ -90,6 +90,7 @@ export class JomeBuilder {
   constructor(params={}) {
     this.projectAbsPath = params.projectAbsPath
     this.buildAbsPath = params.buildAbsPath
+    this.outDir = params.outDir
     this.dependencies = []
   }
 
@@ -163,6 +164,14 @@ export class JomeBuilder {
     }
   
     return {buildFileName, context}
+  }
+
+  /**
+   * Copies files to the output directory
+   */
+  asset(params={}, filename) {
+    let out = path.join(this.outDir, params.as || filename)
+    fs.copyFileSync(filename, out)
   }
 }
 
