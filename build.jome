@@ -55,7 +55,10 @@ builder.asset({as: 'highlight.js.min.css'}, 'node_modules/highlight.js/styles/de
 /*
 {
   JomeBuilder
-    html 'views/'
+    html 'views/home', as: '/'
+    html 'views/examples', as: '/ex'
+    html 'views/librairies', as: '/lib'
+    html 'views/editor', as: '/editor'
     css 'css/'
     js 'lib/'
     asset 'node_modules/highlight.js/styles/default.min.css', as: 'highlight.js.min.css' // Files to be copied to the output directory
