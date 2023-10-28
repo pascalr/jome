@@ -17,8 +17,9 @@ let htmlFiles = globSync('app/views/*.jome')
 
 console.log('htmlFiles', htmlFiles)
 
+let tmpDirName = '.jome/'
 // The absolute path to the directory to contain the intermediary build files and and build runtime file.
-let tmpDir = path.join(__dirname, '.jome/')
+let tmpDir = path.join(__dirname, tmpDirName)
 // The name of the build directory inside the temporary directy
 let buildDirName = 'build'
 // The absolute path of the intermediary build directory
@@ -27,8 +28,10 @@ let buildDir = path.join(tmpDir, buildDirName)
 let outDir = path.join(__dirname, 'docs/')
 
 <sh>
-  rm .jome/* # FIXME: Use the variables above 
-  rm docs/* # FIXME: Use the variables above
+  touch .jome/useless # Otherwise rm complains when the folder is empty
+  touch docs/useless # Otherwise rm complains when the folder is empty
+  rm -R .jome/* # FIXME: Use the variables above 
+  rm -R docs/* # FIXME: Use the variables above
 </sh>
 
 let files = []
@@ -44,7 +47,7 @@ htmlFiles.forEach(file => (
 
 let useIndexHtmlFiles = true
 
-let code = 'import fs from "fs";\n'
+// let code = 'import fs from "fs";\n'
 let builder = {JomeBuilder projectAbsPath: __dirname, buildAbsPath: buildDir}
 
 /*
@@ -57,44 +60,67 @@ let builder = {JomeBuilder projectAbsPath: __dirname, buildAbsPath: buildDir}
 }
 */
 
-files.forEach(|file, i| => (
+saveFile = |name, content| -> (
+  let direct = path.dirname(name)
+  if (!fs.existsSync(direct)) (
+    fs.mkdirSync(direct, { recursive: true })
+  )
+  fs.writeFileSync(name, content, |err| => (
+    if (err) (
+      console.error(err);
+    ) else (
+      console.log('File has been written.', name);
+    )
+  ));
+)
+
+files.forEach(async |file, i| => (
   let dir = path.dirname(file.relPath)
   let fileAbsPath = path.join(__dirname, file.relPath)
   let ext = `.{file.type}.js`
   builder.buildFile(fileAbsPath, ext)
   let f = path.basename(file.relPath).slice(0, -5)+ext
-  code = code + `import imp{i} from "./{path.join(buildDirName, dir)}/{f}"`+'\n' // FIXME parse newline at the end
-  "FIXME"
-))
-
-// FIXME: imports, import should not be a keyword here...
-
-code = code + @`
-
-function saveFile(name, content) {
-  fs.writeFileSync(name, content, (err) => {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log('File has been written.', name);
-    }
-  });
-}
-
-`
-
-files.forEach(|file, i| => (
-  let ext2 = `.{file.type}.js`
   let f2
   if (file.type === 'html' && useIndexHtmlFiles) (
     f2 = outDir+path.basename(file.relPath).slice(0, -5)+'/index.html'
   ) else (
-    f2 = outDir+path.basename(file.relPath).slice(0, -5)+ext2.slice(0,-3)
+    f2 = outDir+path.basename(file.relPath).slice(0, -5)+ext.slice(0,-3)
   )
-  code = code + `saveFile("{f2}", imp{i})`+'\n' // FIXME parse newline at the end
-  "FIXME"
+  let result = await import(`./{tmpDirName}{path.join(buildDirName, dir)}/{f}`);
+  let defaut = result.default
+  saveFile(f2, defaut)
+  // code = code + `import imp{i} from "./{path.join(buildDirName, dir)}/{f}"`+'\n' // FIXME parse newline at the end
+  // "FIXME"
 ))
 
-let linker = './.jome/build.js'
-fs.writeFileSync(linker, code)
-await import(linker);
+// FIXME: imports, import should not be a keyword here...
+
+// code = code + @`
+
+// function saveFile(name, content) {
+//   fs.writeFileSync(name, content, (err) => {
+//     if (err) {
+//       console.error(err);
+//     } else {
+//       console.log('File has been written.', name);
+//     }
+//   });
+// }
+
+// `
+
+// files.forEach(|file, i| => (
+//   let ext2 = `.{file.type}.js`
+//   let f2
+//   if (file.type === 'html' && useIndexHtmlFiles) (
+//     f2 = outDir+path.basename(file.relPath).slice(0, -5)+'/index.html'
+//   ) else (
+//     f2 = outDir+path.basename(file.relPath).slice(0, -5)+ext2.slice(0,-3)
+//   )
+//   code = code + `saveFile("{f2}", imp{i})`+'\n' // FIXME parse newline at the end
+//   "FIXME"
+// ))
+
+// let linker = './.jome/build.js'
+// fs.writeFileSync(linker, code)
+// await import(linker);

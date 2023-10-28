@@ -1064,6 +1064,8 @@ const PROCESSES = {
       return 'await '
     } else if (word === 'import') {
       return 'import '
+    } else if (word === 'async') {
+      return 'async '
     }
     console.error('Error 745912')
   }

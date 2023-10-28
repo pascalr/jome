@@ -1,0 +1,116 @@
+
+    <!DOCTYPE html>
+    <HTML lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Compiling Jome</title>
+        <link rel="stylesheet" type="text/css" href="./stylesheet.css">
+<link rel="stylesheet" type="text/css" href="./highlight.js.min.css">
+      </head>
+      <body>
+        
+        <div class="d-flex flex-column" style="min-height: 100vh;">
+          
+  <div class="navbar">
+    <span class="navbrand" href="#">Jome</span>
+    <a href="/editor">Editor</a>
+    <a href="/">Home</a>
+    <a href="/#lang-ref">Language Reference</a>
+    <a href="/ex">Examples</a>
+    <a href="/lib">Librairies</a>
+    <a href="/compiling">Compiling</a>
+    <a href="https://github.com/pascalr/jome">GitHub</a>
+  </div>
+
+          <div style="flex-grow: 1; height: calc(100vh - 50px);">
+            <div class="d-flex" style="height: 100%;">
+            
+  <div id="left-nav" class="scrollable">
+    <ul class="nav-list">
+      <li><a href="/">Home</a></li>
+      <li><a href="/#lang-ref">Language Reference</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/#syntax">Syntax</a></li>
+        <li><a href="/#blocks">Blocks</a></li>
+        <li><a href="/#nodes">Nodes</a></li>
+        <li><a href="/#scripts">Scripts</a></li>
+        <li><a href="/#named-parameters">Named parameters</a></li>
+        <li><a href="/#classes">Classes</a></li>
+        <li><a href="/#interfaces">Interfaces</a></li>
+        <li><a href="/#arrow-getter">Arrow getter</a></li>
+        <li><a href="/#instance-driven-dev">Instance driven development</a></li>
+        <li><a href="/#verbatim">Verbatim string literals</a></li>
+        <li><a href="/#units">Units</a></li>
+        <li><a href="/#hyphens">Hyphen</a></li>
+      </ul>
+      <li><a href="/compiling">Compiling</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/compiling#jomec">jomec</a></li>
+        <li><a href="/compiling#jomeconfig">jomeconfig.json</a></li>
+      </ul>
+      <li><a href="/lib">Librairies</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/lib/html">Html</a></li>
+        <li><a href="/lib/html-layout">Html Layout</a></li>
+        <li><a href="/lib/express-server">Express Server</a></li>
+      </ul>
+      <li><a href="/ex">Examples</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/ex#hello-world">Hello world</a></li>
+        <li><a href="/ex#snake">Snake</a></li>
+        <li><a href="/ex">Script</a></li>
+      </ul>
+    </ul>
+  </div>
+
+            <div class="scrollable" style="width: 100%;">
+              <div class="app-content">
+                <h2>Compiling</h2>
+<p>For compiling you need jomec.</p>
+  <h3 id="jomec">jomec</h3>
+<pre><code class="language-sh"><span class="hljs-comment"># Usage</span>
+jomec <span class="hljs-comment"># compiles based on jomeconfig.json</span>
+jomec <span class="hljs-string">&quot;file.jome&quot;</span> <span class="hljs-comment"># compile the given file and it&#x27;s dependencies</span>
+jomec <span class="hljs-string">&quot;views/*.jome&quot;</span> <span class="hljs-comment"># compile all the files that matches the path and their dependencies</span>
+</code></pre>
+  <h3 id="jomeconfig">jomeconfig.jome</h3>
+<p>Example config file:</p>
+<pre><code class="language-jome"><span class="hljs-keyword">import</span> {<span class="hljs-title class_">JomeConfig</span>} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;jome-config&#x27;</span>
+
+{
+  <span class="hljs-title class_">JomeConfig</span>
+    compilerOptions:
+      <span class="hljs-variable">outDir</span> = <span class="hljs-string">&quot;docs&quot;</span>
+      <span class="hljs-variable">removeComments</span> = <span class="hljs-keyword">true</span>
+      <span class="hljs-variable">sourceMap</span> = <span class="hljs-keyword">true</span>
+      <span class="hljs-variable">addReturnStatements</span> = <span class="hljs-keyword">true</span>
+    <span class="hljs-variable">files</span> = [
+      <span class="hljs-string">&quot;views/*.jome&quot;</span>
+    ]
+}
+</code></pre>
+  <h3>jomeconfig.json</h3>
+<p>Example config file:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;compilerOptions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;outDir&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;docs&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;removeComments&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;sourceMap&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;files&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-string">&quot;views/*.jome&quot;</span>
+  <span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>TODO: List all the possible options</p>
+
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      
+      </body>
+    </HTML>
+  

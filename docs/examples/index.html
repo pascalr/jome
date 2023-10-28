@@ -1,0 +1,144 @@
+
+    <!DOCTYPE html>
+    <HTML lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Jome examples</title>
+        <link rel="stylesheet" type="text/css" href="./stylesheet.css">
+<link rel="stylesheet" type="text/css" href="./highlight.js.min.css">
+      </head>
+      <body>
+        
+        <div class="d-flex flex-column" style="min-height: 100vh;">
+          
+  <div class="navbar">
+    <span class="navbrand" href="#">Jome</span>
+    <a href="/editor">Editor</a>
+    <a href="/">Home</a>
+    <a href="/#lang-ref">Language Reference</a>
+    <a href="/ex">Examples</a>
+    <a href="/lib">Librairies</a>
+    <a href="/compiling">Compiling</a>
+    <a href="https://github.com/pascalr/jome">GitHub</a>
+  </div>
+
+          <div style="flex-grow: 1; height: calc(100vh - 50px);">
+            <div class="d-flex" style="height: 100%;">
+            
+  <div id="left-nav" class="scrollable">
+    <ul class="nav-list">
+      <li><a href="/">Home</a></li>
+      <li><a href="/#lang-ref">Language Reference</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/#syntax">Syntax</a></li>
+        <li><a href="/#blocks">Blocks</a></li>
+        <li><a href="/#nodes">Nodes</a></li>
+        <li><a href="/#scripts">Scripts</a></li>
+        <li><a href="/#named-parameters">Named parameters</a></li>
+        <li><a href="/#classes">Classes</a></li>
+        <li><a href="/#interfaces">Interfaces</a></li>
+        <li><a href="/#arrow-getter">Arrow getter</a></li>
+        <li><a href="/#instance-driven-dev">Instance driven development</a></li>
+        <li><a href="/#verbatim">Verbatim string literals</a></li>
+        <li><a href="/#units">Units</a></li>
+        <li><a href="/#hyphens">Hyphen</a></li>
+      </ul>
+      <li><a href="/compiling">Compiling</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/compiling#jomec">jomec</a></li>
+        <li><a href="/compiling#jomeconfig">jomeconfig.json</a></li>
+      </ul>
+      <li><a href="/lib">Librairies</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/lib/html">Html</a></li>
+        <li><a href="/lib/html-layout">Html Layout</a></li>
+        <li><a href="/lib/express-server">Express Server</a></li>
+      </ul>
+      <li><a href="/ex">Examples</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/ex#hello-world">Hello world</a></li>
+        <li><a href="/ex#snake">Snake</a></li>
+        <li><a href="/ex">Script</a></li>
+      </ul>
+    </ul>
+  </div>
+
+            <div class="scrollable" style="width: 100%;">
+              <div class="app-content">
+                <h2>Jome examples</h2>
+  <h3 id="hello-world">Hello world</h3>
+<pre><code class="language-jome"><span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>) <span class="hljs-comment">// jome compiles to javascript, so you can use javascript</span>
+</code></pre>
+  <h3 id="html-library">Html library</h3>
+<pre><code class="language-jome"><span class="hljs-variable">html</span> = «
+  <span class="hljs-title class_">IFrame</span> <span class="hljs-comment">// for demo only</span>
+    <span class="hljs-title class_">Html</span> title: <span class="hljs-string">&#x27;My html page&#x27;</span>
+      page: <span class="hljs-title class_">Col</span>
+        navbar: <span class="hljs-title class_">Row</span>
+          <span class="hljs-title class_">Link</span> <span class="hljs-string">&#x27;Some page&#x27;</span>
+          <span class="hljs-title class_">Link</span> <span class="hljs-string">&#x27;Another page&#x27;</span>
+          <span class="hljs-title class_">Link</span> <span class="hljs-string">&#x27;Yet another page&#x27;</span>
+»
+</code></pre>
+  <h3 id="snake">Snake</h3>
+  
+    <div class='example'>
+      <div class='onglets'>
+        <div class='active'>Code</div>
+        <div>Compilé</div>
+        <div>Résultat</div>
+      </div>
+      <div class='example-content'>
+        Test 1212
+      </div>
+    </div>
+  
+  <h3 id="html-button">Html button</h3>
+<pre><code class="language-jome"><span class="hljs-keyword">import</span> {<span class="hljs-title class_">Btn</span>, <span class="hljs-title class_">Txt</span>, <span class="hljs-variable">renderHTML</span>} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;html&quot;</span>
+
+<span class="hljs-title function_">renderHTML</span>(target: <span class="hljs-string">&#x27;#div-id&#x27;</span>, {
+  <span class="hljs-title class_">Btn</span> <span class="hljs-variable">@count</span>: <span class="hljs-number">0</span>, ~click: =&gt; (<span class="hljs-variable">@count</span> += <span class="hljs-number">1</span>)
+    <span class="hljs-title class_">Txt</span> =&gt; <span class="hljs-string">&quot;Clicked {@count} {@count == 1 ? &#x27;time&#x27; : &#x27;times&#x27;}&quot;</span>
+})
+</code></pre>
+<p>Example compiled JavaScript output:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> jome <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;jome_lib&#x27;</span>
+<span class="hljs-keyword">import</span> {<span class="hljs-title class_">Btn</span>, <span class="hljs-title class_">Txt</span>, renderHTML} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;html&quot;</span>
+
+<span class="hljs-keyword">var</span> btn
+
+<span class="hljs-comment">// Add a button to the scene which has a text as a children</span>
+btn = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Btn</span>({<span class="hljs-attr">__signal__click</span>: <span class="hljs-function">() =&gt;</span> {<span class="hljs-variable language_">this</span>.<span class="hljs-property">count</span> += <span class="hljs-number">1</span>}})
+btn.<span class="hljs-property">count</span> = <span class="hljs-number">0</span>
+jome.<span class="hljs-title function_">createObj</span>($, btn)
+jome.<span class="hljs-title function_">createObj</span>($.$.$btn, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Txt</span>(<span class="hljs-function">() =&gt;</span> (
+  <span class="hljs-string">`Clicked <span class="hljs-subst">${<span class="hljs-variable language_">this</span>.count}</span> <span class="hljs-subst">${<span class="hljs-variable language_">this</span>.count == <span class="hljs-number">1</span> ? <span class="hljs-string">&#x27;time&#x27;</span> : <span class="hljs-string">&#x27;times&#x27;</span>}</span>`</span>
+)))
+
+<span class="hljs-comment">// Compile all the objects of the scene and write the html to #jome-placeholder div</span>
+<span class="hljs-title function_">renderHTML</span>({<span class="hljs-attr">target</span>: <span class="hljs-string">&#x27;jome-placeholder&#x27;</span>}, $)
+</code></pre>
+<h2>Recipe?</h2>
+<pre><code class="language-jome">{
+  <span class="hljs-title class_">Recipe</span> (
+    name: <span class="hljs-string">&#x27;Chickpea balls&#x27;</span>
+    ingredients:
+      <span class="hljs-variable">1cup</span>, <span class="hljs-string">&quot;dry chickpeas&quot;</span>
+      <span class="hljs-variable">2cup</span>, <span class="hljs-string">&quot;water&quot;</span>
+      <span class="hljs-variable">2tbsp</span>, <span class="hljs-string">&quot;parmesan&quot;</span>
+    instructions:
+      <span class="hljs-string">&quot;Put ...&quot;</span>
+  )
+}
+</code></pre>
+
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      
+      </body>
+    </HTML>
+  

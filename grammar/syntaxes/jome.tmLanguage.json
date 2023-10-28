@@ -172,7 +172,7 @@
 			  },
         {
           "name": "keyword.control.jome",
-          "match": "\\b(yield|while|for|return|from|import|retourne|ret|export|await|async)\\b"
+          "match": "\\b(yield|while|for|return|from|import|retourne|ret|export|await|async|default)\\b"
 			  },
         {
           "name": "keyword.operator.typeof.jome",
