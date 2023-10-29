@@ -9,6 +9,20 @@ const __dirname = path.dirname(__filename);
 
 const JOME_LIB = 'jome'
 
+function saveFile(name, content) {
+  let direct = path.dirname(name)
+  if (!fs.existsSync(direct)) {
+    fs.mkdirSync(direct, { recursive: true })
+  }
+  fs.writeFileSync(name, content, (err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log('File has been written.', name);
+    }
+  });
+}
+
 export function buildFile(fullPath, dependencies = [], run=false) {
   if (!fullPath.endsWith('.jome')) {
     console.warn('Cannot build file without .jome extension', fullPath);
@@ -172,6 +186,30 @@ export class JomeBuilder {
   asset(params={}, filename) {
     let out = path.join(this.outDir, params.as || filename)
     fs.copyFileSync(filename, out)
+  }
+
+  /**
+   * Compiles the given jome file into an intermediary .js file stored in .jome folder.
+   * Then runs this .js file and store the result based on params.as
+   */
+  async src(params={}, relPath) {
+    let type = path.extname(relPath).slice(1)
+    let dir = path.dirname(relPath)
+    let fileAbsPath = path.join(this.projectAbsPath, relPath)
+    let ext = `.${type}.js`
+    this.buildFile(fileAbsPath, ext)
+    let f = path.basename(relPath).slice(0, -5)+ext
+    let f2 = params.as ? path.join(this.outDir, params.as) : path.join(this.outDir, relPath)
+    // if (type === 'html' && useIndexHtmlFiles) {
+    //   f2 = outDir+path.basename(relPath).slice(0, -5)+'/index.html'
+    // } else {
+    //   f2 = outDir+path.basename(relPath).slice(0, -5)+ext.slice(0,-3)
+    // }
+    let result = await import(`../.jome/${path.join('build', dir)}/${f}`);
+    let defaut = result.default
+    saveFile(f2, defaut)
+    // code = code + `import imp{i} from "./{path.join(buildDirName, dir)}/{f}"`+'\n' // FIXME parse newline at the end
+    // "FIXME"
   }
 }
 

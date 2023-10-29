@@ -12,11 +12,6 @@ import { JomeBuilder } from './src/builder.js';
 // Then write a build.jome file inside the hidden .jome folder that simply imports
 // the default from every compiled file, and write the result into the out directory.
 
-let cssFiles = globSync('app/css/*.jome')
-let htmlFiles = globSync('app/views/*.jome')
-
-console.log('htmlFiles', htmlFiles)
-
 let tmpDirName = '.jome/'
 // The absolute path to the directory to contain the intermediary build files and and build runtime file.
 let tmpDir = path.join(__dirname, tmpDirName)
@@ -34,70 +29,85 @@ let outDir = path.join(__dirname, 'docs/')
   rm -R docs/* # FIXME: Use the variables above
 </sh>
 
-let files = []
-cssFiles.forEach(file => (
-  // Ext is required here to tell how to compile these files
-  files.push({relPath: file, type: 'css'})
-))
-
-htmlFiles.forEach(file => (
-  // Ext is required here to tell how to compile these files
-  files.push({relPath: file, type: 'html'})
-))
-
-let useIndexHtmlFiles = true
-
 // let code = 'import fs from "fs";\n'
 let builder = {JomeBuilder projectAbsPath: __dirname, buildAbsPath: buildDir, outDir: outDir} // FIXME: :outdir
 
 builder.asset({as: 'highlight.js.min.css'}, 'node_modules/highlight.js/styles/default.min.css')
+//builder.asset('reset.css')
+builder.src({as: 'stylesheet.css'}, 'app/css/stylesheet.jome')
+builder.src({as: 'index.html'}, 'app/views/home.jome')
+builder.src({as: 'ex/index.html'}, 'app/views/examples.jome')
+builder.src({as: 'lib/index.html'}, 'app/views/librairies.jome')
+builder.src({as: 'lib/html/index.html'}, 'app/views/lib/html.jome')
+builder.src({as: 'editor/index.html'}, 'app/views/editor.jome')
+builder.src({as: 'compiling/index.html'}, 'app/views/compiling.jome')
+builder.src({as: 'index.html'}, 'app/views/home.jome')
 
-/*
-{
-  JomeBuilder
-    html 'views/home', as: '/'
-    html 'views/examples', as: '/ex'
-    html 'views/librairies', as: '/lib'
-    html 'views/editor', as: '/editor'
-    css 'css/'
-    js 'lib/'
-    asset 'node_modules/highlight.js/styles/default.min.css', as: 'highlight.js.min.css' // Files to be copied to the output directory
-    root '/home'
-}
-*/
 
-saveFile = |name, content| -> (
-  let direct = path.dirname(name)
-  if (!fs.existsSync(direct)) (
-    fs.mkdirSync(direct, { recursive: true })
-  )
-  fs.writeFileSync(name, content, |err| => (
-    if (err) (
-      console.error(err);
-    ) else (
-      console.log('File has been written.', name);
-    )
-  ));
-)
+// let cssFiles = globSync('app/css/*.jome')
+// let htmlFiles = globSync('app/views/*.jome')
 
-files.forEach(async |file, i| => (
-  let dir = path.dirname(file.relPath)
-  let fileAbsPath = path.join(__dirname, file.relPath)
-  let ext = `.{file.type}.js`
-  builder.buildFile(fileAbsPath, ext)
-  let f = path.basename(file.relPath).slice(0, -5)+ext
-  let f2
-  if (file.type === 'html' && useIndexHtmlFiles) (
-    f2 = outDir+path.basename(file.relPath).slice(0, -5)+'/index.html'
-  ) else (
-    f2 = outDir+path.basename(file.relPath).slice(0, -5)+ext.slice(0,-3)
-  )
-  let result = await import(`./{tmpDirName}{path.join(buildDirName, dir)}/{f}`);
-  let defaut = result.default
-  saveFile(f2, defaut)
-  // code = code + `import imp{i} from "./{path.join(buildDirName, dir)}/{f}"`+'\n' // FIXME parse newline at the end
-  // "FIXME"
-))
+// console.log('htmlFiles', htmlFiles)
+
+// let files = []
+// cssFiles.forEach(file => (
+//   // Ext is required here to tell how to compile these files
+//   files.push({relPath: file, type: 'css'})
+// ))
+
+// htmlFiles.forEach(file => (
+//   // Ext is required here to tell how to compile these files
+//   files.push({relPath: file, type: 'html'})
+// ))
+
+// let useIndexHtmlFiles = true
+
+// saveFile = |name, content| -> (
+//   let direct = path.dirname(name)
+//   if (!fs.existsSync(direct)) (
+//     fs.mkdirSync(direct, { recursive: true })
+//   )
+//   fs.writeFileSync(name, content, |err| => (
+//     if (err) (
+//       console.error(err);
+//     ) else (
+//       console.log('File has been written.', name);
+//     )
+//   ));
+// )
+
+// files.forEach(async |file, i| => (
+//   let dir = path.dirname(file.relPath)
+//   let fileAbsPath = path.join(__dirname, file.relPath)
+//   let ext = `.{file.type}.js`
+//   builder.buildFile(fileAbsPath, ext)
+//   let f = path.basename(file.relPath).slice(0, -5)+ext
+//   let f2
+//   if (file.type === 'html' && useIndexHtmlFiles) (
+//     f2 = outDir+path.basename(file.relPath).slice(0, -5)+'/index.html'
+//   ) else (
+//     f2 = outDir+path.basename(file.relPath).slice(0, -5)+ext.slice(0,-3)
+//   )
+//   let result = await import(`./{tmpDirName}{path.join(buildDirName, dir)}/{f}`);
+//   let defaut = result.default
+//   saveFile(f2, defaut)
+//   // code = code + `import imp{i} from "./{path.join(buildDirName, dir)}/{f}"`+'\n' // FIXME parse newline at the end
+//   // "FIXME"
+// ))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // FIXME: imports, import should not be a keyword here...
 

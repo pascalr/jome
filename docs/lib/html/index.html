@@ -4,7 +4,7 @@
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Compiling Jome</title>
+        <title>Jome lib html</title>
         <link rel="stylesheet" type="text/css" href="/stylesheet.css">
 <link rel="stylesheet" type="text/css" href="/highlight.js.min.css">
       </head>
@@ -66,44 +66,27 @@
 
             <div class="scrollable" style="width: 100%;">
               <div class="app-content">
-                <h2>Compiling</h2>
-<p>For compiling you need jomec.</p>
-  <h3 id="jomec">jomec</h3>
-<pre><code class="language-sh"><span class="hljs-comment"># Usage</span>
-jomec <span class="hljs-comment"># compiles based on jomeconfig.json</span>
-jomec <span class="hljs-string">&quot;file.jome&quot;</span> <span class="hljs-comment"># compile the given file and it&#x27;s dependencies</span>
-jomec <span class="hljs-string">&quot;views/*.jome&quot;</span> <span class="hljs-comment"># compile all the files that matches the path and their dependencies</span>
+                <h1>Jome lib html</h1>
+<p>FIXME: This should be generated automatically from the source code.</p>
+<h2>Objects</h2>
+<ul>
+<li>Screen: A div that has at a minimum the page size, but can be taller</li>
+<li>Fullscreen: Takes the full size of the page and hides the overflow</li>
+<li>Row: Children are place side by side</li>
+<li>Col: Children are place one on top of the other</li>
+</ul>
+<h2>Html attributes</h2>
+<p>Every parameters passed onto the object will be assigned to the html tag.</p>
+<pre><code class="language-jome">« <span class="hljs-title class_">Div</span> <span class="hljs-keyword">class</span>: <span class="hljs-string">&#x27;d-flex&#x27;</span> » <span class="hljs-comment">// &lt;div class=&#x27;d-flex&#x27;&gt;&lt;/div&gt;</span>
+« <span class="hljs-title class_">Div</span> width: <span class="hljs-variable">100px</span> » <span class="hljs-comment">// &lt;div width=&#x27;100px&#x27;&gt;&lt;/div&gt;</span>
 </code></pre>
-  <h3 id="jomeconfig">jomeconfig.jome</h3>
-<p>Example config file:</p>
-<pre><code class="language-jome"><span class="hljs-keyword">import</span> {<span class="hljs-title class_">JomeConfig</span>} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;jome-config&#x27;</span>
-
-{
-  <span class="hljs-title class_">JomeConfig</span>
-    compilerOptions:
-      <span class="hljs-variable">outDir</span> = <span class="hljs-string">&quot;docs&quot;</span>
-      <span class="hljs-variable">removeComments</span> = <span class="hljs-keyword">true</span>
-      <span class="hljs-variable">sourceMap</span> = <span class="hljs-keyword">true</span>
-      <span class="hljs-variable">addReturnStatements</span> = <span class="hljs-keyword">true</span>
-    <span class="hljs-variable">files</span> = [
-      <span class="hljs-string">&quot;views/*.jome&quot;</span>
-    ]
-}
+<pre><code class="language-jome">« <span class="hljs-title class_">Div</span> style: {width: <span class="hljs-variable">100px</span>, color: <span class="hljs-string">&#x27;red&#x27;</span>} » <span class="hljs-comment">// &lt;div style=&#x27;width: 100px; color: red;&#x27;&gt;&lt;/div&gt;</span>
+« <span class="hljs-title class_">Div</span> <span class="hljs-variable">style</span>.width: <span class="hljs-variable">100px</span>, <span class="hljs-variable">style</span>.color: <span class="hljs-string">&#x27;red&#x27;</span> » <span class="hljs-comment">// &lt;div style=&#x27;width: 100px; color: red;&#x27;&gt;&lt;/div&gt;</span>
 </code></pre>
-  <h3>jomeconfig.json</h3>
-<p>Example config file:</p>
-<pre><code class="language-json"><span class="hljs-punctuation">{</span>
-  <span class="hljs-attr">&quot;compilerOptions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-    <span class="hljs-attr">&quot;outDir&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;docs&quot;</span><span class="hljs-punctuation">,</span>
-    <span class="hljs-attr">&quot;removeComments&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
-    <span class="hljs-attr">&quot;sourceMap&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span>
-  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">&quot;files&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
-    <span class="hljs-string">&quot;views/*.jome&quot;</span>
-  <span class="hljs-punctuation">]</span>
-<span class="hljs-punctuation">}</span>
+<p>ou bien</p>
+<pre><code class="language-jome">« <span class="hljs-title class_">Div</span> css: {width: <span class="hljs-variable">100px</span>, color: <span class="hljs-string">&#x27;red&#x27;</span>} » <span class="hljs-comment">// &lt;div style=&#x27;width: 100px; color: red;&#x27;&gt;&lt;/div&gt;</span>
+« <span class="hljs-title class_">Div</span> <span class="hljs-variable">css</span>.width: <span class="hljs-variable">100px</span>, <span class="hljs-variable">css</span>.color: <span class="hljs-string">&#x27;red&#x27;</span> » <span class="hljs-comment">// &lt;div style=&#x27;width: 100px; color: red;&#x27;&gt;&lt;/div&gt;</span>
 </code></pre>
-<p>TODO: List all the possible options</p>
 
               </div>
             </div>
