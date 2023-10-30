@@ -1,3 +1,7 @@
+
+// Ça pourrait être pratique vu que ça te donnerait c'est quoi les options pour créer la page.
+// Mais ça pourrait aussi être le bordel super rapidement vu qu'il y a bcp d'options.
+// Alors mettre ça de côté pour l'instant.
 export class HtmlPage |
   title? = '',
   stylesheets? = [],

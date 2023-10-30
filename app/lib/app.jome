@@ -1,13 +1,25 @@
-import {HtmlPage} from '../../lib/html-page.jome'
+//import {HtmlPage} from '../../lib/html-page.jome'
 
 requiert navbar from '../views/partials/navbar.jome'
 requiert sidebar from '../views/partials/sidebar.jome'
 
 export class AppPage |title?, content!| => {
-  toString: => (
-    {
-      HtmlPage title: title, body: <html>
-        <div class="d-flex flex-column" style="min-height: 100vh;">
+  toString: => (<html>
+    <!DOCTYPE html>
+      <HTML lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title><%= title %></title>
+          <link rel="stylesheet" type="text/css" href="<%= {$URL} %>/stylesheet.css">
+          <link rel="stylesheet" type="text/css" href="<%= {$URL} %>/highlight.js.min.css">
+          <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+          <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+          <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+          <link rel="manifest" href="/site.webmanifest">
+        </head>
+        <body>
+          <div class="d-flex flex-column" style="min-height: 100vh;">
           <%= navbar %>
           <div style="flex-grow: 1; height: calc(100vh - 50px);">
             <div class="d-flex" style="height: 100%;">
@@ -18,9 +30,7 @@ export class AppPage |title?, content!| => {
               </div>
             </div>
           </div>
-          </div>
-        </div>
-      </html>, stylesheets: [`{$URL}/stylesheet.css`, `{$URL}/highlight.js.min.css`]
-    }.toString()
-  )
+        </body>
+      </HTML>
+  </html>)
 }

@@ -210,7 +210,7 @@ export class JomeBuilder {
   assets(params={}, glob) {
     let files = globSync(path.join(this.projectAbsPath, glob))
     files.forEach(file => {
-      let out = path.join(this.projectAbsPath, params.into, path.basename(file))
+      let out = path.join(this.outDir, params.into, path.basename(file))
       fs.copyFileSync(file, out)
     })
   }
