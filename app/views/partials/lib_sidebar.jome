@@ -1,9 +1,0 @@
-<html>
-  <div id="left-nav">
-    <ul class="nav-list">
-      <li><a href="/lib">Home</a></li>
-      <b>Librairies</b>
-      <li><a href="/lib/html">Html</a></li>
-    </ul>
-  </div>
-</html>

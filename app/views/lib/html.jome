@@ -1,7 +1,5 @@
 import {AppPage} from '../../lib/app.jome'
 
-requiert libSidebar from '../partials/lib_sidebar.jome'
-
 text23 = <md>
 
   # Jome lib html
