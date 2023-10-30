@@ -4,11 +4,10 @@ import {globSync} from 'glob'
 import fs from 'fs'
 import path from 'path'
 
-import { JomeBuilder } from './src/builder.js';
+import { JomeBuilder } from './src/builder.js'
+import {ExpressServer} from './lib/express_server.jome'
 
 $URL = '/jome'
-
-// THE FILES MUST NOT ONLY BE COMPILED, THEY MUST BE RUN...
 
 // Take the files, compile them as .js files inside a hidden .jome folder
 // Then write a build.jome file inside the hidden .jome folder that simply imports
@@ -32,74 +31,26 @@ let outDir = path.join(__dirname, 'docs/')
 </sh>
 
 // let code = 'import fs from "fs";\n'
-let builder = {JomeBuilder projectAbsPath: __dirname, buildAbsPath: buildDir, outDir: outDir} // FIXME: :outdir
+{
+JomeBuilder projectAbsPath: __dirname, buildAbsPath: buildDir, outDir: outDir // FIXME: :outdir
+  asset 'node_modules/highlight.js/styles/default.min.css', as: 'highlight.js.min.css'
+  // asset 'reset.css'
+  src 'app/css/stylesheet.jome', as: 'stylesheet.css'
+  src 'app/views/home.jome', as: 'index.html'
+  src 'app/views/examples.jome', as: 'ex/index.html'
+  src 'app/views/librairies.jome', as: 'lib/index.html'
+  src 'app/views/lib/html.jome', as: 'lib/html/index.html'
+  src 'app/views/editor.jome', as: 'editor/index.html'
+  src 'app/views/compiling.jome', as: 'compiling/index.html'
+  src 'app/views/home.jome', as: 'index.html'
 
-builder.asset({as: 'highlight.js.min.css'}, 'node_modules/highlight.js/styles/default.min.css')
-//builder.asset('reset.css')
-builder.src({as: 'stylesheet.css'}, 'app/css/stylesheet.jome')
-builder.src({as: 'index.html'}, 'app/views/home.jome')
-builder.src({as: 'ex/index.html'}, 'app/views/examples.jome')
-builder.src({as: 'lib/index.html'}, 'app/views/librairies.jome')
-builder.src({as: 'lib/html/index.html'}, 'app/views/lib/html.jome')
-builder.src({as: 'editor/index.html'}, 'app/views/editor.jome')
-builder.src({as: 'compiling/index.html'}, 'app/views/compiling.jome')
-builder.src({as: 'index.html'}, 'app/views/home.jome')
-
-
-// let cssFiles = globSync('app/css/*.jome')
-// let htmlFiles = globSync('app/views/*.jome')
-
-// console.log('htmlFiles', htmlFiles)
-
-// let files = []
-// cssFiles.forEach(file => (
-//   // Ext is required here to tell how to compile these files
-//   files.push({relPath: file, type: 'css'})
-// ))
-
-// htmlFiles.forEach(file => (
-//   // Ext is required here to tell how to compile these files
-//   files.push({relPath: file, type: 'html'})
-// ))
-
-// let useIndexHtmlFiles = true
-
-// saveFile = |name, content| -> (
-//   let direct = path.dirname(name)
-//   if (!fs.existsSync(direct)) (
-//     fs.mkdirSync(direct, { recursive: true })
-//   )
-//   fs.writeFileSync(name, content, |err| => (
-//     if (err) (
-//       console.error(err);
-//     ) else (
-//       console.log('File has been written.', name);
-//     )
-//   ));
-// )
-
-// files.forEach(async |file, i| => (
-//   let dir = path.dirname(file.relPath)
-//   let fileAbsPath = path.join(__dirname, file.relPath)
-//   let ext = `.{file.type}.js`
-//   builder.buildFile(fileAbsPath, ext)
-//   let f = path.basename(file.relPath).slice(0, -5)+ext
-//   let f2
-//   if (file.type === 'html' && useIndexHtmlFiles) (
-//     f2 = outDir+path.basename(file.relPath).slice(0, -5)+'/index.html'
-//   ) else (
-//     f2 = outDir+path.basename(file.relPath).slice(0, -5)+ext.slice(0,-3)
-//   )
-//   let result = await import(`./{tmpDirName}{path.join(buildDirName, dir)}/{f}`);
-//   let defaut = result.default
-//   saveFile(f2, defaut)
-//   // code = code + `import imp{i} from "./{path.join(buildDirName, dir)}/{f}"`+'\n' // FIXME parse newline at the end
-//   // "FIXME"
-// ))
-
-
-
-
+ExpressServer port: 3000
+  useStatic '/jome', 'docs'
+  get '/', |req, res| => (
+    res.redirect('/jome')
+  )
+  run
+}
 
 
 
