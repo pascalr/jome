@@ -21,8 +21,14 @@ export class ExpressServer |
     ))
   )
 
-  useStatic: |path| => (@app.use(express.static(path)))
-  use: |middleware| => (@app.use(middleware))
+  useStatic: |urlOrPath, path| => (
+    if (path) (
+      @app.use(urlOrPath, express.static(path))
+    ) else (
+      @app.use(express.static(urlOrPath))
+    )
+  )
+  use: |pathOrMiddleware, middleware| => (@app.use(pathOrMiddleware, middleware))
   get: |path, func| => (@app.get(path, func))
   put: |path, func| => (@app.put(path, func))
   post: |path, func| => (@app.post(path, func))

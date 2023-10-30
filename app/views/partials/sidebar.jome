@@ -8,38 +8,38 @@
 <html>
   <div id="left-nav" class="scrollable">
     <ul class="nav-list">
-      <li><a href="/">Home</a></li>
-      <li><a href="/#lang-ref">Language Reference</a></li>
+      <li><a href="<%= $URL %>/">Home</a></li>
+      <li><a href="<%= $URL %>/#lang-ref">Language Reference</a></li>
       <ul class="nav-list nav-sub">
-        <li><a href="/#syntax">Syntax</a></li>
-        <li><a href="/#blocks">Blocks</a></li>
-        <li><a href="/#nodes">Nodes</a></li>
-        <li><a href="/#scripts">Scripts</a></li>
-        <li><a href="/#named-parameters">Named parameters</a></li>
-        <li><a href="/#classes">Classes</a></li>
-        <li><a href="/#interfaces">Interfaces</a></li>
-        <li><a href="/#arrow-getter">Arrow getter</a></li>
-        <li><a href="/#instance-driven-dev">Instance driven development</a></li>
-        <li><a href="/#verbatim">Verbatim string literals</a></li>
-        <li><a href="/#units">Units</a></li>
-        <li><a href="/#hyphens">Hyphen</a></li>
+        <li><a href="<%= $URL %>/#syntax">Syntax</a></li>
+        <li><a href="<%= $URL %>/#blocks">Blocks</a></li>
+        <li><a href="<%= $URL %>/#nodes">Nodes</a></li>
+        <li><a href="<%= $URL %>/#scripts">Scripts</a></li>
+        <li><a href="<%= $URL %>/#named-parameters">Named parameters</a></li>
+        <li><a href="<%= $URL %>/#classes">Classes</a></li>
+        <li><a href="<%= $URL %>/#interfaces">Interfaces</a></li>
+        <li><a href="<%= $URL %>/#arrow-getter">Arrow getter</a></li>
+        <li><a href="<%= $URL %>/#instance-driven-dev">Instance driven development</a></li>
+        <li><a href="<%= $URL %>/#verbatim">Verbatim string literals</a></li>
+        <li><a href="<%= $URL %>/#units">Units</a></li>
+        <li><a href="<%= $URL %>/#hyphens">Hyphen</a></li>
       </ul>
-      <li><a href="/compiling">Compiling</a></li>
+      <li><a href="<%= $URL %>/compiling">Compiling</a></li>
       <ul class="nav-list nav-sub">
-        <li><a href="/compiling#jomec">jomec</a></li>
-        <li><a href="/compiling#jomeconfig">jomeconfig.json</a></li>
+        <li><a href="<%= $URL %>/compiling#jomec">jomec</a></li>
+        <li><a href="<%= $URL %>/compiling#jomeconfig">jomeconfig.json</a></li>
       </ul>
-      <li><a href="/lib">Librairies</a></li>
+      <li><a href="<%= $URL %>/lib">Librairies</a></li>
       <ul class="nav-list nav-sub">
-        <li><a href="/lib/html">Html</a></li>
-        <li><a href="/lib/html-layout">Html Layout</a></li>
-        <li><a href="/lib/express-server">Express Server</a></li>
+        <li><a href="<%= $URL %>/lib/html">Html</a></li>
+        <li><a href="<%= $URL %>/lib/html-layout">Html Layout</a></li>
+        <li><a href="<%= $URL %>/lib/express-server">Express Server</a></li>
       </ul>
-      <li><a href="/ex">Examples</a></li>
+      <li><a href="<%= $URL %>/ex">Examples</a></li>
       <ul class="nav-list nav-sub">
-        <li><a href="/ex#hello-world">Hello world</a></li>
-        <li><a href="/ex#snake">Snake</a></li>
-        <li><a href="/ex">Script</a></li>
+        <li><a href="<%= $URL %>/ex#hello-world">Hello world</a></li>
+        <li><a href="<%= $URL %>/ex#snake">Snake</a></li>
+        <li><a href="<%= $URL %>/ex">Script</a></li>
       </ul>
     </ul>
   </div>

@@ -40,6 +40,6 @@ import {ExpressServer} from './lib/express_server.jome'
   // get '/reset.css', |req, res| => (
   //   res.sendFile(__dirname+'/reset.css')
   // )
-  useStatic 'docs'
+  useStatic '/jome', 'docs'
   run
 }

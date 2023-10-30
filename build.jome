@@ -6,6 +6,8 @@ import path from 'path'
 
 import { JomeBuilder } from './src/builder.js';
 
+$URL = '/jome'
+
 // THE FILES MUST NOT ONLY BE COMPILED, THEY MUST BE RUN...
 
 // Take the files, compile them as .js files inside a hidden .jome folder

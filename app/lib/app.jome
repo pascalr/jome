@@ -20,7 +20,7 @@ export class AppPage |title?, content!| => {
           </div>
           </div>
         </div>
-      </html>, stylesheets: ["/stylesheet.css", "/highlight.js.min.css"]
+      </html>, stylesheets: [`{$URL}/stylesheet.css`, `{$URL}/highlight.js.min.css`]
     }.toString()
   )
 }

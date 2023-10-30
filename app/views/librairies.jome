@@ -15,7 +15,7 @@ content = <md>
 
   ### Common librairies
 
-  - [Html](/lib/html)
+  - [Html](<%= $URL %>/lib/html)
 </md>
 
 main {

@@ -580,6 +580,11 @@ export function escapeBackticks(inputString) {
 // keyword can be 'var', 'def' or null (null means const)
 function assignVariable(node, ctx, keyword) {
   let value = node.text()
+  if (value.startsWith('$')) {
+    let next = node.captureNext() // The = sign (keyword.operator.assignment.compound.jome)
+    next = next.captureNext()
+    return 'process.env.'+value.slice(1)+' = '+compileNode(next, ctx)
+  }
   let outKeyword = ''
   let isAssignment = node.type === 'variable.assignment.jome'
   if (keyword === 'var') {
@@ -911,6 +916,10 @@ const PROCESSES = {
       case 'no': case 'non': return 'false'
       default: throw new Error("FIXME constant: " + node.text())
     }
+  },
+  // $ENV_VAR
+  "variable.other.environment.jome": (node, ctx) => {
+    return 'process.env.'+node.text().slice(1)
   },
   // 10g
   "meta.number-with-unit.jome": (node, ctx) => {

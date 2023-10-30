@@ -524,9 +524,26 @@ main {
   debug(nomDeVariable) // => Debugging nomDeVariable: Value 10
   ```
 
+  ## String modifier
+
+  Idée:
+
+  J'aimerais pouvoir faire
+  $"$URL/stylesheet.css"
+  ou
+  "$URL/stylesheet.css"$
+  ou
+  au lieu de
+  `{$URL}/stylesheet.css`
+  Ça serait plus simple mettre le modificateur avec pour parser, mais c'est plus beau après.
+
   ## Main
 
   The `main` keyword is compiled to `export default`.
+
+  ## Environment variables
+
+  Environment variables start with a dollar sign. For example, `$MY_ENV_VAR = 'foo'`.
 
   ## Contributing
 

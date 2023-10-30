@@ -242,10 +242,16 @@
 			}]
 		},
     "variable": {
-			"patterns": [{
-				"name": "variable.other.jome",
-				"match": "\\w+"
-			}]
+			"patterns": [
+        {
+          "name": "variable.other.environment.jome",
+          "match": "\\$\\w+"
+		  	},
+        {
+          "name": "variable.other.jome",
+          "match": "\\w+"
+        }
+      ]
 		},
     "getter": {
 			"patterns": [{
