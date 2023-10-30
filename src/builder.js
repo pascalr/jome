@@ -3,6 +3,7 @@ import path from 'path';
 import { CompileContext } from './compile_context.js';
 import { compile, compileGetContext } from './compiler.js';
 import { fileURLToPath } from 'url';
+//import {globSync} from 'glob'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -100,11 +101,26 @@ export function buildFile(fullPath, dependencies = [], run=false) {
   return {buildFileName, context}
 }
 
+// Take the files, compile them as .js files inside a hidden .jome folder
+// Then write a build.jome file inside the hidden .jome folder that simply imports
+// the default from every compiled file, and write the result into the out directory.
 export class JomeBuilder {
   constructor(params={}) {
+
     this.projectAbsPath = params.projectAbsPath
-    this.buildAbsPath = params.buildAbsPath
-    this.outDir = params.outDir
+
+    let defaultTmpDirName = '.jome/'
+    // The absolute path to the directory to contain the intermediary build files and and build runtime file.
+    let defaultTmpDir = path.join(this.projectAbsPath, defaultTmpDirName)
+    // The name of the build directory inside the temporary directy
+    let defaultBuildDirName = 'build'
+    // The absolute path of the intermediary build directory
+    let defaultBuildDir = path.join(defaultTmpDir, defaultBuildDirName)
+    // The absolute path of the output directory
+    let defaultOutDir = path.join(this.projectAbsPath, 'docs/')
+
+    this.buildAbsPath = params.buildAbsPath || defaultBuildDir
+    this.outDir = params.outDir || defaultOutDir
     this.dependencies = []
   }
 

@@ -1,26 +1,7 @@
-// At first, I will just do everything I need to do here, after I will abstract it to be used by jomec.
-
-import {globSync} from 'glob'
-import path from 'path'
-
 import { JomeBuilder } from './src/builder.js'
 import {ExpressServer} from './lib/express_server.jome'
 
 $URL = '/jome'
-
-// Take the files, compile them as .js files inside a hidden .jome folder
-// Then write a build.jome file inside the hidden .jome folder that simply imports
-// the default from every compiled file, and write the result into the out directory.
-
-let tmpDirName = '.jome/'
-// The absolute path to the directory to contain the intermediary build files and and build runtime file.
-let tmpDir = path.join(__dirname, tmpDirName)
-// The name of the build directory inside the temporary directy
-let buildDirName = 'build'
-// The absolute path of the intermediary build directory
-let buildDir = path.join(tmpDir, buildDirName)
-// The absolute path of the output directory
-let outDir = path.join(__dirname, 'docs/')
 
 <sh>
   touch .jome/useless # Otherwise rm complains when the folder is empty
@@ -30,7 +11,7 @@ let outDir = path.join(__dirname, 'docs/')
 </sh>
 
 {
-JomeBuilder projectAbsPath: __dirname, buildAbsPath: buildDir, outDir: outDir // FIXME: :outdir
+JomeBuilder projectAbsPath: __dirname
   asset 'node_modules/highlight.js/styles/default.min.css', as: 'highlight.js.min.css'
   // asset 'reset.css'
   src 'app/css/stylesheet.jome', as: 'stylesheet.css'
