@@ -545,6 +545,10 @@ main {
 
   Environment variables start with a dollar sign. For example, `$MY_ENV_VAR = 'foo'`.
 
+  Environment variables or global variables it is not clear yet.
+
+  I don't like __dirname. I think it is ugly. Maybe $DIRNAME instead? It should be $DIRPATH really... maybe $DIR
+
   ## Contributing
 
   I recommend using visual studio code for now because it is super usefull for debugging tokenization. You hit Ctrl+Shift+P,

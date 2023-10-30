@@ -12,7 +12,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "runtimeArgs": ["jome.js", "server.jome"],
+      "runtimeArgs": ["jome.js", "run.jome"],
       "program": "${workspaceFolder}/jome.js"
     },
     {
@@ -23,16 +23,6 @@
         "<node_internals>/**"
       ],
       "runtimeArgs": ["jome.js", "test.jome"],
-      "program": "${workspaceFolder}/jome.js"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Run build",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "runtimeArgs": ["jome.js", "build.jome"],
       "program": "${workspaceFolder}/jome.js"
     },
   ]

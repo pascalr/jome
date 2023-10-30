@@ -1,7 +1,6 @@
 // At first, I will just do everything I need to do here, after I will abstract it to be used by jomec.
 
 import {globSync} from 'glob'
-import fs from 'fs'
 import path from 'path'
 
 import { JomeBuilder } from './src/builder.js'
@@ -30,7 +29,6 @@ let outDir = path.join(__dirname, 'docs/')
   rm -R docs/* # FIXME: Use the variables above
 </sh>
 
-// let code = 'import fs from "fs";\n'
 {
 JomeBuilder projectAbsPath: __dirname, buildAbsPath: buildDir, outDir: outDir // FIXME: :outdir
   asset 'node_modules/highlight.js/styles/default.min.css', as: 'highlight.js.min.css'
@@ -51,45 +49,3 @@ ExpressServer port: 3000
   )
   run
 }
-
-
-
-
-
-
-
-
-
-
-
-// FIXME: imports, import should not be a keyword here...
-
-// code = code + @`
-
-// function saveFile(name, content) {
-//   fs.writeFileSync(name, content, (err) => {
-//     if (err) {
-//       console.error(err);
-//     } else {
-//       console.log('File has been written.', name);
-//     }
-//   });
-// }
-
-// `
-
-// files.forEach(|file, i| => (
-//   let ext2 = `.{file.type}.js`
-//   let f2
-//   if (file.type === 'html' && useIndexHtmlFiles) (
-//     f2 = outDir+path.basename(file.relPath).slice(0, -5)+'/index.html'
-//   ) else (
-//     f2 = outDir+path.basename(file.relPath).slice(0, -5)+ext2.slice(0,-3)
-//   )
-//   code = code + `saveFile("{f2}", imp{i})`+'\n' // FIXME parse newline at the end
-//   "FIXME"
-// ))
-
-// let linker = './.jome/build.js'
-// fs.writeFileSync(linker, code)
-// await import(linker);
