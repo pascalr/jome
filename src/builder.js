@@ -3,7 +3,7 @@ import path from 'path';
 import { CompileContext } from './compile_context.js';
 import { compile, compileGetContext } from './compiler.js';
 import { fileURLToPath } from 'url';
-//import {globSync} from 'glob'
+import {globSync} from 'glob'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -197,11 +197,22 @@ export class JomeBuilder {
   }
 
   /**
-   * Copies files to the output directory
+   * Copies a single file to the output directory
    */
   asset(params={}, filename) {
     let out = path.join(this.outDir, params.as || filename)
     fs.copyFileSync(filename, out)
+  }
+
+  /**
+   * Copies files to the output directory
+   */
+  assets(params={}, glob) {
+    let files = globSync(path.join(this.projectAbsPath, glob))
+    files.forEach(file => {
+      let out = path.join(this.projectAbsPath, params.into, path.basename(file))
+      fs.copyFileSync(file, out)
+    })
   }
 
   /**

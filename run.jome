@@ -13,6 +13,7 @@ $URL = '/jome'
 {
 JomeBuilder projectAbsPath: __dirname
   asset 'node_modules/highlight.js/styles/default.min.css', as: 'highlight.js.min.css'
+  assets 'app/favicon/*', into: '/'
   // asset 'reset.css'
   src 'app/css/stylesheet.jome', as: 'stylesheet.css'
   src 'app/views/home.jome', as: 'index.html'
