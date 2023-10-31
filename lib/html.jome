@@ -1,3 +1,38 @@
+// TODO: The ARIA role attribute and the multiple aria-* states and properties, used for ensuring accessibility.
+// TODO: The event handler attributes: onabort, onautocomplete, onautocompleteerror, onblur, oncancel, oncanplay, oncanplaythrough, onchange, onclick, onclose, oncontextmenu, oncuechange, ondblclick, ondrag, ondragend, ondragenter, ondragleave, ondragover, ondragstart, ondrop, ondurationchange, onemptied, onended, onerror, onfocus, oninput, oninvalid, onkeydown, onkeypress, onkeyup, onload, onloadeddata, onloadedmetadata, onloadstart, onmousedown, onmouseenter, onmouseleave, onmousemove, onmouseout, onmouseover, onmouseup, onmousewheel, onpause, onplay, onplaying, onprogress, onratechange, onreset, onresize, onscroll, onseeked, onseeking, onselect, onshow, onsort, onstalled, onsubmit, onsuspend, ontimeupdate, ontoggle, onvolumechange, onwaiting.
+// interface GlobalAttributes |
+//   accesskey?,
+//   autocapitalize?,
+//   autofocus?,
+//   class?,
+//   contenteditable?,
+//   dir?,
+//   draggable?,
+//   enterkeyhint?,
+//   hidden?,
+//   id?,
+//   inert?,
+//   inputmode?,
+//   is?,
+//   itemid?,
+//   itemprop?,
+//   itemref?,
+//   itemscope?,
+//   itemtype?,
+//   lang?,
+//   nonce?,
+//   part?,
+//   popover?,
+//   role?,
+//   slot?,
+//   spellcheck?,
+//   style?,
+//   tabindex?,
+//   title?,
+//   translate?,
+//   virtualkeyboardpolicy?,
+// |
+
 def renderHTMLAttrs = |obj| => (
   var r = obj->signals->keys.map(n =>
     `on{n}="jome.run('${obj->path}.{n}()')"`
