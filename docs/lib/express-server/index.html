@@ -1,0 +1,90 @@
+
+    <!DOCTYPE html>
+      <HTML lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Jome express server</title>
+          <link rel="stylesheet" type="text/css" href="/jome/stylesheet.css">
+          <link rel="stylesheet" type="text/css" href="/jome/highlight.js.min.css">
+          <link rel="apple-touch-icon" sizes="180x180" href="/jome/apple-touch-icon.png">
+          <link rel="icon" type="image/png" sizes="32x32" href="/jome/favicon-32x32.png">
+          <link rel="icon" type="image/png" sizes="16x16" href="/jome/favicon-16x16.png">
+          <link rel="manifest" href="/jome/site.webmanifest">
+        </head>
+        <body>
+          <div class="d-flex flex-column" style="min-height: 100vh;">
+          
+  <div class="navbar">
+    <span class="navbrand" href="#">Jome</span>
+    <a href="/jome/editor">Editor</a>
+    <a href="/jome/">Home</a>
+    <a href="/jome/#lang-ref">Language Reference</a>
+    <a href="/jome/ex">Examples</a>
+    <a href="/jome/lib">Librairies</a>
+    <a href="/jome/compiling">Compiling</a>
+    <a href="https://github.com/pascalr/jome">GitHub</a>
+  </div>
+
+          <div style="flex-grow: 1; height: calc(100vh - 50px);">
+            <div class="d-flex" style="height: 100%;">
+            
+  <div id="left-nav" class="scrollable">
+    <ul class="nav-list">
+      <li><a href="/jome/">Home</a></li>
+      <li><a href="/jome/#lang-ref">Language Reference</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/jome/#syntax">Syntax</a></li>
+        <li><a href="/jome/#blocks">Blocks</a></li>
+        <li><a href="/jome/#nodes">Nodes</a></li>
+        <li><a href="/jome/#scripts">Scripts</a></li>
+        <li><a href="/jome/#named-parameters">Named parameters</a></li>
+        <li><a href="/jome/#classes">Classes</a></li>
+        <li><a href="/jome/#interfaces">Interfaces</a></li>
+        <li><a href="/jome/#arrow-getter">Arrow getter</a></li>
+        <li><a href="/jome/#instance-driven-dev">Instance driven development</a></li>
+        <li><a href="/jome/#verbatim">Verbatim string literals</a></li>
+        <li><a href="/jome/#units">Units</a></li>
+        <li><a href="/jome/#hyphens">Hyphen</a></li>
+      </ul>
+      <li><a href="/jome/compiling">Compiling</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/jome/compiling#jomec">jomec</a></li>
+        <li><a href="/jome/compiling#jomeconfig">jomeconfig.json</a></li>
+      </ul>
+      <li><a href="/jome/lib">Librairies</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/jome/lib/html">Html</a></li>
+        <li><a href="/jome/lib/html-layout">Html Layout</a></li>
+        <li><a href="/jome/lib/express-server">Express Server</a></li>
+      </ul>
+      <li><a href="/jome/ex">Examples</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/jome/ex#hello-world">Hello world</a></li>
+        <li><a href="/jome/ex#snake">Snake</a></li>
+        <li><a href="/jome/ex">Script</a></li>
+      </ul>
+    </ul>
+  </div>
+
+            <div class="scrollable" style="width: 100%;">
+              <div class="app-content">
+                <h1>Express Server</h1>
+<p>ExpressServer is a wrapper for express in Jome.</p>
+<h2>Usage</h2>
+<pre><code class="language-jome">{
+  <span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span>
+    <span class="hljs-variable">useStatic</span> <span class="hljs-string">&#x27;/jome&#x27;</span>, <span class="hljs-string">&#x27;docs&#x27;</span>
+    <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span>, |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>| =&gt; (
+      <span class="hljs-variable">res</span>.<span class="hljs-title function_">redirect</span>(<span class="hljs-string">&#x27;/jome&#x27;</span>)
+    )
+}
+<span class="hljs-variable">run</span>
+</code></pre>
+
+              </div>
+            </div>
+          </div>
+        </body>
+      </HTML>
+  
