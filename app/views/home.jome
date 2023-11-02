@@ -333,6 +333,34 @@ main {
   class Span |arg, &HtmlOptions| => {/* ... */}
   ```
 
+  I don't know yet how I want to refer to the interface values. Directly or through the interface name?
+  Maybe allow both?
+
+  ```jome
+  class Div &HtmlOption => {
+    toString: => (
+      let widthPlus1 = width + 1
+      // or
+      let widthPlus1 = HtmlOption.width + 1
+    )
+  }
+  ```
+
+  In an interface, you can define arguments, parameters and attributes.
+
+  ```jome
+  interface Example |
+    argument,
+    parameter?,
+    @requiredAttribute,
+    @optionalAttribute?
+  |
+  ```
+
+  Maybe also latter possible to define function that must be implemented by the class using the interface.
+
+  An interface can be used by classes and by functions.
+
   ### Functions
 
   Il doit y avoir un espace avant le -> pour que ce soit une fonction. Sinon, c'est le meta accessor.
