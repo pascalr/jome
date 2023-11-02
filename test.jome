@@ -17,8 +17,7 @@ interface TestInterface |
   arg,
   param?
 |
-// let funcTest = &TestInterface => (arg + param)
-// let funcTestResult = funcTest(10, param: 20)
+let testInterface = &TestInterface => (arg + param)
 
 // TODO: Test Use <HTML> to add an html tag inside <html><HTML></HTML></html>
 
@@ -274,4 +273,7 @@ ten = 10;
 
   TestEq testFuncCall, 5, "testFuncCall"
   TestEq testChainFuncCall, 5, "testChainFuncCall"
+
+  titre 'Test des interfaces'
+  TestEq testInterface(10, param: 20), 30, "testInterface(10, param: 20)"
 }

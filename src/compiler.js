@@ -289,6 +289,14 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
       let type = insideClassFunction ? 'argument-class-function' : 'argument'
       ctx.addBinding(value, {type})
       args[value] = {type}
+
+    } else if (child.type === 'entity.name.type.interface-ref.jome') {
+      let name = child.text().slice(1)
+      let inter = ctx.interfaces[name]
+      args = {...args, ...inter.args}
+      hasParams = hasParams || inter.hasParams
+      attrParams = [...attrParams, inter.attrParams]
+      paramsValues = {...paramsValues, ...inter.paramsValues}
     }
   })
   let argNames = Object.keys(args)

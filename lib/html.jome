@@ -54,7 +54,7 @@ def renderHTMLChildren = |obj| => (
   obj->children.map(c => (c.toString ? c.toString() : '')).join("")
 )
 
-def renderHTML = |obj, &target| => (
+def renderHTML = |obj, target?| => (
   var elem = document.getElementById(target)
   children = []
   html = ''

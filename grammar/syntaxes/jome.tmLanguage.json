@@ -185,6 +185,12 @@
 			  }
       ]
 		},
+    "interface-ref": {
+      "patterns": [    {
+        "name": "entity.name.type.interface-ref.jome",
+        "match": "&\\w+"
+      }]
+    },
     "interface": {
       "patterns": [    {
         "name": "meta.interface.jome",
@@ -225,12 +231,16 @@
           "name": "meta.function.jome",
           "match": "([a-zA-Z_]\\w*)\\s*?(=>| -> )",
           "captures": {
-            "1": {
-              "name": "variable.parameter.jome"
-            },
-            "2": {
-              "name": "keyword.arrow.jome"
-            }
+            "1": {"name": "variable.parameter.jome"},
+            "2": {"name": "keyword.arrow.jome"}
+          }
+        },
+        {
+          "name": "meta.function.jome",
+          "match": "(&[a-zA-Z_]\\w*)\\s*?(=>| -> )",
+          "captures": {
+            "1": {"name": "entity.name.type.interface-ref.jome"},
+            "2": {"name": "keyword.arrow.jome"}
           }
         },
         {
@@ -242,7 +252,7 @@
             "1": {"name": "punctuation.definition.args.end.jome"},
             "2": {"name": "keyword.arrow.jome"}
           },
-          "patterns": [{ "include": "#expression" }]
+          "patterns": [{ "include": "#expression"}, {"include": "#interface-ref" }]
         }
       ]
     },
