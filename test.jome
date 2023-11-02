@@ -13,6 +13,12 @@ import {H1} from './lib/html.jome'
 // import defaultExport, * as name from "module-name";
 // // import "module-name"; TODO: Not written yet in the parser
 
+// interface TestInterface |
+//   arg,
+//   param?
+// |
+// let funcTest = &TestInterface => (arg + param)
+// let funcTestResult = funcTest(10, param: 20)
 
 // TODO: Test Use <HTML> to add an html tag inside <html><HTML></HTML></html>
 
@@ -119,12 +125,20 @@ titre = |texte| => (
   console.log('%c' + texte, 'color: yellow')
 );
 
+// FIXME: THIS IS NOT WORKING YET BECAUSE OF THE H1 CLASS!!!
+// export class H1 text => { super: Tag "h1", text }
+// Le problème est que présentement je crée un constructeur sans paramètres...
+// TODO: Générer une erreur quand on fournit des paramètres à une fonction qui ne prend pas de paramètres
+// Ça ne marche pas parce que ça ne génère par un premier paramètre qui s'appelle params
 var obj = { H1 "Un titre", css: {color: 'red'} };
+var obj2 = { H1 "Un titre 2", title: 'This is a tooltip' };
+var str2 = obj2.toString();
 
 {
   titre 'Test avec objects html'
   TestEq { H1 "Un titre" }.toString(), "<h1>Un titre</h1>", "«H1 \"Un titre\"».toString()"
   TestEq obj.toString(), "<h1 style='color: red;'>Un titre</h1>", "« H1 \"Un titre\", css: {color: 'red'} ».toString()"
+  TestEq obj2.toString(), "<h1 title='This is a tooltip'>Un titre 2</h1>", "« H1 \"Un titre\", title: 'This is a tooltip' ».toString()"
 
   // TODO: TestEq [1,2,3][0..1], [1,2], "Test range inclusif"
   // TODO: TestEq [1,2,3][0...2], [1,2], "Test range exclusif"

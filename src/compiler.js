@@ -4,6 +4,7 @@ import { CompileContext } from './compile_context.js'
 import fs from 'fs'
 import path from 'path'
 import compileMarkdown from './compilers/markdown.js'
+import { analyze } from './analyzer.js'
 
 const JOME_LIB = 'jome'
 const JOME_ROOT = '$'
@@ -1120,6 +1121,7 @@ export function compile(text) {
 
 export function compileGetContext(text, ctx, isNested = false) {
   let root = tokenize(text)
+  analyze(root)
   let context = ctx || new CompileContext()
   // console.log('tokenized:', root.print())
   let r1 = compileNode(root, context)
