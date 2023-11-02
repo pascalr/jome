@@ -1,38 +1,38 @@
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes
 // TODO: The ARIA role attribute and the multiple aria-* states and properties, used for ensuring accessibility.
 // TODO: The event handler attributes: onabort, onautocomplete, onautocompleteerror, onblur, oncancel, oncanplay, oncanplaythrough, onchange, onclick, onclose, oncontextmenu, oncuechange, ondblclick, ondrag, ondragend, ondragenter, ondragleave, ondragover, ondragstart, ondrop, ondurationchange, onemptied, onended, onerror, onfocus, oninput, oninvalid, onkeydown, onkeypress, onkeyup, onload, onloadeddata, onloadedmetadata, onloadstart, onmousedown, onmouseenter, onmouseleave, onmousemove, onmouseout, onmouseover, onmouseup, onmousewheel, onpause, onplay, onplaying, onprogress, onratechange, onreset, onresize, onscroll, onseeked, onseeking, onselect, onshow, onsort, onstalled, onsubmit, onsuspend, ontimeupdate, ontoggle, onvolumechange, onwaiting.
-// interface GlobalAttributes |
-//   accesskey?,
-//   autocapitalize?,
-//   autofocus?,
-//   class?,
-//   contenteditable?,
-//   dir?,
-//   draggable?,
-//   enterkeyhint?,
-//   hidden?,
-//   id?,
-//   inert?,
-//   inputmode?,
-//   is?,
-//   itemid?,
-//   itemprop?,
-//   itemref?,
-//   itemscope?,
-//   itemtype?,
-//   lang?,
-//   nonce?,
-//   part?,
-//   popover?,
-//   role?,
-//   slot?,
-//   spellcheck?,
-//   style?,
-//   tabindex?,
-//   title?,
-//   translate?,
-//   virtualkeyboardpolicy?,
-// |
+interface GlobalAttributes |
+  accesskey?,
+  autocapitalize?,
+  autofocus?,
+  class?,
+  contenteditable?,
+  dir?,
+  draggable?,
+  enterkeyhint?,
+  hidden?,
+  id?,
+  inert?,
+  inputmode?,
+  is?,
+  itemid?,
+  itemprop?,
+  itemref?,
+  itemscope?,
+  itemtype?,
+  lang?,
+  nonce?,
+  part?,
+  popover?,
+  role?,
+  slot?,
+  spellcheck?,
+  style?,
+  tabindex?,
+  title?,
+  translate?,
+  virtualkeyboardpolicy?,
+|
 
 def renderHTMLAttrs = |obj| => (
   var r = obj->signals->keys.map(n =>
@@ -175,7 +175,7 @@ class Fragment => {
   )
 }
 
-export class H1 text => { super: Tag "h1", text }
+export class H1 |text, &GlobalAttributes| => { super: Tag "h1", text }
 class H2 text => { super: Tag "h2", text }
 class H3 text => { super: Tag "h3", text }
 class P text => { super: Tag "p", text }

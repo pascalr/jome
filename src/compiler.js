@@ -295,7 +295,7 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
       let inter = ctx.interfaces[name]
       args = {...args, ...inter.args}
       hasParams = hasParams || inter.hasParams
-      attrParams = [...attrParams, inter.attrParams]
+      attrParams = [...attrParams, ...inter.attrParams]
       paramsValues = {...paramsValues, ...inter.paramsValues}
     }
   })
