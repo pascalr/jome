@@ -45,7 +45,7 @@ def renderHTMLAttrs = |obj| => (
     `{entry[0]}="{entry[1]}"`
   ).join(" "))
 
-  r = r + (obj->hasOwnProperty('css') ? ('style="'+obj.css->entries.map(entry => `{entry[0]}: {entry[1]}`).join('; ')+'"') : '')
+  r = r + (obj->props.css ? ('style="'+obj->props.css->entries.map(entry => `{entry[0]}: {entry[1]}`).join('; ')+'"') : '')
 
   r ? (' '+r) : r
 )

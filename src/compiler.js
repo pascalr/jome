@@ -900,7 +900,9 @@ const PROCESSES = {
       case 'keys': case 'values': case 'entries':
         return `Object.${val}(${prev} || {})`
       case 'props':
-        return `${JOME_LIB}.props(${prev})`
+        //return ctx.isInsideClassSuperObject ? `__params__` : `this.__params__`
+        //return `${JOME_LIB}.props(${prev})`
+        return `${prev}.__params__`
       case 'hasOwnProperty':
       case 'path': // Good?
       case 'name':
@@ -910,7 +912,9 @@ const PROCESSES = {
         return `${JOME_LIB}.getChildren(${prev})`
       case 'removeChildren':
         return `(() => {${prev}.${JOME_ATTRS}.children = []})`
-      default: throw "FIXME meta not implemented yet: " + val
+      case 'params':
+        throw new Error("You probably want props and not params")
+      default: throw "FIXME arrow getter not implemented yet: " + val
     }
   },
   // true, vrai, ...
