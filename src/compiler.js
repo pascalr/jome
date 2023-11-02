@@ -244,7 +244,7 @@ function _buildJomeObjs(nodes, ctx, isRoot = true) {
 }
 
 function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
-  if (!node.type === 'meta.function.jome') {
+  if (node.type !== 'meta.function.jome' && node.type !== 'meta.interface.jome') {
     throw new Error('Error 6927')
   }
   //let args = cutGroup(node.children, 'punctuation.definition.array.begin.jome', 'punctuation.definition.array.end.jome', 'punctuation.separator.delimiter.jome')
@@ -254,7 +254,8 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
   let attrParams = []
   let children = filterSpaces(node.children).filter(child => {
     let t = child.type
-    return t !== 'keyword.arrow.jome' && t !== 'punctuation.definition.args.begin.jome' && t !== 'punctuation.definition.args.end.jome'
+    return t !== 'keyword.arrow.jome' && t !== 'punctuation.definition.args.begin.jome' &&
+           t !== 'punctuation.definition.args.end.jome' && t !== 'entity.name.type.interface.jome'
   })
   let list = parseList(children)
   list.forEach(arr => {
@@ -927,6 +928,20 @@ const PROCESSES = {
     let nb = node.children[0].text()
     let unit = node.children[1].text()
     return nb
+  },
+  // interface SomeInterface
+  "meta.interface.jome": (node, ctx) => {
+    let l0 = filterSpaces(node.children)
+    let name = l0[1].text()
+    ctx.interfaces[name] = compileFunctionArgsDetailed(node, ctx)
+    // let args = l0.slice(3, -1)
+    // let list = parseList(args, ctx)
+    // list.forEach(el => {
+    //   if (el.type === 'variable.other.jome') {
+    //   } else if (el.type === 'support.type.property-name.parameter.optional.jome') {
+    //   }
+    // })
+    return ''
   },
   // class SomeType
   "meta.class.jome": (node, ctx) => {

@@ -21,6 +21,7 @@ export class CompileContext {
     this.imports = {} // All the import statements found
     this.currentFile = null // For import relative paths
     this.rootDir = null // For imports
+    this.interfaces = {}
   }
 
   spacing() {

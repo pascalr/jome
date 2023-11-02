@@ -23,18 +23,6 @@
           }
         },
         {
-          "name": "meta.interface.jome",
-          "match": "(?<=\\s|^|)(interface)\\s+([a-zA-Z_][\\w]*)\\s*",
-          "captures": {
-            "1": {
-              "name": "keyword.control.jome"
-            },
-            "2": {
-              "name": "entity.name.type.interface.jome"
-            }
-          }
-        },
-        {
           "name": "meta.statement.import.jome",
           "begin": "^(import)( \\w+)?",
           "beginCaptures": {
@@ -117,6 +105,7 @@
     "expression": {
       "patterns": [
         { "include": "#comment" },
+        { "include": "#interface" },
         { "include": "#keywords" },
         { "include": "#paren-expression" },
         { "include": "#strings" },
@@ -196,6 +185,22 @@
 			  }
       ]
 		},
+    "interface": {
+      "patterns": [    {
+        "name": "meta.interface.jome",
+        "begin": "(?<=\\s|^)(interface)\\s+([a-zA-Z_][\\w]*)\\s*(\\|)",
+        "beginCaptures": {
+          "1": {"name": "keyword.control.jome"},
+          "2": {"name": "entity.name.type.interface.jome"},
+          "3": {"name": "punctuation.definition.args.begin.jome"}
+        },
+        "end": "(\\|)(?!\\s*(=>|->))",
+        "endCaptures": {
+          "1": {"name": "punctuation.definition.args.end.jome"}
+        },
+        "patterns": [{ "include": "#expression" }]
+      }]
+    },
     "arrow": {
 			"patterns": [{
 				"name": "keyword.arrow.jome",

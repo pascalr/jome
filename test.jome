@@ -13,10 +13,10 @@ import {H1} from './lib/html.jome'
 // import defaultExport, * as name from "module-name";
 // // import "module-name"; TODO: Not written yet in the parser
 
-// interface TestInterface |
-//   arg,
-//   param?
-// |
+interface TestInterface |
+  arg,
+  param?
+|
 // let funcTest = &TestInterface => (arg + param)
 // let funcTestResult = funcTest(10, param: 20)
 
