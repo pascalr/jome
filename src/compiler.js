@@ -921,7 +921,7 @@ const PROCESSES = {
       case 'signals':
         return `${prev}?.${JOME_ATTRS}?.${val}`
       case 'children':
-        return `${JOME_LIB}.getChildren(${prev})`
+        return `(${prev}.$?.children||[])`
       case 'removeChildren':
         return `(() => {${prev}.${JOME_ATTRS}.children = []})`
       case 'params':

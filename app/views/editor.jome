@@ -26,6 +26,9 @@ class Panel {
   super: Div class: "jome-html panel"
 }
 
+// TODO: Fix jome lib pour mettre les childrens dans $.children un array
+
+// FIXME: Le problème présentement est que Panel n'est pas créer sous forme de node, il est créé sous forme de d'objet
 bod = {
   Screen
     Panel
