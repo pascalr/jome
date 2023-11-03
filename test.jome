@@ -1,5 +1,7 @@
 import {H1} from './lib/html.jome'
 
+var testH1 = { H1 "Un titre" }
+
 // Testing imports, all these should be parse properly:
 // import defaultExport from "module-name";
 // import * as name from "module-name";

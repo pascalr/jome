@@ -486,6 +486,8 @@ function compileFunctionCallArgs(array, functionName, ctx) {
     if (klass?.constructorDetails?.hasParams) {
       hasParams = true
     }
+  } else if (binding && binding.type === 'named-import') {
+    hasParams = true // FIXMEEEEEEEEEEEEEE: Somehow check the named imports to see if they take params or not.
   }
   let args = parseList(array, ctx)
   let actualArgs = []
