@@ -296,10 +296,21 @@ main {
 
   ### Props
 
-  Props are the specific case of object creation. When you pass parameters when creating an object, we call them props.
+  Props are all the parameters and attributes as parameters passed during an object creation.
 
   ```jome
-  « Obj someProp: 10, otherProp: 'Paul' »
+  « Obj someProp: 10, someAttr: 'Paul' »
+  class Obj |someProp?, @someAttr?| => {
+  }
+  // compiles to
+  class Obj {
+    constructor(__props__) {
+      this.__props__ = __props__
+      let {someAttr, ...__params___} = __props__
+      this.__params__ = __params__
+      this.someAttr = someAttr
+    }
+  }
   ```
 
   ### Under the hood
@@ -382,6 +393,22 @@ main {
   <rb>puts (1..10).select(&:even?).sum</rb>
   ```
 
+  ### Scripts for data
+
+  TODO:
+
+  En jome, c'est <bin>01010101</bin> pour faire du binaire et <hex>FF00AA</hex> pour faire de l'hexadécimal.
+  <oct>12345678</oct> compile en 0o
+  
+  Ne pas supporter 0xFF00AA et ne pas supporter non plus 0b01010101, ceci est confondant avec les unités.
+
+  bin et hex compile en utilisant 0x et 0b
+
+  FIXME: Ne pas supporter non plus la syntaxe 123e4, trouver une autre syntaxe. Ou bien simplement le supporter?
+  let exponentialNumber = 123e4;
+  console.log(exponentialNumber); // Outputs: 1230000
+  
+
   ### Scripts interpolation
 
   You can add data inside the scripts using the < % =    % > syntax.
@@ -448,6 +475,17 @@ main {
 
   // TODO
   10->times(i => /* ... */)
+  ```
+
+  The list of current arrow properties:
+  ```jome
+  obj->keys // Object.keys(obj)
+  obj->values // Object.values(obj)
+  obj->entries // Object.entries(obj)
+  obj->props // The list of parameters given to an object constructor
+  obj->children // The list of children of a node
+  obj->removeChildren // Remove all children of a node
+  obj->parameters // Get an object where the keys are all the parameter names allowed for the class and the values I don't know yet.
   ```
 
   <h2 id="instance-driven-dev">Instance driven development</h2>

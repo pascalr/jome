@@ -289,8 +289,19 @@ example name.</p>
 we add a params argument to the function, so we need at least one to add the argument, then you can pass as many as you want.</p>
 <p>When calling a function with named parameters, the order does not matter. You can put them before arguments, after or even in the middle.</p>
 <h3>Props</h3>
-<p>Props are the specific case of object creation. When you pass parameters when creating an object, we call them props.</p>
-<pre><code class="language-jome">« <span class="hljs-title class_">Obj</span> someProp: <span class="hljs-number">10</span>, otherProp: <span class="hljs-string">&#x27;Paul&#x27;</span> »
+<p>Props are all the parameters and attributes as parameters passed during an object creation.</p>
+<pre><code class="language-jome">« <span class="hljs-title class_">Obj</span> someProp: <span class="hljs-number">10</span>, someAttr: <span class="hljs-string">&#x27;Paul&#x27;</span> »
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Obj</span> |<span class="hljs-variable">someProp</span>?, <span class="hljs-variable">@someAttr</span>?| =&gt; {
+}
+<span class="hljs-comment">// compiles to</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Obj</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-variable">__props__</span>) {
+    <span class="hljs-variable">this</span>.<span class="hljs-variable">__props__</span> = <span class="hljs-variable">__props__</span>
+    <span class="hljs-keyword">let</span> {<span class="hljs-variable">someAttr</span>, ...<span class="hljs-variable">__params___</span>} = <span class="hljs-variable">__props__</span>
+    <span class="hljs-variable">this</span>.<span class="hljs-variable">__params__</span> = <span class="hljs-variable">__params__</span>
+    <span class="hljs-variable">this</span>.<span class="hljs-variable">someAttr</span> = <span class="hljs-variable">someAttr</span>
+  }
+}
 </code></pre>
 <h3>Under the hood</h3>
 <p>TODO: Explain how it works</p>
@@ -345,6 +356,15 @@ way you never return by accident a sensitive value that should be hiden from use
 <span class="hljs-comment">// Ruby is a pretty nice language for scripts too </span>
 &lt;<span class="hljs-variable">rb</span>&gt;<span class="hljs-variable">puts</span> (<span class="hljs-number">1.</span><span class="hljs-number">.10</span>).<span class="hljs-title function_">select</span>(&amp;:<span class="hljs-variable">even</span>?).<span class="hljs-variable">sum</span>&lt;/<span class="hljs-variable">rb</span>&gt;
 </code></pre>
+<h3>Scripts for data</h3>
+<p>TODO:</p>
+<p>En jome, c'est <bin>01010101</bin> pour faire du binaire et <hex>FF00AA</hex> pour faire de l'hexadécimal.
+<oct>12345678</oct> compile en 0o</p>
+<p>Ne pas supporter 0xFF00AA et ne pas supporter non plus 0b01010101, ceci est confondant avec les unités.</p>
+<p>bin et hex compile en utilisant 0x et 0b</p>
+<p>FIXME: Ne pas supporter non plus la syntaxe 123e4, trouver une autre syntaxe. Ou bien simplement le supporter?
+let exponentialNumber = 123e4;
+console.log(exponentialNumber); // Outputs: 1230000</p>
 <h3>Scripts interpolation</h3>
 <p>You can add data inside the scripts using the &lt; % =    % &gt; syntax.</p>
 <p>Contrary to other template languages like ejs, you must finish the expression given inside the interpolation tag.</p>
@@ -393,6 +413,15 @@ Allows to easily use most of underscore.js features directly.</p>
 
 <span class="hljs-comment">// TODO</span>
 <span class="hljs-number">10</span>-&gt;<span class="hljs-title function_">times</span>(<span class="hljs-variable">i</span> =&gt; <span class="hljs-comment">/* ... */</span>)
+</code></pre>
+<p>The list of current arrow properties:</p>
+<pre><code class="language-jome"><span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">keys</span> <span class="hljs-comment">// Object.keys(obj)</span>
+<span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">values</span> <span class="hljs-comment">// Object.values(obj)</span>
+<span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">entries</span> <span class="hljs-comment">// Object.entries(obj)</span>
+<span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">props</span> <span class="hljs-comment">// The list of parameters given to an object constructor</span>
+<span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">children</span> <span class="hljs-comment">// The list of children of a node</span>
+<span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">removeChildren</span> <span class="hljs-comment">// Remove all children of a node</span>
+<span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">parameters</span> <span class="hljs-comment">// Get an object where the keys are all the parameter names allowed for the class and the values I don&#x27;t know yet.</span>
 </code></pre>
   <h2 id="instance-driven-dev">Instance driven development</h2>
   Instance driven development is what I call when the focus is working on concrete objects in Godot software.
