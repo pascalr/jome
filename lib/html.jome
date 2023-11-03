@@ -41,11 +41,11 @@ def renderHTMLAttrs = |obj| => (
 
   // FIXME: Needs a space between signals and props
 
-  r = r + (obj->props->entries.filter(entry => (entry[0] != 'css')).map(entry =>
+  r = r + (obj->params->entries.filter(entry => (entry[0] != 'css')).map(entry =>
     `{entry[0]}="{entry[1]}"`
   ).join(" "))
 
-  r = r + (obj->props.css ? ('style="'+obj->props.css->entries.map(entry => `{entry[0]}: {entry[1]}`).join('; ')+'"') : '')
+  r = r + (obj->params.css ? ('style="'+obj->params.css->entries.map(entry => `{entry[0]}: {entry[1]}`).join('; ')+'"') : '')
 
   r ? (' '+r) : r
 )
@@ -130,7 +130,7 @@ def createElem = |obj, tag, content, ns| => (
   if (content) (
     el.appendChild(document.createTextNode(content))
   )
-  obj->props->entries.filter(entry => (entry[0] != 'css')).forEach(entry => (
+  obj->params->entries.filter(entry => (entry[0] != 'css')).forEach(entry => (
     el.setAttribute(entry[0], entry[1])
   ))
   if (obj.css) (

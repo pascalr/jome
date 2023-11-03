@@ -173,6 +173,7 @@ ou peut-être jome-base qui a juste jome, et jome qui regroupe beaucoup d'autres
 - A comment at the end of a required file does not work
 - Présentement, je dois mettre <css> avant <html>, ça serait le fun que ce ne soit pas nécessaire
 - Don't import multiple times the same css script...
+- Le this.__props__ = ... ne fonctionne pas vraiment avec l'inhéritage right?
 
 
 
