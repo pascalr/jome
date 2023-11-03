@@ -174,6 +174,8 @@ ou peut-être jome-base qui a juste jome, et jome qui regroupe beaucoup d'autres
 - Présentement, je dois mettre <css> avant <html>, ça serait le fun que ce ne soit pas nécessaire
 - Don't import multiple times the same css script...
 - Le this.__props__ = ... ne fonctionne pas vraiment avec l'inhéritage right?
+- Ne pas utiliser toString un peu partout, ce n'est pas super. Par exemple, dans le debugger de vs code, ben ça le call à côté du nom de la variable
+
 
 
 

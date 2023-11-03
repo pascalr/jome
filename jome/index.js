@@ -34,7 +34,7 @@ export default class Jome {
     return Object.keys(target.__props__)
       .filter(key => !target[key])
       .reduce((newObj, key) => {
-          newObj[key] = target[key];
+          newObj[key] = target.__props__[key];
           return newObj;
       }, {});
   }
