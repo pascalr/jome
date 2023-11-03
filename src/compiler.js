@@ -262,7 +262,11 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
     let child = arr[0]
     if (child.type.startsWith('support.type.property-name.parameter')) {
       let value = child.text().slice(0, -1) // remove the ? or !
-      ctx.addBinding(value, {type: 'parameter'})
+      if (insideClassFunction) {
+        ctx.addBinding(value, {type: 'prop'})
+      } else {
+        ctx.addBinding(value, {type: 'parameter'})
+      }
       ctx.paramsIsClassVariable = insideClassFunction
       hasParams = true
       if (arr[1] && arr[1].type === 'keyword.operator.assignment.jome') {
@@ -821,6 +825,8 @@ const PROCESSES = {
     if (binding.type === 'parameter') {
       return (ctx.paramsIsClassVariable ? 'this.' : '')+'__params__.'+value
       //return (ctx.paramsIsClassVariable ? 'this.__props__' : '__params__')+'__params__.'+value
+    } else if (binding.type === 'prop') {
+      return (ctx.paramsIsClassVariable ? 'this.' : '')+'__props__.'+value
     } else if (binding.type === 'argument-class-function' && !ctx.isInsideClassSuperObject) {
       return 'this.'+value
     } else if (binding.type === 'require-variable') {
@@ -917,7 +923,7 @@ const PROCESSES = {
         //return `${JOME_LIB}.props(${prev})`
         return `${prev}.__props__`
       case 'params':
-        return `${prev}.__params__`
+        return `${JOME_LIB}.params(${prev})`
       case 'hasOwnProperty':
       case 'path': // Good?
       case 'name':
@@ -996,14 +1002,14 @@ const PROCESSES = {
           }
         }
         if (constructorDetails.attrParams && constructorDetails.attrParams.length) {
-          constructorLines.push(`let {${constructorDetails.attrParams.join(', ')}, ...__params__} = __props__`)
+          // constructorLines.push(`let {${constructorDetails.attrParams.join(', ')}, ...__params__} = __props__`)
           constructorDetails.attrParams.forEach(attr => {
-            constructorLines.push(`this.${attr} = ${attr}`)
-            //constructorLines.push(`this.${attr} = __props__.${attr}`)
+            // constructorLines.push(`this.${attr} = ${attr}`)
+            constructorLines.push(`this.${attr} = __props__.${attr}`)
           })
-          constructorLines.push(`this.__params__ = __params__`)
-        } else if (constructorDetails.hasParams) {
-          constructorLines.push(`this.__params__ = __props__`)
+          // constructorLines.push(`this.__params__ = __params__`)
+        // } else if (constructorDetails.hasParams) {
+        //   constructorLines.push(`this.__params__ = __props__`)
         }
         constructorArgs = constructorDetails.result
         next.captured = true

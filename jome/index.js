@@ -30,10 +30,19 @@ export default class Jome {
     return obj
   }
 
-  static props(target) {
-    return target.__params__ || {}
-    //return Object.fromEntries(Object.entries(target).filter(([k,v]) => k !== '$' && target.hasOwnProperty(k) && typeof target[k] !== 'function' && !k.startsWith('@') && !k.startsWith('__arg__')))
+  static params(target) {
+    return Object.keys(target.__props__)
+      .filter(key => !target[key])
+      .reduce((newObj, key) => {
+          newObj[key] = target[key];
+          return newObj;
+      }, {});
   }
+
+  // static props(target) {
+  //   return target.__params__ || {}
+  //   //return Object.fromEntries(Object.entries(target).filter(([k,v]) => k !== '$' && target.hasOwnProperty(k) && typeof target[k] !== 'function' && !k.startsWith('@') && !k.startsWith('__arg__')))
+  // }
 
   static addChildren(parent, children) {
     children.forEach(child => this.addChild(parent, child))
