@@ -45,6 +45,7 @@ export default class Jome {
   }
 
   static addChild(parent, child) {
+    if (!parent || !child.$) {return null}
     parent.childrenCount += 1
     child.$.parent = parent
     let n = child.$.name || ('' + parent.$.childrenCount)

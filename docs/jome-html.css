@@ -1,0 +1,17 @@
+.jome-html.screen {
+  min-height: 100vh;
+  width: 100vw;
+  display: grid; /* grid is decently supported now: https://caniuse.com/css-grid */
+}
+.jome-html.panel {
+  background-color: #aaa;
+  width: 100%;
+  height: 100%;
+}
+.jome-html.row {
+  display: flex;
+}
+.jome-html.column {
+  display: flex;
+  flex-direction: column;
+}

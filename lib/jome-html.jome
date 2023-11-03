@@ -1,22 +1,23 @@
 import {Div} from './html.jome'
 
-<css out="jome-html.built.css">
-  .jome-html.screen {
-    min-height: 100vh;
-    width: 100vw;
-    display: grid; /* grid is decently supported now: https://caniuse.com/css-grid */
-  }
-  .jome-html.panel {
-    background-color: #aaa;
-  }
-  .jome-html.row {
-    display: flex;
-  }
-  .jome-html.column {
-    display: flex;
-    flex-direction: column;
-  }
-</css>
+// Inside jome-html.css for now
+//<css out="jome-html.built.css">
+//  .jome-html.screen {
+//    min-height: 100vh;
+//    width: 100vw;
+//    display: grid; /* grid is decently supported now: https://caniuse.com/css-grid */
+//  }
+//  .jome-html.panel {
+//    background-color: #aaa;
+//  }
+//  .jome-html.row {
+//    display: flex;
+//  }
+//  .jome-html.column {
+//    display: flex;
+//    flex-direction: column;
+//  }
+//</css>
 
 export class HBox {
 

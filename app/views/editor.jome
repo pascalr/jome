@@ -1,5 +1,6 @@
 import {HtmlPage} from '../../lib/html-page.jome'
-import {Col, Row, Screen, Panel} from '../../lib/jome-html.jome'
+import {Div} from '../../lib/html.jome'
+// import {Col, Row, Screen, Panel} from '../../lib/jome-html.jome'
 
 bgColor1 = "#ded9d1"
 bgColor2 = "#c9c2b5"
@@ -17,8 +18,20 @@ bgColor4 = "#b2b2b2"
 
 // $navbar Panel color: '#ded9d1'
 
+class Screen {
+  super: Div class: "jome-html screen"
+}
+
+class Panel {
+  super: Div class: "jome-html panel"
+}
+
+bod = {
+  Screen
+    Panel
+}
+
+// TODO: Use AppPage and simply pass a parameter to hide the navbar and sidebar. This way I have proper head tags.
 main {
-  HtmlPage title: 'Jome editor', stylesheets: ['reset.css', 'jome-html.css'], body: {
-    Screen
-  }.toString()
+  HtmlPage title: 'Jome editor', stylesheets: [`{$URL}/reset.css`, `{$URL}/jome-html.css`], body: bod.toString()
 }.toString()

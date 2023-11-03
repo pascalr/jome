@@ -312,6 +312,26 @@ possible parameters that can be given.</p>
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">Div</span> &amp;<span class="hljs-title class_">HtmlOptions</span> =&gt; {<span class="hljs-comment">/* ... */</span>}
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">Span</span> |<span class="hljs-variable">arg</span>, &amp;<span class="hljs-title class_">HtmlOptions</span>| =&gt; {<span class="hljs-comment">/* ... */</span>}
 </code></pre>
+<p>I don't know yet how I want to refer to the interface values. Directly or through the interface name?
+Maybe allow both?</p>
+<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Div</span> &amp;<span class="hljs-title class_">HtmlOption</span> =&gt; {
+  toString: =&gt; (
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">widthPlus1</span> = <span class="hljs-variable">width</span> + <span class="hljs-number">1</span>
+    <span class="hljs-comment">// or</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">widthPlus1</span> = <span class="hljs-title class_">HtmlOption</span>.<span class="hljs-variable">width</span> + <span class="hljs-number">1</span>
+  )
+}
+</code></pre>
+<p>In an interface, you can define arguments, parameters and attributes.</p>
+<pre><code class="language-jome"><span class="hljs-variable">interface</span> <span class="hljs-title class_">Example</span> |
+  <span class="hljs-variable">argument</span>,
+  <span class="hljs-variable">parameter</span>?,
+  <span class="hljs-variable">@requiredAttribute</span>,
+  <span class="hljs-variable">@optionalAttribute</span>?
+|
+</code></pre>
+<p>Maybe also latter possible to define function that must be implemented by the class using the interface.</p>
+<p>An interface can be used by classes and by functions.</p>
 <h3>Functions</h3>
 <p>Il doit y avoir un espace avant le -&gt; pour que ce soit une fonction. Sinon, c'est le meta accessor.</p>
 <p>By default, Jome adds returns statements to functions. This setting can be disabled in the config file.</p>
