@@ -211,7 +211,7 @@ function _buildJomeObjs(nodes, ctx, isRoot = true) {
         argTokens.push(part)
       }
     })
-    let args = compileFunctionCallArgs(argTokens, ctx)
+    let args = compileFunctionCallArgs(argTokens, type, ctx)
     let childrenNodes = []
     let funcCalls = []
     node.children.forEach(child => {
@@ -220,7 +220,7 @@ function _buildJomeObjs(nodes, ctx, isRoot = true) {
         ctx.tutor = meta.name
       } else if (tok.type === 'entity.name.function.jome') { // Func call
         let name = tok.text()
-        let args = compileFunctionCallArgs(child.array.slice(1), ctx)
+        let args = compileFunctionCallArgs(child.array.slice(1), name, ctx)
         funcCalls.push(name+args)
       } else {
         childrenNodes.push(child)
@@ -478,7 +478,15 @@ function parseIndent(list, ctx) {
   return nodes
 }
 
-function compileFunctionCallArgs(array, ctx) {
+function compileFunctionCallArgs(array, functionName, ctx) {
+  let hasParams = false
+  let binding = functionName ? ctx.getBinding(functionName) : null
+  if (binding && binding.type === 'class_name') {
+    let klass = ctx.classes[functionName]
+    if (klass?.constructorDetails?.hasParams) {
+      hasParams = true
+    }
+  }
   let args = parseList(array, ctx)
   let actualArgs = []
   let params = {}
@@ -495,6 +503,8 @@ function compileFunctionCallArgs(array, ctx) {
   })
   if (Object.keys(params).length) {
     actualArgs = [compileJsObj(params), ...actualArgs]
+  } else if (hasParams) {
+    actualArgs = ['{}', ...actualArgs]
   }
   return `(${actualArgs.join(', ')})`
 }
@@ -652,7 +662,7 @@ function buildBlock(node, ctx, func) {
         if (top.array[1].type === 'expression.group') {
           return name+compileNode(top.array[1], ctx)
         } else {
-          return name+'('+compileFunctionCallArgs(top.array.slice(1), ctx)+')'
+          return name+'('+compileFunctionCallArgs(top.array.slice(1), name, ctx)+')'
         }
       } else {
         let list = parseList(top.array, ctx)
@@ -822,7 +832,7 @@ const PROCESSES = {
       i = 1
     }
     let name = node.children[i].text()
-    let result = `${i === 1 ? '.' : ''}${name}${compileFunctionCallArgs(node.children.slice(2+i, -1), ctx)}`
+    let result = `${i === 1 ? '.' : ''}${name}${compileFunctionCallArgs(node.children.slice(2+i, -1), name, ctx)}`
     return result
   },
   // =>
@@ -968,25 +978,26 @@ const PROCESSES = {
     let constructorLines = []
     let constructorArgs = '()'
     let constructor = ''
+    let constructorDetails
     ctx.nest(() => {
       if (next?.type === 'meta.function.jome') {
-        let details = compileFunctionArgsDetailed(next, ctx, true)
-        constructorLines = Object.keys(details.args).map(arg => {
+        constructorDetails = compileFunctionArgsDetailed(next, ctx, true)
+        constructorLines = Object.keys(constructorDetails.args).map(arg => {
           return `this.${arg} = ${arg}`
         })
-        if (details.hasParams) {
-          if (Object.keys(details.paramsValues).length) {
-            constructorLines.push(`this.__params__ = {...${compileJsObj(details.paramsValues)}, ...__params__}`)
+        if (constructorDetails.hasParams) {
+          if (Object.keys(constructorDetails.paramsValues).length) {
+            constructorLines.push(`this.__params__ = {...${compileJsObj(constructorDetails.paramsValues)}, ...__params__}`)
           } else {
             constructorLines.push(`this.__params__ = __params__`)
           }
         }
-        if (details.attrParams) {
-          details.attrParams.forEach(attr => {
+        if (constructorDetails.attrParams) {
+          constructorDetails.attrParams.forEach(attr => {
             constructorLines.push(`this.${attr} = __params__.${attr}`)
           })
         }
-        constructorArgs = details.result
+        constructorArgs = constructorDetails.result
         next.captured = true
         next = next.next()
       } else if (next?.type === 'keyword.arrow.jome') {
@@ -1018,7 +1029,7 @@ const PROCESSES = {
       if (ctx.superClass) {
         extension = ` extends ${ctx.superClass.array[0].text()}`
         ctx.isInsideClassSuperObject = true
-        let line = `super${compileFunctionCallArgs(ctx.superClass.array.slice(1), ctx)}`
+        let line = `super${compileFunctionCallArgs(ctx.superClass.array.slice(1), null, ctx)}`
         ctx.isInsideClassSuperObject = false
         constructorLines = [line, ...constructorLines]
         ctx.superClass = null
@@ -1032,6 +1043,7 @@ const PROCESSES = {
         constructor = '\n  constructor'+constructorArgs+' '+jsBlock(constructorLines.join('\n'+'  '.repeat(ctx.depth+1)), ctx)
       }
     })
+    ctx.classes[name] = {name, methods, constructorDetails}
     return `class ${name}${extension} {${constructor}
   ${Object.keys(methods).map(key => {
     return `${compileName(key)}${methods[key]}`

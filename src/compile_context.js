@@ -22,6 +22,7 @@ export class CompileContext {
     this.currentFile = null // For import relative paths
     this.rootDir = null // For imports
     this.interfaces = {}
+    this.classes = {}
   }
 
   spacing() {
