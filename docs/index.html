@@ -348,6 +348,26 @@ Maybe allow both?</p>
 <p>By default, Jome adds returns statements to functions. This setting can be disabled in the config file.</p>
 <p>It is very nice when prototyping to not have to write return statements. But for production code, it is safer to always write them, this
 way you never return by accident a sensitive value that should be hiden from users.</p>
+<h3>Jome constants or language variables</h3>
+<p>Jome constants start with the # character.</p>
+<pre><code class="language-jome">  <span class="hljs-keyword">let</span> <span class="hljs-variable">angle</span> = #<span class="hljs-title function_">sin</span>(<span class="hljs-number">2</span> * #<span class="hljs-title class_">PI</span> * <span class="hljs-variable">1deg</span>)
+</code></pre>
+<p>Get the list of parameters given to a function.</p>
+<pre><code class="language-jome">  <span class="hljs-keyword">def</span> <span class="hljs-variable">someFunc</span> = =&gt; (
+    #<span class="hljs-variable">params</span> <span class="hljs-comment">// The object containing all the paramters given to the function.</span>
+  )  
+</code></pre>
+<p>List of jome constants: TODO</p>
+<ul>
+<li>#params</li>
+<li>#sin</li>
+<li>#cos</li>
+<li>#tan</li>
+<li>#PI: 3.14159...</li>
+<li>#e: Euler's constat</li>
+<li>#dirname: Equivalent of __dirname</li>
+<li>#filename: Current filename</li>
+</ul>
 <h2>Optional keys</h2>
 <p>:? =&gt; set le key value seulement si il y a une valeur</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">value</span> = <span class="hljs-keyword">null</span>
@@ -535,10 +555,21 @@ au lieu de
 Ça serait plus simple mettre le modificateur avec pour parser, mais c'est plus beau après.</p>
 <h2>Main</h2>
 <p>The <code>main</code> keyword is compiled to <code>export default</code>.</p>
+<h3>Export</h3>
+<p>Au lieu de export, le keyword public?</p>
+<p>Une idée: Tous est export par défault. Pour mettre privé, mettre un underscore au début.</p>
+<p>Ça pourrait être une option de compilation optionelle. (enabled on mode prototypage, disabled en mode securité?)</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">publicFunc</span> = =&gt; (
+
+)
+
+<span class="hljs-keyword">def</span> <span class="hljs-variable">_privateFunc</span> = =&gt; (
+  
+)
+</code></pre>
 <h2>Environment variables</h2>
 <p>Environment variables start with a dollar sign. For example, <code>$MY_ENV_VAR = 'foo'</code>.</p>
 <p>Environment variables or global variables it is not clear yet.</p>
-<p>I don't like __dirname. I think it is ugly. Maybe $DIRNAME instead? It should be $DIRPATH really... maybe $DIR</p>
 <h2>Contributing</h2>
 <p>I recommend using visual studio code for now because it is super usefull for debugging tokenization. You hit Ctrl+Shift+P,
 &quot;inspect editor token and scope&quot;, and you see if it is correct. Also you see using syntax highlighting.</p>

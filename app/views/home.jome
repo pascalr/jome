@@ -381,6 +381,32 @@ main {
   It is very nice when prototyping to not have to write return statements. But for production code, it is safer to always write them, this
   way you never return by accident a sensitive value that should be hiden from users.
 
+  ### Jome constants or language variables
+
+  Jome constants start with the # character.
+
+  ```jome
+    let angle = #sin(2 * #PI * 1deg)
+  ```
+
+  Get the list of parameters given to a function.
+
+  ```jome
+    def someFunc = => (
+      #params // The object containing all the paramters given to the function.
+    )  
+  ```
+
+  List of jome constants: TODO
+  - #params
+  - #sin
+  - #cos
+  - #tan
+  - #PI: 3.14159...
+  - #e: Euler's constat
+  - #dirname: Equivalent of __dirname
+  - #filename: Current filename
+
   ## Optional keys
 
   :? => set le key value seulement si il y a une valeur
@@ -640,13 +666,29 @@ main {
 
   The `main` keyword is compiled to `export default`.
 
+  ### Export
+
+  Au lieu de export, le keyword public?
+
+  Une idée: Tous est export par défault. Pour mettre privé, mettre un underscore au début.
+
+  Ça pourrait être une option de compilation optionelle. (enabled on mode prototypage, disabled en mode securité?)
+
+  ```jome
+  def publicFunc = => (
+
+  )
+
+  def _privateFunc = => (
+    
+  )
+  ```
+
   ## Environment variables
 
   Environment variables start with a dollar sign. For example, `$MY_ENV_VAR = 'foo'`.
 
   Environment variables or global variables it is not clear yet.
-
-  I don't like __dirname. I think it is ugly. Maybe $DIRNAME instead? It should be $DIRPATH really... maybe $DIR
 
   ## Contributing
 

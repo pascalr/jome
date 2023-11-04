@@ -50,6 +50,10 @@ def renderHTMLAttrs = |obj| => (
   r ? (' '+r) : r
 )
 
+// export def renderHtmlTag = |tag, children| => (
+//   `<{tag}{renderHTMLAttrs(->params)}>{content||''}{renderHTMLChildren(children)}</{tag}>`
+// )
+
 def renderHTMLChildren = |obj| => (
   obj->children.map(c => (c.toString ? c.toString() : '')).join("")
 )
