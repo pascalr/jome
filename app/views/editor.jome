@@ -38,7 +38,7 @@ class Panel |@width?, @height?, @color?| => {
     css: {
       width: @width,
       height: @height,
-      //background-color: @color
+      background-color: @color
     }
   ))
 }

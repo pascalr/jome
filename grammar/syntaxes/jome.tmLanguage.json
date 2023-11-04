@@ -472,14 +472,14 @@
 					}
         },
         {
-          "match": "(?:^|\\G)(\\s*)([\\p{Lu}]\\w*)(?!\\w*\\s*:)",
+          "match": "(?:^|\\G)(\\s*)([\\p{Lu}]\\w*)(?!\\w*(-\\w+)*\\s*:)",
           "captures": {
             "1": {"name": "punctuation.whitespace.indent.jome"},
             "2": {"name": "entity.name.type.jome-obj.jome"}
 					}
         },
         {
-          "match": "(?:^|\\G)(\\s*)([\\p{L}]\\w*)(?!\\w*\\s*:)",
+          "match": "(?:^|\\G)(\\s*)([\\p{L}]\\w*)(?!\\w*(-\\w+)*\\s*:)",
           "captures": {
             "1": {"name": "punctuation.whitespace.indent.jome"},
             "2": {"name": "entity.name.function.jome"}
@@ -492,7 +492,7 @@
         },
         {"match": "\\s+"},
         {
-          "match": "([\\p{L}~]\\w*)\\s*:",
+          "match": "([\\p{L}~]\\w*(-\\w+)*)\\s*:",
           "name": "meta.dictionary-key.jome",
           "captures": {
             "1": { "name": "support.type.property-name.jome" }

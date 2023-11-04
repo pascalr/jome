@@ -69,6 +69,10 @@ execute()
 if true // PAS VALIDE
 */
 
+function compileKey(key) {
+  return /-/.test(key) ? `"${key}"` : key
+}
+
 export function compileRaw(node) {
   if (Array.isArray(node)) {
     return node.map(n => compileRaw(n)).join('')
@@ -188,7 +192,7 @@ function compileJsValue(v) {
 function compileJsObj(obj) {
   let r = []
   Object.keys(obj).forEach(key => {
-    r.push(key+': '+compileJsValue(obj[key]))
+    r.push(compileKey(key)+': '+compileJsValue(obj[key]))
   })
   return '{'+r.join(', ')+'}'
 }
