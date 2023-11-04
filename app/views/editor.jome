@@ -10,6 +10,14 @@ interface BoxParams |
   @border?,
 |
 
+def boxCss = |obj| => {
+  width: obj.width,
+  height: obj.height,
+  background-color: obj.color,
+  margin: obj.margin,
+  border: obj.border
+}
+
 class Screen &BoxParams => {
   toString: => (renderHtmlTag('div', @->children
     class: "jome-html screen"
@@ -24,13 +32,7 @@ class Screen &BoxParams => {
 class Panel &BoxParams => {
   toString: => (renderHtmlTag('div', @->children
     class: "jome-html panel"
-    css: {
-      width: @width,
-      height: @height,
-      background-color: @color,
-      margin: @margin,
-      border: @border
-    }
+    css: boxCss(@)
   ))
 }
 
@@ -50,11 +52,7 @@ class Col {
 class HSplit &BoxParams => {
   toString: => (renderHtmlTag('div', @->children
     class: "jome-html hsplit"
-    css: {
-      width: @width,
-      height: @height,
-      background-color: @color
-    }
+    css: boxCss(@)
   ))
 }
 
@@ -62,11 +60,7 @@ class HSplit &BoxParams => {
 class VSplit &BoxParams => {
   toString: => (renderHtmlTag('div', @->children
     class: "jome-html vsplit"
-    css: {
-      width: @width,
-      height: @height,
-      background-color: @color
-    }
+    css: boxCss(@)
   ))
 }
 
