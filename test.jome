@@ -279,4 +279,7 @@ ten = 10;
 
   titre 'Test des interfaces'
   TestEq testInterface(10, param: 20), 30, "testInterface(10, param: 20)"
+
+  titre 'Test des constantes Jome'
+  TestEq #PI, <js>Math.PI</js>, "#PI"
 }

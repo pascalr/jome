@@ -415,6 +415,8 @@ function _compileJomeObj(obj, ctx) {
   meta.children = `[${children.map(c => _compileJomeObj(c, ctx)).join(', ')}]`
   let r = `${JOME_LIB}.createObj(${ctx.currentObjPath}, ${s1}, ${compileJsObj(meta)})`
   if (funcCalls.length) {
+    // TODO: Use something similar to underscore.js chain function instead of this.
+    // TODO: Remove chain method on $ property!
     let chained = funcCalls.slice(0,-1)
     if (chained.length) {
       r += '\n'+chained.map(call => `.$.chain(o => o.${call})`).join('\n')
@@ -948,6 +950,14 @@ const PROCESSES = {
       case 'off': case 'arrêt': return 'false'
       case 'no': case 'non': return 'false'
       default: throw new Error("FIXME constant: " + node.text())
+    }
+  },
+  // #PI, #sin, #params, ...
+  "variable.other.constant.jome": (node, ctx) => {
+    switch (node.text().slice(1)) {
+      case 'PI': return 'Math.PI'
+      case 'params': return '__params__'
+      default: throw new Error("FIXME hashtag constant: " + node.text())
     }
   },
   // $ENV_VAR

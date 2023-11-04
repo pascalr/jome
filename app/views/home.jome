@@ -407,6 +407,13 @@ main {
   - #dirname: Equivalent of __dirname
   - #filename: Current filename
 
+  Actually, it here here that could go every underscore.js function:
+  - #map
+  - #reduce
+  - ...
+
+  Maybe you can use #keys(obj), but personally I prefer obj->keys
+
   ## Optional keys
 
   :? => set le key value seulement si il y a une valeur

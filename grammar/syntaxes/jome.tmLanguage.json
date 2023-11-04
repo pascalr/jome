@@ -111,6 +111,7 @@
         { "include": "#strings" },
         { "include": "#scripts" },
         { "include": "#arrow" },
+        { "include": "#jome-const" },
         { "include": "#arrow_getter" },
         { "include": "#operators" },
         { "include": "#function" },
@@ -299,6 +300,14 @@
           "2": {"name": "variable.other.jome"}
         }
 			}]
+		},
+    "jome-const": {
+			"patterns": [
+        {
+          "name": "variable.other.constant.jome",
+          "match": "\\#\\w+"
+        }
+      ]
 		},
     "attribute": {
 			"patterns": [
