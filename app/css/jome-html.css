@@ -1,17 +1,30 @@
+.jome-html {
+  box-sizing: border-box; /* Include the padding into the element width */
+}
 .jome-html.screen {
   min-height: 100vh;
   width: 100vw;
   display: grid; /* grid is decently supported now: https://caniuse.com/css-grid */
 }
 .jome-html.panel {
-  background-color: #aaa;
   width: 100%;
   height: 100%;
 }
 .jome-html.row {
   display: flex;
 }
-.jome-html.column {
+.jome-html.col {
   display: flex;
   flex-direction: column;
+}
+.jome-html.hsplit {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+.jome-html.vsplit {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
 }

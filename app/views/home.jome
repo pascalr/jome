@@ -459,6 +459,9 @@ main {
   - C
   - cpp
 
+  MAYBE list:
+  - col: For color, need a way to let the editor know that we want to be picking a color.
+
   ### Scripts for data
 
   TODO:
