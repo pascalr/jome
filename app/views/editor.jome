@@ -8,6 +8,8 @@ interface BoxParams |
   @color?,
   @margin?,
   @border?,
+  @shrink?,
+  @grow?,
 |
 
 def boxCss = |obj| => {
@@ -15,7 +17,9 @@ def boxCss = |obj| => {
   height: obj.height,
   background-color: obj.color,
   margin: obj.margin,
-  border: obj.border
+  border: obj.border,
+  flex-grow: obj.grow,
+  flex-shrink: obj.shrink
 }
 
 class Screen &BoxParams => {
@@ -98,7 +102,8 @@ bod = {
         VSplit width: '200px'
           Panel height: '50%', color: bgColor3, border: `4px solid {bgColor2}`
           Panel height: '50%', color: bgColor3, border: `4px solid {bgColor2}`
-        Panel width: '200px', color: "green"
+        Panel shrink: 1, color: bgColor3, border: `4px solid {bgColor2}`
+        Panel width: '200px', color: bgColor3, border: `4px solid {bgColor2}`
 }
 
 // TODO: Use AppPage and simply pass a parameter to hide the navbar and sidebar. This way I have proper head tags.

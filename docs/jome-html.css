@@ -1,5 +1,6 @@
 .jome-html {
   box-sizing: border-box; /* Include the padding into the element width */
+  flex-shrink: 0;
 }
 .jome-html.screen {
   min-height: 100vh;
