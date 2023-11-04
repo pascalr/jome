@@ -101,7 +101,7 @@ bod = {
       HSplit
         VSplit width: '200px'
           Panel height: '50%', color: bgColor3, border: `4px solid {bgColor2}`
-          Panel height: '50%', color: bgColor3, border: `4px solid {bgColor2}`
+          Panel shrink: 1, color: bgColor3, border: `4px solid {bgColor2}`
         Panel shrink: 1, color: bgColor3, border: `4px solid {bgColor2}`
         Panel width: '200px', color: bgColor3, border: `4px solid {bgColor2}`
 }
