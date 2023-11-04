@@ -1,3 +1,15 @@
+// {
+//   Div class: "navbar"
+//     Span "Jome", class: "navbrand", href: "#"
+//     Link "Editor", to: `{$URL}/editor`
+//     Link "Home", to: `{$URL}/`
+//     Link "Language Reference", to: `{$URL}/#lang-ref`
+//     Link "Examples", to: `{$URL}/ex`
+//     Link "Librairies", to: `{$URL}/lib`
+//     Link "Compiling", to: `{$URL}/compiling`
+//     Link "GitHub", to: `https://github.com/pascalr/jome`
+// }
+
 <html>
   <div class="navbar">
     <span class="navbrand" href="#">Jome</span>

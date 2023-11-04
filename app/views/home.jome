@@ -381,6 +381,18 @@ main {
   It is very nice when prototyping to not have to write return statements. But for production code, it is safer to always write them, this
   way you never return by accident a sensitive value that should be hiden from users.
 
+  ## Optional keys
+
+  :? => set le key value seulement si il y a une valeur
+  ```jome
+  let value = null
+  let obj = {
+   key:? value
+  }
+  obj === {} // true
+  "key" in obj // false
+  ```
+
   <h2 id="scripts">Scripts</h2>
 
   In jome, the idea is that you could include most other programming languages directly using xml tags.
@@ -393,6 +405,22 @@ main {
   <rb>puts (1..10).select(&:even?).sum</rb>
   ```
 
+  Supported list for now:
+  - sh
+  - html
+  - md
+  - js
+
+  TODO list:
+  - bin
+  - oct
+  - hex
+  - rb
+  - sql
+  - txt et/ou str
+  - C
+  - cpp
+
   ### Scripts for data
 
   TODO:
@@ -404,10 +432,12 @@ main {
 
   bin et hex compile en utilisant 0x et 0b
 
-  FIXME: Ne pas supporter non plus la syntaxe 123e4, trouver une autre syntaxe. Ou bien simplement le supporter?
+  TODO: Rajouter du syntax highligh au hex pour changer de couleur à toute les 2 charactères? Afficher comme des
+  string et à tous les 2 charactères mettre comme si escaped string pour que la couleur change un peu.
+
+  TODO: Supporter la syntaxe 123e4 par contre
   let exponentialNumber = 123e4;
   console.log(exponentialNumber); // Outputs: 1230000
-  
 
   ### Scripts interpolation
 

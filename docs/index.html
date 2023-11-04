@@ -348,6 +348,15 @@ Maybe allow both?</p>
 <p>By default, Jome adds returns statements to functions. This setting can be disabled in the config file.</p>
 <p>It is very nice when prototyping to not have to write return statements. But for production code, it is safer to always write them, this
 way you never return by accident a sensitive value that should be hiden from users.</p>
+<h2>Optional keys</h2>
+<p>:? =&gt; set le key value seulement si il y a une valeur</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">value</span> = <span class="hljs-keyword">null</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">obj</span> = {
+ key:? <span class="hljs-variable">value</span>
+}
+<span class="hljs-variable">obj</span> === {} <span class="hljs-comment">// true</span>
+<span class="hljs-string">&quot;key&quot;</span> <span class="hljs-variable">in</span> <span class="hljs-variable">obj</span> <span class="hljs-comment">// false</span>
+</code></pre>
   <h2 id="scripts">Scripts</h2>
 <p>In jome, the idea is that you could include most other programming languages directly using xml tags.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Execute a shell command in a script</span>
@@ -356,13 +365,33 @@ way you never return by accident a sensitive value that should be hiden from use
 <span class="hljs-comment">// Ruby is a pretty nice language for scripts too </span>
 &lt;<span class="hljs-variable">rb</span>&gt;<span class="hljs-variable">puts</span> (<span class="hljs-number">1.</span><span class="hljs-number">.10</span>).<span class="hljs-title function_">select</span>(&amp;:<span class="hljs-variable">even</span>?).<span class="hljs-variable">sum</span>&lt;/<span class="hljs-variable">rb</span>&gt;
 </code></pre>
+<p>Supported list for now:</p>
+<ul>
+<li>sh</li>
+<li>html</li>
+<li>md</li>
+<li>js</li>
+</ul>
+<p>TODO list:</p>
+<ul>
+<li>bin</li>
+<li>oct</li>
+<li>hex</li>
+<li>rb</li>
+<li>sql</li>
+<li>txt et/ou str</li>
+<li>C</li>
+<li>cpp</li>
+</ul>
 <h3>Scripts for data</h3>
 <p>TODO:</p>
 <p>En jome, c'est <bin>01010101</bin> pour faire du binaire et <hex>FF00AA</hex> pour faire de l'hexadécimal.
 <oct>12345678</oct> compile en 0o</p>
 <p>Ne pas supporter 0xFF00AA et ne pas supporter non plus 0b01010101, ceci est confondant avec les unités.</p>
 <p>bin et hex compile en utilisant 0x et 0b</p>
-<p>FIXME: Ne pas supporter non plus la syntaxe 123e4, trouver une autre syntaxe. Ou bien simplement le supporter?
+<p>TODO: Rajouter du syntax highligh au hex pour changer de couleur à toute les 2 charactères? Afficher comme des
+string et à tous les 2 charactères mettre comme si escaped string pour que la couleur change un peu.</p>
+<p>TODO: Supporter la syntaxe 123e4 par contre
 let exponentialNumber = 123e4;
 console.log(exponentialNumber); // Outputs: 1230000</p>
 <h3>Scripts interpolation</h3>

@@ -39,6 +39,10 @@ export default class Jome {
       }, {});
   }
 
+  static entryCond(key, value) {
+    return value ? {key: value} : {}
+  }
+
   // static props(target) {
   //   return target.__params__ || {}
   //   //return Object.fromEntries(Object.entries(target).filter(([k,v]) => k !== '$' && target.hasOwnProperty(k) && typeof target[k] !== 'function' && !k.startsWith('@') && !k.startsWith('__arg__')))

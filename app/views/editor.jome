@@ -26,12 +26,28 @@ class Panel |@width?, @height?| => {
   super: Div class: "jome-html panel"
 }
 
-// TODO: Fix jome lib pour mettre les childrens dans $.children un array
+// class Panel |@width?, @height?| => {
+//   render: => (renderHtmlTag('div'
+//     class: "jome-html panel"
+//     css: {
+//       width:? @width,
+//       height:? @height
+//     }
+//   ))
+// }
+// class Panel {
+//   render() {
+//     return renderHtmlTag({class: "jome-html panel", css: {
+//       ...jome.entryCond("width", this.width),
+//       ...jome.entryCond("height", this.height)
+//     }}, 'div')
+//   }
+// }
+// // C'est inutile de créer un Div comme ça, utiliser plutôt une fonction comme renderHtmlTag('div', class: "jome-html panel", css.width:? @width...)
 
 debug = { Panel width: '200px' }
 debugStr = debug.toString()
 
-// FIXME: Le problème présentement est que Panel n'est pas créer sous forme de node, il est créé sous forme de d'objet
 bod = {
   Screen
     Panel width: '200px'
