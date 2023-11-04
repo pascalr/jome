@@ -2,7 +2,15 @@ import {HtmlPage} from '../../lib/html-page.jome'
 import {Div, renderHtmlTag} from '../../lib/html.jome'
 // import {Col, Row, Screen, Panel} from '../../lib/jome-html.jome'
 
-class Screen |@width?, @height?, @color?| => {
+interface BoxParams |
+  @width?,
+  @height?,
+  @color?,
+  @margin?,
+  @border?,
+|
+
+class Screen &BoxParams => {
   toString: => (renderHtmlTag('div', @->children
     class: "jome-html screen"
     css: {
@@ -13,7 +21,7 @@ class Screen |@width?, @height?, @color?| => {
   ))
 }
 
-class Panel |@width?, @height?, @color?, @margin?, @border?| => {
+class Panel &BoxParams => {
   toString: => (renderHtmlTag('div', @->children
     class: "jome-html panel"
     css: {
@@ -39,16 +47,26 @@ class Col {
 }
 
 // An hsplit takes the whole height compared to a row
-class HSplit {
+class HSplit &BoxParams => {
   toString: => (renderHtmlTag('div', @->children
     class: "jome-html hsplit"
+    css: {
+      width: @width,
+      height: @height,
+      background-color: @color
+    }
   ))
 }
 
 // A vsplit takes the whole width compared to a col
-class VSplit {
+class VSplit &BoxParams => {
   toString: => (renderHtmlTag('div', @->children
     class: "jome-html vsplit"
+    css: {
+      width: @width,
+      height: @height,
+      background-color: @color
+    }
   ))
 }
 
@@ -79,17 +97,14 @@ bgColor4 = "#b2b2b2"
 bod = {
   Screen color: bgColor1
     VSplit
-      Panel height: '40px'
-        HSplit
-          Txt "File"
-          Txt "Edit"
-      Panel
-        HSplit
-          Panel width: '200px'
-            VSplit
-              Panel height: '50%', color: bgColor3, border: `4px solid {bgColor2}`
-              Panel height: '50%', color: bgColor3, border: `4px solid {bgColor2}`
-          Panel width: '200px', color: "green"
+      HSplit height: '40px'
+        Txt "File"
+        Txt "Edit"
+      HSplit
+        VSplit width: '200px'
+          Panel height: '50%', color: bgColor3, border: `4px solid {bgColor2}`
+          Panel height: '50%', color: bgColor3, border: `4px solid {bgColor2}`
+        Panel width: '200px', color: "green"
 }
 
 // TODO: Use AppPage and simply pass a parameter to hide the navbar and sidebar. This way I have proper head tags.
