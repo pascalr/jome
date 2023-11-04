@@ -60,7 +60,8 @@ def renderHTMLTagAttrs = |attrs| => (
     `{entry[0]}="{entry[1]}"`
   ).join(" "))
 
-  r = r + (attrs.css ? (' style="'+attrs.css->entries.map(entry => (entry[1] ? `{entry[0]}: {entry[1]}` : '')).filter(s => s.length).join('; ')+'"') : '')
+  var s = (attrs.css ? (attrs.css->entries.map(entry => (entry[1] ? `{entry[0]}: {entry[1]}` : '')).filter(s => s.length).join('; ')) : '')
+  r = r + (s && s.length ? (' style="'+s+'"') : '')
 
   r ? (' '+r) : r
 )

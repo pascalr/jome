@@ -29,3 +29,15 @@
   height: 100%;
   width: 100%;
 }
+.jome-html.haligned {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
+
+.editor-navbtn {
+  padding: 0 8px;
+  cursor: pointer;
+}

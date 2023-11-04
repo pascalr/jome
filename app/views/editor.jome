@@ -68,10 +68,19 @@ class VSplit &BoxParams => {
   ))
 }
 
-class Txt |@content, @color?| => {
+class HAligned &BoxParams => {
+  toString: => (renderHtmlTag('div', @->children
+    class: "jome-html haligned"
+    css: boxCss(@)
+  ))
+}
+
+class Txt |@content, @color?, @bold?, @class?| => {
   toString: => (renderHtmlTag('span', null, @content
+    class: `jome-html{@class ? ` {@class}` : ''}`
     css: {
       color: @color
+      font-weight: @bold ? "bold" : null
     }
   ))
 }
@@ -95,9 +104,10 @@ bgColor4 = "#b2b2b2"
 bod = {
   Screen color: bgColor1
     VSplit
-      HSplit height: '40px'
-        Txt "File"
-        Txt "Edit"
+      HAligned height: '30px'
+        Txt "JomeEditor", class: 'editor-navbtn', bold: true // bold!
+        Txt "File", class: 'editor-navbtn'
+        Txt "Edit", class: 'editor-navbtn'
       HSplit
         VSplit width: '200px'
           Panel height: '50%', color: bgColor3, border: `4px solid {bgColor2}`
