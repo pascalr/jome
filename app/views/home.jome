@@ -414,6 +414,10 @@ main {
 
   Maybe you can use #keys(obj), but personally I prefer obj->keys
 
+  TODO: All html colors: MAYBEEE? Because I don't know in what format I would want the value to be... so probably don't do this
+  - #red: 0xFF0000
+  - ...
+
   ## Optional keys
 
   :? => set le key value seulement si il y a une valeur

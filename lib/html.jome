@@ -50,9 +50,20 @@ def renderHTMLAttrs = |obj| => (
   r ? (' '+r) : r
 )
 
-// export def renderHtmlTag = |tag, children| => (
-//   `<{tag}{renderHTMLAttrs(->params)}>{content||''}{renderHTMLChildren(children)}</{tag}>`
-// )
+def renderHTMLTagAttrs = |attrs| => (
+
+  var r = (attrs->entries.filter(entry => (entry[0] != 'css')).map(entry =>
+    `{entry[0]}="{entry[1]}"`
+  ).join(" "))
+
+  r = r + (attrs.css ? (' style="'+attrs.css->entries.map(entry => (entry[1] ? `{entry[0]}: {entry[1]}` : '')).filter(s => s.length).join('; ')+'"') : '')
+
+  r ? (' '+r) : r
+)
+
+export def renderHtmlTag = |tag, children, content, &GlobalAttributes| => (
+  `<{tag}{renderHTMLTagAttrs(#params)}>{content||''}{renderHTMLChildren(children)}</{tag}>`
+)
 
 def renderHTMLChildren = |obj| => (
   obj->children.map(c => (c.toString ? c.toString() : '')).join("")
