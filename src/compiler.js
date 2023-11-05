@@ -112,7 +112,7 @@ function jsBlock(node, ctx, addReturnStatement = false) {
   } else if (node.type === 'source.jome') { // Used by require
     r += compileScope(node, node.children, ctx, addReturnStatement)
   } else {
-    r += (addReturnStatement ? 'return ' : '')+compileNode(node, ctx)
+    r += (addReturnStatement ? 'return ' : '')+compileToken(node, ctx)
   }
   ctx.depth -= 1
   r += `\n${'  '.repeat(ctx.depth)}}`
@@ -152,7 +152,7 @@ function compileJsBlock(array, ctx, addReturnStatement = false) {
       if (POST_PROCESSES.has(array[i+1]?.type)) {
         // Ignore will be handled by post process
       } else {
-        let r1 = compileNode(array[i], ctx)
+        let r1 = compileToken(array[i], ctx)
         if (r1 && r1.length) {r.push(r1)}
       }
     }
@@ -216,7 +216,7 @@ function _buildJomeObjs(nodes, ctx, isRoot = true) {
       //} else if (part.type && !part.type.startsWith('punctuation')) {
       } else if (part.type === 'variable.other.state-var.jome') {
         let name = part.text().slice(1)
-        let val = compileNode(node.array[i+2], ctx)
+        let val = compileToken(node.array[i+2], ctx)
         stateVars[name] = val
         i += 2
       } else if (i === 0 && part.type === 'meta.dictionary-key.jome') {
@@ -284,7 +284,7 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
       ctx.paramsIsClassVariable = insideClassFunction
       hasParams = true
       if (arr[1] && arr[1].type === 'keyword.operator.assignment.jome') {
-        paramsValues[value] = compileNode(arr[2], ctx)
+        paramsValues[value] = compileToken(arr[2], ctx)
       }
 
     } else if (child.type === 'support.type.property-name.attribute.jome') {
@@ -298,7 +298,7 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
       ctx.paramsIsClassVariable = insideClassFunction
       hasParams = true
       if (arr[1] && arr[1].type === 'keyword.operator.assignment.jome') {
-        paramsValues[value] = compileNode(arr[2], ctx)
+        paramsValues[value] = compileToken(arr[2], ctx)
       }
       attrParams.push(value)
 
@@ -641,7 +641,7 @@ function assignVariable(node, ctx, keyword) {
   if (value.startsWith('$')) {
     let next = node.captureNext() // The = sign (keyword.operator.assignment.compound.jome)
     next = next.captureNext()
-    return 'process.env.'+value.slice(1)+' = '+compileNode(next, ctx)
+    return 'process.env.'+value.slice(1)+' = '+compileToken(next, ctx)
   }
   let outKeyword = ''
   let isAssignment = node.type === 'variable.assignment.jome'
@@ -674,7 +674,7 @@ function assignVariable(node, ctx, keyword) {
     return `function ${value}() ${jsBlock(func, ctx, true)}`
   }
   ctx.currentVariableAssignment = value
-  let result = outKeyword+value+' = '+compileNode(next, ctx)
+  let result = outKeyword+value+' = '+compileToken(next, ctx)
   ctx.currentVariableAssignment = null
   return result
 }
@@ -701,7 +701,7 @@ function buildBlock(node, ctx, func) {
       } else if (top.array[0].type === 'entity.name.function.jome') { // Func call
         let name = top.array[0].text()
         if (top.array[1].type === 'expression.group') {
-          return name+compileNode(top.array[1], ctx)
+          return name+compileToken(top.array[1], ctx)
         } else {
           return name+'('+compileFunctionCallArgs(top.array.slice(1), name, ctx)+')'
         }
@@ -913,7 +913,7 @@ const PROCESSES = {
   "meta.block.jome": compileBlock,
   // fooBar.x
   "meta.getter.jome": (node, ctx) => {
-    let prev = compileNode(node.prev(), ctx)
+    let prev = compileToken(node.prev(), ctx)
     return prev+'.'+compileRaw(node.children[1], ctx)
   },
   // [10, 20]
@@ -949,7 +949,7 @@ const PROCESSES = {
   // ->keys
   "meta.arrow-getter.jome": (node, ctx) => {
     let val = node.children[1].text()
-    let prev = compileNode(node.prev(), ctx)
+    let prev = compileToken(node.prev(), ctx)
     switch (val) {
       case 'keys': case 'values': case 'entries':
         return `Object.${val}(${prev} || {})`
@@ -1124,7 +1124,7 @@ const PROCESSES = {
       case "elseif": case "elsif": case "sinon si": case "else if": label = ' else if'; break;
       default: throw new Error('Error 84023')
     }
-    return `${label} ${compileNode(cond, ctx)} ${jsBlock(val, ctx)}`
+    return `${label} ${compileToken(cond, ctx)} ${jsBlock(val, ctx)}`
   },
   "keyword.control.main.jome": () => "export default ",
   "punctuation.separator.delimiter.jome": () => ', ',
@@ -1181,14 +1181,14 @@ const PROCESSES = {
   }
 }
 
-function compileNode(node, context) {
-  if (typeof node === 'string') {return node}
-  let process = PROCESSES[node.type]
+function compileToken(tok, context) {
+  if (typeof tok === 'string') {return tok}
+  let process = PROCESSES[tok.type]
   let result;
   if (process) {
-    result = process ? (process(node, context) || '') : ''
+    result = process ? (process(tok, context) || '') : ''
   } else {
-    console.warn("Don't know how to process type", node.type, "at line", node.lineNb)
+    console.warn("Don't know how to process type", tok.type, "at line", tok.lineNb)
     result = ''
   }
   return result
@@ -1224,7 +1224,7 @@ export function compileGetContext(text, ctx, isNested = false) {
   analyze(root)
   let context = ctx || new CompileContext()
   // console.log('tokenized:', root.print())
-  let r1 = compileNode(root, context)
+  let r1 = compileToken(root, context)
   let r0 = isNested ? '' : compileHeaders(context)
   return {result: r0 + r1, context}
 }
