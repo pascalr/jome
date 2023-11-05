@@ -420,10 +420,12 @@ function _compileJomeObj(obj, ctx) {
   let {type, attrs, meta, args, children, funcCalls, stateVars} = obj
   let s1 = type ? `new ${type}${args}` : compileJsObj(attrs)
   // If it is not a node (no children)
-  if (!children.length && !funcCalls.length) { // FIXME: Func calls should not make it a node...
+  if (!children.length && !funcCalls.length && !Object.keys(stateVars).length) { // FIXME: Func calls should not make it a node...
     return s1
   }
-  meta.children = `[${children.map(c => _compileJomeObj(c, ctx)).join(', ')}]`
+  if (children.length) {
+    meta.children = `[${children.map(c => _compileJomeObj(c, ctx)).join(', ')}]`
+  }
   let r = `${JOME_LIB}.createObj(${ctx.currentObjPath}, ${s1}, ${compileJsObj(meta)})`
   if (funcCalls.length) {
     // TODO: Use something similar to underscore.js chain function instead of this.
@@ -434,6 +436,9 @@ function _compileJomeObj(obj, ctx) {
     }
     r += `.${funcCalls[funcCalls.length-1]}`
   }
+  // Object.keys(stateVars).forEach(stateVarName => {
+  //   r += `\njome.initStateVar("${stateVarName}")`
+  // })
   return r
 }
 
@@ -825,7 +830,7 @@ const PROCESSES = {
   "meta.embedded.block.shell": (node, ctx) => {
     let raw = compileRaw(node.children.slice(1,-1))
     ctx.imports['child_process'] = {namedImports: ['execSync']}
-    return "execSync(`"+escapeBackticks(raw)+"`)"
+    return "execSync(`"+escapeBackticks(raw)+"`);"
   },
   // fooBar
   "variable.other.jome": (node, ctx) => {

@@ -67,8 +67,17 @@ export default class Jome {
     // parent.$['$'+n] = child
   }
 
-  static setStateVar(node, stateVar, value) {
+  static initStateVar(node, stateVar, value) {
     node.$.state[stateVar] = value
+  }
+
+  static setStateVar(node, stateVar, value) {
+    if (node.$.state.hasOwnProperty(stateVar)) {
+      node.$.state[stateVar] = value
+    } else if (node.$.parent) {
+      return this.setStateVar(node.$.parent, stateVar, value)
+    }
+    throw new Error("Cannot set unkown state variable", stateVar)
   }
 
   static getStateVar(node, stateVar) {

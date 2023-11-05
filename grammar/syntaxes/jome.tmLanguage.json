@@ -434,9 +434,9 @@
             {
               "name": "meta.string-template-literal.jome",
               "begin": "\\{",
-              "beginCaptures": {"0": {"name": "punctuation.definition.template-literal.begin.jome"}},
+              "beginCaptures": {"0": {"name": "punctuation.definition.template-expression.begin.jome"}},
               "end": "\\}",
-              "endCaptures": {"0": {"name": "punctuation.definition.template-literal.end.jome"}},
+              "endCaptures": {"0": {"name": "punctuation.definition.template-expression.end.jome"}},
               "patterns": [{ "include": "#expression" }]
             },
             {
