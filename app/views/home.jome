@@ -418,6 +418,47 @@ main {
   - #red: 0xFF0000
   - ...
 
+  ## State variables
+
+  Nodes can have state variables that start with a percentage sign like `%stateVar = 10`
+
+  ```jome
+  { // %count does not have to be declared in the Btn class, you can attach any state to any node
+    Btn %count: 0, ~click: => (%count += 1)
+      Txt "Clicked {%count} {%count == 1 ? 'time' : 'times'}"  
+  }
+  // Txt does not have a %count state variable, so it checks to see if it's parent has one. Yes, Btn has a state variable called %count.
+  // So Txt will add itself as a dependency on Btn state. It Btn state changes, then Txt will be updated too.
+  ```
+
+  Comment est-ce que je compile cela?
+  ```js
+  let btn = new Btn()
+  jome.setStateVar(btn, "count", 0)
+  // btn.$.state.count = 0
+  // jome.addChild(btn, (__state) => new Txt(`Clicked ${__state.count} ${__state.count == 1 ? 'time' : 'times'}`))
+  // let txt = () => new Txt(`Clicked ${jome.getStateVar(@, 'count')} ${jome.getStateVar(@, 'count') == 1 ? 'time' : 'times'}`)
+  // jome.addChild(btn, txt)
+  jome.addDependentChild(btn, "count", () => new Txt(`Clicked ${jome.getStateVar(@, 'count')} ${jome.getStateVar(@, 'count') == 1 ? 'time' : 'times'}`))
+  // jome.addChild(btn, new Txt(() => `Clicked ${jome.getStateVar(@, 'count')} ${jome.getStateVar(@, 'count') == 1 ? 'time' : 'times'}`))
+  // Since txt is referencing to the %count state, that add it as a listener
+  // jome.addListener(btn, "count", txt)
+  // btn.$.listeners.push(txt)
+
+  // Ici, Txt devient une fonction au lieu de simplement un object puisqu'il dépend du state.
+  ```
+
+  ### Documenting state variables
+
+  Declaring state variables is not necessary. You can simply attach them to nodes. But it should be pretty important
+  to declare them, in order to know what is available.
+
+  ```jome
+  class Something |%someState| => {
+
+  }
+  ```
+
   ## Optional keys
 
   :? => set le key value seulement si il y a une valeur

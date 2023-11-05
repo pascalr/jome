@@ -1,3 +1,6 @@
+// Everything here is static instead of being a class Node that other classes inherit from
+// because it is more flexible this way. It works with javascript that is not Jome too.
+
 export default class Jome {
 
   // x = [1,2,3]; $$.at(x, -1) => 3
@@ -63,6 +66,20 @@ export default class Jome {
     // let n = child.$.name || ('' + parent.$.childrenCount)
     // parent.$['$'+n] = child
   }
+
+  static setStateVar(node, stateVar, value) {
+    node.$.state[stateVar] = value
+  }
+
+  static getStateVar(node, stateVar) {
+    if (node.$.state.hasOwnProperty(stateVar)) {
+      return node.$.state[stateVar]
+    } else if (node.$.parent) {
+      return this.getStateVar(node.$.parent, stateVar)
+    }
+    throw new Error("Unknown state variable", stateVar)
+  }
+  // btn.$.state.count = 0
 
   // static getOrCreateChild(parent, name) {
   //   let s = name.split('/')

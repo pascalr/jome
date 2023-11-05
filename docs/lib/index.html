@@ -75,6 +75,65 @@
 <ul>
 <li><a href="/jome/lib/html">Html</a></li>
 </ul>
+<h3>Alive</h3>
+<pre><code class="language-jome"><span class="hljs-keyword">import</span> {<span class="hljs-title class_">Alive</span>} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;alive&quot;</span>
+<span class="hljs-keyword">import</span> {<span class="hljs-title class_">Btn</span>, <span class="hljs-title class_">Txt</span>} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;html&quot;</span>
+
+{
+  <span class="hljs-title class_">Alive</span> target: <span class="hljs-string">&#x27;#jome-react-placeholder&#x27;</span>
+    <span class="hljs-title class_">Btn</span> <span class="hljs-variable">@count</span>: <span class="hljs-number">0</span>, ~click: =&gt; (<span class="hljs-variable">@count</span> += <span class="hljs-number">1</span>)
+      <span class="hljs-title class_">Txt</span> =&gt; <span class="hljs-string">&quot;Clicked {@count} {@count == 1 ? &#x27;time&#x27; : &#x27;times&#x27;}&quot;</span>  
+}
+</code></pre>
+<p>Alive should check for all the signals of all it's descendants.</p>
+<p>Add a listener to it.</p>
+<p>Alive should use createElement to get js elements and not toHtml.</p>
+<p>Faire un exemple sans Html pour que ce soit plus simple au début.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">import</span> {<span class="hljs-title class_">Alive</span>} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;alive&quot;</span>
+
+{
+  <span class="hljs-title class_">Alive</span>
+    app: <span class="hljs-title class_">App</span> count: <span class="hljs-number">0</span>
+      <span class="hljs-title class_">Button</span> <span class="hljs-string">&quot;Click me&quot;</span>, ~click: =&gt; (<span class="hljs-variable">app</span>.<span class="hljs-variable">count</span> += <span class="hljs-number">1</span>)
+      <span class="hljs-title class_">Txt</span> <span class="hljs-string">&quot;Button click count: &quot;</span>+<span class="hljs-variable">app</span>.<span class="hljs-variable">count</span>
+}
+</code></pre>
+<p>Add to the onclick js function a call to Alive.update or something.</p>
+<p>En fait, tout ce qui est fait avec React c'est pour gérer le state.</p>
+<p>Ça prend simplement un autre type de variable, state variable, peut-être qui commence avec %?</p>
+<p>Les nodes auraient un state.</p>
+<pre><code class="language-jome">
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Something</span> |%<span class="hljs-variable">someState</span>| =&gt; {
+
+}
+
+{ <span class="hljs-comment">// %count does not have to be declared in the Btn class, you can attach any state to any node, or maybe not, maybe it has to be declared</span>
+  <span class="hljs-title class_">Btn</span> %count: <span class="hljs-number">0</span>, ~click: =&gt; (%<span class="hljs-variable">count</span> += <span class="hljs-number">1</span>)
+    <span class="hljs-title class_">Txt</span> <span class="hljs-string">&quot;Clicked {%count} {%count == 1 ? &#x27;time&#x27; : &#x27;times&#x27;}&quot;</span>  
+}
+<span class="hljs-comment">// Txt does not have a %count state variable, so it checks to see if it&#x27;s parent has one. Yes, Btn has a state variable called %count.</span>
+<span class="hljs-comment">// So Txt will add itself as a dependency on Btn state. It Btn state changes, then Txt will be updated too.</span>
+</code></pre>
+<p>Comment est-ce que je compile cela?</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> btn = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Btn</span>()
+jome.<span class="hljs-title function_">setStateVar</span>(btn, <span class="hljs-string">&quot;count&quot;</span>, <span class="hljs-number">0</span>)
+<span class="hljs-comment">// btn.$.state.count = 0</span>
+<span class="hljs-comment">// jome.addChild(btn, (__state) =&gt; new Txt(`Clicked ${__state.count} ${__state.count == 1 ? &#x27;time&#x27; : &#x27;times&#x27;}`))</span>
+<span class="hljs-comment">// let txt = () =&gt; new Txt(`Clicked ${jome.getStateVar(@, &#x27;count&#x27;)} ${jome.getStateVar(@, &#x27;count&#x27;) == 1 ? &#x27;time&#x27; : &#x27;times&#x27;}`)</span>
+<span class="hljs-comment">// jome.addChild(btn, txt)</span>
+jome.<span class="hljs-title function_">addDependentChild</span>(btn, <span class="hljs-string">&quot;count&quot;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Txt</span>(<span class="hljs-string">`Clicked <span class="hljs-subst">${jome.getStateVar(@, <span class="hljs-string">&#x27;count&#x27;</span>)}</span> <span class="hljs-subst">${jome.getStateVar(@, <span class="hljs-string">&#x27;count&#x27;</span>) == <span class="hljs-number">1</span> ? <span class="hljs-string">&#x27;time&#x27;</span> : <span class="hljs-string">&#x27;times&#x27;</span>}</span>`</span>))
+<span class="hljs-comment">// jome.addChild(btn, new Txt(() =&gt; `Clicked ${jome.getStateVar(@, &#x27;count&#x27;)} ${jome.getStateVar(@, &#x27;count&#x27;) == 1 ? &#x27;time&#x27; : &#x27;times&#x27;}`))</span>
+<span class="hljs-comment">// Since txt is referencing to the %count state, that add it as a listener</span>
+<span class="hljs-comment">// jome.addListener(btn, &quot;count&quot;, txt)</span>
+<span class="hljs-comment">// btn.$.listeners.push(txt)</span>
+
+<span class="hljs-comment">// Ici, Txt devient une fonction au lieu de simplement un object puisqu&#x27;il dépend du state.</span>
+</code></pre>
+<p>Ca me prend un exemple facile pour faire des tests</p>
+<pre><code class="language-jome">{
+  <span class="hljs-title class_">Obj</span> %
+}
+</code></pre>
 
               </div>
             </div>
