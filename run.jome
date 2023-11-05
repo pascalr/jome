@@ -28,6 +28,11 @@ JomeBuilder projectAbsPath: __dirname
   src 'app/views/compiling.jome', as: 'compiling/index.html'
   src 'app/views/home.jome', as: 'index.html'
 
+<sh>
+  npx prettier --write --ignore-path=.prettierignore .jome/**.built.js
+  npx prettier --write --ignore-path=.prettierignore ./*.built.js
+</sh>
+
 ExpressServer port: 3000
   useStatic '/jome', 'docs'
   get '/', |req, res| => (

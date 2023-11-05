@@ -33,6 +33,7 @@
     "morgan": "^1.10.0",
     "node-fetch": "^3.3.0",
     "node-html-parser": "^6.1.4",
+    "prettier": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "vscode-oniguruma": "^2.0.0",

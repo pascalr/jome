@@ -746,6 +746,18 @@ main {
 
   Environment variables or global variables it is not clear yet.
 
+  ## Pretty output
+
+  Idéalement, je ne me soucis pas de l'indentation de l'output et tout le tralala qui peut compliquer le compilateur pour rien.
+
+  Simplement passer le code dans un formatteur de code.
+
+  J'ai essayé prettier et js-beautify.
+
+  Je préfère de loin prettier je trouve son output plus beau personnellement.
+
+  Le problème est que prettier bug et ne veut pas process mes fichiers s'ils sont dans le .gitignore file............
+
   ## Contributing
 
   I recommend using visual studio code for now because it is super usefull for debugging tokenization. You hit Ctrl+Shift+P,
