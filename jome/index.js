@@ -17,7 +17,7 @@ export default class Jome {
   static createObj(parent=null, obj={}, meta={}) {
     if (!obj.$) {
       let {children, ...otherMeta} = meta
-      obj.$ = {children: [], signals: [], ...otherMeta, chain: (func) => {
+      obj.$ = {children: [], signals: [], state: {}, ...otherMeta, chain: (func) => {
         func(obj)
         return obj
       }}

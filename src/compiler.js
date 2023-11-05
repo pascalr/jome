@@ -436,9 +436,9 @@ function _compileJomeObj(obj, ctx) {
     }
     r += `.${funcCalls[funcCalls.length-1]}`
   }
-  // Object.keys(stateVars).forEach(stateVarName => {
-  //   r += `\njome.initStateVar("${stateVarName}")`
-  // })
+  Object.keys(stateVars).forEach(stateVarName => {
+    r += `\njome.initStateVar(${ctx.currentVariableAssignment}, "${stateVarName}", ${stateVars[stateVarName]})`
+  })
   return r
 }
 
@@ -659,7 +659,10 @@ function assignVariable(node, ctx, keyword) {
     let func = next.captureNext()
     return `function ${value}() ${jsBlock(func, ctx, true)}`
   }
-  return outKeyword+value+' = '+compileNode(next, ctx)
+  ctx.currentVariableAssignment = value
+  let result = outKeyword+value+' = '+compileNode(next, ctx)
+  ctx.currentVariableAssignment = null
+  return result
 }
 
 function buildBlock(node, ctx, func) {
