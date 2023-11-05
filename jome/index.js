@@ -11,66 +11,63 @@ function initNode(node) {
 //   .getFive();
 let jome = (target) => {
 
-  let isDependent = (typeof target === 'function')
-  let _node
-  
-  if (!isDependent) {
-    _node = target
-    initNode(_node)
-  }
+  let wrapper = {_node: null, addChildren, addChild, node, initStateVar, setStateVar, setParent, call, setKey, init}
 
-  let wrapper = {addChildren, addChild, node, initStateVar, setStateVar, setParent, call, setKey, init}
+  if (typeof target !== 'function') {
+    wrapper._node = target
+    initNode(wrapper._node)
+  }
 
   // If the target is a function, the object is created here.
   function init() {
     // FIXME: Pass __state__ as args somehow
-    _node = target({
+    wrapper._node = target({
       get() {
         return null
       }
     })
-    initNode(_node)
+    initNode(wrapper._node)
     return wrapper
   }
 
   function call(func) {
-    func(_node)
+    func(wrapper._node)
     return wrapper
   }
 
   function addChild(child) {
-    _node.$.children.push(child)
+    wrapper._node.$.children.push(child)
     if (child.$) {
-      child.$.parent = _node
+      child.$.parent = wrapper._node
     }
     return wrapper
   }
 
   function setKey(key) {
-    _node.$.parent[key] = _node
+    wrapper._node.$.parent[key] = wrapper._node
     return wrapper
   }
 
   function addChildren(children) {
-    children.forEach(child => addChild(_node, child))
+    children.forEach(child => addChild(wrapper._node, child))
     return wrapper
   }
 
   function initStateVar(stateVar, value) {
-    _node.$.state[stateVar] = value
+    wrapper._node.$.state[stateVar] = value
     return wrapper
   }
 
   function setParent(parent) {
-    jome(parent).addChild(_node)
+    jome(parent).addChild(wrapper._node)
     return wrapper
   }
 
   function setStateVar(stateVar, value) {
-    if (_node.$.state.hasOwnProperty(stateVar)) {
-      _node.$.state[stateVar] = value
-    } else if (_node.$.parent) {
-      this.setStateVar(_node.$.parent, stateVar, value)
+    if (wrapper._node.$.state.hasOwnProperty(stateVar)) {
+      wrapper._node.$.state[stateVar] = value
+    } else if (wrapper._node.$.parent) {
+      this.setStateVar(wrapper._node.$.parent, stateVar, value)
     } else {
       throw new Error("Cannot set unkown state variable", stateVar)
     }
@@ -78,7 +75,7 @@ let jome = (target) => {
   }
 
   function node() {
-    return _node
+    return wrapper._node
   }
 
   return wrapper;
