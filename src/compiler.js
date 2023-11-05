@@ -205,6 +205,7 @@ function _buildJomeObjs(nodes, ctx, isRoot = true) {
     let meta = {}
     let stateVars = {}
     let argTokens = []
+    let key
     let type
     for (let i = 0; i < node.array.length; i++) {
       let part = node.array[i]
@@ -218,6 +219,8 @@ function _buildJomeObjs(nodes, ctx, isRoot = true) {
         let val = compileNode(node.array[i+2], ctx)
         stateVars[name] = val
         i += 2
+      } else if (i === 0 && part.type === 'meta.dictionary-key.jome') {
+        key = part.children[0].text()
       } else {
         argTokens.push(part)
       }
@@ -242,7 +245,7 @@ function _buildJomeObjs(nodes, ctx, isRoot = true) {
       meta.tutorPath = ctx.tutor
     }
     if (type || Object.keys(meta).length) {
-      result.push({type, args, attrs, meta, children, funcCalls, stateVars})
+      result.push({type, args, attrs, meta, children, funcCalls, stateVars, key})
     }
       // $$.newObj({}, {name: 'container', children: [$$.newObj({}, {name: 'subcontainer'})], tutor: 'subcontainer'})
     // } else if (tok.type === 'keyword.control.tutor.jome') {
@@ -417,13 +420,16 @@ function buildDictV2(topLevelNodes, ctx, func) {
 // }
 
 function _compileJomeObj(obj, ctx) {
-  let {type, attrs, meta, args, children, funcCalls, stateVars} = obj
+  let {type, attrs, meta, args, children, funcCalls, stateVars, key} = obj
   let s1 = type ? `new ${type}${args}` : compileJsObj(attrs)
   // If it is not a node (no children)
-  if (!children.length && !funcCalls.length && !Object.keys(stateVars).length) { // FIXME: Func calls should not make it a node...
+  if (!children.length && !funcCalls.length && !Object.keys(stateVars).length && !key) { // FIXME: Func calls should not make it a node...
     return ctx.hasStateVariable ? '(__state__) => ('+s1+')' : s1
   }
   let r = `${JOME_LIB}(${s1})`
+  if (key) {
+    r += `\n  .setKey("${key}")`
+  }
   if (ctx.currentObjPath) {
     r += `\n  .setParent(${ctx.currentObjPath})`
   }
@@ -1101,7 +1107,7 @@ const PROCESSES = {
   },
   "variable.other.state-var.jome": (node, ctx) => {
     ctx.hasStateVariable = true
-    return `jome.getStateVar(__state__, ${node.text().slice(1)})`
+    return `__state__.get("${node.text().slice(1)}")`
   },
   "keyword.control.conditional.else.jome": (node, ctx) => {
     let val = node.captureNext()

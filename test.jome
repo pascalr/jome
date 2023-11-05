@@ -5,7 +5,7 @@ class SomeNode {
 }
 var node = {
   SomeNode %stateVar: 20
-    SomeNode tenMore: (%stateVar+10)
+    child: SomeNode tenMore: (%stateVar+10)
 }
 
 var testH1 = { H1 "Un titre" }

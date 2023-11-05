@@ -21,7 +21,7 @@ let jome = (target) => {
   //   target.$ = {...target.$, metaProperties}
   // }
 
-  let wrapper = {addChildren, addChild, node, initStateVar, setStateVar, setParent, call}
+  let wrapper = {addChildren, addChild, node, initStateVar, setStateVar, setParent, call, setKey}
 
   function call(func) {
     func(target)
@@ -33,6 +33,11 @@ let jome = (target) => {
     if (child.$) {
       child.$.parent = target
     }
+    return wrapper
+  }
+
+  function setKey(key) {
+    target.$.parent[key] = target
     return wrapper
   }
 
