@@ -21,7 +21,7 @@ let jome = (target) => {
   //   target.$ = {...target.$, metaProperties}
   // }
 
-  let wrapper = {addChildren, node, initStateVar, setStateVar, setParent, call}
+  let wrapper = {addChildren, addChild, node, initStateVar, setStateVar, setParent, call}
 
   function call(func) {
     func(target)

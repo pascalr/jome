@@ -423,18 +423,17 @@ function _compileJomeObj(obj, ctx) {
   if (!children.length && !funcCalls.length && !Object.keys(stateVars).length) { // FIXME: Func calls should not make it a node...
     return s1
   }
-  if (children.length) {
-    meta.children = `[${children.map(c => _compileJomeObj(c, ctx)).join(', ')}]`
-  }
   let r = `${JOME_LIB}(${s1})`
   if (ctx.currentObjPath) {
     r += `\n  .setParent(${ctx.currentObjPath})`
   }
-  // let r = `${JOME_LIB}(${ctx.currentObjPath}, ${s1}, ${compileJsObj(meta)})`
+  if (children.length) {
+    r += children.map(c => '\n  .addChild('+_compileJomeObj(c, ctx)+')').join('')
+  }
   if (funcCalls.length) {
     let chained = funcCalls.slice(0,-1)
     if (chained.length) {
-      r += chained.map(call => `\n  .call(o => o.${call})`).join('\n')
+      r += chained.map(call => `\n  .call(o => o.${call})`).join('')
     }
   }
   Object.keys(stateVars).forEach(stateVarName => {
