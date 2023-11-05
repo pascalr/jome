@@ -1,18 +1,16 @@
 // Everything here is static instead of being a class Node that other classes inherit from
 // because it is more flexible this way. It works with javascript that is not Jome too.
 
+// TODO:
+// jome({some: 'object', y: 20}).node()
+// L'avantage de cette syntaxe, est de pouvoir faire:
+// jome(node)
+//   .addChildren(child1)
+//   .addChildren(child2)
+//   .addChildren(child3)
+//   .node() // Get the node object
+
 export default class Jome {
-
-  // x = [1,2,3]; $$.at(x, -1) => 3
-  // $$.at(dict, 'key')
-  static at(list, indexOrKey) {
-    return (indexOrKey < 0) ? list[list.length+indexOrKey] : list[indexOrKey]
-  }
-
-  static assign(target, source) {
-    target = {...target, ...source}
-    return target
-  }
 
   static createObj(parent=null, obj={}, meta={}) {
     if (!obj.$) {
@@ -88,46 +86,4 @@ export default class Jome {
     }
     //throw new Error("Unknown state variable", stateVar)
   }
-  // btn.$.state.count = 0
-
-  // static getOrCreateChild(parent, name) {
-  //   let s = name.split('/')
-  //   let o = parent
-  //   for (let i = 0; i < s.length; i++) {
-  //     let v = s[i]
-  //     let c = (/^\d+$/.test(v)) ? o.$['$'+(parseInt(v)-1)] : o.$['$'+v]
-  //     if (!c) {
-  //       c = this.createObj(null, {}, {name: v})
-  //       this.addChild(o, c)
-  //     }
-  //     o = c
-  //   }
-  //   return o
-  // }
-
-  // static getChild(parent, name) {
-  //   let s = name.split('/')
-  //   let o = parent
-  //   for (let i = 0; i < s.length; i++) {
-  //     let v = s[i]
-  //     o = (/^\d+$/.test(v)) ? o.$['$'+(parseInt(v)-1)] : o.$['$'+v]
-  //     if (!o) {return null}
-  //   }
-  //   return o
-  // }
-
-  // // Children are attached directly to the $ property.
-  // static getChildren(obj) {
-  //   let list = []
-  //   Object.keys(obj.$||{}).forEach(key => {
-  //     if (key[0] === '$') {
-  //       list.push(obj.$[key])
-  //     }
-  //   })
-  //   return list
-  // }
-
-  // static getNthChild(parent, index) {
-  //   return parent.$.children[index-1]
-  // }
 }
