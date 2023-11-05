@@ -77,7 +77,7 @@ export default class Jome {
     } else if (node.$.parent) {
       return this.getStateVar(node.$.parent, stateVar)
     }
-    throw new Error("Unknown state variable", stateVar)
+    //throw new Error("Unknown state variable", stateVar)
   }
   // btn.$.state.count = 0
 

@@ -203,18 +203,25 @@ function _buildJomeObjs(nodes, ctx, isRoot = true) {
     // if (tok.type === 'meta.jome-obj.jome') {
     let attrs = {}
     let meta = {}
+    let stateVars = {}
     let argTokens = []
     let type
-    node.array.forEach(part => {
+    for (let i = 0; i < node.array.length; i++) {
+      let part = node.array[i]
       if (part.type === 'entity.name.type.jome-obj.jome') {
         type = part.text()
       } else if (part.type === 'keyword.control.tutor.jome') {
         // Ignore handled elsewhere
       //} else if (part.type && !part.type.startsWith('punctuation')) {
+      } else if (part.type === 'variable.other.state-var.jome') {
+        let name = part.text().slice(1)
+        let val = compileNode(node.array[i+2], ctx)
+        stateVars[name] = val
+        i += 2
       } else {
         argTokens.push(part)
       }
-    })
+    }
     let args = compileFunctionCallArgs(argTokens, type, ctx)
     let childrenNodes = []
     let funcCalls = []
@@ -235,7 +242,7 @@ function _buildJomeObjs(nodes, ctx, isRoot = true) {
       meta.tutorPath = ctx.tutor
     }
     if (type || Object.keys(meta).length) {
-      result.push({type, args, attrs, meta, children, funcCalls})
+      result.push({type, args, attrs, meta, children, funcCalls, stateVars})
     }
       // $$.newObj({}, {name: 'container', children: [$$.newObj({}, {name: 'subcontainer'})], tutor: 'subcontainer'})
     // } else if (tok.type === 'keyword.control.tutor.jome') {
@@ -410,7 +417,7 @@ function buildDictV2(topLevelNodes, ctx, func) {
 // }
 
 function _compileJomeObj(obj, ctx) {
-  let {type, attrs, meta, args, children, funcCalls} = obj
+  let {type, attrs, meta, args, children, funcCalls, stateVars} = obj
   let s1 = type ? `new ${type}${args}` : compileJsObj(attrs)
   // If it is not a node (no children)
   if (!children.length && !funcCalls.length) { // FIXME: Func calls should not make it a node...
@@ -1078,6 +1085,9 @@ const PROCESSES = {
   }).join('\n  ')}
 }\n\n`
   },
+  // "variable.other.state-var.jome": (node, ctx) => {
+  //   return node.text().slice(1)
+  // },
   "keyword.control.conditional.else.jome": (node, ctx) => {
     let val = node.captureNext()
     return ` else ${jsBlock(val, ctx)}`

@@ -112,6 +112,7 @@
         { "include": "#scripts" },
         { "include": "#arrow" },
         { "include": "#jome-const" },
+        { "include": "#state-var" },
         { "include": "#arrow_getter" },
         { "include": "#operators" },
         { "include": "#function" },
@@ -306,6 +307,14 @@
         {
           "name": "variable.other.constant.jome",
           "match": "\\#\\w+"
+        }
+      ]
+		},
+    "state-var": {
+			"patterns": [
+        {
+          "name": "variable.other.state-var.jome",
+          "match": "%\\w+"
         }
       ]
 		},
