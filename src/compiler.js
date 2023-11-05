@@ -421,7 +421,7 @@ function _compileJomeObj(obj, ctx) {
   let s1 = type ? `new ${type}${args}` : compileJsObj(attrs)
   // If it is not a node (no children)
   if (!children.length && !funcCalls.length && !Object.keys(stateVars).length) { // FIXME: Func calls should not make it a node...
-    return s1
+    return ctx.hasStateVariable ? '(__state__) => ('+s1+')' : s1
   }
   let r = `${JOME_LIB}(${s1})`
   if (ctx.currentObjPath) {
@@ -443,7 +443,9 @@ function _compileJomeObj(obj, ctx) {
   if (funcCalls.length) {
     r += `\n  .${funcCalls[funcCalls.length-1]}`
   }
-  return r
+  let res = ctx.hasStateVariable ? '(__state__) => ('+r+')' : r
+  ctx.hasStateVariable = false
+  return res
 }
 
 function buildJomeObjs(node, ctx) {
@@ -1097,9 +1099,10 @@ const PROCESSES = {
   }).join('\n  ')}
 }\n\n`
   },
-  // "variable.other.state-var.jome": (node, ctx) => {
-  //   return node.text().slice(1)
-  // },
+  "variable.other.state-var.jome": (node, ctx) => {
+    ctx.hasStateVariable = true
+    return `jome.getStateVar(__state__, ${node.text().slice(1)})`
+  },
   "keyword.control.conditional.else.jome": (node, ctx) => {
     let val = node.captureNext()
     return ` else ${jsBlock(val, ctx)}`
