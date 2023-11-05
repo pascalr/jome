@@ -426,19 +426,24 @@ function _compileJomeObj(obj, ctx) {
   if (children.length) {
     meta.children = `[${children.map(c => _compileJomeObj(c, ctx)).join(', ')}]`
   }
-  let r = `${JOME_LIB}.createObj(${ctx.currentObjPath}, ${s1}, ${compileJsObj(meta)})`
+  let r = `${JOME_LIB}(${s1})`
+  if (ctx.currentObjPath) {
+    r += `\n  .setParent(${ctx.currentObjPath})`
+  }
+  // let r = `${JOME_LIB}(${ctx.currentObjPath}, ${s1}, ${compileJsObj(meta)})`
   if (funcCalls.length) {
-    // TODO: Use something similar to underscore.js chain function instead of this.
-    // TODO: Remove chain method on $ property!
     let chained = funcCalls.slice(0,-1)
     if (chained.length) {
-      r += '\n'+chained.map(call => `.$.chain(o => o.${call})`).join('\n')
+      r += chained.map(call => `\n  .call(o => o.${call})`).join('\n')
     }
-    r += `.${funcCalls[funcCalls.length-1]}`
   }
   Object.keys(stateVars).forEach(stateVarName => {
-    r += `\njome.initStateVar(${ctx.currentVariableAssignment}, "${stateVarName}", ${stateVars[stateVarName]})`
+    r += `\n  .initStateVar(${ctx.currentVariableAssignment}, "${stateVarName}", ${stateVars[stateVarName]})`
   })
+  r += '\n  .node()'
+  if (funcCalls.length) {
+    r += `\n  .${funcCalls[funcCalls.length-1]}`
+  }
   return r
 }
 
