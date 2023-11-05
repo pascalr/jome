@@ -1,66 +1,76 @@
-// Everything here is static instead of being a class Node that other classes inherit from
-// because it is more flexible this way. It works with javascript that is not Jome too.
+function initNode(node) {
+  if (!node.$) {
+    node.$ = {children: [], signals: [], state: {}}
+  }
+}
 
-// TODO:
-// jome({some: 'object', y: 20}).node()
-// L'avantage de cette syntaxe, est de pouvoir faire:
-// jome(node)
-//   .addChildren(child1)
-//   .addChildren(child2)
-//   .addChildren(child3)
-//   .node() // Get the node object
-
+// Example:
+// var testChainFuncCall = jome(new TestFuncCall())
+//   .call((o) => o.getFive())
+//   .node()
+//   .getFive();
 let jome = (target) => {
 
-  if (!target.$) {
-    target.$ = {children: [], signals: [], state: {}}
+  let isDependent = (typeof target === 'function')
+  let _node
+  
+  if (!isDependent) {
+    _node = target
+    initNode(_node)
   }
 
-  // // Do I really want to do this?
-  // function setMeta(metaProperties) {
-  //   target.$ = {...target.$, metaProperties}
-  // }
+  let wrapper = {addChildren, addChild, node, initStateVar, setStateVar, setParent, call, setKey, init}
 
-  let wrapper = {addChildren, addChild, node, initStateVar, setStateVar, setParent, call, setKey}
+  // If the target is a function, the object is created here.
+  function init() {
+    // FIXME: Pass __state__ as args somehow
+    _node = target({
+      get() {
+        return null
+      }
+    })
+    initNode(_node)
+    return wrapper
+  }
 
   function call(func) {
-    func(target)
+    func(_node)
     return wrapper
   }
 
   function addChild(child) {
-    target.$.children.push(child)
+    _node.$.children.push(child)
     if (child.$) {
-      child.$.parent = target
+      child.$.parent = _node
     }
     return wrapper
   }
 
   function setKey(key) {
-    target.$.parent[key] = target
+    _node.$.parent[key] = _node
     return wrapper
   }
 
   function addChildren(children) {
-    children.forEach(child => addChild(target, child))
+    children.forEach(child => addChild(_node, child))
     return wrapper
   }
 
   function initStateVar(stateVar, value) {
-    target.$.state[stateVar] = value
+    _node.$.state[stateVar] = value
     return wrapper
   }
 
   function setParent(parent) {
-    jome(parent).addChild(target)
+    jome(parent).addChild(_node)
     return wrapper
   }
 
   function setStateVar(stateVar, value) {
-    if (target.$.state.hasOwnProperty(stateVar)) {
-      target.$.state[stateVar] = value
-    } else if (target.$.parent) {
-      this.setStateVar(target.$.parent, stateVar, value)
+    if (_node.$.state.hasOwnProperty(stateVar)) {
+      _node.$.state[stateVar] = value
+    } else if (_node.$.parent) {
+      this.setStateVar(_node.$.parent, stateVar, value)
     } else {
       throw new Error("Cannot set unkown state variable", stateVar)
     }
@@ -68,7 +78,7 @@ let jome = (target) => {
   }
 
   function node() {
-    return target
+    return _node
   }
 
   return wrapper;

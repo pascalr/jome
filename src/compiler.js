@@ -422,11 +422,17 @@ function buildDictV2(topLevelNodes, ctx, func) {
 function _compileJomeObj(obj, ctx) {
   let {type, attrs, meta, args, children, funcCalls, stateVars, key} = obj
   let s1 = type ? `new ${type}${args}` : compileJsObj(attrs)
-  // If it is not a node (no children)
-  if (!children.length && !funcCalls.length && !Object.keys(stateVars).length && !key) { // FIXME: Func calls should not make it a node...
-    return ctx.hasStateVariable ? '(__state__) => ('+s1+')' : s1
+  if (ctx.hasStateVariable) {
+    s1 = '(__state__) => ('+s1+')'
+  }
+  // If it is not a node
+  if (!children.length && !funcCalls.length && !Object.keys(stateVars).length && !key && !ctx.hasStateVariable) {
+    return s1
   }
   let r = `${JOME_LIB}(${s1})`
+  if (ctx.hasStateVariable) {
+    r += '\n  .init()'
+  }
   if (key) {
     r += `\n  .setKey("${key}")`
   }
@@ -449,9 +455,8 @@ function _compileJomeObj(obj, ctx) {
   if (funcCalls.length) {
     r += `\n  .${funcCalls[funcCalls.length-1]}`
   }
-  let res = ctx.hasStateVariable ? '(__state__) => ('+r+')' : r
   ctx.hasStateVariable = false
-  return res
+  return r
 }
 
 function buildJomeObjs(node, ctx) {
