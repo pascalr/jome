@@ -433,6 +433,9 @@ function _compileJomeObj(obj, ctx) {
   if (ctx.currentObjPath) {
     r += `\n  .setParent(${ctx.currentObjPath})`
   }
+  Object.keys(stateVars).forEach(stateVarName => {
+    r += `\n  .initStateVar(${ctx.currentVariableAssignment}, "${stateVarName}", ${stateVars[stateVarName]})`
+  })
   if (children.length) {
     r += children.map(c => '\n  .addChild('+_compileJomeObj(c, ctx)+')').join('')
   }
@@ -442,9 +445,6 @@ function _compileJomeObj(obj, ctx) {
       r += chained.map(call => `\n  .call(o => o.${call})`).join('')
     }
   }
-  Object.keys(stateVars).forEach(stateVarName => {
-    r += `\n  .initStateVar(${ctx.currentVariableAssignment}, "${stateVarName}", ${stateVars[stateVarName]})`
-  })
   r += '\n  .node()'
   if (funcCalls.length) {
     r += `\n  .${funcCalls[funcCalls.length-1]}`
