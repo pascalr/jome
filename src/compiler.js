@@ -433,9 +433,6 @@ function _compileJomeObj(obj, ctx) {
   if (ctx.hasStateVariable) {
     r += '\n  .init()'
   }
-  if (key) {
-    r += `\n  .setKey("${key}")`
-  }
   if (ctx.currentObjPath) {
     r += `\n  .setParent(${ctx.currentObjPath})`
   }
@@ -456,7 +453,7 @@ function _compileJomeObj(obj, ctx) {
     r += `\n  .${funcCalls[funcCalls.length-1]}`
   }
   ctx.hasStateVariable = false
-  return r
+  return key ? `"${key}", ${r}` : r
 }
 
 function buildJomeObjs(node, ctx) {

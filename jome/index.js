@@ -11,7 +11,8 @@ function initNode(node) {
 //   .getFive();
 let jome = (target) => {
 
-  let wrapper = {_node: null, addChildren, addChild, node, initStateVar, setStateVar, setParent, call, setKey, init}
+  // OPTIMIZE: Is there a way to avoid writing wrapper everywhere?
+  let wrapper = {_node: null, addChildren, addChild, node, initStateVar, setStateVar, setParent, call, init}
 
   if (typeof target !== 'function') {
     wrapper._node = target
@@ -35,16 +36,15 @@ let jome = (target) => {
     return wrapper
   }
 
-  function addChild(child) {
-    wrapper._node.$.children.push(child)
-    if (child.$) {
-      child.$.parent = wrapper._node
+  function addChild(key, child) {
+    let _child = child || key
+    wrapper._node.$.children.push(_child)
+    if (_child.$) {
+      _child.$.parent = wrapper._node
     }
-    return wrapper
-  }
-
-  function setKey(key) {
-    wrapper._node.$.parent[key] = wrapper._node
+    if (child) {
+      wrapper._node[key] = child
+    }
     return wrapper
   }
 
