@@ -31,9 +31,6 @@ function getStateVar(target, stateVar) {
 let jome = (target) => {
 
   // OPTIMIZE: Is there a way to avoid writing wrapper everywhere?
-  // let wrapper = {_node: null, _metaInConstruction: {}, _stateDependencies: [], addChildren, addChild, node, initStateVar, setStateVar, setParent, call, init, addStateVarDep}
-
-  // OPTIMIZE: Is there a way to avoid writing wrapper everywhere?
   let wrapper = {
     _node: null,
     _parent: null,
@@ -41,7 +38,6 @@ let jome = (target) => {
     _stateDependencies: [],
     _calls: [],
     _entries: {},
-    _metaInConstruction: {},
     addChildren: chain(addChildren),
     addChild: chain(addChild),
     initStateVar: chain(initStateVar),
@@ -109,7 +105,7 @@ let jome = (target) => {
   }
 
   function setParent(parent) {
-    wrapper._metaInConstruction.parent = parent
+    wrapper._parent = parent
     // jome(parent).addChild(wrapper._node)
   }
 
@@ -124,10 +120,8 @@ let jome = (target) => {
   }
 
   function node() {
-    Object.keys(wrapper._metaInConstruction).forEach(key => {
-      wrapper._node.$[key] = wrapper._metaInConstruction[key]
-    })
-    if (wrapper._node.$.parent) {
+    if (wrapper._parent) {
+      wrapper._node.$.parent = wrapper._parent
       wrapper._node.$.parent.$.children.push(wrapper._node)
     }
     return wrapper._node
