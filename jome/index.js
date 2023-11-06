@@ -31,8 +31,7 @@ function getStateVar(target, stateVar) {
 let jome = (target) => {
 
   // OPTIMIZE: Is there a way to avoid writing wrapper everywhere?
-  // Rename wrapper to builder?
-  let wrapper = {
+  let builder = {
     _node: null,
     _parent: null,
     _children: [],
@@ -52,15 +51,15 @@ let jome = (target) => {
   }
 
   if (typeof target !== 'function') {
-    wrapper._node = target
-    initNode(wrapper._node)
+    builder._node = target
+    initNode(builder._node)
   }
 
   // TODO: Remove this. It is silly to have an init() and a node(), simply create everything at the end at node()
   // If the target is a function, the object is created here.
   function init() {
     // FIXME: Pass __state__ as args somehow
-    wrapper._node = target({
+    builder._node = target({
       get() {
         return null
       }
@@ -69,42 +68,42 @@ let jome = (target) => {
     // _stateDependencies.forEach(dep => {
     //   getStateVar(wrapper._node)
     // })
-    initNode(wrapper._node)
+    initNode(builder._node)
   }
 
   function chain(func) {
     return (...args) => {
       func(...args)
-      return wrapper
+      return builder
     }
   }
 
   function call(func) {
-    func(wrapper._node)
+    func(builder._node)
   }
 
   function addStateVarDep(name) {
-    wrapper._stateDependencies.push(name)
+    builder._stateDependencies.push(name)
   }
 
   function addChild(key, child) {
     let _child = child || key
-    wrapper._children.push(_child)
+    builder._children.push(_child)
     if (child) {
-      wrapper._entries[key] = child
+      builder._entries[key] = child
     }
   }
 
   function addChildren(children) {
-    children.forEach(child => addChild(wrapper._node, child))
+    children.forEach(child => addChild(builder._node, child))
   }
 
   function initStateVar(stateVar, value) {
-    wrapper._state[stateVar] = value
+    builder._state[stateVar] = value
   }
 
   function setParent(parent) {
-    wrapper._parent = parent
+    builder._parent = parent
     // jome(parent).addChild(wrapper._node)
   }
 
@@ -119,30 +118,30 @@ let jome = (target) => {
   // }
 
   function node() {
-    let meta = wrapper._node.$
+    let meta = builder._node.$
     // Parent
-    if (wrapper._parent) {
-      meta.parent = wrapper._parent
-      meta.parent.$.children.push(wrapper._node)
+    if (builder._parent) {
+      meta.parent = builder._parent
+      meta.parent.$.children.push(builder._node)
     }
     // Children
-    meta.children = wrapper._children
+    meta.children = builder._children
     meta.children.forEach(child => {
       if(child.$) {
-        child.$.parent = wrapper._node
+        child.$.parent = builder._node
       }
     })
     // Copy all the entries into the node
-    Object.keys(wrapper._entries).forEach(key => {
-      wrapper._node[key] = wrapper._entries[key]
+    Object.keys(builder._entries).forEach(key => {
+      builder._node[key] = builder._entries[key]
     })
 
-    meta.state = wrapper._state
+    meta.state = builder._state
 
-    return wrapper._node
+    return builder._node
   }
 
-  return wrapper;
+  return builder;
 }
 
 jome.getStateVar = getStateVar
