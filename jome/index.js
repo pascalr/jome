@@ -28,13 +28,13 @@ let jome = (target) => {
   let builder = {
     _node: null,
     _parent: null,
-    _children: [],
+    _childrenInfo: [],
     _state: {},
     _stateDependencies: [],
     _calls: [],
-    _entries: {},
     addChildren: chain(addChildren),
     addChild: chain(addChild),
+    addChildBuilder: chain(addChildBuilder),
     initStateVar: chain(initStateVar),
     // setStateVar: chain(setStateVar),
     setParent: chain(setParent),
@@ -60,18 +60,18 @@ let jome = (target) => {
 
   // Same as addChild, but takes a function that wants the parent as an argument.
   function addChildBuilder(key, func) {
-    let _func = func || key
-    builder._children.push(_func)
     if (child) {
-      builder._entries[key] = func
+      builder._childrenInfo.push({childBuilder: func, key})
+    } else {
+      builder._childrenInfo.push({childBuilder: key})
     }
   }
 
   function addChild(key, child) {
-    let _child = child || key
-    builder._children.push(_child)
     if (child) {
-      builder._entries[key] = child
+      builder._childrenInfo.push({child, key})
+    } else {
+      builder._childrenInfo.push({child: key})
     }
   }
 
@@ -123,21 +123,15 @@ let jome = (target) => {
       meta.parent.$.children.push(node)
     }
     // Children
-    meta.children = builder._children.map(child => {
+    meta.children = builder._childrenInfo.map(({child, key, childBuilder}) => {
       if(child.$) {
         child.$.parent = node
       }
-      // If the child is a builder
-      return typeof child === 'function' ? child(node) : child
-    })
-    // Copy all the entries into the node
-    Object.keys(builder._entries).forEach(key => {
-      let value = builder._entries[key]
-      // If the entry is a builder
-      // OPTIMIZE: The builder is called twice with above. Only call once.
-      // Instead of using _children, use _childrenInfo, which stores an array of {child, isBuilder, isKey}
-      // This way I don't even need to use _entries...
-      node[key] = typeof child === 'function' ? value(node) : value
+      let value = childBuilder ? childBuilder(node) : child
+      if (key) {
+        node[key] = value
+      }
+      return value
     })
 
     meta.state = builder._state
