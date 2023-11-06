@@ -87,12 +87,9 @@ let jome = (target) => {
 
   function addChild(key, child) {
     let _child = child || key
-    wrapper._node.$.children.push(_child)
-    if (_child.$) {
-      _child.$.parent = wrapper._node
-    }
+    wrapper._children.push(_child)
     if (child) {
-      wrapper._node[key] = child
+      wrapper._entries[key] = child
     }
   }
 
@@ -120,10 +117,24 @@ let jome = (target) => {
   }
 
   function node() {
+    let meta = wrapper._node.$
+    // Parent
     if (wrapper._parent) {
-      wrapper._node.$.parent = wrapper._parent
-      wrapper._node.$.parent.$.children.push(wrapper._node)
+      meta.parent = wrapper._parent
+      meta.parent.$.children.push(wrapper._node)
     }
+    // Children
+    meta.children = wrapper._children
+    meta.children.forEach(child => {
+      if(child.$) {
+        child.$.parent = wrapper._node
+      }
+    })
+    // Copy all the entries into the node
+    Object.keys(wrapper._entries).forEach(key => {
+      wrapper._node[key] = wrapper._entries[key]
+    })
+
     return wrapper._node
   }
 
