@@ -404,9 +404,6 @@ function _compileJomeObj(obj, ctx) {
   stateVariables.forEach(depencency => {
     r += '\n  .addStateVarDep("'+depencency+'")'
   })
-  if (hasStateVariable) {
-    r += '\n  .init()'
-  }
   if (ctx.currentObjPath) {
     r += `\n  .setParent(${ctx.currentObjPath})`
   }
