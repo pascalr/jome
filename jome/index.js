@@ -58,6 +58,15 @@ let jome = (target) => {
     builder._stateDependencies.push(name)
   }
 
+  // Same as addChild, but takes a function that wants the parent as an argument.
+  function addChildBuilder(key, func) {
+    let _func = func || key
+    builder._children.push(_func)
+    if (child) {
+      builder._entries[key] = func
+    }
+  }
+
   function addChild(key, child) {
     let _child = child || key
     builder._children.push(_child)
@@ -114,15 +123,21 @@ let jome = (target) => {
       meta.parent.$.children.push(node)
     }
     // Children
-    meta.children = builder._children
-    meta.children.forEach(child => {
+    meta.children = builder._children.map(child => {
       if(child.$) {
         child.$.parent = node
       }
+      // If the child is a builder
+      return typeof child === 'function' ? child(node) : child
     })
     // Copy all the entries into the node
     Object.keys(builder._entries).forEach(key => {
-      node[key] = builder._entries[key]
+      let value = builder._entries[key]
+      // If the entry is a builder
+      // OPTIMIZE: The builder is called twice with above. Only call once.
+      // Instead of using _children, use _childrenInfo, which stores an array of {child, isBuilder, isKey}
+      // This way I don't even need to use _entries...
+      node[key] = typeof child === 'function' ? value(node) : value
     })
 
     meta.state = builder._state
