@@ -379,7 +379,7 @@ function buildDictV2(topLevelNodes, ctx, func) {
 
       } else if (arr[i+1].type === 'entity.name.type.jome-obj.jome') {
         //value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: node.children}], ctx)[0], ctx)
-        value = _compileJomeObj(_buildJomeObjs([{array: arr.slice(i+1), children: [/* FIXME */]}], ctx)[0], ctx)
+        value = compileNode(_buildJomeObjs([{array: arr.slice(i+1), children: [/* FIXME */]}], ctx)[0], ctx)
         dict[key] = value
       } else {
         dict = buildDictV2ParseKeys(dict, arr, ctx, func)
@@ -389,7 +389,7 @@ function buildDictV2(topLevelNodes, ctx, func) {
   return dict
 }
 
-function _compileJomeObj(obj, ctx) {
+function compileNode(obj, ctx) {
   let {type, attrs, meta, args, children, funcCalls, stateVars, key, stateVariables} = obj
   let s1 = type ? `new ${type}${args}` : compileJsObj(attrs)
   let hasStateVariable = stateVariables.length
@@ -411,7 +411,7 @@ function _compileJomeObj(obj, ctx) {
     r += `\n  .initStateVar(${ctx.currentVariableAssignment}, "${stateVarName}", ${stateVars[stateVarName]})`
   })
   if (children.length) {
-    r += children.map(c => '\n  .addChild('+_compileJomeObj(c, ctx)+')').join('')
+    r += children.map(c => '\n  .addChild('+compileNode(c, ctx)+')').join('')
   }
   if (funcCalls.length) {
     let chained = funcCalls.slice(0,-1)
@@ -666,7 +666,7 @@ function buildBlock(node, ctx, func) {
   } else {
     return topLevelNodes.map(top => {
       if (top.array[0].type === 'entity.name.type.jome-obj.jome') {
-        return _compileJomeObj(_buildJomeObjs([top], ctx)[0], ctx)
+        return compileNode(_buildJomeObjs([top], ctx)[0], ctx)
 
       } else if (top.array[0].type === 'entity.name.function.jome') { // Func call
         let name = top.array[0].text()
