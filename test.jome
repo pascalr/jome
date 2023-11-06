@@ -3,10 +3,10 @@ import {H1} from './lib/html.jome'
 class SomeNode {
 
 }
-var node = {
-  SomeNode %stateVar: 20
-    child: SomeNode tenMore: (%stateVar+10)
-}
+// var node = {
+//   SomeNode %stateVar: 20
+//     child: SomeNode tenMore: (%stateVar+10)
+// }
 
 var testH1 = { H1 "Un titre" }
 

@@ -1,9 +1,3 @@
-function initNode(node) {
-  if (!node.$) {
-    node.$ = {children: [], signals: [], state: {}}
-  }
-}
-
 function params(target) {
   return Object.keys(target.__props__)
     .filter(key => !target[key])
@@ -45,30 +39,8 @@ let jome = (target) => {
     // setStateVar: chain(setStateVar),
     setParent: chain(setParent),
     call: chain(call),
-    init: chain(init),
     addStateVarDep: chain(addStateVarDep),
     node
-  }
-
-  if (typeof target !== 'function') {
-    builder._node = target
-    initNode(builder._node)
-  }
-
-  // TODO: Remove this. It is silly to have an init() and a node(), simply create everything at the end at node()
-  // If the target is a function, the object is created here.
-  function init() {
-    // FIXME: Pass __state__ as args somehow
-    builder._node = target({
-      get() {
-        return null
-      }
-    })
-    let args = {}
-    // _stateDependencies.forEach(dep => {
-    //   getStateVar(wrapper._node)
-    // })
-    initNode(builder._node)
   }
 
   function chain(func) {
@@ -79,7 +51,7 @@ let jome = (target) => {
   }
 
   function call(func) {
-    func(builder._node)
+    builder._calls.push(func)
   }
 
   function addStateVarDep(name) {
@@ -118,27 +90,52 @@ let jome = (target) => {
   // }
 
   function node() {
-    let meta = builder._node.$
+
+    let node;
+    if (typeof target === 'function') {
+      // FIXME: Pass __state__ as args somehow
+      let args = {}
+      node = target({
+        get() {
+          return null
+        }
+      })
+      // _stateDependencies.forEach(dep => {
+      //   getStateVar(wrapper._node)
+      // })
+    } else {
+      node = target
+    }
+    if (!node.$) {
+      node.$ = {children: [], signals: [], state: {}}
+    }
+
+    let meta = node.$
     // Parent
     if (builder._parent) {
       meta.parent = builder._parent
-      meta.parent.$.children.push(builder._node)
+      meta.parent.$.children.push(node)
     }
     // Children
     meta.children = builder._children
     meta.children.forEach(child => {
       if(child.$) {
-        child.$.parent = builder._node
+        child.$.parent = node
       }
     })
     // Copy all the entries into the node
     Object.keys(builder._entries).forEach(key => {
-      builder._node[key] = builder._entries[key]
+      node[key] = builder._entries[key]
     })
 
     meta.state = builder._state
 
-    return builder._node
+    // Calls
+    builder._calls.forEach(func => {
+      func(node)
+    })
+
+    return node
   }
 
   return builder;
