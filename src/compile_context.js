@@ -23,6 +23,7 @@ export class CompileContext {
     this.rootDir = null // For imports
     this.interfaces = {}
     this.classes = {}
+    this.stateVariables = []
   }
 
   spacing() {

@@ -244,10 +244,10 @@ function _buildJomeObjs(nodes, ctx, isRoot = true) {
     if (isRoot && ctx.tutor) {
       meta.tutorPath = ctx.tutor
     }
-    let hasStateVariable = ctx.hasStateVariable
-    ctx.hasStateVariable = false
+    let stateVariables = ctx.stateVariables
+    ctx.stateVariables = []
     if (type || Object.keys(meta).length) {
-      result.push({type, args, attrs, meta, children, funcCalls, stateVars, key, hasStateVariable})
+      result.push({type, args, attrs, meta, children, funcCalls, stateVars, key, stateVariables})
     }
       // $$.newObj({}, {name: 'container', children: [$$.newObj({}, {name: 'subcontainer'})], tutor: 'subcontainer'})
     // } else if (tok.type === 'keyword.control.tutor.jome') {
@@ -390,8 +390,9 @@ function buildDictV2(topLevelNodes, ctx, func) {
 }
 
 function _compileJomeObj(obj, ctx) {
-  let {type, attrs, meta, args, children, funcCalls, stateVars, key, hasStateVariable} = obj
+  let {type, attrs, meta, args, children, funcCalls, stateVars, key, stateVariables} = obj
   let s1 = type ? `new ${type}${args}` : compileJsObj(attrs)
+  let hasStateVariable = stateVariables.length
   if (hasStateVariable) {
     s1 = '(__state__) => ('+s1+')'
   }
@@ -400,6 +401,9 @@ function _compileJomeObj(obj, ctx) {
     return s1
   }
   let r = `${JOME_LIB}(${s1})`
+  stateVariables.forEach(depencency => {
+    r += '\n  .addStateVarDep("'+depencency+'")'
+  })
   if (hasStateVariable) {
     r += '\n  .init()'
   }
@@ -1077,8 +1081,9 @@ const PROCESSES = {
 }\n\n`
   },
   "variable.other.state-var.jome": (node, ctx) => {
-    ctx.hasStateVariable = true
-    return `__state__.get("${node.text().slice(1)}")`
+    let name = node.text().slice(1)
+    ctx.stateVariables.push(name)
+    return `__state__.get("${name}")`
   },
   "keyword.control.conditional.else.jome": (node, ctx) => {
     let val = node.captureNext()

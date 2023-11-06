@@ -4,6 +4,25 @@ function initNode(node) {
   }
 }
 
+function params(target) {
+  return Object.keys(target.__props__)
+    .filter(key => !target[key])
+    .reduce((newObj, key) => {
+        newObj[key] = target.__props__[key];
+        return newObj;
+    }, {});
+}
+
+function getStateVar(target, stateVar) {
+  if (target.$.state.hasOwnProperty(stateVar)) {
+    return target.$.state[stateVar]
+  } else if (target.$.parent) {
+    return this.getStateVar(target.$.parent, stateVar)
+  }
+  return target
+  //throw new Error("Unknown state variable", stateVar)
+}
+
 // Example:
 // var testChainFuncCall = jome(new TestFuncCall())
 //   .call((o) => o.getFive())
@@ -12,13 +31,14 @@ function initNode(node) {
 let jome = (target) => {
 
   // OPTIMIZE: Is there a way to avoid writing wrapper everywhere?
-  let wrapper = {_node: null, addChildren, addChild, node, initStateVar, setStateVar, setParent, call, init}
+  let wrapper = {_node: null, _metaInConstruction: {}, _stateDependencies: [], addChildren, addChild, node, initStateVar, setStateVar, setParent, call, init, addStateVarDep}
 
   if (typeof target !== 'function') {
     wrapper._node = target
     initNode(wrapper._node)
   }
 
+  // TODO: Remove this. It is silly to have an init() and a node(), simply create everything at the end at node()
   // If the target is a function, the object is created here.
   function init() {
     // FIXME: Pass __state__ as args somehow
@@ -27,12 +47,21 @@ let jome = (target) => {
         return null
       }
     })
+    let args = {}
+    // _stateDependencies.forEach(dep => {
+    //   getStateVar(wrapper._node)
+    // })
     initNode(wrapper._node)
     return wrapper
   }
 
   function call(func) {
     func(wrapper._node)
+    return wrapper
+  }
+
+  function addStateVarDep(name) {
+    wrapper._stateDependencies.push(name)
     return wrapper
   }
 
@@ -59,7 +88,8 @@ let jome = (target) => {
   }
 
   function setParent(parent) {
-    jome(parent).addChild(wrapper._node)
+    wrapper._metaInConstruction.parent = parent
+    // jome(parent).addChild(wrapper._node)
     return wrapper
   }
 
@@ -75,30 +105,20 @@ let jome = (target) => {
   }
 
   function node() {
+    Object.keys(wrapper._metaInConstruction).forEach(key => {
+      wrapper._node.$[key] = wrapper._metaInConstruction[key]
+    })
+    if (wrapper._node.$.parent) {
+      wrapper._node.$.parent.$.children.push(wrapper._node)
+    }
     return wrapper._node
   }
 
   return wrapper;
 }
 
-jome.params = (target) => {
-  return Object.keys(target.__props__)
-    .filter(key => !target[key])
-    .reduce((newObj, key) => {
-        newObj[key] = target.__props__[key];
-        return newObj;
-    }, {});
-}
-
-jome.getStateVar = (target, stateVar) => {
-  if (target.$.state.hasOwnProperty(stateVar)) {
-    return target.$.state[stateVar]
-  } else if (target.$.parent) {
-    return this.getStateVar(target.$.parent, stateVar)
-  }
-  return target
-  //throw new Error("Unknown state variable", stateVar)
-}
+jome.getStateVar = getStateVar
+jome.params = params
 
 export default jome
 
