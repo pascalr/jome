@@ -60,7 +60,7 @@ let jome = (target) => {
 
   // Same as addChild, but takes a function that wants the parent as an argument.
   function addChildBuilder(key, func) {
-    if (child) {
+    if (func) {
       builder._childrenInfo.push({childBuilder: func, key})
     } else {
       builder._childrenInfo.push({childBuilder: key})
@@ -124,10 +124,16 @@ let jome = (target) => {
     }
     // Children
     meta.children = builder._childrenInfo.map(({child, key, childBuilder}) => {
-      if(child.$) {
-        child.$.parent = node
+      let value;
+      if (childBuilder) {
+        childBuilder.setParent(node)
+        value = childBuilder.node()
+      } else {
+        value = child
       }
-      let value = childBuilder ? childBuilder(node) : child
+      if(value.$) {
+        value.$.parent = node
+      }
       if (key) {
         node[key] = value
       }

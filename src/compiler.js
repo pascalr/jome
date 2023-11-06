@@ -390,6 +390,10 @@ function buildDictV2(topLevelNodes, ctx, func) {
 }
 
 function compileNode(obj, ctx) {
+  return _compileNode(obj, ctx).result
+}
+
+function _compileNode(obj, ctx, nested = false) {
   let {type, attrs, meta, args, children, funcCalls, stateVars, key, stateVariables} = obj
   let s1 = type ? `new ${type}${args}` : compileJsObj(attrs)
   let hasStateVariable = stateVariables.length
@@ -398,7 +402,7 @@ function compileNode(obj, ctx) {
   }
   // If it is not a node
   if (!children.length && !funcCalls.length && !Object.keys(stateVars).length && !key && !hasStateVariable) {
-    return s1
+    return {isNode: false, result: s1}
   }
   let r = `${JOME_LIB}(${s1})`
   stateVariables.forEach(depencency => {
@@ -411,7 +415,14 @@ function compileNode(obj, ctx) {
     r += `\n  .initStateVar(${ctx.currentVariableAssignment}, "${stateVarName}", ${stateVars[stateVarName]})`
   })
   if (children.length) {
-    r += children.map(c => '\n  .addChild('+compileNode(c, ctx)+')').join('')
+    r += children.map(c => {
+      let childCompiled = _compileNode(c, ctx, true)
+      if (childCompiled.isNode) {
+        return `\n  .addChildBuilder(`+childCompiled.result+')'
+      } else {
+        return `\n  .addChild(`+childCompiled.result+')'
+      }
+    }).join('')
   }
   if (funcCalls.length) {
     let chained = funcCalls.slice(0,-1)
@@ -419,11 +430,13 @@ function compileNode(obj, ctx) {
       r += chained.map(call => `\n  .call(o => o.${call})`).join('')
     }
   }
-  r += '\n  .node()'
+  if (!nested) {
+    r += '\n  .node()'
+  }
   if (funcCalls.length) {
     r += `\n  .${funcCalls[funcCalls.length-1]}`
   }
-  return key ? `"${key}", ${r}` : r
+  return {isNode: true, result: (key ? `"${key}", ${r}` : r)}
 }
 
 function buildJomeObjs(node, ctx) {
