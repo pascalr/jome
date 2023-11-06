@@ -31,9 +31,6 @@ function getStateVar(target, stateVar) {
 let jome = (target) => {
 
   // OPTIMIZE: Is there a way to avoid writing wrapper everywhere?
-  // let wrapper = {_node: null, _metaInConstruction: {}, _stateDependencies: [], addChildren, addChild, node, initStateVar, setStateVar, setParent, call, init, addStateVarDep}
-
-  // OPTIMIZE: Is there a way to avoid writing wrapper everywhere?
   let wrapper = {
     _node: null,
     _parent: null,
@@ -41,21 +38,27 @@ let jome = (target) => {
     _stateDependencies: [],
     _calls: [],
     _entries: {},
-    _metaInConstruction: {},
     addChildren: chain(addChildren),
     addChild: chain(addChild),
+    node: chain(node),
     initStateVar: chain(initStateVar),
     setStateVar: chain(setStateVar),
     setParent: chain(setParent),
     call: chain(call),
     init: chain(init),
-    addStateVarDep: chain(addStateVarDep),
-    node
+    addStateVarDep: chain(addStateVarDep)
   }
 
   if (typeof target !== 'function') {
     wrapper._node = target
     initNode(wrapper._node)
+  }
+
+  function chain(func) {
+    return (...args) => {
+      func(...args)
+      return wrapper
+    }
   }
 
   // TODO: Remove this. It is silly to have an init() and a node(), simply create everything at the end at node()
@@ -72,45 +75,46 @@ let jome = (target) => {
     //   getStateVar(wrapper._node)
     // })
     initNode(wrapper._node)
-  }
-
-  function chain(func) {
-    return (...args) => {
-      func(...args)
-      return wrapper
-    }
+    return wrapper
   }
 
   function call(func) {
-    func(wrapper._node)
+    wrapper._calls.push(func)
+    return wrapper
   }
 
   function addStateVarDep(name) {
     wrapper._stateDependencies.push(name)
+    return wrapper
   }
 
   function addChild(key, child) {
     let _child = child || key
-    wrapper._node.$.children.push(_child)
-    if (_child.$) {
-      _child.$.parent = wrapper._node
-    }
+    wrapper._metaInConstruction.children.push(_child)
+    // wrapper._node.$.children.push(_child)
+    // if (_child.$) {
+    //   _child.$.parent = wrapper._node
+    // }
     if (child) {
       wrapper._node[key] = child
     }
+    return wrapper
   }
 
   function addChildren(children) {
     children.forEach(child => addChild(wrapper._node, child))
+    return wrapper
   }
 
   function initStateVar(stateVar, value) {
     wrapper._node.$.state[stateVar] = value
+    return wrapper
   }
 
   function setParent(parent) {
     wrapper._metaInConstruction.parent = parent
     // jome(parent).addChild(wrapper._node)
+    return wrapper
   }
 
   function setStateVar(stateVar, value) {
@@ -121,6 +125,7 @@ let jome = (target) => {
     } else {
       throw new Error("Cannot set unkown state variable", stateVar)
     }
+    return wrapper
   }
 
   function node() {
