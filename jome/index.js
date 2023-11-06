@@ -95,14 +95,11 @@ let jome = (target) => {
     if (typeof target === 'function') {
       // FIXME: Pass __state__ as args somehow
       let args = {}
-      node = target({
-        get() {
-          return null
-        }
-      })
-      // _stateDependencies.forEach(dep => {
-      //   getStateVar(wrapper._node)
+      // builder._stateDependencies.forEach(dep => {
+      //   let value = getStateVar(builder._parent, dep)
+      //   args[dep] = value
       // })
+      node = target(args)
     } else {
       node = target
     }

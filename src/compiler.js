@@ -1080,7 +1080,7 @@ const PROCESSES = {
   "variable.other.state-var.jome": (node, ctx) => {
     let name = node.text().slice(1)
     ctx.stateVariables.push(name)
-    return `__state__.get("${name}")`
+    return `__state__.${name}`
   },
   "keyword.control.conditional.else.jome": (node, ctx) => {
     let val = node.captureNext()
