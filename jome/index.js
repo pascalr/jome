@@ -31,17 +31,19 @@ function getStateVar(target, stateVar) {
 let jome = (target) => {
 
   // OPTIMIZE: Is there a way to avoid writing wrapper everywhere?
+  // Rename wrapper to builder?
   let wrapper = {
     _node: null,
     _parent: null,
     _children: [],
+    _state: {},
     _stateDependencies: [],
     _calls: [],
     _entries: {},
     addChildren: chain(addChildren),
     addChild: chain(addChild),
     initStateVar: chain(initStateVar),
-    setStateVar: chain(setStateVar),
+    // setStateVar: chain(setStateVar),
     setParent: chain(setParent),
     call: chain(call),
     init: chain(init),
@@ -98,7 +100,7 @@ let jome = (target) => {
   }
 
   function initStateVar(stateVar, value) {
-    wrapper._node.$.state[stateVar] = value
+    wrapper._state[stateVar] = value
   }
 
   function setParent(parent) {
@@ -106,15 +108,15 @@ let jome = (target) => {
     // jome(parent).addChild(wrapper._node)
   }
 
-  function setStateVar(stateVar, value) {
-    if (wrapper._node.$.state.hasOwnProperty(stateVar)) {
-      wrapper._node.$.state[stateVar] = value
-    } else if (wrapper._node.$.parent) {
-      this.setStateVar(wrapper._node.$.parent, stateVar, value)
-    } else {
-      throw new Error("Cannot set unkown state variable", stateVar)
-    }
-  }
+  // function setStateVar(stateVar, value) {
+  //   if (wrapper._node.$.state.hasOwnProperty(stateVar)) {
+  //     wrapper._node.$.state[stateVar] = value
+  //   } else if (wrapper._node.$.parent) {
+  //     this.setStateVar(wrapper._node.$.parent, stateVar, value)
+  //   } else {
+  //     throw new Error("Cannot set unkown state variable", stateVar)
+  //   }
+  // }
 
   function node() {
     let meta = wrapper._node.$
@@ -134,6 +136,8 @@ let jome = (target) => {
     Object.keys(wrapper._entries).forEach(key => {
       wrapper._node[key] = wrapper._entries[key]
     })
+
+    meta.state = wrapper._state
 
     return wrapper._node
   }
