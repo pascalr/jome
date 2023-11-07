@@ -8,7 +8,8 @@ export const POST_PROCESSES = new Set([
   "keyword.control.inline-conditional.jome",
   "meta.arrow-getter.jome",
   "meta.obj-block.jome",
-  "meta.getter.jome"
+  "meta.getter.jome",
+  "entity.name.function.utility.jome"
 ])
 
 function _ignoreNode(node) {
