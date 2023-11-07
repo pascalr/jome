@@ -412,7 +412,7 @@ function _compileNode(obj, ctx, nested = false) {
     r += `\n  .setParent(${ctx.currentObjPath})`
   }
   Object.keys(stateVars).forEach(stateVarName => {
-    r += `\n  .initStateVar(${ctx.currentVariableAssignment}, "${stateVarName}", ${stateVars[stateVarName]})`
+    r += `\n  .initStateVar("${stateVarName}", ${stateVars[stateVarName]})`
   })
   if (children.length) {
     r += children.map(c => {

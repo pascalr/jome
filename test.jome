@@ -1,6 +1,6 @@
 import {H1} from './lib/html.jome'
 
-class SomeNode {
+class SomeNode |someParam?, @tenMore?| => {
 
 }
 var node = {
@@ -290,4 +290,7 @@ ten = 10;
 
   titre 'Test des constantes Jome'
   TestEq #PI, <js>Math.PI</js>, "#PI"
+
+  titre 'Test des states variables'
+  TestEq node.child.tenMore, 30, "node.child.tenMore"
 }

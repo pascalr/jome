@@ -13,7 +13,7 @@ function getStateVar(target, stateVar) {
   } else if (target.$.parent) {
     return this.getStateVar(target.$.parent, stateVar)
   }
-  return target
+  return null
   //throw new Error("Unknown state variable", stateVar)
 }
 
@@ -104,10 +104,10 @@ let jome = (target) => {
     if (typeof target === 'function') {
       // FIXME: Pass __state__ as args somehow
       let args = {}
-      // builder._stateDependencies.forEach(dep => {
-      //   let value = getStateVar(builder._parent, dep)
-      //   args[dep] = value
-      // })
+      builder._stateDependencies.forEach(dep => {
+        let value = getStateVar(builder._parent, dep)
+        args[dep] = value
+      })
       node = target(args)
     } else {
       node = target
@@ -117,11 +117,16 @@ let jome = (target) => {
     }
 
     let meta = node.$
+
     // Parent
     if (builder._parent) {
       meta.parent = builder._parent
       meta.parent.$.children.push(node)
     }
+
+    // State
+    meta.state = builder._state
+
     // Children
     meta.children = builder._childrenInfo.map(({child, key, childBuilder}) => {
       let value;
@@ -139,8 +144,6 @@ let jome = (target) => {
       }
       return value
     })
-
-    meta.state = builder._state
 
     // Calls
     builder._calls.forEach(func => {

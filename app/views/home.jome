@@ -384,43 +384,6 @@ main {
   It is very nice when prototyping to not have to write return statements. But for production code, it is safer to always write them, this
   way you never return by accident a sensitive value that should be hiden from users.
 
-  ### Jome constants or language variables
-
-  Jome constants start with the # character.
-
-  ```jome
-    let angle = #sin(2 * #PI * 1deg)
-  ```
-
-  Get the list of parameters given to a function.
-
-  ```jome
-    def someFunc = => (
-      #params // The object containing all the paramters given to the function.
-    )  
-  ```
-
-  List of jome constants: TODO
-  - #params
-  - #sin
-  - #cos
-  - #tan
-  - #PI: 3.14159...
-  - #e: Euler's constat
-  - #dirname: Equivalent of __dirname
-  - #filename: Current filename
-
-  Actually, it here here that could go every underscore.js function:
-  - #map
-  - #reduce
-  - ...
-
-  Maybe you can use #keys(obj), but personally I prefer obj->keys
-
-  TODO: All html colors: MAYBEEE? Because I don't know in what format I would want the value to be... so probably don't do this
-  - #red: 0xFF0000
-  - ...
-
   ## State variables
 
   Nodes can have state variables that start with a percentage sign like `%stateVar = 10`
@@ -566,44 +529,82 @@ main {
 
   It think this would be pratical for example for config files.
 
-  <h2 id="arrow-getter">Arrow getter</h2>
+  <h2 id="utilities">Utilities</h2>
+
+  Utilities start with the # character.
+
+  It can be a constant or acting upon a variable.
+
+  ```jome
+  // Utility constants
+  let angle = #sin(2 * #PI * 1deg)
+  // Utility acting on variable
+  let objKeys = obj#keys // same as Object.keys(obj)
+  ```
+
+  Get the list of parameters given to a function.
+
+  ```jome
+    def someFunc = => (
+      #params // The object containing all the paramters given to the function.
+    )  
+  ```
+
+  List of jome constants: TODO
+  - #params
+  - #sin
+  - #cos
+  - #tan
+  - #PI: 3.14159...
+  - #e: Euler's constat
+  - #dirname: Equivalent of __dirname
+  - #filename: Current filename
+
+  Actually, it here here that could go every underscore.js function:
+  - #map
+  - #reduce
+  - ...
+
+  Maybe you can use #keys(obj), but personally I prefer obj#keys
+
+  TODO: All html colors: MAYBEEE? Because I don't know in what format I would want the value to be... so probably don't do this
+  - #red: 0xFF0000
+  - ...
 
   Allows to save keystrokes and is easier to type.
   Allows to easily use most of underscore.js features directly.
 
   ```jome
-  // Arrow getter is useful for objects
   dict = {x: 10, y: 20}
-  dict->keys // Object.keys(obj)
-  dict->size // Object.keys(obj).length
+  dict#keys // Object.keys(obj)
+  dict#size // Object.keys(obj).length
 
-  // Arrow getter is useful for nodes
-  node = «
-    $parent
-      $child1
-      $child2
-  »
-  node->children
+  node = {/* ... */}
+  node#children#each () => {
+    
+  }
 
   // Arrow getter is useful for arrays
   TODO
 
   // TODO
-  10->times(i => /* ... */)
+  10#times(i => /* ... */)
   ```
+
+  // TODO: #each which is the same as .forEach, but 3 characters less
 
   The list of current arrow properties:
   ```jome
-  obj->keys // Object.keys(obj)
-  obj->values // Object.values(obj)
-  obj->entries // Object.entries(obj)
-  obj->params // The list of props given to an object constructor
-  obj->props // The list of props given to an object constructor
-  obj->children // The list of children of a node
-  obj->removeChildren // Remove all children of a node
+  obj#keys // Object.keys(obj)
+  obj#values // Object.values(obj)
+  obj#entries // Object.entries(obj)
+  obj#params // The list of props given to an object constructor
+  obj#props // The list of props given to an object constructor
+  obj#children // The list of children of a node
+  obj#removeChildren // Remove all children of a node
   // TODO
-  obj->blank // Like Rails blank // ou bien isBlank?
-  obj->present // The opposite of Rails blank // ou bien isPresent?
+  obj#isBlank // Like Rails blank // ou bien isBlank?
+  obj#isPresent // The opposite of Rails blank // ou bien isPresent?
   ```
 
   <h2 id="instance-driven-dev">Instance driven development</h2>
