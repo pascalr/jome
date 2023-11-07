@@ -143,7 +143,7 @@ titre = |texte| => (
 // TODO: Générer une erreur quand on fournit des paramètres à une fonction qui ne prend pas de paramètres
 // Ça ne marche pas parce que ça ne génère par un premier paramètre qui s'appelle params
 var obj = { H1 "Un titre", css: {color: 'red'} };
-var props = obj->props
+var props = obj#props
 var obj2 = { H1 "Un titre 2", title: 'This is a tooltip' };
 var str2 = obj.toString();
 
