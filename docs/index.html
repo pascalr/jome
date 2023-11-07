@@ -459,6 +459,12 @@ be removed from the markdown compile, and that inserted compiled using a templat
 <h3>.jobj extension</h3>
 <p>Files with a .jobj extension would start already in a block.</p>
 <p>It think this would be pratical for example for config files.</p>
+<h2>PARAMS</h2>
+<p>Get the list of parameters given to a function.</p>
+<pre><code class="language-jome">  <span class="hljs-keyword">def</span> <span class="hljs-variable">someFunc</span> = =&gt; (
+    <span class="hljs-title class_">PARAMS</span> <span class="hljs-comment">// The object containing all the paramters given to the function.</span>
+  )  
+</code></pre>
   <h2 id="utilities">Utilities</h2>
 <p>Utilities start with the # character.</p>
 <p>It can be a constant or acting upon a variable.</p>
@@ -467,14 +473,8 @@ be removed from the markdown compile, and that inserted compiled using a templat
 <span class="hljs-comment">// Utility acting on variable</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">objKeys</span> = <span class="hljs-variable">obj</span>#<span class="hljs-variable">keys</span> <span class="hljs-comment">// same as Object.keys(obj)</span>
 </code></pre>
-<p>Get the list of parameters given to a function.</p>
-<pre><code class="language-jome">  <span class="hljs-keyword">def</span> <span class="hljs-variable">someFunc</span> = =&gt; (
-    #<span class="hljs-variable">params</span> <span class="hljs-comment">// The object containing all the paramters given to the function.</span>
-  )  
-</code></pre>
 <p>List of jome constants: TODO</p>
 <ul>
-<li>#params</li>
 <li>#sin</li>
 <li>#cos</li>
 <li>#tan</li>

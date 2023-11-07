@@ -17,6 +17,22 @@ function getStateVar(target, stateVar) {
   //throw new Error("Unknown state variable", stateVar)
 }
 
+// When you call .$ on a node, you get an instance of NodeData.
+class NodeData {
+
+  constructor(data) {
+    if (data) {
+      Object.keys(data).forEach(key => {
+        this[key] = data[key]
+      })
+    }
+    this.children = []
+    this.signals = []
+    this.state = {}
+  }
+
+}
+
 // Example:
 // var testChainFuncCall = jome(new TestFuncCall())
 //   .call((o) => o.getFive())
@@ -113,7 +129,7 @@ let jome = (target) => {
       node = target
     }
     if (!node.$) {
-      node.$ = {children: [], signals: [], state: {}}
+      node.$ = new NodeData()
     }
 
     let meta = node.$
