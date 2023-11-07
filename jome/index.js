@@ -20,15 +20,21 @@ function getStateVar(target, stateVar) {
 // When you call .$ on a node, you get an instance of NodeData.
 class NodeData {
 
-  constructor(data) {
+  constructor(obj, data) {
     if (data) {
       Object.keys(data).forEach(key => {
         this[key] = data[key]
       })
     }
+    this.obj = obj
     this.children = []
     this.signals = []
     this.state = {}
+  }
+
+  // Update the state of the node.
+  update(updates) {
+    console.log('TODO: Implement NodeData.update')
   }
 
 }
@@ -129,7 +135,7 @@ let jome = (target) => {
       node = target
     }
     if (!node.$) {
-      node.$ = new NodeData()
+      node.$ = new NodeData(node)
     }
 
     let meta = node.$

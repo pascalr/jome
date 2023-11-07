@@ -725,9 +725,10 @@ function compileUtility(node, ctx) {
       return `${prev}.__props__`
     case 'params':
       return `${JOME_LIB}.params(${prev})`
-    case 'hasOwnProperty':
-    case 'path': // Good?
-    case 'name':
+    case 'hasOwnProperty': // deprecated
+    case 'path': // deprecated
+    case 'name': // deprecated
+    case 'update':
     case 'signals':
       return `${prev}?.${JOME_ATTRS}?.${val}`
     case 'children':

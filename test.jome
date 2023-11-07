@@ -9,7 +9,7 @@ var node = {
   SomeNode %stateVar: 20
     child: SomeNode tenMore: (%stateVar+10)
 }
-// node->update(stateVar: stateVar + 5)
+node#update({stateVar: 35})
 
 var testH1 = { H1 "Un titre" }
 
