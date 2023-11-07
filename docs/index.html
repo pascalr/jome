@@ -624,6 +624,22 @@ au lieu de
 <p>J'ai essayé prettier et js-beautify.</p>
 <p>Je préfère de loin prettier je trouve son output plus beau personnellement.</p>
 <p>Le problème est que prettier bug et ne veut pas process mes fichiers s'ils sont dans le .gitignore file............</p>
+<h2>Types</h2>
+<p>TODO: Support static typing a little like Typescript.</p>
+<p>You will be able to add the type of the variable with a colon like in the examples below.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">greet</span> = |name: <span class="hljs-variable">string</span>, greeting: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;Hello&quot;</span>|: <span class="hljs-variable">string</span> =&gt; {
+  <span class="hljs-string">`${greeting}, ${name}!`</span>
+}
+</code></pre>
+<pre><code class="language-jome"><span class="hljs-variable">interface</span> <span class="hljs-title class_">Person</span> {
+  firstName: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;John&quot;</span>
+  lastName: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;Doe&quot;</span>
+  age: <span class="hljs-variable">number</span>
+}
+</code></pre>
+<pre><code class="language-jome"><span class="hljs-keyword">var</span> answer: <span class="hljs-variable">number</span> = <span class="hljs-number">42</span>
+</code></pre>
+<p>I don't know Typescript. I don't get why type and interface. Let's just use Jome interface for now.</p>
 <h2>Contributing</h2>
 <p>I recommend using visual studio code for now because it is super usefull for debugging tokenization. You hit Ctrl+Shift+P,
 &quot;inspect editor token and scope&quot;, and you see if it is correct. Also you see using syntax highlighting.</p>

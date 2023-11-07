@@ -5,7 +5,10 @@ main {
 
   # Jome
 
-  Jome is a language that compiles in JavaScript. It is simliar to CoffeeScript in this way.
+  Jome is a language that compiles to JavaScript. It has a node structure like in Godot, it has types like Typescript,
+  it has goodies like CoffeeScript and underscore.js, it handles state like in React and it has some (new?) ideas.
+
+  Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.
 
   You can read from top to bottom to learn the language, or you can jump to any section if you are only curious.
 
@@ -757,6 +760,34 @@ main {
   Je préfère de loin prettier je trouve son output plus beau personnellement.
 
   Le problème est que prettier bug et ne veut pas process mes fichiers s'ils sont dans le .gitignore file............
+
+  ## Types
+
+  TODO: Support static typing a little like Typescript.
+
+  You will be able to add the type of the variable with a colon like in the examples below.
+
+  ```jome
+  def greet = |name: string, greeting: string = "Hello"|: string => {
+    `${greeting}, ${name}!`
+  }
+  ```
+
+  ```jome
+  interface Person {
+    firstName: string = "John"
+    lastName: string = "Doe"
+    age: number
+  }
+  ```
+
+   ```jome
+  var answer: number = 42
+  ```
+
+  I don't know Typescript. I don't get why type and interface. Let's just use Jome interface for now.
+
+
 
   ## Contributing
 
