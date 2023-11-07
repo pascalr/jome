@@ -713,6 +713,31 @@ function compileBlock(node, ctx) {
   }
 }
 
+function compileUtility(node, ctx) {
+  let val = node.type === "entity.name.function.utility.jome" ? node.text().slice(1) : node.children[1].text()
+  let prev = compileToken(node.prev(), ctx)
+  switch (val) {
+    case 'keys': case 'values': case 'entries':
+      return `Object.${val}(${prev} || {})`
+    case 'props':
+      //return ctx.isInsideClassSuperObject ? `__params__` : `this.__params__`
+      //return `${JOME_LIB}.props(${prev})`
+      return `${prev}.__props__`
+    case 'params':
+      return `${JOME_LIB}.params(${prev})`
+    case 'hasOwnProperty':
+    case 'path': // Good?
+    case 'name':
+    case 'signals':
+      return `${prev}?.${JOME_ATTRS}?.${val}`
+    case 'children':
+      return `(${prev}.$?.children||[])`
+    case 'removeChildren':
+      return `(() => {${prev}.${JOME_ATTRS}.children = []})`
+    default: throw "FIXME arrow getter not implemented yet: " + val
+  }
+}
+
 // Using an hashmap here because it is easier to debug,
 // a bunch of if else if else is annoying to go through step by step
 // and switch case is really annoying because it does not scope the variables
@@ -930,30 +955,9 @@ const PROCESSES = {
   "keyword.operator.colon.jome": () => ' : ',
   "keyword.operator.existential.jome": () => ' ? ',
   // ->keys
-  "meta.arrow-getter.jome": (node, ctx) => {
-    let val = node.children[1].text()
-    let prev = compileToken(node.prev(), ctx)
-    switch (val) {
-      case 'keys': case 'values': case 'entries':
-        return `Object.${val}(${prev} || {})`
-      case 'props':
-        //return ctx.isInsideClassSuperObject ? `__params__` : `this.__params__`
-        //return `${JOME_LIB}.props(${prev})`
-        return `${prev}.__props__`
-      case 'params':
-        return `${JOME_LIB}.params(${prev})`
-      case 'hasOwnProperty':
-      case 'path': // Good?
-      case 'name':
-      case 'signals':
-        return `${prev}?.${JOME_ATTRS}?.${val}`
-      case 'children':
-        return `(${prev}.$?.children||[])`
-      case 'removeChildren':
-        return `(() => {${prev}.${JOME_ATTRS}.children = []})`
-      default: throw "FIXME arrow getter not implemented yet: " + val
-    }
-  },
+  "meta.arrow-getter.jome": compileUtility,
+  // #keys
+  "entity.name.function.utility.jome": compileUtility,
   // true, vrai, ...
   "constant.language.jome": (node, ctx) => {
     switch (node.text()) {
@@ -968,8 +972,15 @@ const PROCESSES = {
       default: throw new Error("FIXME constant: " + node.text())
     }
   },
+  // PARAMS
+  "variable.language.jome": (node, ctx) => {
+    switch (node.text()) {
+      case 'PARAMS': return '__params__'
+      default: throw new Error("FIXME variable.language.jome: " + node.text())
+    }
+  },
   // #PI, #sin, #params, ...
-  "variable.other.constant.jome": (node, ctx) => {
+  "variable.other.constant.utility.jome": (node, ctx) => {
     switch (node.text().slice(1)) {
       case 'PI': return 'Math.PI'
       case 'params': return '__params__'

@@ -529,6 +529,16 @@ main {
 
   It think this would be pratical for example for config files.
 
+  ## PARAMS
+  
+  Get the list of parameters given to a function.
+
+  ```jome
+    def someFunc = => (
+      PARAMS // The object containing all the paramters given to the function.
+    )  
+  ```
+
   <h2 id="utilities">Utilities</h2>
 
   Utilities start with the # character.
@@ -542,16 +552,7 @@ main {
   let objKeys = obj#keys // same as Object.keys(obj)
   ```
 
-  Get the list of parameters given to a function.
-
-  ```jome
-    def someFunc = => (
-      #params // The object containing all the paramters given to the function.
-    )  
-  ```
-
   List of jome constants: TODO
-  - #params
   - #sin
   - #cos
   - #tan

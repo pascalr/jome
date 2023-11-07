@@ -111,7 +111,7 @@
         { "include": "#strings" },
         { "include": "#scripts" },
         { "include": "#arrow" },
-        { "include": "#jome-const" },
+        { "include": "#utilities" },
         { "include": "#state-var" },
         { "include": "#arrow_getter" },
         { "include": "#operators" },
@@ -302,11 +302,16 @@
         }
 			}]
 		},
-    "jome-const": {
+    "utilities": {
 			"patterns": [
         {
-          "name": "variable.other.constant.jome",
-          "match": "\\#\\w+"
+          "name": "variable.other.constant.utility.jome",
+          "match": "#\\b(PI)\\b",
+          "notWorkingMatch": "#\\b\\w+\\b(?!\\(|#)"
+        },
+        {
+          "name": "entity.name.function.utility.jome",
+          "match": "#\\w+"
         }
       ]
 		},
@@ -634,6 +639,10 @@
         {
           "name": "constant.language.jome",
           "match": "\\b(true|false|vrai|faux|null|undefined|nul|indéfini|on|marche|off|arrêt|yes|oui|no|non)\\b"
+        },
+        {
+          "name": "variable.language.jome",
+          "match": "\\b(PARAMS)\\b"
         }
       ]
     },

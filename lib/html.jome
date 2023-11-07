@@ -67,7 +67,7 @@ def renderHTMLTagAttrs = |attrs| => (
 )
 
 export def renderHtmlTag = |tag, children, content, &GlobalAttributes| => (
-  `<{tag}{renderHTMLTagAttrs(#params)}>{content||''}{renderHTMLTagChildren(children||[])}</{tag}>`
+  `<{tag}{renderHTMLTagAttrs(PARAMS)}>{content||''}{renderHTMLTagChildren(children||[])}</{tag}>`
 )
 
 def renderHTMLChildren = |obj| => (
