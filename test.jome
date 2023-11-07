@@ -3,14 +3,17 @@ import {H1} from './lib/html.jome'
 class SomeNode |someParam?, @tenMore?| => {
 
 }
+// Based on the complexity, Jome could make tenMore variable a function that depends on the state instead of making the whole object.
+// But that's a premature optimization I am not there yet.
 var node = {
   SomeNode %stateVar: 20
     child: SomeNode tenMore: (%stateVar+10)
 }
+// node->update(stateVar: stateVar + 5)
 
 var testH1 = { H1 "Un titre" }
 
-// Testing imports, all these should be parse properly:
+// Testing imports, all these should be parsed properly:
 // import defaultExport from "module-name";
 // import * as name from "module-name";
 // import { export1 } from "module-name";
@@ -292,5 +295,5 @@ ten = 10;
   TestEq #PI, <js>Math.PI</js>, "#PI"
 
   titre 'Test des states variables'
-  TestEq node.child.tenMore, 30, "node.child.tenMore"
+  TestEq node.child.tenMore, 35, "node.child.tenMore"
 }
