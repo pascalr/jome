@@ -418,7 +418,7 @@ function _compileNode(obj, ctx, nested = false) {
     r += children.map(c => {
       let childCompiled = _compileNode(c, ctx, true)
       if (childCompiled.isNode) {
-        return `\n  .addChildBuilder(`+childCompiled.result+')'
+        return `\n  .addChildNode(`+childCompiled.result+')'
       } else {
         return `\n  .addChild(`+childCompiled.result+')'
       }

@@ -34,7 +34,7 @@ let jome = (target) => {
     _calls: [],
     addChildren: chain(addChildren),
     addChild: chain(addChild),
-    addChildBuilder: chain(addChildBuilder),
+    addChildNode: chain(addChildNode),
     initStateVar: chain(initStateVar),
     // setStateVar: chain(setStateVar),
     setParent: chain(setParent),
@@ -59,7 +59,7 @@ let jome = (target) => {
   }
 
   // Same as addChild, but takes a function that wants the parent as an argument.
-  function addChildBuilder(key, func) {
+  function addChildNode(key, func) {
     if (func) {
       builder._childrenInfo.push({childBuilder: func, key})
     } else {
