@@ -397,21 +397,36 @@ main {
   // So Txt will add itself as a dependency on Btn state. It Btn state changes, then Txt will be updated too.
   ```
 
-  Comment est-ce que je compile cela?
-  ```js
-  let btn = new Btn()
-  jome.setStateVar(btn, "count", 0)
-  // btn.$.state.count = 0
-  // jome.addChild(btn, (__state) => new Txt(`Clicked ${__state.count} ${__state.count == 1 ? 'time' : 'times'}`))
-  // let txt = () => new Txt(`Clicked ${jome.getStateVar(@, 'count')} ${jome.getStateVar(@, 'count') == 1 ? 'time' : 'times'}`)
-  // jome.addChild(btn, txt)
-  jome.addDependentChild(btn, "count", () => new Txt(`Clicked ${jome.getStateVar(@, 'count')} ${jome.getStateVar(@, 'count') == 1 ? 'time' : 'times'}`))
-  // jome.addChild(btn, new Txt(() => `Clicked ${jome.getStateVar(@, 'count')} ${jome.getStateVar(@, 'count') == 1 ? 'time' : 'times'}`))
-  // Since txt is referencing to the %count state, that add it as a listener
-  // jome.addListener(btn, "count", txt)
-  // btn.$.listeners.push(txt)
+  C'est OK, mais j'aimerais pouvoir dire à qui appartient le state au lieu d'être à l'aveugle comme ça.
 
-  // Ici, Txt devient une fonction au lieu de simplement un object puisqu'il dépend du state.
+  J'aimerais pouvoir setter le state à travers un nom de node? Je ne sais pas ce n'est pas si explicit non plus...
+
+  Qu'est-ce qui se passe si le node et ses parents n'ont pas le state?
+
+  State variables inside classes.
+
+  Class using parent state:
+
+  ```jome
+  // A question mark when dependent on a state or an exclamation mark (silent vs throw exception?)
+  class ColoredText |@text, %theme?| {
+    print: () => {
+      return `<p style="color: {%theme.textColor}">{%theme}</p>`
+    }
+  }
+  ```
+
+  Class having state:
+
+  ```jome
+  // No question mark having state
+  class App |%theme| {
+    init: () => {
+      %theme = {
+        textColor: "red"
+      }
+    }
+  }
   ```
 
   ### Documenting state variables

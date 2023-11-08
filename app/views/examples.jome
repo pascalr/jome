@@ -84,8 +84,8 @@ conten = <md>
   import {Btn, Txt, renderHTML} from "html"
 
   renderHTML(target: '#div-id', {
-    Btn @count: 0, ~click: => (@count += 1)
-      Txt => "Clicked {@count} {@count == 1 ? 'time' : 'times'}"
+    Btn %count: 0, ~click: => (%count += 1)
+      Txt => "Clicked {%count} {%count == 1 ? 'time' : 'times'}"
   })
   ```
 
