@@ -1,7 +1,7 @@
 function addStateVarDepToHolder(original, node, dep) {
   if (node.$.state.hasOwnProperty(dep)) {
     if (node !== original) {
-      node.$.dependants.push(node)
+      node.$.dependants.push(original)
     }
   } else if (node.$.parent) {
     addStateVarDepToHolder(original, node.$.parent, dep)
@@ -36,8 +36,8 @@ class NodeData {
     Object.keys(data||{}).forEach(key => {
       this[key] = data[key]
     })
-    this.key = key
-    this.idx = idx
+    this.key = key // this.parent[key] === this
+    this.idx = idx // this.parent.$.children[idx] === this
     this.obj = obj
     this.children = []
     this.signals = []
@@ -140,27 +140,27 @@ let jome = (target) => {
   // idx, the index of the node in it's parent children array
   function node(idx, key) {
 
-    let node;
+    let _node;
     if (typeof target === 'function') {
       let args = {}
       builder._stateDependencies.forEach(dep => {
         let value = getStateVar(builder._parent, dep)
         args[dep] = value
       })
-      node = target(args)
+      _node = target(args)
     } else {
-      node = target
+      _node = target
     }
-    if (!node.$) {
-      node.$ = new NodeData(node, idx, key)
+    if (!_node.$) {
+      _node.$ = new NodeData(_node, idx, key)
     }
 
-    let meta = node.$
+    let meta = _node.$
 
     // Parent
     if (builder._parent) {
       meta.parent = builder._parent
-      meta.parent.$.children.push(node)
+      meta.parent.$.children.push(_node)
     }
 
     // State
@@ -170,30 +170,30 @@ let jome = (target) => {
     meta.children = builder._childrenInfo.map(({child, key, childBuilder}, i) => {
       let value;
       if (childBuilder) {
-        childBuilder.setParent(node)
+        childBuilder.setParent(_node)
         value = childBuilder.node(i, key)
       } else {
         value = child
       }
       if(value.$) {
-        value.$.parent = node
+        value.$.parent = _node
       }
       if (key) {
-        node[key] = value
+        _node[key] = value
       }
       return value
     })
 
     builder._stateDependencies.forEach(dep => {
-      addStateVarDepToHolder(node, node, dep)
+      addStateVarDepToHolder(_node, _node, dep)
     })
 
     // Calls
     builder._calls.forEach(func => {
-      func(node)
+      func(_node)
     })
 
-    return node
+    return _node
   }
 
   return builder;
