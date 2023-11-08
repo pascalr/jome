@@ -32,10 +32,12 @@ function getStateVar(target, stateVar) {
 // When you call .$ on a node, you get an instance of NodeData.
 class NodeData {
 
-  constructor(obj, data) {
+  constructor(obj, idx, key, data) {
     Object.keys(data||{}).forEach(key => {
       this[key] = data[key]
     })
+    this.key = key
+    this.idx = idx
     this.obj = obj
     this.children = []
     this.signals = []
@@ -46,6 +48,7 @@ class NodeData {
   // Update the state of the node.
   update(updates) {
     console.log('TODO: Implement NodeData.update', updates)
+    console.log('dependants', this.dependants)
     Object.keys(updates).forEach(key => {
       this.obj[key] = updates[key]
     })
@@ -134,11 +137,11 @@ let jome = (target) => {
   //   }
   // }
 
-  function node() {
+  // idx, the index of the node in it's parent children array
+  function node(idx, key) {
 
     let node;
     if (typeof target === 'function') {
-      // FIXME: Pass __state__ as args somehow
       let args = {}
       builder._stateDependencies.forEach(dep => {
         let value = getStateVar(builder._parent, dep)
@@ -149,7 +152,7 @@ let jome = (target) => {
       node = target
     }
     if (!node.$) {
-      node.$ = new NodeData(node)
+      node.$ = new NodeData(node, idx, key)
     }
 
     let meta = node.$
@@ -164,11 +167,11 @@ let jome = (target) => {
     meta.state = builder._state
 
     // Children
-    meta.children = builder._childrenInfo.map(({child, key, childBuilder}) => {
+    meta.children = builder._childrenInfo.map(({child, key, childBuilder}, i) => {
       let value;
       if (childBuilder) {
         childBuilder.setParent(node)
-        value = childBuilder.node()
+        value = childBuilder.node(i, key)
       } else {
         value = child
       }

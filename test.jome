@@ -10,6 +10,7 @@ var node = {
     child: SomeNode tenMore: (%stateVar+10)
 }
 node#update({stateVar: 35})
+// En updatant le state de node, je veux mettre à jour child et le children de sa liste.
 
 var testH1 = { H1 "Un titre" }
 
