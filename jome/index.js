@@ -1,3 +1,15 @@
+function addStateVarDepToHolder(original, node, dep) {
+  if (node.$.state.hasOwnProperty(dep)) {
+    if (node !== original) {
+      node.$.dependants.push(node)
+    }
+  } else if (node.$.parent) {
+    addStateVarDepToHolder(original, node.$.parent, dep)
+  } else {
+    throw new Error("Could not find state variable holder for "+dep)
+  }
+}
+
 function params(target) {
   return Object.keys(target.__props__)
     .filter(key => !target[key])
@@ -21,20 +33,22 @@ function getStateVar(target, stateVar) {
 class NodeData {
 
   constructor(obj, data) {
-    if (data) {
-      Object.keys(data).forEach(key => {
-        this[key] = data[key]
-      })
-    }
+    Object.keys(data||{}).forEach(key => {
+      this[key] = data[key]
+    })
     this.obj = obj
     this.children = []
     this.signals = []
     this.state = {}
+    this.dependants = [] // TODO: A list of callbacks to handle changes to the state for descendants.
   }
 
   // Update the state of the node.
   update(updates) {
-    console.log('TODO: Implement NodeData.update')
+    console.log('TODO: Implement NodeData.update', updates)
+    Object.keys(updates).forEach(key => {
+      this.obj[key] = updates[key]
+    })
   }
 
 }
@@ -165,6 +179,10 @@ let jome = (target) => {
         node[key] = value
       }
       return value
+    })
+
+    builder._stateDependencies.forEach(dep => {
+      addStateVarDepToHolder(node, node, dep)
     })
 
     // Calls
