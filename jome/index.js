@@ -1,10 +1,10 @@
-function addStateVarDepToHolder(original, node, dep) {
+function addStateVarDepToHolder(builder, node, dep) {
   if (node.$.state.hasOwnProperty(dep)) {
-    if (node !== original) {
-      node.$.dependants.push(original)
+    if (node !== builder._node) {
+      node.$.dependants.push(builder)
     }
   } else if (node.$.parent) {
-    addStateVarDepToHolder(original, node.$.parent, dep)
+    addStateVarDepToHolder(builder, node.$.parent, dep)
   } else {
     throw new Error("Could not find state variable holder for "+dep)
   }
@@ -23,7 +23,7 @@ function getStateVar(target, stateVar) {
   if (target.$.state.hasOwnProperty(stateVar)) {
     return target.$.state[stateVar]
   } else if (target.$.parent) {
-    return this.getStateVar(target.$.parent, stateVar)
+    return getStateVar(target.$.parent, stateVar)
   }
   return null
   //throw new Error("Unknown state variable", stateVar)
@@ -50,7 +50,16 @@ class NodeData {
     console.log('TODO: Implement NodeData.update', updates)
     console.log('dependants', this.dependants)
     Object.keys(updates).forEach(key => {
-      this.obj[key] = updates[key]
+      this.obj.$.state[key] = updates[key]
+    })
+    this.dependants.forEach(dependant => {
+      let previous = dependant._node
+      // Dependant is a builder
+      let updated = dependant.node() // Recreate the node
+      Object.keys(updated).forEach(key => {
+        previous[key] = updated[key]
+      })
+      
     })
   }
 
@@ -79,7 +88,7 @@ let jome = (target) => {
     setParent: chain(setParent),
     call: chain(call),
     addStateVarDep: chain(addStateVarDep),
-    node
+    node,
   }
 
   function chain(func) {
@@ -138,7 +147,7 @@ let jome = (target) => {
   // }
 
   // idx, the index of the node in it's parent children array
-  function node(idx, key) {
+  function node(idx, key, isNew = true) {
 
     let _node;
     if (typeof target === 'function') {
@@ -160,7 +169,11 @@ let jome = (target) => {
     // Parent
     if (builder._parent) {
       meta.parent = builder._parent
-      meta.parent.$.children.push(_node)
+      if (isNew) {
+        meta.parent.$.children.push(_node)
+      } else {
+        meta.parent.$.children[idx] = _node
+      }
     }
 
     // State
@@ -171,7 +184,7 @@ let jome = (target) => {
       let value;
       if (childBuilder) {
         childBuilder.setParent(_node)
-        value = childBuilder.node(i, key)
+        value = childBuilder.node(i, key, isNew)
       } else {
         value = child
       }
@@ -184,8 +197,11 @@ let jome = (target) => {
       return value
     })
 
+    if (isNew) {
+      builder._node = _node
+    }
     builder._stateDependencies.forEach(dep => {
-      addStateVarDepToHolder(_node, _node, dep)
+      addStateVarDepToHolder(builder, _node, dep)
     })
 
     // Calls

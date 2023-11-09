@@ -7,7 +7,8 @@ class SomeNode |someParam?, @tenMore?| => {
 // But that's a premature optimization I am not there yet.
 var node = {
   SomeNode %stateVar: 20
-    child: SomeNode tenMore: (%stateVar+10)
+    child: SomeNode
+      child: SomeNode tenMore: (%stateVar+10)
 }
 node#update({stateVar: 35})
 // En updatant le state de node, je veux mettre à jour child et le children de sa liste.
@@ -296,5 +297,5 @@ ten = 10;
   TestEq #PI, <js>Math.PI</js>, "#PI"
 
   titre 'Test des states variables'
-  TestEq node.child.tenMore, 35, "node.child.tenMore"
+  TestEq node.child.child.tenMore, 45, "node.child.tenMore"
 }
