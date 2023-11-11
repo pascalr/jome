@@ -1,6 +1,6 @@
 import {H1} from './lib/html.jome'
 
-class SomeNode |someParam?, @tenMore?| => {
+class SomeNode |someParam?, @tenMore?, @someText?| => {
 
 }
 // Based on the complexity, Jome could make tenMore variable a function that depends on the state instead of making the whole object.
@@ -11,7 +11,13 @@ var node = {
       child: SomeNode tenMore: (%stateVar+10)
 }
 node#update({stateVar: 35})
-// En updatant le state de node, je veux mettre à jour child et le children de sa liste.
+
+// var counter = {
+//   SomeNode %count: 0, ~click: => (%count += 1)
+//     text: SomeNode someText: `Clicked {%count} {%count == 1 ? 'time' : 'times'}`
+//     // someString: `Clicked {%count} {%count == 1 ? 'time' : 'times'}` // Ca serait nice de pouvoir faire ça directement aussi. Je sais pas.
+// }
+// counter.click()
 
 var testH1 = { H1 "Un titre" }
 
@@ -298,4 +304,7 @@ ten = 10;
 
   titre 'Test des states variables'
   TestEq node.child.child.tenMore, 45, "node.child.tenMore"
+
+  // TestEq counter.count, 1, "counter.count"
+  // TestEq counter.text.someText, "Clicked 1 time", "counter.text.someText"
 }

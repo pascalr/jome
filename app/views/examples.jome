@@ -114,14 +114,47 @@ conten = <md>
   {
     Recipe (
       name: 'Chickpea balls'
-      ingredients:
-        1cup, "dry chickpeas"
-        2cup, "water"
-        2tbsp, "parmesan"
-      instructions:
-        "Put ..."
     )
+      Ing 1cup, "dry chickpeas"
+      Ing 2cup, "water"
+      Ing 2tbsp, "parmesan"
+      Step `Put {@.ing(1)} into {@.ing(2)}...` // Here @ would reference to Recipe?
+      Step "Mix ..."
+      Step "Blah blah ..."
   }
+  // or 
+  <recipe>
+    ?
+  </recipe>
+  ```
+
+  ## A format database like?
+
+  ```jome
+  data = {
+    "comma", "separated", "values"
+    1,       "foo",       10.0
+    2,       "bar",       20.0
+  }
+  ```
+  <csv>
+    "comma", "separated", "values"
+    1,       "foo",       10.0
+    2,       "bar",       20.0
+  </csv>
+
+  ## Sqlite3 export to CSV JavaScript
+
+  Faire un petit script en Jome qui convertit un fichier .sqlite3 en un dossier avec des .csv pour chaques table un .csv pour le metadata
+
+  TODO: Save metadata too.
+
+  ```jome
+  let tables = <sh>sqlite3 <%= ARGV[1] %> ".table"</sh>
+  <sh>mkdir <%= ARGV[2] %></sh>
+  tables#each(table => (
+    <sh>sqlite3 -header -csv <%= ARGV[1] %> "select * from <%= table %>;" > <%= table %>.csv</sh>
+  ))
   ```
 
 </md>

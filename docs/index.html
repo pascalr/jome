@@ -359,20 +359,27 @@ way you never return by accident a sensitive value that should be hiden from use
 <span class="hljs-comment">// Txt does not have a %count state variable, so it checks to see if it&#x27;s parent has one. Yes, Btn has a state variable called %count.</span>
 <span class="hljs-comment">// So Txt will add itself as a dependency on Btn state. It Btn state changes, then Txt will be updated too.</span>
 </code></pre>
-<p>Comment est-ce que je compile cela?</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> btn = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Btn</span>()
-jome.<span class="hljs-title function_">setStateVar</span>(btn, <span class="hljs-string">&quot;count&quot;</span>, <span class="hljs-number">0</span>)
-<span class="hljs-comment">// btn.$.state.count = 0</span>
-<span class="hljs-comment">// jome.addChild(btn, (__state) =&gt; new Txt(`Clicked ${__state.count} ${__state.count == 1 ? &#x27;time&#x27; : &#x27;times&#x27;}`))</span>
-<span class="hljs-comment">// let txt = () =&gt; new Txt(`Clicked ${jome.getStateVar(@, &#x27;count&#x27;)} ${jome.getStateVar(@, &#x27;count&#x27;) == 1 ? &#x27;time&#x27; : &#x27;times&#x27;}`)</span>
-<span class="hljs-comment">// jome.addChild(btn, txt)</span>
-jome.<span class="hljs-title function_">addDependentChild</span>(btn, <span class="hljs-string">&quot;count&quot;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Txt</span>(<span class="hljs-string">`Clicked <span class="hljs-subst">${jome.getStateVar(@, <span class="hljs-string">&#x27;count&#x27;</span>)}</span> <span class="hljs-subst">${jome.getStateVar(@, <span class="hljs-string">&#x27;count&#x27;</span>) == <span class="hljs-number">1</span> ? <span class="hljs-string">&#x27;time&#x27;</span> : <span class="hljs-string">&#x27;times&#x27;</span>}</span>`</span>))
-<span class="hljs-comment">// jome.addChild(btn, new Txt(() =&gt; `Clicked ${jome.getStateVar(@, &#x27;count&#x27;)} ${jome.getStateVar(@, &#x27;count&#x27;) == 1 ? &#x27;time&#x27; : &#x27;times&#x27;}`))</span>
-<span class="hljs-comment">// Since txt is referencing to the %count state, that add it as a listener</span>
-<span class="hljs-comment">// jome.addListener(btn, &quot;count&quot;, txt)</span>
-<span class="hljs-comment">// btn.$.listeners.push(txt)</span>
-
-<span class="hljs-comment">// Ici, Txt devient une fonction au lieu de simplement un object puisqu&#x27;il dépend du state.</span>
+<p>C'est OK, mais j'aimerais pouvoir dire à qui appartient le state au lieu d'être à l'aveugle comme ça.</p>
+<p>J'aimerais pouvoir setter le state à travers un nom de node? Je ne sais pas ce n'est pas si explicit non plus...</p>
+<p>Qu'est-ce qui se passe si le node et ses parents n'ont pas le state?</p>
+<p>State variables inside classes.</p>
+<p>Class using parent state:</p>
+<pre><code class="language-jome"><span class="hljs-comment">// A question mark when dependent on a state or an exclamation mark (silent vs throw exception?)</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ColoredText</span> |<span class="hljs-variable">@text</span>, %<span class="hljs-variable">theme</span>?| {
+  print: () =&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`&lt;p style=&quot;color: {%theme.textColor}&quot;&gt;{%theme}&lt;/p&gt;`</span>
+  }
+}
+</code></pre>
+<p>Class having state:</p>
+<pre><code class="language-jome"><span class="hljs-comment">// No question mark having state</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">App</span> |%<span class="hljs-variable">theme</span>| {
+  init: () =&gt; {
+    %<span class="hljs-variable">theme</span> = {
+      textColor: <span class="hljs-string">&quot;red&quot;</span>
+    }
+  }
+}
 </code></pre>
 <h3>Documenting state variables</h3>
 <p>Declaring state variables is not necessary. You can simply attach them to nodes. But it should be pretty important

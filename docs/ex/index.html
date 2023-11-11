@@ -101,8 +101,8 @@
 <pre><code class="language-jome"><span class="hljs-keyword">import</span> {<span class="hljs-title class_">Btn</span>, <span class="hljs-title class_">Txt</span>, <span class="hljs-variable">renderHTML</span>} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;html&quot;</span>
 
 <span class="hljs-title function_">renderHTML</span>(target: <span class="hljs-string">&#x27;#div-id&#x27;</span>, {
-  <span class="hljs-title class_">Btn</span> <span class="hljs-variable">@count</span>: <span class="hljs-number">0</span>, ~click: =&gt; (<span class="hljs-variable">@count</span> += <span class="hljs-number">1</span>)
-    <span class="hljs-title class_">Txt</span> =&gt; <span class="hljs-string">&quot;Clicked {@count} {@count == 1 ? &#x27;time&#x27; : &#x27;times&#x27;}&quot;</span>
+  <span class="hljs-title class_">Btn</span> %count: <span class="hljs-number">0</span>, ~click: =&gt; (%<span class="hljs-variable">count</span> += <span class="hljs-number">1</span>)
+    <span class="hljs-title class_">Txt</span> =&gt; <span class="hljs-string">&quot;Clicked {%count} {%count == 1 ? &#x27;time&#x27; : &#x27;times&#x27;}&quot;</span>
 })
 </code></pre>
 <p>Example compiled JavaScript output:</p>
