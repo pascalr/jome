@@ -32,6 +32,12 @@ import {AppPage} from '../lib/app.jome'
 content2 = <md>
   ## Compiling
 
+  FIXME: This has changed a lot. I don't want to do something similar to CoffeeScript with jomec.
+
+  I want more to execute files directly.
+
+  DEPRECATED:
+
   For compiling you need jomec.
 
   <h3 id="jomec">jomec</h3>
