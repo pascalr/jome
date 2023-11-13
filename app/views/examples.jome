@@ -150,10 +150,10 @@ conten = <md>
   TODO: Save metadata too.
 
   ```jome
-  let tables = <sh>sqlite3 <%= ARGV[1] %> ".table"</sh>
-  <sh>mkdir <%= ARGV[2] %></sh>
+  let tables = <sh>sqlite3 < % = ARGV[1] % > ".table"</sh>
+  <sh>mkdir < % = ARGV[2] % ></sh>
   tables#each(table => (
-    <sh>sqlite3 -header -csv <%= ARGV[1] %> "select * from <%= table %>;" > <%= table %>.csv</sh>
+    <sh>sqlite3 -header -csv < % = ARGV[1] % > "select * from < % = table % >;" > < % = table % >.csv</sh>
   ))
   ```
 
