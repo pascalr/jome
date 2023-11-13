@@ -122,19 +122,21 @@ export class JomeBuilder {
     this.buildAbsPath = params.buildAbsPath || defaultBuildDir
     this.outDir = params.outDir || defaultOutDir
     this.dependencies = []
+
+    this.filesToBuild = []
   }
 
-  buildFile(absPath, ext) {
+  compileFile(absPath, ext) {
     if (!absPath.endsWith('.jome')) {
-      console.warn('Cannot build file without .jome extension', absPath);
+      console.warn('Cannot compile file without .jome extension', absPath);
       return;
     }
   
     if (!absPath.startsWith(this.projectAbsPath)) {
-      throw new Error("Only building files inside the project folder supported for now.")
+      throw new Error("Only compiling files inside the project folder supported for now.")
     }
     let relPath = absPath.slice(this.projectAbsPath.length+1)
-    console.log('Building File', relPath);
+    console.log('Compiling File', relPath);
   
     try {
       // Check if the file exists
@@ -143,13 +145,6 @@ export class JomeBuilder {
       console.error(`File '${absPath}' does not exist.`);
       return null
     }
-
-    let dir = path.dirname(relPath)
-    let buildDir = path.join(this.buildAbsPath, dir)
-    // Reproduce the directory structure inside the build directory.
-    if (!fs.existsSync(buildDir)) (
-      fs.mkdirSync(buildDir, { recursive: true })
-    )
   
     // Read the contents of the file synchronously
     const data = fs.readFileSync(absPath, 'utf8');
@@ -171,13 +166,27 @@ export class JomeBuilder {
       }
     })
   
-    missings.forEach(missing => {
-      this.buildFile(missing, '.built.js') // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEE. I could import a file of any type...
-    })
-  
     if (ext.endsWith('.js')) {
       result = `import ${JOME_LIB} from 'jome'\n\n` + result;
     }
+  
+    return {result, context, missings, relPath}
+  }
+
+  buildFile(absPath, ext) {
+
+    let {result, context, missings, relPath} = this.compileFile(absPath, ext)
+
+    let dir = path.dirname(relPath)
+    let buildDir = path.join(this.buildAbsPath, dir)
+    // Reproduce the directory structure inside the build directory.
+    if (!fs.existsSync(buildDir)) (
+      fs.mkdirSync(buildDir, { recursive: true })
+    )
+  
+    missings.forEach(missing => {
+      this.buildFile(missing, '.built.js') // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEE. I could import a file of any type...
+    })
   
     // Generate the build file name
     const buildFileName = path.basename(absPath.replace(/\.jome$/, ext));
@@ -215,28 +224,34 @@ export class JomeBuilder {
     })
   }
 
+  async build() {
+    this.filesToBuild.forEach(async ({relPath, params}) => {
+      let type = path.extname(relPath).slice(1)
+      let dir = path.dirname(relPath)
+      let fileAbsPath = path.join(this.projectAbsPath, relPath)
+      let ext = `.${type}.js`
+      this.buildFile(fileAbsPath, ext)
+      let f = path.basename(relPath).slice(0, -5)+ext
+      let f2 = params.as ? path.join(this.outDir, params.as) : path.join(this.outDir, relPath)
+      // if (type === 'html' && useIndexHtmlFiles) {
+      //   f2 = outDir+path.basename(relPath).slice(0, -5)+'/index.html'
+      // } else {
+      //   f2 = outDir+path.basename(relPath).slice(0, -5)+ext.slice(0,-3)
+      // }
+      let result = await import(`../.jome/${path.join('build', dir)}/${f}`);
+      let defaut = result.default
+      saveFile(f2, defaut)
+      // code = code + `import imp{i} from "./{path.join(buildDirName, dir)}/{f}"`+'\n' // FIXME parse newline at the end
+      // "FIXME"
+    })
+  }
+
   /**
    * Compiles the given jome file into an intermediary .js file stored in .jome folder.
    * Then runs this .js file and store the result based on params.as
    */
-  async src(params={}, relPath) {
-    let type = path.extname(relPath).slice(1)
-    let dir = path.dirname(relPath)
-    let fileAbsPath = path.join(this.projectAbsPath, relPath)
-    let ext = `.${type}.js`
-    this.buildFile(fileAbsPath, ext)
-    let f = path.basename(relPath).slice(0, -5)+ext
-    let f2 = params.as ? path.join(this.outDir, params.as) : path.join(this.outDir, relPath)
-    // if (type === 'html' && useIndexHtmlFiles) {
-    //   f2 = outDir+path.basename(relPath).slice(0, -5)+'/index.html'
-    // } else {
-    //   f2 = outDir+path.basename(relPath).slice(0, -5)+ext.slice(0,-3)
-    // }
-    let result = await import(`../.jome/${path.join('build', dir)}/${f}`);
-    let defaut = result.default
-    saveFile(f2, defaut)
-    // code = code + `import imp{i} from "./{path.join(buildDirName, dir)}/{f}"`+'\n' // FIXME parse newline at the end
-    // "FIXME"
+  src(params={}, relPath) {
+    this.filesToBuild.push({relPath, params})
   }
 }
 
@@ -301,6 +316,10 @@ export class JomeBuilder {
 //     }
 //   });
 // }
+
+// TODO: Sort out the mess of this file...
+// Use a single buildFile method
+// Use a compile file, because when executing a file I don't want to write to an intermediary file.
 
 export async function buildAndRunFile(fullPath, dependencies=[]) {
   let buildFileName = buildFile(fullPath, dependencies, true)?.buildFileName

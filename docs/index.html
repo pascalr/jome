@@ -578,6 +578,36 @@ them I don't know if I want to do that. Or I want to offer multiple possibilitie
 <span class="hljs-variable">btn</span> = « <span class="hljs-title class_">Button</span> »
 <span class="hljs-variable">btn</span>.<span class="hljs-title function_">click</span>()
 </code></pre>
+<h3>Default signals</h3>
+<p>Default signals are created for very common things.</p>
+<p>Jome signals:</p>
+<ul>
+<li>~created: Called when an object is created. I think this would be soooo nice and would be very usefull.
+This way, you can create an object and call a lot of methods that define how the object will be created.
+Then it will be call automatically. Maybe objects will have a variable isAuto by default true and if true
+then it will executed created automatically.</li>
+</ul>
+<p>Html functions:</p>
+<p>click, ...</p>
+<h3>Under the hood</h3>
+<p>Work in progress</p>
+<p>Signals are compiled as functions where the tilde is replaced by the prefix on_. And another
+function is created with the same same as the signal to force the signal.</p>
+<p>Or maybe just the version without the tilde and that's it?</p>
+<pre><code class="language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Button</span> {
+  <span class="hljs-title function_">on_click</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Button clicked!&#x27;</span>)
+  }
+  <span class="hljs-title function_">click</span>(<span class="hljs-params"></span>) { <span class="hljs-title function_">on_click</span>() }
+  <span class="hljs-comment">// or simply</span>
+  <span class="hljs-title function_">click</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Button clicked!&#x27;</span>)
+  }
+}
+
+btn = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Button</span>()
+btn.<span class="hljs-title function_">click</span>()
+</code></pre>
   <h2 id="declaration">Declaration</h2>
 <p>When you declare a variable without a keyword, the variable will be a constant. To declare a variable, use the var keyword.
 To declare a function, use de def function.</p>

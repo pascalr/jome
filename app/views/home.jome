@@ -692,6 +692,45 @@ main {
   btn.click()
   ```
 
+  ### Default signals
+
+  Default signals are created for very common things.
+
+  Jome signals:
+  - ~created: Called when an object is created. I think this would be soooo nice and would be very usefull.
+  This way, you can create an object and call a lot of methods that define how the object will be created.
+  Then it will be call automatically. Maybe objects will have a variable isAuto by default true and if true
+  then it will executed created automatically.
+
+  Html functions:
+
+  click, ...
+
+  ### Under the hood
+
+  Work in progress
+
+  Signals are compiled as functions where the tilde is replaced by the prefix on_. And another
+  function is created with the same same as the signal to force the signal.
+
+  Or maybe just the version without the tilde and that's it?
+
+  ```js
+  class Button {
+    on_click() {
+      console.log('Button clicked!')
+    }
+    click() { on_click() }
+    // or simply
+    click() {
+      console.log('Button clicked!')
+    }
+  }
+
+  btn = new Button()
+  btn.click()
+  ```
+
   <h2 id="declaration">Declaration</h2>
 
   When you declare a variable without a keyword, the variable will be a constant. To declare a variable, use the var keyword.
