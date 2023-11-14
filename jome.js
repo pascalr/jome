@@ -66,7 +66,7 @@
 //   console.log(`Child process exited with code ${code}`);
 // });
 
-import { buildAndRunFile } from './src/builder.js';
+import { JomeBuilder, buildAndRunFile } from './src/builder.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -78,3 +78,6 @@ const args = process.argv.slice(2); // Exclude the first two arguments (node exe
 const fileName = (args.length === 0) ? 'index.jome' : args[0];
 const fullPath = path.join(__dirname, fileName)
 buildAndRunFile(fullPath)
+
+// let builder = new JomeBuilder({projectAbsPath: __dirname})
+// builder.execute(fullPath)

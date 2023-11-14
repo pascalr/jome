@@ -4,6 +4,7 @@ import { CompileContext } from './compile_context.js';
 import { compile, compileGetContext } from './compiler.js';
 import { fileURLToPath } from 'url';
 import {globSync} from 'glob'
+import { spawn } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -114,7 +115,7 @@ export function buildFile(fullPath, dependencies = [], run=false) {
 export class JomeBuilder {
   constructor(params={}) {
 
-    this.projectAbsPath = params.projectAbsPath
+    this.projectAbsPath = params.projectAbsPath || ''
 
     let defaultTmpDirName = '.jome/'
     // The absolute path to the directory to contain the intermediary build files and and build runtime file.
@@ -209,7 +210,7 @@ export class JomeBuilder {
       return null
     }
   
-    return {buildFileName, context}
+    return {buildFileName, context, outFileName}
   }
 
   /**
@@ -229,6 +230,11 @@ export class JomeBuilder {
       let out = path.join(this.outDir, params.into, path.basename(file))
       fs.copyFileSync(file, out)
     })
+  }
+
+  async execute(absPath) {    
+    let {outFileName} = this.compileAndSaveFile(absPath, '.js')
+    await import(outFileName);
   }
 
   async run() {

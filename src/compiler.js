@@ -1194,7 +1194,12 @@ function compileHeaders(ctx) {
   let r = ctx.headers.join('\n')+'\n'
   Object.keys(ctx.imports).forEach(fileName => {
     let imp = ctx.imports[fileName]
-    r += `import ${imp.default||''}${(imp.namedImports||[]).length ? `{${imp.namedImports.join(', ')}}`:''} from "${fileName}";\n`
+    // if (fileName.endsWith('.js')) {
+    //   console.log('FIXME hardcoded relative path inside compileHeaders')
+    //   r += `import ${imp.default||''}${(imp.namedImports||[]).length ? `{${imp.namedImports.join(', ')}}`:''} from "../../${fileName}";\n`
+    // } else {
+      r += `import ${imp.default||''}${(imp.namedImports||[]).length ? `{${imp.namedImports.join(', ')}}`:''} from "${fileName}";\n`
+    // }
   })
   if (ctx.usesDirname) {
     // FIXME: don't import path and fileURLToPath multiple times...
