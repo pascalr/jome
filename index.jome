@@ -17,17 +17,17 @@ JomeBuilder projectAbsPath: __dirname
   asset 'app/css/jome-html.css', as: 'jome-html.css'
   assets 'app/favicon/*', into: '/'
   // asset 'reset.css'
-  src 'app/css/stylesheet.jome', as: 'stylesheet.css'
-  src 'app/views/home.jome', as: 'index.html'
-  src 'app/views/examples.jome', as: 'ex/index.html'
-  src 'app/views/librairies.jome', as: 'lib/index.html'
-  src 'app/views/lib/html.jome', as: 'lib/html/index.html'
-  src 'app/views/lib/express-server.jome', as: 'lib/express-server/index.html'
-  src 'app/views/lib/html-layout.jome', as: 'lib/html-layout/index.html'
-  src 'app/views/editor.jome', as: 'editor/index.html'
-  src 'app/views/compiling.jome', as: 'compiling/index.html'
-  src 'app/views/home.jome', as: 'index.html'
-  build
+  build 'app/css/stylesheet.jome', as: 'stylesheet.css'
+  build 'app/views/home.jome', as: 'index.html'
+  build 'app/views/examples.jome', as: 'ex/index.html'
+  build 'app/views/librairies.jome', as: 'lib/index.html'
+  build 'app/views/lib/html.jome', as: 'lib/html/index.html'
+  build 'app/views/lib/express-server.jome', as: 'lib/express-server/index.html'
+  build 'app/views/lib/html-layout.jome', as: 'lib/html-layout/index.html'
+  build 'app/views/editor.jome', as: 'editor/index.html'
+  build 'app/views/compiling.jome', as: 'compiling/index.html'
+  build 'app/views/home.jome', as: 'index.html'
+  run
 }
 
 // <sh>

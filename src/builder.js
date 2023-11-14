@@ -101,9 +101,16 @@ export function buildFile(fullPath, dependencies = [], run=false) {
   return {buildFileName, context}
 }
 
-// Take the files, compile them as .js files inside a hidden .jome folder
-// Then write a build.jome file inside the hidden .jome folder that simply imports
-// the default from every compiled file, and write the result into the out directory.
+/**
+ * Process Jome code.
+ * 
+ * Compile:
+ * Take the .jome files as input and compile them as .js files inside a hidden .jome folder
+ * 
+ * Build:
+ * Execute the main of every compiled files, and write the result into the out directory.
+ * 
+ */
 export class JomeBuilder {
   constructor(params={}) {
 
@@ -173,7 +180,7 @@ export class JomeBuilder {
     return {result, context, missings, relPath}
   }
 
-  buildFile(absPath, ext) {
+  compileAndSaveFile(absPath, ext) {
 
     let {result, context, missings, relPath} = this.compileFile(absPath, ext)
 
@@ -185,7 +192,7 @@ export class JomeBuilder {
     )
   
     missings.forEach(missing => {
-      this.buildFile(missing, '.built.js') // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEE. I could import a file of any type...
+      this.compileAndSaveFile(missing, '.built.js') // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEE. I could import a file of any type...
     })
   
     // Generate the build file name
@@ -224,13 +231,13 @@ export class JomeBuilder {
     })
   }
 
-  async build() {
+  async run() {
     this.filesToBuild.forEach(async ({relPath, params}) => {
       let type = path.extname(relPath).slice(1)
       let dir = path.dirname(relPath)
       let fileAbsPath = path.join(this.projectAbsPath, relPath)
       let ext = `.${type}.js`
-      this.buildFile(fileAbsPath, ext)
+      this.compileAndSaveFile(fileAbsPath, ext)
       let f = path.basename(relPath).slice(0, -5)+ext
       let f2 = params.as ? path.join(this.outDir, params.as) : path.join(this.outDir, relPath)
       // if (type === 'html' && useIndexHtmlFiles) {
@@ -250,72 +257,10 @@ export class JomeBuilder {
    * Compiles the given jome file into an intermediary .js file stored in .jome folder.
    * Then runs this .js file and store the result based on params.as
    */
-  src(params={}, relPath) {
+  build(params={}, relPath) {
     this.filesToBuild.push({relPath, params})
   }
 }
-
-// // FIXME: This makes a whole lot of ugly assomptions for paths.........
-// // FIXME: This currently does not work because it is building asynchronously files I think
-// /** @deprecated Use buildFile instead */
-// export function buildFileAsync(fullPath, dependencies=[], callback) {
-//   if (!fullPath.endsWith('.jome')) {
-//     return console.warn('cannot build file not .jome extension', fullPath)  
-//   }
-//   console.log('buildingFile', fullPath)
-//   // Check if the file exists
-//   fs.access(fullPath, fs.constants.F_OK, (err) => {
-//     if (err) {
-//       console.error(`File '${fullPath}' does not exist.`);
-//     } else {
-//       // Read and display the contents of the file
-//       fs.readFile(fullPath, 'utf8', async (err, data) => {
-//         if (err) {
-//           console.error('Error reading the file:', err);
-//         } else {
-//           let jome = new Jome()
-//           let {result, context} = jome.buildGetContext(data, new CompileContext(callback ? {} : {module: true}))
-
-//           // FIXMEEEEEEEEEEEEEEEEEE dependencies are relative to the path of the file, handle that
-
-//           let missings = []
-//           context.dependencies.forEach(dependency => {
-//             if (!(dependency in dependencies)) {
-//               dependencies.push(dependency)
-//               missings.push(dependency)
-//             }
-//           })
-
-//           const directoryPart = path.dirname(fullPath);
-//           missings.forEach(missing => {
-//             buildFile(path.join(directoryPart, missing), dependencies)
-//           })
-
-//           //let nb = (fullPath.match(/\//g)||[]).length;
-//           //if (fullPath.startsWith('./')) {nb -= 1}
-//           if (callback) {
-//             result = `const $ = $$.newObj()\nif (typeof window !== 'undefined') {window.$ = $;}\n\n` + result
-//           }
-//           //result = `import {$$} from '${'../'.repeat(nb)}./src/jome_v9.js'\n\n` + result
-//           result = `import {$$} from 'jome_lib'\n\n` + result
-
-//           //let buildFileName = "build/built.js"
-//           let buildFileName = fullPath.replace(/\.jome$/, ".built.js")
-//           fs.writeFile(buildFileName, result, async (err) => {
-//             if (err) {
-//                 console.error('Error writing to the file:', err);
-//             } else {
-//                 console.log(`Successfully wrote to '${buildFileName}'.`);
-//                 if (callback) {
-//                   callback(buildFileName)
-//                 }
-//             }
-//           });
-//         }
-//       });
-//     }
-//   });
-// }
 
 // TODO: Sort out the mess of this file...
 // Use a single buildFile method
