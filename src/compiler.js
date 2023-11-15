@@ -1121,7 +1121,7 @@ const PROCESSES = {
     }
     return `${label} ${compileToken(cond, ctx)} ${jsBlock(val, ctx)}`
   },
-  "keyword.control.main.jome": () => "export default ",
+  "keyword.control.main.jome": (node, ctx) => ctx.useESM ? "export default " : "module.exports = ",
   "punctuation.separator.delimiter.jome": () => ', ',
   "punctuation.terminator.statement.jome": () => ';',
   "keyword.operator.jome": (node, ctx) => (
@@ -1164,7 +1164,9 @@ const PROCESSES = {
     if (word === 'ret' || word === 'return' || word === 'retourne') {
       return 'return '
     } else if (word === 'export') {
-      return 'export '
+      if (ctx.useESM) {return 'export '}
+      let next = node.next()
+      throw new Error('TODO 4359073450')
     } else if (word === 'await') {
       return 'await '
     } else if (word === 'import') {
@@ -1196,26 +1198,39 @@ function compileAtBottom(ctx) {
 
 function compileHeaders(ctx) {
   let r = ctx.headers.join('\n')+'\n'
-  Object.keys(ctx.imports).forEach(fileName => {
-    let imp = ctx.imports[fileName]
-    // if (fileName.endsWith('.js')) {
-    //   console.log('FIXME hardcoded relative path inside compileHeaders')
-    //   r += `import ${imp.default||''}${(imp.namedImports||[]).length ? `{${imp.namedImports.join(', ')}}`:''} from "../../${fileName}";\n`
-    // } else {
-      r += `import ${imp.default||''}${(imp.namedImports||[]).length ? `{${imp.namedImports.join(', ')}}`:''} from "${fileName}";\n`
-    // }
-  })
-  if (ctx.usesDirname) {
-    // FIXME: don't import path and fileURLToPath multiple times...
-    r += `
+  if (ctx.useESM) {
+    Object.keys(ctx.imports).forEach(fileName => {
+      let imp = ctx.imports[fileName]
+      // if (fileName.endsWith('.js')) {
+      //   console.log('FIXME hardcoded relative path inside compileHeaders')
+      //   r += `import ${imp.default||''}${(imp.namedImports||[]).length ? `{${imp.namedImports.join(', ')}}`:''} from "../../${fileName}";\n`
+      // } else {
+        r += `import ${imp.default||''}${(imp.namedImports||[]).length ? `{${imp.namedImports.join(', ')}}`:''} from "${fileName}";\n`
+      // }
+    })
+    if (ctx.usesDirname) {
+      // FIXME: don't import path and fileURLToPath multiple times...
+      r += `
 let __filename = fileURLToPath(import.meta.url)
 let __dirname = path.dirname(__filename)
-    `
-  } else if (ctx.usesFilename) {
-    // FIXME: don't import path and fileURLToPath multiple times...
-    r += `
+`
+    } else if (ctx.usesFilename) {
+      // FIXME: don't import path and fileURLToPath multiple times...
+      r += `
 __filename = fileURLToPath(import.meta.url)
-    `
+`
+    }
+  } else {
+    Object.keys(ctx.imports).forEach(fileName => {
+      let imp = ctx.imports[fileName]
+      if (imp.default && imp.namedImports.length) {
+        throw new Error("Error can't import default and named imports with CommonJS.")
+      } else if (imp.default) {
+        r += `const ${imp.default} = require("${fileName}");\n`
+      } else if (imp.namedImports.length) {
+        r += `const {${imp.namedImports.join(', ')}} = require("${fileName}");\n`
+      }
+    })
   }
   return r
 }

@@ -24,6 +24,8 @@ export class CompileContext {
     this.interfaces = {}
     this.classes = {}
     this.stateVariables = []
+    this.useESM = true // Use CommonJS by default to be executed by node easier.
+    this.exports = []
   }
 
   spacing() {
