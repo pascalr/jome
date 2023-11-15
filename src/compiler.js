@@ -1166,7 +1166,17 @@ const PROCESSES = {
     } else if (word === 'export') {
       if (ctx.useESM) {return 'export '}
       let next = node.next()
-      throw new Error('TODO 4359073450')
+      let name = ''
+      if (next.type === 'keyword.control.declaration.jome') {
+        name = next.next().text()
+      } else if (next.type === 'meta.class.jome') {
+        name = filterSpaces(next.children)[1].text()
+      } else if (next.type === 'variable.assignment.jome') {
+        name = next.text()
+      } else {
+        throw new Error('TODO 4359073450')
+      }
+      return 'module.exports.'+name+' = '
     } else if (word === 'await') {
       return 'await '
     } else if (word === 'import') {

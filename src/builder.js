@@ -4,7 +4,7 @@ import { CompileContext } from './compile_context.js';
 import { compile, compileGetContext } from './compiler.js';
 import { fileURLToPath } from 'url';
 import {globSync} from 'glob'
-import { spawn } from 'child_process';
+import { spawnSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,7 +70,11 @@ export function buildFile(fullPath, dependencies = [], run=false) {
   })
 
   // Modify 'result' as needed
-  result = `import ${JOME_LIB} from 'jome'\n\n` + result;
+  if (context.useESM) {
+    result = `import ${JOME_LIB} from 'jome'\n\n` + result;
+  } else {
+    result = `const ${JOME_LIB} = require('jome')\n\n` + result;
+  }
 
   // Generate the build file name
   const buildFileName = fullPath.replace(/\.jome$/, '.built.js');
@@ -175,7 +179,11 @@ export class JomeBuilder {
     })
   
     if (ext.endsWith('.js')) {
-      result = `import ${JOME_LIB} from 'jome'\n\n` + result;
+      if (context.useESM) {
+        result = `import ${JOME_LIB} from 'jome'\n\n` + result;
+      } else {
+        result = `const ${JOME_LIB} = require('jome')\n\n` + result;
+      }
     }
   
     return {result, context, missings, relPath}
@@ -232,9 +240,31 @@ export class JomeBuilder {
     })
   }
 
+  // async execute(absPath) {    
+  //   let {outFileName} = this.compileAndSaveFile(absPath, '.js')
+  //   await import(outFileName);
+  // }
+
   async execute(absPath) {    
-    let {outFileName} = this.compileAndSaveFile(absPath, '.js')
-    await import(outFileName);
+    let {result: scriptCode} = this.compileFile(absPath, '.js')
+    const result = spawnSync('node', [], {
+      input: scriptCode,
+      encoding: 'utf-8',
+    });
+    
+    // Check for errors
+    if (result.error) {
+      console.error(`Error in child process: ${result.error.message}`);
+    }
+    
+    // Log the child process output
+    console.log(`Child process output: ${result.stdout}`);
+    
+    // Log the exit code and signal
+    console.log(`Child process exited with code ${result.status} and signal ${result.signal}`);
+    
+    // Perform actions after the child process has exited
+    console.log('Child process has ended.');
   }
 
   async run() {
