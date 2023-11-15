@@ -218,8 +218,8 @@ let jome = (target) => {
 jome.getStateVar = getStateVar
 jome.params = params
 
-export default jome
-// module.exports = jome
+// export default jome
+module.exports = jome
 
 
 // export default class Jome {
