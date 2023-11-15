@@ -779,6 +779,11 @@ main {
 
   The `main` keyword is compiled to `export default`.
 
+  Waiiiiiiit. Pas sur. Je vais convertir mes trucs en CommonJs, et on va voir après si je peux supporter ça.
+
+  Possiblement tu peux faire main ou export, mais pas les deux en même temps, parce que sois tu exécutes, sois tu exportes des fonctions
+  parce que tu ne peux pas avoir l'équivalent de export et export default en CommonJS je crois.
+
   ### Export
 
   Au lieu de export, le keyword public?

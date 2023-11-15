@@ -641,6 +641,9 @@ au lieu de
 Ça serait plus simple mettre le modificateur avec pour parser, mais c'est plus beau après.</p>
 <h2>Main</h2>
 <p>The <code>main</code> keyword is compiled to <code>export default</code>.</p>
+<p>Waiiiiiiit. Pas sur. Je vais convertir mes trucs en CommonJs, et on va voir après si je peux supporter ça.</p>
+<p>Possiblement tu peux faire main ou export, mais pas les deux en même temps, parce que sois tu exécutes, sois tu exportes des fonctions
+parce que tu ne peux pas avoir l'équivalent de export et export default en CommonJS je crois.</p>
 <h3>Export</h3>
 <p>Au lieu de export, le keyword public?</p>
 <p>Une idée: Tous est export par défault. Pour mettre privé, mettre un underscore au début.</p>

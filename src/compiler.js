@@ -7,7 +7,6 @@ import compileMarkdown from './compilers/markdown.js'
 import { analyze } from './analyzer.js'
 
 const JOME_LIB = 'jome'
-const JOME_ROOT = '$'
 const JOME_ATTRS = '$'
 
 // TODO: I should use a nesting index for params __params__, __params1__, __params2__, ...
@@ -1190,6 +1189,11 @@ function compileToken(tok, context) {
   return result
 }
 
+function compileAtBottom(ctx) {
+  console.log('TODO: Compile as CommonJS, or at least allow to.')
+  return ''
+}
+
 function compileHeaders(ctx) {
   let r = ctx.headers.join('\n')+'\n'
   Object.keys(ctx.imports).forEach(fileName => {
@@ -1227,5 +1231,6 @@ export function compileGetContext(text, ctx, isNested = false) {
   // console.log('tokenized:', root.print())
   let r1 = compileToken(root, context)
   let r0 = isNested ? '' : compileHeaders(context)
-  return {result: r0 + r1, context}
+  let r2 = isNested ? '' : compileAtBottom(context)
+  return {result: r0 + r1 + r2, context}
 }

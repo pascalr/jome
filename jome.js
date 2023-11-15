@@ -18,6 +18,7 @@
 
 // Args: (any arguments must be at the beginning of the command!)
 // -c "fileToCompile.jome": Compiles the given file to a .js file.
+// -r "fileToRun.jome": Compiles the given file to a .js file and runs it.
 // -e "log('Hello')": Execute some code
 // -h: Config mode
 //
@@ -78,6 +79,14 @@ const args = process.argv.slice(2); // Exclude the first two arguments (node exe
 const fileName = (args.length === 0) ? 'index.jome' : args[0];
 const fullPath = path.join(__dirname, fileName)
 buildAndRunFile(fullPath)
+
+// Fuck utiliser .jome, simplement compiler les trucs à la même place qu'ils sont.
+// Offrir des options:
+// Rajouter un préfix au fichier '.' ou '~' ou autre.
+// Rajouter un suffix au fichier
+// Le garder pareil
+// Supprimer les fichiers générer une fois terminé
+// Bundle tous les fichiers généré et supprimé les intermédiaires.
 
 // let builder = new JomeBuilder({projectAbsPath: __dirname})
 // builder.execute(fullPath)
