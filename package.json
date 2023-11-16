@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "",
   "main": "jome.js",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/pascalr/jome.git"

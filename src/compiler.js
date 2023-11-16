@@ -1,10 +1,18 @@
-import { POST_PROCESSES, tokenize } from './tokenizer.js'
-import { CompileContext } from './compile_context.js'
+// import { POST_PROCESSES, tokenize } from './tokenizer.js'
+// import { CompileContext } from './compile_context.js'
 
-import fs from 'fs'
-import path from 'path'
-import compileMarkdown from './compilers/markdown.js'
-import { analyze } from './analyzer.js'
+// import fs from 'fs'
+// import path from 'path'
+// import compileMarkdown from './compilers/markdown.js'
+// import { analyze } from './analyzer.js'
+
+const { POST_PROCESSES, tokenize } = require('./tokenizer.js');
+const { CompileContext } = require('./compile_context.js');
+
+const fs = require('fs');
+const path = require('path');
+const compileMarkdown = require('./compilers/markdown.js');
+const { analyze } = require('./analyzer.js');
 
 const JOME_LIB = 'jome'
 const JOME_ATTRS = '$'
@@ -72,7 +80,7 @@ function compileKey(key) {
   return /-/.test(key) ? `"${key}"` : key
 }
 
-export function compileRaw(node) {
+function compileRaw(node) {
   if (Array.isArray(node)) {
     return node.map(n => compileRaw(n)).join('')
   } else if (node.type === 'newline') {
@@ -552,7 +560,7 @@ function parseList(list, ctx) {
   return results
 }
 
-export function compileInterpolate(str, ctx, escSeqBeg = '${', escSeqEnd = '}') {
+function compileInterpolate(str, ctx, escSeqBeg = '${', escSeqEnd = '}') {
   // FIXME: This is a simplify method that does not allow "%>" to be for example inside a string
   // FIXME: <html><%= "%>" %></html> // DOES NOT WORK
   // A proper solution would be to have all the tmLanguage files to tokenize properly, and inject
@@ -604,7 +612,8 @@ function getRelativePath(relPath, ctx, forRequire) {
   if (curFolder[0] !== '/') {
     return './'+path.join(curFolder, relPath)
   } else if (forRequire) {
-    let rel = ctx.currentFile.slice(ctx.rootDir.length+1) // FIXME: +1 for slash
+    let rel = ctx.currentFile.slice(ctx.rootDir.length) // FIXME: +1 for slash
+    if (rel[0] === '/') {rel = rel.slice(1)}
     let relDir = path.dirname(rel)
     if (relDir && relDir !== '.') {
       return './' + path.join(relDir, relPath)
@@ -613,7 +622,7 @@ function getRelativePath(relPath, ctx, forRequire) {
   return relPath
 }
 
-export function escapeBackticks(inputString) {
+function escapeBackticks(inputString) {
   return inputString.replace(/`/g, '\u005c`').replace(/\$\{/g, '\u005c\$\{')
 }
 
@@ -1135,6 +1144,7 @@ const PROCESSES = {
   "keyword.operator.assignment.compound.jome": compileWithSpaces,
   "support.variable.jome": (node, ctx) => {
     let name = node.text()
+    console.log('Maybe write __dirname as a string directly for cjs?')
     if (name === '__dirname') {
       ctx.imports['path'] = {default: 'path'}
       ctx.imports['url'] = {namedImports: ['fileURLToPath']}
@@ -1249,11 +1259,11 @@ __filename = fileURLToPath(import.meta.url)
   return r
 }
 
-export function compile(text) {
+function compile(text) {
   return compileGetContext(text).result
 }
 
-export function compileGetContext(text, ctx, isNested = false) {
+function compileGetContext(text, ctx, isNested = false) {
   let root = tokenize(text)
   analyze(root)
   let context = ctx || new CompileContext()
@@ -1262,4 +1272,12 @@ export function compileGetContext(text, ctx, isNested = false) {
   let r0 = isNested ? '' : compileHeaders(context)
   let r2 = isNested ? '' : compileAtBottom(context)
   return {result: r0 + r1 + r2, context}
+}
+
+module.exports = {
+  compileRaw,
+  compileInterpolate,
+  escapeBackticks,
+  compile,
+  compileGetContext
 }

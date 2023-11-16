@@ -67,18 +67,20 @@
 //   console.log(`Child process exited with code ${code}`);
 // });
 
-import { JomeBuilder, buildAndRunFile } from './src/builder.js';
-import path from 'path';
-import { fileURLToPath } from 'url';
+const { JomeBuilder, buildAndRunFile } = require('./src/builder.js');
+const path = require('path');
+// import { JomeBuilder, buildAndRunFile } from './src/builder.js';
+// import path from 'path';
+// import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 const args = process.argv.slice(2); // Exclude the first two arguments (node executable and script file)
 
 const fileName = (args.length === 0) ? 'index.jome' : args[0];
 const fullPath = path.join(__dirname, fileName)
-buildAndRunFile(fullPath)
+// buildAndRunFile(fullPath)
 
 // Fuck utiliser .jome, simplement compiler les trucs à la même place qu'ils sont.
 // Offrir des options:
@@ -88,5 +90,5 @@ buildAndRunFile(fullPath)
 // Supprimer les fichiers générer une fois terminé
 // Bundle tous les fichiers généré et supprimé les intermédiaires.
 
-// let builder = new JomeBuilder({projectAbsPath: __dirname})
-// builder.execute(fullPath)
+let builder = new JomeBuilder({projectAbsPath: __dirname})
+builder.execute(fullPath)

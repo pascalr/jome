@@ -1,10 +1,11 @@
-import FirstMate from 'first-mate'
+// import FirstMate from 'first-mate'
+const FirstMate = require('first-mate')
 
 const registry = new FirstMate.GrammarRegistry()
 //registry.loadGrammarSync('./grammar/syntaxes/JavaScript.tmLanguage.json')
 const grammar = registry.loadGrammarSync('./grammar/syntaxes/jome.tmLanguage.json')
 
-export const POST_PROCESSES = new Set([
+const POST_PROCESSES = new Set([
   "keyword.control.inline-conditional.jome",
   "meta.arrow-getter.jome",
   "meta.obj-block.jome",
@@ -143,7 +144,12 @@ function tokenizeLines(text) {
   return results;
 }
 
-export function tokenize(text) {
+function tokenize(text) {
   let lines = tokenizeLines(text)
   return decodeTokensAsTree(lines)
+}
+
+module.exports = {
+  POST_PROCESSES,
+  tokenize
 }

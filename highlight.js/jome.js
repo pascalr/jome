@@ -1,7 +1,7 @@
 // Example of an example:
 // https://github.com/highlightjs/highlight.js/blob/main/src/languages/css.js
 
-export default function(hljs) {
+const highlighter = function(hljs) {
 
   // Source: https://github.com/highlightjs/highlight.js/blob/main/src/languages/javascript.js
   // https://tc39.es/ecma262/#sec-literals-numeric-literals
@@ -117,3 +117,5 @@ export default function(hljs) {
     ]
   }
 }
+
+module.exports = highlighter

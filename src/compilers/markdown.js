@@ -1,8 +1,14 @@
-import MarkdownIt from 'markdown-it'
-import { compileInterpolate, compileRaw, escapeBackticks } from '../compiler.js'
+// import MarkdownIt from 'markdown-it'
+// import { compileInterpolate, compileRaw, escapeBackticks } from '../compiler.js'
 
-import hljs from 'highlight.js'
-import jomeHljs from '../../highlight.js/jome.js'
+// import hljs from 'highlight.js'
+// import jomeHljs from '../../highlight.js/jome.js'
+
+const MarkdownIt = require('markdown-it')
+//const { compileInterpolate, compileRaw, escapeBackticks } = require('../compiler.js')
+
+const hljs = require('highlight.js')
+const jomeHljs = require('../../highlight.js/jome.js')
 
 hljs.registerLanguage('jome', jomeHljs)
 
@@ -18,10 +24,13 @@ let markdownIt = new MarkdownIt({
   }
 })
 
-export default function compileMarkdown(node, ctx) {
-  let r = compileRaw(node.children.slice(1,-1))
-  r = compileInterpolate(r, ctx, "$$escSeqBeg$$", "$$escSeqEnd$$")
-  r = escapeBackticks(markdownIt.render(r))
+function compileMarkdown(node, ctx) {
+  const compiler = require('../compiler.js')
+  let r = compiler.compileRaw(node.children.slice(1,-1))
+  r = compiler.compileInterpolate(r, ctx, "$$escSeqBeg$$", "$$escSeqEnd$$")
+  r = compiler.escapeBackticks(markdownIt.render(r))
   r = r.replaceAll(/\$\$escSeqBeg\$\$/g, '${').replaceAll(/\$\$escSeqEnd\$\$/g, '}')
   return '`'+r+'`'
 }
+
+module.exports = compileMarkdown

@@ -1,4 +1,5 @@
-import { LexicalEnvironment } from './lex_env.js';
+const { LexicalEnvironment } = require('./lex_env.js');
+// import { LexicalEnvironment } from './lex_env.js';
 
 class Scope {
   constructor(parent, params={}) {
@@ -7,7 +8,7 @@ class Scope {
   }
 }
 
-export class CompileContext {
+class CompileContext {
   constructor(params={}) {
     let {lexEnv, compile, dependencies, depth, module} = params
     this.lexEnv = lexEnv || new LexicalEnvironment()
@@ -24,7 +25,7 @@ export class CompileContext {
     this.interfaces = {}
     this.classes = {}
     this.stateVariables = []
-    this.useESM = true // Use CommonJS by default to be executed by node easier.
+    this.useESM = false // Use CommonJS by default to be executed by node easier.
     this.exports = []
   }
 
@@ -64,4 +65,8 @@ export class CompileContext {
       this.currentScopeNode.declarations.add(name)
     }
   }
+}
+
+module.exports = {
+  CompileContext
 }

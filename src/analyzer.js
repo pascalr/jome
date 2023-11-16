@@ -9,10 +9,14 @@
  * 
  * Check for dependencies so you can call classes and functions that are declared after they are used.
  */
-export function analyze(rootToken) {
+function analyze(rootToken) {
   analyzeNode(rootToken)
 }
 
 function analyzeNode(node, context) {
 
+}
+
+module.exports = {
+  analyze
 }

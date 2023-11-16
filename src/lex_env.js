@@ -1,4 +1,4 @@
-export class LexicalEnvironment {
+class LexicalEnvironment {
   constructor(outerEnvironment = null, debug = null) {
     // console.warn('Creating lexical environment')
     this.bindings = {};
@@ -42,4 +42,8 @@ export class LexicalEnvironment {
     return (this.getBindingEnv(name)?.bindings || this.bindings)
     // throw new ReferenceError(`${name} is not defined.`);
   }
+}
+
+module.exports = {
+  LexicalEnvironment
 }

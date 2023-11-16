@@ -1,13 +1,20 @@
-import fs from 'fs';
-import path from 'path';
-import { CompileContext } from './compile_context.js';
-import { compile, compileGetContext } from './compiler.js';
-import { fileURLToPath } from 'url';
-import {globSync} from 'glob'
-import { spawnSync } from 'child_process';
+// import fs from 'fs';
+// import path from 'path';
+// import { CompileContext } from './compile_context.js';
+// import { compile, compileGetContext } from './compiler.js';
+// import { fileURLToPath } from 'url';
+// import {globSync} from 'glob'
+// import { spawnSync } from 'child_process';
+const fs = require('fs');
+const path = require('path');
+const { CompileContext } = require('./compile_context.js');
+const { compile, compileGetContext } = require('./compiler.js');
+const { fileURLToPath } = require('url');
+const globSync = require('glob').sync;
+const { spawnSync } = require('child_process');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 const JOME_LIB = 'jome'
 
@@ -25,7 +32,7 @@ function saveFile(name, content) {
   });
 }
 
-export function buildFile(fullPath, dependencies = [], run=false) {
+function buildFile(fullPath, dependencies = [], run=false) {
   if (!fullPath.endsWith('.jome')) {
     console.warn('Cannot build file without .jome extension', fullPath);
     return;
@@ -116,10 +123,12 @@ export function buildFile(fullPath, dependencies = [], run=false) {
  * Execute the main of every compiled files, and write the result into the out directory.
  * 
  */
-export class JomeBuilder {
+class JomeBuilder {
   constructor(params={}) {
 
     this.projectAbsPath = params.projectAbsPath || ''
+    console.warn('FIXME: Hardcoded project abs path to test')
+    if (this.projectAbsPath === '.') {this.projectAbsPath = '/home/pascalr/jome/'}
 
     let defaultTmpDirName = '.jome/'
     // The absolute path to the directory to contain the intermediary build files and and build runtime file.
@@ -205,8 +214,8 @@ export class JomeBuilder {
     let {result, context, relPath} = this.compileFileAndDeps(absPath, ext)
 
     let dir = path.dirname(relPath)
-    // let buildDir = path.join(this.projectAbsPath, dir)
-    let buildDir = path.join(this.buildAbsPath, dir)
+    let buildDir = path.join(this.projectAbsPath, dir)
+    // let buildDir = path.join(this.buildAbsPath, dir)
     // Reproduce the directory structure inside the build directory.
     if (!fs.existsSync(buildDir)) (
       fs.mkdirSync(buildDir, { recursive: true })
@@ -256,6 +265,7 @@ export class JomeBuilder {
   async execute(absPath) {    
     let {result: scriptCode} = this.compileFileAndDeps(absPath, '.js')
     const result = spawnSync('node', [], {
+      cwd: this.projectAbsPath,
       input: scriptCode,
       encoding: 'utf-8',
     });
@@ -310,10 +320,16 @@ export class JomeBuilder {
 // Use a single buildFile method
 // Use a compile file, because when executing a file I don't want to write to an intermediary file.
 
-export async function buildAndRunFile(fullPath, dependencies=[]) {
+async function buildAndRunFile(fullPath, dependencies=[]) {
   let buildFileName = buildFile(fullPath, dependencies, true)?.buildFileName
   if (buildFileName) {
     console.log('Running built')
     await import(buildFileName);
   }
+}
+
+module.exports = {
+  buildFile,
+  buildAndRunFile,
+  JomeBuilder
 }
