@@ -807,7 +807,8 @@ const PROCESSES = {
     let ext = path.extname(relPath)
     if (ext === '.jome') {
       ctx.dependencies.push(relPath)
-      relPath = relPath.slice(0, relPath.length-4)+"built.js"
+      // relPath = relPath.slice(0, relPath.length-4)+"built.js"
+      relPath = relPath.slice(0, relPath.length-4)+(ctx.useESM ? 'built.js' : 'built.cjs')
     }
     ctx.imports[relPath] = {
       default: defaultImport,
@@ -1176,7 +1177,8 @@ const PROCESSES = {
       } else {
         throw new Error('TODO 4359073450')
       }
-      return 'module.exports.'+name+' = '
+      ctx.exports.push(name)
+      return ''
     } else if (word === 'await') {
       return 'await '
     } else if (word === 'import') {
@@ -1202,7 +1204,9 @@ function compileToken(tok, context) {
 }
 
 function compileAtBottom(ctx) {
-  console.log('TODO: Compile as CommonJS, or at least allow to.')
+  if (ctx.exports.length) {
+    return '\n\nmodule.exports = {'+ctx.exports.join(', ')+'}'
+  }
   return ''
 }
 
@@ -1233,7 +1237,7 @@ __filename = fileURLToPath(import.meta.url)
   } else {
     Object.keys(ctx.imports).forEach(fileName => {
       let imp = ctx.imports[fileName]
-      if (imp.default && imp.namedImports.length) {
+      if (imp.default && imp.namedImports?.length) {
         throw new Error("Error can't import default and named imports with CommonJS.")
       } else if (imp.default) {
         r += `const ${imp.default} = require("${fileName}");\n`

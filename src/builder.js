@@ -189,20 +189,28 @@ export class JomeBuilder {
     return {result, context, missings, relPath}
   }
 
-  compileAndSaveFile(absPath, ext) {
+  compileFileAndDeps(absPath, ext) {
 
     let {result, context, missings, relPath} = this.compileFile(absPath, ext)
+  
+    missings.forEach(missing => {
+      this.compileAndSaveFile(missing, context.useESM ? '.built.js' : '.built.cjs') // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEE. I could import a file of any type...
+    })
+  
+    return {result, context, relPath}
+  }
+
+  compileAndSaveFile(absPath, ext) {
+
+    let {result, context, relPath} = this.compileFileAndDeps(absPath, ext)
 
     let dir = path.dirname(relPath)
+    // let buildDir = path.join(this.projectAbsPath, dir)
     let buildDir = path.join(this.buildAbsPath, dir)
     // Reproduce the directory structure inside the build directory.
     if (!fs.existsSync(buildDir)) (
       fs.mkdirSync(buildDir, { recursive: true })
     )
-  
-    missings.forEach(missing => {
-      this.compileAndSaveFile(missing, '.built.js') // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEE. I could import a file of any type...
-    })
   
     // Generate the build file name
     const buildFileName = path.basename(absPath.replace(/\.jome$/, ext));
@@ -246,7 +254,7 @@ export class JomeBuilder {
   // }
 
   async execute(absPath) {    
-    let {result: scriptCode} = this.compileFile(absPath, '.js')
+    let {result: scriptCode} = this.compileFileAndDeps(absPath, '.js')
     const result = spawnSync('node', [], {
       input: scriptCode,
       encoding: 'utf-8',
