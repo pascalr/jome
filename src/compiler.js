@@ -816,8 +816,8 @@ const PROCESSES = {
     let ext = path.extname(relPath)
     if (ext === '.jome') {
       ctx.dependencies.push(relPath)
-      // relPath = relPath.slice(0, relPath.length-4)+"built.js"
-      relPath = relPath.slice(0, relPath.length-4)+(ctx.useESM ? 'built.js' : 'built.cjs')
+      relPath = relPath.slice(0, relPath.length-4)+"built.js"
+      // relPath = relPath.slice(0, relPath.length-4)+(ctx.useESM ? 'built.js' : 'built.cjs')
     }
     ctx.imports[relPath] = {
       default: defaultImport,

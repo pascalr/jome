@@ -1,7 +1,7 @@
-import jome from 'jome'
+const jome = require('jome')
 
 
-import {AppPage} from "../lib/app.built.js";
+const {AppPage} = require("../lib/app.built.js");
 
 class Example {
   toString() {
@@ -102,4 +102,4 @@ jome.<span class="hljs-title function_">createObj</span>($.$.$btn, <span class="
 ))
 </code></pre>
 `
-export default new AppPage({title: 'Jome examples', content: conten}).toString()
+module.exports = new AppPage({title: 'Jome examples', content: conten}).toString()

@@ -1,9 +1,9 @@
-import jome from 'jome'
+const jome = require('jome')
 
 
-import {AppPage} from "../../lib/app.built.js";
+const {AppPage} = require("../../lib/app.built.js");
 
-export default new AppPage({title: 'Jome express server', content: `<h1>Express Server</h1>
+module.exports = new AppPage({title: 'Jome express server', content: `<h1>Express Server</h1>
 <p>ExpressServer is a wrapper for express in Jome.</p>
 <h2>Usage</h2>
 <pre><code class="language-jome">{

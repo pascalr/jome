@@ -1,7 +1,7 @@
-import jome from 'jome'
+const jome = require('jome')
 
 
-import {AppPage} from "../../lib/app.built.js";
+const {AppPage} = require("../../lib/app.built.js");
 
 var text23 = `<h1>Jome lib html</h1>
 <p>FIXME: This should be generated automatically from the source code.</p>
@@ -25,4 +25,4 @@ var text23 = `<h1>Jome lib html</h1>
 « <span class="hljs-title class_">Div</span> <span class="hljs-variable">css</span>.width: <span class="hljs-variable">100px</span>, <span class="hljs-variable">css</span>.color: <span class="hljs-string">&#x27;red&#x27;</span> » <span class="hljs-comment">// &lt;div style=&#x27;width: 100px; color: red;&#x27;&gt;&lt;/div&gt;</span>
 </code></pre>
 `
-export default new AppPage({title: 'Jome lib html', content: text23}).toString()
+module.exports = new AppPage({title: 'Jome lib html', content: text23}).toString()

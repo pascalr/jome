@@ -33,6 +33,7 @@ function saveFile(name, content) {
 }
 
 function buildFile(fullPath, dependencies = [], run=false) {
+  throw new Error('buildFile function is deprecated. Use JomeBuilder')
   if (!fullPath.endsWith('.jome')) {
     console.warn('Cannot build file without .jome extension', fullPath);
     return;
@@ -156,7 +157,8 @@ class JomeBuilder {
     if (!absPath.startsWith(this.projectAbsPath)) {
       throw new Error("Only compiling files inside the project folder supported for now.")
     }
-    let relPath = absPath.slice(this.projectAbsPath.length+1)
+    let relPath = absPath.slice(this.projectAbsPath.length)
+    if (relPath[0] === '/') {relPath = relPath.slice(1)}
     console.log('Compiling File', relPath);
   
     try {
@@ -203,7 +205,8 @@ class JomeBuilder {
     let {result, context, missings, relPath} = this.compileFile(absPath, ext)
   
     missings.forEach(missing => {
-      this.compileAndSaveFile(missing, context.useESM ? '.built.js' : '.built.cjs') // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEE. I could import a file of any type...
+      //this.compileAndSaveFile(missing, context.useESM ? '.built.js' : '.built.cjs') // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEE. I could import a file of any type...
+      this.compileAndSaveFile(missing, '.built.js') // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEE. I could import a file of any type...
     })
   
     return {result, context, relPath}
@@ -299,8 +302,10 @@ class JomeBuilder {
       // } else {
       //   f2 = outDir+path.basename(relPath).slice(0, -5)+ext.slice(0,-3)
       // }
-      let result = await import(`../.jome/${path.join('build', dir)}/${f}`);
-      let defaut = result.default
+      //let result = await import(`../.jome/${path.join('build', dir)}/${f}`);
+      //let result = await import(`../${dir}/${f}`);
+      //let defaut = result.default
+      let defaut = require(`../${dir}/${f}`);
       saveFile(f2, defaut)
       // code = code + `import imp{i} from "./{path.join(buildDirName, dir)}/{f}"`+'\n' // FIXME parse newline at the end
       // "FIXME"

@@ -1,9 +1,9 @@
-import jome from 'jome'
+const jome = require('jome')
 
 
-import {AppPage} from "../lib/app.built.js";
+const {AppPage} = require("../lib/app.built.js");
 
-export default new AppPage({title: 'Simple HTML Page', content: (`<h1>Jome</h1>
+module.exports = new AppPage({title: 'Simple HTML Page', content: (`<h1>Jome</h1>
 <p>Jome is a language that compiles to JavaScript. It has a node structure like in Godot, it has types like Typescript,
 it has goodies like CoffeeScript and underscore.js, it handles state like in React and it has some (new?) ideas.</p>
 <p>Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.</p>

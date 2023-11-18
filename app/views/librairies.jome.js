@@ -1,7 +1,7 @@
-import jome from 'jome'
+const jome = require('jome')
 
 
-import {AppPage} from "../lib/app.built.js";
+const {AppPage} = require("../lib/app.built.js");
 
 var content = `<h2>Jome librairies</h2>
 <p>Librairies should be distributed the same way as CoffeeScript librairies. So I think it is mainly through npm.</p>
@@ -10,4 +10,4 @@ var content = `<h2>Jome librairies</h2>
 <li><a href="${process.env.URL}/lib/html">Html</a></li>
 </ul>
 `
-export default new AppPage({title: 'Jome examples', className: "examples-page", content: content}).toString()
+module.exports = new AppPage({title: 'Jome examples', className: "examples-page", content: content}).toString()

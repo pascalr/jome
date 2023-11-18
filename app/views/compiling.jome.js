@@ -1,7 +1,7 @@
-import jome from 'jome'
+const jome = require('jome')
 
 
-import {AppPage} from "../lib/app.built.js";
+const {AppPage} = require("../lib/app.built.js");
 
 var content2 = `<h2>Compiling</h2>
 <p>FIXME: This has changed a lot. I don't want to do something similar to CoffeeScript with jomec.</p>
@@ -45,4 +45,4 @@ jomec <span class="hljs-string">&quot;views/*.jome&quot;</span> <span class="hlj
 </code></pre>
 <p>TODO: List all the possible options</p>
 `
-export default new AppPage({title: 'Compiling Jome', content: content2}).toString()
+module.exports = new AppPage({title: 'Compiling Jome', content: content2}).toString()

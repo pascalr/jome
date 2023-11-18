@@ -1,8 +1,8 @@
-import jome from 'jome'
+const jome = require('jome')
 
 
 
-export default `
+module.exports = `
   body {
     margin: 0;
     background-color: #f9f4f4;

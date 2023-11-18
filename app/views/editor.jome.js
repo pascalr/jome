@@ -1,8 +1,8 @@
-import jome from 'jome'
+const jome = require('jome')
 
 
-import {HtmlPage} from "../../lib/html-page.built.js";
-import {Div, renderHtmlTag} from "../../lib/html.built.js";
+const {HtmlPage} = require("../../lib/html-page.built.js");
+const {Div, renderHtmlTag} = require("../../lib/html.built.js");
 
 const boxCss = (obj) => {
   return {width: obj.width, height: obj.height, "background-color": obj.color, margin: obj.margin, border: obj.border, "flex-grow": obj.grow, "flex-shrink": obj.shrink}
@@ -149,4 +149,4 @@ var bod = jome(new Screen({color: bgColor1}))
   .addChild(new Panel({shrink: 1, color: bgColor3, border: `4px solid ${bgColor2}`}))
   .addChild(new Panel({width: '200px', color: bgColor3, border: `4px solid ${bgColor2}`}))))
   .node()
-export default new HtmlPage({title: 'Jome editor', stylesheets: [`${process.env.URL}/reset.css`, `${process.env.URL}/jome-html.css`], body: bod.toString()}).toString()
+module.exports = new HtmlPage({title: 'Jome editor', stylesheets: [`${process.env.URL}/reset.css`, `${process.env.URL}/jome-html.css`], body: bod.toString()}).toString()
