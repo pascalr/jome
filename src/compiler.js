@@ -727,13 +727,8 @@ function compileUtility(node, ctx) {
   if (node.type === "entity.name.function.utility.jome") {
     val = node.text().slice(1)
     operatedOn = compileNode(node.captureNext(), ctx)
-  } else if (node.type === "entity.name.function.utility-inline.jome") {
-    val = node.text().slice(2)
-    operatedOn = compileToken(node.prev(), ctx)
   } else {
-    console.warn("Deprecated f890234hr3")
-    //throw new Error("Deprecated f890234hr3")
-    val = node.children[1].text()
+    val = node.text().slice(2)
     operatedOn = compileToken(node.prev(), ctx)
   }
   switch (val) {
@@ -976,8 +971,6 @@ const PROCESSES = {
   },
   "keyword.operator.colon.jome": () => ' : ',
   "keyword.operator.existential.jome": () => ' ? ',
-  // ->keys
-  "meta.arrow-getter.jome": compileUtility,
   // #keys
   "entity.name.function.utility.jome": compileUtility,
   "entity.name.function.utility-inline.jome": compileUtility,

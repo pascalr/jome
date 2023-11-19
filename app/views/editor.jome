@@ -35,7 +35,7 @@ def textCss = |obj| => {
 }
 
 class Screen &BoxParams => {
-  toString: => (renderHtmlTag('div', @->children
+  toString: => (renderHtmlTag('div', @.#children
     class: "jome-html screen"
     css: {
       width: @width,
@@ -46,27 +46,27 @@ class Screen &BoxParams => {
 }
 
 class Panel &BoxParams => {
-  toString: => (renderHtmlTag('div', @->children
+  toString: => (renderHtmlTag('div', @.#children
     class: "jome-html panel"
     css: boxCss(@)
   ))
 }
 
 class Row {
-  toString: => (renderHtmlTag('div', @->children
+  toString: => (renderHtmlTag('div', @.#children
     class: "jome-html row"
   ))
 }
 
 class Col {
-  toString: => (renderHtmlTag('div', @->children
+  toString: => (renderHtmlTag('div', @.#children
     class: "jome-html col"
   ))
 }
 
 // An hsplit takes the whole height compared to a row
 class HSplit &BoxParams => {
-  toString: => (renderHtmlTag('div', @->children
+  toString: => (renderHtmlTag('div', @.#children
     class: "jome-html hsplit"
     css: boxCss(@)
   ))
@@ -74,14 +74,14 @@ class HSplit &BoxParams => {
 
 // A vsplit takes the whole width compared to a col
 class VSplit &BoxParams => {
-  toString: => (renderHtmlTag('div', @->children
+  toString: => (renderHtmlTag('div', @.#children
     class: "jome-html vsplit"
     css: boxCss(@)
   ))
 }
 
 class HAligned &BoxParams => {
-  toString: => (renderHtmlTag('div', @->children
+  toString: => (renderHtmlTag('div', @.#children
     class: "jome-html haligned"
     css: boxCss(@)
   ))
@@ -95,7 +95,7 @@ class Txt &TextParams => {
 }
 
 class Link |&TextParams, @to?| => {
-  toString: => (renderHtmlTag('a', @->children, @content
+  toString: => (renderHtmlTag('a', @.#children, @content
     class: `jome-html{@class ? ` {@class}` : ''}`
     href: @to
     css: textCss(@)

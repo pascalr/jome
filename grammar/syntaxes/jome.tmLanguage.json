@@ -113,7 +113,6 @@
         { "include": "#arrow" },
         { "include": "#utilities" },
         { "include": "#state-var" },
-        { "include": "#arrow_getter" },
         { "include": "#operators" },
         { "include": "#function" },
         { "include": "#parameter" },
@@ -289,16 +288,6 @@
         "captures": {
           "1": {"name": "punctuation.dot.jome"},
           "2": {"name": "variable.other.property.jome"}
-        }
-			}]
-		},
-    "arrow_getter": {
-			"patterns": [{
-				"name": "meta.arrow-getter.jome",
-				"match": "(->)(\\w+)",
-        "captures": {
-          "1": {"name": "punctuation.arrow.jome"},
-          "2": {"name": "variable.other.jome"}
         }
 			}]
 		},

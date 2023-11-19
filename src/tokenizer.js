@@ -7,7 +7,6 @@ const grammar = registry.loadGrammarSync('./grammar/syntaxes/jome.tmLanguage.jso
 
 const POST_PROCESSES = new Set([
   "keyword.control.inline-conditional.jome",
-  "meta.arrow-getter.jome",
   "meta.obj-block.jome",
   "meta.getter.jome",
   "entity.name.function.utility-inline.jome"
