@@ -824,9 +824,17 @@ main {
 
   ## Environment variables
 
-  Environment variables start with a dollar sign. For example, `$MY_ENV_VAR = 'foo'`.
+  FIXME: Environment variables do not start with a dollar sign anymore. Global variables do
 
-  Environment variables or global variables it is not clear yet.
+  Use #env for environment variables
+
+  ```jome
+  #env.MY_ENV_VAR = 'foo' // => process.env.MY_ENV_VAR = 'foo'
+  ```
+
+  ## Global variables
+
+  TODO: Global variables start with a dollar sign. For example, `$MY_GLOB_VAR = 'foo'`.
 
   ## Pretty output
 

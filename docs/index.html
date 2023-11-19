@@ -671,8 +671,12 @@ parce que tu ne peux pas avoir l'équivalent de export et export default en Comm
 )
 </code></pre>
 <h2>Environment variables</h2>
-<p>Environment variables start with a dollar sign. For example, <code>$MY_ENV_VAR = 'foo'</code>.</p>
-<p>Environment variables or global variables it is not clear yet.</p>
+<p>FIXME: Environment variables do not start with a dollar sign anymore. Global variables do</p>
+<p>Use #env for environment variables</p>
+<pre><code class="language-jome">#<span class="hljs-variable">env</span>.<span class="hljs-title class_">MY_ENV_VAR</span> = <span class="hljs-string">&#x27;foo&#x27;</span> <span class="hljs-comment">// =&gt; process.env.MY_ENV_VAR = &#x27;foo&#x27;</span>
+</code></pre>
+<h2>Global variables</h2>
+<p>TODO: Global variables start with a dollar sign. For example, <code>$MY_GLOB_VAR = 'foo'</code>.</p>
 <h2>Pretty output</h2>
 <p>Idéalement, je ne me soucis pas de l'indentation de l'output et tout le tralala qui peut compliquer le compilateur pour rien.</p>
 <p>Simplement passer le code dans un formatteur de code.</p>

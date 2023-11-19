@@ -10,7 +10,7 @@ const POST_PROCESSES = new Set([
   "meta.arrow-getter.jome",
   "meta.obj-block.jome",
   "meta.getter.jome",
-  "entity.name.function.utility.jome"
+  "entity.name.function.utility-inline.jome"
 ])
 
 function _ignoreNode(node) {

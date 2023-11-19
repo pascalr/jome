@@ -35,17 +35,17 @@ interface GlobalAttributes |
 |
 
 def renderHTMLAttrs = |obj| => (
-  var r = obj#signals#keys.map(n =>
-    `on{n}="jome.run('${obj#path}.{n}()')"`
+  var r = obj.#signals.#keys.map(n =>
+    `on{n}="jome.run('${obj.#path}.{n}()')"`
   ).join(" ")
 
   // FIXME: Needs a space between signals and props
 
-  r = r + (obj#params#entries.filter(entry => (entry[0] != 'css')).map(entry =>
+  r = r + (obj.#params.#entries.filter(entry => (entry[0] != 'css')).map(entry =>
     `{entry[0]}="{entry[1]}"`
   ).join(" "))
 
-  r = r + (obj#params.css ? ('style="'+obj#params.css#entries.map(entry => `{entry[0]}: {entry[1]}`).join('; ')+'"') : '')
+  r = r + (obj.#params.css ? ('style="'+obj.#params.css.#entries.map(entry => `{entry[0]}: {entry[1]}`).join('; ')+'"') : '')
 
   r ? (' '+r) : r
 )
@@ -56,11 +56,11 @@ def renderHTMLTagChildren = |children| => (
 
 def renderHTMLTagAttrs = |attrs| => (
 
-  var r = (attrs#entries.filter(entry => (entry[0] != 'css')).map(entry =>
+  var r = (attrs.#entries.filter(entry => (entry[0] != 'css')).map(entry =>
     `{entry[0]}="{entry[1]}"`
   ).join(" "))
 
-  var s = (attrs.css ? (attrs.css#entries.map(entry => (entry[1] ? `{entry[0]}: {entry[1]}` : '')).filter(s => s.length).join('; ')) : '')
+  var s = (attrs.css ? (attrs.css.#entries.map(entry => (entry[1] ? `{entry[0]}: {entry[1]}` : '')).filter(s => s.length).join('; ')) : '')
   r = r + (s && s.length ? (' style="'+s+'"') : '')
 
   r ? (' '+r) : r
@@ -71,14 +71,14 @@ export def renderHtmlTag = |tag, children, content, &GlobalAttributes| => (
 )
 
 def renderHTMLChildren = |obj| => (
-  obj#children.map(c => (c.toString ? c.toString() : '')).join("")
+  obj.#children.map(c => (c.toString ? c.toString() : '')).join("")
 )
 
 def renderHTML = |obj, target?| => (
   var elem = document.getElementById(target)
   children = []
   html = ''
-  obj#children.forEach(child => (
+  obj.#children.forEach(child => (
     if (child.createElem) (
       var e = child.createElem()
       children.push(e)
@@ -150,13 +150,13 @@ def createElem = |obj, tag, content, ns| => (
   if (content) (
     el.appendChild(document.createTextNode(content))
   )
-  obj#params#entries.filter(entry => (entry[0] != 'css')).forEach(entry => (
+  obj.#params.#entries.filter(entry => (entry[0] != 'css')).forEach(entry => (
     el.setAttribute(entry[0], entry[1])
   ))
   if (obj.css) (
-    el.style= obj.css#entries.map(entry => `{entry[0]}: {entry[1]}`).join('; ')
+    el.style= obj.css.#entries.map(entry => `{entry[0]}: {entry[1]}`).join('; ')
   )
-  obj#children.forEach(child => (
+  obj.#children.forEach(child => (
     if (child.createElem) (
       el.appendChild(child.createElem())
     ) else if (child.toString) (
@@ -166,7 +166,7 @@ def createElem = |obj, tag, content, ns| => (
       el.appendChild(tmp.firstElementChild)
     )
   ))
-  obj#signals#keys.forEach(n => (
+  obj.#signals.#keys.forEach(n => (
     if (HTML_EVENTS.includes(n)) (
       el.addEventListener(n, obj['~'+n])
     )
@@ -186,7 +186,7 @@ class Fragment => {
   toString: => `{renderHTMLChildren(@)}`
   createElem: => (
     var el = document.createDocumentFragment()
-    @#children.forEach(child => (
+    @.#children.forEach(child => (
       if (child.createElem) (
         el.appendChild(child.createElem())
       )

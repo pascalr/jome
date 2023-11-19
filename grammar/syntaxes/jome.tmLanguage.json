@@ -305,6 +305,10 @@
     "utilities": {
 			"patterns": [
         {
+          "name": "entity.name.function.utility-inline.jome",
+          "match": "\\.#\\w+"
+        },
+        {
           "name": "variable.other.constant.utility.jome",
           "match": "#\\b(PI)\\b",
           "notWorkingMatch": "#\\b\\w+\\b(?!\\(|#)"

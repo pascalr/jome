@@ -722,27 +722,39 @@ function compileBlock(node, ctx) {
 }
 
 function compileUtility(node, ctx) {
-  let val = node.type === "entity.name.function.utility.jome" ? node.text().slice(1) : node.children[1].text()
-  let prev = compileToken(node.prev(), ctx)
+  let val;
+  let operatedOn;
+  if (node.type === "entity.name.function.utility.jome") {
+    val = node.text().slice(1)
+    operatedOn = compileNode(node.captureNext(), ctx)
+  } else if (node.type === "entity.name.function.utility-inline.jome") {
+    val = node.text().slice(2)
+    operatedOn = compileToken(node.prev(), ctx)
+  } else {
+    console.warn("Deprecated f890234hr3")
+    //throw new Error("Deprecated f890234hr3")
+    val = node.children[1].text()
+    operatedOn = compileToken(node.prev(), ctx)
+  }
   switch (val) {
     case 'keys': case 'values': case 'entries':
-      return `Object.${val}(${prev} || {})`
+      return `Object.${val}(${operatedOn} || {})`
     case 'props':
       //return ctx.isInsideClassSuperObject ? `__params__` : `this.__params__`
       //return `${JOME_LIB}.props(${prev})`
-      return `${prev}.__props__`
+      return `${operatedOn}.__props__`
     case 'params':
-      return `${JOME_LIB}.params(${prev})`
+      return `${JOME_LIB}.params(${operatedOn})`
     case 'hasOwnProperty': // deprecated
     case 'path': // deprecated
     case 'name': // deprecated
     case 'update':
     case 'signals':
-      return `${prev}?.${JOME_ATTRS}?.${val}`
+      return `${operatedOn}?.${JOME_ATTRS}?.${val}`
     case 'children':
-      return `(${prev}.$?.children||[])`
+      return `(${operatedOn}.$?.children||[])`
     case 'removeChildren':
-      return `(() => {${prev}.${JOME_ATTRS}.children = []})`
+      return `(() => {${operatedOn}.${JOME_ATTRS}.children = []})`
     default: throw "FIXME arrow getter not implemented yet: " + val
   }
 }
@@ -968,6 +980,7 @@ const PROCESSES = {
   "meta.arrow-getter.jome": compileUtility,
   // #keys
   "entity.name.function.utility.jome": compileUtility,
+  "entity.name.function.utility-inline.jome": compileUtility,
   // true, vrai, ...
   "constant.language.jome": (node, ctx) => {
     switch (node.text()) {
