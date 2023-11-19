@@ -77,7 +77,7 @@ class JomeBuilder {
     }
     let relPath = absPath.slice(this.projectAbsPath.length)
     if (relPath[0] === '/') {relPath = relPath.slice(1)}
-    console.log('Compiling File', relPath);
+    console.log('Compiling', relPath)
   
     try {
       // Check if the file exists

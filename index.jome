@@ -2,6 +2,16 @@
 // // FIXME: Hardcoded path, sh is not using my bash_aliases jome command
 // <sh>node /home/pascalr/jome/jome.js bin/server.jome</sh>
 
+/*
+
+TODO:
+jome # List the available options
+jome build # Build the app
+jome run # Run the server
+jome test # Run the tests
+jome dev # Build the app and run the server
+*/
+
 import { JomeBuilder } from './src/builder.js'
 import {ExpressServer} from './lib/express_server.jome'
 

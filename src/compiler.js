@@ -750,7 +750,7 @@ function compileUtility(node, ctx) {
       return `(${operatedOn}.$?.children||[])`
     case 'removeChildren':
       return `(() => {${operatedOn}.${JOME_ATTRS}.children = []})`
-    default: throw "FIXME arrow getter not implemented yet: " + val
+    default: throw "Error unkown utility: " + val
   }
 }
 
