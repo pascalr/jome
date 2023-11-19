@@ -3,9 +3,9 @@ const jome = require('jome')
 
 const {AppPage} = require("../lib/app.built.js");
 
-module.exports = new AppPage({title: 'Simple HTML Page', content: (`<h1>Jome</h1>
+module.exports = new AppPage({title: 'Simple HTML Page', content: (`<h1>Jome v0.0.0.0.1</h1>
 <p>Jome is a language that compiles to JavaScript. It has a node structure like in Godot, it has types like Typescript,
-it has goodies like CoffeeScript and underscore.js, it handles state like in React and it has some (new?) ideas.</p>
+it has goodies like CoffeeScript and underscore.js, it handles state like in React and it has some original features.</p>
 <p>Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.</p>
 <p>You can read from top to bottom to learn the language, or you can jump to any section if you are only curious.</p>
 <h2>Overview</h2>
@@ -229,6 +229,14 @@ example name.</p>
 <p>BUT YOU CAN'T PASS a parameter to a function if the function does not take any parameter. Because under the hood,
 we add a params argument to the function, so we need at least one to add the argument, then you can pass as many as you want.</p>
 <p>When calling a function with named parameters, the order does not matter. You can put them before arguments, after or even in the middle.</p>
+<h3>PARAMS</h3>
+<p>Get the list of parameters given to a function.</p>
+<pre><code class="language-jome">  <span class="hljs-keyword">def</span> <span class="hljs-variable">someFunc</span> = =&gt; (
+    <span class="hljs-title class_">PARAMS</span> <span class="hljs-comment">// The object containing all the paramters given to the function.</span>
+  )  
+</code></pre>
+<p>FIXME: I don't like using the word PARAMS in capital letters, but I don't have a better idea yet.
+I don't want to reserve the keyword params...</p>
 <h3>Props</h3>
 <p>Props are all the parameters and attributes as parameters passed during an object creation.</p>
 <pre><code class="language-jome">« <span class="hljs-title class_">Obj</span> someProp: <span class="hljs-number">10</span>, someAttr: <span class="hljs-string">&#x27;Paul&#x27;</span> »
@@ -405,12 +413,6 @@ be removed from the markdown compile, and that inserted compiled using a templat
 <h3>.jobj extension</h3>
 <p>Files with a .jobj extension would start already in a block.</p>
 <p>It think this would be pratical for example for config files.</p>
-<h2>PARAMS</h2>
-<p>Get the list of parameters given to a function.</p>
-<pre><code class="language-jome">  <span class="hljs-keyword">def</span> <span class="hljs-variable">someFunc</span> = =&gt; (
-    <span class="hljs-title class_">PARAMS</span> <span class="hljs-comment">// The object containing all the paramters given to the function.</span>
-  )  
-</code></pre>
   <h2 id="utilities">Utilities</h2>
 <p>Utilities start with the # character.</p>
 <p>It can be a constant or acting upon a variable.</p>
@@ -605,12 +607,13 @@ parce que tu ne peux pas avoir l'équivalent de export et export default en Comm
 )
 </code></pre>
 <h2>Environment variables</h2>
-<p>FIXME: Environment variables do not start with a dollar sign anymore. Global variables do</p>
 <p>Use #env for environment variables</p>
 <pre><code class="language-jome">#<span class="hljs-variable">env</span>.<span class="hljs-title class_">MY_ENV_VAR</span> = <span class="hljs-string">&#x27;foo&#x27;</span> <span class="hljs-comment">// =&gt; process.env.MY_ENV_VAR = &#x27;foo&#x27;</span>
 </code></pre>
 <h2>Global variables</h2>
-<p>TODO: Global variables start with a dollar sign. For example, <code>$MY_GLOB_VAR = 'foo'</code>.</p>
+<p>Global variables start with a dollar sign. For example, <code>$MY_GLOB_VAR = 'foo'</code>.</p>
+<p>Simply equivalent of global._ for now. Adding underscore in order to avoid name clashes. For example,
+I was using $URL, but this does not work because global.URL already exists within Node.</p>
 <h2>Pretty output</h2>
 <p>Idéalement, je ne me soucis pas de l'indentation de l'output et tout le tralala qui peut compliquer le compilateur pour rien.</p>
 <p>Simplement passer le code dans un formatteur de code.</p>

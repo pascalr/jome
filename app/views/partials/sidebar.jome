@@ -24,11 +24,6 @@
         <li><a href="<%= $URL %>/#units">Units</a></li>
         <li><a href="<%= $URL %>/#hyphens">Hyphen</a></li>
       </ul>
-      <li><a href="<%= $URL %>/compiling">Compiling</a></li>
-      <ul class="nav-list nav-sub">
-        <li><a href="<%= $URL %>/compiling#jomec">jomec</a></li>
-        <li><a href="<%= $URL %>/compiling#jomeconfig">jomeconfig.json</a></li>
-      </ul>
       <li><a href="<%= $URL %>/lib">Librairies</a></li>
       <ul class="nav-list nav-sub">
         <li><a href="<%= $URL %>/lib/html">Html</a></li>

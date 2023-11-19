@@ -25,7 +25,6 @@ JomeBuilder projectAbsPath: __dirname + '../'
   build 'app/views/lib/express-server.jome', as: 'lib/express-server/index.html'
   build 'app/views/lib/html-layout.jome', as: 'lib/html-layout/index.html'
   build 'app/views/editor.jome', as: 'editor/index.html'
-  build 'app/views/compiling.jome', as: 'compiling/index.html'
   build 'app/views/home.jome', as: 'index.html'
   run
 }

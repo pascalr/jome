@@ -6,7 +6,6 @@
 //     Link "Language Reference", to: `{$URL}/#lang-ref`
 //     Link "Examples", to: `{$URL}/ex`
 //     Link "Librairies", to: `{$URL}/lib`
-//     Link "Compiling", to: `{$URL}/compiling`
 //     Link "GitHub", to: `https://github.com/pascalr/jome`
 // }
 
@@ -18,7 +17,6 @@
     <a href="<%= $URL %>/#lang-ref">Language Reference</a>
     <a href="<%= $URL %>/ex">Examples</a>
     <a href="<%= $URL %>/lib">Librairies</a>
-    <a href="<%= $URL %>/compiling">Compiling</a>
     <a href="https://github.com/pascalr/jome">GitHub</a>
   </div>
 </html>
