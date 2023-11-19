@@ -67,6 +67,12 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <p>Vertical bars are used for function parameters.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">addXY</span> = |<span class="hljs-variable">x</span>, <span class="hljs-variable">y</span>| -&gt; (<span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>)
 </code></pre>
+<p>TODO: Try an idea: -&gt; and =&gt; are optional</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">addXY</span> = |<span class="hljs-variable">x</span>, <span class="hljs-variable">y</span>| (<span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>)
+[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>].<span class="hljs-title function_">filter</span>(|<span class="hljs-variable">nb</span>| <span class="hljs-variable">nb</span> &gt; <span class="hljs-number">5</span>)
+<span class="hljs-comment">// Et pour quand il n&#x27;y a pas d&#x27;argument?</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span> = | | (#<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hello!&quot;</span>)) <span class="hljs-comment">// Noooooon ça c&#x27;est laid...</span>
+</code></pre>
 <h3>Keywords</h3>
 <p>Declaration keywords:</p>
 <ul>
@@ -408,10 +414,12 @@ be removed from the markdown compile, and that inserted compiled using a templat
   <h2 id="utilities">Utilities</h2>
 <p>Utilities start with the # character.</p>
 <p>It can be a constant or acting upon a variable.</p>
+<p>TODO: To use the previous token as an argument, use &quot;.#&quot; syntax.</p>
+<p>obj.#keys === #keys(obj)</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Utility constants</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">angle</span> = #<span class="hljs-title function_">sin</span>(<span class="hljs-number">2</span> * #<span class="hljs-title class_">PI</span> * <span class="hljs-variable">1deg</span>)
 <span class="hljs-comment">// Utility acting on variable</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">objKeys</span> = <span class="hljs-variable">obj</span>#<span class="hljs-variable">keys</span> <span class="hljs-comment">// same as Object.keys(obj)</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">objKeys</span> = <span class="hljs-variable">obj</span>.#<span class="hljs-variable">keys</span> <span class="hljs-comment">// same as Object.keys(obj)</span>
 </code></pre>
 <p>List of jome constants: TODO</p>
 <ul>
@@ -429,7 +437,6 @@ be removed from the markdown compile, and that inserted compiled using a templat
 <li>#reduce</li>
 <li>...</li>
 </ul>
-<p>Maybe you can use #keys(obj), but personally I prefer obj#keys</p>
 <p>TODO: All html colors: MAYBEEE? Because I don't know in what format I would want the value to be... so probably don't do this</p>
 <ul>
 <li>#red: 0xFF0000</li>
@@ -438,33 +445,40 @@ be removed from the markdown compile, and that inserted compiled using a templat
 <p>Allows to save keystrokes and is easier to type.
 Allows to easily use most of underscore.js features directly.</p>
 <pre><code class="language-jome"><span class="hljs-variable">dict</span> = {x: <span class="hljs-number">10</span>, y: <span class="hljs-number">20</span>}
-<span class="hljs-variable">dict</span>#<span class="hljs-variable">keys</span> <span class="hljs-comment">// Object.keys(obj)</span>
-<span class="hljs-variable">dict</span>#<span class="hljs-variable">size</span> <span class="hljs-comment">// Object.keys(obj).length</span>
+<span class="hljs-variable">dict</span>.#<span class="hljs-variable">keys</span> <span class="hljs-comment">// Object.keys(obj)</span>
+<span class="hljs-variable">dict</span>.#<span class="hljs-variable">size</span> <span class="hljs-comment">// Object.keys(obj).length</span>
 
 <span class="hljs-variable">node</span> = {<span class="hljs-comment">/* ... */</span>}
-<span class="hljs-variable">node</span>#<span class="hljs-variable">children</span>#<span class="hljs-variable">each</span> () =&gt; {
+<span class="hljs-variable">node</span>.#<span class="hljs-variable">children</span>.#<span class="hljs-title function_">each</span>(() =&gt; (
   
-}
+))
 
 <span class="hljs-comment">// Arrow getter is useful for arrays</span>
 <span class="hljs-title class_">TODO</span>
 
 <span class="hljs-comment">// TODO</span>
-<span class="hljs-number">10</span>#<span class="hljs-title function_">times</span>(<span class="hljs-variable">i</span> =&gt; <span class="hljs-comment">/* ... */</span>)
+<span class="hljs-number">10.</span>#<span class="hljs-title function_">times</span>(<span class="hljs-variable">i</span> =&gt; <span class="hljs-comment">/* ... */</span>)
 </code></pre>
-<p>// TODO: #each which is the same as .forEach, but 3 characters less</p>
+<p>// TODO: .#each which is the same as .forEach, but 2 characters less</p>
 <p>The list of current arrow properties:</p>
-<pre><code class="language-jome"><span class="hljs-variable">obj</span>#<span class="hljs-variable">keys</span> <span class="hljs-comment">// Object.keys(obj)</span>
-<span class="hljs-variable">obj</span>#<span class="hljs-variable">values</span> <span class="hljs-comment">// Object.values(obj)</span>
-<span class="hljs-variable">obj</span>#<span class="hljs-variable">entries</span> <span class="hljs-comment">// Object.entries(obj)</span>
-<span class="hljs-variable">obj</span>#<span class="hljs-variable">params</span> <span class="hljs-comment">// The list of props given to an object constructor</span>
-<span class="hljs-variable">obj</span>#<span class="hljs-variable">props</span> <span class="hljs-comment">// The list of props given to an object constructor</span>
-<span class="hljs-variable">obj</span>#<span class="hljs-variable">children</span> <span class="hljs-comment">// The list of children of a node</span>
-<span class="hljs-variable">obj</span>#<span class="hljs-variable">removeChildren</span> <span class="hljs-comment">// Remove all children of a node</span>
+<pre><code class="language-jome"><span class="hljs-variable">obj</span>.#<span class="hljs-variable">keys</span> <span class="hljs-comment">// Object.keys(obj)</span>
+<span class="hljs-variable">obj</span>.#<span class="hljs-variable">values</span> <span class="hljs-comment">// Object.values(obj)</span>
+<span class="hljs-variable">obj</span>.#<span class="hljs-variable">entries</span> <span class="hljs-comment">// Object.entries(obj)</span>
+<span class="hljs-variable">obj</span>.#<span class="hljs-variable">params</span> <span class="hljs-comment">// The list of props given to an object constructor</span>
+<span class="hljs-variable">obj</span>.#<span class="hljs-variable">props</span> <span class="hljs-comment">// The list of props given to an object constructor</span>
+<span class="hljs-variable">obj</span>.#<span class="hljs-variable">children</span> <span class="hljs-comment">// The list of children of a node</span>
+<span class="hljs-variable">obj</span>.#<span class="hljs-variable">removeChildren</span> <span class="hljs-comment">// Remove all children of a node</span>
 <span class="hljs-comment">// TODO</span>
-<span class="hljs-variable">obj</span>#<span class="hljs-variable">isBlank</span> <span class="hljs-comment">// Like Rails blank // ou bien isBlank?</span>
-<span class="hljs-variable">obj</span>#<span class="hljs-variable">isPresent</span> <span class="hljs-comment">// The opposite of Rails blank // ou bien isPresent?</span>
+<span class="hljs-variable">obj</span>.#<span class="hljs-variable">isBlank</span> <span class="hljs-comment">// Like Rails blank // ou bien isBlank?</span>
+<span class="hljs-variable">obj</span>.#<span class="hljs-variable">isPresent</span> <span class="hljs-comment">// The opposite of Rails blank // ou bien isPresent?</span>
 </code></pre>
+<p>obj.#keys.#filter(key -&gt; key.startsWith(':')).#each /* ... */</p>
+<p>TODO:
+#package_dir: The closest directory to contain a package.json file.
+#dirname: The directory of the current file. (Equivalent of __dirname)
+#filename: The name of the current file. (Equivalent of __filename)</p>
+<p>#log === console.log
+#log(&quot;Hello world!&quot;)</p>
   <h2 id="instance-driven-dev">Instance driven development</h2>
   Instance driven development is what I call when the focus is working on concrete objects in Godot software.
   Most of the time you control objects directly inside the editor and simply modify parameters.

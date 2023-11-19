@@ -99,6 +99,14 @@ main {
   def addXY = |x, y| -> (x + y)
   ```
 
+  TODO: Try an idea: -> and => are optional
+  ```jome
+  def addXY = |x, y| (x + y)
+  [1,2,3,4,5,6,7,8,9].filter(|nb| nb > 5)
+  // Et pour quand il n'y a pas d'argument?
+  def sayHello = | | (#log("Hello!")) // Noooooon ça c'est laid...
+  ```
+
   ### Keywords
 
   Declaration keywords:
@@ -558,11 +566,15 @@ main {
 
   It can be a constant or acting upon a variable.
 
+  TODO: To use the previous token as an argument, use ".#" syntax.
+
+  obj.#keys === #keys(obj)
+
   ```jome
   // Utility constants
   let angle = #sin(2 * #PI * 1deg)
   // Utility acting on variable
-  let objKeys = obj#keys // same as Object.keys(obj)
+  let objKeys = obj.#keys // same as Object.keys(obj)
   ```
 
   List of jome constants: TODO
@@ -579,8 +591,6 @@ main {
   - #reduce
   - ...
 
-  Maybe you can use #keys(obj), but personally I prefer obj#keys
-
   TODO: All html colors: MAYBEEE? Because I don't know in what format I would want the value to be... so probably don't do this
   - #red: 0xFF0000
   - ...
@@ -590,36 +600,46 @@ main {
 
   ```jome
   dict = {x: 10, y: 20}
-  dict#keys // Object.keys(obj)
-  dict#size // Object.keys(obj).length
+  dict.#keys // Object.keys(obj)
+  dict.#size // Object.keys(obj).length
 
   node = {/* ... */}
-  node#children#each () => {
+  node.#children.#each(() => (
     
-  }
+  ))
 
   // Arrow getter is useful for arrays
   TODO
 
   // TODO
-  10#times(i => /* ... */)
+  10.#times(i => /* ... */)
   ```
 
-  // TODO: #each which is the same as .forEach, but 3 characters less
+  // TODO: .#each which is the same as .forEach, but 2 characters less
 
   The list of current arrow properties:
   ```jome
-  obj#keys // Object.keys(obj)
-  obj#values // Object.values(obj)
-  obj#entries // Object.entries(obj)
-  obj#params // The list of props given to an object constructor
-  obj#props // The list of props given to an object constructor
-  obj#children // The list of children of a node
-  obj#removeChildren // Remove all children of a node
+  obj.#keys // Object.keys(obj)
+  obj.#values // Object.values(obj)
+  obj.#entries // Object.entries(obj)
+  obj.#params // The list of props given to an object constructor
+  obj.#props // The list of props given to an object constructor
+  obj.#children // The list of children of a node
+  obj.#removeChildren // Remove all children of a node
   // TODO
-  obj#isBlank // Like Rails blank // ou bien isBlank?
-  obj#isPresent // The opposite of Rails blank // ou bien isPresent?
+  obj.#isBlank // Like Rails blank // ou bien isBlank?
+  obj.#isPresent // The opposite of Rails blank // ou bien isPresent?
   ```
+
+  obj.#keys.#filter(key -> key.startsWith(':')).#each /* ... */
+
+  TODO:
+  #package_dir: The closest directory to contain a package.json file.
+  #dirname: The directory of the current file. (Equivalent of __dirname)
+  #filename: The name of the current file. (Equivalent of __filename)
+
+  #log === console.log
+  #log("Hello world!")
 
   <h2 id="instance-driven-dev">Instance driven development</h2>
   Instance driven development is what I call when the focus is working on concrete objects in Godot software.

@@ -1,21 +1,17 @@
-// //<sh>jome bin/server.jome</sh>
-// // FIXME: Hardcoded path, sh is not using my bash_aliases jome command
-// <sh>node /home/pascalr/jome/jome.js bin/server.jome</sh>
-
 import { JomeBuilder } from './src/builder.js'
 import {ExpressServer} from './lib/express_server.jome'
 
 $URL = '/jome'
 
 <sh>
-  touch .jome/useless # Otherwise rm complains when the folder is empty
   touch docs/useless # Otherwise rm complains when the folder is empty
-  rm -R .jome/* # FIXME: Use the variables above 
   rm -R docs/* # FIXME: Use the variables above
 </sh>
+// rm -R .jome/* # FIXME: Use the variables above 
+// touch .jome/useless # Otherwise rm complains when the folder is empty
 
 {
-JomeBuilder projectAbsPath: __dirname
+JomeBuilder projectAbsPath: __dirname + '../'
   asset 'node_modules/highlight.js/styles/default.min.css', as: 'highlight.js.min.css'
   asset 'app/css/reset.css', as: 'reset.css'
   asset 'app/css/jome-html.css', as: 'jome-html.css'
