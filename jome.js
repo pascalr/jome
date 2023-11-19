@@ -76,7 +76,7 @@ const path = require('path');
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 
-const args = process.argv.slice(2,-1); // Exclude the first two arguments (node executable and script file)
+const args = process.argv.slice(2); // Exclude the first two arguments (node executable and script file)
 
 let buildAndRun = args.includes('-r')
 let filesRelPaths = args.filter(arg => !arg.startsWith('-'))
