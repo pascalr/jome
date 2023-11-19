@@ -46,8 +46,7 @@ class JomeBuilder {
   constructor(params={}) {
 
     this.projectAbsPath = params.projectAbsPath || ''
-    console.warn('FIXME: Hardcoded project abs path to test')
-    if (this.projectAbsPath === '.') {this.projectAbsPath = '/home/pascalr/jome/'}
+    // if (this.projectAbsPath === '.') {this.projectAbsPath = '/home/pascalr/jome/'}
 
     let defaultTmpDirName = '.jome/'
     // The absolute path to the directory to contain the intermediary build files and and build runtime file.

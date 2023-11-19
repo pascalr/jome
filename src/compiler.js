@@ -1153,7 +1153,7 @@ const PROCESSES = {
   "keyword.operator.assignment.compound.jome": compileWithSpaces,
   "support.variable.jome": (node, ctx) => {
     let name = node.text()
-    console.log('Maybe write __dirname as a string directly for cjs?')
+    // console.log('Maybe write __dirname as a string directly for cjs?')
     if (name === '__dirname') {
       ctx.imports['path'] = {default: 'path'}
       ctx.imports['url'] = {namedImports: ['fileURLToPath']}
