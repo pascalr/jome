@@ -310,7 +310,7 @@
         },
         {
           "name": "variable.other.constant.utility.jome",
-          "match": "#\\b(PI)\\b",
+          "match": "#\\b(PI|env)\\b",
           "notWorkingMatch": "#\\b\\w+\\b(?!\\(|#)"
         },
         {

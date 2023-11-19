@@ -238,7 +238,7 @@ class JomeBuilder {
       return null
     }
   
-    return {buildFileName, context, outFileName}
+    return {buildFileName, context, outFileName, result}
   }
 
   /**
@@ -265,8 +265,14 @@ class JomeBuilder {
   //   await import(outFileName);
   // }
 
-  async execute(absPath) {    
-    let {result: scriptCode} = this.compileFileAndDeps(absPath, '.js')
+  async execute(absPath, params={}) {    
+    let {buildAndRun} = params
+    let scriptCode;
+    if (buildAndRun) {
+      scriptCode = this.compileAndSaveFile(absPath, '.js').result
+    } else {
+      scriptCode = this.compileFileAndDeps(absPath, '.js').result
+    }
     const result = spawnSync('node', [], {
       cwd: this.projectAbsPath,
       input: scriptCode,

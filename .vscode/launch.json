@@ -12,6 +12,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
+      "runtimeArgs": ["jome.js", "-r"],
       "program": "${workspaceFolder}/jome.js"
     },
     {

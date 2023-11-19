@@ -76,9 +76,12 @@ const path = require('path');
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 
-const args = process.argv.slice(2); // Exclude the first two arguments (node executable and script file)
+const args = process.argv.slice(2,-1); // Exclude the first two arguments (node executable and script file)
 
-const fileName = (args.length === 0) ? 'index.jome' : args[0];
+let buildAndRun = args.includes('-r')
+let filesRelPaths = args.filter(arg => !arg.startsWith('-'))
+
+const fileName = (filesRelPaths.length === 0) ? 'index.jome' : filesRelPaths[0];
 const fullPath = path.join(__dirname, fileName)
 // buildAndRunFile(fullPath)
 
@@ -91,4 +94,4 @@ const fullPath = path.join(__dirname, fileName)
 // Bundle tous les fichiers généré et supprimé les intermédiaires.
 
 let builder = new JomeBuilder({projectAbsPath: __dirname})
-builder.execute(fullPath)
+builder.execute(fullPath, {buildAndRun})

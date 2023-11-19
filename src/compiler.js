@@ -632,7 +632,7 @@ function assignVariable(node, ctx, keyword) {
   if (value.startsWith('$')) {
     let next = node.captureNext() // The = sign (keyword.operator.assignment.compound.jome)
     next = next.captureNext()
-    return 'process.env.'+value.slice(1)+' = '+compileToken(next, ctx)
+    return 'global._'+value.slice(1)+' = '+compileToken(next, ctx)
   }
   let outKeyword = ''
   let isAssignment = node.type === 'variable.assignment.jome'
@@ -1006,13 +1006,16 @@ const PROCESSES = {
   "variable.other.constant.utility.jome": (node, ctx) => {
     switch (node.text().slice(1)) {
       case 'PI': return 'Math.PI'
+      case 'env': return 'process.env'
       case 'params': return '__params__'
       default: throw new Error("FIXME hashtag constant: " + node.text())
     }
   },
-  // $ENV_VAR
+  // $GLOBAL_VARIABLE
   "variable.other.environment.jome": (node, ctx) => {
-    return 'process.env.'+node.text().slice(1)
+    // Adding an underscore so the name does not collide with Node.js default variables (ex: URL)
+    // https://nodejs.org/api/globals.html#url
+    return 'global._'+node.text().slice(1)
   },
   // 10g
   "meta.number-with-unit.jome": (node, ctx) => {

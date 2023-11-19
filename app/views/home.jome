@@ -824,8 +824,6 @@ main {
 
   ## Environment variables
 
-  FIXME: Environment variables do not start with a dollar sign anymore. Global variables do
-
   Use #env for environment variables
 
   ```jome
@@ -834,7 +832,10 @@ main {
 
   ## Global variables
 
-  TODO: Global variables start with a dollar sign. For example, `$MY_GLOB_VAR = 'foo'`.
+  Global variables start with a dollar sign. For example, `$MY_GLOB_VAR = 'foo'`.
+
+  Simply equivalent of global._ for now. Adding underscore in order to avoid name clashes. For example,
+  I was using $URL, but this does not work because global.URL already exists within Node.
 
   ## Pretty output
 
