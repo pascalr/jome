@@ -68,8 +68,7 @@ class JomeBuilder {
 
   compileFile(absPath, ext) {
     if (!absPath.endsWith('.jome')) {
-      console.warn('Cannot compile file without .jome extension', absPath);
-      return;
+      throw new Error('Cannot compile file without .jome extension', absPath);
     }
   
     if (!absPath.startsWith(this.projectAbsPath)) {
@@ -83,8 +82,7 @@ class JomeBuilder {
       // Check if the file exists
       fs.accessSync(absPath, fs.constants.F_OK);
     } catch (err) {
-      console.error(`File '${absPath}' does not exist.`);
-      return null
+      throw new Error(`File '${absPath}' does not exist.`);
     }
   
     // Read the contents of the file synchronously
@@ -185,31 +183,39 @@ class JomeBuilder {
 
   async execute(absPath, params={}) {    
     let {buildAndRun} = params
-    let scriptCode;
+    if (!buildAndRun) {
+      // The idea is to be able to execute a file without generating a .js file.
+      // I don't want to pollute with useless files.
+      // But the issue right now is that in spawn, __dirname is set to '.'
+      console.warn('buildAndRun option temporarly forced')
+      buildAndRun = true
+    }
     if (buildAndRun) {
-      scriptCode = this.compileAndSaveFile(absPath, '.js').result
+      let {outFileName} = this.compileAndSaveFile(absPath, '.js')
+      require(outFileName)
     } else {
-      scriptCode = this.compileFileAndDeps(absPath, '.js').result
+      let scriptCode = this.compileFileAndDeps(absPath, '.js').result
+
+      const result = spawnSync('node', [], {
+        cwd: this.projectAbsPath,
+        input: scriptCode,
+        encoding: 'utf-8',
+      });
+      
+      // Check for errors
+      if (result.error) {
+        console.error(`Error in child process: ${result.error.message}`);
+      }
+      
+      // Log the child process output
+      console.log(`Child process output: ${result.stdout}`);
+      
+      // Log the exit code and signal
+      console.log(`Child process exited with code ${result.status} and signal ${result.signal}`);
+      
+      // Perform actions after the child process has exited
+      console.log('Child process has ended.');
     }
-    const result = spawnSync('node', [], {
-      cwd: this.projectAbsPath,
-      input: scriptCode,
-      encoding: 'utf-8',
-    });
-    
-    // Check for errors
-    if (result.error) {
-      console.error(`Error in child process: ${result.error.message}`);
-    }
-    
-    // Log the child process output
-    console.log(`Child process output: ${result.stdout}`);
-    
-    // Log the exit code and signal
-    console.log(`Child process exited with code ${result.status} and signal ${result.signal}`);
-    
-    // Perform actions after the child process has exited
-    console.log('Child process has ended.');
   }
 
   async run() {

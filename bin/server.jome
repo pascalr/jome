@@ -1,5 +1,5 @@
-import { JomeBuilder } from './src/builder.js'
-import {ExpressServer} from './lib/express_server.jome'
+import { JomeBuilder } from '../src/builder.js'
+import {ExpressServer} from '../lib/express_server.jome'
 
 $URL = '/jome'
 
