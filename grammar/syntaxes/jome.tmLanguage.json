@@ -299,7 +299,7 @@
         },
         {
           "name": "variable.other.constant.utility.jome",
-          "match": "#\\b(PI|env)\\b",
+          "match": "#\\b(PI|env|cwd)\\b",
           "notWorkingMatch": "#\\b\\w+\\b(?!\\(|#)"
         },
         {

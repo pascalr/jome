@@ -748,6 +748,8 @@ function compileUtility(node, ctx) {
       return `${operatedOn}?.${JOME_ATTRS}?.${val}`
     case 'children':
       return `(${operatedOn}.$?.children||[])`
+    case 'log':
+      return 'console.log'+operatedOn
     case 'removeChildren':
       return `(() => {${operatedOn}.${JOME_ATTRS}.children = []})`
     default: throw "Error unkown utility: " + val
@@ -1000,6 +1002,7 @@ const PROCESSES = {
     switch (node.text().slice(1)) {
       case 'PI': return 'Math.PI'
       case 'env': return 'process.env'
+      case 'cwd': return 'process.cwd()'
       case 'params': return '__params__'
       default: throw new Error("FIXME hashtag constant: " + node.text())
     }
@@ -1153,7 +1156,6 @@ const PROCESSES = {
   "keyword.operator.assignment.compound.jome": compileWithSpaces,
   "support.variable.jome": (node, ctx) => {
     let name = node.text()
-    // console.log('Maybe write __dirname as a string directly for cjs?')
     if (name === '__dirname') {
       ctx.imports['path'] = {default: 'path'}
       ctx.imports['url'] = {namedImports: ['fileURLToPath']}

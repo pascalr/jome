@@ -11,7 +11,7 @@ $URL = '/jome'
 // touch .jome/useless # Otherwise rm complains when the folder is empty
 
 {
-JomeBuilder projectAbsPath: __dirname + '../'
+JomeBuilder projectAbsPath: #cwd
   asset 'node_modules/highlight.js/styles/default.min.css', as: 'highlight.js.min.css'
   asset 'app/css/reset.css', as: 'reset.css'
   asset 'app/css/jome-html.css', as: 'jome-html.css'

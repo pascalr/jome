@@ -82,7 +82,8 @@ let buildAndRun = args.includes('-r')
 let filesRelPaths = args.filter(arg => !arg.startsWith('-'))
 
 const fileName = (filesRelPaths.length === 0) ? 'index.jome' : filesRelPaths[0];
-const fullPath = path.join(__dirname, fileName)
+const cwd = process.cwd()
+const fullPath = path.join(cwd, fileName)
 // buildAndRunFile(fullPath)
 
 // Fuck utiliser .jome, simplement compiler les trucs à la même place qu'ils sont.
@@ -93,5 +94,5 @@ const fullPath = path.join(__dirname, fileName)
 // Supprimer les fichiers générer une fois terminé
 // Bundle tous les fichiers généré et supprimé les intermédiaires.
 
-let builder = new JomeBuilder({projectAbsPath: __dirname})
+let builder = new JomeBuilder({projectAbsPath: cwd})
 builder.execute(fullPath, {buildAndRun})

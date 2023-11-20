@@ -580,6 +580,8 @@ main {
   let objKeys = obj.#keys // same as Object.keys(obj)
   ```
 
+  TODO: Most of process. #env, #cwd, ...
+
   List of jome constants: TODO
   - #sin
   - #cos

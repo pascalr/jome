@@ -423,6 +423,7 @@ be removed from the markdown compile, and that inserted compiled using a templat
 <span class="hljs-comment">// Utility acting on variable</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">objKeys</span> = <span class="hljs-variable">obj</span>.#<span class="hljs-variable">keys</span> <span class="hljs-comment">// same as Object.keys(obj)</span>
 </code></pre>
+<p>TODO: Most of process. #env, #cwd, ...</p>
 <p>List of jome constants: TODO</p>
 <ul>
 <li>#sin</li>
