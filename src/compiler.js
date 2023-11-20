@@ -726,6 +726,10 @@ function compileUtility(node, ctx) {
   let operatedOn;
   if (node.type === "entity.name.function.utility.jome") {
     val = node.text().slice(1)
+    switch (val) {
+      case 'log':
+        return 'console.log'
+    }
     operatedOn = compileNode(node.captureNext(), ctx)
   } else {
     val = node.text().slice(2)
@@ -748,8 +752,6 @@ function compileUtility(node, ctx) {
       return `${operatedOn}?.${JOME_ATTRS}?.${val}`
     case 'children':
       return `(${operatedOn}.$?.children||[])`
-    case 'log':
-      return 'console.log'+operatedOn
     case 'removeChildren':
       return `(() => {${operatedOn}.${JOME_ATTRS}.children = []})`
     default: throw "Error unkown utility: " + val
