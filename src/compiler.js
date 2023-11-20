@@ -1004,6 +1004,7 @@ const PROCESSES = {
     switch (node.text().slice(1)) {
       case 'PI': return 'Math.PI'
       case 'env': return 'process.env'
+      case 'argv': return 'process.argv'
       case 'cwd': return 'process.cwd()'
       case 'params': return '__params__'
       default: throw new Error("FIXME hashtag constant: " + node.text())

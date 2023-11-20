@@ -1,3 +1,8 @@
 // //<sh>jome bin/server.jome</sh>
 // // FIXME: Hardcoded path, sh is not using my bash_aliases jome command
-<sh>node /home/pascalr/jome/jome.js bin/server.jome</sh>
+
+if (#argv[1] === 'test') (
+  <sh>node /home/pascalr/jome/jome.js test.jome</sh>
+) else (
+  <sh>node /home/pascalr/jome/jome.js bin/server.jome</sh>
+)
