@@ -81,7 +81,9 @@ const args = process.argv.slice(2); // Exclude the first two arguments (node exe
 let buildAndRun = args.includes('-r')
 let wholeArgs = args.filter(arg => !arg.startsWith('-'))
 
-const fileName = (wholeArgs.length === 0) ? 'index.jome' : wholeArgs[0];
+let executingCommand = (!wholeArgs[0]?.endsWith('.jome'))
+
+const fileName = (executingCommand || wholeArgs.length === 0) ? 'index.jome' : wholeArgs[0];
 const cwd = process.cwd()
 const fullPath = path.join(cwd, fileName)
 // buildAndRunFile(fullPath)
@@ -95,4 +97,4 @@ const fullPath = path.join(cwd, fileName)
 // Bundle tous les fichiers généré et supprimé les intermédiaires.
 
 let builder = new JomeBuilder({projectAbsPath: cwd})
-builder.execute(fullPath, {buildAndRun})
+builder.execute(fullPath, {buildAndRun, argv: (executingCommand ? wholeArgs : null)})

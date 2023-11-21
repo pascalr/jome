@@ -181,7 +181,7 @@ class JomeBuilder {
   // }
 
   async execute(absPath, params={}) {    
-    let {buildAndRun} = params
+    let {buildAndRun, argv} = params
     if (!buildAndRun) {
       // The idea is to be able to execute a file without generating a .js file.
       // I don't want to pollute with useless files.
@@ -195,7 +195,7 @@ class JomeBuilder {
     } else {
       let scriptCode = this.compileFileAndDeps(absPath, '.js').result
 
-      const result = spawnSync('node', [], {
+      const result = spawnSync('node', argv, {
         cwd: this.projectAbsPath,
         input: scriptCode,
         encoding: 'utf-8',
