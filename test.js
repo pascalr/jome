@@ -3,6 +3,7 @@ const jome = require('jome')
 
 const {H1} = require("./lib/html.built.js");
 const {execSync} = require("child_process");
+const execSh = require("jome/lib/exec_sh");
 
 class SomeNode {
   constructor(__props__) {
@@ -72,7 +73,7 @@ var testObjList = [
 ]
 var testObjNested = {key1: new ClassForTesting({attr: "attr1", prop: "propVal1"}, "arg1"), key2: new ClassForTesting({attr: "attr2", prop: "propVal2"}, "arg2"), key3: new ClassForTesting({attr: "attr3", prop: "propVal3"}, "arg3")}
 console.log(new ClassForTesting({prop: 'Hello'}).__props__)
-execSync(`echo "Starting tests!"`);
+execSh(`echo "Starting tests!"`);
 console.log('There')
 var person = "John"
 var woman = 'Jane'

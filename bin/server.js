@@ -3,10 +3,10 @@ const jome = require('jome')
 
 const {JomeBuilder} = require("../src/builder.js");
 const {ExpressServer} = require("../lib/express_server.built.js");
-const {execSync} = require("child_process");
+const execSh = require("jome/lib/exec_sh");
 
 global._URL = '/jome'
-execSync(`
+execSh(`
   touch docs/useless # Otherwise rm complains when the folder is empty
   rm -R docs/* # FIXME: Use the variables above
 `);
