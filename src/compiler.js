@@ -1004,7 +1004,9 @@ const PROCESSES = {
     switch (node.text().slice(1)) {
       case 'PI': return 'Math.PI'
       case 'env': return 'process.env'
-      case 'argv': return 'process.argv'
+      case 'argv':
+        ctx.usesArgv = true
+        return 'global.jome_argv'
       case 'cwd': return 'process.cwd()'
       case 'params': return '__params__'
       default: throw new Error("FIXME hashtag constant: " + node.text())
@@ -1236,6 +1238,9 @@ function compileAtBottom(ctx) {
 
 function compileHeaders(ctx) {
   let r = ctx.headers.join('\n')+'\n'
+  if (ctx.usesArgv) {
+    r += 'global.jome_argv = ["jome", ...process.argv.slice(process.argv.indexOf("--") + 1)];\n\n'
+  }
   if (ctx.useESM) {
     Object.keys(ctx.imports).forEach(fileName => {
       let imp = ctx.imports[fileName]

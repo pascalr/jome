@@ -25,5 +25,15 @@
       "args": ["test.jome"],
       "program": "${workspaceFolder}/jome.js"
     },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run tests v2",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "args": ["--", "test"],
+      "program": "${workspaceFolder}/jome.js"
+    },
   ]
 }

@@ -191,21 +191,22 @@ class JomeBuilder {
     let {buildAndRun, argv} = params
 
     let {outFileName} = this.compileAndSaveFile(absPath, '.js')
-    const result = spawnSync('node', [outFileName]);
+    execSync(`node ${outFileName} -- ${(argv||[]).join(' ')}`);
+    // const result = spawnSync('node', [outFileName, '--', ...(argv||[])]);
 
-    // Check for errors
-    if (result.error) {
-      console.error(`Error in child process: ${result.error.message}`);
-    }
+    // // Check for errors
+    // if (result.error) {
+    //   console.error(`Error in child process: ${result.error.message}`);
+    // }
     
-    // Log the child process output
-    console.log(`Child process output: ${result.stdout}`);
+    // // Log the child process output
+    // console.log(`Child process output: ${result.stdout}`);
     
-    // Log the exit code and signal
-    console.log(`Child process exited with code ${result.status} and signal ${result.signal}`);
+    // // Log the exit code and signal
+    // console.log(`Child process exited with code ${result.status} and signal ${result.signal}`);
     
-    // Perform actions after the child process has exited
-    console.log('Child process has ended.');
+    // // Perform actions after the child process has exited
+    // console.log('Child process has ended.');
   }
 
   async run() {
