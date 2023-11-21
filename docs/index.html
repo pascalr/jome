@@ -222,6 +222,15 @@ It is also the syntax required to build <a href="#nodes">nodes</a>.</p>
 <h3>List with single element</h3>
 <p>In a block, you can't have a list with a single element because it that case it returns the element directly.
 You have to use the square brackets syntax then.</p>
+<h3>At (@)</h3>
+<p>At is usually the same as the keyword this.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">_this</span> = @ <span class="hljs-comment">// same as this</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">name</span> = <span class="hljs-variable">@name</span> <span class="hljs-comment">// same as this.name</span>
+</code></pre>
+<p>Idea: But it can also be used to refer to children.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">firstChild</span> = <span class="hljs-variable">@1</span> <span class="hljs-comment">// Child index starts at 1</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">secondChild</span> = <span class="hljs-variable">@2</span>
+</code></pre>
   <h2 id="nodes">Nodes</h2>
 <p>Nodes are objects in a tree structure. They can have a parent and they can have children.</p>
 <p>You create nodes by using blocks.</p>

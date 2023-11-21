@@ -66,7 +66,7 @@
               <div class="app-content">
                 <h2>Jome examples</h2>
   <h3 id="hello-world">Hello world</h3>
-<pre><code class="language-jome"><span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>) <span class="hljs-comment">// jome compiles to javascript, so you can use javascript</span>
+<pre><code class="language-jome">#<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>)
 </code></pre>
   <h3 id="html-library">Html library</h3>
 <pre><code class="language-jome"><span class="hljs-variable">html</span> = «
@@ -125,14 +125,10 @@ jome.<span class="hljs-title function_">createObj</span>($.$.$btn, <span class="
     <span class="hljs-title class_">Ing</span> <span class="hljs-variable">1cup</span>, <span class="hljs-string">&quot;dry chickpeas&quot;</span>
     <span class="hljs-title class_">Ing</span> <span class="hljs-variable">2cup</span>, <span class="hljs-string">&quot;water&quot;</span>
     <span class="hljs-title class_">Ing</span> <span class="hljs-variable">2tbsp</span>, <span class="hljs-string">&quot;parmesan&quot;</span>
-    <span class="hljs-title class_">Step</span> <span class="hljs-string">`Put {@.ing(1)} into {@.ing(2)}...`</span> <span class="hljs-comment">// Here @ would reference to Recipe?</span>
+    <span class="hljs-title class_">Step</span> <span class="hljs-string">`Put {@1} into {@2}...`</span> <span class="hljs-comment">// @1 is the first children</span>
     <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Mix ...&quot;</span>
     <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Blah blah ...&quot;</span>
 }
-<span class="hljs-comment">// or </span>
-&lt;<span class="hljs-variable">recipe</span>&gt;
-  ?
-&lt;/<span class="hljs-variable">recipe</span>&gt;
 </code></pre>
 <h2>A format database like?</h2>
 <pre><code class="language-jome"><span class="hljs-variable">data</span> = {

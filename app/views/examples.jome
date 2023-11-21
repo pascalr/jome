@@ -58,7 +58,7 @@ conten = <md>
   <h3 id="hello-world">Hello world</h3>
 
   ```jome
-  console.log("Hello world!") // jome compiles to javascript, so you can use javascript
+  #log("Hello world!")
   ```
 
   <h3 id="html-library">Html library</h3>
@@ -118,14 +118,10 @@ conten = <md>
       Ing 1cup, "dry chickpeas"
       Ing 2cup, "water"
       Ing 2tbsp, "parmesan"
-      Step `Put {@.ing(1)} into {@.ing(2)}...` // Here @ would reference to Recipe?
+      Step `Put {@1} into {@2}...` // @1 is the first children
       Step "Mix ..."
       Step "Blah blah ..."
   }
-  // or 
-  <recipe>
-    ?
-  </recipe>
   ```
 
   ## A format database like?
