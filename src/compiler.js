@@ -877,6 +877,8 @@ const PROCESSES = {
     let raw = compileRaw(node.children.slice(1,-1))
     ctx.imports['child_process'] = {namedImports: ['execSync']}
     return "execSync(`"+escapeBackticks(raw)+"`);"
+    // ctx.imports['child_process'] = {namedImports: ['spawnSync']}
+    // return "spawnSync(`"+escapeBackticks(raw)+"`, [], { encoding: 'utf-8', stdio: 'inherit' });"
   },
   // fooBar
   "variable.other.jome": (node, ctx) => {

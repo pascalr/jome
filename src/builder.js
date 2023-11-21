@@ -191,8 +191,10 @@ class JomeBuilder {
     let {buildAndRun, argv} = params
 
     let {outFileName} = this.compileAndSaveFile(absPath, '.js')
-    execSync(`node ${outFileName} -- ${(argv||[]).join(' ')}`);
-    // const result = spawnSync('node', [outFileName, '--', ...(argv||[])]);
+    // let cmd = `node ${outFileName} -- ${(argv||[]).join(' ')}`
+    // console.log('Executing:', cmd)
+    // execSync(cmd);
+    spawnSync('node', [outFileName, '--', ...(argv||[])], { encoding: 'utf-8', stdio: 'inherit' });
 
     // // Check for errors
     // if (result.error) {
