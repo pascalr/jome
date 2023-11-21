@@ -22,6 +22,7 @@
     <a href="/jome/#lang-ref">Language Reference</a>
     <a href="/jome/ex">Examples</a>
     <a href="/jome/lib">Librairies</a>
+    <a href="/jome/utils">Utils</a>
     <a href="https://github.com/pascalr/jome">GitHub</a>
   </div>
 
@@ -63,14 +64,14 @@
 
             <div class="scrollable" style="width: 100%;">
               <div class="app-content">
-                <h1>Jome v0.0.0.0.1</h1>
+                <h1>Jome v-0.0.0.0.1</h1>
 <p>Jome is a language that compiles to JavaScript. It has a node structure like in Godot, it has types like Typescript,
 it has goodies like CoffeeScript and underscore.js, it handles state like in React and it has some original features.</p>
 <p>Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.</p>
 <p>You can read from top to bottom to learn the language, or you can jump to any section if you are only curious.</p>
 <h2>Overview</h2>
 <p>Example Jome code: TODO: Make this like the examples so you can click see compiled and result</p>
-<p>Here is some code to show what Jome looks like. You can look at the <a href="/examples">examples</a> page to see more.</p>
+<p>Here is some code to show what Jome looks like. You can look at the <a href="/jome/examples">examples</a> page to see more.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Classes</span>
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">Character</span> |<span class="hljs-variable">@name</span>, <span class="hljs-variable">@weapon</span>?| =&gt; {
   attack: |<span class="hljs-variable">enemy</span>| =&gt; (
@@ -473,75 +474,26 @@ be removed from the markdown compile, and that inserted compiled using a templat
 <h3>.jobj extension</h3>
 <p>Files with a .jobj extension would start already in a block.</p>
 <p>It think this would be pratical for example for config files.</p>
-  <h2 id="utilities">Utilities</h2>
-<p>Utilities start with the # character.</p>
-<p>It can be a constant or acting upon a variable.</p>
-<p>TODO: To use the previous token as an argument, use &quot;.#&quot; syntax.</p>
-<p>obj.#keys === #keys(obj)</p>
-<pre><code class="language-jome"><span class="hljs-comment">// Utility constants</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">angle</span> = #<span class="hljs-title function_">sin</span>(<span class="hljs-number">2</span> * #<span class="hljs-title class_">PI</span> * <span class="hljs-variable">1deg</span>)
-<span class="hljs-comment">// Utility acting on variable</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">objKeys</span> = <span class="hljs-variable">obj</span>.#<span class="hljs-variable">keys</span> <span class="hljs-comment">// same as Object.keys(obj)</span>
-</code></pre>
-<p>TODO: Most of process. #env, #cwd, ...</p>
-<p>List of jome constants: TODO</p>
-<ul>
-<li>#sin</li>
-<li>#cos</li>
-<li>#tan</li>
-<li>#PI: 3.14159...</li>
-<li>#e: Euler's constat</li>
-<li>#dirname: Equivalent of __dirname</li>
-<li>#filename: Current filename</li>
-</ul>
-<p>Actually, it here here that could go every underscore.js function:</p>
-<ul>
-<li>#map</li>
-<li>#reduce</li>
-<li>...</li>
-</ul>
-<p>TODO: All html colors: MAYBEEE? Because I don't know in what format I would want the value to be... so probably don't do this</p>
-<ul>
-<li>#red: 0xFF0000</li>
-<li>...</li>
-</ul>
-<p>Allows to save keystrokes and is easier to type.
-Allows to easily use most of underscore.js features directly.</p>
-<pre><code class="language-jome"><span class="hljs-variable">dict</span> = {x: <span class="hljs-number">10</span>, y: <span class="hljs-number">20</span>}
-<span class="hljs-variable">dict</span>.#<span class="hljs-variable">keys</span> <span class="hljs-comment">// Object.keys(obj)</span>
-<span class="hljs-variable">dict</span>.#<span class="hljs-variable">size</span> <span class="hljs-comment">// Object.keys(obj).length</span>
+  <h2 id="utils">Utils</h2>
+<p>For the complete list of utils: see the <a href="/jome/utils">utils page</a>.</p>
+<p>Utils start with the # character.</p>
+<p>It can be a constant, a function or a function acting upon a variable.</p>
+<pre><code class="language-jome"><span class="hljs-comment">// A constant</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = #<span class="hljs-title class_">PI</span>/<span class="hljs-number">2</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">e</span> = #<span class="hljs-variable">e</span> <span class="hljs-comment">// Euler&#x27;s number</span>
 
-<span class="hljs-variable">node</span> = {<span class="hljs-comment">/* ... */</span>}
-<span class="hljs-variable">node</span>.#<span class="hljs-variable">children</span>.#<span class="hljs-title function_">each</span>(() =&gt; (
-  
-))
+<span class="hljs-comment">// A function</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">angle</span> = #<span class="hljs-title function_">sin</span>(<span class="hljs-variable">x</span>)
+#<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;The angle is:&quot;</span>, <span class="hljs-variable">angle</span>) <span class="hljs-comment">// #log is a shorthand for console.log</span>
 
-<span class="hljs-comment">// Arrow getter is useful for arrays</span>
-<span class="hljs-title class_">TODO</span>
-
-<span class="hljs-comment">// TODO</span>
-<span class="hljs-number">10.</span>#<span class="hljs-title function_">times</span>(<span class="hljs-variable">i</span> =&gt; <span class="hljs-comment">/* ... */</span>)
+<span class="hljs-comment">// A function acting upon a variable</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">keys</span> = <span class="hljs-variable">obj</span>.#<span class="hljs-variable">keys</span> <span class="hljs-comment">// === #keys(obj) === Object.keys(obj)</span>
 </code></pre>
-<p>// TODO: .#each which is the same as .forEach, but 2 characters less</p>
-<p>The list of current arrow properties:</p>
-<pre><code class="language-jome"><span class="hljs-variable">obj</span>.#<span class="hljs-variable">keys</span> <span class="hljs-comment">// Object.keys(obj)</span>
-<span class="hljs-variable">obj</span>.#<span class="hljs-variable">values</span> <span class="hljs-comment">// Object.values(obj)</span>
-<span class="hljs-variable">obj</span>.#<span class="hljs-variable">entries</span> <span class="hljs-comment">// Object.entries(obj)</span>
-<span class="hljs-variable">obj</span>.#<span class="hljs-variable">params</span> <span class="hljs-comment">// The list of props given to an object constructor</span>
-<span class="hljs-variable">obj</span>.#<span class="hljs-variable">props</span> <span class="hljs-comment">// The list of props given to an object constructor</span>
-<span class="hljs-variable">obj</span>.#<span class="hljs-variable">children</span> <span class="hljs-comment">// The list of children of a node</span>
-<span class="hljs-variable">obj</span>.#<span class="hljs-variable">removeChildren</span> <span class="hljs-comment">// Remove all children of a node</span>
-<span class="hljs-comment">// TODO</span>
-<span class="hljs-variable">obj</span>.#<span class="hljs-variable">isBlank</span> <span class="hljs-comment">// Like Rails blank // ou bien isBlank?</span>
-<span class="hljs-variable">obj</span>.#<span class="hljs-variable">isPresent</span> <span class="hljs-comment">// The opposite of Rails blank // ou bien isPresent?</span>
-</code></pre>
-<p>obj.#keys.#filter(key -&gt; key.startsWith(':')).#each /* ... */</p>
-<p>TODO:
-#package_dir: The closest directory to contain a package.json file.
-#dirname: The directory of the current file. (Equivalent of __dirname)
-#filename: The name of the current file. (Equivalent of __filename)</p>
-<p>#log === console.log
-#log(&quot;Hello world!&quot;)</p>
+<p>Utils include most things global in javascript and useful utils like in underscore.js.</p>
+<p>Math: #PI, #sin, #cos, #tan, ..., #rand?
+console: #log, ...
+process: #argv, #env, #cwd...
+underscore.js: #map, #reduce, ...</p>
   <h2 id="instance-driven-dev">Instance driven development</h2>
   Instance driven development is what I call when the focus is working on concrete objects in Godot software.
   Most of the time you control objects directly inside the editor and simply modify parameters.

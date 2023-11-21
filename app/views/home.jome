@@ -3,7 +3,7 @@ import {AppPage} from '../lib/app.jome'
 main {
   AppPage title: 'Simple HTML Page', content: (<md>
 
-  # Jome v0.0.0.0.1
+  # Jome v-0.0.0.0.1
 
   Jome is a language that compiles to JavaScript. It has a node structure like in Godot, it has types like Typescript,
   it has goodies like CoffeeScript and underscore.js, it handles state like in React and it has some original features.
@@ -16,7 +16,7 @@ main {
 
   Example Jome code: TODO: Make this like the examples so you can click see compiled and result
 
-  Here is some code to show what Jome looks like. You can look at the [examples](/examples) page to see more.
+  Here is some code to show what Jome looks like. You can look at the [examples](<%= $URL %>/examples) page to see more.
 
   ```jome
   // Classes
@@ -563,89 +563,34 @@ main {
 
   It think this would be pratical for example for config files.
 
-  <h2 id="utilities">Utilities</h2>
+  <h2 id="utils">Utils</h2>
 
-  Utilities start with the # character.
+  For the complete list of utils: see the [utils page](<%= $URL %>/utils).
 
-  It can be a constant or acting upon a variable.
+  Utils start with the # character.
 
-  TODO: To use the previous token as an argument, use ".#" syntax.
-
-  obj.#keys === #keys(obj)
+  It can be a constant, a function or a function acting upon a variable.
 
   ```jome
-  // Utility constants
-  let angle = #sin(2 * #PI * 1deg)
-  // Utility acting on variable
-  let objKeys = obj.#keys // same as Object.keys(obj)
+  // A constant
+  let x = #PI/2
+  let e = #e // Euler's number
+
+  // A function
+  let angle = #sin(x)
+  #log("The angle is:", angle) // #log is a shorthand for console.log
+
+  // A function acting upon a variable
+  let keys = obj.#keys // === #keys(obj) === Object.keys(obj)
   ```
 
-  TODO: Most of process. #env, #cwd, ...
-
-  List of jome constants: TODO
-  - #sin
-  - #cos
-  - #tan
-  - #PI: 3.14159...
-  - #e: Euler's constat
-  - #dirname: Equivalent of __dirname
-  - #filename: Current filename
-
-  Actually, it here here that could go every underscore.js function:
-  - #map
-  - #reduce
-  - ...
-
-  TODO: All html colors: MAYBEEE? Because I don't know in what format I would want the value to be... so probably don't do this
-  - #red: 0xFF0000
-  - ...
-
-  Allows to save keystrokes and is easier to type.
-  Allows to easily use most of underscore.js features directly.
-
-  ```jome
-  dict = {x: 10, y: 20}
-  dict.#keys // Object.keys(obj)
-  dict.#size // Object.keys(obj).length
-
-  node = {/* ... */}
-  node.#children.#each(() => (
-    
-  ))
-
-  // Arrow getter is useful for arrays
-  TODO
-
-  // TODO
-  10.#times(i => /* ... */)
-  ```
-
-  // TODO: .#each which is the same as .forEach, but 2 characters less
-
-  The list of current arrow properties:
-  ```jome
-  obj.#keys // Object.keys(obj)
-  obj.#values // Object.values(obj)
-  obj.#entries // Object.entries(obj)
-  obj.#params // The list of props given to an object constructor
-  obj.#props // The list of props given to an object constructor
-  obj.#children // The list of children of a node
-  obj.#removeChildren // Remove all children of a node
-  // TODO
-  obj.#isBlank // Like Rails blank // ou bien isBlank?
-  obj.#isPresent // The opposite of Rails blank // ou bien isPresent?
-  ```
-
-  obj.#keys.#filter(key -> key.startsWith(':')).#each /* ... */
-
-  TODO:
-  #package_dir: The closest directory to contain a package.json file.
-  #dirname: The directory of the current file. (Equivalent of __dirname)
-  #filename: The name of the current file. (Equivalent of __filename)
-
-  #log === console.log
-  #log("Hello world!")
-
+  Utils include most things global in javascript and useful utils like in underscore.js.
+  
+  Math: #PI, #sin, #cos, #tan, ..., #rand?
+  console: #log, ...
+  process: #argv, #env, #cwd...
+  underscore.js: #map, #reduce, ...
+  
   <h2 id="instance-driven-dev">Instance driven development</h2>
   Instance driven development is what I call when the focus is working on concrete objects in Godot software.
   Most of the time you control objects directly inside the editor and simply modify parameters.

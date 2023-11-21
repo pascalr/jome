@@ -20,6 +20,7 @@ JomeBuilder projectAbsPath: #cwd
   build 'app/css/stylesheet.jome', as: 'stylesheet.css'
   build 'app/views/home.jome', as: 'index.html'
   build 'app/views/examples.jome', as: 'ex/index.html'
+  build 'app/views/utils.jome', as: 'utils/index.html'
   build 'app/views/librairies.jome', as: 'lib/index.html'
   build 'app/views/lib/html.jome', as: 'lib/html/index.html'
   build 'app/views/lib/express-server.jome', as: 'lib/express-server/index.html'
