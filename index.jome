@@ -1,8 +1,18 @@
 // //<sh>jome bin/server.jome</sh>
 // // FIXME: Hardcoded path, sh is not using my bash_aliases jome command
 
-if (#argv[1] === 'test') (
+let cmd = #argv[1]
+
+if (cmd === 'test') (
   <sh>node /home/pascalr/jome/jome.js -- test.jome</sh>
-) else (
+) else if (cmd === 's' || cmd === 'server') (
   <sh>node /home/pascalr/jome/jome.js -- bin/server.jome</sh>
+) else (
+  #log(`Jome App v0.0.0.0.1
+
+Usage:
+jome # get this help message
+jome s # start server (or jome server)
+jome test # launch the tests
+`)
 )

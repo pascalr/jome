@@ -1184,7 +1184,7 @@ const PROCESSES = {
   "string.quoted.single.jome": (node) => `'${compileRaw(node.children.slice(1,-1))}'`,
   "string.quoted.double.jome": (node) => `"${compileRaw(node.children.slice(1,-1))}"`,
   "string.quoted.backtick.jome": (node, ctx) => {
-    return '`'+node.children.slice(1,-1).map(
+    return '`'+node.children.slice(1,-1).map(c => c.type === 'newline' ? '\n' : c).map(
       c => typeof c === 'string' ? c : '${'+compileJsBlock(c.children.slice(1,-1), ctx)+'}'
     ).join('')+'`'
   },
