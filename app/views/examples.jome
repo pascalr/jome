@@ -60,6 +60,8 @@ def showExample = |data| => (
 ```
 </md>
 
+  return src
+
   <html>
     <div class='example'>
       <div class='onglets'>
@@ -101,7 +103,6 @@ let conten = <md>
   ```
 
   <h3 id="snake">Snake</h3>
-  <%= ex %>
 
   <h3 id="html-button">Html button</h3>
   

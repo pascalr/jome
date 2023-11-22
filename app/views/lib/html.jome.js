@@ -2,27 +2,40 @@ const jome = require('jome')
 
 
 const {AppPage} = require("../../lib/app.built.js");
+const renderMarkdown = require("jome/lib/render_markdown");
 
-var text23 = `<h1>Jome lib html</h1>
-<p>FIXME: This should be generated automatically from the source code.</p>
-<h2>Objects</h2>
-<ul>
-<li>Screen: A div that has at a minimum the page size, but can be taller</li>
-<li>Fullscreen: Takes the full size of the page and hides the overflow</li>
-<li>Row: Children are place side by side</li>
-<li>Col: Children are place one on top of the other</li>
-</ul>
-<h2>Html attributes</h2>
-<p>Every parameters passed onto the object will be assigned to the html tag.</p>
-<pre><code class="language-jome">« <span class="hljs-title class_">Div</span> <span class="hljs-keyword">class</span>: <span class="hljs-string">&#x27;d-flex&#x27;</span> » <span class="hljs-comment">// &lt;div class=&#x27;d-flex&#x27;&gt;&lt;/div&gt;</span>
-« <span class="hljs-title class_">Div</span> width: <span class="hljs-variable">100px</span> » <span class="hljs-comment">// &lt;div width=&#x27;100px&#x27;&gt;&lt;/div&gt;</span>
-</code></pre>
-<pre><code class="language-jome">« <span class="hljs-title class_">Div</span> style: {width: <span class="hljs-variable">100px</span>, color: <span class="hljs-string">&#x27;red&#x27;</span>} » <span class="hljs-comment">// &lt;div style=&#x27;width: 100px; color: red;&#x27;&gt;&lt;/div&gt;</span>
-« <span class="hljs-title class_">Div</span> <span class="hljs-variable">style</span>.width: <span class="hljs-variable">100px</span>, <span class="hljs-variable">style</span>.color: <span class="hljs-string">&#x27;red&#x27;</span> » <span class="hljs-comment">// &lt;div style=&#x27;width: 100px; color: red;&#x27;&gt;&lt;/div&gt;</span>
-</code></pre>
-<p>ou bien</p>
-<pre><code class="language-jome">« <span class="hljs-title class_">Div</span> css: {width: <span class="hljs-variable">100px</span>, color: <span class="hljs-string">&#x27;red&#x27;</span>} » <span class="hljs-comment">// &lt;div style=&#x27;width: 100px; color: red;&#x27;&gt;&lt;/div&gt;</span>
-« <span class="hljs-title class_">Div</span> <span class="hljs-variable">css</span>.width: <span class="hljs-variable">100px</span>, <span class="hljs-variable">css</span>.color: <span class="hljs-string">&#x27;red&#x27;</span> » <span class="hljs-comment">// &lt;div style=&#x27;width: 100px; color: red;&#x27;&gt;&lt;/div&gt;</span>
-</code></pre>
-`
+var text23 = renderMarkdown(`
+
+  # Jome lib html
+
+  FIXME: This should be generated automatically from the source code.
+
+  ## Objects
+  - Screen: A div that has at a minimum the page size, but can be taller
+  - Fullscreen: Takes the full size of the page and hides the overflow
+  - Row: Children are place side by side
+  - Col: Children are place one on top of the other
+
+  ## Html attributes
+
+  Every parameters passed onto the object will be assigned to the html tag.
+
+  \`\`\`jome
+  « Div class: 'd-flex' » // <div class='d-flex'></div>
+  « Div width: 100px » // <div width='100px'></div>
+  \`\`\`
+
+  \`\`\`jome
+  « Div style: {width: 100px, color: 'red'} » // <div style='width: 100px; color: red;'></div>
+  « Div style.width: 100px, style.color: 'red' » // <div style='width: 100px; color: red;'></div>
+  \`\`\`
+
+  ou bien
+
+  \`\`\`jome
+  « Div css: {width: 100px, color: 'red'} » // <div style='width: 100px; color: red;'></div>
+  « Div css.width: 100px, css.color: 'red' » // <div style='width: 100px; color: red;'></div>
+  \`\`\`
+
+`)
 module.exports = new AppPage({title: 'Jome lib html', content: text23}).toString()

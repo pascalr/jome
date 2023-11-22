@@ -24,6 +24,7 @@ let markdownIt = new MarkdownIt({
   }
 })
 
+// FIXME: DEPRECATED, use render_markdown instead
 function compileMarkdown(node, ctx) {
   const compiler = require('../compiler.js')
   let r = compiler.compileRaw(node.children.slice(1,-1))

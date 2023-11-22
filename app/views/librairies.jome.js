@@ -2,12 +2,16 @@ const jome = require('jome')
 
 
 const {AppPage} = require("../lib/app.built.js");
+const renderMarkdown = require("jome/lib/render_markdown");
 
-var content = `<h2>Jome librairies</h2>
-<p>Librairies should be distributed the same way as CoffeeScript librairies. So I think it is mainly through npm.</p>
-<h3>Common librairies</h3>
-<ul>
-<li><a href="${global._URL}/lib/html">Html</a></li>
-</ul>
-`
+var content = renderMarkdown(`
+  ## Jome librairies
+
+  Librairies should be distributed the same way as CoffeeScript librairies. So I think it is mainly through npm.
+
+  ### Common librairies
+
+  - [Html](${global._URL}/lib/html)
+
+`)
 module.exports = new AppPage({title: 'Jome examples', className: "examples-page", content: content}).toString()

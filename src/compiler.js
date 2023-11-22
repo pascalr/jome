@@ -623,7 +623,7 @@ function getRelativePath(relPath, ctx, forRequire) {
 }
 
 function escapeBackticks(inputString) {
-  return inputString.replace(/`/g, '\u005c`').replace(/\$\{/g, '\u005c\$\{')
+  return inputString.replace(/`/g, '\u005c`').replace(/\$\{/g, '\u005c\$\{').replace(/\\\\`/g, '\\\\\\`')
 }
 
 // keyword can be 'var', 'def' or null (null means const)
@@ -862,7 +862,13 @@ const PROCESSES = {
   // },
   "meta.embedded.block.css": (node, ctx) => '`'+compileRaw(node.children.slice(1,-1))+'`',
   "meta.embedded.block.javascript": (node, ctx) => compileRaw(node.children.slice(1,-1)),
-  "meta.embedded.block.markdown": compileMarkdown,
+  "meta.embedded.block.markdown": (node, ctx) => {
+    let r = compileRaw(node.children.slice(1,-1))
+    r = escapeBackticks(r)
+    r = compileInterpolate(r, ctx)
+    ctx.imports['jome/lib/render_markdown'] = {default: ['renderMarkdown']}
+    return 'renderMarkdown(`'+r+'`)'
+  },
   "meta.embedded.block.html": (node, ctx) => {
     let args = parseScriptTagArgs(node.children[0])
     let b = ''
