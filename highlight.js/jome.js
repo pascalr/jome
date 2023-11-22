@@ -56,6 +56,16 @@ const highlighter = function(hljs) {
     begin: "[A-Z]\\w*" //    FIXME: not working... begin: "\\p{Lu}\\w*"
   }
 
+  const UTIL_CONST = {
+    scope: "variable",
+    begin: '#\\b(PI|env|cwd|argv)\\b'
+  }
+
+  const UTIL_FUNC = {
+    scope: "title function_",
+    begin: '#\\w+'
+  }
+
   const FUNC_CALL = {
     scope: "title function_",
     begin: '\\w+(?=\\()'
@@ -109,6 +119,8 @@ const highlighter = function(hljs) {
       NUMBER,
       KEYWORD,
       FUNC_CALL,
+      UTIL_CONST,
+      UTIL_FUNC,
       OBJ_KEY,
       CLASS_NAME,
       VARIABLE,

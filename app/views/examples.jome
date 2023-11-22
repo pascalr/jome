@@ -72,6 +72,11 @@ def showExample = |data| => (
 </html>
 )
 
+// Comment gérer le state?
+// Dans le fond, je veux mettre du code javascript dans la page qui génère dynamiquement du HTML.
+// Je vais probablement devoir utiliser une librairie à rajouter dans le package jome
+// renderHTML ou qqchose du genre, lire ce que j'avais pensé déjà
+
 // TODO: Hello world example, see jome code, js code and output result
 let helloWorld = {
   src: '#log("Hello world!")'

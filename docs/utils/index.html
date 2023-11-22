@@ -68,19 +68,19 @@
 <p>Utils start with the # character.</p>
 <p>It can be a constant, a function or a function acting upon a variable.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// A constant</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = #<span class="hljs-title class_">PI</span>/<span class="hljs-number">2</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">e</span> = #<span class="hljs-variable">e</span> <span class="hljs-comment">// Euler&#x27;s number</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-variable">#PI</span>/<span class="hljs-number">2</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">e</span> = <span class="hljs-title function_">#e</span> <span class="hljs-comment">// Euler&#x27;s number</span>
 
 <span class="hljs-comment">// A function</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">angle</span> = #<span class="hljs-title function_">sin</span>(<span class="hljs-variable">x</span>)
-#<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;The angle is:&quot;</span>, <span class="hljs-variable">angle</span>) <span class="hljs-comment">// #log is a shorthand for console.log</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">angle</span> = <span class="hljs-title function_">#sin</span>(<span class="hljs-variable">x</span>)
+<span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;The angle is:&quot;</span>, <span class="hljs-variable">angle</span>) <span class="hljs-comment">// #log is a shorthand for console.log</span>
 
 <span class="hljs-comment">// A function acting upon a variable</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">keys</span> = <span class="hljs-variable">obj</span>.#<span class="hljs-variable">keys</span> <span class="hljs-comment">// === #keys(obj) === Object.keys(obj)</span>
-<span class="hljs-number">10.</span>#<span class="hljs-title function_">times</span>(<span class="hljs-variable">i</span> =&gt; <span class="hljs-comment">/* ... */</span>)
+<span class="hljs-keyword">let</span> <span class="hljs-variable">keys</span> = <span class="hljs-variable">obj</span>.<span class="hljs-title function_">#keys</span> <span class="hljs-comment">// === #keys(obj) === Object.keys(obj)</span>
+<span class="hljs-number">10.</span><span class="hljs-title function_">#times</span>(<span class="hljs-variable">i</span> =&gt; <span class="hljs-comment">/* ... */</span>)
 
 <span class="hljs-comment">// Chaining example</span>
-<span class="hljs-variable">obj</span>.#<span class="hljs-variable">keys</span>.#<span class="hljs-title function_">filter</span>(<span class="hljs-variable">key</span> -&gt; <span class="hljs-variable">key</span>.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;:&#x27;</span>)).#<span class="hljs-title function_">each</span>(<span class="hljs-variable">el</span> =&gt; <span class="hljs-comment">/* ... */</span>)
+<span class="hljs-variable">obj</span>.<span class="hljs-title function_">#keys</span>.<span class="hljs-title function_">#filter</span>(<span class="hljs-variable">key</span> -&gt; <span class="hljs-variable">key</span>.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;:&#x27;</span>)).<span class="hljs-title function_">#each</span>(<span class="hljs-variable">el</span> =&gt; <span class="hljs-comment">/* ... */</span>)
 </code></pre>
 <h3>Jome specific utils</h3>
 <p>#params, #props, #children, #removeChildren</p>

@@ -98,6 +98,10 @@ module.exports = `
     background-color: #cdcdcd;
   }
 
+  .example pre {
+    margin: 0;
+  }
+
   .example-content {
     background-color: #dce0e8;
     border: 1px solid black;

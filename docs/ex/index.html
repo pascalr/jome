@@ -72,7 +72,7 @@
       <div>Compiled</div>
       <div>Output</div>
     </div>
-    <div class='example-content'><pre><code class="language-jome">#<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>)
+    <div class='example-content'><pre><code class="language-jome"><span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>)
 </code></pre>
 </div>
   </div>
@@ -143,7 +143,7 @@ jome.<span class="hljs-title function_">createObj</span>($.$.$btn, <span class="
 <p>TODO: Save metadata too.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">tables</span> = <span class="language-shell">&lt;sh&gt;sqlite3 &lt; % = ARGV[1] % &gt; &quot;.table&quot;&lt;/sh&gt;</span>
 <span class="language-shell">&lt;sh&gt;mkdir &lt; % = ARGV[2] % &gt;&lt;/sh&gt;</span>
-<span class="hljs-variable">tables</span>#<span class="hljs-title function_">each</span>(<span class="hljs-variable">table</span> =&gt; (
+<span class="hljs-variable">tables</span><span class="hljs-title function_">#each</span>(<span class="hljs-variable">table</span> =&gt; (
   <span class="language-shell">&lt;sh&gt;sqlite3 -header -csv &lt; % = ARGV[1] % &gt; &quot;select * from &lt; % = table % &gt;;&quot; &gt; &lt; % = table % &gt;.csv&lt;/sh&gt;</span>
 ))
 </code></pre>

@@ -132,7 +132,7 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">addXY</span> = |<span class="hljs-variable">x</span>, <span class="hljs-variable">y</span>| (<span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>)
 [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>].<span class="hljs-title function_">filter</span>(|<span class="hljs-variable">nb</span>| <span class="hljs-variable">nb</span> &gt; <span class="hljs-number">5</span>)
 <span class="hljs-comment">// Et pour quand il n&#x27;y a pas d&#x27;argument?</span>
-<span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span> = | | (#<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hello!&quot;</span>)) <span class="hljs-comment">// Noooooon ça c&#x27;est laid...</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span> = | | (<span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;Hello!&quot;</span>)) <span class="hljs-comment">// Noooooon ça c&#x27;est laid...</span>
 </code></pre>
 <h3>Keywords</h3>
 <p>Declaration keywords:</p>
@@ -490,15 +490,15 @@ be removed from the markdown compile, and that inserted compiled using a templat
 <p>Utils start with the # character.</p>
 <p>It can be a constant, a function or a function acting upon a variable.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// A constant</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = #<span class="hljs-title class_">PI</span>/<span class="hljs-number">2</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">e</span> = #<span class="hljs-variable">e</span> <span class="hljs-comment">// Euler&#x27;s number</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-variable">#PI</span>/<span class="hljs-number">2</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">e</span> = <span class="hljs-title function_">#e</span> <span class="hljs-comment">// Euler&#x27;s number</span>
 
 <span class="hljs-comment">// A function</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">angle</span> = #<span class="hljs-title function_">sin</span>(<span class="hljs-variable">x</span>)
-#<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;The angle is:&quot;</span>, <span class="hljs-variable">angle</span>) <span class="hljs-comment">// #log is a shorthand for console.log</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">angle</span> = <span class="hljs-title function_">#sin</span>(<span class="hljs-variable">x</span>)
+<span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;The angle is:&quot;</span>, <span class="hljs-variable">angle</span>) <span class="hljs-comment">// #log is a shorthand for console.log</span>
 
 <span class="hljs-comment">// A function acting upon a variable</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">keys</span> = <span class="hljs-variable">obj</span>.#<span class="hljs-variable">keys</span> <span class="hljs-comment">// === #keys(obj) === Object.keys(obj)</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">keys</span> = <span class="hljs-variable">obj</span>.<span class="hljs-title function_">#keys</span> <span class="hljs-comment">// === #keys(obj) === Object.keys(obj)</span>
 </code></pre>
 <p>Utils include most things global in javascript and useful utils like in underscore.js.</p>
 <p>Math: #PI, #sin, #cos, #tan, ..., #rand?
@@ -632,7 +632,7 @@ parce que tu ne peux pas avoir l'équivalent de export et export default en Comm
 </code></pre>
 <h2>Environment variables</h2>
 <p>Use #env for environment variables</p>
-<pre><code class="language-jome">#<span class="hljs-variable">env</span>.<span class="hljs-title class_">MY_ENV_VAR</span> = <span class="hljs-string">&#x27;foo&#x27;</span> <span class="hljs-comment">// =&gt; process.env.MY_ENV_VAR = &#x27;foo&#x27;</span>
+<pre><code class="language-jome"><span class="hljs-variable">#env</span>.<span class="hljs-title class_">MY_ENV_VAR</span> = <span class="hljs-string">&#x27;foo&#x27;</span> <span class="hljs-comment">// =&gt; process.env.MY_ENV_VAR = &#x27;foo&#x27;</span>
 </code></pre>
 <h2>Global variables</h2>
 <p>Global variables start with a dollar sign. For example, <code>$MY_GLOB_VAR = 'foo'</code>.</p>
