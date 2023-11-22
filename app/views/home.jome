@@ -572,6 +572,10 @@ main {
 
   Basically, I want to inject html and not inject markdown directly.
 
+  Nahhhh, I don't like this.
+
+  What I really what is to add markdown. This means using markdown-it at compile time. I am fine with this.
+
   ### .jobj extension
 
   Files with a .jobj extension would start already in a block.

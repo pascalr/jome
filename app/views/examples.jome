@@ -50,16 +50,41 @@ class Example {
   </html>
 }
 
-ex = { Example }
+let ex = { Example }
 
-conten = <md>
+def showExample = |data| => (
+  
+  let src = <md>
+```jome
+<%= data.src %>
+```
+</md>
+
+  <html>
+    <div class='example'>
+      <div class='onglets'>
+        <div class='active'>Code</div>
+        <div>Compilé</div>
+        <div>Résultat</div>
+      </div>
+      <div class='example-content'><%= src %></div>
+    </div>
+  </html>
+)
+
+// TODO: Hello world example, see jome code, js code and output result
+let helloWorld = {
+  src: '#log("Hello world!")'
+  js: 'console.log("Hello world!")'
+  out: 'Hello world!'
+}
+
+let conten = <md>
   ## Jome examples
 
   <h3 id="hello-world">Hello world</h3>
 
-  ```jome
-  #log("Hello world!")
-  ```
+  <%= showExample(helloWorld) %>
 
   <h3 id="html-library">Html library</h3>
   

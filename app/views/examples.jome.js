@@ -21,10 +21,25 @@ class Example {
 }
 
 var ex = new Example()
+const showExample = (data) => {
+  
+var src = `<p>${data.src}</p>
+`
+return `
+    <div class='example'>
+      <div class='onglets'>
+        <div class='active'>Code</div>
+        <div>Compilé</div>
+        <div>Résultat</div>
+      </div>
+      <div class='example-content'>${src}</div>
+    </div>
+  `
+}
+var helloWorld = {src: '#log("Hello world!")', js: 'console.log("Hello world!")', out: 'Hello world!'}
 var conten = `<h2>Jome examples</h2>
   <h3 id="hello-world">Hello world</h3>
-<pre><code class="language-jome">#<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>)
-</code></pre>
+<p>${showExample(helloWorld)}</p>
   <h3 id="html-library">Html library</h3>
 <pre><code class="language-jome"><span class="hljs-variable">html</span> = «
   <span class="hljs-title class_">IFrame</span> <span class="hljs-comment">// for demo only</span>
