@@ -922,5 +922,10 @@ main {
   - [Units](#units) - You can add units to numbers. ex: "density = 105g / 98mL"
   - [Hyphen](#hyphens) - You can use hyphens in variable names like left-panel. The minus operator should always be surrounded by spaces.
 
+  ## bugs
+
+  FIXME: The indentation is super important in markdown. For example, adding tabs inside md scripts, if only one tab html tags will work,
+  otherwise it will not.
+
 </md>)
 }.toString()

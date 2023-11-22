@@ -29,17 +29,16 @@ var src = renderMarkdown(`
 ${data.src}
 \`\`\`
 `)
-return src
 return `
-    <div class='example'>
-      <div class='onglets'>
-        <div class='active'>Code</div>
-        <div>Compilé</div>
-        <div>Résultat</div>
-      </div>
-      <div class='example-content'>${src}</div>
+  <div class='example'>
+    <div class='onglets'>
+      <div class='active'>Code</div>
+      <div>Compiled</div>
+      <div>Output</div>
     </div>
-  `
+    <div class='example-content'>${src}</div>
+  </div>
+`
 }
 var helloWorld = {src: '#log("Hello world!")', js: 'console.log("Hello world!")', out: 'Hello world!'}
 var conten = renderMarkdown(`

@@ -86,7 +86,6 @@ module.exports = `
 
   .onglets {
     display: flex;
-    justify-content: flex-end;
   }
 
   .onglets > * {
@@ -100,8 +99,8 @@ module.exports = `
   }
 
   .example-content {
+    background-color: #dce0e8;
     border: 1px solid black;
-    padding: 1em;
   }
 
     /* Add some basic CSS for the navbar */

@@ -60,18 +60,16 @@ def showExample = |data| => (
 ```
 </md>
 
-  return src
-
-  <html>
-    <div class='example'>
-      <div class='onglets'>
-        <div class='active'>Code</div>
-        <div>Compilé</div>
-        <div>Résultat</div>
-      </div>
-      <div class='example-content'><%= src %></div>
+<html>
+  <div class='example'>
+    <div class='onglets'>
+      <div class='active'>Code</div>
+      <div>Compiled</div>
+      <div>Output</div>
     </div>
-  </html>
+    <div class='example-content'><%= src %></div>
+  </div>
+</html>
 )
 
 // TODO: Hello world example, see jome code, js code and output result
