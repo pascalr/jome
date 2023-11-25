@@ -32,15 +32,25 @@ return `
 
 class DynamicRenderer {
   constructor() {
-    this.objs = []
+    this.objsById = {}
+this.scope = ""
+this.idCounters = {}
+  }
+  getObjId(obj) {
+    var type = obj.constructor.name
+var nb = (this.idCounters[type]) ? (this.idCounters[type] + 1) : 1
+this.idCounters[type] = nb
+return `${this.scope ? (this.scope + '-') : ''}${type}-${nb}`
   }
   render(obj) {
-    this.objs.push(obj)
-return `<div id="todo-obj-unique-id"></div>`
+    var id = this.getObjId(obj)
+this.objsById[id] = obj
+return `<div id="${id}"></div>`
   }
   script() {
-    var code = this.objs.map((obj) => {
-      return `document.getElementById("todo-obj-unique-id").innerHTML = "Worksworksworks"`
+    
+var code = Object.keys(this.objsById || {}).map((id) => {
+      return `document.getElementById("${id}").innerHTML = "Worksworksworks"`
     }, ).join('\n')
 return `
       <script>
@@ -75,6 +85,7 @@ var conten = renderMarkdown(`
 
   <h3>Testing 1212</h3>
 `) + dynamic.render(new Example(helloWorld)) + 
+dynamic.render(new Example(helloWorld)) + 
 renderMarkdown(`
 
   <h3 id="hello-world">Hello world</h3>

@@ -62,15 +62,26 @@ class Example |data| => {
 
 class DynamicRenderer {
   constructor: => (
-    @objs = []
+    @objsById = {}
+    @scope = "" // A prefix to add to ids to make them unique
+    @idCounters = {} // The keys are the class names (obj.constructor.name), the values start at 1 and get incremented everytime
+  )
+  getObjId: |obj| => (
+    let type = obj.constructor.name
+    let nb = (@idCounters[type]) ? (@idCounters[type]+1) : 1
+    @idCounters[type] = nb
+    `{@scope ? (@scope+'-') : ''}{type}-{nb}`
   )
   render: |obj| => (
-    @objs.push(obj)
-    <html><div id="todo-obj-unique-id"></div></html>
+    let id = @getObjId(obj)
+    @objsById[id] = obj
+    <html><div id="<%= id %>"></div></html>
   ),
   script: => (
-    let code = @objs.map(obj =>
-      `document.getElementById("todo-obj-unique-id").innerHTML = "Worksworksworks"`
+    // obj.#id
+
+    let code = @objsById.#keys.map(id =>
+      `document.getElementById("{id}").innerHTML = "Worksworksworks"`
     ).join('\n')
     //let code = "document.getElementById('todo-obj-unique-id').innerHTML = 'Worksworksworks'"
     <html>
@@ -131,6 +142,7 @@ let conten = <md>
 
   <h3>Testing 1212</h3>
 </md> + dynamic.render({Example helloWorld}) + // OPTIMIZE: Une syntaxe pour éviter d'avoir à faire ça
+dynamic.render({Example helloWorld}) +
 <md>
 
   <h3 id="hello-world">Hello world</h3>
