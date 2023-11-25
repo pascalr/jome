@@ -5,26 +5,55 @@ const {AppPage} = require("../lib/app.built.js");
 const renderMarkdown = require("jome/lib/render_markdown");
 
 class Example {
+  constructor(data) {
+    this.data = data
+  }
   toString() {
-    return `
-    <div class='example'>
-      <div class='onglets'>
-        <div class='active'>Code</div>
-        <div>Compilé</div>
-        <div>Résultat</div>
-      </div>
-      <div class='example-content'>
-        Test 1212
-      </div>
+    
+var src = renderMarkdown(`
+\`\`\`jome
+${this.data.src}
+\`\`\`
+`)
+return `
+  <div class='example'>
+    <div class='onglets'>
+      <div class='active'>Code</div>
+      <div>Compilé</div>
+      <div>Résultat</div>
     </div>
-  `
+    <div class='example-content'>
+      ${src}
+    </div>
+  </div>
+`
   }
 }
 
-var ex = new Example()
+class DynamicRenderer {
+  constructor() {
+    this.objs = []
+  }
+  render(obj) {
+    this.objs.push(obj)
+return `<div id="todo-obj-unique-id"></div>`
+  }
+  script() {
+    var code = this.objs.map((obj) => {
+      return `document.getElementById("todo-obj-unique-id").innerHTML = "Worksworksworks"`
+    }, ).join('\n')
+return `
+      <script>
+        ${code}
+      </script>
+    `
+  }
+}
+
+var dynamic = new DynamicRenderer()
 const showExample = (data) => {
   
-var src = renderMarkdown(`
+src = renderMarkdown(`
 \`\`\`jome
 ${data.src}
 \`\`\`
@@ -43,6 +72,10 @@ return `
 var helloWorld = {src: '#log("Hello world!")', js: 'console.log("Hello world!")', out: 'Hello world!'}
 var conten = renderMarkdown(`
   ## Jome examples
+
+  <h3>Testing 1212</h3>
+`) + dynamic.render(new Example(helloWorld)) + 
+renderMarkdown(`
 
   <h3 id="hello-world">Hello world</h3>
 
@@ -139,5 +172,5 @@ var conten = renderMarkdown(`
   ))
   \`\`\`
 
-`)
+`) + dynamic.script()
 module.exports = new AppPage({title: 'Jome examples', content: conten}).toString()

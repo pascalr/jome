@@ -34,23 +34,65 @@ import {AppPage} from '../lib/app.jome'
 // jomeCode = <jome>
 //   x = 10
 // </jome>
+// but this could be something implemented only for here, because it is usefull only here
 
-class Example {
-  toString: => <html>
-    <div class='example'>
-      <div class='onglets'>
-        <div class='active'>Code</div>
-        <div>Compilé</div>
-        <div>Résultat</div>
-      </div>
-      <div class='example-content'>
-        Test 1212
-      </div>
+class Example |data| => {
+  toString: => (
+
+  let src = <md>
+```jome
+<%= data.src %>
+```
+</md>
+
+<html>
+  <div class='example'>
+    <div class='onglets'>
+      <div class='active'>Code</div>
+      <div>Compilé</div>
+      <div>Résultat</div>
     </div>
-  </html>
+    <div class='example-content'>
+      <%= src %>
+    </div>
+  </div>
+</html>
+  )
 }
 
-let ex = { Example }
+class DynamicRenderer {
+  constructor: => (
+    @objs = []
+  )
+  render: |obj| => (
+    @objs.push(obj)
+    <html><div id="todo-obj-unique-id"></div></html>
+  ),
+  script: => (
+    let code = @objs.map(obj =>
+      `document.getElementById("todo-obj-unique-id").innerHTML = "Worksworksworks"`
+    ).join('\n')
+    //let code = "document.getElementById('todo-obj-unique-id').innerHTML = 'Worksworksworks'"
+    <html>
+      <script>
+        <%= code %>
+      </script>
+    </html>  
+  )
+}
+
+let dynamic = {DynamicRenderer}
+
+/*
+<html>
+  ...
+  ...
+  <%= dynamicElement({
+    Div ~click: |foo| => ()
+      Span
+  }) %>
+</html>
+*/
 
 def showExample = |data| => (
   
@@ -86,6 +128,10 @@ let helloWorld = {
 
 let conten = <md>
   ## Jome examples
+
+  <h3>Testing 1212</h3>
+</md> + dynamic.render({Example helloWorld}) + // OPTIMIZE: Une syntaxe pour éviter d'avoir à faire ça
+<md>
 
   <h3 id="hello-world">Hello world</h3>
 
@@ -182,7 +228,7 @@ let conten = <md>
   ))
   ```
 
-</md>
+</md> + dynamic.script()
 
 main {
   AppPage title: 'Jome examples', content: conten

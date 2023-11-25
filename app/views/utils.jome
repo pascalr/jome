@@ -3,6 +3,20 @@ import {AppPage} from '../lib/app.jome'
 content = <md>
   ## Utils
 
+  TODO: #uuid, avec un enum obligatoire, par example #uuid(FAST), ou #uuid(SECURE)
+  Utiliser quel #uuid par défaut? Idéalement, un paramètre obligatoire. Ce que j'aimerais, tu fais
+  #uuid( et là l'autocomplete te demande tu veux utiliser quel enum.
+  // # Define an enum
+  //DaysOfWeek = enum
+  //  SUNDAY:   0
+  //  MONDAY:   1
+  //  TUESDAY:  2
+  //  WEDNESDAY: 3
+  //  THURSDAY: 4
+  //  FRIDAY:   5
+  //  SATURDAY: 6
+  TODO: Supporter enum comme coffeescript ou d'une manière différente
+
   Utils start with the # character.
 
   It can be a constant, a function or a function acting upon a variable.
