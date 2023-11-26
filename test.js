@@ -2,7 +2,6 @@ const jome = require('jome')
 
 
 const {H1} = require("./lib/html.built.js");
-const {execSync} = require("child_process");
 const execSh = require("jome/lib/exec_sh");
 
 class SomeNode {

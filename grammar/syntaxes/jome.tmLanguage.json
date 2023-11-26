@@ -253,7 +253,7 @@
             "1": {"name": "punctuation.definition.args.end.jome"},
             "2": {"name": "keyword.arrow.jome"}
           },
-          "patterns": [{ "include": "#expression"}, {"include": "#interface-ref" }]
+          "patterns": [{"include": "#variable-with-type"}, {"include": "#expression"}, {"include": "#interface-ref" }]
         }
       ]
     },
@@ -269,6 +269,17 @@
         "patterns": [{ "include": "#expression" }]
 			}]
 		},
+    "variable-with-type": {
+      "patterns": [
+        {
+          "match": "(\\w+)\\s*:\\s*(\\w+)",
+          "captures": {
+            "1": {"name": "variable.other.jome"},
+            "2": {"name": "support.type.jome"}
+          }
+        }
+      ]
+    },
     "variable": {
 			"patterns": [
         {
@@ -352,6 +363,14 @@
 				{
 					"match": "&&|!|\\|\\|",
 					"name": "keyword.operator.logical.jome"
+				},
+        {
+					"match": "([a-zA-Z$_][\\w$]*)?:\\s*(\\w+)\\s*(=)(?![>=])",
+					"captures": {
+						"1": {"name": "variable.assignment.jome"},
+            "2": {"name": "support.type.jome"},
+						"3": {"name": "keyword.operator.assignment.jome"}
+					}
 				},
 				{
 					"match": "([a-zA-Z$_][\\w$]*)?\\s*(=)(?![>=])",

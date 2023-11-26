@@ -1,5 +1,11 @@
 import {H1} from './lib/html.jome'
 
+//let strWithType: string = 'someStr'
+
+//def funcWithType = |someArg: string| => (
+  
+//)
+
 class SomeNode |someParam?, @tenMore?, @someText?| => {
 
 }

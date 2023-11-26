@@ -21,6 +21,11 @@ content = <md>
   Implémenter un seul #uuid, simple, si tu as besoin de quelquechose de plus spécifique, ben utilise qqchose de plus spécifique.
   Avoir tous des trucs de base utile pour prototyper. Garder ça en tête.
 
+  TODO: #debug =>
+  def debug = |msg with code: code| => (
+    #log(code+':', msg)
+  )
+
   TODO: Implémenter un système de version lock. Je ne veux pas avoir #uuid-v2 #uuid-v3, ...
   Je veux un seul #uuid, mais je veux pouvoir changer le code dans le temps, mais sans briser quoi que ce soit.
   L'idée, est que la première fois que #uuid est détecter, alors, enregistrer dans jome.lock ou quelque chose du
