@@ -4,6 +4,7 @@ const jome = require('jome')
 const {H1} = require("./lib/html.built.js");
 const execSh = require("jome/lib/exec_sh");
 
+var string = 'someStr'
 class SomeNode {
   constructor(__props__) {
     this.__props__ = __props__

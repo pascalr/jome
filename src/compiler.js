@@ -627,7 +627,16 @@ function escapeBackticks(inputString) {
 }
 
 // keyword can be 'var', 'def' or null (null means const)
-function assignVariable(node, ctx, keyword) {
+function assignVariable(_node, ctx, keyword) {
+  let type;
+  let node = _node;
+  // check for the type of the variable
+  if (node.next().type === 'keyword.operator.type.annotation.jome') {
+    let next =  node.captureNext() // The colon operator
+    next = next.captureNext() // The type
+    type = next.text()
+    node = next
+  }
   let value = node.text()
   if (value.startsWith('$')) {
     let next = node.captureNext() // The = sign (keyword.operator.assignment.compound.jome)
@@ -638,11 +647,11 @@ function assignVariable(node, ctx, keyword) {
   let isAssignment = node.type === 'variable.assignment.jome'
   if (keyword === 'var') {
     // TODO: Check if already defined inside the SAME scope, throw an Error if so
-    ctx.addBinding(value, {type: 'variable'})
+    ctx.addBinding(value, {type: 'variable', vartype: type})
     outKeyword = 'var '
   } else if (keyword === 'def') {
     // TODO: Check if already defined inside the SAME scope, throw an Error if so
-    ctx.addBinding(value, {type: 'definition'})
+    ctx.addBinding(value, {type: 'definition', vartype: type})
     outKeyword = 'const '
   } else {
     if (ctx.hasBinding(value)) {
@@ -651,7 +660,7 @@ function assignVariable(node, ctx, keyword) {
       }
     } else {
       outKeyword = 'var '
-      ctx.addBinding(value, {type: 'global-constant'})
+      ctx.addBinding(value, {type: 'global-constant', vartype: type})
     }
   }
   if (node.type === 'variable.other.jome') {
@@ -836,6 +845,7 @@ const PROCESSES = {
     }
     return ''
   },
+  // let fooBar = 
   "keyword.control.declaration.jome": (node, ctx) => {
     let keyword = node.text()
     let next = node.captureNext()

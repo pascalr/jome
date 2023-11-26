@@ -272,10 +272,11 @@
     "variable-with-type": {
       "patterns": [
         {
-          "match": "(\\w+)\\s*:\\s*(\\w+)",
+          "match": "(\\w+)\\s*(:)\\s*(\\w+)",
           "captures": {
             "1": {"name": "variable.other.jome"},
-            "2": {"name": "support.type.jome"}
+            "2": {"name": "keyword.operator.type.annotation.jome"},
+            "3": {"name": "support.type.jome"}
           }
         }
       ]
@@ -365,11 +366,12 @@
 					"name": "keyword.operator.logical.jome"
 				},
         {
-					"match": "([a-zA-Z$_][\\w$]*)?:\\s*(\\w+)\\s*(=)(?![>=])",
+					"match": "([a-zA-Z$_][\\w$]*)?(:)\\s*(\\w+)\\s*(=)(?![>=])",
 					"captures": {
 						"1": {"name": "variable.assignment.jome"},
-            "2": {"name": "support.type.jome"},
-						"3": {"name": "keyword.operator.assignment.jome"}
+            "2": {"name": "keyword.operator.type.annotation.jome"},
+            "3": {"name": "support.type.jome"},
+						"4": {"name": "keyword.operator.assignment.jome"}
 					}
 				},
 				{
