@@ -50,10 +50,11 @@ return `<div id="${id}"></div>`
   script() {
     
 var code = Object.keys(this.objsById || {}).map((id) => {
-      return `document.getElementById("${id}").innerHTML = "Worksworksworks"`
-    }, ).join('\n')
+      var obj2 = this.objsById[id]
+return `document.getElementById("${id}").innerHTML = "${obj2.toString()}"`
+    }).join('\n')
 return `
-      <script>
+      <script defer>
         ${code}
       </script>
     `

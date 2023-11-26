@@ -80,12 +80,13 @@ class DynamicRenderer {
   script: => (
     // obj.#id
 
-    let code = @objsById.#keys.map(id =>
-      `document.getElementById("{id}").innerHTML = "Worksworksworks"`
-    ).join('\n')
+    let code = @objsById.#keys.map(id => (
+      let obj2 = @objsById[id]
+      `document.getElementById("{id}").innerHTML = "{obj2.toString()}"`
+    )).join('\n')
     //let code = "document.getElementById('todo-obj-unique-id').innerHTML = 'Worksworksworks'"
     <html>
-      <script>
+      <script defer>
         <%= code %>
       </script>
     </html>  
