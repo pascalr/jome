@@ -1,7 +1,7 @@
 import {H1} from './lib/html.jome'
 
-def printCode = |unused along code| => (
-  #log(code)
+def printCode = |unused along source| => (
+  #log(source)
 )
 printCode(1+1) // should print "1+1"
 

@@ -328,7 +328,7 @@
     "along": {
 			"patterns": [
         {
-          "match": "(along)\\s*(type|unit|code)",
+          "match": "(along)\\s*(type|unit|code|source)",
           "captures": {
             "1": {"name": "keyword.control.along.jome"},
             "2": {"name": "variable.language.jome"}

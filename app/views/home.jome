@@ -744,7 +744,8 @@ main {
   along is useful to be used alongside:
   - unit: The unit of the expression given, as a string
   - type: The variable type of the expression given (like typescript), as a string
-  - code: The code literaly given of the expression, as a string
+  - source: The source code literaly given of the expression, as a string
+  - code: The js compiled code of the expression, as a string
 
   The along keyword is useful, because you could also want the use of the modifiers above alone.
 
