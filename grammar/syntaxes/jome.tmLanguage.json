@@ -253,7 +253,12 @@
             "1": {"name": "punctuation.definition.args.end.jome"},
             "2": {"name": "keyword.arrow.jome"}
           },
-          "patterns": [{"include": "#variable-with-type"}, {"include": "#expression"}, {"include": "#interface-ref" }]
+          "patterns": [
+            {"include": "#variable-with-type"},
+            {"include": "#along"},
+            {"include": "#expression"},
+            {"include": "#interface-ref" }
+          ]
         }
       ]
     },
@@ -317,6 +322,17 @@
         {
           "name": "entity.name.function.utility.jome",
           "match": "#\\w+"
+        }
+      ]
+		},
+    "along": {
+			"patterns": [
+        {
+          "match": "(along)\\s*(type|unit|code)",
+          "captures": {
+            "1": {"name": "keyword.control.along.jome"},
+            "2": {"name": "variable.language.jome"}
+          }
         }
       ]
 		},

@@ -1,9 +1,9 @@
 import {H1} from './lib/html.jome'
 
-// def printCode = |unused along code| => (
-//   #log(code)
-// )
-// printCode(1+1) // should print "1+1"
+def printCode = |unused along code| => (
+  #log(code)
+)
+printCode(1+1) // should print "1+1"
 
 let strWithType: string = 'someStr'
 
