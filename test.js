@@ -4,8 +4,8 @@ const jome = require('jome')
 const {H1} = require("./lib/html.built.js");
 const execSh = require("jome/lib/exec_sh");
 
-const printCode = (unused) => {
-  return console.log()
+const printCode = (unused, source) => {
+  return console.log(source)
 }
 printCode(1 + 1)
 var string = 'someStr'

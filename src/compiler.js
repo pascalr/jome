@@ -325,6 +325,13 @@ function compileFunctionArgsDetailed(node, ctx, insideClassFunction = false) {
       attrParams = [...attrParams, ...inter.attrParams]
       paramsValues = {...paramsValues, ...inter.paramsValues}
     }
+
+    if (arr[1]?.type === 'keyword.control.along.jome') {
+      let alongKind = arr[2].text() // unit|source|code|type
+      let type = 'along-'+alongKind
+      ctx.addBinding(alongKind, {type})
+      args[alongKind] = {type}
+    }
   })
   let argNames = Object.keys(args)
   argNames = hasParams ? [insideClassFunction ? '__props__' : '__params__', ...argNames] : argNames
