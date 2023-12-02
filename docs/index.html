@@ -594,14 +594,30 @@ To declare a function, use de def function.</p>
 <span class="hljs-title function_">add10</span>(<span class="hljs-number">20</span>)
 <span class="hljs-variable">add10</span> = <span class="hljs-variable">x</span> =&gt; <span class="hljs-variable">x</span> + <span class="hljs-number">20</span> <span class="hljs-comment">// ERROR. add10 can only be redeclared in a nested scope</span>
 </code></pre>
+<h2>along keyword</h2>
+<p>When you want to also have the unit or the code for a variable, you can use the along keyword.</p>
+<p>along is useful to be used alongside:</p>
+<ul>
+<li>unit: The unit of the expression given, as a string</li>
+<li>type: The variable type of the expression given (like typescript), as a string</li>
+<li>source: The source code literaly given of the expression, as a string</li>
+<li>code: The js compiled code of the expression, as a string</li>
+</ul>
+<p>The along keyword is useful, because you could also want the use of the modifiers above alone.</p>
+<p>def debug = |msg along code along type along unit| =&gt; (
+def debug = |msg along code as customCodeName along type as customTypeName along unit as customUnitName| =&gt; (</p>
+<p>You can't only get the modifier value, but then again you can simply assign an unused variable name</p>
+<p>def printType = |unused along type|</p>
 <h2>Capture de code</h2>
-<p>TODO: Quelque chose que j'aimerais beaucoup avoir. Un système pour capturer le code.</p>
-<p>Par exemple,</p>
-<pre><code class="language-jome"><span class="hljs-variable">nomDeVariable</span> = <span class="hljs-number">10</span>
-<span class="hljs-variable">debug</span> = |<span class="hljs-variable">arg</span>, <span class="hljs-keyword">code</span> <span class="hljs-variable">argCode</span>| =&gt; (
-  <span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Debugging {argCode}: Value {arg}&quot;</span>)
+<p>TODO</p>
+<p>Je pense que la syntaxe que je veux est d'utiliser le type 'code'.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">debug</span> = |<span class="hljs-variable">msg</span> <span class="hljs-variable">along</span> <span class="hljs-keyword">code</span>| =&gt; (
+  <span class="hljs-title function_">#log</span>(<span class="hljs-keyword">code</span>+<span class="hljs-string">&#x27;:&#x27;</span>, <span class="hljs-variable">msg</span>)
 )
-<span class="hljs-title function_">debug</span>(<span class="hljs-variable">nomDeVariable</span>) <span class="hljs-comment">// =&gt; Debugging nomDeVariable: Value 10</span>
+<span class="hljs-title function_">debug</span>(<span class="hljs-variable">nomDeVariable</span>) <span class="hljs-comment">// =&gt; #log(&quot;nomDeVariable:&quot;, nomDeVariable)</span>
+
+<span class="hljs-comment">// When calling in javascript, you need to supply both arguments</span>
+<span class="hljs-title function_">debug</span>(<span class="hljs-variable">nomDeVariable</span>, <span class="hljs-string">&quot;nomDeVariable&quot;</span>)
 </code></pre>
 <h2>String modifier</h2>
 <p>Idée:</p>

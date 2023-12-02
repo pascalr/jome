@@ -740,18 +740,39 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   add10 = x => x + 20 // ERROR. add10 can only be redeclared in a nested scope
   \`\`\`
 
+  ## along keyword
+
+  When you want to also have the unit or the code for a variable, you can use the along keyword.
+
+  along is useful to be used alongside:
+  - unit: The unit of the expression given, as a string
+  - type: The variable type of the expression given (like typescript), as a string
+  - source: The source code literaly given of the expression, as a string
+  - code: The js compiled code of the expression, as a string
+
+  The along keyword is useful, because you could also want the use of the modifiers above alone.
+
+  def debug = |msg along code along type along unit| => (
+  def debug = |msg along code as customCodeName along type as customTypeName along unit as customUnitName| => (
+
+  You can't only get the modifier value, but then again you can simply assign an unused variable name
+
+  def printType = |unused along type|
+
   ## Capture de code
 
-  TODO: Quelque chose que j'aimerais beaucoup avoir. Un système pour capturer le code.
+  TODO
 
-  Par exemple,
+  Je pense que la syntaxe que je veux est d'utiliser le type 'code'.
 
   \`\`\`jome
-  nomDeVariable = 10
-  debug = |arg, code argCode| => (
-    console.log("Debugging {argCode}: Value {arg}")
+  def debug = |msg along code| => (
+    #log(code+':', msg)
   )
-  debug(nomDeVariable) // => Debugging nomDeVariable: Value 10
+  debug(nomDeVariable) // => #log("nomDeVariable:", nomDeVariable)
+
+  // When calling in javascript, you need to supply both arguments
+  debug(nomDeVariable, "nomDeVariable")
   \`\`\`
 
   ## String modifier

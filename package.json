@@ -10,7 +10,8 @@
   "scripts": {
     "run": "NODE_ENV=production node jome.js server.jome",
     "dev": "NODE_ENV=development nodemon jome.js server.jome",
-    "build": "node ./build.js"
+    "build": "node ./build.js",
+    "jest": "jest"
   },
   "author": "",
   "bugs": {
@@ -37,5 +38,8 @@
     "react-dom": "^18.2.0",
     "vscode-oniguruma": "^2.0.0",
     "vscode-textmate": "^9.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
