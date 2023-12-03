@@ -1,5 +1,5 @@
 {
-  "name": "grammar-jome",
+  "name": "jome-grammar",
   "displayName": "Jome Grammar",
   "description": "",
   "version": "0.0.1",
@@ -7,7 +7,7 @@
     "vscode": "^1.81.0"
   },
   "scripts": {
-    "install": "cp -R . ~/.vscode/extensions/jome"
+    "install": "cp -R . ~/.vscode/extensions/jome-grammar"
   },
   "categories": [
     "Programming Languages"

@@ -78,6 +78,7 @@ const path = require('path');
 
 const args = process.argv.slice(2); // Exclude the first two arguments (node executable and script file)
 
+let compileOnly = args.includes('-c')
 let buildAndRun = args.includes('-r')
 let wholeArgs = args.filter(arg => !arg.startsWith('-'))
 
@@ -97,4 +98,8 @@ const fullPath = path.join(cwd, fileName)
 // Bundle tous les fichiers généré et supprimé les intermédiaires.
 
 let builder = new JomeBuilder({projectAbsPath: cwd})
-builder.execute(fullPath, {buildAndRun, argv: (executingCommand ? wholeArgs : null)})
+if (compileOnly) {
+  builder.compileAndSaveFile(fullPath, '.js')
+} else {
+  builder.execute(fullPath, {buildAndRun, argv: (executingCommand ? wholeArgs : null)})
+}

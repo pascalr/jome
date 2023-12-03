@@ -418,6 +418,16 @@ main {
   It is very nice when prototyping to not have to write return statements. But for production code, it is safer to always write them, this
   way you never return by accident a sensitive value that should be hiden from users.
 
+  Je n'aime pas tant que Jome ajoute des returns statements automatiquement. Je veux avoir le contrôle là dessus. Comment faire
+  si je ne veux pas retourner rien?
+
+  Idées:
+  def sum = |args| :=> (executeMaisRetournePas(10))
+  def sum = |args| :-> (executeMaisRetournePas(10))
+  def sum = |args| (executeMaisRetournePas(10))
+  def sum = func |args| (executeMaisRetournePas(10))
+  function sum(args) ()
+
   ## State variables
 
   Nodes can have state variables that start with a percentage sign like `%stateVar = 10`
