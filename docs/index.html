@@ -370,11 +370,18 @@ way you never return by accident a sensitive value that should be hiden from use
 <p>Je n'aime pas tant que Jome ajoute des returns statements automatiquement. Je veux avoir le contrôle là dessus. Comment faire
 si je ne veux pas retourner rien?</p>
 <p>Idées:
-def sum = |args| :=&gt; (executeMaisRetournePas(10))
-def sum = |args| :-&gt; (executeMaisRetournePas(10))
-def sum = |args| (executeMaisRetournePas(10))
-def sum = func |args| (executeMaisRetournePas(10))
+def sum |args| :=&gt; (executeMaisRetournePas(10))
+def sum |args| :-&gt; (executeMaisRetournePas(10))
+def sum |args| |&gt; (executeMaisRetournePas(10))
+def sum |args| |&gt; (executeMaisRetournePas(10))
+def sum |args| (executeMaisRetournePas(10))
+func sum |args| (executeMaisRetournePas(10))
 function sum(args) ()</p>
+<p>Peut-être qu'avec def ne pas utiliser le signe =, je trouve ça redondant.</p>
+<p>def x 10
+def sum |a,b| =&gt; (a+b)
+def sayHello =&gt; #log(&quot;Hello!&quot;)
+def sayHello |&gt; #log(&quot;Hello!&quot;)</p>
 <h2>State variables</h2>
 <p>Nodes can have state variables that start with a percentage sign like <code>%stateVar = 10</code></p>
 <pre><code class="language-jome">{ <span class="hljs-comment">// %count does not have to be declared in the Btn class, you can attach any state to any node</span>

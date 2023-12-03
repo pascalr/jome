@@ -425,11 +425,20 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   si je ne veux pas retourner rien?
 
   Idées:
-  def sum = |args| :=> (executeMaisRetournePas(10))
-  def sum = |args| :-> (executeMaisRetournePas(10))
-  def sum = |args| (executeMaisRetournePas(10))
-  def sum = func |args| (executeMaisRetournePas(10))
+  def sum |args| :=> (executeMaisRetournePas(10))
+  def sum |args| :-> (executeMaisRetournePas(10))
+  def sum |args| |> (executeMaisRetournePas(10))
+  def sum |args| |> (executeMaisRetournePas(10))
+  def sum |args| (executeMaisRetournePas(10))
+  func sum |args| (executeMaisRetournePas(10))
   function sum(args) ()
+
+  Peut-être qu'avec def ne pas utiliser le signe =, je trouve ça redondant.
+
+  def x 10
+  def sum |a,b| => (a+b)
+  def sayHello => #log("Hello!")
+  def sayHello |> #log("Hello!")
 
   ## State variables
 

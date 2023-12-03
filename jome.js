@@ -103,11 +103,13 @@ let builder = new JomeBuilder({projectAbsPath: cwd})
 if (executingCommand || wholeArgs.length === 0) {
   builder.execute(path.join(cwd, 'index.jome'), {buildAndRun, argv: wholeArgs})
 } else {
-  const fileName = wholeArgs[0]
-  const fullPath = path.join(cwd, fileName)
-  if (compileOnly) {
-    builder.compileAndSaveFile(fullPath, '.js')
-  } else {
-    builder.execute(fullPath, {buildAndRun})
-  }
+  const files = globSync(wholeArgs[0])
+  files.forEach(fileName => {
+    const fullPath = path.join(cwd, fileName)
+    if (compileOnly) {
+      builder.compileAndSaveFile(fullPath, '.js')
+    } else {
+      builder.execute(fullPath, {buildAndRun})
+    }
+  })
 }

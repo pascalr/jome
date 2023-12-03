@@ -13,7 +13,7 @@
     {
       "label": "Build tests",
       "command": "node",
-      "args": ["jome.js", "-c", "tmp/sum.test.jome"],
+      "args": ["jome.js", "-c", "jome -c **/*.test.jome"],
       "options": {
         "cwd": "${workspaceFolder}/"
       }
