@@ -367,6 +367,14 @@ Maybe allow both?</p>
 <p>By default, Jome adds returns statements to functions. This setting can be disabled in the config file.</p>
 <p>It is very nice when prototyping to not have to write return statements. But for production code, it is safer to always write them, this
 way you never return by accident a sensitive value that should be hiden from users.</p>
+<p>Je n'aime pas tant que Jome ajoute des returns statements automatiquement. Je veux avoir le contrôle là dessus. Comment faire
+si je ne veux pas retourner rien?</p>
+<p>Idées:
+def sum = |args| :=&gt; (executeMaisRetournePas(10))
+def sum = |args| :-&gt; (executeMaisRetournePas(10))
+def sum = |args| (executeMaisRetournePas(10))
+def sum = func |args| (executeMaisRetournePas(10))
+function sum(args) ()</p>
 <h2>State variables</h2>
 <p>Nodes can have state variables that start with a percentage sign like <code>%stateVar = 10</code></p>
 <pre><code class="language-jome">{ <span class="hljs-comment">// %count does not have to be declared in the Btn class, you can attach any state to any node</span>

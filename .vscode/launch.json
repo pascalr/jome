@@ -25,5 +25,14 @@
       "args": ["test.jome"],
       "program": "${workspaceFolder}/jome.js"
     },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Jest tests",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "preLaunchTask": "Jest runner",
+    },
   ]
 }

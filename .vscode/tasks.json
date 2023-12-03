@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Jest runner",
+      "command": "npm",
+      "args": ["run", "jest"],
+      "options": {
+        "cwd": "${workspaceFolder}/"
+      },
+      "dependsOn": ["Build tests"]
+    },
+    {
+      "label": "Build tests",
+      "command": "node",
+      "args": ["jome.js", "-c", "tmp/sum.test.jome"],
+      "options": {
+        "cwd": "${workspaceFolder}/"
+      }
+    }
+  ]
+}
