@@ -69,6 +69,7 @@
 
 const { JomeBuilder, buildAndRunFile } = require('./src/builder.js');
 const path = require('path');
+const { globSync } = require('glob')
 // import { JomeBuilder, buildAndRunFile } from './src/builder.js';
 // import path from 'path';
 // import { fileURLToPath } from 'url';
@@ -84,9 +85,6 @@ let wholeArgs = args.filter(arg => !arg.startsWith('-'))
 
 let executingCommand = (!wholeArgs[0]?.endsWith('.jome'))
 
-const fileName = (executingCommand || wholeArgs.length === 0) ? 'index.jome' : wholeArgs[0];
-const cwd = process.cwd()
-const fullPath = path.join(cwd, fileName)
 // buildAndRunFile(fullPath)
 
 // Fuck utiliser .jome, simplement compiler les trucs à la même place qu'ils sont.
@@ -97,9 +95,19 @@ const fullPath = path.join(cwd, fileName)
 // Supprimer les fichiers générer une fois terminé
 // Bundle tous les fichiers généré et supprimé les intermédiaires.
 
+
+// TODO: Add error messages that you cannot execute a command at the same time of using the options -c or -r. These three things are always separate.
+
+const cwd = process.cwd()
 let builder = new JomeBuilder({projectAbsPath: cwd})
-if (compileOnly) {
-  builder.compileAndSaveFile(fullPath, '.js')
+if (executingCommand || wholeArgs.length === 0) {
+  builder.execute(path.join(cwd, 'index.jome'), {buildAndRun, argv: wholeArgs})
 } else {
-  builder.execute(fullPath, {buildAndRun, argv: (executingCommand ? wholeArgs : null)})
+  const fileName = wholeArgs[0]
+  const fullPath = path.join(cwd, fileName)
+  if (compileOnly) {
+    builder.compileAndSaveFile(fullPath, '.js')
+  } else {
+    builder.execute(fullPath, {buildAndRun})
+  }
 }
