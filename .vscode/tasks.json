@@ -8,7 +8,14 @@
       "options": {
         "cwd": "${workspaceFolder}/"
       },
-      "dependsOn": ["Build tests"]
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
     },
     {
       "label": "Build tests",
