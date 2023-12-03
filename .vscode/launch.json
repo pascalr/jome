@@ -33,6 +33,7 @@
         "<node_internals>/**"
       ],
       "preLaunchTask": "Jest runner",
+      "program": "${workspaceFolder}/bin/do_nothing.js"
     },
   ]
 }
