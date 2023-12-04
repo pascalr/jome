@@ -35,5 +35,17 @@
       "preLaunchTask": "Jest runner",
       "program": "${workspaceFolder}/bin/do_nothing.js"
     },
+    {
+      "name": "Debug Jest Tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceFolder}/node_modules/jest/bin/jest.js",
+        "--runInBand"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+    }
   ]
 }
