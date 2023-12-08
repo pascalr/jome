@@ -10,8 +10,29 @@ class ASTNode {
   }
 }
 
+function getPrecedence(tok) {
+
+  if (tok.type === 'constant.numeric.integer.jome') {
+    return 100
+  } else if (tok.type === 'keyword.operator.jome') {
+    let op = tok.text()
+    if (op === '+' || op === '-') {
+      return 1000
+    } else if (op === '*' || op === '/') {
+      return 1100
+    } else if (op === '^') {
+      return 1200
+    }
+  }
+
+  throw new Error("TODO: getPrecedence of token not implemented yet: "+tok.type)
+}
+
 // Create an abstract syntax tree (AST) from tokens. Returns a list of ASTNode.
 function parse(toks) {
+  toks.forEach(tok => {
+    tok.precedence = getPrecedence(tok)  
+  });
   /* TODO */
   return []
 }

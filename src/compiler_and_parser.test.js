@@ -1,4 +1,30 @@
 const {compile} = require('./compiler.js')
+const {parse} = require('./parser.js')
+const {tokenize} = require('./tokenizer.js')
+
+/*
+FIXMEEEE: Combining compiler and parser tests because I am having issues with depedencies: (running either separate OK)
+TypeError: Cannot redefine property: length
+        at Function.defineProperty (<anonymous>)
+
+      1 | // import FirstMate from 'first-mate'
+    > 2 | const FirstMate = require('first-mate')
+        |                   ^
+      3 |
+      4 | const registry = new FirstMate.GrammarRegistry()
+      5 | //registry.loadGrammarSync('./grammar/syntaxes/JavaScript.tmLanguage.json')
+
+      at Object.<anonymous> (node_modules/oniguruma/src/oniguruma.js:108:8)
+      at Object.<anonymous> (node_modules/first-mate/lib/grammar.js:10:10)
+      at Object.<anonymous> (node_modules/first-mate/lib/grammar.js:395:4)
+      at Object.<anonymous> (node_modules/first-mate/lib/grammar-registry.js:12:13)
+      at Object.<anonymous> (node_modules/first-mate/lib/grammar-registry.js:273:4)
+      at Object.<anonymous> (node_modules/first-mate/lib/first-mate.js:4:22)
+      at Object.<anonymous> (node_modules/first-mate/lib/first-mate.js:14:4)
+      at Object.require (src/tokenizer.js:2:19)
+      at Object.require (src/compiler.js:9:38)
+      at Object.require (src/compiler_and_parser.test.js:1:19)
+*/
 
 /*
 I was wondering whether I want to write tests in Jome or in js. But I think I prefer to write them in
@@ -96,3 +122,25 @@ test('let x = 1', () => {
   // FIXME: Do I want var or I want let? I used var because it is what CoffeeScript is using by default.
   expect(compile('let x = 1')).toMatch(/var x = 1/);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+describe("Test operations", () => {
+  test('Test operation 1 + 2', () => {
+    let ast = parse(tokenize("1+2").children)[0]
+    expect(ast?.raw()).toBe('+')
+    expect(ast?.children?.[0]?.raw()).toBe('1')
+    expect(ast?.children?.[0]?.raw()).toBe('2')
+  })
+})
