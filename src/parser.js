@@ -27,45 +27,39 @@ function parse(tokens) {
   let nodes = filterSpaces(tokens).map(tok => new ASTNode(tok))
   // Only the top nodes
   let topNodes = []
-  let start = 0;
 
   // lhs === left hand side
   // rhs === right hand side
   const parseExpression1 = (lhs, minPrecedence) => {
-    start += 1
-    for (let i = start; i < nodes.length-1; i++) {
-      let lookahead = nodes[i]
+    let lookahead = nodes[0]
+    while (
+      lookahead &&
+      lookahead.precedence >= minPrecedence &&
+      lookahead.captureLeft
+    ) {
+      const op = lookahead;
+      // TODO: Check if capture right
+      nodes.shift()
+      let rhs = nodes[0]
+      lookahead = nodes[1]
       while (
         lookahead &&
-        lookahead.precedence >= minPrecedence &&
-        lookahead.captureLeft
+        ((lookahead.precedence > op.precedence) ||
+          (lookahead.precedence === op.precedence &&
+            lookahead.rightAssociative))
       ) {
-        const op = lookahead;
-        i += 1
-        // TODO: Check if capture right
-        let rhs = nodes[i]
-        lookahead = nodes[i+1]
-        while (
-          lookahead &&
-          ((lookahead.precedence > op.precedence) ||
-            (lookahead.precedence === op.precedence &&
-              lookahead.rightAssociative))
-        ) {
-          start += 1
-          rhs = parseExpression1(rhs, op.precedence + (lookahead.precedence > op.precedence ? 1 : 0));
-          i += 1
-          lookahead = nodes[i+1];
-        }
-  
-        op.children = [lhs, rhs]
-        lhs = op;
-        start += 2
+        rhs = parseExpression1(rhs, op.precedence + (lookahead.precedence > op.precedence ? 1 : 0));
+        nodes.shift();
+        lookahead = nodes[0];
       }
+
+      op.children = [lhs, rhs];
+      lhs = op;
     }
     return lhs;
   };
 
-  topNodes.push(parseExpression1(nodes[0], 0))
+  topNodes.push(parseExpression1(nodes.shift(), 0))
 
   return topNodes
 }
