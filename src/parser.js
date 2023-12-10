@@ -17,7 +17,15 @@ class ASTNode {
       this.children = parse(token.children)
     }
     this.children = []
-    this.compile = data.compile ? () => data.compile(this) : null
+    this.compile = data.compile ? () => {
+      if (data.validate) {
+        let err = data.validate(this)
+        if (err) {
+          throw new Error(err)
+        }
+      }
+      return data.compile(this)
+    } : null
   }
 }
 
@@ -42,7 +50,6 @@ function parse(tokens) {
       } else {
         lhs.children.push(nodes.shift())
       }
-      return lhs
     }
     let lookahead = nodes[0]
     while (
@@ -87,7 +94,7 @@ function validateOperator(node) {
   if (node.children.length !== 2) {
     return "A binary operator must have a two operands"
   } else if (!node.children.every(child => OPERAND_TYPES.includes(child.type))) {
-    return `Invalid operand type for operator ${node.type}. Was: ${child.type}`
+    return `Invalid operand type for operator ${node.type}. Was: ${node.type}`
   }
 }
 
@@ -143,9 +150,26 @@ const TOKENS = {
     captureLeft: true,
     captureRight: true,
   },
+  'keyword.operator.comparison.jome': {
+    precedence: 500,
+    captureLeft: true,
+    captureRight: true,
+    validate: validateOperator,
+    compile: compileOperator,
+  },
+  'keyword.operator.assignment.jome': {
+    precedence: 2000,
+    captureLeft: true,
+    captureRight: true,
+    validate: validateOperator,
+    compile: compileOperator,
+  },
   'keyword.control.declaration.jome': {
     precedence: 5000,
     captureRight: true,
+    compile(node) {
+      return `let ${node.children[0].raw}`
+    }
     // allowedChildren: [
     //   'variable.other.jome',
     //   'variable.assigment.jome'
@@ -161,13 +185,6 @@ const TOKENS = {
   'entity.name.function.utility.jome': {
      ...tokenAsIs,
      compile: compileUtility,
-  },
-  'keyword.operator.comparison.jome': {
-    precedence: 500,
-    captureLeft: true,
-    captureRight: true,
-    validate: validateOperator,
-    compile: compileOperator,
   }
 }
 
@@ -176,14 +193,7 @@ function compilePP(nodes) {
   return nodes.map(node => {
     let compFunc = node.compile
     if (!compFunc) {
-      throw new Error("Error cannot compile node no function available to compile")
-    }
-    let validateFunc = node.validate
-    if (validateFunc) {
-      err = validateFunc(node)
-      if (err) {
-        throw new Error(err)
-      }
+      throw new Error("Error cannot compile node no function available to compile: "+node.type)
     }
     return compFunc()
   }).join('\n')
