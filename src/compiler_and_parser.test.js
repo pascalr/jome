@@ -161,7 +161,7 @@ describe("Parse operation", () => {
   })
 })
 
-describe("Parse assignment", () => {
+describe("Parse let assignment", () => {
 
   test('let x', () => {
     let list = parse(tokenize("let x").children)
@@ -186,6 +186,22 @@ describe("Parse assignment", () => {
     expect(list[0]?.children?.[0]?.raw).toBe('x')
     expect(list[2]?.raw).toBe('let')
     expect(list[2]?.children?.[0]?.raw).toBe('y')
+  })
+
+})
+
+describe("Parse def assignment", () => {
+
+  test('def x 10', () => {
+    let list = parse(tokenize("def x 10").children)
+    expect(list?.length).toBe(1)
+    let ast = list[0]
+    expect(ast?.raw).toBe('def')
+    expect(ast?.children?.[0]?.raw).toBe('x')
+    expect(ast?.children?.[1]?.raw).toBe('10')
+
+    let out = compilePP(list)
+    expect(out).toMatch(/(let|var|const)\s+x\s*=\s*10/)
   })
 
 })

@@ -14,7 +14,7 @@ class ASTNode {
     this.minRequiredChildren = data.minRequiredChildren
     this.allowedChildren = data.allowedChildren
     this.children = children
-    this.compile = data.compile
+    this.compile = data.compile ? () => data.compile(this) : null
   }
 }
 
@@ -89,22 +89,25 @@ function validateOperator(node) {
 }
 
 function compileOperator(node) {
-  return `${node.children[0].raw} ${node.raw} ${node.children[1].raw}`
+  return `${node.children[0].compile()} ${node.raw} ${node.children[1].compile()}`
+}
+
+function compileRaw(node) {
+  return node.raw
+}
+
+const tokenAsIs = {
+  precedence: 100,
+  compile: compileRaw
 }
 
 const TOKENS = {
   'punctuation.terminator.statement.jome': {
     precedence: 999999
   },
-  'variable.other.jome': {
-    precedence: 100
-  },
-  'variable.assignment.jome': {
-    precedence: 100
-  },
-  'constant.numeric.integer.jome': {
-    precedence: 100
-  },
+  'variable.other.jome': tokenAsIs,
+  'variable.assignment.jome': tokenAsIs,
+  'constant.numeric.integer.jome': tokenAsIs,
   // js uses more specifically:
   // keyword.operator.arithmetic.jome
   // keyword.operator.logical.jome
@@ -135,6 +138,9 @@ const TOKENS = {
   'keyword.control.declaration.def.jome': {
     precedence: 5000,
     captureRight: 2,
+    compile(node) {
+      return `let ${node.children[0].raw} = ${node.children[1].compile()}`
+    }
     // allowedChildren: [
     //   'variable.other.jome',
     //   'variable.assigment.jome'
@@ -163,7 +169,7 @@ function compilePP(nodes) {
         throw new Error(err)
       }
     }
-    return compFunc(node)
+    return compFunc()
   }).join('\n')
 }
 
