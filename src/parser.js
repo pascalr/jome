@@ -5,31 +5,55 @@ class ASTNode {
     this.children = children
   }
 
+  static createRoot() {
+    let node = new ASTNode(null, [])
+    node.isRoot = true
+    return node
+  }
+
   raw() {
     return this.token.value
   }
 }
 
-function getPrecedence(tok) {
-
-  if (tok.type === 'constant.numeric.integer.jome') {
-    return 100
-  } else if (tok.type === 'keyword.operator.jome') {
-    let op = tok.text()
-    if (op === '+' || op === '-') {
-      return 1000
-    } else if (op === '*' || op === '/') {
-      return 1100
-    } else if (op === '^') {
-      return 1200
-    }
+const TOKENS = {
+  'constant.numeric.integer.jome': {
+    precedence: 100
+  },
+  // js uses:
+  // keyword.operator.comparison.jome
+  // keyword.operator.arithmetic.jome
+  // keyword.operator.logical.jome
+  'keyword.operator.jome': {
+    precedence: (token => {
+      let op = token.text()
+      if (op === '+' || op === '-') {
+        return 1000 - 1
+      } else if (op === '*' || op === '/') {
+        return 1100
+      } else if (op === '^') {
+        return 1200
+      }
+    }),
+    captureLeft: true,
+    captureRight: true,
+    allowedChildren: [
+      'constant.numeric.integer.jome'
+    ]
   }
+}
 
-  throw new Error("TODO: getPrecedence of token not implemented yet: "+tok.type)
+function getPrecedence(tok) {
+  let data = TOKENS[tok.type]
+  if (data) {
+    return (typeof data.precedence === 'function') ? data.precedence(tok) : data.precedence
+  }
+  throw new Error("TODO: token not implemented yet: "+tok.type)
 }
 
 // Create an abstract syntax tree (AST) from tokens. Returns a list of ASTNode.
 function parse(toks) {
+  let root = ASTNode.createRoot()
   toks.forEach(tok => {
     tok.precedence = getPrecedence(tok)  
   });
