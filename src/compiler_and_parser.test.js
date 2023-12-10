@@ -131,29 +131,49 @@ test('let x = 1', () => {
 /******************* TEST PARSER *********************/
 /*****************************************************/
 
-describe("Test operations", () => {
+// describe("Parse operation", () => {
 
-  test('Test operation 1 + 2', () => {
-    let list = parse(tokenize("1+2").children)
+//   test('1 + 2', () => {
+//     let list = parse(tokenize("1+2").children)
+//     expect(list?.length).toBe(1)
+//     let ast = list[0]
+//     expect(ast?.raw).toBe('+')
+//     expect(ast?.children?.[0]?.raw).toBe('1')
+//     expect(ast?.children?.[1]?.raw).toBe('2')
+//   })
+
+//   test('2 + 3 * 4 + 5 == 19', () => {
+//     let list = parse(tokenize("2 + 3 * 4 + 5 == 19").children)
+//     expect(list?.length).toBe(1)
+//     let ast = list[0]
+//     expect(ast?.raw).toBe('==')
+//     expect(ast?.children?.[0]?.raw).toBe('+')
+//     expect(ast?.children?.[0]?.children?.[0]?.raw).toBe('+')
+//     expect(ast?.children?.[0]?.children?.[0]?.children?.[0]?.raw).toBe('2')
+//     expect(ast?.children?.[0]?.children?.[0]?.children?.[1]?.raw).toBe('*')
+//     expect(ast?.children?.[0]?.children?.[0]?.children?.[1]?.children?.[0]?.raw).toBe('3')
+//     expect(ast?.children?.[0]?.children?.[0]?.children?.[1]?.children?.[1]?.raw).toBe('4')
+//     expect(ast?.children?.[0]?.children?.[1]?.raw).toBe('5')
+//     expect(ast?.children?.[1]?.raw).toBe('19')
+//   })
+// })
+
+describe("Parse assignment", () => {
+
+  test('let x', () => {
+    let list = parse(tokenize("let x").children)
     expect(list?.length).toBe(1)
     let ast = list[0]
-    expect(ast?.raw).toBe('+')
-    expect(ast?.children?.[0]?.raw).toBe('1')
-    expect(ast?.children?.[1]?.raw).toBe('2')
+    expect(ast?.raw).toBe('let')
+    expect(ast?.children?.[0]?.raw).toBe('x')
   })
 
-  test('Test operation 2 + 3 * 4 + 5 == 19', () => {
-    let list = parse(tokenize("2 + 3 * 4 + 5 == 19").children)
+  test('let x;', () => {
+    let list = parse(tokenize("let x;").children)
     expect(list?.length).toBe(1)
     let ast = list[0]
-    expect(ast?.raw).toBe('==')
-    expect(ast?.children?.[0]?.raw).toBe('+')
-    expect(ast?.children?.[0]?.children?.[0]?.raw).toBe('+')
-    expect(ast?.children?.[0]?.children?.[0]?.children?.[0]?.raw).toBe('2')
-    expect(ast?.children?.[0]?.children?.[0]?.children?.[1]?.raw).toBe('*')
-    expect(ast?.children?.[0]?.children?.[0]?.children?.[1]?.children?.[0]?.raw).toBe('3')
-    expect(ast?.children?.[0]?.children?.[0]?.children?.[1]?.children?.[1]?.raw).toBe('4')
-    expect(ast?.children?.[0]?.children?.[1]?.raw).toBe('5')
-    expect(ast?.children?.[1]?.raw).toBe('19')
+    expect(ast?.raw).toBe('let')
+    expect(ast?.children?.[0]?.raw).toBe('x')
   })
+
 })

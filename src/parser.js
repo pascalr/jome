@@ -69,6 +69,15 @@ const OPERAND_TYPES = [
 ]
 
 const TOKENS = {
+  'punctuation.terminator.statement.jome': {
+    precedence: 999999
+  },
+  'variable.other.jome': {
+    precedence: 100
+  },
+  'variable.assignment.jome': {
+    precedence: 100
+  },
   'constant.numeric.integer.jome': {
     precedence: 100
   },
@@ -90,6 +99,14 @@ const TOKENS = {
     captureRight: true,
     minRequiredChildren: 2,
     allowedChildren: OPERAND_TYPES
+  },
+  'keyword.control.declaration.jome': {
+    precedence: 5000,
+    captureRight: true,
+    allowedChildren: [
+      'variable.other.jome',
+      'variable.assigment.jome'
+    ]
   },
   'keyword.operator.comparison.jome': {
     precedence: 500,

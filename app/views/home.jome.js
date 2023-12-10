@@ -440,6 +440,30 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   def sayHello => #log("Hello!")
   def sayHello |> #log("Hello!")
 
+  I think I got it: do and end
+
+  def sayHello do #log("Hello!") end
+  def sayHello do
+    #log("Hello!")
+  end
+
+  def sayHelloTo |name| do
+    #log(\`Hello! {name}\`)
+  end
+  // Utiliser la syntaxe comme ruby?
+  def sayHelloTo do |name|
+    #log(\`Hello! {name}\`)
+  end
+
+  Il reste la question de quand est-ce que c'est une fonction et quand est-ce que c'est une arrow function pour le bind?
+
+  def c'est toujours pour le bind?
+  Utiliser un keyword func ou fn pour les fonctions?
+
+  if x do
+    
+  end
+
   ## State variables
 
   Nodes can have state variables that start with a percentage sign like \`%stateVar = 10\`
