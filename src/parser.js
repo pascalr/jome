@@ -2,11 +2,12 @@
 class ASTNode {
   constructor(token, children=[]) {
     this.token = token
+    this.precedence = getPrecedence(token)
     this.children = children
   }
 
   static createRoot() {
-    let node = new ASTNode(null, [])
+    let node = new ASTNode(null)
     node.isRoot = true
     return node
   }
@@ -14,6 +15,44 @@ class ASTNode {
   raw() {
     return this.token.value
   }
+}
+
+function parseExpression(tokens) {
+
+  let nodes = tokens.map(tok => new ASTNode(tok))
+  let consumedIdx = 0;
+
+  // lhs === left hand side
+  // rhs === right hand side
+  const parseExpression1 = (start, lhs, minPrecedence) => {
+    for (let i = start; i < nodes.length-1; i++) {
+      let lookahead = nodes[i+1]
+      while (
+        lookahead &&
+        lookahead.precedence >= minPrecedence
+      ) {
+        const op = lookahead;
+        i += 1
+        let rhs = nodes[i+1]
+        lookahead = nodes[i+2]
+        while (
+          lookahead &&
+          ((lookahead.precedence > op.precedence) ||
+            (lookahead.precedence === op.precedence &&
+              lookahead.rightAssociative))
+        ) {
+          rhs = parseExpression1(i+1, rhs, op.precedence + (lookahead.precedence > op.precedence ? 1 : 0));
+          lookahead = nodes[0];
+        }
+  
+        lhs = new TreeNode(op, lhs, rhs);
+        lookahead = nodes[0];
+      }
+    }
+    return lhs;
+  };
+
+  return parseExpression1(0, nodes[0], 0);
 }
 
 const TOKENS = {
@@ -44,6 +83,7 @@ const TOKENS = {
 }
 
 function getPrecedence(tok) {
+  if (!tok) {return -1}
   let data = TOKENS[tok.type]
   if (data) {
     return (typeof data.precedence === 'function') ? data.precedence(tok) : data.precedence
@@ -54,9 +94,6 @@ function getPrecedence(tok) {
 // Create an abstract syntax tree (AST) from tokens. Returns a list of ASTNode.
 function parse(toks) {
   let root = ASTNode.createRoot()
-  toks.forEach(tok => {
-    tok.precedence = getPrecedence(tok)  
-  });
   /* TODO */
   return []
 }
