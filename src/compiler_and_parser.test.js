@@ -132,10 +132,28 @@ test('let x = 1', () => {
 /*****************************************************/
 
 describe("Test operations", () => {
+
   test('Test operation 1 + 2', () => {
-    let ast = parse(tokenize("1+2").children)[0]
-    expect(ast?.raw()).toBe('+')
-    expect(ast?.children?.[0]?.raw()).toBe('1')
-    expect(ast?.children?.[0]?.raw()).toBe('2')
+    let list = parse(tokenize("1+2").children)
+    expect(list?.length).toBe(1)
+    let ast = list[0]
+    expect(ast?.raw).toBe('+')
+    expect(ast?.children?.[0]?.raw).toBe('1')
+    expect(ast?.children?.[1]?.raw).toBe('2')
+  })
+
+  test('Test operation 2 + 3 * 4 + 5 == 19', () => {
+    let list = parse(tokenize("2 + 3 * 4 + 5 == 19").children)
+    expect(list?.length).toBe(1)
+    let ast = list[0]
+    expect(ast?.raw).toBe('==')
+    expect(ast?.children?.[0]?.raw).toBe('+')
+    expect(ast?.children?.[0]?.children?.[0]?.raw).toBe('2')
+    expect(ast?.children?.[0]?.children?.[1]?.raw).toBe('+')
+    expect(ast?.children?.[0]?.children?.[1]?.children?.[0]?.raw).toBe('*')
+    expect(ast?.children?.[0]?.children?.[1]?.children?.[0]?.children?.[0]?.raw).toBe('3')
+    expect(ast?.children?.[0]?.children?.[1]?.children?.[0]?.children?.[1]?.raw).toBe('4')
+    expect(ast?.children?.[0]?.children?.[1]?.children?.[1]?.raw).toBe('5')
+    expect(ast?.children?.[1]?.raw).toBe('19')
   })
 })
