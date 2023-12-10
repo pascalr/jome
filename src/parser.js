@@ -13,6 +13,9 @@ class ASTNode {
     this.captureRight = data.captureRight
     this.minRequiredChildren = data.minRequiredChildren
     this.allowedChildren = data.allowedChildren
+    if (token.children && !(token.children.length === 1 && typeof token.children[0] === "string")) {
+      this.children = parse(token.children)
+    }
     this.children = []
     this.compile = data.compile ? () => data.compile(this) : null
   }
@@ -108,10 +111,15 @@ const tokenAsIs = {
   compile: compileRaw
 }
 
+const ignoreToken = {
+  precedence: 100,
+  compile: () => ""
+}
+
 const TOKENS = {
-  'punctuation.terminator.statement.jome': {
-    precedence: 999999
-  },
+  'punctuation.paren.open': ignoreToken,
+  'punctuation.paren.close': ignoreToken,
+  'punctuation.terminator.statement.jome': tokenAsIs,
   'expression.group': tokenAsIs,
   'variable.other.jome': tokenAsIs,
   'variable.assignment.jome': tokenAsIs,
