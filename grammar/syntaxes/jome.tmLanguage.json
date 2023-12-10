@@ -166,7 +166,11 @@
 			  },
         {
           "name": "keyword.control.declaration.jome",
-          "match": "\\b(var|def|let)\\b"
+          "match": "\\b(let|var)\\b"
+			  },
+        {
+          "name": "keyword.control.declaration.def.jome",
+          "match": "\\b(def)\\b"
 			  },
         {
           "name": "keyword.control.main.jome",

@@ -34,7 +34,11 @@ function parse(tokens) {
   // rhs === right hand side
   const parseExpression1 = (lhs, minPrecedence) => {
     if (lhs.captureRight) {
-      lhs.children.push(nodes.shift())
+      if (typeof lhs.captureRight === "number" && Number.isInteger(lhs.captureRight)) {
+        lhs.children = nodes.splice(0, lhs.captureRight)
+      } else {
+        lhs.children.push(nodes.shift())
+      }
       return lhs
     }
     let lookahead = nodes[0]
@@ -123,10 +127,18 @@ const TOKENS = {
   'keyword.control.declaration.jome': {
     precedence: 5000,
     captureRight: true,
-    allowedChildren: [
-      'variable.other.jome',
-      'variable.assigment.jome'
-    ]
+    // allowedChildren: [
+    //   'variable.other.jome',
+    //   'variable.assigment.jome'
+    // ]
+  },
+  'keyword.control.declaration.def.jome': {
+    precedence: 5000,
+    captureRight: 2,
+    // allowedChildren: [
+    //   'variable.other.jome',
+    //   'variable.assigment.jome'
+    // ]
   },
   'keyword.operator.comparison.jome': {
     precedence: 500,
