@@ -2,8 +2,9 @@
 class ASTNode {
   constructor(token, children=[]) {
     this.raw = token.text()
-    this.token = token
-    let data = TOKENS[token.type]
+    this.type = token.type
+    //this.token = token
+    let data = TOKENS[this.type]
     if (!data) {
       throw new Error("TODO: token not implemented yet: "+token.type)  
     }
@@ -13,6 +14,7 @@ class ASTNode {
     this.minRequiredChildren = data.minRequiredChildren
     this.allowedChildren = data.allowedChildren
     this.children = children
+    this.compile = data.compile
   }
 }
 
@@ -74,6 +76,18 @@ const OPERAND_TYPES = [
   'keyword.operator.jome'
 ]
 
+function validateOperator(node) {
+  if (node.children.length !== 2) {
+    return "A binary operator must have a two operands"
+  } else if (!node.children.every(child => OPERAND_TYPES.includes(child.type))) {
+    return `Invalid operand type for operator ${node.type}. Was: ${child.type}`
+  }
+}
+
+function compileOperator(node) {
+  return `${node.children[0].raw} ${node.raw} ${node.children[1].raw}`
+}
+
 const TOKENS = {
   'punctuation.terminator.statement.jome': {
     precedence: 999999
@@ -101,10 +115,10 @@ const TOKENS = {
         return 1200
       }
     }),
+    validate: validateOperator,
+    compile: compileOperator,
     captureLeft: true,
     captureRight: true,
-    minRequiredChildren: 2,
-    allowedChildren: OPERAND_TYPES
   },
   'keyword.control.declaration.jome': {
     precedence: 5000,
@@ -118,13 +132,32 @@ const TOKENS = {
     precedence: 500,
     captureLeft: true,
     captureRight: true,
-    minRequiredChildren: 2,
-    allowedChildren: OPERAND_TYPES
+    validate: validateOperator,
+    compile: compileOperator,
   }
 }
 
+// That a list of ASTNode and return js code
+function compilePP(nodes) {
+  return nodes.map(node => {
+    let compFunc = node.compile
+    if (!compFunc) {
+      throw new Error("Error cannot compile node no function available to compile")
+    }
+    let validateFunc = node.validate
+    if (validateFunc) {
+      err = validateFunc(node)
+      if (err) {
+        throw new Error(err)
+      }
+    }
+    return compFunc(node)
+  }).join('\n')
+}
+
 module.exports = {
-  parse
+  parse,
+  compilePP
 }
 
 /*
