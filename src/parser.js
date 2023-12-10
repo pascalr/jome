@@ -62,7 +62,9 @@ function parse(tokens) {
     return lhs;
   };
 
-  topNodes.push(parseExpression1(nodes.shift(), 0))
+  while (nodes.length) {
+    topNodes.push(parseExpression1(nodes.shift(), 0))
+  }
 
   return topNodes
 }

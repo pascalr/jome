@@ -170,10 +170,19 @@ describe("Parse assignment", () => {
 
   test('let x;', () => {
     let list = parse(tokenize("let x;").children)
-    expect(list?.length).toBe(1)
+    expect(list?.length).toBe(2)
     let ast = list[0]
     expect(ast?.raw).toBe('let')
     expect(ast?.children?.[0]?.raw).toBe('x')
+  })
+
+  test('let x; let y', () => {
+    let list = parse(tokenize("let x; let y").children)
+    expect(list?.length).toBe(3)
+    expect(list[0]?.raw).toBe('let')
+    expect(list[0]?.children?.[0]?.raw).toBe('x')
+    expect(list[2]?.raw).toBe('let')
+    expect(list[2]?.children?.[0]?.raw).toBe('y')
   })
 
 })
