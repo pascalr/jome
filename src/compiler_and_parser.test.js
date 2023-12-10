@@ -1,4 +1,4 @@
-const {compile} = require('./compiler.js')
+//const {compile} = require('./compiler.js')
 const {parse,compilePP} = require('./parser.js')
 const {tokenize} = require('./tokenizer.js')
 
@@ -31,7 +31,9 @@ I was wondering whether I want to write tests in Jome or in js. But I think I pr
 javascript because it is more stable. It is a little weird to compile tests in itself when the language is not stable yet.
 */
 
-// TODO: Strip spaces in most cases because I don't want to correct spacing, just syntax. Spacing may change over time.
+function compile(code) {
+  return compilePP(parse(tokenize(code).children))
+}
 
 describe("Test utils", () => {
   test('#log', () => {

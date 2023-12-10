@@ -1,9 +1,9 @@
 // An abstract syntax tree (AST) node
 class ASTNode {
-  constructor(token, children=[]) {
+  constructor(token) {
     this.raw = token.text()
     this.type = token.type
-    //this.token = token
+    this.token = token
     let data = TOKENS[this.type]
     if (!data) {
       throw new Error("TODO: token not implemented yet: "+token.type)  
@@ -13,7 +13,7 @@ class ASTNode {
     this.captureRight = data.captureRight
     this.minRequiredChildren = data.minRequiredChildren
     this.allowedChildren = data.allowedChildren
-    this.children = children
+    this.children = []
     this.compile = data.compile ? () => data.compile(this) : null
   }
 }
@@ -96,6 +96,13 @@ function compileRaw(node) {
   return node.raw
 }
 
+function compileUtility(node) {
+  let raw = node.raw
+  switch (raw) {
+    case 'log': return 'console.log'
+  }
+}
+
 const tokenAsIs = {
   precedence: 100,
   compile: compileRaw
@@ -105,6 +112,7 @@ const TOKENS = {
   'punctuation.terminator.statement.jome': {
     precedence: 999999
   },
+  'expression.group': tokenAsIs,
   'variable.other.jome': tokenAsIs,
   'variable.assignment.jome': tokenAsIs,
   'constant.numeric.integer.jome': tokenAsIs,
@@ -141,10 +149,10 @@ const TOKENS = {
     compile(node) {
       return `let ${node.children[0].raw} = ${node.children[1].compile()}`
     }
-    // allowedChildren: [
-    //   'variable.other.jome',
-    //   'variable.assigment.jome'
-    // ]
+  },
+  'entity.name.function.utility.jome': {
+     ...tokenAsIs,
+     compile: compileUtility,
   },
   'keyword.operator.comparison.jome': {
     precedence: 500,
