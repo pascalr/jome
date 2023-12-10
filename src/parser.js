@@ -90,7 +90,16 @@ const OPERAND_TYPES = [
   'keyword.operator.jome'
 ]
 
+// const validateChildren = (nb, types) => (node) => {
+//   if (node.children.length !== nb) {
+//     return "Invalid number of children for node."
+//   } else if (!node.children.every(child => types.includes(child.type))) {
+//     return `Invalid children type for node ${node.type}. Was: ${node.type}`
+//   }
+// }
+
 function validateOperator(node) {
+  // return validateChildren(2, OPERAND_TYPES)(node)
   if (node.children.length !== 2) {
     return "A binary operator must have a two operands"
   } else if (!node.children.every(child => OPERAND_TYPES.includes(child.type))) {
@@ -161,7 +170,15 @@ const TOKENS = {
     precedence: 2000,
     captureLeft: true,
     captureRight: true,
-    validate: validateOperator,
+    validate: (node) => {
+      if (node.children.length !== 2) {
+        return "An assignment must have a two operands"
+      } else if (!['keyword.control.declaration.jome'].includes(node.children[0].type)) {
+        return `Invalid left hand side for assignement ${node.type}. Was: ${node.type}`
+      } else if (!OPERAND_TYPES.includes(node.children[1].type)) {
+        return `Invalid value for assignement ${node.type}. Was: ${node.type}`
+      }
+    },
     compile: compileOperator,
   },
   'keyword.control.declaration.jome': {

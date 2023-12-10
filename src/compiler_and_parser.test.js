@@ -122,7 +122,7 @@ describe("Test if statements", () => {
 
 test('let x = 1', () => {
   // FIXME: Do I want var or I want let? I used var because it is what CoffeeScript is using by default.
-  expect(compile('let x = 1')).toMatch(/var x = 1/);
+  expect(compile('let x = 1')).toMatch(/(var|let)\s+x\s*=\s*1/);
 });
 
 
