@@ -41,7 +41,8 @@ function parse(tokens) {
       // TODO: Check if capture right
       nodes.shift()
       let rhs = nodes[0]
-      lookahead = nodes[1]
+      nodes.shift();
+      lookahead = nodes[0]
       while (
         lookahead &&
         ((lookahead.precedence > op.precedence) ||
@@ -49,10 +50,8 @@ function parse(tokens) {
             lookahead.rightAssociative))
       ) {
         rhs = parseExpression1(rhs, op.precedence + (lookahead.precedence > op.precedence ? 1 : 0));
-        nodes.shift();
         lookahead = nodes[0];
       }
-
       op.children = [lhs, rhs];
       lhs = op;
     }
