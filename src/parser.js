@@ -31,6 +31,10 @@ function parse(tokens) {
   // lhs === left hand side
   // rhs === right hand side
   const parseExpression1 = (lhs, minPrecedence) => {
+    if (lhs.captureRight) {
+      lhs.children.push(nodes.shift())
+      return lhs
+    }
     let lookahead = nodes[0]
     while (
       lookahead &&
