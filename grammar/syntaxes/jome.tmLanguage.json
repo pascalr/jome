@@ -672,7 +672,7 @@
         },
         {
           "name": "constant.language.jome",
-          "match": "\\b(true|false|vrai|faux|null|undefined|nul|indéfini|on|marche|off|arrêt|yes|oui|no|non)\\b"
+          "match": "\\b(true|false|null|undefined)\\b"
         },
         {
           "name": "variable.language.jome",

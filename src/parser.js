@@ -29,15 +29,18 @@ class ASTNode {
   }
 }
 
-function filterSpaces(array) {
-  return array.filter(e => !/^\s*$/.test(e)) // filter spaces
+// function filterSpaces(array) {
+//   return array.filter(e => !/^\s*$/.test(e))
+// }
+function filterStrings(array) {
+  return array.filter(e => typeof e !== 'string')
 }
 
 // Create an abstract syntax tree (AST) from tokens. Returns a list of ASTNode.
 function parse(tokens) {
 
   // All the tokens converted to nodes
-  let nodes = filterSpaces(tokens).map(tok => new ASTNode(tok))
+  let nodes = filterStrings(tokens).map(tok => new ASTNode(tok))
   // Only the top nodes
   let topNodes = []
 
@@ -133,9 +136,12 @@ const ignoreToken = {
 }
 
 const TOKENS = {
+  'comment.block.jome': ignoreToken,
+  'punctuation.definition.comment.jome': ignoreToken,
   'punctuation.paren.open': ignoreToken,
   'punctuation.paren.close': ignoreToken,
   'punctuation.terminator.statement.jome': tokenAsIs,
+  'constant.language.jome': tokenAsIs,
   'expression.group': tokenAsIs,
   'variable.other.jome': tokenAsIs,
   'variable.assignment.jome': tokenAsIs,
@@ -143,6 +149,7 @@ const TOKENS = {
   // js uses more specifically:
   // keyword.operator.arithmetic.jome
   // keyword.operator.logical.jome
+  // + - * / ^
   'keyword.operator.jome': {
     precedence: (token => {
       let op = token.text()
@@ -159,6 +166,7 @@ const TOKENS = {
     captureLeft: true,
     captureRight: true,
   },
+  // ==, !=, ===, !===
   'keyword.operator.comparison.jome': {
     precedence: 500,
     captureLeft: true,
@@ -166,6 +174,7 @@ const TOKENS = {
     validate: validateOperator,
     compile: compileOperator,
   },
+  // =
   'keyword.operator.assignment.jome': {
     precedence: 2000,
     captureLeft: true,
@@ -181,6 +190,20 @@ const TOKENS = {
     },
     compile: compileOperator,
   },
+  // if
+  'keyword.control.conditional.jome': {
+    precedence: 200,
+    captureRight: 2,
+    validate: (node) => {
+      if (node.children.length !== 2) {
+        return "An if statement must have a condition and a value"
+      }
+    },
+    compile(node) {
+      return `if (${node.children[0].compile()}) { ${node.children[1].compile()} }`
+    }
+  },
+  // let
   'keyword.control.declaration.jome': {
     precedence: 5000,
     captureRight: true,
@@ -192,6 +215,7 @@ const TOKENS = {
     //   'variable.assigment.jome'
     // ]
   },
+  // def
   'keyword.control.declaration.def.jome': {
     precedence: 5000,
     captureRight: 2,
@@ -199,6 +223,7 @@ const TOKENS = {
       return `let ${node.children[0].raw} = ${node.children[1].compile()}`
     }
   },
+  // #log
   'entity.name.function.utility.jome': {
      ...tokenAsIs,
      compile: compileUtility,
