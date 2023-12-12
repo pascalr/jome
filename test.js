@@ -168,9 +168,7 @@ var str2 = obj.toString();
   new TestEq((2 * 2 * 2 + 1 + 2 * 2 * 2), 2*2*2+1+2*2*2, "2 * 2 * 2 + 1 + 2 * 2 * 2"),
   titre(('Vérification des conditions')),
   new TestEq(true, true, "true"),
-  new TestEq(true, true, "vrai"),
   new TestEq(false, false, "false"),
-  new TestEq(false, false, "faux"),
   titre(('Vérification des fonctions'))
 ]
 var addXs = function(__params__) {

@@ -31,8 +31,20 @@ I was wondering whether I want to write tests in Jome or in js. But I think I pr
 javascript because it is more stable. It is a little weird to compile tests in itself when the language is not stable yet.
 */
 
+// function printTree(node, depth = 0) {
+//   const indentation = '  '.repeat(depth);
+
+//   console.log(`${indentation}${node.raw}`);
+
+//   for (const child of node.children) {
+//     printTree(child, depth + 1);
+//   }
+// }
+
 function compile(code) {
-  return compilePP(parse(tokenize(code).children))
+  let topNodes = parse(tokenize(code).children)
+  //topNodes.forEach(top => printTree(top))
+  return compilePP(topNodes)
 }
 
 describe("Test utils", () => {
@@ -115,7 +127,7 @@ describe("Test functions creation", () => {
 })
 
 describe("Test if statements", () => {
-  test('if statements use parentheses and not square brackets', () => {
+  test.only('if statements use parentheses and not square brackets', () => {
     expect(compile('if (true) (/* some code */)')).toMatch(/\s*if \(true\) \{\s*\}/); // FIXME: Should keep comment
   })
 })

@@ -13,10 +13,10 @@ class ASTNode {
     this.captureRight = data.captureRight
     this.minRequiredChildren = data.minRequiredChildren
     this.allowedChildren = data.allowedChildren
+    this.children = []
     if (token.children && !(token.children.length === 1 && typeof token.children[0] === "string")) {
       this.children = parse(token.children)
     }
-    this.children = []
     this.compile = data.compile ? () => {
       if (data.validate) {
         let err = data.validate(this)
@@ -272,4 +272,4 @@ issues found during the parsing process.
 
 Overall, breaking down the compilation process into distinct phases, such as lexical analysis (tokenization)
 and syntax analysis (parsing), helps in creating a modular and maintainable compiler design.
-*/
+*/ 

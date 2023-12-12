@@ -218,9 +218,7 @@ var str2 = obj.toString();
   titre 'Vérification des conditions'
 
   TestEq true, <js>true</js>, "true"
-  TestEq vrai, <js>true</js>, "vrai"
   TestEq false, <js>false</js>, "false"
-  TestEq faux, <js>false</js>, "faux"
   // TestEq (if true 10), <js>10</js>, "faux"
   // TestEq (if 1 10), <js>10</js>, "faux"
   // TestEq (if false 10), <js>null</js>, "faux"

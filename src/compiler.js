@@ -852,6 +852,14 @@ const PROCESSES = {
     }
     return ''
   },
+  "keyword.control.declaration.def.jome": (node, ctx) => {
+    let keyword = node.text()
+    let next = node.captureNext()
+    if (next.type !== 'variable.assignment.jome' && next.type !== 'variable.other.jome') {
+      throw new Error('Error bnjs98124u9sdb92')
+    }
+    return assignVariable(next, ctx, keyword)
+  },
   // let fooBar = 
   "keyword.control.declaration.jome": (node, ctx) => {
     let keyword = node.text()
@@ -1219,7 +1227,7 @@ const PROCESSES = {
       if (ctx.useESM) {return 'export '}
       let next = node.next()
       let name = ''
-      if (next.type === 'keyword.control.declaration.jome') {
+      if (next.type === 'keyword.control.declaration.jome' || next.type === 'keyword.control.declaration.def.jome') {
         name = next.next().text()
       } else if (next.type === 'meta.class.jome') {
         name = filterSpaces(next.children)[1].text()

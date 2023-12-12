@@ -295,6 +295,69 @@ main {
   - signals: A list of the signals the node listens to
   - childrenCount: The number of children of the node. Not sure about this one. TODO: Remove this since I can do children.length
 
+  ## Conditions
+
+  On jase. Pour les ifs, qu'est-ce qui pourrait être fait?
+  J'aime quand même bien le if après.
+
+  return "some val" if someCond
+
+  Est-ce que ça serait possible de faire quelque chose de similaire plus développé?
+  someVar = "some val" if someCond else "some default"
+  someVar = "some val" if someCond
+            "some other val" if someOtherCond
+            else "some default"
+  Est-ce que ça prend un else partout?
+  someVar = "some val" if someCond else
+            "some other val" if someOtherCond
+            else "some default"
+
+  Je veux quand même pouvoir faire un if normal, je pense que je préfère avec un end (vu que pas avec {})
+  if someCond
+    doSomething
+  end
+
+  if someCond
+    doSomething
+  else if someOtherCond
+    doSomething // all valid
+  elsif someOtherCond
+    doSomething // all valid
+  elif someOtherCond
+    doSomething // all valid
+  else
+    doSomething
+  end
+
+  J'aime ça j'aime mes idées.
+  On jase encore plus:
+  Quoi faire avec le switch case?
+
+  Mon idée, tu fais:
+  case someVal
+  Ça assigne la valeur someVal comme valeur temporaire qui va être utilisée.
+  Ensuite, quand tu call when, ça compare avec la valeur de someVal
+
+  ex:
+  let cmd = "yell"
+  case cmd
+  // Any code can be here it does not matter
+  return "HELLO WORLD" when "yell"
+  let someVar = "hello" when "talk" else
+                "hola" when "spanish" else
+                "sup"
+
+  Par défault, when fais simplement une comparaison.
+  Mais tu peux utiliser d'autre opérations avec en suivant when d'un opérateur
+
+  case number
+  return "very big number" when > 10000
+  return "big number" when > 1000
+  return "number"
+
+  Le case doit être dans le scope des when. Tu ne peux pas par exemple le mettre caché dans le if.
+  Les when sont simplement remplacé par "if (expression du case)"
+
   <h2 id="named-parameters">Named parameters and props</h2>
 
   When calling a function, you can add paramters.

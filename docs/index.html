@@ -286,6 +286,57 @@ example name.</p>
 <li>signals: A list of the signals the node listens to</li>
 <li>childrenCount: The number of children of the node. Not sure about this one. TODO: Remove this since I can do children.length</li>
 </ul>
+<h2>Conditions</h2>
+<p>On jase. Pour les ifs, qu'est-ce qui pourrait être fait?
+J'aime quand même bien le if après.</p>
+<p>return &quot;some val&quot; if someCond</p>
+<p>Est-ce que ça serait possible de faire quelque chose de similaire plus développé?
+someVar = &quot;some val&quot; if someCond else &quot;some default&quot;
+someVar = &quot;some val&quot; if someCond
+&quot;some other val&quot; if someOtherCond
+else &quot;some default&quot;
+Est-ce que ça prend un else partout?
+someVar = &quot;some val&quot; if someCond else
+&quot;some other val&quot; if someOtherCond
+else &quot;some default&quot;</p>
+<p>Je veux quand même pouvoir faire un if normal, je pense que je préfère avec un end (vu que pas avec {})
+if someCond
+doSomething
+end</p>
+<p>if someCond
+doSomething
+else if someOtherCond
+doSomething // all valid
+elsif someOtherCond
+doSomething // all valid
+elif someOtherCond
+doSomething // all valid
+else
+doSomething
+end</p>
+<p>J'aime ça j'aime mes idées.
+On jase encore plus:
+Quoi faire avec le switch case?</p>
+<p>Mon idée, tu fais:
+case someVal
+Ça assigne la valeur someVal comme valeur temporaire qui va être utilisée.
+Ensuite, quand tu call when, ça compare avec la valeur de someVal</p>
+<p>ex:
+let cmd = &quot;yell&quot;
+case cmd
+// Any code can be here it does not matter
+return &quot;HELLO WORLD&quot; when &quot;yell&quot;
+let someVar = &quot;hello&quot; when &quot;talk&quot; else
+&quot;hola&quot; when &quot;spanish&quot; else
+&quot;sup&quot;</p>
+<p>Par défault, when fais simplement une comparaison.
+Mais tu peux utiliser d'autre opérations avec en suivant when d'un opérateur</p>
+<p>case number
+return &quot;very big number&quot; when &gt; 10000
+return &quot;big number&quot; when &gt; 1000
+return &quot;number&quot;</p>
+<p>Le case doit être dans le scope des when. Tu ne peux pas par exemple le mettre caché dans le if.
+Les when sont simplement remplacé par &quot;if (expression du case)&quot;</p>
   <h2 id="named-parameters">Named parameters and props</h2>
 <p>When calling a function, you can add paramters.</p>
 <pre><code class="language-jome"><span class="hljs-title function_">someFunc</span>(someParam: <span class="hljs-number">10</span>, otherParam: <span class="hljs-string">&#x27;Jean&#x27;</span>)
