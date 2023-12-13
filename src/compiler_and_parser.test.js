@@ -127,8 +127,12 @@ describe("Test functions creation", () => {
 })
 
 describe("Test if statements", () => {
-  test.only('if statements use parentheses and not square brackets', () => {
-    expect(compile('if (true) (/* some code */)')).toMatch(/\s*if \(true\) \{\s*\}/); // FIXME: Should keep comment
+  test('if statements blocks', () => {
+    expect(compile('if true #log("hello") end')).toMatch(/\s*if \(true\) \{\s*console.log\("hello"\);?\s*\}/);
+  })
+  // An if modifier executes everything to it's left only if the condition is true
+  test('if modifier', () => {
+    expect(compile('let x; x = "10" if true')).toMatch(/let x; if true \{x = "10"\}/);
   })
 })
 
