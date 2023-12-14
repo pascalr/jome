@@ -115,42 +115,22 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <p>This documentation assumes the reader is familiar with javascript.</p>
 <p>Jome is similar to JavaScript, but there are a few distinctions that you must be aware of. Mainly, the syntax is a bit different, there are nodes, named parameters and scripts.</p>
   <h2 id="syntax">Syntax</h2>
-<p>Parentheses are used for statement blocks.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">if</span> (<span class="hljs-variable">someCondition</span>) (
-  <span class="hljs-comment">/* Notice the usage of parentheses and not curly braces */</span>
-)
-</code></pre>
-<p>Curly braces are used for <a href="#blocks">blocks</a>.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">someFunction</span> = -&gt; (<span class="hljs-keyword">return</span> <span class="hljs-number">10</span> + <span class="hljs-number">20</span>) <span class="hljs-comment">// ok</span>
-<span class="hljs-keyword">def</span> <span class="hljs-variable">someFunction</span> = -&gt; {<span class="hljs-keyword">return</span> <span class="hljs-number">10</span> + <span class="hljs-number">20</span>} <span class="hljs-comment">// WRONG!</span>
-<span class="hljs-keyword">def</span> <span class="hljs-variable">someFunction</span> = -&gt; {x: <span class="hljs-number">10</span>} <span class="hljs-comment">// ok</span>
+<p>Curly braces are only used for creating objects (See <a href="#blocks">blocks</a>). As a delimiter, you use the keyword end instead.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">sayHelloJohn</span>
+  <span class="hljs-title function_">#log</span>(<span class="hljs-string">`Hello John!`</span>)
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">if</span> (<span class="hljs-variable">johnIsHere</span>)
+  <span class="hljs-title function_">sayHelloJohn</span>()
+<span class="hljs-keyword">end</span>
 </code></pre>
 <p>Vertical bars are used for function parameters.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">addXY</span> = |<span class="hljs-variable">x</span>, <span class="hljs-variable">y</span>| -&gt; (<span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>)
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">addXY</span> = |<span class="hljs-variable">x</span>, <span class="hljs-variable">y</span>| =&gt; (<span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>)
+
+<span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span> |<span class="hljs-variable">name</span>|
+  <span class="hljs-title function_">#log</span>(<span class="hljs-string">`Hello {name}!`</span>)
+<span class="hljs-keyword">end</span>
 </code></pre>
-<p>TODO: Try an idea: -&gt; and =&gt; are optional</p>
-<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">addXY</span> = |<span class="hljs-variable">x</span>, <span class="hljs-variable">y</span>| (<span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>)
-[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>].<span class="hljs-title function_">filter</span>(|<span class="hljs-variable">nb</span>| <span class="hljs-variable">nb</span> &gt; <span class="hljs-number">5</span>)
-<span class="hljs-comment">// Et pour quand il n&#x27;y a pas d&#x27;argument?</span>
-<span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span> = | | (<span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;Hello!&quot;</span>)) <span class="hljs-comment">// Noooooon ça c&#x27;est laid...</span>
-</code></pre>
-<h3>Keywords</h3>
-<p>Declaration keywords:</p>
-<ul>
-<li><a href="#declaration">var</a>: To declare variables</li>
-<li><a href="#declaration">def</a>: To declare functions</li>
-<li><a href="#declaration">let</a>: To declare anything</li>
-</ul>
-<h3>Bilingual</h3>
-<p>Jome is bilingual in french and english. There are french keywords equivalent to english keywords.</p>
-<ul>
-<li>vrai: true</li>
-<li>faux: false</li>
-<li>si: if</li>
-<li>sinon: else</li>
-<li>requiert: require</li>
-<li>...</li>
-</ul>
   <h2 id="blocks">Blocks</h2>
 <p>Blocks are a key component of Jome. They use indentation to build objects in a short and subjectively pretty way.
 It is also the syntax required to build <a href="#nodes">nodes</a>.</p>
@@ -231,6 +211,10 @@ You have to use the square brackets syntax then.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">firstChild</span> = <span class="hljs-variable">@1</span> <span class="hljs-comment">// Child index starts at 1</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">secondChild</span> = <span class="hljs-variable">@2</span>
 </code></pre>
+<h2>Arrays</h2>
+<p>I'd like to be able to generate arrays using commas. The comma is an operator that join objects to create list?</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">names</span> = <span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-string">&quot;Jack&quot;</span>, <span class="hljs-string">&quot;Jasper&quot;</span>
+</code></pre>
   <h2 id="nodes">Nodes</h2>
 <p>Nodes are objects in a tree structure. They can have a parent and they can have children.</p>
 <p>You create nodes by using blocks.</p>
@@ -287,9 +271,8 @@ example name.</p>
 <li>childrenCount: The number of children of the node. Not sure about this one. TODO: Remove this since I can do children.length</li>
 </ul>
 <h2>Conditions</h2>
-<p>On jase. Pour les ifs, qu'est-ce qui pourrait être fait?
-J'aime quand même bien le if après.</p>
 <p>return &quot;some val&quot; if someCond</p>
+<p>An if modifier executes everything to it's left only if the condition is true</p>
 <p>Est-ce que ça serait possible de faire quelque chose de similaire plus développé?
 someVar = &quot;some val&quot; if someCond else &quot;some default&quot;
 someVar = &quot;some val&quot; if someCond
@@ -298,7 +281,46 @@ else &quot;some default&quot;
 Est-ce que ça prend un else partout?
 someVar = &quot;some val&quot; if someCond else
 &quot;some other val&quot; if someOtherCond
-else &quot;some default&quot;</p>
+else &quot;some default&quot;
+Une virgule?
+someVar = &quot;some val&quot; if someCond,
+&quot;some other val&quot; if someOtherCond,
+&quot;some default&quot;</p>
+<p>someVar = someCond ? &quot;some val&quot; : (
+someOtherCond ? &quot;some other val&quot; :
+&quot;some default&quot;)</p>
+<p>Ouin pas sur... Je n'aime pas toute ces affaires.</p>
+<p>En fait je pense que j'aimerais quelque chose de nouveau. Quand on fait de quoi de compliqué comme ça, ce qu'on fait est un map?</p>
+<p>Est-ce que je pourrais faire de quoi d'inteligent avec mes nodes? Parce que c'est des branches des ifs...</p>
+<p>An if does not return anything, except in a node block. So you can use a node block to assing a value conditionally.</p>
+<pre><code class="language-jome"><span class="hljs-variable">someVar</span> = {
+  <span class="hljs-keyword">if</span> <span class="hljs-variable">someCond</span>
+    <span class="hljs-string">&quot;someVal&quot;</span>
+  <span class="hljs-variable">elsif</span> <span class="hljs-variable">someOtherCond</span>
+    <span class="hljs-string">&quot;some other val&quot;</span>
+  <span class="hljs-variable">else</span>
+    <span class="hljs-string">&quot;some default&quot;</span>
+  <span class="hljs-keyword">end</span>
+}
+</code></pre>
+<p>Le keyword then peut être utiliser pour mettre la valeur sur la même ligne que la condition</p>
+<pre><code class="language-jome"><span class="hljs-variable">someVar</span> = {
+  <span class="hljs-keyword">if</span> <span class="hljs-variable">someCond</span> <span class="hljs-variable">then</span> <span class="hljs-string">&quot;someVal&quot;</span>
+  <span class="hljs-variable">elsif</span> <span class="hljs-variable">someOtherCond</span> <span class="hljs-variable">then</span> <span class="hljs-string">&quot;some other val&quot;</span>
+  <span class="hljs-variable">else</span> <span class="hljs-string">&quot;some default&quot;</span> <span class="hljs-keyword">end</span>
+}
+</code></pre>
+<p>Comment est-ce que ça comporterait un if modifier dans un node block?
+Ça marche pour ajouter des childrens conditionnellement.</p>
+<pre><code class="language-jome"><span class="hljs-variable">someVar</span> = {
+  <span class="hljs-string">&quot;item1&quot;</span> <span class="hljs-keyword">if</span> <span class="hljs-variable">someCond</span>
+  <span class="hljs-string">&quot;item2&quot;</span> <span class="hljs-keyword">if</span> <span class="hljs-variable">someOtherCond</span>
+  <span class="hljs-string">&quot;item3 always there&quot;</span>
+}
+</code></pre>
+<p>J'aimerais pouvoir utiliser un if modifier dans un string literal.</p>
+<p>someStr = <code>Hello{' '+name if name}</code></p>
+<p>Et j'aimerais que dans ce cas, ça retourne automatiquement '' au lieu de undefined ou null</p>
 <p>Je veux quand même pouvoir faire un if normal, je pense que je préfère avec un end (vu que pas avec {})
 if someCond
 doSomething
@@ -450,6 +472,18 @@ end</p>
 Utiliser un keyword func ou fn pour les fonctions?</p>
 <p>if x do</p>
 <p>end</p>
+<p>Est-ce que je veux vraiment permettre de créer des variables avec def? def x 10. C'est laid. Nooon je ne veux pas.
+Parce que en plus, ça peut causer des bugs, parce que je ne pourrais pas juste définir sans avoir de valeur.
+def x; def y; ça ne serait pas valide, parce que nécessite 2 valeurs...
+def x 10
+J'aime mieux &quot;let x = 10&quot; de toute façon.</p>
+<p>J'aimerais ne pas à avoir à utiliser do avec def.</p>
+<p>def sayHello
+#log('Hello')
+end</p>
+<p>def sayHello |name|
+#log(<code>Hello {name}</code>)
+end</p>
 <h2>State variables</h2>
 <p>Nodes can have state variables that start with a percentage sign like <code>%stateVar = 10</code></p>
 <pre><code class="language-jome">{ <span class="hljs-comment">// %count does not have to be declared in the Btn class, you can attach any state to any node</span>
@@ -758,7 +792,29 @@ I was using $URL, but this does not work because global.URL already exists withi
 </code></pre>
 <pre><code class="language-jome"><span class="hljs-keyword">var</span> answer: <span class="hljs-variable">number</span> = <span class="hljs-number">42</span>
 </code></pre>
-<p>I don't know Typescript. I don't get why type and interface. Let's just use Jome interface for now.</p>
+<p>In a node block, you will be able to specify the types of keys like so:
+type MyObject = {
+[key: string]: number; // Key is a string, and the corresponding value is a number
+};</p>
+<p>But what about the types of children? (string)
+{
+MyNode
+&quot;childString&quot;
+(string) someFuncCallReturnsString
+}</p>
+<h2>TODO</h2>
+<p>Faire que this fais toujours référence à un this normal!!! Caché ce défault de javascript de l'utilisateur.</p>
+<p>Peut-être créer un keyword #evt ou quelque chose du genre pour avoir accès au this dans un évènement html.</p>
+<p>Idée: #1, #2, ... fait référence aux arguments d'une fonction. Pas obliger de les déclarer. Ça peut être court comme syntaxe
+pour des filters par exemple.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">even</span> = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>].<span class="hljs-title function_">filter</span>(<span class="hljs-title function_">#1</span> <span class="hljs-variable">mod</span> <span class="hljs-number">2</span>)
+</code></pre>
+<p>TODO: Try an idea: -&gt; and =&gt; are optional</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">addXY</span> = |<span class="hljs-variable">x</span>, <span class="hljs-variable">y</span>| (<span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>)
+[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>].<span class="hljs-title function_">filter</span>(|<span class="hljs-variable">nb</span>| <span class="hljs-variable">nb</span> &gt; <span class="hljs-number">5</span>)
+<span class="hljs-comment">// Et pour quand il n&#x27;y a pas d&#x27;argument?</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span> = | | (<span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;Hello!&quot;</span>)) <span class="hljs-comment">// Noooooon ça c&#x27;est laid...</span>
+</code></pre>
 <h2>Contributing</h2>
 <p>I recommend using visual studio code for now because it is super usefull for debugging tokenization. You hit Ctrl+Shift+P,
 &quot;inspect editor token and scope&quot;, and you see if it is correct. Also you see using syntax highlighting.</p>

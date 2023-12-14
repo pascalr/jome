@@ -59,6 +59,13 @@ var content = renderMarkdown(`
   obj.#keys.#filter(key -> key.startsWith(':')).#each(el => /* ... */)
   \`\`\`
 
+  Idée: #1, #2, ... fait référence aux arguments d'une fonction. Pas obliger de les déclarer. Ça peut être court comme syntaxe
+  pour des filters par exemple.
+
+  \`\`\`jome
+  let even = [1,2,3,4,5,6,7,8,9].filter(#1 mod 2)
+  \`\`\`
+
   ### Jome specific utils
 
   #params, #props, #children, #removeChildren

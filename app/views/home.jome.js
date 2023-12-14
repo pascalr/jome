@@ -79,54 +79,26 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   <h2 id="syntax">Syntax</h2>
 
-  Parentheses are used for statement blocks.
+  Curly braces are only used for creating objects (See [blocks](#blocks)). As a delimiter, you use the keyword end instead.
 
   \`\`\`jome
-  if (someCondition) (
-    /* Notice the usage of parentheses and not curly braces */
-  )
+  def sayHelloJohn
+    #log(\`Hello John!\`)
+  end
+
+  if (johnIsHere)
+    sayHelloJohn()
+  end
   \`\`\`
-
-  Curly braces are used for [blocks](#blocks).
-
-  \`\`\`jome
-  def someFunction = -> (return 10 + 20) // ok
-  def someFunction = -> {return 10 + 20} // WRONG!
-  def someFunction = -> {x: 10} // ok
-  \`\`\`
-
-
 
   Vertical bars are used for function parameters.
   \`\`\`jome
-  def addXY = |x, y| -> (x + y)
+  let addXY = |x, y| => (x + y)
+
+  def sayHello |name|
+    #log(\`Hello {name}!\`)
+  end
   \`\`\`
-
-  TODO: Try an idea: -> and => are optional
-  \`\`\`jome
-  def addXY = |x, y| (x + y)
-  [1,2,3,4,5,6,7,8,9].filter(|nb| nb > 5)
-  // Et pour quand il n'y a pas d'argument?
-  def sayHello = | | (#log("Hello!")) // Noooooon ça c'est laid...
-  \`\`\`
-
-  ### Keywords
-
-  Declaration keywords:
-  - [var](#declaration): To declare variables
-  - [def](#declaration): To declare functions
-  - [let](#declaration): To declare anything
-
-  ### Bilingual
-
-  Jome is bilingual in french and english. There are french keywords equivalent to english keywords.
-
-  - vrai: true
-  - faux: false
-  - si: if
-  - sinon: else
-  - requiert: require
-  - ...
 
   <h2 id="blocks">Blocks</h2>
 
@@ -229,6 +201,14 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   let secondChild = @2
   \`\`\`
 
+  ## Arrays
+
+  I'd like to be able to generate arrays using commas. The comma is an operator that join objects to create list?
+
+  \`\`\`jome
+  let names = "John", "Jack", "Jasper"
+  \`\`\`
+
   <h2 id="nodes">Nodes</h2>
 
   Nodes are objects in a tree structure. They can have a parent and they can have children.
@@ -300,10 +280,9 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   ## Conditions
 
-  On jase. Pour les ifs, qu'est-ce qui pourrait être fait?
-  J'aime quand même bien le if après.
-
   return "some val" if someCond
+
+  An if modifier executes everything to it's left only if the condition is true
 
   Est-ce que ça serait possible de faire quelque chose de similaire plus développé?
   someVar = "some val" if someCond else "some default"
@@ -314,6 +293,61 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   someVar = "some val" if someCond else
             "some other val" if someOtherCond
             else "some default"
+  Une virgule?
+  someVar = "some val" if someCond,
+            "some other val" if someOtherCond,
+            "some default"
+
+  someVar = someCond ? "some val" : (
+            someOtherCond ? "some other val" :
+            "some default")
+
+  Ouin pas sur... Je n'aime pas toute ces affaires.
+
+  En fait je pense que j'aimerais quelque chose de nouveau. Quand on fait de quoi de compliqué comme ça, ce qu'on fait est un map?
+
+  Est-ce que je pourrais faire de quoi d'inteligent avec mes nodes? Parce que c'est des branches des ifs...
+
+  An if does not return anything, except in a node block. So you can use a node block to assing a value conditionally.
+
+  \`\`\`jome
+  someVar = {
+    if someCond
+      "someVal"
+    elsif someOtherCond
+      "some other val"
+    else
+      "some default"
+    end
+  }
+  \`\`\`
+
+  Le keyword then peut être utiliser pour mettre la valeur sur la même ligne que la condition
+
+  \`\`\`jome
+  someVar = {
+    if someCond then "someVal"
+    elsif someOtherCond then "some other val"
+    else "some default" end
+  }
+  \`\`\`
+
+  Comment est-ce que ça comporterait un if modifier dans un node block?
+  Ça marche pour ajouter des childrens conditionnellement.
+
+  \`\`\`jome
+  someVar = {
+    "item1" if someCond
+    "item2" if someOtherCond
+    "item3 always there"
+  }
+  \`\`\`
+
+  J'aimerais pouvoir utiliser un if modifier dans un string literal.
+
+  someStr = \`Hello{' '+name if name}\`
+
+  Et j'aimerais que dans ce cas, ça retourne automatiquement '' au lieu de undefined ou null
 
   Je veux quand même pouvoir faire un if normal, je pense que je préfère avec un end (vu que pas avec {})
   if someCond
@@ -525,6 +559,22 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   if x do
     
+  end
+
+  Est-ce que je veux vraiment permettre de créer des variables avec def? def x 10. C'est laid. Nooon je ne veux pas.
+  Parce que en plus, ça peut causer des bugs, parce que je ne pourrais pas juste définir sans avoir de valeur.
+  def x; def y; ça ne serait pas valide, parce que nécessite 2 valeurs...
+  def x 10
+  J'aime mieux "let x = 10" de toute façon.
+
+  J'aimerais ne pas à avoir à utiliser do avec def.
+
+  def sayHello
+    #log('Hello')
+  end
+
+  def sayHello |name|
+    #log(\`Hello {name}\`)
   end
 
   ## State variables
@@ -972,9 +1022,38 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   var answer: number = 42
   \`\`\`
 
-  I don't know Typescript. I don't get why type and interface. Let's just use Jome interface for now.
+  In a node block, you will be able to specify the types of keys like so:
+  type MyObject = {
+    [key: string]: number; // Key is a string, and the corresponding value is a number
+  };
 
+  But what about the types of children? (string)
+  {
+    MyNode
+      "childString"
+      (string) someFuncCallReturnsString
+  }
 
+  ## TODO
+
+  Faire que this fais toujours référence à un this normal!!! Caché ce défault de javascript de l'utilisateur.
+
+  Peut-être créer un keyword #evt ou quelque chose du genre pour avoir accès au this dans un évènement html.
+
+  Idée: #1, #2, ... fait référence aux arguments d'une fonction. Pas obliger de les déclarer. Ça peut être court comme syntaxe
+  pour des filters par exemple.
+
+  \`\`\`jome
+  let even = [1,2,3,4,5,6,7,8,9].filter(#1 mod 2)
+  \`\`\`
+
+  TODO: Try an idea: -> and => are optional
+  \`\`\`jome
+  def addXY = |x, y| (x + y)
+  [1,2,3,4,5,6,7,8,9].filter(|nb| nb > 5)
+  // Et pour quand il n'y a pas d'argument?
+  def sayHello = | | (#log("Hello!")) // Noooooon ça c'est laid...
+  \`\`\`
 
   ## Contributing
 

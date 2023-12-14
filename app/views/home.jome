@@ -76,54 +76,30 @@ main {
 
   <h2 id="syntax">Syntax</h2>
 
-  Parentheses are used for statement blocks.
+  Curly braces are only used for creating objects (See [blocks](#blocks)). As a delimiter, you use the keyword end instead.
 
   ```jome
-  if (someCondition) (
-    /* Notice the usage of parentheses and not curly braces */
-  )
+  def sayHelloJohn
+    #log(`Hello John!`)
+  end
+
+  if (johnIsHere)
+    sayHelloJohn()
+  end
   ```
-
-  Curly braces are used for [blocks](#blocks).
-
-  ```jome
-  def someFunction = -> (return 10 + 20) // ok
-  def someFunction = -> {return 10 + 20} // WRONG!
-  def someFunction = -> {x: 10} // ok
-  ```
-
-
 
   Vertical bars are used for function parameters.
   ```jome
-  def addXY = |x, y| -> (x + y)
+  let addXY = |x, y| => (x + y)
+
+  def sayHello |name|
+    #log(`Hello {name}!`)
+  end
   ```
 
-  TODO: Try an idea: -> and => are optional
-  ```jome
-  def addXY = |x, y| (x + y)
-  [1,2,3,4,5,6,7,8,9].filter(|nb| nb > 5)
-  // Et pour quand il n'y a pas d'argument?
-  def sayHello = | | (#log("Hello!")) // Noooooon ça c'est laid...
-  ```
-
-  ### Keywords
-
-  Declaration keywords:
-  - [var](#declaration): To declare variables
-  - [def](#declaration): To declare functions
-  - [let](#declaration): To declare anything
-
-  ### Bilingual
-
-  Jome is bilingual in french and english. There are french keywords equivalent to english keywords.
-
-  - vrai: true
-  - faux: false
-  - si: if
-  - sinon: else
-  - requiert: require
-  - ...
+  As you can see, the keyword def is used instead of the keyword function. It is not exactly the same as a js function.
+  TODO: I want the thing to be like a function, so available anywhere, but that uses the reference of this. Is it possible?
+  Probably not. I am tired.
 
   <h2 id="blocks">Blocks</h2>
 
@@ -224,6 +200,14 @@ main {
   ```jome
   let firstChild = @1 // Child index starts at 1
   let secondChild = @2
+  ```
+
+  ## Arrays
+
+  I'd like to be able to generate arrays using commas. The comma is an operator that join objects to create list?
+
+  ```jome
+  let names = "John", "Jack", "Jasper"
   ```
 
   <h2 id="nodes">Nodes</h2>
@@ -576,6 +560,22 @@ main {
 
   if x do
     
+  end
+
+  Est-ce que je veux vraiment permettre de créer des variables avec def? def x 10. C'est laid. Nooon je ne veux pas.
+  Parce que en plus, ça peut causer des bugs, parce que je ne pourrais pas juste définir sans avoir de valeur.
+  def x; def y; ça ne serait pas valide, parce que nécessite 2 valeurs...
+  def x 10
+  J'aime mieux "let x = 10" de toute façon.
+
+  J'aimerais ne pas à avoir à utiliser do avec def.
+
+  def sayHello
+    #log('Hello')
+  end
+
+  def sayHello |name|
+    #log(`Hello {name}`)
   end
 
   ## State variables
@@ -1035,7 +1035,26 @@ main {
       (string) someFuncCallReturnsString
   }
 
+  ## TODO
 
+  Faire que this fais toujours référence à un this normal!!! Caché ce défault de javascript de l'utilisateur.
+
+  Peut-être créer un keyword #evt ou quelque chose du genre pour avoir accès au this dans un évènement html.
+
+  Idée: #1, #2, ... fait référence aux arguments d'une fonction. Pas obliger de les déclarer. Ça peut être court comme syntaxe
+  pour des filters par exemple.
+
+  ```jome
+  let even = [1,2,3,4,5,6,7,8,9].filter(#1 mod 2)
+  ```
+
+  TODO: Try an idea: -> and => are optional
+  ```jome
+  def addXY = |x, y| (x + y)
+  [1,2,3,4,5,6,7,8,9].filter(|nb| nb > 5)
+  // Et pour quand il n'y a pas d'argument?
+  def sayHello = | | (#log("Hello!")) // Noooooon ça c'est laid...
+  ```
 
   ## Contributing
 
