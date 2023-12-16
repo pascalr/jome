@@ -108,6 +108,7 @@
         { "include": "#interface" },
         { "include": "#if_block" },
         { "include": "#keywords" },
+        { "include": "#vbars-args" },
         { "include": "#function_do_end" },
         { "include": "#def" },
         { "include": "#paren-expression" },
@@ -228,8 +229,8 @@
     "vbars-args": {
       "patterns": [
         {
-          "name": "meta.function.do.args.jome",
-          "begin": "(?:\\G)\\s*\\|",
+          "name": "meta.args.jome",
+          "begin": "\\|(?!\\|)",
           "beginCaptures": {"0": {"name": "punctuation.vertical-bar.begin.jome"}},
           "end": "\\|",
           "endCaptures": {
@@ -258,7 +259,6 @@
             "0": {"name": "keyword.control.jome"}
           },
           "patterns": [
-            {"include": "#vbars-args"},
             {"include": "#expression"}
           ]
         }
@@ -289,7 +289,6 @@
             "0": {"name": "keyword.control.jome"}
           },
           "patterns": [
-            {"include": "#vbars-args"},
             {"include": "#expression"}
           ]
         }

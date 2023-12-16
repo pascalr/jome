@@ -160,7 +160,7 @@ function compileArgs(node) {
 }
 
 const TOKENS = {
-  'meta.function.do.args.jome': ignoreToken,
+  'meta.args.jome': ignoreToken,
   'punctuation.vertical-bar.begin.jome': ignoreToken,
   'punctuation.vertical-bar.end.jome': ignoreToken,
   'comment.block.jome': ignoreToken,
@@ -184,7 +184,7 @@ const TOKENS = {
   //   ).join('')+'`'
   // },
   "meta.function.do.end.jome": regular((node) => {
-    let args = node.children.find(c => c.type === 'meta.function.do.args.jome')
+    let args = node.children.find(c => c.type === 'meta.args.jome')
     return `function ${args ? compileArgs(args) : '()'} {${node.children.map(c => c.compile()).join('')}}`
   }),
   'constant.language.jome': tokenAsIs,
