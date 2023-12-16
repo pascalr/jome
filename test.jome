@@ -4,6 +4,7 @@ import {H1} from './lib/html.jome'
 //def printCode |unused along source|
 //  #log(source)
 //end
+//if true #log("hello") end
 
 def printCode = |unused along source| => (
   #log(source)

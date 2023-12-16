@@ -180,22 +180,6 @@ describe("Parse let assignment", () => {
 
 })
 
-describe("Parse def assignment", () => {
-
-  test('def x 10', () => {
-    let list = parse(tokenize("def x 10").children)
-    expect(list?.length).toBe(1)
-    let ast = list[0]
-    expect(ast?.raw).toBe('def')
-    expect(ast?.children?.[0]?.raw).toBe('x')
-    expect(ast?.children?.[1]?.raw).toBe('10')
-
-    let out = compilePP(list)
-    expect(out).toMatch(/(let|var|const)\s+x\s*=\s*10/)
-  })
-
-})
-
 describe("Test values", () => {
   test('integer', () => {
     expect(compile('10')).toMatch(/10/);

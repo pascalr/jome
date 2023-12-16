@@ -106,6 +106,7 @@
       "patterns": [
         { "include": "#comment" },
         { "include": "#interface" },
+        { "include": "#if_block" },
         { "include": "#keywords" },
         { "include": "#function_do_end" },
         { "include": "#def" },
@@ -152,11 +153,7 @@
 			"patterns": [
         {
           "name": "keyword.control.conditional.jome",
-          "match": "(?:^|\\G)\\s*\\b(if|si)\\b"
-			  },
-        {
-          "name": "keyword.control.conditional.jome",
-          "match": "\\b(elseif|elsif|sinon si|else if)\\b"
+          "match": "\\b(elseif|elsif|else if)\\b"
 			  },
         {
           "name": "keyword.control.conditional.else.jome",
@@ -262,6 +259,20 @@
           },
           "patterns": [
             {"include": "#vbars-args"},
+            {"include": "#expression"}
+          ]
+        }
+      ]
+    },
+    "if_block": {
+      "patterns": [
+        {
+          "name": "meta.if-block.jome",
+          "begin": "(?:^|\\G)\\s*\\b(if)\\b",
+          "beginCaptures": {"0": {"name": "keyword.control.conditional.jome"}},
+          "end": "\\b(end)\\b",
+          "endCaptures": {"0": {"name": "keyword.control.jome"}},
+          "patterns": [
             {"include": "#expression"}
           ]
         }

@@ -165,6 +165,7 @@ const TOKENS = {
   'punctuation.vertical-bar.end.jome': ignoreToken,
   'comment.block.jome': ignoreToken,
   'keyword.control.jome': ignoreToken,
+  'keyword.control.conditional.jome': ignoreToken,
   'punctuation.definition.comment.jome': ignoreToken,
   'punctuation.paren.open': ignoreToken,
   'punctuation.paren.close': ignoreToken,
@@ -192,6 +193,10 @@ const TOKENS = {
   'variable.assignment.jome': tokenAsIs,
   'constant.numeric.integer.jome': tokenAsIs,
   'constant.numeric.float.jome': tokenAsIs,
+  'meta.if-block.jome': regular((node) => {
+    let cs = node.children.slice(1, -1) // remove if and end
+    return `if (${cs[0].compile()}) {${cs.slice(1).map(c => c.compile()).join('')}}`
+  }),
   // js uses more specifically:
   // keyword.operator.arithmetic.jome
   // keyword.operator.logical.jome
@@ -252,19 +257,19 @@ const TOKENS = {
     },
     compile: compileOperator,
   },
-  // if
-  'keyword.control.conditional.jome': {
-    precedence: 200,
-    captureRight: 2,
-    validate: (node) => {
-      if (node.children.length !== 2) {
-        return "An if statement must have a condition and a value"
-      }
-    },
-    compile(node) {
-      return `if (${node.children[0].compile()}) { ${node.children[1].compile()} }`
-    }
-  },
+  // // if
+  // 'keyword.control.conditional.jome': {
+  //   precedence: 200,
+  //   captureRight: 2,
+  //   validate: (node) => {
+  //     if (node.children.length !== 2) {
+  //       return "An if statement must have a condition and a value"
+  //     }
+  //   },
+  //   compile(node) {
+  //     return `if (${node.children[0].compile()}) { ${node.children[1].compile()} }`
+  //   }
+  // },
   // let
   'keyword.control.declaration.jome': {
     precedence: 5000,
