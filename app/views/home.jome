@@ -495,6 +495,10 @@ main {
 
     attr someAttr = "defaultValue"
 
+    def someMethod |someArg|
+
+    end
+
   end
   ```
 

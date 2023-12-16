@@ -6,7 +6,7 @@
 // import compileMarkdown from './compilers/markdown.js'
 // import { analyze } from './analyzer.js'
 
-const { POST_PROCESSES, tokenize } = require('./tokenizer.js');
+const { POST_PROCESSES, tokenize } = require('./tokenizer_old_grammar.js');
 const { CompileContext } = require('./compile_context.js');
 
 const fs = require('fs');
