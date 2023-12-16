@@ -50,6 +50,9 @@ function compile(code) {
 
 describe("Test utils", () => {
   test('#log', () => {
+    expect(compile('#log')).toMatch(/console.log/);
+  })
+  test('#log hello world', () => {
     expect(compile('#log("Hello world!")')).toMatch(/console.log\("Hello world!"\)/);
   })
 })

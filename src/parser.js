@@ -1,7 +1,19 @@
+function compileTokenRaw(token) {
+  if (Array.isArray(token)) {
+    return token.map(n => compileTokenRaw(n)).join('')
+  } else if (token.type === 'newline') {
+    return '\n'
+  } else if (typeof token === 'string') {
+    return token
+  } else {
+    return token.children.map(n => compileTokenRaw(n)).join('')
+  }
+}
+
 // An abstract syntax tree (AST) node
 class ASTNode {
   constructor(token) {
-    this.raw = token.text()
+    this.raw = compileTokenRaw(token.children)
     this.type = token.type
     this.token = token
     let data = TOKENS[this.type]
@@ -119,7 +131,7 @@ function compileRaw(node) {
 }
 
 function compileUtility(node) {
-  let raw = node.raw
+  let raw = node.raw.slice(1)
   switch (raw) {
     case 'log': return 'console.log'
   }
@@ -256,7 +268,7 @@ function compilePP(nodes) {
       throw new Error("Error cannot compile node no function available to compile: "+node.type)
     }
     return compFunc()
-  }).join('\n')
+  }).join('')
 }
 
 module.exports = {
