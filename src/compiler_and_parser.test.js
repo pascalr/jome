@@ -91,10 +91,10 @@ describe("Test functions creation", () => {
     expect(compile('do |x, name| #log("hello", name) end')).toMatch(/function \(x,\s*name\) {\s*console.log\("hello", name\)\s*}/);
   })
   test('inline with arrow function', () => {
-    expect(compile('=> 5')).toMatch(/\(\) => 5/);
+    expect(compile('=> 5')).toMatch(/\(\) => \(?5\)?/);
   })
   test('inline with arrow function with args', () => {
-    expect(compile('|x| => x')).toMatch(/\(x\) => x/);
+    expect(compile('|x| => x')).toMatch(/\(x\) => \(?x\)?/);
   })
 })
 

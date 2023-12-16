@@ -217,6 +217,17 @@ const TOKENS = {
     captureLeft: true,
     captureRight: true,
   },
+  // =>
+  'keyword.arrow.jome': {
+    precedence: 300,
+    captureLeft: true,
+    captureRight: true,
+    // validate: TODO validate that left arg is an arg
+    compile: (node) => {
+      let args = node.children.find(c => c.type === 'meta.args.jome')
+      return `${args ? compileArgs(args) : '()'} => (${node.children.map(c => c.compile()).join('')})`
+    },
+  },
   // ==, !=, ===, !===
   'keyword.operator.comparison.jome': {
     precedence: 500,
