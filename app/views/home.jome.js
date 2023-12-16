@@ -498,6 +498,10 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
     attr someAttr = "defaultValue"
 
+    def someMethod |someArg|
+
+    end
+
   end
   \`\`\`
 

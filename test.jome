@@ -1,6 +1,9 @@
 import {H1} from './lib/html.jome'
 
 //let add2Nb = do |nb1, nb2| return nb1 + nb2 end
+//def printCode |unused along source|
+//  #log(source)
+//end
 
 def printCode = |unused along source| => (
   #log(source)

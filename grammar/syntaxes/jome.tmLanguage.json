@@ -108,6 +108,7 @@
         { "include": "#interface" },
         { "include": "#keywords" },
         { "include": "#function_do_end" },
+        { "include": "#def" },
         { "include": "#paren-expression" },
         { "include": "#strings" },
         { "include": "#scripts" },
@@ -170,10 +171,6 @@
           "match": "\\b(let|var)\\b"
 			  },
         {
-          "name": "keyword.control.declaration.def.jome",
-          "match": "\\b(def)\\b"
-			  },
-        {
           "name": "keyword.control.main.jome",
           "match": "\\b(main)\\b"
 			  },
@@ -231,6 +228,45 @@
         }
       ]
 		},
+    "vbars-args": {
+      "patterns": [
+        {
+          "name": "meta.function.do.args.jome",
+          "begin": "(?:\\G)\\s*\\|",
+          "beginCaptures": {"0": {"name": "punctuation.vertical-bar.begin.jome"}},
+          "end": "\\|",
+          "endCaptures": {
+            "0": {"name": "punctuation.vertical-bar.end.jome"}
+          },
+          "patterns": [
+            {"include": "#variable-with-type"},
+            {"include": "#along"},
+            {"include": "#expression"},
+            {"include": "#interface-ref" }
+          ]
+        }
+      ]
+    },
+    "def": {
+      "patterns": [
+        {
+          "name": "meta.def.jome",
+          "begin": "\\b(def)\\s*(\\w+)?\\b",
+          "beginCaptures": {
+            "1": {"name": "keyword.control.jome"},
+            "2": {"name": "entity.name.function.jome"}
+          },
+          "end": "\\b(end)\\b",
+          "endCaptures": {
+            "0": {"name": "keyword.control.jome"}
+          },
+          "patterns": [
+            {"include": "#vbars-args"},
+            {"include": "#expression"}
+          ]
+        }
+      ]
+    },
     "function_do_end": {
       "patterns": [
         {
@@ -242,21 +278,7 @@
             "0": {"name": "keyword.control.jome"}
           },
           "patterns": [
-            {
-              "name": "meta.function.do.args.jome",
-              "begin": "(?:\\G)\\s*\\|",
-              "beginCaptures": {"0": {"name": "punctuation.vertical-bar.begin.jome"}},
-              "end": "\\|",
-              "endCaptures": {
-                "0": {"name": "punctuation.vertical-bar.end.jome"}
-              },
-              "patterns": [
-                {"include": "#variable-with-type"},
-                {"include": "#along"},
-                {"include": "#expression"},
-                {"include": "#interface-ref" }
-              ]
-            },
+            {"include": "#vbars-args"},
             {"include": "#expression"}
           ]
         }
