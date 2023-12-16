@@ -154,6 +154,7 @@ const regular = (compile) => ({
 
 const TOKENS = {
   'comment.block.jome': ignoreToken,
+  'keyword.control.jome': ignoreToken,
   'punctuation.definition.comment.jome': ignoreToken,
   'punctuation.paren.open': ignoreToken,
   'punctuation.paren.close': ignoreToken,
@@ -170,6 +171,9 @@ const TOKENS = {
   //     c => typeof c === 'string' ? c : '${'+compileJsBlock(c.children.slice(1,-1), ctx)+'}'
   //   ).join('')+'`'
   // },
+  "meta.function.do.end.jome": regular((node) => {
+    return `function () {${node.children.map(c => c.compile()).join('')}}`
+  }),
   'constant.language.jome': tokenAsIs,
   'expression.group': tokenAsIs,
   'variable.other.jome': tokenAsIs,
