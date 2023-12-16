@@ -88,7 +88,7 @@ describe("Test functions creation", () => {
     expect(compile('do #log("hello") end')).toMatch(/function \(\) {\s*console.log\("hello"\)\s*}/);
   })
   test('inline with do end with args', () => {
-    expect(compile('do |name| #log("hello", name) end')).toMatch(/function \(name\) {\s*console.log\("hello", name\)\s*}/);
+    expect(compile('do |x, name| #log("hello", name) end')).toMatch(/function \(x,\s*name\) {\s*console.log\("hello", name\)\s*}/);
   })
   test('inline with arrow function', () => {
     expect(compile('=> 5')).toMatch(/\(\) => 5/);

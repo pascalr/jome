@@ -152,7 +152,17 @@ const regular = (compile) => ({
   compile
 })
 
+function compileArgs(node) {
+  let children = node.children.slice(1, -1) // remove vertical bars
+  //let args = 
+  //let todo = 10
+  return `(${children.map(c => c.compile()).join('')})`
+}
+
 const TOKENS = {
+  'meta.function.do.args.jome': ignoreToken,
+  'punctuation.vertical-bar.begin.jome': ignoreToken,
+  'punctuation.vertical-bar.end.jome': ignoreToken,
   'comment.block.jome': ignoreToken,
   'keyword.control.jome': ignoreToken,
   'punctuation.definition.comment.jome': ignoreToken,
@@ -161,6 +171,7 @@ const TOKENS = {
   'punctuation.definition.string.begin.jome': ignoreToken,
   'punctuation.definition.string.end.jome': ignoreToken,
   'punctuation.terminator.statement.jome': tokenAsIs,
+  'punctuation.separator.delimiter.jome': tokenAsIs,
   "string.quoted.backtick.verbatim.jome": regular((node) => `\`${node.token.children[1]}\``),
   "string.quoted.double.verbatim.jome": regular((node) => `"${node.token.children[1]}"`),
   "string.quoted.single.jome": regular((node) => `'${node.token.children[1]}'`),
@@ -172,7 +183,8 @@ const TOKENS = {
   //   ).join('')+'`'
   // },
   "meta.function.do.end.jome": regular((node) => {
-    return `function () {${node.children.map(c => c.compile()).join('')}}`
+    let args = node.children.find(c => c.type === 'meta.function.do.args.jome')
+    return `function ${args ? compileArgs(args) : '()'} {${node.children.map(c => c.compile()).join('')}}`
   }),
   'constant.language.jome': tokenAsIs,
   'expression.group': tokenAsIs,
