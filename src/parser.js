@@ -135,17 +135,35 @@ const ignoreToken = {
   compile: () => ""
 }
 
+const regular = (compile) => ({
+  precedence: 100,
+  compile
+})
+
 const TOKENS = {
   'comment.block.jome': ignoreToken,
   'punctuation.definition.comment.jome': ignoreToken,
   'punctuation.paren.open': ignoreToken,
   'punctuation.paren.close': ignoreToken,
+  'punctuation.definition.string.begin.jome': ignoreToken,
+  'punctuation.definition.string.end.jome': ignoreToken,
   'punctuation.terminator.statement.jome': tokenAsIs,
+  "string.quoted.backtick.verbatim.jome": regular((node) => `\`${node.token.children[1]}\``),
+  "string.quoted.double.verbatim.jome": regular((node) => `"${node.token.children[1]}"`),
+  "string.quoted.single.jome": regular((node) => `'${node.token.children[1]}'`),
+  "string.quoted.double.jome": regular((node) => `"${node.token.children[1]}"`),
+  "string.quoted.backtick.jome": regular((node) => `\`${node.token.children[1]}\``),
+  // "string.quoted.backtick.jome": (node, ctx) => {
+  //   return '`'+node.children.slice(1,-1).map(c => c.type === 'newline' ? '\n' : c).map(
+  //     c => typeof c === 'string' ? c : '${'+compileJsBlock(c.children.slice(1,-1), ctx)+'}'
+  //   ).join('')+'`'
+  // },
   'constant.language.jome': tokenAsIs,
   'expression.group': tokenAsIs,
   'variable.other.jome': tokenAsIs,
   'variable.assignment.jome': tokenAsIs,
   'constant.numeric.integer.jome': tokenAsIs,
+  'constant.numeric.float.jome': tokenAsIs,
   // js uses more specifically:
   // keyword.operator.arithmetic.jome
   // keyword.operator.logical.jome
