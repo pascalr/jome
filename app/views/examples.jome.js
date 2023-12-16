@@ -143,9 +143,10 @@ renderMarkdown(`
 
   \`\`\`jome
   {
-    Recipe (
-      name: 'Chickpea balls'
-    )
+    Recipe
+      attr
+        name: 'Chickpea balls'
+        prepare: 1h
       Ing 1cup, "dry chickpeas"
       Ing 2cup, "water"
       Ing 2tbsp, "parmesan"

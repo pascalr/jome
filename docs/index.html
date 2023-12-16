@@ -131,10 +131,13 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
   <span class="hljs-title function_">#log</span>(<span class="hljs-string">`Hello {name}!`</span>)
 <span class="hljs-keyword">end</span>
 </code></pre>
+<p>As you can see, the keyword def is used instead of the keyword function. It is not exactly the same as a js function.
+TODO: I want the thing to be like a function, so available anywhere, but that uses the reference of this. Is it possible?
+Probably not. I am tired.</p>
   <h2 id="blocks">Blocks</h2>
 <p>Blocks are a key component of Jome. They use indentation to build objects in a short and subjectively pretty way.
 It is also the syntax required to build <a href="#nodes">nodes</a>.</p>
-<p>Blocks are surrounded by curly braces. The result of a block can be an object, a list, a node or a value.</p>
+<p>Blocks are surrounded by curly braces. The result of a block can be an object, a node or a value.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// objects</span>
 <span class="hljs-variable">position</span> = {x: <span class="hljs-number">10</span>, y: <span class="hljs-number">10</span>}
 <span class="hljs-variable">destination</span> = {
@@ -144,19 +147,6 @@ It is also the syntax required to build <a href="#nodes">nodes</a>.</p>
 <span class="hljs-variable">details</span> = {
   distanceX: <span class="hljs-number">30</span>, distanceY: <span class="hljs-number">40</span> <span class="hljs-comment">// comma is optional</span>
   totalDistance: <span class="hljs-number">50</span>, eta: <span class="hljs-variable">10min</span>
-}
-
-<span class="hljs-comment">// lists</span>
-<span class="hljs-variable">numbers</span> = {<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>} <span class="hljs-comment">// but [1,2,3,4] is preferred when on a single line</span>
-<span class="hljs-variable">names</span> = {
-  <span class="hljs-string">&quot;Jean&quot;</span>
-  <span class="hljs-string">&quot;Jacques&quot;</span>
-  <span class="hljs-string">&quot;Paul&quot;</span>
-}
-<span class="hljs-variable">matrix</span> = {
-  <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>
-  <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>
-  <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>
 }
 
 <span class="hljs-comment">// nodes</span>
@@ -181,12 +171,33 @@ It is also the syntax required to build <a href="#nodes">nodes</a>.</p>
 <span class="hljs-comment">// same as</span>
 <span class="hljs-variable">obj</span> = {content: <span class="hljs-variable">content</span>, value: <span class="hljs-variable">value</span>}
 </code></pre>
-<h3>Functions inside blocks</h3>
-<p>A variable name nested under a node is a function call.</p>
-<p>If you want to refer to the variable to add it as a children, you use the = sign at the beginning.</p>
+<h3>Keywords inside blocks</h3>
+<p>There are four keywords used inside blocks: init, attr, exe and parent.</p>
+<p>Every entry after the keyword init will be given to the constructor. This is the
+default right after the class name. Everything on the first line is also given to the constructor</p>
+<p>Every entry after the keyword attr is set on the object AFTER the initialize.</p>
+<p>By default, nested objects are children of the parent.</p>
+<p>You can use the keyword exe to enter execution mode, everything after will be executed.</p>
+<p>You can use the keyword parent to return to procreation mode.</p>
+<pre><code class="language-jome">{
+<span class="hljs-title class_">Recipe</span>
+  <span class="hljs-keyword">init</span> name: <span class="hljs-string">&#x27;Chickpea balls&#x27;</span>
+  <span class="hljs-keyword">attr</span> name: <span class="hljs-string">&#x27;Chickpea balls&#x27;</span>, prepare: <span class="hljs-variable">1h</span>
+  <span class="hljs-title class_">Ing</span> <span class="hljs-variable">1cup</span>, <span class="hljs-string">&quot;dry chickpeas&quot;</span>
+  <span class="hljs-title class_">Ing</span> <span class="hljs-variable">2cup</span>, <span class="hljs-string">&quot;water&quot;</span>
+  <span class="hljs-title class_">Ing</span> <span class="hljs-variable">2tbsp</span>, <span class="hljs-string">&quot;parmesan&quot;</span>
+  <span class="hljs-title class_">Step</span> <span class="hljs-string">`Put {@1} into {@2}...`</span> <span class="hljs-comment">// @1 is the first children</span>
+  <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Mix ...&quot;</span>
+  <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Blah blah ...&quot;</span>
+  <span class="hljs-keyword">exe</span>
+  <span class="hljs-variable">prepare</span> <span class="hljs-string">&#x27;The recipe&#x27;</span>
+  <span class="hljs-keyword">parent</span>
+  <span class="hljs-title class_">Ing</span> ...
+}
+</code></pre>
 <pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a get handler and start it</span>
 {
-  <span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span>
+  <span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-keyword">exe</span>
     <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span>, |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>| =&gt; (
       <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-variable">homePage</span>)
     )
@@ -195,13 +206,33 @@ It is also the syntax required to build <a href="#nodes">nodes</a>.</p>
 
 <span class="hljs-variable">obj</span> = {
   <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
-    =<span class="hljs-title function_">addChild</span>(<span class="hljs-string">&#x27;arg&#x27;</span>)
-    <span class="hljs-variable">executeFunction</span>
+    <span class="hljs-title function_">addChild</span>(<span class="hljs-string">&#x27;arg&#x27;</span>)
+    <span class="hljs-keyword">exe</span> <span class="hljs-variable">executeFunction</span>
 }
 </code></pre>
-<h3>List with single element</h3>
-<p>In a block, you can't have a list with a single element because it that case it returns the element directly.
-You have to use the square brackets syntax then.</p>
+<pre><code class="language-jome"><span class="hljs-comment">// Three syntaxes allowed to execute functions</span>
+{[
+  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
+    <span class="hljs-keyword">exe</span> <span class="hljs-variable">execFunc</span>
+    <span class="hljs-keyword">exe</span> <span class="hljs-variable">execFunc2</span>
+
+  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span> <span class="hljs-keyword">exe</span>
+    <span class="hljs-variable">execFunc</span>
+    <span class="hljs-variable">execFunc2</span>
+
+  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
+    <span class="hljs-keyword">exe</span>
+      <span class="hljs-variable">execFunc</span>
+      <span class="hljs-variable">execFunc2</span>
+]}
+</code></pre>
+<h3>Lists inside blocks</h3>
+<p>A block { } will return only one object. Use {[ ]} to generate a list of objects.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">listObjs</span> = {[
+  <span class="hljs-title class_">Obj</span> name: <span class="hljs-string">&#x27;foo&#x27;</span>
+  <span class="hljs-title class_">Obj</span> name: <span class="hljs-string">&#x27;bar&#x27;</span>
+]}
+</code></pre>
 <h3>At (@)</h3>
 <p>At is usually the same as the keyword this.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">_this</span> = @ <span class="hljs-comment">// same as this</span>
@@ -211,21 +242,14 @@ You have to use the square brackets syntax then.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">firstChild</span> = <span class="hljs-variable">@1</span> <span class="hljs-comment">// Child index starts at 1</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">secondChild</span> = <span class="hljs-variable">@2</span>
 </code></pre>
-<h2>Arrays</h2>
-<p>I'd like to be able to generate arrays using commas. The comma is an operator that join objects to create list?</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">names</span> = <span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-string">&quot;Jack&quot;</span>, <span class="hljs-string">&quot;Jasper&quot;</span>
-</code></pre>
   <h2 id="nodes">Nodes</h2>
 <p>Nodes are objects in a tree structure. They can have a parent and they can have children.</p>
 <p>You create nodes by using blocks.</p>
 <pre><code class="language-jome"><span class="hljs-variable">node</span> = {
-  <span class="hljs-title class_">Obj</span> (
-    prop: <span class="hljs-string">&#x27;val&#x27;</span>,
-    prop2: <span class="hljs-string">&#x27;val2&#x27;</span>
-  )
-    <span class="hljs-variable">@attr</span> = <span class="hljs-string">&#x27;val3&#x27;</span>
-    <span class="hljs-variable">@attr2</span> = <span class="hljs-string">&#x27;val4&#x27;</span>
-    child: <span class="hljs-string">&#x27;val5&#x27;</span>
+  <span class="hljs-title class_">Obj</span>
+    <span class="hljs-keyword">init</span> prop1: <span class="hljs-string">&#x27;val&#x27;</span>, prop2: <span class="hljs-string">&#x27;val2&#x27;</span>
+    <span class="hljs-keyword">attr</span> attr1: <span class="hljs-string">&#x27;val3&#x27;</span>, attr2: <span class="hljs-string">&#x27;val4&#x27;</span>
+    child1: <span class="hljs-string">&#x27;val5&#x27;</span>
     child2: <span class="hljs-string">&#x27;val6&#x27;</span>
 }
 </code></pre>
@@ -508,7 +532,7 @@ end</p>
 <p>Class having state:</p>
 <pre><code class="language-jome"><span class="hljs-comment">// No question mark having state</span>
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">App</span> |%<span class="hljs-variable">theme</span>| {
-  init: () =&gt; {
+  <span class="hljs-keyword">init</span>: () =&gt; {
     %<span class="hljs-variable">theme</span> = {
       textColor: <span class="hljs-string">&quot;red&quot;</span>
     }
@@ -860,6 +884,19 @@ Page
 </code></pre>
 <p>The advantage is that there is never confusion. You never have an error that tells you you have to add parentheses. For example, in javascript:</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> <span class="hljs-title function_">someFunction</span> = (<span class="hljs-params"></span>) =&gt; ({<span class="hljs-attr">x</span>: <span class="hljs-number">10</span>}) <span class="hljs-comment">// you often have to add extra parentheses around objects in js</span>
+</code></pre>
+<pre><code class="language-jome"><span class="hljs-comment">// lists</span>
+<span class="hljs-variable">numbers</span> = {<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>} <span class="hljs-comment">// but [1,2,3,4] is preferred when on a single line</span>
+<span class="hljs-variable">names</span> = {
+  <span class="hljs-string">&quot;Jean&quot;</span>
+  <span class="hljs-string">&quot;Jacques&quot;</span>
+  <span class="hljs-string">&quot;Paul&quot;</span>
+}
+<span class="hljs-variable">matrix</span> = {
+  <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>
+  <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>
+  <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>
+}
 </code></pre>
 <h2>Features</h2>
 <p>Main ideas:</p>

@@ -100,12 +100,16 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   end
   \`\`\`
 
+  As you can see, the keyword def is used instead of the keyword function. It is not exactly the same as a js function.
+  TODO: I want the thing to be like a function, so available anywhere, but that uses the reference of this. Is it possible?
+  Probably not. I am tired.
+
   <h2 id="blocks">Blocks</h2>
 
   Blocks are a key component of Jome. They use indentation to build objects in a short and subjectively pretty way.
   It is also the syntax required to build [nodes](#nodes).
 
-  Blocks are surrounded by curly braces. The result of a block can be an object, a list, a node or a value.
+  Blocks are surrounded by curly braces. The result of a block can be an object, a node or a value.
 
   \`\`\`jome
   // objects
@@ -117,19 +121,6 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   details = {
     distanceX: 30, distanceY: 40 // comma is optional
     totalDistance: 50, eta: 10min
-  }
-
-  // lists
-  numbers = {1,2,3,4} // but [1,2,3,4] is preferred when on a single line
-  names = {
-    "Jean"
-    "Jacques"
-    "Paul"
-  }
-  matrix = {
-    1, 0, 0
-    0, 1, 0
-    0, 0, 1
   }
 
   // nodes
@@ -158,16 +149,43 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   obj = {content: content, value: value}
   \`\`\`
 
-  ### Functions inside blocks
+  ### Keywords inside blocks
 
-  A variable name nested under a node is a function call.
+  There are four keywords used inside blocks: init, attr, exe and parent.
 
-  If you want to refer to the variable to add it as a children, you use the = sign at the beginning.
+  Every entry after the keyword init will be given to the constructor. This is the
+  default right after the class name. Everything on the first line is also given to the constructor
+
+  Every entry after the keyword attr is set on the object AFTER the initialize.
+
+  By default, nested objects are children of the parent.
+
+  You can use the keyword exe to enter execution mode, everything after will be executed.
+
+  You can use the keyword parent to return to procreation mode.
+
+  \`\`\`jome
+  {
+  Recipe
+    init name: 'Chickpea balls'
+    attr name: 'Chickpea balls', prepare: 1h
+    Ing 1cup, "dry chickpeas"
+    Ing 2cup, "water"
+    Ing 2tbsp, "parmesan"
+    Step \`Put {@1} into {@2}...\` // @1 is the first children
+    Step "Mix ..."
+    Step "Blah blah ..."
+    exe
+    prepare 'The recipe'
+    parent
+    Ing ...
+  }
+  \`\`\`
 
   \`\`\`jome
   // Create a server, add a get handler and start it
   {
-    ExpressServer port: 3000
+    ExpressServer port: 3000 exe
       get '/', |req, res| => (
         res.send(homePage)
       )
@@ -176,15 +194,39 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   obj = {
     Obj prop: 'val'
-      =addChild('arg')
-      executeFunction
+      addChild('arg')
+      exe executeFunction
   }
   \`\`\`
 
-  ### List with single element
+  \`\`\`jome
+  // Three syntaxes allowed to execute functions
+  {[
+    Obj prop: 'val'
+      exe execFunc
+      exe execFunc2
 
-  In a block, you can't have a list with a single element because it that case it returns the element directly.
-  You have to use the square brackets syntax then.
+    Obj prop: 'val' exe
+      execFunc
+      execFunc2
+
+    Obj prop: 'val'
+      exe
+        execFunc
+        execFunc2
+  ]}
+  \`\`\`
+
+  ### Lists inside blocks
+
+  A block { } will return only one object. Use {[ ]} to generate a list of objects.
+
+  \`\`\`jome
+  let listObjs = {[
+    Obj name: 'foo'
+    Obj name: 'bar'
+  ]}
+  \`\`\`
 
   ### At (@)
 
@@ -201,14 +243,6 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   let secondChild = @2
   \`\`\`
 
-  ## Arrays
-
-  I'd like to be able to generate arrays using commas. The comma is an operator that join objects to create list?
-
-  \`\`\`jome
-  let names = "John", "Jack", "Jasper"
-  \`\`\`
-
   <h2 id="nodes">Nodes</h2>
 
   Nodes are objects in a tree structure. They can have a parent and they can have children.
@@ -217,13 +251,10 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   \`\`\`jome
   node = {
-    Obj (
-      prop: 'val',
-      prop2: 'val2'
-    )
-      @attr = 'val3'
-      @attr2 = 'val4'
-      child: 'val5'
+    Obj
+      init prop1: 'val', prop2: 'val2'
+      attr attr1: 'val3', attr2: 'val4'
+      child1: 'val5'
       child2: 'val6'
   }
   \`\`\`
@@ -1114,6 +1145,21 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   \`\`\`js
   let someFunction = () => ({x: 10}) // you often have to add extra parentheses around objects in js
+  \`\`\`
+
+  \`\`\`jome
+  // lists
+  numbers = {1,2,3,4} // but [1,2,3,4] is preferred when on a single line
+  names = {
+    "Jean"
+    "Jacques"
+    "Paul"
+  }
+  matrix = {
+    1, 0, 0
+    0, 1, 0
+    0, 0, 1
+  }
   \`\`\`
 
   ## Features
