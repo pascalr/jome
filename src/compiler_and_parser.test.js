@@ -104,7 +104,7 @@ describe("Test if statements", () => {
   })
   // An if modifier executes everything to it's left only if the condition is true
   test('if modifier', () => {
-    expect(compile('let x; x = "10" if true')).toMatch(/let x; if true \{x = "10"\}/);
+    expect(compile('let x; x = "10" if true')).toMatch(/let x;\s*if \(?true\)? \{x = "10"\}/);
   })
 })
 

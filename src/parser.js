@@ -123,7 +123,7 @@ function validateOperator(node) {
 }
 
 function compileOperator(node) {
-  return `${node.children[0].compile()} ${node.raw} ${node.children[1].compile()}`
+  return `${node.children[0].compile()} ${node.raw} ${node.children[1].compile()}`
 }
 
 function compileRaw(node) {
@@ -220,6 +220,22 @@ const TOKENS = {
     validate: validateOperator,
     compile: compileOperator,
   },
+  // statement if cond
+  'keyword.control.inline-conditional.jome': {
+    precedence: 200,
+    captureLeft: true,
+    captureRight: true,
+    validate: (node) => {
+      if (node.children.length !== 2) {
+        return "An inline condition must have a two operands"
+      // } else if (!OPERAND_TYPES.includes(node.children[1].type)) {
+      //   return `Invalid value for assignement ${node.type}. Was: ${node.type}`
+      }
+    },
+    compile: (node) => {
+      return `if (${node.children[1].compile()}) {${node.children[0].compile()}}`
+    },
+  },
   // =
   'keyword.operator.assignment.jome': {
     precedence: 2000,
@@ -228,10 +244,10 @@ const TOKENS = {
     validate: (node) => {
       if (node.children.length !== 2) {
         return "An assignment must have a two operands"
-      } else if (!['keyword.control.declaration.jome'].includes(node.children[0].type)) {
-        return `Invalid left hand side for assignement ${node.type}. Was: ${node.type}`
-      } else if (!OPERAND_TYPES.includes(node.children[1].type)) {
-        return `Invalid value for assignement ${node.type}. Was: ${node.type}`
+      // } else if (!['keyword.control.declaration.jome'].includes(node.children[0].type)) {
+      //   return `Invalid left hand side for assignement ${node.type}. Was: ${node.type}`
+      // } else if (!OPERAND_TYPES.includes(node.children[1].type)) {
+      //   return `Invalid value for assignement ${node.type}. Was: ${node.type}`
       }
     },
     compile: compileOperator,

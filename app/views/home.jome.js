@@ -485,6 +485,22 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   TODO: Explain how it works
 
+  ## Classes 2.0
+
+  Work in progress.
+
+  L'idée est d'utiliser end.
+
+  \`\`\`jome
+  class SomeClass
+
+    super AbstractClass
+
+    attr someAttr = "defaultValue"
+
+  end
+  \`\`\`
+
   ## Classes
 
   ### Inheritence

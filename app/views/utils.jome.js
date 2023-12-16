@@ -7,6 +7,9 @@ const renderMarkdown = require("jome/lib/render_markdown");
 var content = renderMarkdown(`
   ## Utils
 
+  Je veux que this fasse toujours référence à un this normal comme dans un autre language.
+  Utiliser #evt pour avoir accès au this dans un évènement. Cacher cette merde de javascript au user.
+
   TODO: #uuid, avec un enum obligatoire, par example #uuid(FAST), ou #uuid(SECURE)
   Utiliser quel #uuid par défaut? Idéalement, un paramètre obligatoire. Ce que j'aimerais, tu fais
   #uuid( et là l'autocomplete te demande tu veux utiliser quel enum.
