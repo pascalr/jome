@@ -254,7 +254,7 @@ const TOKENS = {
   },
   // =
   'keyword.operator.assignment.jome': {
-    precedence: 2000,
+    precedence: 250,
     captureLeft: true,
     captureRight: true,
     validate: (node) => {
