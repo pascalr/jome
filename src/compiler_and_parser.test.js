@@ -80,6 +80,8 @@ describe("Test functions creation", () => {
   // test('let keyword with arrow function', () => {
   //   expect(compile('let giveMe5 = => 5')).toMatch(/let giveMe5 = \(\) => \(?5\)?/);
   // })
+  // let giveMe5 = _=> 5
+  // let giveMe5 ==> 5
   test('let keyword with arrow function with args', () => {
     expect(compile('let echo = |x| => x')).toMatch(/let echo = \(x\) => \(?x\)?/);
   })

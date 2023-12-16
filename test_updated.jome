@@ -1,0 +1,325 @@
+import {H1} from './lib/html.jome'
+
+let add2Nb = do |nb1, nb2| return nb1 + nb2 end
+def printCode |unused along source|
+  #log(source)
+end
+if true #log("hello") end
+
+let printCode = |unused along source| => (
+  #log(source)
+)
+printCode(1+1) // should print "1+1"
+
+let strWithType: string = 'someStr'
+
+def funcWithType |someArg: string|
+
+end
+
+class SomeNode |someParam?, @tenMore?, @someText?| => {
+
+}
+// Based on the complexity, Jome could make tenMore variable a function that depends on the state instead of making the whole object.
+// But that's a premature optimization I am not there yet.
+var node = {
+  SomeNode %stateVar: 20
+    child: SomeNode
+      child: SomeNode tenMore: (%stateVar+10)
+}
+node.#update({stateVar: 35})
+
+// var counter = {
+//   SomeNode %count: 0, ~click: => (%count += 1)
+//     text: SomeNode someText: `Clicked {%count} {%count == 1 ? 'time' : 'times'}`
+//     // someString: `Clicked {%count} {%count == 1 ? 'time' : 'times'}` // Ca serait nice de pouvoir faire ça directement aussi. Je sais pas.
+// }
+// counter.click()
+
+var testH1 = { H1 "Un titre" }
+
+// Testing imports, all these should be parsed properly:
+// import defaultExport from "module-name";
+// import * as name from "module-name";
+// import { export1 } from "module-name";
+// import { export1 as alias1 } from "module-name";
+// import { default as alias } from "module-name";
+// import { export1, export2 } from "module-name";
+// import { export1, export2 as alias2, /* … */ } from "module-name";
+// import { "string name" as alias } from "module-name";
+// import defaultExport, { export1, /* … */ } from "module-name";
+// import defaultExport, * as name from "module-name";
+// // import "module-name"; TODO: Not written yet in the parser
+
+interface TestInterface |
+  arg,
+  param?
+|
+let testInterface = &TestInterface => (arg + param)
+
+// TODO: Test Use <HTML> to add an html tag inside <html><HTML></HTML></html>
+
+class ParentClass {
+  getTen: => 10
+}
+class ChildClass {
+  super: ParentClass
+}
+
+class TestFuncCall {
+  getFive: => 5
+}
+testFuncCall = {
+  TestFuncCall
+    getFive
+}
+testChainFuncCall = {
+  TestFuncCall
+    getFive
+    getFive
+}
+
+class ClassForTesting |arg, @attr?, prop?| => {
+  getArg: => arg
+  getProp: => prop
+}
+testObj = {ClassForTesting "arg", attr: "attr", prop: "propVal"}
+testObjList = {
+  ClassForTesting "arg1", attr: "attr1", prop: "propVal1"
+  ClassForTesting "arg2", attr: "attr2", prop: "propVal2"
+  ClassForTesting "arg3", attr: "attr3", prop: "propVal3"
+}
+testObjNested = {
+  key1: ClassForTesting "arg1", attr: "attr1", prop: "propVal1"
+  key2: ClassForTesting "arg2", attr: "attr2", prop: "propVal2"
+  key3: ClassForTesting "arg3", attr: "attr3", prop: "propVal3"
+}
+
+// new ClassForTesting(prop: 'Hello')
+console.log({ ClassForTesting prop: 'Hello' }.#props)
+
+<sh>echo "Starting tests!"</sh>
+
+console.log('There')
+
+var person = "John"
+let woman = 'Jane'
+
+def f = -> (
+  var x = 10
+  x = x + 20
+  x    
+)
+
+classe SomeClassShorter |@name| => {
+  getName: => @name
+}
+
+class SomeClass {
+  constructor: => (
+    @name = 10
+  )
+  getName: => @name
+}
+
+class TestSyntaxe1
+// class TestSyntaxe2 |text| => « TestSyntaxe1 "h1", text »
+// class TestSyntaxe3 « TestSyntaxe1 "h1" » {
+//   //constructor: => ()
+//   //someFunc: => ()
+// }
+// class TestSyntaxe4 |constructorArg| => {}
+// class TestSyntaxe5 |@name| => {}
+/*
+  constructor(name) {
+    this.name = name
+  }
+*/
+/*
+class TestSyntaxe2 extends TestSyntaxe1 {
+  constructor(text) {
+    super("h1", text)
+  }
+}
+*/
+
+class TestEq {
+  constructor: |actual, expected, message| => (
+    if (Array.isArray(expected) || typeof expected === 'object') (
+      @pass = JSON.stringify(actual) === JSON.stringify(expected);
+    ) else (
+      @pass = actual == expected
+    )
+    if (@pass) (
+      console.log("\x1b[32mRÉUSSI\x1b[0m", message || expected)
+    ) else (
+      console.log("\x1b[31mÉCHEC:\x1b[0m", message, "\nExpected:", expected, "\nActually:", actual);
+    )
+  )
+}
+
+titre = |texte| => (
+  console.log('%c' + texte, 'color: yellow')
+);
+
+// FIXME: THIS IS NOT WORKING YET BECAUSE OF THE H1 CLASS!!!
+// export class H1 text => { super: Tag "h1", text }
+// Le problème est que présentement je crée un constructeur sans paramètres...
+// TODO: Générer une erreur quand on fournit des paramètres à une fonction qui ne prend pas de paramètres
+// Ça ne marche pas parce que ça ne génère par un premier paramètre qui s'appelle params
+var obj = { H1 "Un titre", css: {color: 'red'} };
+var props = obj.#props
+var obj2 = { H1 "Un titre 2", title: 'This is a tooltip' };
+var str2 = obj.toString();
+
+{
+  titre 'Test avec objects html'
+  TestEq { H1 "Un titre" }.toString(), "<h1>Un titre</h1>", "«H1 \"Un titre\"».toString()"
+  TestEq obj.toString(), "<h1 style=\"color: red\">Un titre</h1>", "« H1 \"Un titre\", css: {color: 'red'} ».toString()"
+  TestEq obj2.toString(), "<h1 title=\"This is a tooltip\">Un titre 2</h1>", "« H1 \"Un titre\", title: 'This is a tooltip' ».toString()"
+
+  // TODO: TestEq [1,2,3][0..1], [1,2], "Test range inclusif"
+  // TODO: TestEq [1,2,3][0...2], [1,2], "Test range exclusif"
+  // 0..1 => $$.range(0, 1)
+
+  // TODO: Supporter cela, mais seulement quand le chiffre est direct. Ne pas supporter quand c'est une variable négative.
+  // Comme ça pas besoin de toujours regarder si c'est négatif.
+  TestEq [1,2,3][-1], 3, "Un index négatif devrait prendre l'élément en partant de la fin. -1 devrait être le dernier élément."
+  TestEq [1,2,3][-2], 2, "Un index négatif devrait prendre l'élément en partant de la fin. -2 devrait être avant dernier élément."
+
+  titre 'Vérification des opérations'
+
+  TestEq (1+1), <js>1+1</js>, "1+1"
+  TestEq (2*2), <js>2*2</js>, "2 * 2"
+  TestEq (4/2), <js>4/2</js>, "4 / 2"
+  TestEq (5-2), <js>5-2</js>, "5 - 2"
+  TestEq (2^2), <js>2 ** 2</js>, "2 ^ 2"
+
+  // Vérification des opérations multiples
+  TestEq (1+1+1), <js>1+1+1</js>, "1 + 1 + 1"
+  TestEq (2*2*2), <js>2*2*2</js>, "2 * 2 * 2"
+  TestEq (8/2/2), <js>8/2/2</js>, "8 / 2 / 2"
+  TestEq (5 - 2 - 1), <js>5-2-1</js>, "5 - 2 - 1"
+  TestEq (2^2^2), <js>2**2**2</js>, "2 ** 2 ** 2"
+  TestEq (2^1^2^1), <js>2**1**2**1</js>, "2 ** 1 ** 2 ** 1" // I don't know why right to left, why not 4? (left to right)
+
+  // Vérification des opérateurs logique
+  TestEq (1||2), <js>1||2</js>, "1 || 2"
+  TestEq (0||2), <js>0||2</js>, "0 || 2"
+  TestEq (1&&2), <js>1&&2</js>, "1 && 2"
+  TestEq (0&&2), <js>0&&2</js>, "0 && 2"
+  TestEq (0||0||3), <js>0||0||3</js>, "0 || 0 || 3"
+  TestEq (1&&2&&3), <js>1&&2&&3</js>, "1 && 2 && 3"
+  TestEq (1&&0&&3), <js>1&&0&&3</js>, "1 && 0 && 3"
+
+  // Vérification de la séquence d'opérations
+  TestEq (1+2*10), <js>1+2*10</js>, "1 + 2 * 10"
+  TestEq (1 + 2 * 10 + 3 ^ 2), <js>1 + 2 * 10 + 3 ** 2</js>, "1 + 2 * 10 + 3 ** 2"
+  TestEq ((1+2)*10), <js>(1+2)*10</js>, "(1 + 2) * 10"
+  TestEq (2*2*2+1), <js>2*2*2+1</js>, "2 * 2 * 2 + 1"
+  TestEq (1+2*2*2), <js>1+2*2*2</js>, "1 + 2 * 2 * 2"
+  TestEq (2*2+1+2*2), <js>2*2+1+2*2</js>, "2 * 2 + 1 + 2 * 2"
+  TestEq (2*2*2+1+2*2*2), <js>2*2*2+1+2*2*2</js>, "2 * 2 * 2 + 1 + 2 * 2 * 2"
+
+  titre 'Vérification des conditions'
+
+  TestEq true, <js>true</js>, "true"
+  TestEq false, <js>false</js>, "false"
+  // TestEq (if true 10), <js>10</js>, "faux"
+  // TestEq (if 1 10), <js>10</js>, "faux"
+  // TestEq (if false 10), <js>null</js>, "faux"
+  // TestEq (if 1 10 else 20), <js>10</js>, "faux"
+  // TestEq (if 0 10 else 20), <js>20</js>, "faux"
+  // TestEq (if 0 10 elsif 1 30), <js>30</js>, "faux"
+  // TestEq (if 0 10 elsif 0 30), <js>null</js>, "faux"
+  // TestEq (if 0 10 elsif 0 30 else 20), <js>20</js>, "faux"
+
+  titre 'Vérification des fonctions'
+
+  // TestEq ((=> (
+  //   x = 10
+  //   x = x + 20
+  //   x    
+  // ))()), 30, "Testing multiple lines inside a function"
+}
+
+addXs = |x1!, x2!| -> (x1 + x2)
+addAXs = |arg0, x1!, x2!| -> (arg0 + x1 + x2);
+{
+  titre 'Test paramètres de fonctions'
+
+  TestEq addXs(x1: 10, x2: 20), 30, "addXs(x1: 10, x2: 20)"
+  TestEq addAXs(5, x1: 10, x2: 20), 35, "addAXs(5, x1: 10, x2: 20)"
+
+  titre 'Test des unités'
+  TestEq 10.2km/h, 10.2, "10.2km/h"
+  TestEq 0.5W * 2h, 1, "0.5W * 2h"
+//   TestEq 1kW·h, <js>new Quantity(1, 'kW·h')</js>, "1kW·h"
+//   TestEq 1km/h, <js>new Quantity(1, 'km/h')</js>, "1km/h"
+//   TestEq 1km^2, <js>new Quantity(1, 'km²')</js>, "1km^2"
+//   TestEq 1km², <js>new Quantity(1, 'km²')</js>, "1km²"
+}
+
+// Container = «
+//   $container
+//     $subcontainer
+//       tutor
+// »
+
+// $testContainer <<
+//   Container
+//     $subsubcontainer
+// >>
+
+// $tests <<
+//   Titre 'Test tutor'
+//   TestEq $testContainer/container->children.length, 1, "$testContainer/container->children.length"
+//   TestEq $testContainer/container/subcontainer->children.length, 1, "$testContainer/container/subcontainer->children.length"
+// >>
+
+ten = 10;
+{
+  titre 'Test des blocks'
+  TestEq {x: 10}, <js>{x: 10}</js>, "{x: 10}"
+  TestEq {x: 10, :ten}, <js>{x: 10, ten: 10}</js>, "{x: 10, :ten}"
+  TestEq {:ten, x: 10}, <js>{ten: 10, x: 10}</js>, "{x: 10, :ten}"
+  TestEq {1, 2, 3}, <js>[1,2,3]</js>, "{1,2,3}"
+  // TestEq {
+  //   SomeObj 'SomeVal', prop: 'val'
+  //   someFunc('SomeVal')
+  //   someVar
+  // }, <js>[1,2,3]</js>, "{1,2,3}"
+  TestEq {
+    1, 2, 3
+    4, 5, 6
+    7, 8, 9
+  }, <js>[[1,2,3],[4,5,6],[7,8,9]]</js>, "Matrice 1 à 9"
+  TestEq testObj.getArg(), "arg", "class arg"
+  TestEq testObj.attr, "attr", "class attr"
+  TestEq testObj.getProp(), "propVal", "class prop"
+
+  TestEq testObjList[1].getArg(), "arg2", "class arg 2"
+  TestEq testObjList[1].attr, "attr2", "class attr 2"
+  TestEq testObjList[1].getProp(), "propVal2", "class prop 2"
+
+  TestEq testObjNested.key2.getArg(), "arg2", "class arg 2"
+  TestEq testObjNested.key2.attr, "attr2", "class attr 2"
+  TestEq testObjNested.key2.getProp(), "propVal2", "class prop 2"
+
+  TestEq {ChildClass}.getTen(), 10, "testing inheritence"
+
+  TestEq testFuncCall, 5, "testFuncCall"
+  TestEq testChainFuncCall, 5, "testChainFuncCall"
+
+  titre 'Test des interfaces'
+  TestEq testInterface(10, param: 20), 30, "testInterface(10, param: 20)"
+
+  titre 'Test des constantes Jome'
+  TestEq #PI, <js>Math.PI</js>, "#PI"
+
+  titre 'Test des states variables'
+  TestEq node.child.child.tenMore, 45, "node.child.tenMore"
+
+  // TestEq counter.count, 1, "counter.count"
+  // TestEq counter.text.someText, "Clicked 1 time", "counter.text.someText"
+}
