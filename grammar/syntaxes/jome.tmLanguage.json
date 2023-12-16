@@ -107,6 +107,7 @@
         { "include": "#comment" },
         { "include": "#interface" },
         { "include": "#keywords" },
+        { "include": "#function_do_end" },
         { "include": "#paren-expression" },
         { "include": "#strings" },
         { "include": "#scripts" },
@@ -230,6 +231,37 @@
         }
       ]
 		},
+    "function_do_end": {
+      "patterns": [
+        {
+          "name": "meta.function.do.end.jome",
+          "begin": "\\b(do)\\b",
+          "beginCaptures": {"0": {"name": "keyword.control.jome"}},
+          "end": "\\b(end)\\b",
+          "endCaptures": {
+            "0": {"name": "keyword.control.jome"}
+          },
+          "patterns": [
+            {
+              "name": "meta.function.do.args.jome",
+              "begin": "(?:\\G)\\s*\\|",
+              "beginCaptures": {"0": {"name": "punctuation.vertical-bar.begin.jome"}},
+              "end": "\\|",
+              "endCaptures": {
+                "0": {"name": "punctuation.vertical-bar.end.jome"}
+              },
+              "patterns": [
+                {"include": "#variable-with-type"},
+                {"include": "#along"},
+                {"include": "#expression"},
+                {"include": "#interface-ref" }
+              ]
+            },
+            {"include": "#expression"}
+          ]
+        }
+      ]
+    },
     "function": {
       "patterns": [
         {
