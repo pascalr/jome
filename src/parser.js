@@ -20,7 +20,8 @@ class ASTNode {
     if (!data) {
       throw new Error("TODO: token not implemented yet: "+token.type)  
     }
-    this.precedence = (typeof data.precedence === 'function') ? data.precedence(token) : data.precedence
+    let prec = PRECEDENCES[this.type]
+    this.precedence = (typeof prec === 'function') ? prec(token) : (prec || 0)
     this.captureLeft = data.captureLeft
     this.captureRight = data.captureRight
     this.minRequiredChildren = data.minRequiredChildren
@@ -138,17 +139,14 @@ function compileUtility(node) {
 }
 
 const tokenAsIs = {
-  precedence: 100,
   compile: compileRaw
 }
 
 const ignoreToken = {
-  precedence: 100,
   compile: () => ""
 }
 
 const regular = (compile) => ({
-  precedence: 100,
   compile
 })
 
@@ -157,6 +155,30 @@ function compileArgs(node) {
   //let args = 
   //let todo = 10
   return `(${children.map(c => c.compile()).join('')})`
+}
+
+const PRECEDENCES = {
+  // Capture the variable name. FIXME: I think I want to change this.
+  // Do meta.declaration.jome, which inclues the keyword and the entity name.
+  'keyword.control.declaration.jome': 5000,
+  'keyword.operator.jome': (token => {
+    let op = token.text()
+    if (op === '+' || op === '-') {
+      return 1000
+    } else if (op === '*' || op === '/') {
+      return 1100
+    } else if (op === '^') {
+      return 1200
+    }
+  }),
+  // arithmetic operators are higher than comparison: x + 10 < y - 20
+  'keyword.operator.comparison.jome': 500,
+  // Comparison is higher than arrow function: isEqual = |x, y| => x == y
+  'keyword.arrow.jome': 300,
+  // Arrow function is higher than assignment: add5 = |x| => x + 5
+  'keyword.operator.assignment.jome': 250,
+  // Assignment is higher than inline conditional: x = 10 if true
+  'keyword.control.inline-conditional.jome': 200,
 }
 
 const TOKENS = {
@@ -202,16 +224,6 @@ const TOKENS = {
   // keyword.operator.logical.jome
   // + - * / ^
   'keyword.operator.jome': {
-    precedence: (token => {
-      let op = token.text()
-      if (op === '+' || op === '-') {
-        return 1000
-      } else if (op === '*' || op === '/') {
-        return 1100
-      } else if (op === '^') {
-        return 1200
-      }
-    }),
     validate: validateOperator,
     compile: compileOperator,
     captureLeft: true,
@@ -219,7 +231,6 @@ const TOKENS = {
   },
   // =>
   'keyword.arrow.jome': {
-    precedence: 300,
     captureLeft: true,
     captureRight: true,
     // validate: TODO validate that left arg is an arg
@@ -230,7 +241,6 @@ const TOKENS = {
   },
   // ==, !=, ===, !===
   'keyword.operator.comparison.jome': {
-    precedence: 500,
     captureLeft: true,
     captureRight: true,
     validate: validateOperator,
@@ -238,7 +248,6 @@ const TOKENS = {
   },
   // statement if cond
   'keyword.control.inline-conditional.jome': {
-    precedence: 200,
     captureLeft: true,
     captureRight: true,
     validate: (node) => {
@@ -254,7 +263,6 @@ const TOKENS = {
   },
   // =
   'keyword.operator.assignment.jome': {
-    precedence: 250,
     captureLeft: true,
     captureRight: true,
     validate: (node) => {
@@ -283,7 +291,6 @@ const TOKENS = {
   // },
   // let
   'keyword.control.declaration.jome': {
-    precedence: 5000,
     captureRight: true,
     compile(node) {
       return `let ${node.children[0].raw}`
@@ -293,14 +300,14 @@ const TOKENS = {
     //   'variable.assigment.jome'
     // ]
   },
-  // def
-  'keyword.control.declaration.def.jome': {
-    precedence: 5000,
-    captureRight: 2,
-    compile(node) {
-      return `let ${node.children[0].raw} = ${node.children[1].compile()}`
-    }
-  },
+  // // def
+  // 'keyword.control.declaration.def.jome': {
+  //   precedence: 5000,
+  //   captureRight: 2,
+  //   compile(node) {
+  //     return `let ${node.children[0].raw} = ${node.children[1].compile()}`
+  //   }
+  // },
   // #log
   'entity.name.function.utility.jome': {
      ...tokenAsIs,
