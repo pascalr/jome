@@ -11,7 +11,7 @@ function compileTokenRaw(token) {
 }
 
 function compileNode(node) {
-  if (!node.compileFunc) {
+  if (!node.compile) {
     throw new Error("Can't compile node of type "+node.type)
   }
   if (node.validate) {
@@ -20,7 +20,7 @@ function compileNode(node) {
       throw new Error(err)
     }
   }
-  return node.compileFunc(node)
+  return node.compile(node)
 }
 
 // An abstract syntax tree (AST) node
@@ -41,18 +41,8 @@ class ASTNode {
       this.captureRight = data.captureRight
       this.minRequiredChildren = data.minRequiredChildren
       this.allowedChildren = data.allowedChildren
-      this.compileFunc = data.compile
+      this.compile = data.compile
       this.validate = data.validate
-      // TODO: Remove this. Use compileNode instead
-      this.compile = data.compile ? () => {
-        if (data.validate) {
-          let err = data.validate(this)
-          if (err) {
-            throw new Error(err)
-          }
-        }
-        return data.compile(this)
-      } : null
     }
   }
 }
@@ -326,7 +316,7 @@ function compilePP(nodes) {
     if (!compFunc) {
       throw new Error("Error cannot compile node no function available to compile: "+node.type)
     }
-    return compFunc()
+    return compFunc(node)
   }).join('')
 }
 
