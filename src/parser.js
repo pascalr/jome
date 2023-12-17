@@ -185,16 +185,8 @@ const PRECEDENCES = {
 
 const TOKENS = {
   'meta.args.jome': ignoreToken,
-  'punctuation.vertical-bar.begin.jome': ignoreToken,
-  'punctuation.vertical-bar.end.jome': ignoreToken,
   'comment.block.jome': ignoreToken,
   'keyword.control.jome': ignoreToken,
-  'keyword.control.conditional.jome': ignoreToken,
-  'punctuation.definition.comment.jome': ignoreToken,
-  'punctuation.paren.open': ignoreToken,
-  'punctuation.paren.close': ignoreToken,
-  'punctuation.definition.string.begin.jome': ignoreToken,
-  'punctuation.definition.string.end.jome': ignoreToken,
   'punctuation.terminator.statement.jome': tokenAsIs,
   'punctuation.separator.delimiter.jome': tokenAsIs,
   "string.quoted.backtick.verbatim.jome": regular((node) => `\`${node.token.children[1]}\``),
