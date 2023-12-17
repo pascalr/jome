@@ -279,7 +279,7 @@
       "patterns": [
         {
           "name": "meta.class.jome",
-          "begin": "\\b(class)\\b(\\s+([a-zA-Z_]\\w*))?",
+          "begin": "\\b(class)\\b\\s*([a-zA-Z_]\\w*)?",
           "beginCaptures": {
             "1": {"name": "keyword.control.jome"},
             "2": {"name": "entity.name.type.class.jome"}
@@ -296,7 +296,7 @@
       "patterns": [
         {
           "name": "meta.interface.jome",
-          "begin": "\\b(interface)\\b(\\s+([a-zA-Z_]\\w*))",
+          "begin": "\\b(interface)\\b\\s*([a-zA-Z_]\\w*)",
           "beginCaptures": {
             "1": {"name": "keyword.control.jome"},
             "2": {"name": "entity.name.type.interface.jome"}

@@ -244,6 +244,34 @@ const TOKENS = {
       return `${node.children[0].raw} ${node.children[1].raw}`
     },
   },
+  // def someFunc end
+  'meta.def.jome': {
+    validate: (node) => {
+      if (node.children[0].raw !== 'def') {
+        return "Internal error. meta.def.jome should always start with keyword def"
+      }
+      if (node.children[1].type !== 'entity.name.function.jome') {
+        return "Syntax error. Missing function name after keyword def."
+      }
+      if (node.children[node.children.length-1].raw !== 'end') {
+        return "Internal error. meta.def.jome should always end with keyword end"
+      }
+      // Arguments, if present, should always be right after the function name
+      if (node.children.slice(3,-1).find(c => c.type === 'meta.args.jome')) {
+        return "Syntax error. Arguments should always be at the beginning of the function block."
+      }
+    },
+    compile: (node) => {
+      let name = node.children[1].raw
+      let cs = node.children.slice(2,-1) // Remove keywords def, end, and function name
+      let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
+      if (args) {
+        return `function ${name}${compileArgs(args)} {${cs.slice(1).map(c => compileNode(c)).join('')}}`
+      } else {
+        return `function ${name}() {${cs.map(c => compileNode(c)).join('')}}`
+      }
+    },
+  },
   'meta.if-block.jome': regular((node) => {
     let cs = node.children.slice(1, -1) // remove if and end
     return `if (${compileNode(cs[0])}) {${cs.slice(1).map(c => compileNode(c)).join('')}}`

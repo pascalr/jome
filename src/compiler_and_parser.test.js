@@ -68,10 +68,10 @@ describe("Test functions creation", () => {
   */
   // *** KEYWORD def ***
   test('def keyword', () => {
-    expect(compile('def sayHello #log("hello") end')).toMatch(/let sayHello = \(\) => {\s*console.log\("hello"\)\s*}/);
+    expect(compile('def sayHello #log("hello") end')).toMatch(/function sayHello\(\) {\s*console.log\("hello"\)\s*}/);
   })
   test('def keywordwith args', () => {
-    expect(compile('def sayHello |name| #log("hello", name) end')).toMatch(/let sayHello = \(name\) => {\s*console.log\("hello", name\)\s*}/);
+    expect(compile('def sayHello |name| #log("hello", name) end')).toMatch(/function sayHello\(name\) {\s*console.log\("hello", name\)\s*}/);
   })
   // *** KEYWORD let ***
   test('let keyword with do end', () => {
