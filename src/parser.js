@@ -56,8 +56,8 @@ function filterStrings(array) {
   return array.filter(e => typeof e !== 'string')
 }
 
+// someFunc(someVal)[someIndex].someProp.#someFunc // These should all be merged into a single node
 function mergeChainables(nodes) {
-  // CHAINABLE_TYPES
   let merged = []
   let current = nodes[0]
   for (let i = 0; i < nodes.length; i++) {
@@ -152,11 +152,22 @@ function compileRaw(node) {
   return node.raw
 }
 
-function compileUtility(node) {
-  let raw = node.raw.slice(1)
-  switch (raw) {
+function _compileUtility(name) {
+  switch (name) {
     case 'log': return 'console.log'
   }
+}
+
+function compileUtility(node, isInline) {
+  let name = node.raw.slice(isInline ? 2 : 1)
+  let val = _compileUtility(name)
+  if (node.children) {
+    if (isInline) {
+      return `${val}(${node.children.map(c => compileNode(c)).join('')})`
+    }
+    return `${val}${node.children.map(c => compileNode(c)).join('')}`
+  }
+  return val
 }
 
 const tokenAsIs = {
@@ -199,8 +210,8 @@ function compileBlock(node) {
 const CHAINABLE_TYPES = [
   "meta.group.jome",
   "meta.square-bracket.jome",
+  "entity.name.function.utility-inline.jome"
   // attribute accessor
-  // utility accessor
 ]
 
 const OPERAND_TYPES = [
@@ -208,7 +219,8 @@ const OPERAND_TYPES = [
   "keyword.operator.jome",
   "constant.numeric.float.jome",
   "meta.group.jome",
-  "meta.square-bracket.jome"
+  "meta.square-bracket.jome",
+  "meta.block.jome"
 ]
 
 const PRECEDENCES = {
@@ -449,9 +461,13 @@ const TOKENS = {
     //   'variable.assigment.jome'
     // ]
   },
+  // <...>.#log
+  "entity.name.function.utility-inline.jome": {
+    compile: (node) => compileUtility(node, true),
+  },
   // #log
   'entity.name.function.utility.jome': {
-     compile: compileUtility,
+     compile: (node) => compileUtility(node, false),
   }
 }
 

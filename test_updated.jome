@@ -6,6 +6,7 @@ def printCode |unused along source|
 end
 if true #log("hello") end
 // let someTest = someCond ? someVal ?? someDefault
+{x: 1}.#log
 
 let printCode = |unused along source| => (
   #log(source)
