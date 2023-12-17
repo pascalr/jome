@@ -306,7 +306,16 @@ const TOKENS = {
     compile: compileBlock
   },
   'constant.language.jome': tokenAsIs,
-  'meta.group.jome': tokenAsIs,
+  'meta.group.jome': {
+    compile: (node) => {
+      // If a function call
+      if (node.children) {
+        return `${node.children.map(c => compileNode(c)).join('')}${node.raw}`
+      }
+      // If simply a group
+      return node.raw
+    },
+  },
   'variable.other.jome': tokenAsIs,
   'variable.assignment.jome': tokenAsIs,
   'constant.numeric.integer.jome': tokenAsIs,
