@@ -286,19 +286,6 @@ const TOKENS = {
     },
     compile: compileOperator,
   },
-  // // if
-  // 'keyword.control.conditional.jome': {
-  //   precedence: 200,
-  //   captureRight: 2,
-  //   validate: (node) => {
-  //     if (node.children.length !== 2) {
-  //       return "An if statement must have a condition and a value"
-  //     }
-  //   },
-  //   compile(node) {
-  //     return `if (${node.children[0].compile()}) { ${node.children[1].compile()} }`
-  //   }
-  // },
   // let
   'keyword.control.declaration.jome': {
     compile(node) {
@@ -309,17 +296,8 @@ const TOKENS = {
     //   'variable.assigment.jome'
     // ]
   },
-  // // def
-  // 'keyword.control.declaration.def.jome': {
-  //   precedence: 5000,
-  //   captureRight: 2,
-  //   compile(node) {
-  //     return `let ${node.children[0].raw} = ${node.children[1].compile()}`
-  //   }
-  // },
   // #log
   'entity.name.function.utility.jome': {
-     ...tokenAsIs,
      compile: compileUtility,
   }
 }
