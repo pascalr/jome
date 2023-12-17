@@ -55,6 +55,9 @@ describe("Test utils", () => {
   test('#log hello world', () => {
     expect(compile('#log("Hello world!")')).toMatch(/console.log\("Hello world!"\)/);
   })
+  test('{x:1}.#log', () => {
+    expect(compile('{x:1}.#log')).toMatch(/console.log\(\{x\: ?1\}\)/);
+  })
 })
 
 describe("Test functions creation", () => {

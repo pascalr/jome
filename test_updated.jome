@@ -90,10 +90,10 @@ testChainFuncCall = {
     getFive
 }
 
-class ClassForTesting |arg, @attr?, prop?| => {
+class ClassForTesting |arg, @attr?, prop?|
   getArg: => arg
   getProp: => prop
-}
+end
 testObj = {ClassForTesting "arg", attr: "attr", prop: "propVal"}
 testObjList = {
   ClassForTesting "arg1", attr: "attr1", prop: "propVal1"
@@ -116,24 +116,24 @@ console.log('There')
 var person = "John"
 let woman = 'Jane'
 
-def f = -> (
+def f
   var x = 10
   x = x + 20
-  x    
-)
+  return x
+end
 
-classe SomeClassShorter |@name| => {
+class SomeClassShorter |@name|
   getName: => @name
-}
+end
 
-class SomeClass {
+class SomeClass
   constructor: => (
     @name = 10
   )
   getName: => @name
-}
+end
 
-class TestSyntaxe1
+class TestSyntaxe1 end
 // class TestSyntaxe2 |text| => « TestSyntaxe1 "h1", text »
 // class TestSyntaxe3 « TestSyntaxe1 "h1" » {
 //   //constructor: => ()
@@ -154,20 +154,20 @@ class TestSyntaxe2 extends TestSyntaxe1 {
 }
 */
 
-class TestEq {
+class TestEq
   constructor: |actual, expected, message| => (
-    if (Array.isArray(expected) || typeof expected === 'object') (
+    if (Array.isArray(expected) || typeof expected === 'object')
       @pass = JSON.stringify(actual) === JSON.stringify(expected);
-    ) else (
+    else
       @pass = actual == expected
-    )
-    if (@pass) (
+    end
+    if (@pass)
       console.log("\x1b[32mRÉUSSI\x1b[0m", message || expected)
-    ) else (
+    else
       console.log("\x1b[31mÉCHEC:\x1b[0m", message, "\nExpected:", expected, "\nActually:", actual);
-    )
+    end
   )
-}
+end
 
 titre = |texte| => (
   console.log('%c' + texte, 'color: yellow')

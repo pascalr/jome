@@ -220,6 +220,11 @@ const TOKENS = {
       }
     }
   },
+  // "meta.block.jome": {
+  //   compile: (node) => {
+  //     return `${node.children[0].raw} ${node.children[1].raw}`
+  //   },
+  // },
   'constant.language.jome': tokenAsIs,
   'expression.group': tokenAsIs,
   'variable.other.jome': tokenAsIs,
