@@ -210,8 +210,8 @@ function compileBlock(node) {
 const CHAINABLE_TYPES = [
   "meta.group.jome",
   "meta.square-bracket.jome",
-  "entity.name.function.utility-inline.jome"
-  // attribute accessor
+  "entity.name.function.utility-inline.jome",
+  "meta.getter.jome"
 ]
 
 const OPERAND_TYPES = [
@@ -220,7 +220,8 @@ const OPERAND_TYPES = [
   "constant.numeric.float.jome",
   "meta.group.jome",
   "meta.square-bracket.jome",
-  "meta.block.jome"
+  "meta.block.jome",
+  "variable.other.jome"
 ]
 
 const PRECEDENCES = {
@@ -306,6 +307,16 @@ const TOKENS = {
     compile: compileBlock
   },
   'constant.language.jome': tokenAsIs,
+  "meta.getter.jome": {
+    validate: (node) => {
+      if (node.children.length !== 1) {
+        return "Missing operand before getter"
+      }
+    },
+    compile: (node) => {
+      return `${compileNode(node.children[0])}${node.raw}`
+    },
+  },
   'meta.group.jome': {
     compile: (node) => {
       // If a function call
@@ -436,7 +447,7 @@ const TOKENS = {
         return "Internal error. meta.square-bracket.jome should always end with punctuation.definition.square-bracket.end.jome"
       }
       // All the even index children should be punctuation.separator.delimiter.jome
-      if (node.parts.slice(1,-1).any((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
+      if (node.parts.slice(1,-1).some((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
         return "Syntax error. Expecting commas between every element inside an array"
       }
     },
@@ -482,13 +493,7 @@ const TOKENS = {
 
 // That a list of ASTNode and return js code
 function compilePP(nodes) {
-  return nodes.map(node => {
-    let compFunc = node.compile
-    if (!compFunc) {
-      throw new Error("Error cannot compile node no function available to compile: "+node.type)
-    }
-    return compFunc(node)
-  }).join('')
+  return nodes.map(node => compileNode(node)).join('')
 }
 
 module.exports = {
