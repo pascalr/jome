@@ -31,6 +31,7 @@ class ASTNode {
     this.token = token
     let prec = PRECEDENCES[this.type]
     this.precedence = (typeof prec === 'function') ? prec(token) : (prec || 0)
+    // FIXMEEEEEEEEE, I am using children for node children and tokens children, seems bad. Use "children" and "parts" instead?
     this.children = []
     if (token.children && !(token.children.length === 1 && typeof token.children[0] === "string")) {
       this.children = parse(token.children)

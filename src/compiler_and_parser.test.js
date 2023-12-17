@@ -179,6 +179,13 @@ describe("Parse let assignment", () => {
     expect(list[2]?.raw).toBe('let y')
   })
 
+  test('[1][0]', () => {
+    let list = parse(tokenize("[1][0]").children)
+    expect(list?.length).toBe(1)
+    expect(list[0]?.raw).toBe('[1]')
+    expect(list[2]?.raw).toBe('let y')
+  })
+
 })
 
 describe("Test values", () => {
