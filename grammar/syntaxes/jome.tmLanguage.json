@@ -97,6 +97,7 @@
         { "include": "#interface" },
         { "include": "#class" },
         { "include": "#keywords" },
+        { "include": "#declaration" },
         { "include": "#vbars-args" },
         { "include": "#function_do_end" },
         { "include": "#def" },
@@ -153,10 +154,6 @@
         {
           "name": "keyword.control.inline-conditional.jome",
           "match": "\\b(if|si)\\b"
-			  },
-        {
-          "name": "keyword.control.declaration.jome",
-          "match": "\\b(let|var)\\b"
 			  },
         {
           "name": "keyword.control.main.jome",
@@ -216,6 +213,18 @@
             {"include": "#expression"},
             {"include": "#interface-ref" }
           ]
+        }
+      ]
+    },
+    "declaration": {
+      "patterns": [
+        {
+          "name": "meta.declaration.jome",
+          "match": "\\b(let|var)\\b\\s*(\\w+)?",
+          "captures": {
+            "1": {"name": "keyword.control.declaration.jome"},
+            "2": {"name": "variable.other.jome"}
+          }
         }
       ]
     },

@@ -158,9 +158,6 @@ function compileArgs(node) {
 }
 
 const PRECEDENCES = {
-  // Capture the variable name. FIXME: I think I want to change this.
-  // Do meta.declaration.jome, which inclues the keyword and the entity name.
-  'keyword.control.declaration.jome': 5000,
   'keyword.operator.jome': (token => {
     let op = token.text()
     if (op === '+' || op === '-') {
@@ -215,6 +212,19 @@ const TOKENS = {
   'variable.assignment.jome': tokenAsIs,
   'constant.numeric.integer.jome': tokenAsIs,
   'constant.numeric.float.jome': tokenAsIs,
+  // let foo
+  // var bar
+  'meta.declaration.jome': {
+    validate: (node) => {
+      let keyword = node.children[0].raw
+      if (node.children.length !== 2) {
+        return "Missing variable name after keyword "+keyword
+      }
+    },
+    compile: (node) => {
+      return `${node.children[0].raw} ${node.children[1].raw}`
+    },
+  },
   'meta.if-block.jome': regular((node) => {
     let cs = node.children.slice(1, -1) // remove if and end
     return `if (${cs[0].compile()}) {${cs.slice(1).map(c => c.compile()).join('')}}`
@@ -291,7 +301,6 @@ const TOKENS = {
   // },
   // let
   'keyword.control.declaration.jome': {
-    captureRight: true,
     compile(node) {
       return `let ${node.children[0].raw}`
     }
