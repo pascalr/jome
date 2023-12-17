@@ -156,18 +156,29 @@ const regular = (compile) => ({
 })
 
 function compileArgs(node) {
-  // FIXME: Validate args!
+  // TODO: Validate args!
   let children = node.children.slice(1, -1) // remove vertical bars
   //let args = 
   //let todo = 10
   return `(${children.map(c => compileNode(c)).join('')})`
 }
 
+function compileEntry(node) {
+  // TODO: Validate entry!
+  let name = node.children[0].raw
+  let value = compileNode(node.children[1])
+  return `${name}: ${value}`
+}
+
 function compileBlock(node) {
+  let cs = node.children.slice(1, -1) // remove curly braces
+  if (cs.every(c => c.type === 'meta.dictionary-key.jome')) {
+    return `{${cs.map(c => compileEntry(c))}}`
+  }
   // A value is only on a single line, except if using parentheses.
   let wtf = node
   let foo = 10
-  return 'TODO'
+  return '{}'
   // return `${node.children[0].raw} ${node.children[1].raw}`
 }
 

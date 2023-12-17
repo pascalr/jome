@@ -199,9 +199,9 @@ describe("Test values", () => {
 
 describe("Test objects", () => {
   test('{}', () => {
-    expect(compile('{}')).toMatch(/\\{\\}/);
+    expect(compile('{}')).toMatch(/\{\}/);
   })
   test('{x: 1}', () => {
-    expect(compile('{x: 1}')).toMatch(/\\{x\\: ?1\\}/);
+    expect(compile('{x: 1}')).toMatch(/\{x\: ?1\}/);
   })
 })
