@@ -10,35 +10,50 @@ function compileTokenRaw(token) {
   }
 }
 
+function compileNode(node) {
+  if (!node.compileFunc) {
+    throw new Error("Can't compile node of type "+node.type)
+  }
+  if (node.validate) {
+    let err = node.validate(node)
+    if (err) {
+      throw new Error(err)
+    }
+  }
+  return node.compileFunc(node)
+}
+
 // An abstract syntax tree (AST) node
 class ASTNode {
   constructor(token) {
     this.raw = compileTokenRaw(token.children)
     this.type = token.type
     this.token = token
-    let data = TOKENS[this.type]
-    if (!data) {
-      throw new Error("TODO: token not implemented yet: "+token.type)  
-    }
     let prec = PRECEDENCES[this.type]
     this.precedence = (typeof prec === 'function') ? prec(token) : (prec || 0)
-    this.captureLeft = data.captureLeft
-    this.captureRight = data.captureRight
-    this.minRequiredChildren = data.minRequiredChildren
-    this.allowedChildren = data.allowedChildren
     this.children = []
     if (token.children && !(token.children.length === 1 && typeof token.children[0] === "string")) {
       this.children = parse(token.children)
     }
-    this.compile = data.compile ? () => {
-      if (data.validate) {
-        let err = data.validate(this)
-        if (err) {
-          throw new Error(err)
+    let data = TOKENS[this.type]
+    if (data) {
+      this.captureLeft = data.captureLeft
+      this.captureRight = data.captureRight
+      this.minRequiredChildren = data.minRequiredChildren
+      this.allowedChildren = data.allowedChildren
+      this.compileFunc = data.compile
+      this.validate = data.validate
+      // TODO: Remove this. Use compileNode instead
+      this.compile = data.compile ? () => {
+        if (data.validate) {
+          let err = data.validate(this)
+          if (err) {
+            throw new Error(err)
+          }
         }
-      }
-      return data.compile(this)
-    } : null
+        return data.compile(this)
+      } : null
+    }
   }
 }
 
@@ -124,7 +139,7 @@ function validateOperator(node) {
 }
 
 function compileOperator(node) {
-  return `${node.children[0].compile()} ${node.raw} ${node.children[1].compile()}`
+  return `${compileNode(node.children[0])} ${node.raw} ${compileNode(node.children[1])}`
 }
 
 function compileRaw(node) {
@@ -154,7 +169,7 @@ function compileArgs(node) {
   let children = node.children.slice(1, -1) // remove vertical bars
   //let args = 
   //let todo = 10
-  return `(${children.map(c => c.compile()).join('')})`
+  return `(${children.map(c => compileNode(c)).join('')})`
 }
 
 const PRECEDENCES = {
@@ -202,10 +217,12 @@ const TOKENS = {
   //     c => typeof c === 'string' ? c : '${'+compileJsBlock(c.children.slice(1,-1), ctx)+'}'
   //   ).join('')+'`'
   // },
-  "meta.function.do.end.jome": regular((node) => {
-    let args = node.children.find(c => c.type === 'meta.args.jome')
-    return `function ${args ? compileArgs(args) : '()'} {${node.children.map(c => c.compile()).join('')}}`
-  }),
+  "meta.function.do.end.jome": {
+    compile(node) {
+      let args = node.children.find(c => c.type === 'meta.args.jome')
+      return `function ${args ? compileArgs(args) : '()'} {${node.children.map(c => compileNode(c)).join('')}}`
+    }
+  },
   'constant.language.jome': tokenAsIs,
   'expression.group': tokenAsIs,
   'variable.other.jome': tokenAsIs,
@@ -227,7 +244,7 @@ const TOKENS = {
   },
   'meta.if-block.jome': regular((node) => {
     let cs = node.children.slice(1, -1) // remove if and end
-    return `if (${cs[0].compile()}) {${cs.slice(1).map(c => c.compile()).join('')}}`
+    return `if (${compileNode(cs[0])}) {${cs.slice(1).map(c => compileNode(c)).join('')}}`
   }),
   // js uses more specifically:
   // keyword.operator.arithmetic.jome
@@ -246,7 +263,7 @@ const TOKENS = {
     // validate: TODO validate that left arg is an arg
     compile: (node) => {
       let args = node.children.find(c => c.type === 'meta.args.jome')
-      return `${args ? compileArgs(args) : '()'} => (${node.children.map(c => c.compile()).join('')})`
+      return `${args ? compileArgs(args) : '()'} => (${node.children.map(c => compileNode(c)).join('')})`
     },
   },
   // ==, !=, ===, !===
@@ -268,7 +285,7 @@ const TOKENS = {
       }
     },
     compile: (node) => {
-      return `if (${node.children[1].compile()}) {${node.children[0].compile()}}`
+      return `if (${compileNode(node.children[1])}) {${compileNode(node.children[0])}}`
     },
   },
   // =
