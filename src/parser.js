@@ -56,13 +56,32 @@ function filterStrings(array) {
   return array.filter(e => typeof e !== 'string')
 }
 
+function mergeChainables(nodes) {
+  // CHAINABLE_TYPES
+  let merged = []
+  let current = nodes[0]
+  for (let i = 0; i < nodes.length; i++) {
+    let lookahead = nodes[i+1]
+    if (lookahead && CHAINABLE_TYPES.includes(lookahead.type) && OPERAND_TYPES.includes(current.type)) {
+      lookahead.children.push(current)
+    } else {
+      merged.push(current)
+    }
+    current = lookahead
+  }
+  return merged
+}
+
 // Create an abstract syntax tree (AST) from tokens. Returns a list of ASTNode.
 function parse(tokens) {
 
   // All the tokens converted to nodes
-  let nodes = filterStrings(tokens).map(tok => new ASTNode(tok))
+  let allNodes = filterStrings(tokens).map(tok => new ASTNode(tok))
   // Only the top nodes
   let topNodes = []
+
+  // As a first pass, merge all the chainable nodes together. They have highest precedence.
+  let nodes = mergeChainables(allNodes)
 
   // lhs === left hand side
   // rhs === right hand side
