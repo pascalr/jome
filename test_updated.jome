@@ -51,24 +51,26 @@ var testH1 = { H1 "Un titre" }
 // import defaultExport, * as name from "module-name";
 // // import "module-name"; TODO: Not written yet in the parser
 
-interface TestInterface |
-  arg,
+// TODO: interface with an end.
+interface TestInterface
+  arg
   param?
-|
+end
+
 let testInterface = &TestInterface => (arg + param)
 
 // TODO: Test Use <HTML> to add an html tag inside <html><HTML></HTML></html>
 
-class ParentClass {
+class ParentClass
   getTen: => 10
-}
-class ChildClass {
+end
+class ChildClass
   super: ParentClass
-}
+end
 
-class TestFuncCall {
+class TestFuncCall
   getFive: => 5
-}
+end
 testFuncCall = {
   TestFuncCall
     getFive
