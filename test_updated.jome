@@ -17,9 +17,17 @@ def funcWithType |someArg: string|
 
 end
 
-class SomeNode |someParam?, @tenMore?, @someText?| => {
-
-}
+class SomeNode |someParam?, @tenMore?, @someText?|
+end
+class SomeNode
+  init someParam?, @tenMore?, @someText?
+end
+class SomeNode
+  init
+    someParam?
+    @tenMore?
+    @someText?
+end
 // Based on the complexity, Jome could make tenMore variable a function that depends on the state instead of making the whole object.
 // But that's a premature optimization I am not there yet.
 var node = {
@@ -174,7 +182,7 @@ var props = obj.#props
 var obj2 = { H1 "Un titre 2", title: 'This is a tooltip' };
 var str2 = obj.toString();
 
-{
+{[
   titre 'Test avec objects html'
   TestEq { H1 "Un titre" }.toString(), "<h1>Un titre</h1>", "«H1 \"Un titre\"».toString()"
   TestEq obj.toString(), "<h1 style=\"color: red\">Un titre</h1>", "« H1 \"Un titre\", css: {color: 'red'} ».toString()"
@@ -243,11 +251,11 @@ var str2 = obj.toString();
   //   x = x + 20
   //   x    
   // ))()), 30, "Testing multiple lines inside a function"
-}
+]}
 
 addXs = |x1!, x2!| -> (x1 + x2)
 addAXs = |arg0, x1!, x2!| -> (arg0 + x1 + x2);
-{
+{[
   titre 'Test paramètres de fonctions'
 
   TestEq addXs(x1: 10, x2: 20), 30, "addXs(x1: 10, x2: 20)"
@@ -260,7 +268,7 @@ addAXs = |arg0, x1!, x2!| -> (arg0 + x1 + x2);
 //   TestEq 1km/h, <js>new Quantity(1, 'km/h')</js>, "1km/h"
 //   TestEq 1km^2, <js>new Quantity(1, 'km²')</js>, "1km^2"
 //   TestEq 1km², <js>new Quantity(1, 'km²')</js>, "1km²"
-}
+]}
 
 // Container = «
 //   $container
@@ -280,7 +288,7 @@ addAXs = |arg0, x1!, x2!| -> (arg0 + x1 + x2);
 // >>
 
 ten = 10;
-{
+{[
   titre 'Test des blocks'
   TestEq {x: 10}, <js>{x: 10}</js>, "{x: 10}"
   TestEq {x: 10, :ten}, <js>{x: 10, ten: 10}</js>, "{x: 10, :ten}"
@@ -324,4 +332,4 @@ ten = 10;
 
   // TestEq counter.count, 1, "counter.count"
   // TestEq counter.text.someText, "Clicked 1 time", "counter.text.someText"
-}
+]}

@@ -11,18 +11,6 @@
     "statement": {
       "patterns": [
         {
-          "name": "meta.class.jome",
-          "match": "(?<=\\s|^|)(class|classe)\\s+([a-zA-Z_][\\w]*)\\s*",
-          "captures": {
-            "1": {
-              "name": "keyword.control.jome"
-            },
-            "2": {
-              "name": "entity.name.type.class.jome"
-            }
-          }
-        },
-        {
           "name": "meta.statement.import.jome",
           "begin": "^(import)( \\w+)?",
           "beginCaptures": {
@@ -107,7 +95,7 @@
         { "include": "#comment" },
         { "include": "#if_block" },
         { "include": "#interface" },
-        { "include": "#class_end" },
+        { "include": "#class" },
         { "include": "#keywords" },
         { "include": "#vbars-args" },
         { "include": "#function_do_end" },
@@ -128,6 +116,7 @@
         { "include": "#support-items" },
         { "include": "#variable" },
         { "include": "#getter" },
+        { "include": "#block-array" },
         { "include": "#block" },
         {
           "match": ";",
@@ -277,12 +266,15 @@
         }
       ]
     },
-    "class_end": {
+    "class": {
       "patterns": [
         {
           "name": "meta.class.jome",
-          "begin": "\\b(class)\\b",
-          "beginCaptures": {"0": {"name": "keyword.control.jome"}},
+          "begin": "\\b(class)\\b(\\s+([a-zA-Z_]\\w*))?",
+          "beginCaptures": {
+            "1": {"name": "keyword.control.jome"},
+            "2": {"name": "entity.name.type.class.jome"}
+          },
           "end": "\\b(end)\\b",
           "endCaptures": {"0": {"name": "keyword.control.jome"}},
           "patterns": [
@@ -576,12 +568,7 @@
       "name": "expression.group",
       "patterns": [{ "include": "#expression" }]
     },
-    "block": {
-      "begin": "\\{",
-      "end": "\\}",
-      "beginCaptures": {"0": { "name": "punctuation.curly-braces.open" }},
-      "endCaptures": {"0": { "name": "punctuation.curly-braces.close" }},
-      "name": "meta.block.jome",
+    "block-content": {
       "patterns": [
         {
           "match": "(?:^|\\G)(\\s*)([\\p{L}~]\\w*)\\s*:\\s*([\\p{Lu}]\\w*)",
@@ -634,6 +621,22 @@
         },
         {"include": "#expression"}
       ]
+    },
+    "block-array": {
+      "begin": "\\{\\[",
+      "end": "\\]\\}",
+      "beginCaptures": {"0": { "name": "punctuation.curly-braces.open" }},
+      "endCaptures": {"0": { "name": "punctuation.curly-braces.close" }},
+      "name": "meta.block-array.jome",
+      "patterns": [{ "include": "#block-content" }]
+    },
+    "block": {
+      "begin": "\\{",
+      "end": "\\}",
+      "beginCaptures": {"0": { "name": "punctuation.curly-braces.open" }},
+      "endCaptures": {"0": { "name": "punctuation.curly-braces.close" }},
+      "name": "meta.block.jome",
+      "patterns": [{ "include": "#block-content" }]
     },
     "script-params": {
       "patterns": [
