@@ -137,6 +137,16 @@ main {
   } // The value will be the result of the function run of the object created.
   ```
 
+  A value is only on a single line. Use parentheses if you need multiple lines.
+  ```jome
+  {
+    x: 1 +
+       2 // WRONG!
+    y: (1 +
+       2) // OK
+  }
+  ```
+
   ### Shorthand key syntax
 
   The short key syntax is different that in javascript, because it could be confused with list. In Jome, it starts with a colon

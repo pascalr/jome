@@ -156,10 +156,19 @@ const regular = (compile) => ({
 })
 
 function compileArgs(node) {
+  // FIXME: Validate args!
   let children = node.children.slice(1, -1) // remove vertical bars
   //let args = 
   //let todo = 10
   return `(${children.map(c => compileNode(c)).join('')})`
+}
+
+function compileBlock(node) {
+  // A value is only on a single line, except if using parentheses.
+  let wtf = node
+  let foo = 10
+  return 'TODO'
+  // return `${node.children[0].raw} ${node.children[1].raw}`
 }
 
 const PRECEDENCES = {
@@ -179,6 +188,8 @@ const PRECEDENCES = {
   'keyword.arrow.jome': 300,
   // Arrow function is higher than assignment: add5 = |x| => x + 5
   'keyword.operator.assignment.jome': 250,
+  // Assigment and dictionary key have the same precedence. (They should never be used together)
+  'meta.dictionary-key.jome': 250,
   // Assignment is higher than inline conditional: x = 10 if true
   'keyword.control.inline-conditional.jome': 200,
 }
@@ -220,11 +231,27 @@ const TOKENS = {
       }
     }
   },
-  // "meta.block.jome": {
-  //   compile: (node) => {
-  //     return `${node.children[0].raw} ${node.children[1].raw}`
-  //   },
-  // },
+  // foo:
+  "meta.dictionary-key.jome": {
+    captureRight: true,
+    validate: (node) => {
+    },
+    compile: (node) => {
+      let foo = "bar"
+      return `${node.children[0].raw} ${node.children[1].raw}`
+    },
+  },
+  "meta.block.jome": {
+    validate: (node) => {
+      if (node.children[0].type !== 'punctuation.curly-braces.open') {
+        return "Internal error. meta.block.jome should always start with punctuation.curly-braces.open"
+      }
+      if (node.children[node.children.length-1].type !== 'punctuation.curly-braces.close') {
+        return "Internal error. meta.block.jome should always end with punctuation.curly-braces.close"
+      }
+    },
+    compile: compileBlock
+  },
   'constant.language.jome': tokenAsIs,
   'expression.group': tokenAsIs,
   'variable.other.jome': tokenAsIs,
