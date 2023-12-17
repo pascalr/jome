@@ -460,8 +460,12 @@
 					"match": "!=|<=|>=|===|==|<|>",
 					"name": "keyword.operator.comparison.jome"
 				},
+        {
+					"match": "!",
+					"name": "keyword.operator.logical.unary.jome"
+				},
 				{
-					"match": "&&|!|\\|\\|",
+					"match": "&&|\\|\\|",
 					"name": "keyword.operator.logical.jome"
 				},
         {

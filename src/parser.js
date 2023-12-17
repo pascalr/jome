@@ -109,7 +109,7 @@ function parse(tokens) {
         lookahead &&
         ((lookahead.precedence > op.precedence) ||
           (lookahead.precedence === op.precedence &&
-            lookahead.rightAssociative))
+            lookahead.rightAssociative)) // right associative is not used yet
       ) {
         rhs = parseExpression1(rhs, op.precedence + (lookahead.precedence > op.precedence ? 1 : 0));
         lookahead = nodes[0];
@@ -135,13 +135,32 @@ function parse(tokens) {
 //   }
 // }
 
+function validateOperatorUnary(node) {
+  // return validateChildren(2, OPERAND_TYPES)(node)
+  if (node.children.length !== 1) {
+    return "A unary operator must have a single operand"
+  }
+  if (!OPERAND_TYPES.includes(node.children[0].type)) {
+    return `Invalid operand type for operator ${node.type}. Was: ${node.children[0].type}`
+  }
+}
+
 function validateOperator(node) {
   // return validateChildren(2, OPERAND_TYPES)(node)
   if (node.children.length !== 2) {
     return "A binary operator must have a two operands"
-  } else if (!node.children.every(child => OPERAND_TYPES.includes(child.type))) {
-    return `Invalid operand type for operator ${node.type}. Was: ${node.type}`
   }
+
+  for (let i = 0; i < node.children.length; i++) {
+    let child = node.children[i]
+    if (!OPERAND_TYPES.includes(child.type)) {
+      return `Invalid operand type for operator ${node.type}. Was: ${child.type}`
+    }
+  }
+}
+
+function compileOperatorUnary(node) {
+  return `${node.raw}${compileNode(node.children[0])}`
 }
 
 function compileOperator(node) {
@@ -217,11 +236,13 @@ const CHAINABLE_TYPES = [
 const OPERAND_TYPES = [
   "constant.numeric.integer.jome",
   "keyword.operator.jome",
+  "keyword.operator.logical.unary.jome",
   "constant.numeric.float.jome",
   "meta.group.jome",
   "meta.square-bracket.jome",
   "meta.block.jome",
-  "variable.other.jome"
+  "variable.other.jome",
+  "constant.language.jome"
 ]
 
 const PRECEDENCES = {
@@ -401,7 +422,7 @@ const TOKENS = {
         }
         // TODO: Validate right side
       } else {
-        return "Syntax error. Arrow function expects two operands."
+        return "Syntax error. Arrow function expects one or two operands."
       }
     },
     compile: (node) => {
@@ -412,6 +433,19 @@ const TOKENS = {
         return `() => (${compileNode(node.children[0])})`
       }
     },
+  },
+  // !
+  "keyword.operator.logical.unary.jome": {
+    captureRight: true,
+    validate: validateOperatorUnary,
+    compile: compileOperatorUnary,
+  },
+  // || &&
+  "keyword.operator.logical.jome": {
+    captureLeft: true,
+    captureRight: true,
+    validate: validateOperator,
+    compile: compileOperator,
   },
   // ==, !=, ===, !===
   'keyword.operator.comparison.jome': {

@@ -140,6 +140,16 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   } // The value will be the result of the function run of the object created.
   \`\`\`
 
+  A value is only on a single line. Use parentheses if you need multiple lines.
+  \`\`\`jome
+  {
+    x: 1 +
+       2 // WRONG!
+    y: (1 +
+       2) // OK
+  }
+  \`\`\`
+
   ### Shorthand key syntax
 
   The short key syntax is different that in javascript, because it could be confused with list. In Jome, it starts with a colon
@@ -1026,6 +1036,20 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
     
   )
   \`\`\`
+
+  ### Ternary
+
+  Idée: pas de ternary operator comme d'habitude, parce que je veux pouvoir faire (x ? y) seulement
+  sans le :. Le : est très utilisé je trouve. Je n'ai pas tant envie de l'utiliser comme opérateur simple.
+  L'idée est donc d'utiliser les opérateurs qui existe déjà, ? et ??.
+  x ? y ?? z
+  Si x, alors y, sinon z
+  D'un côté je n'aime pas dévié d'un standard. ? : est pas mal dans tous les languages, mais d'un autre côté
+  je trouve ça vraiment gossant de ne pas pouvoir faire simplement x ? y. Le résultat serait null.
+  let r = x ? y // si x, alors y, sinon null
+  let r = x if y // si x, alors y, sinon undefined
+  let r = \`{x ? y}\` // si x, alors \`{y}\`, sinon \`null\`
+  let r = \`{x if y}\` // si x, alors \`{y}\`, sinon \`\` J'aimerais vraiment ça!!!!!!!!!!!!!!
 
   ## Environment variables
 

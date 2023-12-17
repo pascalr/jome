@@ -80,9 +80,9 @@ describe("Test functions creation", () => {
   test('let keyword with do end with args', () => {
     expect(compile('let sayHello = do |name| #log("hello", name) end')).toMatch(/let sayHello = function \(name\) {\s*console.log\("hello", name\)\s*}/);
   })
-  // test('let keyword with arrow function', () => {
-  //   expect(compile('let giveMe5 = => 5')).toMatch(/let giveMe5 = \(\) => \(?5\)?/);
-  // })
+  test('let keyword with arrow function', () => {
+    expect(compile('let giveMe5 = => 5')).toMatch(/let giveMe5 = \(\) => \(?5\)?/);
+  })
   // let giveMe5 = _=> 5
   // let giveMe5 ==> 5
   test('let keyword with arrow function with args', () => {
@@ -233,4 +233,11 @@ describe("Test arrays", () => {
   test('[1,2,3]', () => {
     expect(compile('[1,2,3]')).toMatch(/\[1, ?2, ?3\]/);
   })
+})
+
+test('!true', () => {
+  expect(compile('!true')).toMatch(/!true/);
+})
+test('!true === false', () => {
+  expect(compile('!true === false')).toMatch(/!true === false/);
 })

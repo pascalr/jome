@@ -165,6 +165,14 @@ It is also the syntax required to build <a href="#nodes">nodes</a>.</p>
     <span class="hljs-variable">run</span>
 } <span class="hljs-comment">// The value will be the result of the function run of the object created.</span>
 </code></pre>
+<p>A value is only on a single line. Use parentheses if you need multiple lines.</p>
+<pre><code class="language-jome">{
+  x: <span class="hljs-number">1</span> +
+     <span class="hljs-number">2</span> <span class="hljs-comment">// WRONG!</span>
+  y: (<span class="hljs-number">1</span> +
+     <span class="hljs-number">2</span>) <span class="hljs-comment">// OK</span>
+}
+</code></pre>
 <h3>Shorthand key syntax</h3>
 <p>The short key syntax is different that in javascript, because it could be confused with list. In Jome, it starts with a colon</p>
 <pre><code class="language-jome"><span class="hljs-variable">obj</span> = {:<span class="hljs-variable">content</span>, :<span class="hljs-variable">value</span>}
@@ -807,6 +815,18 @@ parce que tu ne peux pas avoir l'équivalent de export et export default en Comm
   
 )
 </code></pre>
+<h3>Ternary</h3>
+<p>Idée: pas de ternary operator comme d'habitude, parce que je veux pouvoir faire (x ? y) seulement
+sans le :. Le : est très utilisé je trouve. Je n'ai pas tant envie de l'utiliser comme opérateur simple.
+L'idée est donc d'utiliser les opérateurs qui existe déjà, ? et ??.
+x ? y ?? z
+Si x, alors y, sinon z
+D'un côté je n'aime pas dévié d'un standard. ? : est pas mal dans tous les languages, mais d'un autre côté
+je trouve ça vraiment gossant de ne pas pouvoir faire simplement x ? y. Le résultat serait null.
+let r = x ? y // si x, alors y, sinon null
+let r = x if y // si x, alors y, sinon undefined
+let r = <code>{x ? y}</code> // si x, alors <code>{y}</code>, sinon <code>null</code>
+let r = <code>{x if y}</code> // si x, alors <code>{y}</code>, sinon `` J'aimerais vraiment ça!!!!!!!!!!!!!!</p>
 <h2>Environment variables</h2>
 <p>Use #env for environment variables</p>
 <pre><code class="language-jome"><span class="hljs-variable">#env</span>.<span class="hljs-title class_">MY_ENV_VAR</span> = <span class="hljs-string">&#x27;foo&#x27;</span> <span class="hljs-comment">// =&gt; process.env.MY_ENV_VAR = &#x27;foo&#x27;</span>
