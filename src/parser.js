@@ -31,10 +31,11 @@ class ASTNode {
     this.token = token
     let prec = PRECEDENCES[this.type]
     this.precedence = (typeof prec === 'function') ? prec(token) : (prec || 0)
-    // FIXMEEEEEEEEE, I am using children for node children and tokens children, seems bad. Use "children" and "parts" instead?
+    // Children is used for AST nodes by handling captures and precedence
     this.children = []
     if (token.children && !(token.children.length === 1 && typeof token.children[0] === "string")) {
-      this.children = parse(token.children)
+      // Parts represent the inner components of the node
+      this.parts = parse(token.children)
     }
     let data = TOKENS[this.type]
     if (data) {
@@ -158,29 +159,26 @@ const regular = (compile) => ({
 
 function compileArgs(node) {
   // TODO: Validate args!
-  let children = node.children.slice(1, -1) // remove vertical bars
+  let cs = node.parts.slice(1, -1) // remove vertical bars
   //let args = 
   //let todo = 10
-  return `(${children.map(c => compileNode(c)).join('')})`
+  return `(${cs.map(c => compileNode(c)).join('')})`
 }
 
 function compileEntry(node) {
   // TODO: Validate entry!
-  let name = node.children[0].raw
-  let value = compileNode(node.children[1])
+  let name = node.parts[0].raw
+  let value = compileNode(node.children[0])
   return `${name}: ${value}`
 }
 
 function compileBlock(node) {
-  let cs = node.children.slice(1, -1) // remove curly braces
+  let cs = node.parts.slice(1, -1) // remove curly braces
   if (cs.every(c => c.type === 'meta.dictionary-key.jome')) {
     return `{${cs.map(c => compileEntry(c))}}`
   }
   // A value is only on a single line, except if using parentheses.
-  let wtf = node
-  let foo = 10
   return '{}'
-  // return `${node.children[0].raw} ${node.children[1].raw}`
 }
 
 const PRECEDENCES = {
@@ -222,19 +220,19 @@ const TOKENS = {
   // },
   "meta.function.do.end.jome": {
     validate: (node) => {
-      if (node.children[0].raw !== 'do') {
+      if (node.parts[0].raw !== 'do') {
         return "Internal error. meta.function.do.end.jome should always start with keyword do"
       }
-      if (node.children[node.children.length-1].raw !== 'end') {
+      if (node.parts[node.parts.length-1].raw !== 'end') {
         return "Internal error. meta.function.do.end.jome should always end with keyword end"
       }
       // Arguments, if present, should always be at the beginning
-      if (node.children.slice(2,-1).find(c => c.type === 'meta.args.jome')) {
+      if (node.parts.slice(2,-1).find(c => c.type === 'meta.args.jome')) {
         return "Syntax error. Arguments should always be at the beginning of the function block."
       }
     },
     compile(node) {
-      let cs = node.children.slice(1,-1) // Remove keywords do and end
+      let cs = node.parts.slice(1,-1) // Remove keywords do and end
       let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
       if (args) {
         return `function ${compileArgs(args)} {${cs.slice(1).map(c => compileNode(c)).join('')}}`
@@ -250,15 +248,15 @@ const TOKENS = {
     },
     compile: (node) => {
       let foo = "bar"
-      return `${node.children[0].raw} ${node.children[1].raw}`
+      return `${node.parts[0].raw} ${node.parts[1].raw}`
     },
   },
   "meta.block.jome": {
     validate: (node) => {
-      if (node.children[0].type !== 'punctuation.curly-braces.open') {
+      if (node.parts[0].type !== 'punctuation.curly-braces.open') {
         return "Internal error. meta.block.jome should always start with punctuation.curly-braces.open"
       }
-      if (node.children[node.children.length-1].type !== 'punctuation.curly-braces.close') {
+      if (node.parts[node.parts.length-1].type !== 'punctuation.curly-braces.close') {
         return "Internal error. meta.block.jome should always end with punctuation.curly-braces.close"
       }
     },
@@ -274,35 +272,35 @@ const TOKENS = {
   // var bar
   'meta.declaration.jome': {
     validate: (node) => {
-      let keyword = node.children[0].raw
-      if (node.children.length !== 2) {
+      let keyword = node.parts[0].raw
+      if (node.parts.length !== 2) {
         return "Missing variable name after keyword "+keyword
       }
     },
     compile: (node) => {
-      return `${node.children[0].raw} ${node.children[1].raw}`
+      return `${node.parts[0].raw} ${node.parts[1].raw}`
     },
   },
   // def someFunc end
   'meta.def.jome': {
     validate: (node) => {
-      if (node.children[0].raw !== 'def') {
+      if (node.parts[0].raw !== 'def') {
         return "Internal error. meta.def.jome should always start with keyword def"
       }
-      if (node.children[1].type !== 'entity.name.function.jome') {
+      if (node.parts[1].type !== 'entity.name.function.jome') {
         return "Syntax error. Missing function name after keyword def."
       }
-      if (node.children[node.children.length-1].raw !== 'end') {
+      if (node.parts[node.parts.length-1].raw !== 'end') {
         return "Internal error. meta.def.jome should always end with keyword end"
       }
       // Arguments, if present, should always be right after the function name
-      if (node.children.slice(3,-1).find(c => c.type === 'meta.args.jome')) {
+      if (node.parts.slice(3,-1).find(c => c.type === 'meta.args.jome')) {
         return "Syntax error. Arguments should always be at the beginning of the function block."
       }
     },
     compile: (node) => {
-      let name = node.children[1].raw
-      let cs = node.children.slice(2,-1) // Remove keywords def, end, and function name
+      let name = node.parts[1].raw
+      let cs = node.parts.slice(2,-1) // Remove keywords def, end, and function name
       let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
       if (args) {
         return `function ${name}${compileArgs(args)} {${cs.slice(1).map(c => compileNode(c)).join('')}}`
@@ -312,7 +310,7 @@ const TOKENS = {
     },
   },
   'meta.if-block.jome': regular((node) => {
-    let cs = node.children.slice(1, -1) // remove if and end
+    let cs = node.parts.slice(1, -1) // remove if and end
     return `if (${compileNode(cs[0])}) {${cs.slice(1).map(c => compileNode(c)).join('')}}`
   }),
   // js uses more specifically:
@@ -348,7 +346,7 @@ const TOKENS = {
         let args = node.children[0]
         return `${compileArgs(args)} => (${node.children.slice(1).map(c => compileNode(c)).join('')})`
       } else {
-        return `() => (${node.children.map(c => compileNode(c)).join('')})`
+        return `() => (${compileNode(node.children[0])})`
       }
     },
   },
@@ -379,19 +377,19 @@ const TOKENS = {
   // called square-bracket because it can be an array or an operator
   "meta.square-bracket.jome": {
     validate: (node) => {
-      if (node.children[0].type !== 'punctuation.definition.square-bracket.begin.jome') {
+      if (node.parts[0].type !== 'punctuation.definition.square-bracket.begin.jome') {
         return "Internal error. meta.square-bracket.jome should always start with punctuation.definition.square-bracket.begin.jome"
       }
-      if (node.children[node.children.length-1].type !== 'punctuation.definition.square-bracket.end.jome') {
+      if (node.parts[node.parts.length-1].type !== 'punctuation.definition.square-bracket.end.jome') {
         return "Internal error. meta.square-bracket.jome should always end with punctuation.definition.square-bracket.end.jome"
       }
       // All the even index children should be punctuation.separator.delimiter.jome
-      if (node.children.slice(1,-1).any((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
+      if (node.parts.slice(1,-1).any((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
         return "Syntax error. Expecting commas between every element inside an array"
       }
     },
     compile: (node) => {
-      let elems = node.children.slice(1,-1).filter((e, i) => i % 2 === 0)
+      let elems = node.parts.slice(1,-1).filter((e, i) => i % 2 === 0)
       return `[${elems.map(c => compileNode(c)).join(', ')}]`
     },
   },
