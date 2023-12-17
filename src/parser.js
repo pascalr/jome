@@ -373,6 +373,27 @@ const TOKENS = {
       return `if (${compileNode(node.children[1])}) {${compileNode(node.children[0])}}`
     },
   },
+  // [1,2,3]
+  // x[0]
+  // called square-bracket because it can be an array or an operator
+  "meta.square-bracket.jome": {
+    validate: (node) => {
+      if (node.children[0].type !== 'punctuation.definition.square-bracket.begin.jome') {
+        return "Internal error. meta.square-bracket.jome should always start with punctuation.definition.square-bracket.begin.jome"
+      }
+      if (node.children[node.children.length-1].type !== 'punctuation.definition.square-bracket.end.jome') {
+        return "Internal error. meta.square-bracket.jome should always end with punctuation.definition.square-bracket.end.jome"
+      }
+      // All the even index children should be punctuation.separator.delimiter.jome
+      if (node.children.slice(1,-1).any((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
+        return "Syntax error. Expecting commas between every element inside an array"
+      }
+    },
+    compile: (node) => {
+      let elems = node.children.slice(1,-1).filter((e, i) => i % 2 === 0)
+      return `[${elems.map(c => compileNode(c)).join(', ')}]`
+    },
+  },
   // =
   'keyword.operator.assignment.jome': {
     captureLeft: true,

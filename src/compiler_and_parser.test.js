@@ -205,3 +205,14 @@ describe("Test objects", () => {
     expect(compile('{x: 1}')).toMatch(/\{x\: ?1\}/);
   })
 })
+
+// FIXME: How to handle conditionally capture left???
+
+describe("Test arrays", () => {
+  test('[]', () => {
+    expect(compile('[]')).toMatch(/\[\]/);
+  })
+  test('[1,2,3]', () => {
+    expect(compile('[1,2,3]')).toMatch(/\[1, ?2, ?3\]/);
+  })
+})

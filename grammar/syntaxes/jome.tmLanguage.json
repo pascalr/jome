@@ -719,9 +719,9 @@
     "square-bracket": {
       "name": "meta.square-bracket.jome",
       "begin": "\\[",
-      "beginCaptures": {"0": {"name": "punctuation.definition.square-bracket.begin.bracket.square.jome"}},
+      "beginCaptures": {"0": {"name": "punctuation.definition.square-bracket.begin.jome"}},
       "end": "\\]",
-      "endCaptures": {"0": {"name": "punctuation.definition.square-bracket.end.bracket.square.jome"}},
+      "endCaptures": {"0": {"name": "punctuation.definition.square-bracket.end.jome"}},
       "patterns": [
         {
           "match": "(?<!\\.)\\.{3}",
