@@ -184,9 +184,7 @@ const PRECEDENCES = {
 }
 
 const TOKENS = {
-  'meta.args.jome': ignoreToken,
   'comment.block.jome': ignoreToken,
-  // 'keyword.control.jome': ignoreToken,
   'punctuation.terminator.statement.jome': tokenAsIs,
   'punctuation.separator.delimiter.jome': tokenAsIs,
   "string.quoted.backtick.verbatim.jome": regular((node) => `\`${node.token.children[1]}\``),
@@ -215,7 +213,11 @@ const TOKENS = {
     compile(node) {
       let cs = node.children.slice(1,-1) // Remove keywords do and end
       let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
-      return `function ${args ? compileArgs(args) : '()'} {${cs.map(c => compileNode(c)).join('')}}`
+      if (args) {
+        return `function ${compileArgs(args)} {${cs.slice(1).map(c => compileNode(c)).join('')}}`
+      } else {
+        return `function () {${cs.map(c => compileNode(c)).join('')}}`
+      }
     }
   },
   'constant.language.jome': tokenAsIs,
@@ -253,12 +255,29 @@ const TOKENS = {
   },
   // =>
   'keyword.arrow.jome': {
-    captureLeft: true,
+    captureLeft: true, // TODO: Allow to optionnally capture left, so allow no arguments
     captureRight: true,
-    // validate: TODO validate that left arg is an arg
+    validate: (node) => {
+      if (node.children.length === 1) {
+        // No args
+        // TODO: Validate right side
+      } else if (node.children.length === 2) {
+        // With args
+        if (node.children[0].type !== 'meta.args.jome') {
+          return "Syntax error. Arrow function expects arguments at it's left side."
+        }
+        // TODO: Validate right side
+      } else {
+        return "Syntax error. Arrow function expects two operands."
+      }
+    },
     compile: (node) => {
-      let args = node.children.find(c => c.type === 'meta.args.jome')
-      return `${args ? compileArgs(args) : '()'} => (${node.children.map(c => compileNode(c)).join('')})`
+      if (node.children.length > 1) {
+        let args = node.children[0]
+        return `${compileArgs(args)} => (${node.children.slice(1).map(c => compileNode(c)).join('')})`
+      } else {
+        return `() => (${node.children.map(c => compileNode(c)).join('')})`
+      }
     },
   },
   // ==, !=, ===, !===
