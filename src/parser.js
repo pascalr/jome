@@ -186,7 +186,7 @@ const PRECEDENCES = {
 const TOKENS = {
   'meta.args.jome': ignoreToken,
   'comment.block.jome': ignoreToken,
-  'keyword.control.jome': ignoreToken,
+  // 'keyword.control.jome': ignoreToken,
   'punctuation.terminator.statement.jome': tokenAsIs,
   'punctuation.separator.delimiter.jome': tokenAsIs,
   "string.quoted.backtick.verbatim.jome": regular((node) => `\`${node.token.children[1]}\``),
@@ -200,9 +200,22 @@ const TOKENS = {
   //   ).join('')+'`'
   // },
   "meta.function.do.end.jome": {
+    validate: (node) => {
+      if (node.children[0].raw !== 'do') {
+        return "Internal error. meta.function.do.end.jome should always start with keyword do"
+      }
+      if (node.children[node.children.length-1].raw !== 'end') {
+        return "Internal error. meta.function.do.end.jome should always end with keyword end"
+      }
+      // Arguments, if present, should always be at the beginning
+      if (node.children.slice(2,-1).find(c => c.type === 'meta.args.jome')) {
+        return "Syntax error. Arguments should always be at the beginning of the function block."
+      }
+    },
     compile(node) {
-      let args = node.children.find(c => c.type === 'meta.args.jome')
-      return `function ${args ? compileArgs(args) : '()'} {${node.children.map(c => compileNode(c)).join('')}}`
+      let cs = node.children.slice(1,-1) // Remove keywords do and end
+      let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
+      return `function ${args ? compileArgs(args) : '()'} {${cs.map(c => compileNode(c)).join('')}}`
     }
   },
   'constant.language.jome': tokenAsIs,
