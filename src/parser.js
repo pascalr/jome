@@ -108,11 +108,6 @@ function parse(tokens) {
   return topNodes
 }
 
-const OPERAND_TYPES = [
-  'constant.numeric.integer.jome',
-  'keyword.operator.jome'
-]
-
 // const validateChildren = (nb, types) => (node) => {
 //   if (node.children.length !== nb) {
 //     return "Invalid number of children for node."
@@ -181,7 +176,24 @@ function compileBlock(node) {
   return '{}'
 }
 
+// Chainable types have the highest precedence and are all equal
+const CHAINABLE_TYPES = [
+  "meta.group.jome",
+  "meta.square-bracket.jome",
+  // attribute accessor
+  // utility accessor
+]
+
+const OPERAND_TYPES = [
+  "constant.numeric.integer.jome",
+  "keyword.operator.jome",
+  "constant.numeric.float.jome",
+  "meta.group.jome",
+  "meta.square-bracket.jome"
+]
+
 const PRECEDENCES = {
+  // square brackets are higher than arithmetic operators: x[0] + 10 < y - 20
   'keyword.operator.jome': (token => {
     let op = token.text()
     if (op === '+' || op === '-') {
@@ -263,7 +275,7 @@ const TOKENS = {
     compile: compileBlock
   },
   'constant.language.jome': tokenAsIs,
-  'expression.group': tokenAsIs,
+  'meta.group.jome': tokenAsIs,
   'variable.other.jome': tokenAsIs,
   'variable.assignment.jome': tokenAsIs,
   'constant.numeric.integer.jome': tokenAsIs,

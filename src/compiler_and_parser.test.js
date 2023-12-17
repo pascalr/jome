@@ -182,8 +182,10 @@ describe("Parse let assignment", () => {
   test('[1][0]', () => {
     let list = parse(tokenize("[1][0]").children)
     expect(list?.length).toBe(1)
-    expect(list[0]?.raw).toBe('[1]')
-    expect(list[2]?.raw).toBe('let y')
+    let ast = list[0]
+    expect(ast?.parts?.length).toBe(3) // [, 1, ]
+    expect(ast?.children?.length).toBe(1)
+    expect(ast?.children?.[0]?.parts?.length).toBe(3) // [, 0, ]
   })
 
 })

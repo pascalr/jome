@@ -574,7 +574,7 @@
       "endCaptures": {
         "0": { "name": "punctuation.paren.close" }
       },
-      "name": "expression.group",
+      "name": "meta.group.jome",
       "patterns": [{ "include": "#expression" }]
     },
     "block-content": {
