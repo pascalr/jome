@@ -33,6 +33,38 @@ interface GlobalAttributes |
   translate?,
   virtualkeyboardpolicy?,
 |
+// interface GlobalAttributes
+//   accesskey?
+//   autocapitalize?
+//   autofocus?
+//   class?
+//   contenteditable?
+//   dir?
+//   draggable?
+//   enterkeyhint?
+//   hidden?
+//   id?
+//   inert?
+//   inputmode?
+//   is?
+//   itemid?
+//   itemprop?
+//   itemref?
+//   itemscope?
+//   itemtype?
+//   lang?
+//   nonce?
+//   part?
+//   popover?
+//   role?
+//   slot?
+//   spellcheck?
+//   style?
+//   tabindex?
+//   title?
+//   translate?
+//   virtualkeyboardpolicy?
+// end
 
 def renderHTMLAttrs = |obj| => (
   var r = obj.#signals.#keys.map(n =>

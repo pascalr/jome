@@ -72,38 +72,27 @@ let testInterface = &TestInterface => (arg + param)
 // TODO: Test Use <HTML> to add an html tag inside <html><HTML></HTML></html>
 
 class ParentClass
-
-  super {
-    getTen: => 10
-  }
-
-  let getTen = => 10
-
-  def getTen
-    return 10
-  end
-
+  getTen = => 10
 end
-class ChildClass
-  super: ParentClass
+class ChildClass < ParentClass
 end
 
 class TestFuncCall
-  let getFive = => 5
+  getFive = => 5
 end
 testFuncCall = {
   TestFuncCall
-    getFive
+    .getFive
 }
 testChainFuncCall = {
   TestFuncCall
-    getFive
-    getFive
+    .getFive
+    .getFive
 }
 
 class ClassForTesting |arg, @attr?, prop?|
-  getArg: => arg
-  getProp: => prop
+  getArg = => arg
+  getProp = => prop
 end
 testObj = {ClassForTesting "arg", attr: "attr", prop: "propVal"}
 testObjList = {
@@ -134,13 +123,19 @@ def f
 end
 
 class SomeClassShorter |@name|
-  getName: => @name
+  getName = => @name
 end
 
 class SomeClass
-  constructor: => (
+  def constructor
     @name = 10
-  )
+  end
+  def ~create
+    @name = 10
+  end
+  def ~init
+    @name = 10
+  end
   getName: => @name
 end
 
@@ -166,7 +161,7 @@ class TestSyntaxe2 extends TestSyntaxe1 {
 */
 
 class TestEq
-  constructor: |actual, expected, message| => (
+  def constructor |actual, expected, message|
     if (Array.isArray(expected) || typeof expected === 'object')
       @pass = JSON.stringify(actual) === JSON.stringify(expected);
     else
@@ -177,10 +172,10 @@ class TestEq
     else
       console.log("\x1b[31mÉCHEC:\x1b[0m", message, "\nExpected:", expected, "\nActually:", actual);
     end
-  )
+  end
 end
 
-titre = |texte| => (
+let titre = |texte| => (
   console.log('%c' + texte, 'color: yellow')
 );
 

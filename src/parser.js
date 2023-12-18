@@ -407,6 +407,19 @@ const TOKENS = {
     captureLeft: true,
     captureRight: true,
   },
+  // interface
+  "meta.interface.jome": {
+    compile: (node) => {
+      // TODO: Parser les interfaces simplement une ligne à la fois. Un item par ligne.
+      // interface GlobalAttributes
+      //   accesskey?
+      //   autocapitalize?
+      //   autofocus?
+      //   class?
+      // end
+      throw new Error("TODO interface")
+    }
+  },
   // =>
   'keyword.arrow.jome': {
     captureLeft: true, // TODO: Allow to optionnally capture left, so allow no arguments

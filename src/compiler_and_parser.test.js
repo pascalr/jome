@@ -245,3 +245,13 @@ test('!true === !false', () => {
 test('!true === !!false', () => {
   expect(compile('!true === !!false')).toMatch(/!true === !!false/);
 })
+
+describe('Test "ternary"', () => {
+  test('true ? 1', () => {
+    expect(compile('true ? 1')).toMatch(/true \? 1 : null/);
+  })
+  // C'est quand même plus beau cond ? val1 : val2
+  test('false ? 1 ?? 0', () => {
+    expect(compile('false ? 1 ?? 0')).toMatch(/false \? 1 : 0/);
+  })
+})

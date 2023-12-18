@@ -8,8 +8,9 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   # Jome v-0.0.0.0.1
 
-  Jome is a language that compiles to JavaScript. It has a node structure like in Godot, it has types like Typescript,
-  it has goodies like CoffeeScript and underscore.js, it handles state like in React and it has some original features.
+  Jome is a language that compiles to JavaScript. It has a node structure like in Godot, types like Typescript,
+  goodies like CoffeeScript and underscore.js, syntax similar to ruby, it handles state like in React and it
+  has some original features.
 
   Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.
 
@@ -79,7 +80,8 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   <h2 id="syntax">Syntax</h2>
 
-  Curly braces are only used for creating objects (See [blocks](#blocks)). As a delimiter, you use the keyword end instead.
+  The syntax is a little more similar to the ruby programming language. You use the keyword def instead of function.
+  And you use the end keyword instead of curly braces.
 
   \`\`\`jome
   def sayHelloJohn
@@ -91,7 +93,8 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   end
   \`\`\`
 
-  Vertical bars are used for function parameters.
+  Vertical bars are used for function parameters instead of parentheses.
+
   \`\`\`jome
   let addXY = |x, y| => (x + y)
 
@@ -99,10 +102,6 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
     #log(\`Hello {name}!\`)
   end
   \`\`\`
-
-  As you can see, the keyword def is used instead of the keyword function. It is not exactly the same as a js function.
-  TODO: I want the thing to be like a function, so available anywhere, but that uses the reference of this. Is it possible?
-  Probably not. I am tired.
 
   <h2 id="blocks">Blocks</h2>
 
@@ -136,7 +135,7 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
     Obj prop: 'val'
       Nested prop: 'val'
         Nested prop: 'val'
-      run
+      .run
   } // The value will be the result of the function run of the object created.
   \`\`\`
 
@@ -152,7 +151,7 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   ### Shorthand key syntax
 
-  The short key syntax is different that in javascript, because it could be confused with list. In Jome, it starts with a colon
+  The short key syntax is different that in javascript, because it could be confusing. In Jome, it starts with a colon
   \`\`\`jome
   obj = {:content, :value}
   // same as
@@ -173,6 +172,8 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   You can use the keyword exe to enter execution mode, everything after will be executed.
 
   You can use the keyword parent to return to procreation mode.
+
+  Maybe use the keyword set instead of attr??
 
   \`\`\`jome
   {
@@ -210,8 +211,12 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   \`\`\`
 
   \`\`\`jome
-  // Three syntaxes allowed to execute functions
+  // Four syntaxes allowed to execute functions
   {[
+    Obj prop: 'val'
+      .execFunc
+      .execFunc2
+
     Obj prop: 'val'
       exe execFunc
       exe execFunc2
@@ -274,14 +279,14 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   In order to add children to nodes, you can use the << operator.
 
   \`\`\`jome
-  hero.inventory << {
+  hero.inventory << {[
     Sword damage: 10, weight: 500g
     Shield armor: 8, weight: 400g
     Scroll "Scroll of wisdom"
     Belt
       HealingPotion life: 200
       ManaPotion mana: 100
-  }
+  ]}
   \`\`\`
 
   ### Children attached with key
@@ -471,6 +476,8 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   FIXME: I don't like using the word PARAMS in capital letters, but I don't have a better idea yet.
   I don't want to reserve the keyword params...
+
+  Use #params instead of PARAMS?
 
   ### Props
 

@@ -65,8 +65,9 @@
             <div class="scrollable" style="width: 100%;">
               <div class="app-content">
                 <h1>Jome v-0.0.0.0.1</h1>
-<p>Jome is a language that compiles to JavaScript. It has a node structure like in Godot, it has types like Typescript,
-it has goodies like CoffeeScript and underscore.js, it handles state like in React and it has some original features.</p>
+<p>Jome is a language that compiles to JavaScript. It has a node structure like in Godot, types like Typescript,
+goodies like CoffeeScript and underscore.js, syntax similar to ruby, it handles state like in React and it
+has some original features.</p>
 <p>Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.</p>
 <p>You can read from top to bottom to learn the language, or you can jump to any section if you are only curious.</p>
 <h2>Overview</h2>
@@ -115,7 +116,8 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <p>This documentation assumes the reader is familiar with javascript.</p>
 <p>Jome is similar to JavaScript, but there are a few distinctions that you must be aware of. Mainly, the syntax is a bit different, there are nodes, named parameters and scripts.</p>
   <h2 id="syntax">Syntax</h2>
-<p>Curly braces are only used for creating objects (See <a href="#blocks">blocks</a>). As a delimiter, you use the keyword end instead.</p>
+<p>The syntax is a little more similar to the ruby programming language. You use the keyword def instead of function.
+And you use the end keyword instead of curly braces.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">sayHelloJohn</span>
   <span class="hljs-title function_">#log</span>(<span class="hljs-string">`Hello John!`</span>)
 <span class="hljs-keyword">end</span>
@@ -124,16 +126,13 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
   <span class="hljs-title function_">sayHelloJohn</span>()
 <span class="hljs-keyword">end</span>
 </code></pre>
-<p>Vertical bars are used for function parameters.</p>
+<p>Vertical bars are used for function parameters instead of parentheses.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">addXY</span> = |<span class="hljs-variable">x</span>, <span class="hljs-variable">y</span>| =&gt; (<span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>)
 
 <span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span> |<span class="hljs-variable">name</span>|
   <span class="hljs-title function_">#log</span>(<span class="hljs-string">`Hello {name}!`</span>)
 <span class="hljs-keyword">end</span>
 </code></pre>
-<p>As you can see, the keyword def is used instead of the keyword function. It is not exactly the same as a js function.
-TODO: I want the thing to be like a function, so available anywhere, but that uses the reference of this. Is it possible?
-Probably not. I am tired.</p>
   <h2 id="blocks">Blocks</h2>
 <p>Blocks are a key component of Jome. They use indentation to build objects in a short and subjectively pretty way.
 It is also the syntax required to build <a href="#nodes">nodes</a>.</p>
@@ -162,7 +161,7 @@ It is also the syntax required to build <a href="#nodes">nodes</a>.</p>
   <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
     <span class="hljs-title class_">Nested</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
       <span class="hljs-title class_">Nested</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
-    <span class="hljs-variable">run</span>
+    .<span class="hljs-variable">run</span>
 } <span class="hljs-comment">// The value will be the result of the function run of the object created.</span>
 </code></pre>
 <p>A value is only on a single line. Use parentheses if you need multiple lines.</p>
@@ -174,7 +173,7 @@ It is also the syntax required to build <a href="#nodes">nodes</a>.</p>
 }
 </code></pre>
 <h3>Shorthand key syntax</h3>
-<p>The short key syntax is different that in javascript, because it could be confused with list. In Jome, it starts with a colon</p>
+<p>The short key syntax is different that in javascript, because it could be confusing. In Jome, it starts with a colon</p>
 <pre><code class="language-jome"><span class="hljs-variable">obj</span> = {:<span class="hljs-variable">content</span>, :<span class="hljs-variable">value</span>}
 <span class="hljs-comment">// same as</span>
 <span class="hljs-variable">obj</span> = {content: <span class="hljs-variable">content</span>, value: <span class="hljs-variable">value</span>}
@@ -187,6 +186,7 @@ default right after the class name. Everything on the first line is also given t
 <p>By default, nested objects are children of the parent.</p>
 <p>You can use the keyword exe to enter execution mode, everything after will be executed.</p>
 <p>You can use the keyword parent to return to procreation mode.</p>
+<p>Maybe use the keyword set instead of attr??</p>
 <pre><code class="language-jome">{
 <span class="hljs-title class_">Recipe</span>
   <span class="hljs-keyword">init</span> name: <span class="hljs-string">&#x27;Chickpea balls&#x27;</span>
@@ -218,8 +218,12 @@ default right after the class name. Everything on the first line is also given t
     <span class="hljs-keyword">exe</span> <span class="hljs-variable">executeFunction</span>
 }
 </code></pre>
-<pre><code class="language-jome"><span class="hljs-comment">// Three syntaxes allowed to execute functions</span>
+<pre><code class="language-jome"><span class="hljs-comment">// Four syntaxes allowed to execute functions</span>
 {[
+  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
+    .<span class="hljs-variable">execFunc</span>
+    .<span class="hljs-variable">execFunc2</span>
+
   <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
     <span class="hljs-keyword">exe</span> <span class="hljs-variable">execFunc</span>
     <span class="hljs-keyword">exe</span> <span class="hljs-variable">execFunc2</span>
@@ -263,14 +267,14 @@ default right after the class name. Everything on the first line is also given t
 </code></pre>
 <h3>Adding children to nodes</h3>
 <p>In order to add children to nodes, you can use the &lt;&lt; operator.</p>
-<pre><code class="language-jome"><span class="hljs-variable">hero</span>.<span class="hljs-variable">inventory</span> &lt;&lt; {
+<pre><code class="language-jome"><span class="hljs-variable">hero</span>.<span class="hljs-variable">inventory</span> &lt;&lt; {[
   <span class="hljs-title class_">Sword</span> damage: <span class="hljs-number">10</span>, weight: <span class="hljs-variable">500g</span>
   <span class="hljs-title class_">Shield</span> armor: <span class="hljs-number">8</span>, weight: <span class="hljs-variable">400g</span>
   <span class="hljs-title class_">Scroll</span> <span class="hljs-string">&quot;Scroll of wisdom&quot;</span>
   <span class="hljs-title class_">Belt</span>
     <span class="hljs-title class_">HealingPotion</span> life: <span class="hljs-number">200</span>
     <span class="hljs-title class_">ManaPotion</span> mana: <span class="hljs-number">100</span>
-}
+]}
 </code></pre>
 <h3>Children attached with key</h3>
 <p>LES NODES N'ONT PAS DE NOM, MAIS TU PEUX LES ATTACHER AVEC UNE CLÉ À UN PARENT
@@ -412,6 +416,7 @@ we add a params argument to the function, so we need at least one to add the arg
 </code></pre>
 <p>FIXME: I don't like using the word PARAMS in capital letters, but I don't have a better idea yet.
 I don't want to reserve the keyword params...</p>
+<p>Use #params instead of PARAMS?</p>
 <h3>Props</h3>
 <p>Props are all the parameters and attributes as parameters passed during an object creation.</p>
 <pre><code class="language-jome">« <span class="hljs-title class_">Obj</span> someProp: <span class="hljs-number">10</span>, someAttr: <span class="hljs-string">&#x27;Paul&#x27;</span> »
