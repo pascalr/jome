@@ -242,6 +242,19 @@ main {
 
   ### At (@)
 
+  One of the objective of Jome is to remove the weird thing that is this.
+
+  I want in Jome this to refer to the current instance when inside a method and that's it.
+
+  In order to do this, I should bind automatically all the functions inside the class to the proper this.
+  Inside the constructor:
+  everyMethod1.bind(this)
+  everyMethod2.bind(this)
+  Then inside the everyMethod1:
+    __this = this
+  everyMethod2:
+    __this = this
+
   At is usually the same as the keyword this.
 
   ```jome

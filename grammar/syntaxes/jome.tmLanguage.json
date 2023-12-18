@@ -96,6 +96,7 @@
         { "include": "#if_block" },
         { "include": "#interface" },
         { "include": "#class" },
+        { "include": "#fn_block" },
         { "include": "#keywords" },
         { "include": "#declaration" },
         { "include": "#vbars-args" },
@@ -242,6 +243,36 @@
             "0": {"name": "keyword.control.jome"}
           },
           "patterns": [
+            {"include": "#expression"}
+          ]
+        }
+      ]
+    },
+    "fn_block": {
+      "patterns": [
+        {
+          "name": "meta.fn.jome",
+          "begin": "\\b(fn)\\b\\s*(\\w*)\\s*",
+          "beginCaptures": {
+            "1": {"name": "keyword.control.jome"},
+            "2": {"name": "entity.name.function.jome"}
+          },
+          "end": "\\b(end)\\b",
+          "endCaptures": {"0": {"name": "keyword.control.jome"}},
+          "patterns": [
+            {
+              "name": "meta.fn-args.jome",
+              "begin": "\\G\\(",
+              "beginCaptures": {"0": {"name": "punctuation.paren.open"}},
+              "end": "\\)",
+              "endCaptures": {"0": {"name": "punctuation.paren.close"}},
+              "patterns": [
+                {"include": "#variable-with-type"},
+                {"include": "#along"},
+                {"include": "#expression"},
+                {"include": "#interface-ref" }
+              ]
+            },
             {"include": "#expression"}
           ]
         }

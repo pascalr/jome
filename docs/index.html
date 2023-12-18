@@ -246,6 +246,16 @@ default right after the class name. Everything on the first line is also given t
 ]}
 </code></pre>
 <h3>At (@)</h3>
+<p>One of the objective of Jome is to remove the weird thing that is this.</p>
+<p>I want in Jome this to refer to the current instance when inside a method and that's it.</p>
+<p>In order to do this, I should bind automatically all the functions inside the class to the proper this.
+Inside the constructor:
+everyMethod1.bind(this)
+everyMethod2.bind(this)
+Then inside the everyMethod1:
+__this = this
+everyMethod2:
+__this = this</p>
 <p>At is usually the same as the keyword this.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">_this</span> = @ <span class="hljs-comment">// same as this</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">name</span> = <span class="hljs-variable">@name</span> <span class="hljs-comment">// same as this.name</span>
@@ -849,9 +859,31 @@ I was using $URL, but this does not work because global.URL already exists withi
 <h2>Types</h2>
 <p>TODO: Support static typing a little like Typescript.</p>
 <p>You will be able to add the type of the variable with a colon like in the examples below.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">greet</span> = |name: <span class="hljs-variable">string</span>, greeting: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;Hello&quot;</span>|: <span class="hljs-variable">string</span> =&gt; {
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">greet</span> |name: <span class="hljs-variable">string</span>, greeting: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;Hello&quot;</span>| : <span class="hljs-variable">string</span>
   <span class="hljs-string">`${greeting}, ${name}!`</span>
-}
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p>In TypeScript, the character | is used a lot for unions, but here it clashes with my usage of | | for args...
+What can I use instead of |???</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: <span class="hljs-variable">string</span> || <span class="hljs-variable">number</span>[]| : <span class="hljs-variable">string</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: <span class="hljs-variable">string</span> <span class="hljs-variable">or</span> <span class="hljs-variable">number</span>[]| : <span class="hljs-variable">string</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: (<span class="hljs-variable">string</span>, <span class="hljs-variable">number</span>[])| : <span class="hljs-variable">string</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: [<span class="hljs-variable">string</span>, <span class="hljs-variable">number</span>[]]| : <span class="hljs-variable">string</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: (<span class="hljs-variable">string</span> <span class="hljs-variable">number</span>[])| : <span class="hljs-variable">string</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: [<span class="hljs-variable">string</span> <span class="hljs-variable">number</span>[]]| : <span class="hljs-variable">string</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: <span class="hljs-variable">string</span> <span class="hljs-variable">number</span>[]| : <span class="hljs-variable">string</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: <span class="hljs-variable">string</span> / <span class="hljs-variable">number</span>[]| : <span class="hljs-variable">string</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: <span class="hljs-variable">string</span> . <span class="hljs-variable">number</span>[]| : <span class="hljs-variable">string</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: <span class="hljs-variable">string</span> ^ <span class="hljs-variable">number</span>[]| : <span class="hljs-variable">string</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: <span class="hljs-variable">string</span> * <span class="hljs-variable">number</span>[]| : <span class="hljs-variable">string</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: <span class="hljs-variable">string</span>/<span class="hljs-variable">number</span>[]| : <span class="hljs-variable">string</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: <span class="hljs-variable">string</span>|<span class="hljs-variable">number</span>[]| : <span class="hljs-variable">string</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: &lt;<span class="hljs-variable">string</span>,<span class="hljs-variable">number</span>[]&gt;| : <span class="hljs-variable">string</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: <span class="hljs-variable">string</span> - <span class="hljs-variable">number</span>[]| : <span class="hljs-variable">string</span>
+
+<span class="hljs-keyword">def</span> <span class="hljs-variable">first</span> |list: <span class="hljs-variable">string</span> <span class="hljs-variable">or</span> <span class="hljs-variable">number</span>[]| : <span class="hljs-variable">string</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-variable">list</span>[<span class="hljs-number">0</span>]
+<span class="hljs-keyword">end</span>
 </code></pre>
 <pre><code class="language-jome"><span class="hljs-variable">interface</span> <span class="hljs-title class_">Person</span> {
   firstName: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;John&quot;</span>

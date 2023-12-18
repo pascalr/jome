@@ -245,6 +245,19 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   ### At (@)
 
+  One of the objective of Jome is to remove the weird thing that is this.
+
+  I want in Jome this to refer to the current instance when inside a method and that's it.
+
+  In order to do this, I should bind automatically all the functions inside the class to the proper this.
+  Inside the constructor:
+  everyMethod1.bind(this)
+  everyMethod2.bind(this)
+  Then inside the everyMethod1:
+    __this = this
+  everyMethod2:
+    __this = this
+
   At is usually the same as the keyword this.
 
   \`\`\`jome
@@ -1092,9 +1105,34 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   You will be able to add the type of the variable with a colon like in the examples below.
 
   \`\`\`jome
-  def greet = |name: string, greeting: string = "Hello"|: string => {
+  def greet |name: string, greeting: string = "Hello"| : string
     \`\${greeting}, \${name}!\`
-  }
+  end
+  \`\`\`
+
+  In TypeScript, the character | is used a lot for unions, but here it clashes with my usage of | | for args...
+  What can I use instead of |???
+
+  \`\`\`jome
+  def first |list: string || number[]| : string
+  def first |list: string or number[]| : string
+  def first |list: (string, number[])| : string
+  def first |list: [string, number[]]| : string
+  def first |list: (string number[])| : string
+  def first |list: [string number[]]| : string
+  def first |list: string number[]| : string
+  def first |list: string / number[]| : string
+  def first |list: string . number[]| : string
+  def first |list: string ^ number[]| : string
+  def first |list: string * number[]| : string
+  def first |list: string/number[]| : string
+  def first |list: string|number[]| : string
+  def first |list: <string,number[]>| : string
+  def first |list: string - number[]| : string
+
+  def first |list: string or number[]| : string
+    return list[0]
+  end
   \`\`\`
 
   \`\`\`jome

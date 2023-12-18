@@ -4,6 +4,9 @@ let add2Nb = do |nb1, nb2| return nb1 + nb2 end
 def printCode |unused along source|
   #log(source)
 end
+fn printCode(unused along source)
+  #log(source)
+end
 if true #log("hello") end
 // let someTest = someCond ? someVal ?? someDefault
 {x: 1}.#log
@@ -19,9 +22,9 @@ def funcWithType |someArg: string|
 
 end
 
-//fn funcWithType(someArg: string)
+fn funcWithType(someArg: string)
 
-//end
+end
 
 class SomeNode |someParam?, @tenMore?, @someText?|
 end
@@ -131,13 +134,13 @@ class SomeClassShorter |@name|
 end
 
 class SomeClass
-  def constructor
+  fn constructor
     @name = 10
   end
-  def ~create
+  fn ~create
     @name = 10
   end
-  def ~init
+  fn ~init
     @name = 10
   end
   getName: => @name
