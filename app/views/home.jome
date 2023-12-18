@@ -1089,9 +1089,34 @@ main {
   You will be able to add the type of the variable with a colon like in the examples below.
 
   ```jome
-  def greet = |name: string, greeting: string = "Hello"|: string => {
+  def greet |name: string, greeting: string = "Hello"| : string
     `${greeting}, ${name}!`
-  }
+  end
+  ```
+
+  In TypeScript, the character | is used a lot for unions, but here it clashes with my usage of | | for args...
+  What can I use instead of |???
+
+  ```jome
+  def first |list: string || number[]| : string
+  def first |list: string or number[]| : string
+  def first |list: (string, number[])| : string
+  def first |list: [string, number[]]| : string
+  def first |list: (string number[])| : string
+  def first |list: [string number[]]| : string
+  def first |list: string number[]| : string
+  def first |list: string / number[]| : string
+  def first |list: string . number[]| : string
+  def first |list: string ^ number[]| : string
+  def first |list: string * number[]| : string
+  def first |list: string/number[]| : string
+  def first |list: string|number[]| : string
+  def first |list: <string,number[]>| : string
+  def first |list: string - number[]| : string
+
+  def first |list: string or number[]| : string
+    return list[0]
+  end
   ```
 
   ```jome

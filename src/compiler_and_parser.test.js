@@ -122,6 +122,12 @@ describe("Test attribute accessor", () => {
   })
 })
 
+describe("Test attribute setter", () => {
+  test('let o; o.x = 10', () => {
+    expect(compile('let o; o.x = 10')).toMatch(/let o; ?o\.x ?= ?10/);
+  })
+})
+
 test('let x = 1', () => {
   // FIXME: Do I want var or I want let? I used var because it is what CoffeeScript is using by default.
   expect(compile('let x = 1')).toMatch(/(var|let)\s+x\s*=\s*1/);

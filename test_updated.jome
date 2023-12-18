@@ -19,6 +19,10 @@ def funcWithType |someArg: string|
 
 end
 
+//fn funcWithType(someArg: string)
+
+//end
+
 class SomeNode |someParam?, @tenMore?, @someText?|
 end
 class SomeNode
