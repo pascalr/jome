@@ -224,8 +224,6 @@ describe("Test objects", () => {
   })
 })
 
-// FIXME: How to handle conditionally capture left???
-
 describe("Test arrays", () => {
   test('[]', () => {
     expect(compile('[]')).toMatch(/\[\]/);
@@ -240,4 +238,10 @@ test('!true', () => {
 })
 test('!true === false', () => {
   expect(compile('!true === false')).toMatch(/!true === false/);
+})
+test('!true === !false', () => {
+  expect(compile('!true === !false')).toMatch(/!true === !false/);
+})
+test('!true === !!false', () => {
+  expect(compile('!true === !!false')).toMatch(/!true === !!false/);
 })

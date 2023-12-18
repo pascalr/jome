@@ -72,14 +72,24 @@ let testInterface = &TestInterface => (arg + param)
 // TODO: Test Use <HTML> to add an html tag inside <html><HTML></HTML></html>
 
 class ParentClass
-  getTen: => 10
+
+  super {
+    getTen: => 10
+  }
+
+  let getTen = => 10
+
+  def getTen
+    return 10
+  end
+
 end
 class ChildClass
   super: ParentClass
 end
 
 class TestFuncCall
-  getFive: => 5
+  let getFive = => 5
 end
 testFuncCall = {
   TestFuncCall
