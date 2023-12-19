@@ -93,12 +93,12 @@ describe("Test functions creation", () => {
     expect(compile('let sayHello = function(name) #log("hello", name) end')).toMatch(/let sayHello = function \(name\) {\s*console.log\("hello", name\)\s*}/);
   })
   test('let keyword with arrow function', () => {
-    expect(compile('let giveMe5 = => 5')).toMatch(/let giveMe5 = \(\) => \(?5\)?/);
+    expect(compile('let giveMe5 = () => 5')).toMatch(/let giveMe5 = \(\) => \(?5\)?/);
   })
   // let giveMe5 = _=> 5
   // let giveMe5 ==> 5
   test('let keyword with arrow function with args', () => {
-    expect(compile('let echo = |x| => x')).toMatch(/let echo = \(x\) => \(?x\)?/);
+    expect(compile('let echo = (x) => x')).toMatch(/let echo = \(x\) => \(?x\)?/);
   })
   // *** inline ***
   test('inline with function end', () => {
@@ -108,10 +108,13 @@ describe("Test functions creation", () => {
     expect(compile('function(x, name) #log("hello", name) end')).toMatch(/function \(x,\s*name\) {\s*console.log\("hello", name\)\s*}/);
   })
   test('inline with arrow function', () => {
-    expect(compile('=> 5')).toMatch(/\(\) => \(?5\)?/);
+    expect(compile('() => 5')).toMatch(/\(\) => \(?5\)?/);
+  })
+  test('inline with arrow function with args no paren', () => {
+    expect(compile('x => x')).toMatch(/\(?x\)? => \(?x\)?/);
   })
   test('inline with arrow function with args', () => {
-    expect(compile('|x| => x')).toMatch(/\(x\) => \(?x\)?/);
+    expect(compile('(x) => x')).toMatch(/\(x\) => \(?x\)?/);
   })
 })
 

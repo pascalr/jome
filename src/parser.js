@@ -430,7 +430,8 @@ const TOKENS = {
         // TODO: Validate right side
       } else if (node.children.length === 2) {
         // With args
-        if (node.children[0].type !== 'meta.args.jome') {
+        let t = node.children[0].type
+        if (!(t === 'meta.group.jome' || t === 'variable.other.jome')) {
           return "Syntax error. Arrow function expects arguments at it's left side."
         }
         // TODO: Validate right side
