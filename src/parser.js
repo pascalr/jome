@@ -201,7 +201,10 @@ const regular = (compile) => ({
   compile
 })
 
-function compileArgs(node) {
+function compileArgs(node) { 
+  if (node.type === 'variable.other.jome') {
+    return node.raw
+  }
   // TODO: Validate args!
   let cs = node.parts.slice(1, -1) // remove vertical bars
   //let args = 
