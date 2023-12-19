@@ -1,10 +1,7 @@
 import {H1} from './lib/html.jome'
 
 let add2Nb = do |nb1, nb2| return nb1 + nb2 end
-def printCode |unused along source|
-  #log(source)
-end
-fn printCode(unused along source)
+def printCode(unused along source)
   #log(source)
 end
 if true #log("hello") end
@@ -18,11 +15,7 @@ printCode(1+1) // should print "1+1"
 
 let strWithType: string = 'someStr'
 
-def funcWithType |someArg: string|
-
-end
-
-fn funcWithType(someArg: string)
+def funcWithType(someArg: string)
 
 end
 

@@ -96,7 +96,7 @@
         { "include": "#if_block" },
         { "include": "#interface" },
         { "include": "#class" },
-        { "include": "#fn_block" },
+        { "include": "#function_v2" },
         { "include": "#keywords" },
         { "include": "#declaration" },
         { "include": "#vbars-args" },
@@ -233,7 +233,7 @@
       "patterns": [
         {
           "name": "meta.def.jome",
-          "begin": "\\b(def)\\s*(\\w+)?\\b",
+          "begin": "\\b(def)\\s*(\\w+)?\\b\\s*",
           "beginCaptures": {
             "1": {"name": "keyword.control.jome"},
             "2": {"name": "entity.name.function.jome"}
@@ -243,16 +243,29 @@
             "0": {"name": "keyword.control.jome"}
           },
           "patterns": [
+            {
+              "name": "meta.args.jome",
+              "begin": "\\G\\(",
+              "beginCaptures": {"0": {"name": "punctuation.paren.open"}},
+              "end": "\\)",
+              "endCaptures": {"0": {"name": "punctuation.paren.close"}},
+              "patterns": [
+                {"include": "#variable-with-type"},
+                {"include": "#along"},
+                {"include": "#expression"},
+                {"include": "#interface-ref" }
+              ]
+            },
             {"include": "#expression"}
           ]
         }
       ]
     },
-    "fn_block": {
+    "function_v2": {
       "patterns": [
         {
-          "name": "meta.fn.jome",
-          "begin": "\\b(fn)\\b\\s*(\\w*)\\s*",
+          "name": "meta.function_v2.jome",
+          "begin": "\\b(function)\\b\\s*",
           "beginCaptures": {
             "1": {"name": "keyword.control.jome"},
             "2": {"name": "entity.name.function.jome"}
@@ -261,7 +274,7 @@
           "endCaptures": {"0": {"name": "keyword.control.jome"}},
           "patterns": [
             {
-              "name": "meta.fn-args.jome",
+              "name": "meta.args.jome",
               "begin": "\\G\\(",
               "beginCaptures": {"0": {"name": "punctuation.paren.open"}},
               "end": "\\)",

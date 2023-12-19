@@ -66,12 +66,24 @@ describe("Test functions creation", () => {
   You can also use the let keyword instead of def
   Functions can also be declared inline.
   */
+  // def sayHello
+  // end
+  // let sayHello = function
+  // end
+  // let sayHello = function(name)
+  // end
+  // def sayHello(name)
+  // end
+  // let sayHello = (name) => `Hello {name}`
+  // let giveMe5 = () => 5
+  // and/or
+  // let giveMe5 = => 5
   // *** KEYWORD def ***
   test('def keyword', () => {
     expect(compile('def sayHello #log("hello") end')).toMatch(/function sayHello\(\) {\s*console.log\("hello"\)\s*}/);
   })
-  test('def keywordwith args', () => {
-    expect(compile('def sayHello |name| #log("hello", name) end')).toMatch(/function sayHello\(name\) {\s*console.log\("hello", name\)\s*}/);
+  test('def keyword with args', () => {
+    expect(compile('def sayHello(name) #log("hello", name) end')).toMatch(/function sayHello\(name\) {\s*console.log\("hello", name\)\s*}/);
   })
   // *** KEYWORD let ***
   test('let keyword with do end', () => {
