@@ -8,6 +8,9 @@ if true #log("hello") end
 // let someTest = someCond ? someVal ?? someDefault
 {x: 1}.#log
 
+let x = () => 6
+x => x
+
 let printCode = |unused along source| => (
   #log(source)
 )

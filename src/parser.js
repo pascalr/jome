@@ -283,13 +283,13 @@ const TOKENS = {
   //     c => typeof c === 'string' ? c : '${'+compileJsBlock(c.children.slice(1,-1), ctx)+'}'
   //   ).join('')+'`'
   // },
-  "meta.function_v2.jome": {
+  "meta.function.jome": {
     validate: (node) => {
       if (node.parts[0].raw !== 'function') {
-        return "Internal error. meta.function_v2.jome should always start with keyword function"
+        return "Internal error. meta.function.jome should always start with keyword function"
       }
       if (node.parts[node.parts.length-1].raw !== 'end') {
-        return "Internal error. meta.function_v2.jome should always end with keyword end"
+        return "Internal error. meta.function.jome should always end with keyword end"
       }
       // Arguments, if present, should always be at the beginning
       if (node.parts.slice(2,-1).find(c => c.type === 'meta.args.jome')) {
