@@ -100,7 +100,6 @@
         { "include": "#keywords" },
         { "include": "#declaration" },
         { "include": "#vbars-args" },
-        { "include": "#function_do_end" },
         { "include": "#def" },
         { "include": "#paren-expression" },
         { "include": "#strings" },
@@ -267,8 +266,7 @@
           "name": "meta.function_v2.jome",
           "begin": "\\b(function)\\b\\s*",
           "beginCaptures": {
-            "1": {"name": "keyword.control.jome"},
-            "2": {"name": "entity.name.function.jome"}
+            "1": {"name": "keyword.control.jome"}
           },
           "end": "\\b(end)\\b",
           "endCaptures": {"0": {"name": "keyword.control.jome"}},
@@ -297,20 +295,6 @@
           "name": "meta.if-block.jome",
           "begin": "(?:^|\\G)\\s*\\b(if)\\b",
           "beginCaptures": {"0": {"name": "keyword.control.conditional.jome"}},
-          "end": "\\b(end)\\b",
-          "endCaptures": {"0": {"name": "keyword.control.jome"}},
-          "patterns": [
-            {"include": "#expression"}
-          ]
-        }
-      ]
-    },
-    "function_do_end": {
-      "patterns": [
-        {
-          "name": "meta.function.do.end.jome",
-          "begin": "\\b(do)\\b",
-          "beginCaptures": {"0": {"name": "keyword.control.jome"}},
           "end": "\\b(end)\\b",
           "endCaptures": {"0": {"name": "keyword.control.jome"}},
           "patterns": [

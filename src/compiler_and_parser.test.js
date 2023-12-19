@@ -86,11 +86,11 @@ describe("Test functions creation", () => {
     expect(compile('def sayHello(name) #log("hello", name) end')).toMatch(/function sayHello\(name\) {\s*console.log\("hello", name\)\s*}/);
   })
   // *** KEYWORD let ***
-  test('let keyword with do end', () => {
-    expect(compile('let sayHello = do #log("hello") end')).toMatch(/let sayHello = function \(\) {\s*console.log\("hello"\)\s*}/);
+  test('let keyword with function end', () => {
+    expect(compile('let sayHello = function #log("hello") end')).toMatch(/let sayHello = function \(\) {\s*console.log\("hello"\)\s*}/);
   })
-  test('let keyword with do end with args', () => {
-    expect(compile('let sayHello = do |name| #log("hello", name) end')).toMatch(/let sayHello = function \(name\) {\s*console.log\("hello", name\)\s*}/);
+  test('let keyword with function end with args', () => {
+    expect(compile('let sayHello = function(name) #log("hello", name) end')).toMatch(/let sayHello = function \(name\) {\s*console.log\("hello", name\)\s*}/);
   })
   test('let keyword with arrow function', () => {
     expect(compile('let giveMe5 = => 5')).toMatch(/let giveMe5 = \(\) => \(?5\)?/);
@@ -101,11 +101,11 @@ describe("Test functions creation", () => {
     expect(compile('let echo = |x| => x')).toMatch(/let echo = \(x\) => \(?x\)?/);
   })
   // *** inline ***
-  test('inline with do end', () => {
-    expect(compile('do #log("hello") end')).toMatch(/function \(\) {\s*console.log\("hello"\)\s*}/);
+  test('inline with function end', () => {
+    expect(compile('function #log("hello") end')).toMatch(/function \(\) {\s*console.log\("hello"\)\s*}/);
   })
-  test('inline with do end with args', () => {
-    expect(compile('do |x, name| #log("hello", name) end')).toMatch(/function \(x,\s*name\) {\s*console.log\("hello", name\)\s*}/);
+  test('inline with function end with args', () => {
+    expect(compile('function(x, name) #log("hello", name) end')).toMatch(/function \(x,\s*name\) {\s*console.log\("hello", name\)\s*}/);
   })
   test('inline with arrow function', () => {
     expect(compile('=> 5')).toMatch(/\(\) => \(?5\)?/);
