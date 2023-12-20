@@ -10,6 +10,7 @@ let add2Nb = do |nb1, nb2| return nb1 + nb2 end
 def printCode(unused along source)
   #log(source)
 end
+
 if true #log("hello") end
 // let someTest = someCond ? someVal ?? someDefault
 {x: 1}.#log
@@ -18,7 +19,7 @@ let x = () => 6
 x => x
 
 let printCode = |unused along source| => (
-  #log(source)
+  #log source
 )
 printCode(1+1) // should print "1+1"
 
@@ -27,6 +28,7 @@ let strWithType: string = 'someStr'
 def funcWithType(someArg: string)
 
 end
+funcWithType "Hello!"
 
 class SomeNode |someParam?, @tenMore?, @someText?|
 end
@@ -136,13 +138,13 @@ class SomeClassShorter |@name|
 end
 
 class SomeClass
-  fn constructor
+  def constructor
     @name = 10
   end
-  fn ~create
+  def ~create
     @name = 10
   end
-  fn ~init
+  def ~init
     @name = 10
   end
   getName: => @name
@@ -349,3 +351,17 @@ ten = 10;
   // TestEq counter.count, 1, "counter.count"
   // TestEq counter.text.someText, "Clicked 1 time", "counter.text.someText"
 ]}
+
+
+
+describe "Test utils" do
+  test '#log' do
+    //expect compile('#log').toMatch(/console.log/);
+  end
+  test '#log hello world' do
+    //expect compile('#log("Hello world!")').toMatch(/console.log\("Hello world!"\)/);
+  end
+  test '{x:1}.#log' do
+    //expect compile('{x:1}.#log').toMatch(/console.log\(\{x\: ?1\}\)/);
+  end
+end
