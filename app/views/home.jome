@@ -80,6 +80,43 @@ main {
   The syntax is a little more similar to the ruby programming language. You use the keyword def instead of function.
   And you use the end keyword instead of curly braces.
 
+  J'aimerais que les parenthèses soient optionels quand il y a des arguments.
+
+  def title(name)
+  end
+
+  title "My title" // should always work, a name followed by a value is a func call
+  // A name that is following by anything that is not an operator or a keyword is a func call
+  dog.bark // do I need parentheses here? How do I know if bark is a function or not?
+  // What i find really cool is that you can have a method that you can call like an arg.
+  ex:
+  class Quantity
+    // has weight and volume
+    def density
+      return weight / volume
+    end
+  end
+  qty.density, // I don't like to have to do density()
+  // maybe use -> ?
+  qty->density
+  player->move "right"
+  player.move "right"
+
+  ```jome
+  class dog
+    def bark
+      #log('Wouf wouf')
+    end
+  end
+  dogs.#each(&:bark)
+  dogs.#each do |dog|
+    dog.bark()
+  end
+  dogs.#each(fn(dog)
+    dog.bark()
+  end)
+  ```
+
   ```jome
   def sayHelloJohn
     #log(`Hello John!`)

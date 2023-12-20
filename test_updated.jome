@@ -1,5 +1,11 @@
 import {H1} from './lib/html.jome'
 
+type StringOrNull = string | null
+type Person
+  name: string
+  age: number
+end
+
 let add2Nb = do |nb1, nb2| return nb1 + nb2 end
 def printCode(unused along source)
   #log(source)
