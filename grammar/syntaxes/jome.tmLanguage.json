@@ -97,6 +97,7 @@
         { "include": "#interface" },
         { "include": "#class" },
         { "include": "#function" },
+        { "include": "#type_def" },
         { "include": "#keywords" },
         { "include": "#declaration" },
         { "include": "#vbars-args" },
@@ -294,6 +295,39 @@
           "name": "meta.if-block.jome",
           "begin": "(?:^|\\G)\\s*\\b(if)\\b",
           "beginCaptures": {"0": {"name": "keyword.control.conditional.jome"}},
+          "end": "\\b(end)\\b",
+          "endCaptures": {"0": {"name": "keyword.control.jome"}},
+          "patterns": [
+            {"include": "#expression"}
+          ]
+        }
+      ]
+    },
+    "type_def": {
+      "patterns": [
+        {
+          "name": "meta.type_def.jome",
+          "match": "\\b(type)\\b\\s*(\\w*)\\s*=\\s*((\\s*[\\|\\&]?\\w*)*)",
+          "captures": {
+            "1": {"name": "keyword.control.jome"},
+            "2": {"name": "entity.name.type.jome"},
+            "3": {
+              "patterns": [
+                {
+                  "match": "\\w+",
+                  "name": "support.type.jome"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "meta.type_def.jome",
+          "begin": "\\b(type)\\b(\\w*)",
+          "beginCaptures": {
+            "1": {"name": "keyword.control.jome"},
+            "2": {"name": "entity.name.type.jome"}
+          },
           "end": "\\b(end)\\b",
           "endCaptures": {"0": {"name": "keyword.control.jome"}},
           "patterns": [
