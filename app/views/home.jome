@@ -108,13 +108,11 @@ main {
       #log('Wouf wouf')
     end
   end
-  dogs.#each(&:bark)
   dogs.#each do |dog|
     dog.bark()
   end
-  dogs.#each(fn(dog)
-    dog.bark()
-  end)
+  // or? dogs.#each(&:bark)
+  // or? dogs.#each(&.bark)
   ```
 
   ```jome
@@ -127,15 +125,38 @@ main {
   end
   ```
 
-  Vertical bars are used for function parameters instead of parentheses.
+  ## Types
+
+  TODO: Support static typing a little like Typescript.
+
+  You can give types to variables. It's a little like Typescript, but interfaces are different and there is no type because parameters (TODO link) takes care of this.
+
+  You can use primitive types (string, number, integer, float, ...) or class names.
 
   ```jome
-  let addXY = |x, y| => (x + y)
-
-  def sayHello |name|
-    #log(`Hello {name}!`)
+  def greet(name: string, greeting: string = "Hello") : string
+    `${greeting}, ${name}!`
   end
   ```
+
+  In TypeScript, the character | is used a lot for unions, but here it clashes with my usage of | | for args...
+  What can I use instead of |???
+
+  In a node block, you will be able to specify the types of keys like so:
+  ```jome
+  type MyObject = {
+    [key: string]: number; // Key is a string, and the corresponding value is a number
+  };
+  ```
+
+  But what about the types of children? (string)
+  {
+    MyNode
+      "childString"
+      (string) someFuncCallReturnsString
+      [string] someFuncCallReturnsString
+      someFuncCallReturnsString : string // Nooooooo, because it clashes with parameters...
+  }
 
   <h2 id="blocks">Blocks</h2>
 
@@ -554,6 +575,27 @@ main {
   Work in progress.
 
   L'idée est d'utiliser end.
+
+  ```jome
+  class Person
+    @firstName: string = "John"
+    @lastName: string = "Doe"
+    @age: number
+  
+    def constructor(favoriteColor)
+      @favoriteColor = favoriteColor || 'brown'
+    end
+  end
+
+  class Person
+    @username: string = "Bigdaddy007" // same as doing @username = "Bigdaddy007" inside the constructor
+    @username?: string = "Bigdaddy007" // same as doing @username = #params.username || "Bigdaddy007" inside the constructor
+    @usersame // does nothing
+    @username // same as doing @username = null inside the constructor
+    
+    @@className = "Person"
+  end
+  ```
 
   ```jome
   class SomeClass
@@ -1131,67 +1173,6 @@ main {
   Je préfère de loin prettier je trouve son output plus beau personnellement.
 
   Le problème est que prettier bug et ne veut pas process mes fichiers s'ils sont dans le .gitignore file............
-
-  ## Types
-
-  TODO: Support static typing a little like Typescript.
-
-  You will be able to add the type of the variable with a colon like in the examples below.
-
-  ```jome
-  def greet |name: string, greeting: string = "Hello"| : string
-    `${greeting}, ${name}!`
-  end
-  ```
-
-  In TypeScript, the character | is used a lot for unions, but here it clashes with my usage of | | for args...
-  What can I use instead of |???
-
-  ```jome
-  def first |list: string || number[]| : string
-  def first |list: string or number[]| : string
-  def first |list: (string, number[])| : string
-  def first |list: [string, number[]]| : string
-  def first |list: (string number[])| : string
-  def first |list: [string number[]]| : string
-  def first |list: string number[]| : string
-  def first |list: string / number[]| : string
-  def first |list: string . number[]| : string
-  def first |list: string ^ number[]| : string
-  def first |list: string * number[]| : string
-  def first |list: string/number[]| : string
-  def first |list: string|number[]| : string
-  def first |list: <string,number[]>| : string
-  def first |list: string - number[]| : string
-
-  def first |list: string or number[]| : string
-    return list[0]
-  end
-  ```
-
-  ```jome
-  interface Person {
-    firstName: string = "John"
-    lastName: string = "Doe"
-    age: number
-  }
-  ```
-
-   ```jome
-  var answer: number = 42
-  ```
-
-  In a node block, you will be able to specify the types of keys like so:
-  type MyObject = {
-    [key: string]: number; // Key is a string, and the corresponding value is a number
-  };
-
-  But what about the types of children? (string)
-  {
-    MyNode
-      "childString"
-      (string) someFuncCallReturnsString
-  }
 
   ## TODO
 
