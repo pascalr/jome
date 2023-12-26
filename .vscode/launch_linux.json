@@ -1,7 +1,4 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
 
@@ -33,7 +30,7 @@
         "<node_internals>/**"
       ],
       "preLaunchTask": "Jest runner",
-      "program": "${workspaceFolder}\\bin\\do_nothing.js"
+      "program": "${workspaceFolder}/bin/do_nothing.js"
     },
     {
       "name": "Debug Jest Tests",
@@ -45,7 +42,7 @@
         "--runInBand"
       ],
       "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
+      "internalConsoleOptions": "neverOpen"
     }
   ]
 }

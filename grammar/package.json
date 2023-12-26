@@ -7,7 +7,8 @@
     "vscode": "^1.81.0"
   },
   "scripts": {
-    "install": "cp -R . ~/.vscode/extensions/jome-grammar"
+    "install": "cp -R . ~/.vscode/extensions/jome-grammar",
+    "install-windows": "xcopy /E . C:\\Users\\Loville\\.vscode\\extensions\\jome-grammar"
   },
   "categories": [
     "Programming Languages"

@@ -85,7 +85,7 @@ function decodeTokensAsTree(lines) {
       let tag = tags[i];
       if (tag >= 0) {
         let str = line.substring(offset, offset + tag)
-        if (!str.length || scopes[scopes.length-1] === 'ignore') {
+        if (!str.length || scopes[scopes.length-1] === 'ignore' || str === '\r') {
           // Ignore whitespaces (except indent)
         } else {
           currentNode.addChild(str)

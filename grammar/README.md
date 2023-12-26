@@ -1,14 +1,18 @@
+# Installation
+
+## Linux
+
+## Windows
+
+Copier le dossier dans mon C:\Users\...\... ne fonctionnait pas.
+
+J'ai fait Ctrl+Shift+P dans vscode, ensuite Developper : Install extension from location,
+j'ai sélectionné grammar comme dossier et ça l'a finalement fonctionné!
+
+
 MERCIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII https://www.apeth.com/nonblog/stories/textmatebundle.html
 Pour \G entre autres
 
-
-
-
-
-
-
-FIXME: bitwise operator devient quoi puisque j'utilise << et >>. Tous les bitwise. & et | aussi.
-TODO: Idée: <jsx></jsx> tag, mais probablement inutile et mieux de faire différent avec jome
 
 https://github.com/microsoft/vscode/blob/main/extensions/javascript/syntaxes/JavaScript.tmLanguage.json
 

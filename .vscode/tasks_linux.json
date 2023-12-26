@@ -3,7 +3,7 @@
   "tasks": [
     {
       "label": "Jest runner",
-      "command": "npm.cmd",
+      "command": "npm",
       "args": ["run", "jest"],
       "options": {
         "cwd": "${workspaceFolder}/"
@@ -19,7 +19,7 @@
     },
     {
       "label": "Build tests",
-      "command": "node.cmd",
+      "command": "node",
       "args": ["jome.js", "-c", "jome -c **/*.test.jome"],
       "options": {
         "cwd": "${workspaceFolder}/"

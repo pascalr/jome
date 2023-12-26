@@ -1,5 +1,40 @@
 # Jome
 
+TODO: Avoir seulement un README.md et des dossiers
+
+TODO: License file
+
+## jomec
+
+A package that contains the compiler that converts .jome file to .js files.
+
+## jome-lib
+
+The .js files that are used by Jome. Not sure about that one. Ideally, the files belong to jomec and the
+code is bundled together. But it's nice if it can be used standalone too. Or useless?
+
+## jome-cli
+
+The command line application to run .jome files.
+
+## jome-website
+
+The source code for the website that contains the documentation and examples.
+
+## jome-tm-grammar
+
+The text mate grammar files and visual studio code extension.
+
+## jome-hl-grammar
+
+The highlight.js grammar files.
+
+## docs
+
+The compiled files for the website.
+
+# Jome
+
 Jome is a little language that compiles in JavaScript. It is simliar to CoffeeScript in this way.
 
 The main idea is what I call instance driven development. It's the same thing as object oriented, but the focus is on the concrete object
