@@ -67,7 +67,7 @@
 //   console.log(`Child process exited with code ${code}`);
 // });
 
-const { JomeBuilder, buildAndRunFile } = require('./src/builder.js');
+const { JomeBuilder, buildAndRunFile } = require('../src/builder.js');
 const path = require('path');
 const { globSync } = require('glob')
 // import { JomeBuilder, buildAndRunFile } from './src/builder.js';
