@@ -8,7 +8,7 @@ const MarkdownIt = require('markdown-it')
 //const { compileInterpolate, compileRaw, escapeBackticks } = require('../compiler.js')
 
 const hljs = require('highlight.js')
-const jomeHljs = require('../../highlight.js/jome.js')
+const jomeHljs = require('../../hl-grammar/jome.js')
 
 hljs.registerLanguage('jome', jomeHljs)
 
