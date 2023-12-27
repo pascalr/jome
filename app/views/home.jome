@@ -77,28 +77,31 @@ main {
 
   <h2 id="syntax">Syntax</h2>
 
-  The syntax is a little more similar to the ruby programming language. You use the keyword def instead of function.
+  The syntax is a similar to the ruby programming language. You use the keyword def instead of function.
   And you use the end keyword instead of curly braces.
 
-  Parentheses are optional. To call a method on a object without parameters, you can use an arrow ```obj->density``` which is
-  the same as ```record.density()```
-
-  def title(name)
-  end
+  Also, parentheses are optional for function calls.
 
   ```jome
-  class dog
-    def bark
-      #log 'Wouf wouf'
-    end
-    def lick(obj)
-      // ...
+  class Person
+    def sayHello
+      console.log 'Hello!'
     end
   end
-  dogs.#each do |dog|
-    dog->bark
+  ```
+
+  To call a method on a object without parameters, you can use an arrow.
+
+  ```jome
+  obj->density // same as obj.density()
+  ```
+
+  You can use `do ... end` to create functions. You pass arguments between vertical bars.
+
+  ```jome
+  [1,2,3,4,5].each do |i|
+    console.log i
   end
-  // or? dogs.#each(&->bark)
   ```
 
   ## Types
