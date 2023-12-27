@@ -6,7 +6,7 @@ let cmd = #argv[1]
 if (cmd === 'test') (
   <sh>jome -- test.jome</sh>
 ) else if (cmd === 's' || cmd === 'server') (
-  <sh>jome -- bin/server.jome</sh>
+  <sh>jome -- website/server.jome</sh>
 ) else (
   #log(`Jome App v0.0.0.0.1
 
