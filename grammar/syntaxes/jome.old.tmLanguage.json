@@ -29,7 +29,7 @@
             "1": {"name": "keyword.control.jome"},
             "2": {"name": "variable.other.default-import.jome"}
           },
-          "end": "\\n|$",
+          "end": "\\r\\n|\\n|$",
           "patterns": [
             { "match": "\\s+" },
             {
@@ -93,7 +93,7 @@
               "name": "keyword.control.jome"
             }
           },
-          "end": "\\n|$",
+          "end": "\\r\\n|\\n|$",
           "patterns": [
             { "include": "#keywords" },
             { "include": "#strings" },
@@ -132,6 +132,10 @@
         {
           "match": ",",
           "name": "punctuation.separator.delimiter.jome"
+        },
+        {
+          "match": "\\r",
+          "name": "ignore"
         }
       ]
     },
@@ -567,7 +571,7 @@
         },
         {"match": "(?:\\G)\\s+"},
         {
-          "match": "(?:^|\n)\\s+",
+          "match": "(?:^|\\r\\n|\n)\\s+",
           "name": "punctuation.whitespace.indent.jome"
         },
         {"match": "\\s+"},
@@ -724,7 +728,7 @@
     "comment": {
       "patterns": [
         {
-          "match": "(^[ \\t]+)?((//)(?:\\s*((@)internal)(?=\\s|$))?).*(?:\n|$)",
+          "match": "(^[ \\t]+)?((//)(?:\\s*((@)internal)(?=\\s|$))?).*(?:\\r\\n|\n|$)",
           "name": "comment.line.double-slash.jome"
         },
         {

@@ -80,54 +80,32 @@ main {
   The syntax is a little more similar to the ruby programming language. You use the keyword def instead of function.
   And you use the end keyword instead of curly braces.
 
-  J'aimerais que les parenthèses soient optionels quand il y a des arguments.
+  Parentheses are optional. To call a method on a object without parameters, you can use an arrow ```obj->density``` which is
+  the same as ```record.density()```
 
   def title(name)
   end
 
-  title "My title" // should always work, a name followed by a value is a func call
-  // A name that is following by anything that is not an operator or a keyword is a func call
-  dog.bark // do I need parentheses here? How do I know if bark is a function or not?
-  // What i find really cool is that you can have a method that you can call like an arg.
-  ex:
-  class Quantity
-    // has weight and volume
-    def density
-      return weight / volume
-    end
-  end
-  qty.density, // I don't like to have to do density()
-  // maybe use -> ?
-  qty->density
-  player->move "right"
-  player.move "right"
-
   ```jome
   class dog
     def bark
-      #log('Wouf wouf')
+      #log 'Wouf wouf'
+    end
+    def lick(obj)
+      // ...
     end
   end
   dogs.#each do |dog|
-    dog.bark()
+    dog->bark
   end
-  // or? dogs.#each(&:bark)
-  // or? dogs.#each(&.bark)
-  ```
-
-  ```jome
-  def sayHelloJohn
-    #log(`Hello John!`)
-  end
-
-  if (johnIsHere)
-    sayHelloJohn()
-  end
+  // or? dogs.#each(&->bark)
   ```
 
   ## Types
 
   TODO: Support static typing a little like Typescript.
+
+  I don't think type and interface are usefull like in Typescript because of parameters.
 
   You can give types to variables. It's a little like Typescript, but interfaces are different and there is no type because parameters (TODO link) takes care of this.
 
@@ -157,6 +135,51 @@ main {
       [string] someFuncCallReturnsString
       someFuncCallReturnsString : string // Nooooooo, because it clashes with parameters...
   }
+
+  ## Modules
+
+  Supporter les 2: module et exports. Pouvoir combiner les deux. Module et export
+
+  Work in progress.
+
+  ```jome
+  module MyModule1
+    def someFunc
+    end
+  end
+
+  module MyModule2
+    class SomeClass
+      def someMethod
+      end
+    end
+    def someFunc
+    end
+    someVar = 10
+  end
+  ```
+
+  Same as:
+
+  ```js
+  module.exports = {
+    MyModule1: {
+      someFunc: () => ()
+    },
+    MyModule2: {
+      someFunc: () => ()
+      ...
+    }
+  }
+  ```
+
+  To use module, I can use import MyModule1??? How to know in what file MyModule1 lives?
+
+  Let's say I have index.jome
+
+  ```jome
+  import MyModule1 from './'
+  ```
 
   <h2 id="blocks">Blocks</h2>
 
