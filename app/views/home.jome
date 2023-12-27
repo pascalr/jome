@@ -80,14 +80,19 @@ main {
   The syntax is a similar to the ruby programming language. You use the keyword def instead of function.
   And you use the end keyword instead of curly braces.
 
-  Also, parentheses are optional for function calls.
-
   ```jome
   class Person
     def sayHello
-      console.log 'Hello!'
+      console.log('Hello!')
     end
   end
+  ```
+
+  Parentheses are optional for function calls.
+
+  ```jome
+  let add = (x,y) => x + y
+  add 10 20
   ```
 
   To call a method on a object without parameters, you can use an arrow.
@@ -175,6 +180,23 @@ main {
     }
   }
   ```
+
+  Il y a aussi le keyword main qui permet de retourner une valeur du fichier.
+  ```jome
+  // sum.jome
+  main |a, b| => (a + b)
+  ```
+
+  C'est aussi possible de faire module sans nom, et c'est ça qui est retourné.
+  ```jome
+  module
+    def someFunc1
+    end
+    def someFunc2
+    end
+  end
+  ```
+  
 
   To use module, I can use import MyModule1??? How to know in what file MyModule1 lives?
 

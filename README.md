@@ -21,11 +21,11 @@ The command line application to run .jome files.
 
 The source code for the website that contains the documentation and examples.
 
-## jome-tm-grammar
+## tm-grammar
 
 The text mate grammar files and visual studio code extension.
 
-## jome-hl-grammar
+## hl-grammar
 
 The highlight.js grammar files.
 
