@@ -3,7 +3,7 @@ const FirstMate = require('first-mate')
 
 const registry = new FirstMate.GrammarRegistry()
 //registry.loadGrammarSync('./grammar/syntaxes/JavaScript.tmLanguage.json')
-const grammar = registry.loadGrammarSync('./grammar/syntaxes/jome.tmLanguage.json')
+const grammar = registry.loadGrammarSync('./tm-grammar/syntaxes/jome.tmLanguage.json')
 
 const POST_PROCESSES = new Set([
   "keyword.control.inline-conditional.jome",
