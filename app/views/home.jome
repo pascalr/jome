@@ -310,6 +310,56 @@ main {
   obj = {content: content, value: value}
   ```
 
+  ### Keywords inside blocks V2?
+
+  Un slash au début fait comme si ce qu'il y avait de la ligne précédente continue sur la ligne suivante?
+
+  Donc pratique pour mettre props sur plusieurs lignes, au lieu de juste la première ligne.
+
+  Utiliser do ... end pour exécuter des fonctions?
+
+  ```jome
+  {
+  Recipe
+    \ prop: 'Some prop'
+    name: 'Chickpea balls', prepare: 1h
+    Ing 1cup, "dry chickpeas"
+    Ing 2cup, "water"
+    Ing 2tbsp, "parmesan"
+    Step `Put {@1} into {@2}...` // @1 is the first children
+    Step "Mix ..."
+    Step "Blah blah ..."
+    do
+      prepare 'The recipe'
+    end
+    Ing ...
+  }
+  ```
+
+  ```jome
+  // Four syntaxes allowed to execute functions
+  {[
+    Obj prop: 'val'
+      .execFunc
+      .execFunc2
+
+    Obj prop: 'val'
+      do execFunc end
+      do execFunc2 end
+
+    Obj prop: 'val' do
+      execFunc
+      execFunc2
+    end
+
+    Obj prop: 'val'
+      do
+        execFunc
+        execFunc2
+      end
+  ]}
+  ```
+
   ### Keywords inside blocks
 
   There are four keywords used inside blocks: init, attr, exe and parent.
