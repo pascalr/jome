@@ -168,19 +168,12 @@ main {
   end
   ```
 
-  I don't think type and interface are usefull like in Typescript because of parameters.
-
-  You can give types to variables. It's a little like Typescript, but interfaces are different and there is no type because parameters (TODO link) takes care of this.
-
-  You can use primitive types (string, number, integer, float, ...) or class names.
-
-  In TypeScript, the character | is used a lot for unions, but here it clashes with my usage of | | for args...
-  What can I use instead of |???
+  There are no unions or intersect like in typescript. If the function is too overloaded and it is too complicated, than don't use types and use documentation comments instead.
 
   In a node block, you will be able to specify the types of keys like so:
   ```jome
   type MyObject = {
-    [key: string]: number; // Key is a string, and the corresponding value is a number
+    [key: string]: nb; // Here nb is a string
   };
   ```
 
@@ -193,66 +186,65 @@ main {
       someFuncCallReturnsString : string // Nooooooo, because it clashes with parameters...
   }
 
-  ## Modules
+  ## Modules and exports
 
-  Supporter les 2: module et exports. Pouvoir combiner les deux. Module et export
-
-  Work in progress.
+  There are many ways to export items, but they are all compiled the same. Either using module.exports or export depending on jome config.
 
   ```jome
-  module MyModule1
+  module
     def someFunc
     end
-  end
-
-  module MyModule2
-    class SomeClass
-      def someMethod
-      end
-    end
-    def someFunc
-    end
-    someVar = 10
+    let someVar = 10
   end
   ```
 
-  Same as:
+  Compiles to
 
   ```js
   module.exports = {
-    MyModule1: {
-      someFunc: () => ()
+    someFunc: () => {
     },
-    MyModule2: {
-      someFunc: () => ()
-      ...
-    }
+    someVar: 10
   }
+  // or
+  export function someFunc() {
+  }
+  export const someVar = 10
   ```
 
-  Il y a aussi le keyword main qui permet de retourner une valeur du fichier.
+  You can give a name to the module, which simply creates an object that holds everything inside.
+
+  ```jome
+  module SomeModule
+    def someFunc
+    end
+    let someVar = 10
+  end
+
+  // usage:
+  // import {SomeModule} from './some_file.jome'
+  // let ten = SomeModule.someVar
+  ```
+
+  You can also export functions and constants individually.
+
+  ```jome
+  export def someFunc
+  end
+  export let someVar = 10
+
+  // usage:
+  // import {someFunc, someVar} from './some_file.jome'
+  ```
+
+  To export the default or an object, use the main keyword. It allows you to return a value from a file.
+
   ```jome
   // sum.jome
   main |a, b| => (a + b)
-  ```
 
-  C'est aussi possible de faire module sans nom, et c'est ça qui est retourné.
-  ```jome
-  module
-    def someFunc1
-    end
-    def someFunc2
-    end
-  end
-  ```
-  
-
-  To use module, I can use import MyModule1??? How to know in what file MyModule1 lives?
-
-  Let's say I have index.jome
-
-  ```jome
-  import MyModule1 from './'
+  // usage:
+  // import sum from './sum.jome'
   ```
 
   <h2 id="blocks">Blocks</h2>
