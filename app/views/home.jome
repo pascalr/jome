@@ -249,41 +249,32 @@ main {
 
   <h2 id="blocks">Blocks</h2>
 
-  Blocks are a key component of Jome. They use indentation to build objects in a short and subjectively pretty way.
-  It is also the syntax required to build [nodes](#nodes).
-
-  Blocks are surrounded by curly braces. The result of a block can be an object, a node or a value.
+  Blocks are delimited by curly braces and are used for a lot more than creating objects. You also use then to instantiate
+  objects, execute functions and to create [nodes](#nodes)
 
   ```jome
   // objects
-  position = {x: 10, y: 10}
-  destination = {
-    x: 40
-    y: 50
-  }
-  details = {
+  let details = {
     distanceX: 30, distanceY: 40 // comma is optional
     totalDistance: 50, eta: 10min
   }
 
+  // values
+  let obj = {Obj prop: 'val'} // instantiate and object
+  let objRunResult = {
+    Obj prop: 'val'
+      .run 'some arg'
+  }
+
   // nodes
   node = {
-    Obj some: 'obj'
+    Obj someProp: 'obj'
       'String child'
       Nested prop: 'val'
   }
-
-  // values
-  singleObj = {Obj prop: 'val'}
-  chainResult = {
-    Obj prop: 'val'
-      Nested prop: 'val'
-        Nested prop: 'val'
-      .run
-  } // The value will be the result of the function run of the object created.
   ```
 
-  A value is only on a single line. Use parentheses if you need multiple lines.
+  Note: A value is only on a single line. Use parentheses if you need multiple lines.
   ```jome
   {
     x: 1 +
