@@ -73,7 +73,7 @@ main {
 
   This documentation assumes the reader is familiar with javascript.
 
-  Jome is similar to JavaScript, but there are a few distinctions that you must be aware of. Mainly, the syntax is a bit different, there are nodes, named parameters and scripts.
+  Jome is similar to JavaScript, but there are a few distinctions that you must be aware of. Mainly, the syntax is a bit different, there are nodes and scripts.
 
   <h2 id="syntax">Syntax</h2>
 
@@ -92,7 +92,14 @@ main {
 
   ```jome
   let add = (x,y) => x + y
-  add 10 5
+  add 10, 5
+  ```
+
+  You can pass arguments for a single object without using curly braces.
+
+  ```jome
+  let add = ({x, y}) => x + y
+  add x: 10, y: 5
   ```
 
   To call a method on a object without parameters, you can use an arrow.
@@ -141,19 +148,23 @@ main {
 
   ## Types
 
-  TODO: Support static typing a little like Typescript.
+  You can specify types for variables. It can be primitives like string, number, integer or float. It can also be class names.
+
+  ```jome
+  def greet(name: string, greeting: string = "Hello") : string
+    `${greeting}, ${name}!`
+  end
+
+  def attack(enemy: Player)
+    /* ... */
+  end
+  ```
 
   I don't think type and interface are usefull like in Typescript because of parameters.
 
   You can give types to variables. It's a little like Typescript, but interfaces are different and there is no type because parameters (TODO link) takes care of this.
 
   You can use primitive types (string, number, integer, float, ...) or class names.
-
-  ```jome
-  def greet(name: string, greeting: string = "Hello") : string
-    `${greeting}, ${name}!`
-  end
-  ```
 
   In TypeScript, the character | is used a lot for unions, but here it clashes with my usage of | | for args...
   What can I use instead of |???
@@ -586,67 +597,6 @@ main {
 
   Le case doit être dans le scope des when. Tu ne peux pas par exemple le mettre caché dans le if.
   Les when sont simplement remplacé par "if (expression du case)"
-
-  <h2 id="named-parameters">Named parameters and props</h2>
-
-  When calling a function, you can add paramters.
-
-  ```jome
-  someFunc(someParam: 10, otherParam: 'Jean')
-  ```
-
-  To define parameters when creating a function, you either add ? at the end for an optional parameter, or you add ! for a required parameter.
-
-  ```jome
-  def someFunc = |someParam?, otherParam? = 'Pierre', optionalParam?, requiredParam!| => (
-    console.log(someParam) // No need to add ? or ! when refering to a parameter
-  )
-  ```
-
-  You can pass a parameter that was not defined in the list.
-
-  BUT YOU CAN'T PASS a parameter to a function if the function does not take any parameter. Because under the hood,
-  we add a params argument to the function, so we need at least one to add the argument, then you can pass as many as you want.
-
-  When calling a function with named parameters, the order does not matter. You can put them before arguments, after or even in the middle.
-
-  ### PARAMS
-  
-  Get the list of parameters given to a function.
-
-  ```jome
-    def someFunc = => (
-      PARAMS // The object containing all the paramters given to the function.
-    )  
-  ```
-
-  FIXME: I don't like using the word PARAMS in capital letters, but I don't have a better idea yet.
-  I don't want to reserve the keyword params...
-
-  Use #params instead of PARAMS?
-
-  ### Props
-
-  Props are all the parameters and attributes as parameters passed during an object creation.
-
-  ```jome
-  « Obj someProp: 10, someAttr: 'Paul' »
-  class Obj |someProp?, @someAttr?| => {
-  }
-  // compiles to
-  class Obj {
-    constructor(__props__) {
-      this.__props__ = __props__
-      let {someAttr, ...__params___} = __props__
-      this.__params__ = __params__
-      this.someAttr = someAttr
-    }
-  }
-  ```
-
-  ### Under the hood
-
-  TODO: Explain how it works
 
   ## Classes 2.0
 
@@ -1340,6 +1290,88 @@ main {
 
   FIXME: The indentation is super important in markdown. For example, adding tabs inside md scripts, if only one tab html tags will work,
   otherwise it will not.
+
+
+
+
+
+
+
+
+
+
+
+
+  # DEPRECATED
+  <h2 id="named-parameters">Named parameters and props</h2>
+
+  When calling a function, you can add paramters.
+
+  ```jome
+  someFunc(someParam: 10, otherParam: 'Jean')
+  ```
+
+  To define parameters when creating a function, you either add ? at the end for an optional parameter, or you add ! for a required parameter.
+
+  ```jome
+  def someFunc = |someParam?, otherParam? = 'Pierre', optionalParam?, requiredParam!| => (
+    console.log(someParam) // No need to add ? or ! when refering to a parameter
+  )
+  ```
+
+  You can pass a parameter that was not defined in the list.
+
+  BUT YOU CAN'T PASS a parameter to a function if the function does not take any parameter. Because under the hood,
+  we add a params argument to the function, so we need at least one to add the argument, then you can pass as many as you want.
+
+  When calling a function with named parameters, the order does not matter. You can put them before arguments, after or even in the middle.
+
+  ### PARAMS
+  
+  Get the list of parameters given to a function.
+
+  ```jome
+    def someFunc = => (
+      PARAMS // The object containing all the paramters given to the function.
+    )  
+  ```
+
+  FIXME: I don't like using the word PARAMS in capital letters, but I don't have a better idea yet.
+  I don't want to reserve the keyword params...
+
+  Use #params instead of PARAMS?
+
+  ### Props
+
+  Props are all the parameters and attributes as parameters passed during an object creation.
+
+  ```jome
+  « Obj someProp: 10, someAttr: 'Paul' »
+  class Obj |someProp?, @someAttr?| => {
+  }
+  // compiles to
+  class Obj {
+    constructor(__props__) {
+      this.__props__ = __props__
+      let {someAttr, ...__params___} = __props__
+      this.__params__ = __params__
+      this.someAttr = someAttr
+    }
+  }
+  ```
+
+  ### Under the hood
+
+  TODO: Explain how it works
+
+
+
+
+
+
+
+
+
 
 </md>)
 }.toString()
