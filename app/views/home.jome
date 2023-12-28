@@ -318,6 +318,8 @@ main {
 
   Utiliser do ... end pour exécuter des fonctions?
 
+  Nooon, utiliser exe ... end au pire.
+
   ```jome
   {
   Recipe
@@ -329,7 +331,7 @@ main {
     Step `Put {@1} into {@2}...` // @1 is the first children
     Step "Mix ..."
     Step "Blah blah ..."
-    do
+    exe
       prepare 'The recipe'
     end
     Ing ...
@@ -344,16 +346,16 @@ main {
       .execFunc2
 
     Obj prop: 'val'
-      do execFunc end
-      do execFunc2 end
+      exe execFunc end
+      exe execFunc2 end
 
-    Obj prop: 'val' do
+    Obj prop: 'val' exe
       execFunc
       execFunc2
     end
 
     Obj prop: 'val'
-      do
+      exe
         execFunc
         execFunc2
       end
