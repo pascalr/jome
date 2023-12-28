@@ -152,11 +152,19 @@ main {
 
   ```jome
   def greet(name: string, greeting: string = "Hello") : string
-    `${greeting}, ${name}!`
+    return `${greeting}, ${name}!`
   end
 
   def attack(enemy: Player)
     /* ... */
+  end
+  ```
+
+  You add a question mark after the type is the variable can be null.
+
+  ```jome
+  def sayHello(anybody: Person?): string
+    return `${greeting}, ${anybody.name}!` if anybody
   end
   ```
 
@@ -625,6 +633,8 @@ main {
   end
   ```
 
+  All attributes are public because it is javascript, so no need for attr_reader, attr_accessor...
+
   ```jome
   class SomeClass
 
@@ -658,6 +668,16 @@ main {
 
   An interface is a list of props. When you declare a class, you can give an interface so you don't have to specify every time the list of
   possible parameters that can be given.
+
+  ```jome
+  interface HtmlOptions ({
+    width,
+    height
+  })
+
+  class Div &HtmlOptions => {/* ... */}
+  class Span |arg, &HtmlOptions| => {/* ... */}
+  ```
 
   To refer to an interface, you add an ampersand before the name.
 

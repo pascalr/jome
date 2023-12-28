@@ -1,0 +1,265 @@
+// https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes
+// TODO: The ARIA role attribute and the multiple aria-* states and properties, used for ensuring accessibility.
+// TODO: The event handler attributes: onabort, onautocomplete, onautocompleteerror, onblur, oncancel, oncanplay, oncanplaythrough, onchange, onclick, onclose, oncontextmenu, oncuechange, ondblclick, ondrag, ondragend, ondragenter, ondragleave, ondragover, ondragstart, ondrop, ondurationchange, onemptied, onended, onerror, onfocus, oninput, oninvalid, onkeydown, onkeypress, onkeyup, onload, onloadeddata, onloadedmetadata, onloadstart, onmousedown, onmouseenter, onmouseleave, onmousemove, onmouseout, onmouseover, onmouseup, onmousewheel, onpause, onplay, onplaying, onprogress, onratechange, onreset, onresize, onscroll, onseeked, onseeking, onselect, onshow, onsort, onstalled, onsubmit, onsuspend, ontimeupdate, ontoggle, onvolumechange, onwaiting.
+interface GlobalAttributes({
+  accesskey,
+  autocapitalize,
+  autofocus,
+  class,
+  contenteditable,
+  dir,
+  draggable,
+  enterkeyhint,
+  hidden,
+  id,
+  inert,
+  inputmode,
+  is,
+  itemid,
+  itemprop,
+  itemref,
+  itemscope,
+  itemtype,
+  lang,
+  nonce,
+  part,
+  popover,
+  role,
+  slot,
+  spellcheck,
+  style,
+  tabindex,
+  title,
+  translate,
+  virtualkeyboardpolicy
+})
+// interface GlobalAttributes
+//   accesskey?
+//   autocapitalize?
+//   autofocus?
+//   class?
+//   contenteditable?
+//   dir?
+//   draggable?
+//   enterkeyhint?
+//   hidden?
+//   id?
+//   inert?
+//   inputmode?
+//   is?
+//   itemid?
+//   itemprop?
+//   itemref?
+//   itemscope?
+//   itemtype?
+//   lang?
+//   nonce?
+//   part?
+//   popover?
+//   role?
+//   slot?
+//   spellcheck?
+//   style?
+//   tabindex?
+//   title?
+//   translate?
+//   virtualkeyboardpolicy?
+// end
+
+def renderHTMLAttrs(obj)
+  var r = obj.#signals.#keys.map(n =>
+    `on{n}="jome.run('${obj.#path}.{n}()')"`
+  ).join(" ")
+/*
+  // FIXME: Needs a space between signals and props
+
+  r = r + (obj.#params.#entries.filter(entry => (entry[0] != 'css')).map(entry =>
+    `{entry[0]}="{entry[1]}"`
+  ).join(" "))
+
+  r = r + (obj.#params.css ? ('style="'+obj.#params.css.#entries.map(entry => `{entry[0]}: {entry[1]}`).join('; ')+'"') : '')
+
+  r ? (' '+r) : r*/
+end
+
+def renderHTMLTagChildren = |children| => (
+  children.map(c => (c.toString ? c.toString() : '')).join("")
+)
+
+def renderHTMLTagAttrs = |attrs| => (
+
+  var r = (attrs.#entries.filter(entry => (entry[0] != 'css')).map(entry =>
+    `{entry[0]}="{entry[1]}"`
+  ).join(" "))
+
+  var s = (attrs.css ? (attrs.css.#entries.map(entry => (entry[1] ? `{entry[0]}: {entry[1]}` : '')).filter(s => s.length).join('; ')) : '')
+  r = r + (s && s.length ? (' style="'+s+'"') : '')
+
+  r ? (' '+r) : r
+)
+
+export def renderHtmlTag = |tag, children, content, &GlobalAttributes| => (
+  `<{tag}{renderHTMLTagAttrs(PARAMS)}>{content||''}{renderHTMLTagChildren(children||[])}</{tag}>`
+)
+
+def renderHTMLChildren = |obj| => (
+  obj.#children.map(c => (c.toString ? c.toString() : '')).join("")
+)
+
+def renderHTML = |obj, target?| => (
+  var elem = document.getElementById(target)
+  children = []
+  html = ''
+  obj.#children.forEach(child => (
+    if (child.createElem) (
+      var e = child.createElem()
+      children.push(e)
+    ) else if (child.toString) (
+      html += child.toString()
+    )
+  ))
+  elem.innerHTML = html
+  children.forEach(child => (
+    elem.appendChild(child)
+  ))
+)
+
+// FIXME: List given by LLM and not verified
+HTML_EVENTS = [
+  "click",
+  "dblclick",
+  "mouseover",
+  "mouseout",
+  "mousedown",
+  "mouseup",
+  "mousemove",
+  "contextmenu",
+  "keydown",
+  "keyup",
+  "keypress",
+  "submit",
+  "reset",
+  "change",
+  "focus",
+  "blur",
+  "input",
+  "touchstart",
+  "touchend",
+  "touchmove",
+  "touchcancel",
+  "load",
+  "unload",
+  "resize",
+  "scroll",
+  "play",
+  "pause",
+  "ended",
+  "volumechange",
+  "timeupdate",
+  "dragstart",
+  "drag",
+  "dragenter",
+  "dragleave",
+  "dragover",
+  "drop",
+  "dragend",
+  "animationstart",
+  "animationend",
+  "animationiteration",
+  "transitionstart",
+  "transitionend"
+]
+
+class Html {
+  ~run: => (
+    document.getElementById(target).innerHTML = renderHTMLChildren(@)
+  )
+}
+
+// ns: namespace for createElementNS
+def createElem = |obj, tag, content, ns| => (
+  var el = (ns ? document.createElementNS(ns, tag) : document.createElement(tag))
+  if (content) (
+    el.appendChild(document.createTextNode(content))
+  )
+  obj.#params.#entries.filter(entry => (entry[0] != 'css')).forEach(entry => (
+    el.setAttribute(entry[0], entry[1])
+  ))
+  if (obj.css) (
+    el.style= obj.css.#entries.map(entry => `{entry[0]}: {entry[1]}`).join('; ')
+  )
+  obj.#children.forEach(child => (
+    if (child.createElem) (
+      el.appendChild(child.createElem())
+    ) else if (child.toString) (
+      tmp = document.createElement("div")
+      tmp.innerHTML = child.toString()
+      console.log('here', tmp.innerHTML)
+      el.appendChild(tmp.firstElementChild)
+    )
+  ))
+  obj.#signals.#keys.forEach(n => (
+    if (HTML_EVENTS.includes(n)) (
+      el.addEventListener(n, obj['~'+n])
+    )
+  ))
+  el
+)
+
+class Tag |tag, content| => {
+  toString: => `<{tag}{renderHTMLAttrs(@)}>{content||''}{renderHTMLChildren(@)}</{tag}>`
+  createElem: => createElem(@, tag, content)
+}
+class InlineTag |tag| => {
+  toString: => `<{tag}{renderHTMLAttrs(@)} />`
+  createElem: => createElem(@, tag)
+}
+class Fragment => {
+  toString: => `{renderHTMLChildren(@)}`
+  createElem: => (
+    var el = document.createDocumentFragment()
+    @.#children.forEach(child => (
+      if (child.createElem) (
+        el.appendChild(child.createElem())
+      )
+    ))
+    el
+  )
+}
+
+export class H1 |text, &GlobalAttributes| => { super: Tag "h1", text }
+export class H2 |text, &GlobalAttributes| => { super: Tag "h2", text }
+export class H3 |text, &GlobalAttributes| => { super: Tag "h3", text }
+export class P |text, &GlobalAttributes| => { super: Tag "p", text }
+export class Li |text, &GlobalAttributes| => { super: Tag "li", text }
+export class Span |text, &GlobalAttributes| => { super: Tag "span", text }
+export class Div |text, &GlobalAttributes| => { super: Tag "div", text }
+export class Pre |text, &GlobalAttributes| => { super: Tag "pre", text }
+export class Code |text, &GlobalAttributes| => { super: Tag "code", text }
+
+export class Form |&GlobalAttributes| => { super: Tag "form" }
+export class Ul |&GlobalAttributes| => { super: Tag "ul" }
+export class Ol |&GlobalAttributes| => { super: Tag "ol" }
+export class HtmlObject |&GlobalAttributes| => { super: Tag "object" }
+export class Canvas |&GlobalAttributes| => { super: Tag "canvas" }
+
+export class Br |&GlobalAttributes| => { super: InlineTag "br" }
+export class Hr |&GlobalAttributes| => { super: InlineTag "hr" }
+
+export class Txt text => {
+  toString: => (
+    attrs = renderHTMLAttrs(@)
+    attrs ? "<span{attrs}>{text}</span>" : "{text}"
+  )
+  createElem: => (
+    document.createTextNode(text)
+  )
+}
+export class Btn text => { super: Tag "button", text }
+export Button = Btn
+export class Link |url, name| => { super: Tag "a", name, href: url }
+ 
+export class Label |name, text| => { super: Tag "label", text, htmlFor: text }
+ 
+export class Input |name| => { super: InlineTag "input", id: name, name: name, autocomplete: name }
+export class Img |url, alt| => { super: InlineTag "img", src: url, alt: alt }
