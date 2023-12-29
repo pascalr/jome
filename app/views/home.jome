@@ -301,17 +301,8 @@ main {
   =identifier // add identifier as a children of the node
   key = identifier // add identifier as a property of the object and as a children
 
-  class Node
-    def constructor(props: Object)
-      // Assign each entry of the object to 'this'
-      for (const key in props)
-        if (props.hasOwnProperty(key)) {
-          this[key] = props[key];
-        }
-      end
-      this.props = props
-    end
-  end
+  // if you want to set attributes without passing it to the constructor, you can use:
+  .set attr: 'value' // set is a method on Node
 
   ```jome
   {
@@ -397,15 +388,23 @@ main {
   let secondChild = @2
   ```
 
-  ## For loop
+  ## Loops
 
-  TODO: Exactly like in javascript.
+  Loops are used exactly like in javascript, but with the end keyword.
+
+  Note: There is no do ... while, because the do keyword is used for functions.
+  Maybe exec ... while ???
+
   ```jome
   for (let el in els)
     // ...
   end
 
   for (let i = 0; i < list.length; i++)
+    // ...
+  end
+
+  while (someCondition)
     // ...
   end
   ```
@@ -419,13 +418,29 @@ main {
   ```jome
   node = {
     Obj prop1: 'val', prop2: 'val2'
-      attr1: 'val3', attr2: 'val4'
-      child1: 'val5'
-      child2: 'val6'
+      prop3: 'val3', prop4: 'val4'
+      propAndChild1 = 'val5'
+      propAndChild2 = 'val6'
   }
   ```
 
-  Waiiiiiiit comment savoir si c'est un child ou pas?
+  ```jome
+  class Node
+    def constructor(props: Object)
+      set(props)
+      this.props = props
+    end
+
+    def set(attrs: Object)
+      // Assign each entry of the object to 'this'
+      for (const key in props)
+        if (props.hasOwnProperty(key)) {
+          this[key] = props[key];
+        }
+      end
+    end
+  end
+  ```
 
   ### Adding children to nodes
   
