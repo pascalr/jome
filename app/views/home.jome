@@ -500,35 +500,29 @@ main {
 
   ## Conditions
 
+  ```jome
+  if someCond
+    doSomething
+  end
+
+  if someCond
+    doSomething
+  else if someOtherCond
+    doSomething // all valid
+  elsif someOtherCond
+    doSomething // all valid
+  elif someOtherCond
+    doSomething // all valid
+  else
+    doSomething
+  end
+  ```
+
   return "some val" if someCond
 
   An if modifier executes everything to it's left only if the condition is true
 
-  Est-ce que ça serait possible de faire quelque chose de similaire plus développé?
-  someVar = "some val" if someCond else "some default"
-  someVar = "some val" if someCond
-            "some other val" if someOtherCond
-            else "some default"
-  Est-ce que ça prend un else partout?
-  someVar = "some val" if someCond else
-            "some other val" if someOtherCond
-            else "some default"
-  Une virgule?
-  someVar = "some val" if someCond,
-            "some other val" if someOtherCond,
-            "some default"
-
-  someVar = someCond ? "some val" : (
-            someOtherCond ? "some other val" :
-            "some default")
-
-  Ouin pas sur... Je n'aime pas toute ces affaires.
-
-  En fait je pense que j'aimerais quelque chose de nouveau. Quand on fait de quoi de compliqué comme ça, ce qu'on fait est un map?
-
-  Est-ce que je pourrais faire de quoi d'inteligent avec mes nodes? Parce que c'est des branches des ifs...
-
-  An if does not return anything, except in a node block. So you can use a node block to assing a value conditionally.
+  An if does not return anything, except in a block. So you can use a block to assing a value conditionally.
 
   ```jome
   someVar = {
@@ -552,15 +546,17 @@ main {
   }
   ```
 
+  You can use elif, elsif or else if, they are all the same.
+
   Comment est-ce que ça comporterait un if modifier dans un node block?
   Ça marche pour ajouter des childrens conditionnellement.
 
   ```jome
-  someVar = {
+  someVar = {[
     "item1" if someCond
     "item2" if someOtherCond
     "item3 always there"
-  }
+  ]}
   ```
 
   J'aimerais pouvoir utiliser un if modifier dans un string literal.
@@ -569,26 +565,7 @@ main {
 
   Et j'aimerais que dans ce cas, ça retourne automatiquement '' au lieu de undefined ou null
 
-  Je veux quand même pouvoir faire un if normal, je pense que je préfère avec un end (vu que pas avec {})
-  if someCond
-    doSomething
-  end
-
-  if someCond
-    doSomething
-  else if someOtherCond
-    doSomething // all valid
-  elsif someOtherCond
-    doSomething // all valid
-  elif someOtherCond
-    doSomething // all valid
-  else
-    doSomething
-  end
-
-  J'aime ça j'aime mes idées.
-  On jase encore plus:
-  Quoi faire avec le switch case?
+  ### Switch / case
 
   Mon idée, tu fais:
   case someVal
@@ -615,11 +592,7 @@ main {
   Le case doit être dans le scope des when. Tu ne peux pas par exemple le mettre caché dans le if.
   Les when sont simplement remplacé par "if (expression du case)"
 
-  ## Classes 2.0
-
-  Work in progress.
-
-  L'idée est d'utiliser end.
+  ## Classes
 
   ```jome
   class Person
@@ -663,15 +636,9 @@ main {
   end
   ```
 
-  ## Classes
-
   ### Inheritence
 
-  ```jome
-    class Base {
-      super: Abstract prop: 'val'
-    }
-  ```
+  ?
 
   ## Interfaces
 
