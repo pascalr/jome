@@ -304,6 +304,12 @@ main {
   // if you want to set attributes without passing it to the constructor, you can use:
   .set attr: 'value' // set is a method on Node
 
+  Le désavantage que je vois de faire key: identifier pour une propriété, est que c'est tanant pour le type.
+  Avec un = c'est facile rajouter le type. Mais d'un autre côté, est-ce qu'on veut vraiment mettre un type
+  là? Ça devrait être assez explicit en général. Et tu peux quand même le faire avec [key: type].
+
+  You can specify dynamic keys using square brackets. Ex: [`key_{name}`]
+
   ```jome
   {
   Recipe
@@ -465,7 +471,7 @@ main {
  
   ```jome
   $ <<
-    someVar = 10
+    someVar: 10
     page: Page
       navbar: Navbar
         list: List
