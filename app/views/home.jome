@@ -293,19 +293,31 @@ main {
   obj = {content: content, value: value}
   ```
 
-  ### Keywords inside blocks V2?
+  ### Work in progress
 
-  attr: 'value'
-  SomeChildInstance 'somee arg'
-  .funcCall 'some arg'
-  =someFuncToAddAsChildren
+  identifier // new identifier()
+  .identifier // call identifier on the created object
+  key: identifier // pass identifier to the constructor as a property of the object
+  =identifier // add identifier as a children of the node
+  key = identifier // add identifier as a property of the object and as a children
+
+  class Node
+    def constructor(props: Object)
+      // Assign each entry of the object to 'this'
+      for (const key in props)
+        if (props.hasOwnProperty(key)) {
+          this[key] = props[key];
+        }
+      end
+      this.props = props
+    end
+  end
 
   ```jome
   {
-  Recipe (
-    prop: 'Some prop'
-  )
-    name: 'Chickpea balls', prepare: 1h
+  Recipe
+    name: 'Chickpea balls'
+    prepare: 1h
     Ing 1cup, "dry chickpeas"
     Ing 2cup, "water"
     Ing 2tbsp, "parmesan"
@@ -318,7 +330,7 @@ main {
   ```
 
   ```jome
-  // Four syntaxes allowed to execute functions
+  // Three syntaxes allowed to execute functions
   {[
     Obj prop: 'val'
       .execFunc
@@ -335,41 +347,6 @@ main {
   ]}
   ```
 
-  ### Keywords inside blocks
-
-  There are four keywords used inside blocks: init, attr, exe and parent.
-
-  Every entry after the keyword init will be given to the constructor. This is the
-  default right after the class name. Everything on the first line is also given to the constructor
-
-  Every entry after the keyword attr is set on the object AFTER the initialize.
-
-  By default, nested objects are children of the parent.
-
-  You can use the keyword exe to enter execution mode, everything after will be executed.
-
-  You can use the keyword parent to return to procreation mode.
-
-  Maybe use the keyword set instead of attr??
-
-  ```jome
-  {
-  Recipe
-    init name: 'Chickpea balls'
-    attr name: 'Chickpea balls', prepare: 1h
-    Ing 1cup, "dry chickpeas"
-    Ing 2cup, "water"
-    Ing 2tbsp, "parmesan"
-    Step `Put {@1} into {@2}...` // @1 is the first children
-    Step "Mix ..."
-    Step "Blah blah ..."
-    exe
-    prepare 'The recipe'
-    parent
-    Ing ...
-  }
-  ```
-
   ```jome
   // Create a server, add a get handler and start it
   {
@@ -379,34 +356,6 @@ main {
       )
       start
   }
-
-  obj = {
-    Obj prop: 'val'
-      addChild('arg')
-      exe executeFunction
-  }
-  ```
-
-  ```jome
-  // Four syntaxes allowed to execute functions
-  {[
-    Obj prop: 'val'
-      .execFunc
-      .execFunc2
-
-    Obj prop: 'val'
-      exe execFunc
-      exe execFunc2
-
-    Obj prop: 'val' exe
-      execFunc
-      execFunc2
-
-    Obj prop: 'val'
-      exe
-        execFunc
-        execFunc2
-  ]}
   ```
 
   ### Lists inside blocks
@@ -448,6 +397,19 @@ main {
   let secondChild = @2
   ```
 
+  ## For loop
+
+  TODO: Exactly like in javascript.
+  ```jome
+  for (let el in els)
+    // ...
+  end
+
+  for (let i = 0; i < list.length; i++)
+    // ...
+  end
+  ```
+
   <h2 id="nodes">Nodes</h2>
 
   Nodes are objects in a tree structure. They can have a parent and they can have children.
@@ -456,13 +418,14 @@ main {
 
   ```jome
   node = {
-    Obj
-      init prop1: 'val', prop2: 'val2'
-      attr attr1: 'val3', attr2: 'val4'
+    Obj prop1: 'val', prop2: 'val2'
+      attr1: 'val3', attr2: 'val4'
       child1: 'val5'
       child2: 'val6'
   }
   ```
+
+  Waiiiiiiit comment savoir si c'est un child ou pas?
 
   ### Adding children to nodes
   
