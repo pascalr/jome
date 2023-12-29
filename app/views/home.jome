@@ -286,7 +286,7 @@ main {
 
   ### Shorthand key syntax
 
-  The short key syntax is different that in javascript, because it could be confusing. In Jome, it starts with a colon
+  The short key syntax is different that in javascript, because it could be confusing with children. In Jome, it starts with a colon
   ```jome
   obj = {:content, :value}
   // same as
@@ -295,18 +295,16 @@ main {
 
   ### Keywords inside blocks V2?
 
-  Un slash au début fait comme si ce qu'il y avait de la ligne précédente continue sur la ligne suivante?
-
-  Donc pratique pour mettre props sur plusieurs lignes, au lieu de juste la première ligne.
-
-  Utiliser do ... end pour exécuter des fonctions?
-
-  Nooon, utiliser exe ... end au pire.
+  attr: 'value'
+  SomeChildInstance 'somee arg'
+  .funcCall 'some arg'
+  =someFuncToAddAsChildren
 
   ```jome
   {
-  Recipe
-    \ prop: 'Some prop'
+  Recipe (
+    prop: 'Some prop'
+  )
     name: 'Chickpea balls', prepare: 1h
     Ing 1cup, "dry chickpeas"
     Ing 2cup, "water"
@@ -314,9 +312,7 @@ main {
     Step `Put {@1} into {@2}...` // @1 is the first children
     Step "Mix ..."
     Step "Blah blah ..."
-    exe
-      prepare 'The recipe'
-    end
+    .prepare 'The recipe'
     Ing ...
   }
   ```
@@ -328,20 +324,14 @@ main {
       .execFunc
       .execFunc2
 
-    Obj prop: 'val'
-      exe execFunc end
-      exe execFunc2 end
-
-    Obj prop: 'val' exe
+    Obj prop: 'val' exec
       execFunc
       execFunc2
-    end
 
     Obj prop: 'val'
-      exe
+      exec
         execFunc
         execFunc2
-      end
   ]}
   ```
 
@@ -383,7 +373,7 @@ main {
   ```jome
   // Create a server, add a get handler and start it
   {
-    ExpressServer port: 3000 exe
+    ExpressServer port: 3000 exec
       get '/', |req, res| => (
         res.send(homePage)
       )
