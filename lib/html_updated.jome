@@ -48,13 +48,14 @@ def renderHTMLAttrs(obj)
   r = r + (obj.#params.css ? ('style="'+obj.#params.css.#entries.map(entry => `{entry[0]}: {entry[1]}`).join('; ')+'"') : '')
 
   r ? (' '+r) : r*/
+  return r
 end
 
-def renderHTMLTagChildren = |children| => (
-  children.map(c => (c.toString ? c.toString() : '')).join("")
-)
+def renderHTMLTagChildren(children)
+  return children.map(c => (c.toString ? c.toString() : '')).join("")
+end
 
-def renderHTMLTagAttrs = |attrs| => (
+def renderHTMLTagAttrs(attrs)
 
   var r = (attrs.#entries.filter(entry => (entry[0] != 'css')).map(entry =>
     `{entry[0]}="{entry[1]}"`
@@ -63,18 +64,18 @@ def renderHTMLTagAttrs = |attrs| => (
   var s = (attrs.css ? (attrs.css.#entries.map(entry => (entry[1] ? `{entry[0]}: {entry[1]}` : '')).filter(s => s.length).join('; ')) : '')
   r = r + (s && s.length ? (' style="'+s+'"') : '')
 
-  r ? (' '+r) : r
-)
+  return r ? (' '+r) : r
+end
 
-export def renderHtmlTag = |tag, children, content, &GlobalAttributes| => (
-  `<{tag}{renderHTMLTagAttrs(PARAMS)}>{content||''}{renderHTMLTagChildren(children||[])}</{tag}>`
-)
+export def renderHtmlTag(tag, children, content, attrs: GlobalAttributes)
+  return `<{tag}{renderHTMLTagAttrs(attrs)}>{content||''}{renderHTMLTagChildren(children||[])}</{tag}>`
+end
 
-def renderHTMLChildren = |obj| => (
-  obj.#children.map(c => (c.toString ? c.toString() : '')).join("")
-)
+def renderHTMLChildren(obj)
+  return obj.#children.map(c => (c.toString ? c.toString() : '')).join("")
+end
 
-def renderHTML = |obj, target?| => (
+def renderHTML(obj, {target})
   var elem = document.getElementById(target)
   children = []
   html = ''
@@ -90,7 +91,7 @@ def renderHTML = |obj, target?| => (
   children.forEach(child => (
     elem.appendChild(child)
   ))
-)
+end
 
 // FIXME: List given by LLM and not verified
 HTML_EVENTS = [
@@ -138,14 +139,14 @@ HTML_EVENTS = [
   "transitionend"
 ]
 
-class Html {
+class Html
   ~run: => (
     document.getElementById(target).innerHTML = renderHTMLChildren(@)
   )
-}
+end
 
 // ns: namespace for createElementNS
-def createElem = |obj, tag, content, ns| => (
+def createElem(obj, tag, content, ns)
   var el = (ns ? document.createElementNS(ns, tag) : document.createElement(tag))
   if (content) (
     el.appendChild(document.createTextNode(content))
@@ -171,8 +172,8 @@ def createElem = |obj, tag, content, ns| => (
       el.addEventListener(n, obj['~'+n])
     )
   ))
-  el
-)
+  return el
+end
 
 class Tag |tag, content| => {
   toString: => `<{tag}{renderHTMLAttrs(@)}>{content||''}{renderHTMLChildren(@)}</{tag}>`

@@ -174,12 +174,6 @@
 			  }
       ]
 		},
-    "interface-ref": {
-      "patterns": [    {
-        "name": "entity.name.type.interface-ref.jome",
-        "match": "&\\w+"
-      }]
-    },
     "arrow": {
 			"patterns": [{
 				"name": "keyword.arrow.jome",
@@ -209,10 +203,10 @@
             "0": {"name": "punctuation.vertical-bar.end.jome"}
           },
           "patterns": [
+            {"include": "#variable"},
             {"include": "#variable-with-type"},
             {"include": "#along"},
-            {"include": "#expression"},
-            {"include": "#interface-ref" }
+            {"include": "#expression"}
           ]
         }
       ]
@@ -226,10 +220,10 @@
           "end": "\\)",
           "endCaptures": {"0": {"name": "punctuation.paren.close"}},
           "patterns": [
+            {"include": "#variable"},
             {"include": "#variable-with-type"},
             {"include": "#along"},
-            {"include": "#expression"},
-            {"include": "#interface-ref" }
+            {"include": "#expression"}
           ]
         }
       ]
@@ -376,6 +370,8 @@
           "end": "\\b(end)\\b",
           "endCaptures": {"0": {"name": "keyword.control.jome"}},
           "patterns": [
+            {"include": "#variable"},
+            {"include": "#variable-with-type"},
             {"include": "#expression"}
           ]
         }
@@ -395,7 +391,7 @@
         },
         {
           "name": "support.function-call.WIP.jome",
-          "begin": "(\\.)?\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|end|\\}))",
+          "begin": "(\\.)?\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|end|\\}|\\?|\\[))",
           "beginCaptures": {
             "1": {"name": "punctuation.dot.jome"},
             "2": { "name": "entity.name.function.jome" }
