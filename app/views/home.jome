@@ -722,71 +722,19 @@ main {
 
   ### Functions
 
-  Il doit y avoir un espace avant le -> pour que ce soit une fonction. Sinon, c'est le meta accessor.
-
-  By default, Jome adds returns statements to functions. This setting can be disabled in the config file.
-
-  It is very nice when prototyping to not have to write return statements. But for production code, it is safer to always write them, this
-  way you never return by accident a sensitive value that should be hiden from users.
-
-  Je n'aime pas tant que Jome ajoute des returns statements automatiquement. Je veux avoir le contrôle là dessus. Comment faire
-  si je ne veux pas retourner rien?
-
-  Idées:
-  def sum |args| :=> (executeMaisRetournePas(10))
-  def sum |args| :-> (executeMaisRetournePas(10))
-  def sum |args| |> (executeMaisRetournePas(10))
-  def sum |args| |> (executeMaisRetournePas(10))
-  def sum |args| (executeMaisRetournePas(10))
-  func sum |args| (executeMaisRetournePas(10))
-  function sum(args) ()
-
-  Peut-être qu'avec def ne pas utiliser le signe =, je trouve ça redondant.
-
-  def x 10
-  def sum |a,b| => (a+b)
-  def sayHello => #log("Hello!")
-  def sayHello |> #log("Hello!")
-
-  I think I got it: do and end
-
-  def sayHello do #log("Hello!") end
-  def sayHello do
-    #log("Hello!")
-  end
-
-  def sayHelloTo |name| do
-    #log(`Hello! {name}`)
-  end
-  // Utiliser la syntaxe comme ruby?
-  def sayHelloTo do |name|
-    #log(`Hello! {name}`)
-  end
-
-  Il reste la question de quand est-ce que c'est une fonction et quand est-ce que c'est une arrow function pour le bind?
-
-  def c'est toujours pour le bind?
-  Utiliser un keyword func ou fn pour les fonctions?
-
-  if x do
-    
-  end
-
-  Est-ce que je veux vraiment permettre de créer des variables avec def? def x 10. C'est laid. Nooon je ne veux pas.
-  Parce que en plus, ça peut causer des bugs, parce que je ne pourrais pas juste définir sans avoir de valeur.
-  def x; def y; ça ne serait pas valide, parce que nécessite 2 valeurs...
-  def x 10
-  J'aime mieux "let x = 10" de toute façon.
-
-  J'aimerais ne pas à avoir à utiliser do avec def.
-
+  ```jome
+  // Utilise la syntaxe comme ruby
   def sayHello
     #log('Hello')
   end
 
-  def sayHello |name|
-    #log(`Hello {name}`)
+  def sayHelloTo do |name|
+    #log(`Hello! {name}`)
   end
+  ```
+
+  Je ne veux pas que le user n'aie à faire la distinction entre une fonction et une arrow fonction.
+  Trouver une manière de gérer cela.
 
   ## State variables
 
