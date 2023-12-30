@@ -148,29 +148,30 @@ end
 // ns: namespace for createElementNS
 def createElem(obj, tag, content, ns)
   var el = (ns ? document.createElementNS(ns, tag) : document.createElement(tag))
-  if (content) (
+  if content
     el.appendChild(document.createTextNode(content))
-  )
+  end
   obj.#params.#entries.filter(entry => (entry[0] != 'css')).forEach(entry => (
     el.setAttribute(entry[0], entry[1])
   ))
-  if (obj.css) (
+  if obj.css
     el.style= obj.css.#entries.map(entry => `{entry[0]}: {entry[1]}`).join('; ')
-  )
+  end
   obj.#children.forEach(child => (
-    if (child.createElem) (
+    if child.createElem
       el.appendChild(child.createElem())
-    ) else if (child.toString) (
+    elsif child.toString
       tmp = document.createElement("div")
       tmp.innerHTML = child.toString()
       console.log('here', tmp.innerHTML)
       el.appendChild(tmp.firstElementChild)
-    )
+    end
   ))
+
   obj.#signals.#keys.forEach(n => (
-    if (HTML_EVENTS.includes(n)) (
+    if (HTML_EVENTS.includes(n))
       el.addEventListener(n, obj['~'+n])
-    )
+    end
   ))
   return el
 end
