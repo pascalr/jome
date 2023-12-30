@@ -395,7 +395,7 @@
         },
         {
           "name": "support.function-call.WIP.jome",
-          "begin": "(\\.)?\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|end))",
+          "begin": "(\\.)?\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|end|\\}))",
           "beginCaptures": {
             "1": {"name": "punctuation.dot.jome"},
             "2": { "name": "entity.name.function.jome" }
