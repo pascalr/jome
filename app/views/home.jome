@@ -640,60 +640,85 @@ main {
 
   ?
 
-  ## Interfaces
+  ## Interfaces and types
 
-  An interface is a list of props. When you declare a class, you can give an interface so you don't have to specify every time the list of
-  possible parameters that can be given.
-
-  ```jome
-  interface HtmlOptions ({
-    width,
-    height
-  })
-
-  class Div &HtmlOptions => {/* ... */}
-  class Span |arg, &HtmlOptions| => {/* ... */}
-  ```
-
-  To refer to an interface, you add an ampersand before the name.
+  I find interfaces and types to be confusing in Typescript as someone who does know to language. In order to avoid
+  the confusion, you cannot declare an object with type. So you use interface for an object, and type otherwise.
 
   ```jome
-  interface HtmlOptions |
-    width?,
-    height?
-  |
+  interface Dimensions
+    width: number
+    height: number
+  end
 
-  class Div &HtmlOptions => {/* ... */}
-  class Span |arg, &HtmlOptions| => {/* ... */}
+  // Alias
+  type Dim = Dimensions
+
+  // Unions
+  type DimOrStr = Dim | string
+
+  // Tuples
+  type DimAndStr = [Dim, string]
+
+  def funcWithDimensions(dim : Dim)
+    // ...
+  end
   ```
 
-  I don't know yet how I want to refer to the interface values. Directly or through the interface name?
-  Maybe allow both?
+  ### Inheritence
+
+  You can use the extends keyword for extending an interface.
+
+   ```jome
+  interface Dim3d extends Dimensions
+    depth: number
+  end
+  ```
+
+  ### Intersection
+
+  You can use intersection to combine the properties of two interfaces together.
+
+  ### Function types
+
+  You can give a single function signature to a type. You can give function signatures to variables in interfaces.
 
   ```jome
-  class Div &HtmlOption => {
-    toString: => (
-      let widthPlus1 = width + 1
-      // or
-      let widthPlus1 = HtmlOption.width + 1
-    )
-  }
+  type log = (val: string) => void;
+
+  interface WithLog
+    log: (val: string) => void;
+  end
   ```
 
-  In an interface, you can define arguments, parameters and attributes.
+  For function overloading, you can use unions.
 
   ```jome
-  interface Example |
-    argument,
-    parameter?,
-    @requiredAttribute,
-    @optionalAttribute?
-  |
+  type log = (val: string) => void | (val: number) => void;
   ```
 
-  Maybe also latter possible to define function that must be implemented by the class using the interface.
+  ### Default values
 
-  An interface can be used by classes and by functions.
+  Contrary to Typescript, you can add default values in an interface.
+
+  ```jome
+  interface Options
+    method: string = 'get'
+    ttl: number = 30s
+  end
+  ```
+
+  ### Declaration Merging
+
+  I don't want to do this. But maybe required? Let's delay this decision.
+
+  ### Class extends interface
+
+  A class can extend an interface.
+
+  ### Source for decisions
+
+  https://stackoverflow.com/questions/37233735/interfaces-vs-types-in-typescript
 
   ### Functions
 
