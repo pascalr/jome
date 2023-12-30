@@ -203,8 +203,7 @@
             "0": {"name": "punctuation.vertical-bar.end.jome"}
           },
           "patterns": [
-            {"include": "#variable"},
-            {"include": "#variable-with-type"},
+            {"include": "#argument"},
             {"include": "#along"},
             {"include": "#expression"}
           ]
@@ -220,8 +219,7 @@
           "end": "\\)",
           "endCaptures": {"0": {"name": "punctuation.paren.close"}},
           "patterns": [
-            {"include": "#variable"},
-            {"include": "#variable-with-type"},
+            {"include": "#argument"},
             {"include": "#along"},
             {"include": "#expression"}
           ]
@@ -370,8 +368,7 @@
           "end": "\\b(end)\\b",
           "endCaptures": {"0": {"name": "keyword.control.jome"}},
           "patterns": [
-            {"include": "#variable"},
-            {"include": "#variable-with-type"},
+            {"include": "#argument"},
             {"include": "#expression"}
           ]
         }
@@ -401,7 +398,7 @@
         }
       ]
 		},
-    "variable-with-type": {
+    "argument": {
       "patterns": [
         {
           "match": "(\\w+)\\s*(:)\\s*(\\w+)",
@@ -410,6 +407,18 @@
             "2": {"name": "keyword.operator.type.annotation.jome"},
             "3": {"name": "support.type.jome"}
           }
+        },
+        {"include": "#variable"},
+        {
+          "name": "support.function-call.WIP.jome",
+          "begin": "\\{",
+          "beginCaptures": {"0": {"name": "punctuation.curly-braces.open.jome"}},
+          "end": "\\}",
+          "endCaptures": {"0": {"name": "punctuation.curly-braces.close.jome"}},
+          "patterns": [
+            {"include": "#argument"},
+            {"include": "#expression"}
+          ]
         }
       ]
     },

@@ -79,14 +79,14 @@ def renderHTML(obj, {target})
   var elem = document.getElementById(target)
   children = []
   html = ''
-  obj.#children.forEach(child => (
-    if (child.createElem) (
+  obj.#children.#each do |child|
+    if child.createElem
       var e = child.createElem()
       children.push(e)
-    ) else if (child.toString) (
+    elsif child.toString
       html += child.toString()
-    )
-  ))
+    end
+  end
   elem.innerHTML = html
   children.forEach(child => (
     elem.appendChild(child)
