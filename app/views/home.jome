@@ -677,7 +677,7 @@ main {
 
   ### Intersection
 
-  You can use intersection to combine the properties of two interfaces together.
+  You can use intersection to create a type that combines the properties of two interfaces together.
 
   ### Function types
 
@@ -710,11 +710,21 @@ main {
 
   ### Declaration Merging
 
-  I don't want to do this. But maybe required? Let's delay this decision.
+  By default, you cannot redeclare an interface and it adds to the previous one.
+
+  You have to use another syntax to do this. Maybe interface extends
+
+  ```jome
+  interface extends Options
+    arg: string = 'one more option'
+  end
+  ```
 
   ### Class extends interface
 
   A class can extend an interface.
+
+  Interface default values will given given to the instance by default in the constructor.
 
   ### Source for decisions
 
