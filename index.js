@@ -9,7 +9,7 @@ var cmd = global.jome_argv[1]
 if (cmd === 'test') {
   execSh(`jome -- test.jome`);
 } else if (cmd === 's' || cmd === 'server') {
-  execSh(`jome -- bin/server.jome`);
+  execSh(`jome -- website/server.jome`);
 } else {
   console.log(`Jome App v0.0.0.0.1
 

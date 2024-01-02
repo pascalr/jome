@@ -76,70 +76,212 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   This documentation assumes the reader is familiar with javascript.
 
-  Jome is similar to JavaScript, but there are a few distinctions that you must be aware of. Mainly, the syntax is a bit different, there are nodes, named parameters and scripts.
+  Jome is similar to JavaScript, but there are a few distinctions that you must be aware of. Mainly, the syntax is a bit different, there are nodes and scripts.
 
   <h2 id="syntax">Syntax</h2>
 
-  The syntax is a little more similar to the ruby programming language. You use the keyword def instead of function.
+  The syntax is a similar to the ruby programming language. You use the keyword def instead of function.
   And you use the end keyword instead of curly braces.
 
   \`\`\`jome
-  def sayHelloJohn
-    #log(\`Hello John!\`)
-  end
-
-  if (johnIsHere)
-    sayHelloJohn()
+  class Person
+    def sayHello
+      console.log('Hello!')
+    end
   end
   \`\`\`
 
-  Vertical bars are used for function parameters instead of parentheses.
+  Parentheses are optional for function calls.
 
   \`\`\`jome
-  let addXY = |x, y| => (x + y)
+  let add = (x,y) => x + y
+  add 10, 5
+  \`\`\`
 
-  def sayHello |name|
-    #log(\`Hello {name}!\`)
+  You can pass arguments for a single object without using curly braces.
+
+  \`\`\`jome
+  let add = ({x, y}) => x + y
+  add x: 10, y: 5
+  \`\`\`
+
+  To call a method on a object without parameters, you can use an arrow.
+
+  Je viens d'apprendre qu'il existe le keyword get en javascript qui permet de faire ça.
+  Mais l'avantage d'utiliser un -> est que tu peux définir une méthode avec des arguments optionels.
+  C'est impossible avec get. (A getter must have exactly zero parameters)
+
+  \`\`\`jome
+  obj->density // same as obj.density()
+  \`\`\`
+
+  You can use \`do ... end\` to create functions. You pass arguments between vertical bars.
+
+  \`\`\`jome
+  [1,2,3,4,5].each do |i|
+    console.log i
   end
+  \`\`\`
+
+  <h2 id="utils">Utils</h2>
+
+  The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.
+
+  For the complete list of utils: see the [utils page](${global._URL}/utils).
+
+  \`\`\`jome
+  // A constant
+  let x = #PI/2
+  let e = #e // Euler's number
+
+  // A function
+  let angle = #sin(x)
+  #log("The angle is:", angle) // #log is a shorthand for console.log
+  \`\`\`
+
+  By addind a dot before the hashtag, you can call the function with the preceding token as an argument.
+
+  \`\`\`jome
+  // A function acting upon a variable
+  let keys = obj.#keys // same as #keys(obj) or Object.keys(obj)
+  \`\`\`
+
+  Utils include most things global in javascript and useful utils like in underscore.js.
+  
+  Math: #PI, #sin, #cos, #tan, ..., #rand?
+  console: #log, ...
+  process: #argv, #env, #cwd...
+  underscore.js: #map, #reduce, ...
+
+  ## Types
+
+  You can specify types for variables. It can be primitives like string, number, integer or float. It can also be class names.
+
+  \`\`\`jome
+  def greet(name: string, greeting: string = "Hello") : string
+    return \`\${greeting}, \${name}!\`
+  end
+
+  def attack(enemy: Player)
+    /* ... */
+  end
+  \`\`\`
+
+  You add a question mark after the type is the variable can be null.
+
+  \`\`\`jome
+  def sayHello(anybody: Person?): string
+    return \`\${greeting}, \${anybody.name}!\` if anybody
+  end
+  \`\`\`
+
+  There are no unions or intersect like in typescript. If the function is too overloaded and it is too complicated, than don't use types and use documentation comments instead.
+
+  In a node block, you will be able to specify the types of keys like so:
+  \`\`\`jome
+  type MyObject = {
+    [key: string]: nb; // Here nb is a string
+  };
+  \`\`\`
+
+  But what about the types of children? (string)
+  {
+    MyNode
+      "childString"
+      (string) someFuncCallReturnsString
+      [string] someFuncCallReturnsString
+      someFuncCallReturnsString : string // Nooooooo, because it clashes with parameters...
+  }
+
+  ## Modules and exports
+
+  There are many ways to export items, but they are all compiled the same. Either using module.exports or export depending on jome config.
+
+  \`\`\`jome
+  module
+    def someFunc
+    end
+    let someVar = 10
+  end
+  \`\`\`
+
+  Compiles to
+
+  \`\`\`js
+  module.exports = {
+    someFunc: () => {
+    },
+    someVar: 10
+  }
+  // or
+  export function someFunc() {
+  }
+  export const someVar = 10
+  \`\`\`
+
+  You can give a name to the module, which simply creates an object that holds everything inside.
+
+  \`\`\`jome
+  module SomeModule
+    def someFunc
+    end
+    let someVar = 10
+  end
+
+  // usage:
+  // import {SomeModule} from './some_file.jome'
+  // let ten = SomeModule.someVar
+  \`\`\`
+
+  You can also export functions and constants individually.
+
+  \`\`\`jome
+  export def someFunc
+  end
+  export let someVar = 10
+
+  // usage:
+  // import {someFunc, someVar} from './some_file.jome'
+  \`\`\`
+
+  To export the default or an object, use the main keyword. It allows you to return a value from a file.
+
+  \`\`\`jome
+  // sum.jome
+  main |a, b| => (a + b)
+
+  // usage:
+  // import sum from './sum.jome'
   \`\`\`
 
   <h2 id="blocks">Blocks</h2>
 
-  Blocks are a key component of Jome. They use indentation to build objects in a short and subjectively pretty way.
-  It is also the syntax required to build [nodes](#nodes).
-
-  Blocks are surrounded by curly braces. The result of a block can be an object, a node or a value.
+  Blocks are delimited by curly braces and are used for a lot more than creating objects. You also use then to instantiate
+  objects, execute functions and to create [nodes](#nodes)
 
   \`\`\`jome
   // objects
-  position = {x: 10, y: 10}
-  destination = {
-    x: 40
-    y: 50
-  }
-  details = {
+  let details = {
     distanceX: 30, distanceY: 40 // comma is optional
     totalDistance: 50, eta: 10min
   }
 
+  // values
+  let obj = {Obj prop: 'val'} // instantiate and object
+  let objRunResult = {
+    Obj prop: 'val'
+      .run 'some arg'
+  }
+
   // nodes
   node = {
-    Obj some: 'obj'
+    Obj someProp: 'obj'
       'String child'
       Nested prop: 'val'
   }
-
-  // values
-  singleObj = {Obj prop: 'val'}
-  chainResult = {
-    Obj prop: 'val'
-      Nested prop: 'val'
-        Nested prop: 'val'
-      .run
-  } // The value will be the result of the function run of the object created.
   \`\`\`
 
-  A value is only on a single line. Use parentheses if you need multiple lines.
+  Note: A value is only on a single line. Use parentheses if you need multiple lines.
   \`\`\`jome
   {
     x: 1 +
@@ -151,85 +293,73 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   ### Shorthand key syntax
 
-  The short key syntax is different that in javascript, because it could be confusing. In Jome, it starts with a colon
+  The short key syntax is different that in javascript, because it could be confusing with children. In Jome, it starts with a colon
   \`\`\`jome
   obj = {:content, :value}
   // same as
   obj = {content: content, value: value}
   \`\`\`
 
-  ### Keywords inside blocks
+  ### Work in progress
 
-  There are four keywords used inside blocks: init, attr, exe and parent.
+  identifier // new identifier()
+  .identifier // call identifier on the created object
+  key: identifier // pass identifier to the constructor as a property of the object
+  =identifier // add identifier as a children of the node
+  key = identifier // add identifier as a property of the object and as a children
 
-  Every entry after the keyword init will be given to the constructor. This is the
-  default right after the class name. Everything on the first line is also given to the constructor
+  // if you want to set attributes without passing it to the constructor, you can use:
+  .set attr: 'value' // set is a method on Node
 
-  Every entry after the keyword attr is set on the object AFTER the initialize.
+  Le désavantage que je vois de faire key: identifier pour une propriété, est que c'est tanant pour le type.
+  Avec un = c'est facile rajouter le type. Mais d'un autre côté, est-ce qu'on veut vraiment mettre un type
+  là? Ça devrait être assez explicit en général. Et tu peux quand même le faire avec [key: type].
 
-  By default, nested objects are children of the parent.
-
-  You can use the keyword exe to enter execution mode, everything after will be executed.
-
-  You can use the keyword parent to return to procreation mode.
-
-  Maybe use the keyword set instead of attr??
+  You can specify dynamic keys using square brackets. Ex: [\`key_{name}\`]
 
   \`\`\`jome
   {
   Recipe
-    init name: 'Chickpea balls'
-    attr name: 'Chickpea balls', prepare: 1h
+    name: 'Chickpea balls'
+    prepare: 1h
     Ing 1cup, "dry chickpeas"
     Ing 2cup, "water"
     Ing 2tbsp, "parmesan"
     Step \`Put {@1} into {@2}...\` // @1 is the first children
     Step "Mix ..."
     Step "Blah blah ..."
-    exe
-    prepare 'The recipe'
-    parent
+    .prepare 'The recipe'
     Ing ...
   }
   \`\`\`
 
   \`\`\`jome
-  // Create a server, add a get handler and start it
-  {
-    ExpressServer port: 3000 exe
-      get '/', |req, res| => (
-        res.send(homePage)
-      )
-      start
-  }
-
-  obj = {
-    Obj prop: 'val'
-      addChild('arg')
-      exe executeFunction
-  }
-  \`\`\`
-
-  \`\`\`jome
-  // Four syntaxes allowed to execute functions
+  // Three syntaxes allowed to execute functions
   {[
     Obj prop: 'val'
       .execFunc
       .execFunc2
 
-    Obj prop: 'val'
-      exe execFunc
-      exe execFunc2
-
-    Obj prop: 'val' exe
+    Obj prop: 'val' exec
       execFunc
       execFunc2
 
     Obj prop: 'val'
-      exe
+      exec
         execFunc
         execFunc2
   ]}
+  \`\`\`
+
+  \`\`\`jome
+  // Create a server, add a get handler and start it
+  {
+    ExpressServer port: 3000 exec
+      get '/', |req, res| => (
+        res.send(homePage)
+      )
+      start
+  }
   \`\`\`
 
   ### Lists inside blocks
@@ -271,6 +401,27 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   let secondChild = @2
   \`\`\`
 
+  ## Loops
+
+  Loops are used exactly like in javascript, but with the end keyword.
+
+  Note: There is no do ... while, because the do keyword is used for functions.
+  Maybe exec ... while ???
+
+  \`\`\`jome
+  for (let el in els)
+    // ...
+  end
+
+  for (let i = 0; i < list.length; i++)
+    // ...
+  end
+
+  while (someCondition)
+    // ...
+  end
+  \`\`\`
+
   <h2 id="nodes">Nodes</h2>
 
   Nodes are objects in a tree structure. They can have a parent and they can have children.
@@ -279,12 +430,29 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   \`\`\`jome
   node = {
-    Obj
-      init prop1: 'val', prop2: 'val2'
-      attr attr1: 'val3', attr2: 'val4'
-      child1: 'val5'
-      child2: 'val6'
+    Obj prop1: 'val', prop2: 'val2'
+      prop3: 'val3', prop4: 'val4'
+      propAndChild1 = 'val5'
+      propAndChild2 = 'val6'
   }
+  \`\`\`
+
+  \`\`\`jome
+  class Node
+    def constructor(props: Object)
+      set(props)
+      this.props = props
+    end
+
+    def set(attrs: Object)
+      // Assign each entry of the object to 'this'
+      for (const key in props)
+        if (props.hasOwnProperty(key)) {
+          this[key] = props[key];
+        }
+      end
+    end
+  end
   \`\`\`
 
   ### Adding children to nodes
@@ -310,7 +478,7 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
  
   \`\`\`jome
   $ <<
-    someVar = 10
+    someVar: 10
     page: Page
       navbar: Navbar
         list: List
@@ -339,35 +507,29 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   ## Conditions
 
+  \`\`\`jome
+  if someCond
+    doSomething
+  end
+
+  if someCond
+    doSomething
+  else if someOtherCond
+    doSomething // all valid
+  elsif someOtherCond
+    doSomething // all valid
+  elif someOtherCond
+    doSomething // all valid
+  else
+    doSomething
+  end
+  \`\`\`
+
   return "some val" if someCond
 
   An if modifier executes everything to it's left only if the condition is true
 
-  Est-ce que ça serait possible de faire quelque chose de similaire plus développé?
-  someVar = "some val" if someCond else "some default"
-  someVar = "some val" if someCond
-            "some other val" if someOtherCond
-            else "some default"
-  Est-ce que ça prend un else partout?
-  someVar = "some val" if someCond else
-            "some other val" if someOtherCond
-            else "some default"
-  Une virgule?
-  someVar = "some val" if someCond,
-            "some other val" if someOtherCond,
-            "some default"
-
-  someVar = someCond ? "some val" : (
-            someOtherCond ? "some other val" :
-            "some default")
-
-  Ouin pas sur... Je n'aime pas toute ces affaires.
-
-  En fait je pense que j'aimerais quelque chose de nouveau. Quand on fait de quoi de compliqué comme ça, ce qu'on fait est un map?
-
-  Est-ce que je pourrais faire de quoi d'inteligent avec mes nodes? Parce que c'est des branches des ifs...
-
-  An if does not return anything, except in a node block. So you can use a node block to assing a value conditionally.
+  An if does not return anything, except in a block. So you can use a block to assing a value conditionally.
 
   \`\`\`jome
   someVar = {
@@ -391,15 +553,17 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   }
   \`\`\`
 
+  You can use elif, elsif or else if, they are all the same.
+
   Comment est-ce que ça comporterait un if modifier dans un node block?
   Ça marche pour ajouter des childrens conditionnellement.
 
   \`\`\`jome
-  someVar = {
+  someVar = {[
     "item1" if someCond
     "item2" if someOtherCond
     "item3 always there"
-  }
+  ]}
   \`\`\`
 
   J'aimerais pouvoir utiliser un if modifier dans un string literal.
@@ -408,26 +572,7 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   Et j'aimerais que dans ce cas, ça retourne automatiquement '' au lieu de undefined ou null
 
-  Je veux quand même pouvoir faire un if normal, je pense que je préfère avec un end (vu que pas avec {})
-  if someCond
-    doSomething
-  end
-
-  if someCond
-    doSomething
-  else if someOtherCond
-    doSomething // all valid
-  elsif someOtherCond
-    doSomething // all valid
-  elif someOtherCond
-    doSomething // all valid
-  else
-    doSomething
-  end
-
-  J'aime ça j'aime mes idées.
-  On jase encore plus:
-  Quoi faire avec le switch case?
+  ### Switch / case
 
   Mon idée, tu fais:
   case someVal
@@ -454,72 +599,30 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   Le case doit être dans le scope des when. Tu ne peux pas par exemple le mettre caché dans le if.
   Les when sont simplement remplacé par "if (expression du case)"
 
-  <h2 id="named-parameters">Named parameters and props</h2>
-
-  When calling a function, you can add paramters.
+  ## Classes
 
   \`\`\`jome
-  someFunc(someParam: 10, otherParam: 'Jean')
-  \`\`\`
-
-  To define parameters when creating a function, you either add ? at the end for an optional parameter, or you add ! for a required parameter.
-
-  \`\`\`jome
-  def someFunc = |someParam?, otherParam? = 'Pierre', optionalParam?, requiredParam!| => (
-    console.log(someParam) // No need to add ? or ! when refering to a parameter
-  )
-  \`\`\`
-
-  You can pass a parameter that was not defined in the list.
-
-  BUT YOU CAN'T PASS a parameter to a function if the function does not take any parameter. Because under the hood,
-  we add a params argument to the function, so we need at least one to add the argument, then you can pass as many as you want.
-
-  When calling a function with named parameters, the order does not matter. You can put them before arguments, after or even in the middle.
-
-  ### PARAMS
+  class Person
+    @firstName: string = "John"
+    @lastName: string = "Doe"
+    @age: number
   
-  Get the list of parameters given to a function.
+    def constructor(favoriteColor)
+      @favoriteColor = favoriteColor || 'brown'
+    end
+  end
 
-  \`\`\`jome
-    def someFunc = => (
-      PARAMS // The object containing all the paramters given to the function.
-    )  
+  class Person
+    @username: string = "Bigdaddy007" // same as doing @username = "Bigdaddy007" inside the constructor
+    @username?: string = "Bigdaddy007" // same as doing @username = #params.username || "Bigdaddy007" inside the constructor
+    @usersame // does nothing
+    @username // same as doing @username = null inside the constructor
+    
+    @@className = "Person"
+  end
   \`\`\`
 
-  FIXME: I don't like using the word PARAMS in capital letters, but I don't have a better idea yet.
-  I don't want to reserve the keyword params...
-
-  Use #params instead of PARAMS?
-
-  ### Props
-
-  Props are all the parameters and attributes as parameters passed during an object creation.
-
-  \`\`\`jome
-  « Obj someProp: 10, someAttr: 'Paul' »
-  class Obj |someProp?, @someAttr?| => {
-  }
-  // compiles to
-  class Obj {
-    constructor(__props__) {
-      this.__props__ = __props__
-      let {someAttr, ...__params___} = __props__
-      this.__params__ = __params__
-      this.someAttr = someAttr
-    }
-  }
-  \`\`\`
-
-  ### Under the hood
-
-  TODO: Explain how it works
-
-  ## Classes 2.0
-
-  Work in progress.
-
-  L'idée est d'utiliser end.
+  All attributes are public because it is javascript, so no need for attr_reader, attr_accessor...
 
   \`\`\`jome
   class SomeClass
@@ -540,128 +643,175 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   end
   \`\`\`
 
-  ## Classes
+  ### Methods
+
+  \`\`\`jome
+  class SomeClass
+    // Multiple lines methods
+    def someMethod
+      // ...
+    end
+
+    // Inline methods
+    add10 = x => x + 10
+
+    // Alias
+    addTen = add10
+
+    // What about constants? Is this allowed?
+    constant = 125 // What does this meannnnnnn??
+    @@constant = 125 // Double ampersand! What does this meannnnnnn?!?!
+
+    @token = ... // attached to instance (set in constructor)
+    token = ... // attached to prototype
+    @@token = ... // static, attached to class
+
+    // SomeClass.constant
+
+    def @@staticMethod
+    end
+  end
+  \`\`\`
+
+  Idée: Quand une classe inhérite d'un interface, mettre les valeurs par défaut dans le prototype.
+
+  ### Class arguments
+
+  \`\`\`jome
+  class Tag(tag, content)
+    def toString = => \`<{tag}{renderHTMLAttrs(@)}>{content||''}{renderHTMLChildren(@)}</{tag}>\`
+    def createElem = => createElem(@, tag, content)
+  end
+  \`\`\`
+
+  \`\`\`jome
+  interface TagProps
+    foo: bar
+  end
+
+  class Tag(props: TagProps) < Node(props)
+
+  end
+  \`\`\`
+
+  Qu'est-ce que ça implique de faire ça?
+
+  Qu'est-ce que ça peut vouloir dire:
+  - je veux que le premier argument du constructeur soit tag, et setter this.tag = tag
+  - je veux avoir accès à tag sans nécessairement le rendre public, encapsulter par une fonction?
+  - je veux pouvoir faire tag: tag dans le constructeur.
+
+  No constructor. Constructor code directly inside class.
 
   ### Inheritence
 
-  \`\`\`jome
-    class Base {
-      super: Abstract prop: 'val'
-    }
-  \`\`\`
+  ?
 
-  ## Interfaces
+  ## Interfaces and types
 
-  An interface is a list of props. When you declare a class, you can give an interface so you don't have to specify every time the list of
-  possible parameters that can be given.
-
-  To refer to an interface, you add an ampersand before the name.
+  I find interfaces and types to be confusing in Typescript as someone who does know to language. In order to avoid
+  the confusion, you cannot declare an object with type. So you use interface for an object, and type otherwise.
 
   \`\`\`jome
-  interface HtmlOptions |
-    width?,
-    height?
-  |
+  interface Dimensions
+    width: number
+    height: number
+  end
 
-  class Div &HtmlOptions => {/* ... */}
-  class Span |arg, &HtmlOptions| => {/* ... */}
+  // Alias
+  type Dim = Dimensions
+
+  // Unions
+  type DimOrStr = Dim | string
+
+  // Tuples
+  type DimAndStr = [Dim, string]
+
+  def funcWithDimensions(dim : Dim)
+    // ...
+  end
   \`\`\`
 
-  I don't know yet how I want to refer to the interface values. Directly or through the interface name?
-  Maybe allow both?
+  ### Inheritence
+
+  You can use the extends keyword for extending an interface.
+
+   \`\`\`jome
+  interface Dim3d extends Dimensions
+    depth: number
+  end
+  \`\`\`
+
+  ### Intersection
+
+  You can use intersection to create a type that combines the properties of two interfaces together.
+
+  ### Function types
+
+  You can give a single function signature to a type. You can give function signatures to variables in interfaces.
 
   \`\`\`jome
-  class Div &HtmlOption => {
-    toString: => (
-      let widthPlus1 = width + 1
-      // or
-      let widthPlus1 = HtmlOption.width + 1
-    )
-  }
+  type log = (val: string) => void;
+
+  interface WithLog
+    log: (val: string) => void;
+  end
   \`\`\`
 
-  In an interface, you can define arguments, parameters and attributes.
+  For function overloading, you can use unions.
 
   \`\`\`jome
-  interface Example |
-    argument,
-    parameter?,
-    @requiredAttribute,
-    @optionalAttribute?
-  |
+  type log = (val: string) => void | (val: number) => void;
   \`\`\`
 
-  Maybe also latter possible to define function that must be implemented by the class using the interface.
+  ### Default values
 
-  An interface can be used by classes and by functions.
+  Contrary to Typescript, you can add default values in an interface.
+
+  \`\`\`jome
+  interface Options
+    method: string = 'get'
+    ttl: number = 30s
+  end
+  \`\`\`
+
+  ### Declaration Merging
+
+  By default, you cannot redeclare an interface and it adds to the previous one.
+
+  You have to use another syntax to do this. Maybe interface extends
+
+  \`\`\`jome
+  interface extends Options
+    arg: string = 'one more option'
+  end
+  \`\`\`
+
+  ### Class extends interface
+
+  A class can extend an interface.
+
+  Interface default values will given given to the instance by default in the constructor.
+
+  ### Source for decisions
+
+  https://stackoverflow.com/questions/37233735/interfaces-vs-types-in-typescript
 
   ### Functions
 
-  Il doit y avoir un espace avant le -> pour que ce soit une fonction. Sinon, c'est le meta accessor.
-
-  By default, Jome adds returns statements to functions. This setting can be disabled in the config file.
-
-  It is very nice when prototyping to not have to write return statements. But for production code, it is safer to always write them, this
-  way you never return by accident a sensitive value that should be hiden from users.
-
-  Je n'aime pas tant que Jome ajoute des returns statements automatiquement. Je veux avoir le contrôle là dessus. Comment faire
-  si je ne veux pas retourner rien?
-
-  Idées:
-  def sum |args| :=> (executeMaisRetournePas(10))
-  def sum |args| :-> (executeMaisRetournePas(10))
-  def sum |args| |> (executeMaisRetournePas(10))
-  def sum |args| |> (executeMaisRetournePas(10))
-  def sum |args| (executeMaisRetournePas(10))
-  func sum |args| (executeMaisRetournePas(10))
-  function sum(args) ()
-
-  Peut-être qu'avec def ne pas utiliser le signe =, je trouve ça redondant.
-
-  def x 10
-  def sum |a,b| => (a+b)
-  def sayHello => #log("Hello!")
-  def sayHello |> #log("Hello!")
-
-  I think I got it: do and end
-
-  def sayHello do #log("Hello!") end
-  def sayHello do
-    #log("Hello!")
-  end
-
-  def sayHelloTo |name| do
-    #log(\`Hello! {name}\`)
-  end
-  // Utiliser la syntaxe comme ruby?
-  def sayHelloTo do |name|
-    #log(\`Hello! {name}\`)
-  end
-
-  Il reste la question de quand est-ce que c'est une fonction et quand est-ce que c'est une arrow function pour le bind?
-
-  def c'est toujours pour le bind?
-  Utiliser un keyword func ou fn pour les fonctions?
-
-  if x do
-    
-  end
-
-  Est-ce que je veux vraiment permettre de créer des variables avec def? def x 10. C'est laid. Nooon je ne veux pas.
-  Parce que en plus, ça peut causer des bugs, parce que je ne pourrais pas juste définir sans avoir de valeur.
-  def x; def y; ça ne serait pas valide, parce que nécessite 2 valeurs...
-  def x 10
-  J'aime mieux "let x = 10" de toute façon.
-
-  J'aimerais ne pas à avoir à utiliser do avec def.
-
+  \`\`\`jome
+  // Utilise la syntaxe comme ruby
   def sayHello
     #log('Hello')
   end
 
-  def sayHello |name|
-    #log(\`Hello {name}\`)
+  def sayHelloTo do |name|
+    #log(\`Hello! {name}\`)
   end
+  \`\`\`
+
+  Je ne veux pas que le user n'aie à faire la distinction entre une fonction et une arrow fonction.
+  Trouver une manière de gérer cela.
 
   ## State variables
 
@@ -826,34 +976,6 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   Files with a .jobj extension would start already in a block.
 
   It think this would be pratical for example for config files.
-
-  <h2 id="utils">Utils</h2>
-
-  For the complete list of utils: see the [utils page](${global._URL}/utils).
-
-  Utils start with the # character.
-
-  It can be a constant, a function or a function acting upon a variable.
-
-  \`\`\`jome
-  // A constant
-  let x = #PI/2
-  let e = #e // Euler's number
-
-  // A function
-  let angle = #sin(x)
-  #log("The angle is:", angle) // #log is a shorthand for console.log
-
-  // A function acting upon a variable
-  let keys = obj.#keys // === #keys(obj) === Object.keys(obj)
-  \`\`\`
-
-  Utils include most things global in javascript and useful utils like in underscore.js.
-  
-  Math: #PI, #sin, #cos, #tan, ..., #rand?
-  console: #log, ...
-  process: #argv, #env, #cwd...
-  underscore.js: #map, #reduce, ...
   
   <h2 id="instance-driven-dev">Instance driven development</h2>
   Instance driven development is what I call when the focus is working on concrete objects in Godot software.
@@ -1098,67 +1220,6 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   Le problème est que prettier bug et ne veut pas process mes fichiers s'ils sont dans le .gitignore file............
 
-  ## Types
-
-  TODO: Support static typing a little like Typescript.
-
-  You will be able to add the type of the variable with a colon like in the examples below.
-
-  \`\`\`jome
-  def greet |name: string, greeting: string = "Hello"| : string
-    \`\${greeting}, \${name}!\`
-  end
-  \`\`\`
-
-  In TypeScript, the character | is used a lot for unions, but here it clashes with my usage of | | for args...
-  What can I use instead of |???
-
-  \`\`\`jome
-  def first |list: string || number[]| : string
-  def first |list: string or number[]| : string
-  def first |list: (string, number[])| : string
-  def first |list: [string, number[]]| : string
-  def first |list: (string number[])| : string
-  def first |list: [string number[]]| : string
-  def first |list: string number[]| : string
-  def first |list: string / number[]| : string
-  def first |list: string . number[]| : string
-  def first |list: string ^ number[]| : string
-  def first |list: string * number[]| : string
-  def first |list: string/number[]| : string
-  def first |list: string|number[]| : string
-  def first |list: <string,number[]>| : string
-  def first |list: string - number[]| : string
-
-  def first |list: string or number[]| : string
-    return list[0]
-  end
-  \`\`\`
-
-  \`\`\`jome
-  interface Person {
-    firstName: string = "John"
-    lastName: string = "Doe"
-    age: number
-  }
-  \`\`\`
-
-   \`\`\`jome
-  var answer: number = 42
-  \`\`\`
-
-  In a node block, you will be able to specify the types of keys like so:
-  type MyObject = {
-    [key: string]: number; // Key is a string, and the corresponding value is a number
-  };
-
-  But what about the types of children? (string)
-  {
-    MyNode
-      "childString"
-      (string) someFuncCallReturnsString
-  }
-
   ## TODO
 
   Faire que this fais toujours référence à un this normal!!! Caché ce défault de javascript de l'utilisateur.
@@ -1275,5 +1336,87 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   FIXME: The indentation is super important in markdown. For example, adding tabs inside md scripts, if only one tab html tags will work,
   otherwise it will not.
+
+
+
+
+
+
+
+
+
+
+
+
+  # DEPRECATED
+  <h2 id="named-parameters">Named parameters and props</h2>
+
+  When calling a function, you can add paramters.
+
+  \`\`\`jome
+  someFunc(someParam: 10, otherParam: 'Jean')
+  \`\`\`
+
+  To define parameters when creating a function, you either add ? at the end for an optional parameter, or you add ! for a required parameter.
+
+  \`\`\`jome
+  def someFunc = |someParam?, otherParam? = 'Pierre', optionalParam?, requiredParam!| => (
+    console.log(someParam) // No need to add ? or ! when refering to a parameter
+  )
+  \`\`\`
+
+  You can pass a parameter that was not defined in the list.
+
+  BUT YOU CAN'T PASS a parameter to a function if the function does not take any parameter. Because under the hood,
+  we add a params argument to the function, so we need at least one to add the argument, then you can pass as many as you want.
+
+  When calling a function with named parameters, the order does not matter. You can put them before arguments, after or even in the middle.
+
+  ### PARAMS
+  
+  Get the list of parameters given to a function.
+
+  \`\`\`jome
+    def someFunc = => (
+      PARAMS // The object containing all the paramters given to the function.
+    )  
+  \`\`\`
+
+  FIXME: I don't like using the word PARAMS in capital letters, but I don't have a better idea yet.
+  I don't want to reserve the keyword params...
+
+  Use #params instead of PARAMS?
+
+  ### Props
+
+  Props are all the parameters and attributes as parameters passed during an object creation.
+
+  \`\`\`jome
+  « Obj someProp: 10, someAttr: 'Paul' »
+  class Obj |someProp?, @someAttr?| => {
+  }
+  // compiles to
+  class Obj {
+    constructor(__props__) {
+      this.__props__ = __props__
+      let {someAttr, ...__params___} = __props__
+      this.__params__ = __params__
+      this.someAttr = someAttr
+    }
+  }
+  \`\`\`
+
+  ### Under the hood
+
+  TODO: Explain how it works
+
+
+
+
+
+
+
+
+
 
 `))}).toString()

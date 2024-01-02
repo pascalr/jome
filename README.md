@@ -4,6 +4,10 @@ TODO: Avoir seulement un README.md et des dossiers
 
 TODO: License file
 
+## installation
+
+Development: npm link
+
 ## jomec
 
 A package that contains the compiler that converts .jome file to .js files.
