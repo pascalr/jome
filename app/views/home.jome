@@ -104,6 +104,10 @@ main {
 
   To call a method on a object without parameters, you can use an arrow.
 
+  Je viens d'apprendre qu'il existe le keyword get en javascript qui permet de faire ça.
+  Mais l'avantage d'utiliser un -> est que tu peux définir une méthode avec des arguments optionels.
+  C'est impossible avec get. (A getter must have exactly zero parameters)
+
   ```jome
   obj->density // same as obj.density()
   ```
@@ -635,6 +639,66 @@ main {
 
   end
   ```
+
+  ### Methods
+
+  ```jome
+  class SomeClass
+    // Multiple lines methods
+    def someMethod
+      // ...
+    end
+
+    // Inline methods
+    add10 = x => x + 10
+
+    // Alias
+    addTen = add10
+
+    // What about constants? Is this allowed?
+    constant = 125 // What does this meannnnnnn??
+    @@constant = 125 // Double ampersand! What does this meannnnnnn?!?!
+
+    @token = ... // attached to instance (set in constructor)
+    token = ... // attached to prototype
+    @@token = ... // static, attached to class
+
+    // SomeClass.constant
+
+    def @@staticMethod
+    end
+  end
+  ```
+
+  Idée: Quand une classe inhérite d'un interface, mettre les valeurs par défaut dans le prototype.
+
+  ### Class arguments
+
+  ```jome
+  class Tag(tag, content)
+    def toString = => `<{tag}{renderHTMLAttrs(@)}>{content||''}{renderHTMLChildren(@)}</{tag}>`
+    def createElem = => createElem(@, tag, content)
+  end
+  ```
+
+  ```jome
+  interface TagProps
+    foo: bar
+  end
+
+  class Tag(props: TagProps) < Node(props)
+
+  end
+  ```
+
+  Qu'est-ce que ça implique de faire ça?
+
+  Qu'est-ce que ça peut vouloir dire:
+  - je veux que le premier argument du constructeur soit tag, et setter this.tag = tag
+  - je veux avoir accès à tag sans nécessairement le rendre public, encapsulter par une fonction?
+  - je veux pouvoir faire tag: tag dans le constructeur.
+
+  No constructor. Constructor code directly inside class.
 
   ### Inheritence
 
