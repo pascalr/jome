@@ -271,6 +271,12 @@ function compileFunction(node) {
   }
 }
 
+function compileFuncCall(node) {
+  let called = compileNode(node.parts[0])
+  let args = node.parts.slice(1).map(p => compileNode(p)).join('')//.filter(p => p && p.length).join(', ')
+  return `${called}(${args})`
+}
+
 // Chainable types have the highest precedence and are all equal
 const CHAINABLE_TYPES = [
   "meta.group.jome",
@@ -436,16 +442,10 @@ const TOKENS = {
     return `if (${compileNode(cs[0])}) {${cs.slice(1).map(c => compileNode(c)).join('')}}`
   }),
   "support.function-call.WIP.jome": {
-    compile: (node) => {
-      throw "TODO support.function-call.WIP.jome"
-    }
+    compile: compileFuncCall
   },
   "support.function-call.jome": {
-    compile: (node) => {
-      let called = compileNode(node.parts[0])
-      let args = node.parts.slice(1).map(p => compileNode(p)).join('')//.filter(p => p && p.length).join(', ')
-      return `${called}(${args})`
-    }
+    compile: compileFuncCall
   },
   // js uses more specifically:
   // keyword.operator.arithmetic.jome
