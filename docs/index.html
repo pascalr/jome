@@ -75,6 +75,12 @@ has some original features.</p>
 <p>Here is some code to show what Jome looks like. You can look at the <a href="/jome/examples">examples</a> page to see more.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Classes</span>
 <span class="hljs-keyword">class</span> <span class="hljs-title function_">Character</span>(<span class="hljs-variable">name</span>, <span class="hljs-variable">props</span>)
+  <span class="hljs-variable">include</span> <span class="hljs-variable">name</span>, <span class="hljs-variable">props</span>
+  <span class="hljs-keyword">def</span> <span class="hljs-title function_">attack</span>(<span class="hljs-variable">enemy</span>)
+
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title function_">Character</span>(<span class="hljs-variable">name</span>, <span class="hljs-variable">props</span>)
   <span class="hljs-variable">@name</span> = <span class="hljs-variable">name</span>
   <span class="hljs-variable">@weapon</span> = <span class="hljs-variable">props</span>.<span class="hljs-variable">weapon</span>
   <span class="hljs-keyword">def</span> <span class="hljs-title function_">attack</span>(<span class="hljs-variable">enemy</span>)
@@ -560,7 +566,15 @@ Les when sont simplement remplacé par &quot;if (expression du case)&quot;</p>
 </ul>
 <p>No constructor. Constructor code directly inside class.</p>
 <h3>Inheritence</h3>
-<p>?</p>
+<p>WIP</p>
+<h3>Inject object</h3>
+<p>I want to be able to inject an object into an instance. But what syntax to use???</p>
+<p>Keyword include?</p>
+<pre><code class="language-jome"><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title function_">ExpressServer</span>(<span class="hljs-variable">options</span>)
+
+  <span class="hljs-variable">include</span> <span class="hljs-variable">options</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
 <h2>Modules and exports</h2>
 <p>There are many ways to export items, but they are all compiled the same. Either using module.exports or export depending on jome config.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">module</span>

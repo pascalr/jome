@@ -25,6 +25,12 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   \`\`\`jome
   // Classes
   class Character(name, props)
+    include name, props
+    def attack(enemy)
+
+    end
+  end
+  class Character(name, props)
     @name = name
     @weapon = props.weapon
     def attack(enemy)
@@ -660,7 +666,20 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   ### Inheritence
 
-  ?
+  WIP
+
+  ### Inject object
+
+  I want to be able to inject an object into an instance. But what syntax to use???
+
+  Keyword include?
+
+  \`\`\`jome
+  export class ExpressServer(options)
+
+    include options
+  end
+  \`\`\`
 
   ## Modules and exports
 

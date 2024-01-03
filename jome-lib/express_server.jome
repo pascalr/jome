@@ -1,0 +1,36 @@
+import express from 'express'
+
+interface ServerOptions
+  port: int = 3000
+end
+
+/**
+ * ExpressServer is a wrapper for express in Jome.
+ */
+export class ExpressServer(options) < options
+
+  constructor
+    @app = express()
+    // Middleware to parse JSON requests
+    @app.use(express.json())
+  end
+
+  run: => (
+    // Start the server
+    @app.listen(port, => (
+      console.log(`Server is listening on port {port}`)
+    ))
+  )
+
+  useStatic: |urlOrPath, path| => (
+    if (path) (
+      @app.use(urlOrPath, express.static(path))
+    ) else (
+      @app.use(express.static(urlOrPath))
+    )
+  )
+  use: |pathOrMiddleware, middleware| => (@app.use(pathOrMiddleware, middleware))
+  get: |path, func| => (@app.get(path, func))
+  put: |path, func| => (@app.put(path, func))
+  post: |path, func| => (@app.post(path, func))
+end
