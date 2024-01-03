@@ -116,11 +116,11 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <p>This documentation assumes the reader is familiar with javascript.</p>
 <p>Jome is similar to JavaScript, but there are a few distinctions that you must be aware of. Mainly, the syntax is a bit different, there are nodes and scripts.</p>
   <h2 id="syntax">Syntax</h2>
-<p>The syntax is a similar to the ruby programming language. You use the keyword def instead of function.
+<p>The syntax is similar to the ruby programming language. You use the keyword def instead of function.
 And you use the end keyword instead of curly braces.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span>
   <span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span>
-    <span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Hello!&#x27;</span>)
+    <span class="hljs-title function_">#log</span> <span class="hljs-string">&#x27;Hello!&#x27;</span> <span class="hljs-comment">// #log is a util shorthand of console.log</span>
   <span class="hljs-keyword">end</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
@@ -133,9 +133,6 @@ And you use the end keyword instead of curly braces.</p>
 <span class="hljs-variable">add</span> x: <span class="hljs-number">10</span>, y: <span class="hljs-number">5</span>
 </code></pre>
 <p>To call a method on a object without parameters, you can use an arrow.</p>
-<p>Je viens d'apprendre qu'il existe le keyword get en javascript qui permet de faire ça.
-Mais l'avantage d'utiliser un -&gt; est que tu peux définir une méthode avec des arguments optionels.
-C'est impossible avec get. (A getter must have exactly zero parameters)</p>
 <pre><code class="language-jome"><span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">density</span> <span class="hljs-comment">// same as obj.density()</span>
 </code></pre>
 <p>You can use <code>do ... end</code> to create functions. You pass arguments between vertical bars.</p>
@@ -963,6 +960,10 @@ pour des filters par exemple.</p>
 <span class="hljs-comment">// Et pour quand il n&#x27;y a pas d&#x27;argument?</span>
 <span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span> = | | (<span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;Hello!&quot;</span>)) <span class="hljs-comment">// Noooooon ça c&#x27;est laid...</span>
 </code></pre>
+<p>get and set javascript keyword? Allow this in Jome? Or should use -&gt;?</p>
+<p>Je viens d'apprendre qu'il existe le keyword get en javascript qui permet de faire ça.
+Mais l'avantage d'utiliser un -&gt; est que tu peux définir une méthode avec des arguments optionels.
+C'est impossible avec get. (A getter must have exactly zero parameters)</p>
 <h2>Contributing</h2>
 <p>I recommend using visual studio code for now because it is super usefull for debugging tokenization. You hit Ctrl+Shift+P,
 &quot;inspect editor token and scope&quot;, and you see if it is correct. Also you see using syntax highlighting.</p>

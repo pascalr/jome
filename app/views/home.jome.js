@@ -80,13 +80,13 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   <h2 id="syntax">Syntax</h2>
 
-  The syntax is a similar to the ruby programming language. You use the keyword def instead of function.
+  The syntax is similar to the ruby programming language. You use the keyword def instead of function.
   And you use the end keyword instead of curly braces.
 
   \`\`\`jome
   class Person
     def sayHello
-      console.log('Hello!')
+      #log 'Hello!' // #log is a util shorthand of console.log
     end
   end
   \`\`\`
@@ -106,10 +106,6 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   \`\`\`
 
   To call a method on a object without parameters, you can use an arrow.
-
-  Je viens d'apprendre qu'il existe le keyword get en javascript qui permet de faire ça.
-  Mais l'avantage d'utiliser un -> est que tu peux définir une méthode avec des arguments optionels.
-  C'est impossible avec get. (A getter must have exactly zero parameters)
 
   \`\`\`jome
   obj->density // same as obj.density()
@@ -1240,6 +1236,12 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   // Et pour quand il n'y a pas d'argument?
   def sayHello = | | (#log("Hello!")) // Noooooon ça c'est laid...
   \`\`\`
+
+  get and set javascript keyword? Allow this in Jome? Or should use ->?
+
+  Je viens d'apprendre qu'il existe le keyword get en javascript qui permet de faire ça.
+  Mais l'avantage d'utiliser un -> est que tu peux définir une méthode avec des arguments optionels.
+  C'est impossible avec get. (A getter must have exactly zero parameters)
 
   ## Contributing
 

@@ -33,6 +33,12 @@ var content = renderMarkdown(`
     #log(code+':', msg)
   )
 
+  #log is for loggin
+  #log10 is logarithmic
+  #ln is natural logarithmic
+
+  Maybe #print that does the same thing as #log? #puts?
+
   TODO: Implémenter un système de version lock. Je ne veux pas avoir #uuid-v2 #uuid-v3, ...
   Je veux un seul #uuid, mais je veux pouvoir changer le code dans le temps, mais sans briser quoi que ce soit.
   L'idée, est que la première fois que #uuid est détecter, alors, enregistrer dans jome.lock ou quelque chose du
