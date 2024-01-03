@@ -21,7 +21,9 @@ main {
 
   ```jome
   // Classes
-  class Character(props as {name, weapon}) < props
+  class Character(name, props)
+    @name = name
+    @weapon = props.weapon
     def attack(enemy)
 
     end
