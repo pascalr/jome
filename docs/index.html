@@ -138,7 +138,7 @@ And you use the end keyword instead of curly braces.</p>
 <span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">save</span>
 </code></pre>
 <p>You can use <code>do ... end</code> to create functions. You pass arguments between vertical bars.</p>
-<pre><code class="language-jome">[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>].<span class="hljs-variable">each</span> <span class="hljs-variable">do</span> |<span class="hljs-variable">i</span>|
+<pre><code class="language-jome">[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>].<span class="hljs-variable">each</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">i</span>|
   <span class="hljs-variable">console</span>.<span class="hljs-variable">log</span> <span class="hljs-variable">i</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
@@ -310,15 +310,15 @@ __this = this</p>
 <p>Loops are used exactly like in javascript, but with the end keyword.</p>
 <p>Note: There is no do ... while, because the do keyword is used for functions.
 Maybe exec ... while ???</p>
-<pre><code class="language-jome"><span class="hljs-variable">for</span> (<span class="hljs-keyword">let</span> <span class="hljs-variable">el</span> <span class="hljs-variable">in</span> <span class="hljs-variable">els</span>)
+<pre><code class="language-jome"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> <span class="hljs-variable">el</span> <span class="hljs-keyword">in</span> <span class="hljs-variable">els</span>)
   <span class="hljs-comment">// ...</span>
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-variable">for</span> (<span class="hljs-keyword">let</span> <span class="hljs-variable">i</span> = <span class="hljs-number">0</span>; <span class="hljs-variable">i</span> &lt; <span class="hljs-variable">list</span>.<span class="hljs-variable">length</span>; <span class="hljs-variable">i</span>++)
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> <span class="hljs-variable">i</span> = <span class="hljs-number">0</span>; <span class="hljs-variable">i</span> &lt; <span class="hljs-variable">list</span>.<span class="hljs-variable">length</span>; <span class="hljs-variable">i</span>++)
   <span class="hljs-comment">// ...</span>
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-variable">while</span> (<span class="hljs-variable">someCondition</span>)
+<span class="hljs-keyword">while</span> (<span class="hljs-variable">someCondition</span>)
   <span class="hljs-comment">// ...</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
@@ -340,7 +340,7 @@ Maybe exec ... while ???</p>
 
   <span class="hljs-keyword">def</span> <span class="hljs-title function_">set</span>(attrs: <span class="hljs-title class_">Object</span>)
     <span class="hljs-comment">// Assign each entry of the object to &#x27;this&#x27;</span>
-    <span class="hljs-variable">for</span> (<span class="hljs-variable">const</span> <span class="hljs-variable">key</span> <span class="hljs-variable">in</span> <span class="hljs-variable">props</span>)
+    <span class="hljs-keyword">for</span> (<span class="hljs-variable">const</span> <span class="hljs-variable">key</span> <span class="hljs-keyword">in</span> <span class="hljs-variable">props</span>)
       <span class="hljs-keyword">if</span> (<span class="hljs-variable">props</span>.<span class="hljs-title function_">hasOwnProperty</span>(<span class="hljs-variable">key</span>)) {
         <span class="hljs-variable">this</span>[<span class="hljs-variable">key</span>] = <span class="hljs-variable">props</span>[<span class="hljs-variable">key</span>];
       }
@@ -589,7 +589,7 @@ Les when sont simplement remplacé par &quot;if (expression du case)&quot;</p>
 </code></pre>
 <p>To export the default or an object, use the main keyword. It allows you to return a value from a file.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// sum.jome</span>
-<span class="hljs-variable">main</span> |<span class="hljs-variable">a</span>, <span class="hljs-variable">b</span>| =&gt; (<span class="hljs-variable">a</span> + <span class="hljs-variable">b</span>)
+<span class="hljs-keyword">main</span> |<span class="hljs-variable">a</span>, <span class="hljs-variable">b</span>| =&gt; (<span class="hljs-variable">a</span> + <span class="hljs-variable">b</span>)
 
 <span class="hljs-comment">// usage:</span>
 <span class="hljs-comment">// import sum from &#x27;./sum.jome&#x27;</span>
@@ -603,13 +603,13 @@ the confusion, you cannot declare an object with type. So you use interface for 
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-comment">// Alias</span>
-<span class="hljs-variable">type</span> <span class="hljs-title class_">Dim</span> = <span class="hljs-title class_">Dimensions</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Dim</span> = <span class="hljs-title class_">Dimensions</span>
 
 <span class="hljs-comment">// Unions</span>
-<span class="hljs-variable">type</span> <span class="hljs-title class_">DimOrStr</span> = <span class="hljs-title class_">Dim</span> | <span class="hljs-variable">string</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">DimOrStr</span> = <span class="hljs-title class_">Dim</span> | <span class="hljs-variable">string</span>
 
 <span class="hljs-comment">// Tuples</span>
-<span class="hljs-variable">type</span> <span class="hljs-title class_">DimAndStr</span> = [<span class="hljs-title class_">Dim</span>, <span class="hljs-variable">string</span>]
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">DimAndStr</span> = [<span class="hljs-title class_">Dim</span>, <span class="hljs-variable">string</span>]
 
 <span class="hljs-keyword">def</span> <span class="hljs-title function_">funcWithDimensions</span>(<span class="hljs-variable">dim</span> : <span class="hljs-title class_">Dim</span>)
   <span class="hljs-comment">// ...</span>
@@ -625,14 +625,14 @@ the confusion, you cannot declare an object with type. So you use interface for 
 <p>You can use intersection to create a type that combines the properties of two interfaces together.</p>
 <h3>Function types</h3>
 <p>You can give a single function signature to a type. You can give function signatures to variables in interfaces.</p>
-<pre><code class="language-jome"><span class="hljs-variable">type</span> <span class="hljs-variable">log</span> = (val: <span class="hljs-variable">string</span>) =&gt; <span class="hljs-variable">void</span>;
+<pre><code class="language-jome"><span class="hljs-keyword">type</span> <span class="hljs-variable">log</span> = (val: <span class="hljs-variable">string</span>) =&gt; <span class="hljs-variable">void</span>;
 
 <span class="hljs-keyword">interface</span> <span class="hljs-title class_">WithLog</span>
   log: (val: <span class="hljs-variable">string</span>) =&gt; <span class="hljs-variable">void</span>;
 <span class="hljs-keyword">end</span>
 </code></pre>
 <p>For function overloading, you can use unions.</p>
-<pre><code class="language-jome"><span class="hljs-variable">type</span> <span class="hljs-variable">log</span> = (val: <span class="hljs-variable">string</span>) =&gt; <span class="hljs-variable">void</span> | (val: <span class="hljs-variable">number</span>) =&gt; <span class="hljs-variable">void</span>;
+<pre><code class="language-jome"><span class="hljs-keyword">type</span> <span class="hljs-variable">log</span> = (val: <span class="hljs-variable">string</span>) =&gt; <span class="hljs-variable">void</span> | (val: <span class="hljs-variable">number</span>) =&gt; <span class="hljs-variable">void</span>;
 </code></pre>
 <h3>Default values</h3>
 <p>Contrary to Typescript, you can add default values in an interface.</p>
@@ -659,7 +659,7 @@ the confusion, you cannot declare an object with type. So you use interface for 
   <span class="hljs-title function_">#log</span>(<span class="hljs-string">&#x27;Hello&#x27;</span>)
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-keyword">def</span> <span class="hljs-variable">sayHelloTo</span> <span class="hljs-variable">do</span> |<span class="hljs-variable">name</span>|
+<span class="hljs-keyword">def</span> <span class="hljs-variable">sayHelloTo</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">name</span>|
   <span class="hljs-title function_">#log</span>(<span class="hljs-string">`Hello! {name}`</span>)
 <span class="hljs-keyword">end</span>
 </code></pre>
@@ -710,7 +710,7 @@ to declare them, in order to know what is available.</p>
  key:? <span class="hljs-variable">value</span>
 }
 <span class="hljs-variable">obj</span> === {} <span class="hljs-comment">// true</span>
-<span class="hljs-string">&quot;key&quot;</span> <span class="hljs-variable">in</span> <span class="hljs-variable">obj</span> <span class="hljs-comment">// false</span>
+<span class="hljs-string">&quot;key&quot;</span> <span class="hljs-keyword">in</span> <span class="hljs-variable">obj</span> <span class="hljs-comment">// false</span>
 </code></pre>
   <h2 id="scripts">Scripts</h2>
 <p>In jome, the idea is that you could include most other programming languages directly using xml tags.</p>

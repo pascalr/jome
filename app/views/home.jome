@@ -21,17 +21,22 @@ main {
 
   ```jome
   // Classes
-  class Character |@name, @weapon?| => {
-    attack: |enemy| => (
+  class Character(props as {name, weapon}) < props
+    def attack(enemy)
 
-    )
-  }
-  class Weapon |damage?, range?| => {}
+    end
+  end
+  interface Weapon
+    damage: number
+    range: int
+  end
+
+  // When you inherit from an interface, you can call super on the interface to initialize some values
 
   // Inheritence and properties
-  class Dagger { super: Weapon range: 50 }
-  class WeakDagger { super: Dagger damage: 50 }
-  class StrongDagger { super: Dagger damage: 200 }
+  class Dagger < Weapon(range: 50) end
+  class WeakDagger < Dagger(damage: 50) end
+  class StrongDagger < Dagger(damage: 200) end
 
   // Instantiation
   var startingWeapon = { WeakDagger }
@@ -41,9 +46,9 @@ main {
   var gameSaved = <sh>cat "saved-gamed.json"</sh>
 
   // Functions
-  def announceGameIsStarted = -> (
-    console.log('Game started!')
-  )
+  def announceGameIsStarted
+    #log 'Game started!'
+  end
   announceGameIsStarted()
   ```
   
@@ -611,6 +616,15 @@ main {
 
   Idée: Quand une classe inhérite d'un interface, mettre les valeurs par défaut dans le prototype.
 
+  ### Deconstructings
+
+  I want to be able to name deconstructed arguments in a method. Maybe with keyword as?
+
+  ```jome
+  def example(props as {arg1, arg2})
+  end
+  ```
+
   ### Class arguments
 
   ```jome
@@ -737,6 +751,17 @@ main {
   interface Dim3d extends Dimensions
     depth: number
   end
+  ```
+
+  ```jome
+  interface Weapon damage, range end
+
+  // When you inherit from an interface, you can call super on the interface to initialize some values
+
+  // Inheritence and properties
+  class Dagger < Weapon(range: 50) end
+  class WeakDagger < Dagger(damage: 50) end
+  class StrongDagger < Dagger(damage: 200) end
   ```
 
   ### Intersection
