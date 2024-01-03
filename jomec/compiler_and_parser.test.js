@@ -154,6 +154,13 @@ describe("Test functions creation", () => {
   test('inline with arrow function with args', () => {
     expect(compile('(x) => x')).toMatch(/\(x\) => \(?x\)?/);
   })
+  // *** KEYWORD do ***
+  test('let keyword with do end', () => {
+    expect(compile('let sayHello = do #log("hello") end')).toMatch(/let sayHello = function \(\) {\s*console.log\("hello"\)\s*}/);
+  })
+  test('let keyword with do end with args', () => {
+    expect(compile('let sayHello = do |name| #log("hello", name) end')).toMatch(/let sayHello = function \(name\) {\s*console.log\("hello", ?name\)\s*}/);
+  })
 })
 
 describe("Test if statements", () => {
@@ -326,8 +333,9 @@ describe('Test "ternary"', () => {
 // ************************************************************
 
 // You can pass arguments for a single object without using curly braces.
-
-//   ```jome
 //   let add = ({x, y}) => x + y
 //   add x: 10, y: 5
-//   ```
+
+
+
+// obj->density = 1.05 // def density=(val) // TODO: WIP

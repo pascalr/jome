@@ -260,7 +260,7 @@ function compileMethod(node) {
 }
 
 // A def outside a class
-function compileFunction(node) {
+function compileDefFunction(node) {
   let name = node.parts[1].raw
   let cs = node.parts.slice(2,-1) // Remove keywords def, end, and function name
   let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
@@ -268,6 +268,16 @@ function compileFunction(node) {
     return `function ${name}${compileArgs(args)} {${cs.slice(1).map(c => compileNode(c)).join('')}}`
   } else {
     return `function ${name}() {${cs.map(c => compileNode(c)).join('')}}`
+  }
+}
+
+function compileStandaloneFunction(node) {
+  let cs = node.parts.slice(1,-1) // Remove keywords do and end
+  let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
+  if (args) {
+    return `function ${compileArgs(args)} {${cs.slice(1).map(c => compileNode(c)).join('')}}`
+  } else {
+    return `function () {${cs.map(c => compileNode(c)).join('')}}`
   }
 }
 
@@ -343,6 +353,7 @@ const TOKENS = {
   //     c => typeof c === 'string' ? c : '${'+compileJsBlock(c.children.slice(1,-1), ctx)+'}'
   //   ).join('')+'`'
   // },
+  // function(arg) end
   "meta.function.jome": {
     validate: (node) => {
       if (node.parts[0].raw !== 'function') {
@@ -356,15 +367,7 @@ const TOKENS = {
         return "Syntax error. Arguments should always be at the beginning of the function block."
       }
     },
-    compile(node) {
-      let cs = node.parts.slice(1,-1) // Remove keywords do and end
-      let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
-      if (args) {
-        return `function ${compileArgs(args)} {${cs.slice(1).map(c => compileNode(c)).join('')}}`
-      } else {
-        return `function () {${cs.map(c => compileNode(c)).join('')}}`
-      }
-    }
+    compile: compileStandaloneFunction
   },
   // foo:
   "meta.dictionary-key.jome": {
@@ -439,6 +442,22 @@ const TOKENS = {
       return `${node.parts[0].raw} ${node.parts[1].raw}`
     },
   },
+  // do |args| /* ... */ end
+  'meta.do-end.jome': {
+    validate: (node) => {
+      if (node.parts[0].raw !== 'do') {
+        return "Internal error. meta.do-end.jome should always start with keyword do"
+      }
+      if (node.parts[node.parts.length-1].raw !== 'end') {
+        return "Internal error. meta.def.jome should always end with keyword end"
+      }
+      // Arguments, if present, should always be right after the function name
+      if (node.parts.slice(2,-1).find(c => c.type === 'meta.args.jome')) {
+        return "Syntax error. Arguments should always be at the beginning of the function block."
+      }
+    },
+    compile: compileStandaloneFunction,
+  },
   // def someFunc end
   'meta.def.jome': {
     validate: (node) => {
@@ -456,7 +475,7 @@ const TOKENS = {
         return "Syntax error. Arguments should always be at the beginning of the function block."
       }
     },
-    compile: compileFunction,
+    compile: compileDefFunction,
   },
   'meta.if-block.jome': regular((node) => {
     let cs = node.parts.slice(1, -1) // remove if and end
