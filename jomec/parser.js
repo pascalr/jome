@@ -292,7 +292,8 @@ function compileFuncCall(node) {
   let hasDot = node.parts[0].type === 'punctuation.dot.jome'
   let parts = hasDot ? node.parts.slice(1) : node.parts
   let called = compileNode(parts[0])
-  let args = parts.slice(1).map(p => compileNode(p)).join('')//.filter(p => p && p.length).join(', ')
+  let args = parts.slice(1).filter(p => p.type !== 'punctuation.separator.delimiter.jome').map(p => compileNode(p)).join(', ')
+  //let args = parts.slice(1).map(p => compileNode(p)).join('')//.filter(p => p && p.length).join(', ')
   return `${hasDot ? '.' : ''}${called}(${args})`
 }
 
