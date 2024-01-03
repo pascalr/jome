@@ -1,5 +1,0 @@
-describe "Tests written in jome" do
-  test '1 + 1' do
-    expect(compile(`obj->call`)).toMatch(/obj.call\(\)/)
-  end
-end

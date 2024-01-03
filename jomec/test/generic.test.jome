@@ -1,0 +1,16 @@
+// //const {compile} = require('./compiler.js')
+// const {parse,compilePP} = require('./parser.js')
+// const {tokenize} = require('./tokenizer.js')
+
+// function compile(code) {
+//   let tokens = tokenize(code).children
+//   let topNodes = parse(tokens)
+//   //topNodes.forEach(top => printTree(top))
+//   return compilePP(topNodes)
+// }
+
+describe "Tests written in jome" do
+  test '1 + 1' do
+    expect(compile(`1 + 1`)).toMatch(/1 \+ 1/)
+  end
+end
