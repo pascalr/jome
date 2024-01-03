@@ -274,6 +274,7 @@ const PRECEDENCES = {
 
 const TOKENS = {
   'comment.block.jome': ignoreToken,
+  'newline': {compile: () => '\n'},
   'punctuation.terminator.statement.jome': tokenAsIs,
   'punctuation.separator.delimiter.jome': tokenAsIs,
   "string.quoted.backtick.verbatim.jome": regular((node) => `\`${node.token.children[1]}\``),

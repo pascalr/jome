@@ -1,5 +1,11 @@
 import {H1} from './lib/html.jome'
 
+class Person
+  def sayHello
+    #log 'Hello!'
+  end
+end
+
 type StringOrNull = string | null
 type Person
   name: string

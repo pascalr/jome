@@ -48,6 +48,18 @@ function compile(code) {
   return compilePP(topNodes)
 }
 
+describe("Test class", () => {
+  test('Class with one method', () => {
+    expect(compile(`
+class Person
+  def sayHello
+    #log 'Hello!'
+  end
+end
+`)).toMatch(/\s*class Person\s*\{\s+sayHello = \(\) => console.log\("Hello!"\)\s*\}/);
+  })
+})
+
 describe("Test utils", () => {
   test('#log', () => {
     expect(compile('#log')).toMatch(/console.log/);
@@ -59,6 +71,10 @@ describe("Test utils", () => {
     expect(compile('{x:1}.#log')).toMatch(/console.log\(\{x\: ?1\}\)/);
   })
 })
+
+// ```jome
+//   
+//   ```
 
 describe("Test functions creation", () => {
   /*
