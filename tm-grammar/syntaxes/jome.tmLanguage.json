@@ -107,14 +107,15 @@
         { "include": "#strings" },
         { "include": "#scripts" },
         { "include": "#arrow" },
-        { "include": "#utilities" },
         { "include": "#state-var" },
         { "include": "#operators" },
         { "include": "#parameter" },
         { "include": "#attribute" },
         { "include": "#square-bracket" },
         { "include": "#constants" },
+        { "include": "#inline-utility" },
         { "include": "#function_call" },
+        { "include": "#utilities" },
         { "include": "#support-items" },
         { "include": "#variable" },
         { "include": "#getter" },
@@ -387,6 +388,26 @@
           "patterns": [{ "include": "#expression" }]
         },
         {
+          "name": "support.function-call.jome",
+          "begin": "(\\.)?(#\\w+)\\(",
+          "beginCaptures": {
+            "1": {"name": "punctuation.dot.jome"},
+            "2": { "name": "entity.name.function.utility.jome" }
+          },
+          "end": "\\)",
+          "patterns": [{ "include": "#expression" }]
+        },
+        {
+          "name": "support.function-call.WIP.jome",
+          "begin": "(\\.)?(#\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|end|\\}|\\?|\\[|\\]))",
+          "beginCaptures": {
+            "1": {"name": "punctuation.dot.jome"},
+            "2": { "name": "entity.name.function.utility.jome" }
+          },
+          "end": "\r\n|\n|$",
+          "patterns": [{ "include": "#expression" }]
+        },
+        {
           "name": "support.function-call.WIP.jome",
           "begin": "(\\.)?\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|end|\\}|\\?|\\[|\\]))",
           "beginCaptures": {
@@ -410,7 +431,6 @@
         },
         {"include": "#variable"},
         {
-          "name": "support.function-call.WIP.jome",
           "begin": "\\{",
           "beginCaptures": {"0": {"name": "punctuation.curly-braces.open.jome"}},
           "end": "\\}",
@@ -444,12 +464,16 @@
         }
 			}]
 		},
-    "utilities": {
+    "inline-utility": {
 			"patterns": [
         {
           "name": "entity.name.function.utility-inline.jome",
           "match": "\\.#\\w+"
-        },
+        }
+      ]
+		},
+    "utilities": {
+			"patterns": [
         {
           "name": "variable.other.constant.utility.jome",
           "match": "#\\b(PI|env|cwd|argv)\\b",

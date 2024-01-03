@@ -67,6 +67,9 @@ describe("Test utils", () => {
   test('#log hello world', () => {
     expect(compile('#log("Hello world!")')).toMatch(/console.log\("Hello world!"\)/);
   })
+  test('#log hello world without parens', () => {
+    expect(compile('#log "Hello world!"')).toMatch(/console.log\("Hello world!"\)/);
+  })
   test('{x:1}.#log', () => {
     expect(compile('{x:1}.#log')).toMatch(/console.log\(\{x\: ?1\}\)/);
   })
@@ -99,14 +102,14 @@ describe("Test functions creation", () => {
     expect(compile('def sayHello #log("hello") end')).toMatch(/function sayHello\(\) {\s*console.log\("hello"\)\s*}/);
   })
   test('def keyword with args', () => {
-    expect(compile('def sayHello(name) #log("hello", name) end')).toMatch(/function sayHello\(name\) {\s*console.log\("hello", name\)\s*}/);
+    expect(compile('def sayHello(name) #log("hello", name) end')).toMatch(/function sayHello\(name\) {\s*console.log\("hello", ?name\)\s*}/);
   })
   // *** KEYWORD let ***
   test('let keyword with function end', () => {
     expect(compile('let sayHello = function #log("hello") end')).toMatch(/let sayHello = function \(\) {\s*console.log\("hello"\)\s*}/);
   })
   test('let keyword with function end with args', () => {
-    expect(compile('let sayHello = function(name) #log("hello", name) end')).toMatch(/let sayHello = function \(name\) {\s*console.log\("hello", name\)\s*}/);
+    expect(compile('let sayHello = function(name) #log("hello", name) end')).toMatch(/let sayHello = function \(name\) {\s*console.log\("hello", ?name\)\s*}/);
   })
   test('let keyword with arrow function', () => {
     expect(compile('let giveMe5 = () => 5')).toMatch(/let giveMe5 = \(\) => \(?5\)?/);
@@ -119,7 +122,7 @@ describe("Test functions creation", () => {
     expect(compile('function #log("hello") end')).toMatch(/function \(\) {\s*console.log\("hello"\)\s*}/);
   })
   test('inline with function end with args', () => {
-    expect(compile('function(x, name) #log("hello", name) end')).toMatch(/function \(x,\s*name\) {\s*console.log\("hello", name\)\s*}/);
+    expect(compile('function(x, name) #log("hello", name) end')).toMatch(/function \(x,\s*name\) {\s*console.log\("hello", ?name\)\s*}/);
   })
   test('inline with arrow function', () => {
     expect(compile('() => 5')).toMatch(/\(\) => \(?5\)?/);

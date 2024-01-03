@@ -6,6 +6,8 @@ class Person
   end
 end
 
+def sayHello(name) #log("hello", name) end
+
 type StringOrNull = string | null
 type Person
   name: string
@@ -371,3 +373,4 @@ describe "Test utils" do
     //expect compile('{x:1}.#log').toMatch(/console.log\(\{x\: ?1\}\)/);
   end
 end
+

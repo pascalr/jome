@@ -435,6 +435,18 @@ const TOKENS = {
     let cs = node.parts.slice(1, -1) // remove if and end
     return `if (${compileNode(cs[0])}) {${cs.slice(1).map(c => compileNode(c)).join('')}}`
   }),
+  "support.function-call.WIP.jome": {
+    compile: (node) => {
+      throw "TODO support.function-call.WIP.jome"
+    }
+  },
+  "support.function-call.jome": {
+    compile: (node) => {
+      let called = compileNode(node.parts[0])
+      let args = node.parts.slice(1).map(p => compileNode(p)).join('')//.filter(p => p && p.length).join(', ')
+      return `${called}(${args})`
+    }
+  },
   // js uses more specifically:
   // keyword.operator.arithmetic.jome
   // keyword.operator.logical.jome
