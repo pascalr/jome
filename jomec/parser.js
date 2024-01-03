@@ -1,3 +1,7 @@
+const fs = require('fs');
+const path = require('path');
+const {tokenize} = require('./tokenizer.js')
+
 function compileTokenRaw(token) {
   if (Array.isArray(token)) {
     return token.map(n => compileTokenRaw(n)).join('')
@@ -669,38 +673,41 @@ function compilePP(nodes) {
   return nodes.map(node => compileNode(node)).join('')
 }
 
-// function compilePPAndSaveFile(file, ext) {
+function compilePPAndSaveFile(absPath) {
 
-//   let {result, context, relPath} = this.compileFileAndDeps(absPath, ext)
+  if (!absPath.endsWith('.jome')) {
+    throw new Error('Cannot compile file without .jome extension', absPath);
+  }
 
-//   let dir = path.dirname(relPath)
-//   let buildDir = path.join(this.projectAbsPath, dir)
-//   // let buildDir = path.join(this.buildAbsPath, dir)
-//   // Reproduce the directory structure inside the build directory.
-//   if (!fs.existsSync(buildDir)) (
-//     fs.mkdirSync(buildDir, { recursive: true })
-//   )
+  if (!fs.existsSync(absPath)) {
+    throw new Error("Can't compile and save missing file " + absPath)
+  }
 
-//   // Generate the build file name
-//   const buildFileName = path.basename(absPath.replace(/\.jome$/, ext));
-//   const outFileName = path.join(buildDir, buildFileName)
+  // Read the contents of the file synchronously
+  const data = fs.readFileSync(absPath, 'utf8');
 
-//   try {
-//     // Write the result to the file synchronously
-//     fs.writeFileSync(outFileName, result);
+  let tokens = tokenize(data).children
+  let topNodes = parse(tokens)
+  //topNodes.forEach(top => printTree(top))
+  let result = compilePP(topNodes)
 
-//     console.log(`Successfully wrote to '${buildFileName}'.`);
-//   } catch (err) {
-//     console.error('Error writing to the file:', err);
-//     return null
-//   }
+  const buildFileName = path.basename(absPath.replace(/\.jome$/, '.js')); // FIXME: Only replace .jome at the end of the filename
 
-//   return {buildFileName, context, outFileName, result}
-// }
+  try {
+    // Write the result to the file synchronously
+    fs.writeFileSync(buildFileName, result);
+
+    console.log(`Successfully wrote to '${buildFileName}'.`);
+  } catch (err) {
+    console.error('Error writing to the file:', err);
+    return null
+  }
+}
 
 module.exports = {
   parse,
-  compilePP
+  compilePP,
+  compilePPAndSaveFile
 }
 
 /*

@@ -1,6 +1,9 @@
 const { JomeBuilder, buildAndRunFile } = require('./builder.js');
 
+const { compilePPAndSaveFile } = require('./parser.js');
+
 module.exports = {
   JomeBuilder,
-  buildAndRunFile
+  buildAndRunFile,
+  compilePPAndSaveFile
 }

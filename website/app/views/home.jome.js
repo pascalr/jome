@@ -1003,6 +1003,13 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   What I really what is to add markdown. This means using markdown-it at compile time. I am fine with this.
 
+  ### Compile files with different extension
+
+  You can compile files with a different extension by having the preceding extension just before.
+
+  So if you compile some-page.html.jome, it should first create a some-page.html.js, then this
+  file can be executed to make some-page.html
+
   ### .jobj extension
 
   Files with a .jobj extension would start already in a block.

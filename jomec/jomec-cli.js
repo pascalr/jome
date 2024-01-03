@@ -4,7 +4,7 @@
 
 const { globSync } = require('glob')
 
-const { JomeBuilder } = require('./index.js');
+const { compilePPAndSaveFile } = require('./index.js');
 const path = require('path');
 
 const args = process.argv.slice(2); // Exclude the first two arguments (node executable and script file)
@@ -16,9 +16,8 @@ if (args.length < 1) {
 }
 
 const cwd = process.cwd()
-let builder = new JomeBuilder({projectAbsPath: cwd})
 let files = globSync(args[0])
 files.forEach(fileName => {
   const fullPath = path.join(cwd, fileName)
-  builder.compileAndSaveFile(fullPath, '.js')
+  compilePPAndSaveFile(fullPath)
 })
