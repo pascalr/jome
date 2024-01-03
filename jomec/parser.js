@@ -282,7 +282,8 @@ const CHAINABLE_TYPES = [
   "meta.group.jome",
   "meta.square-bracket.jome",
   "entity.name.function.utility-inline.jome",
-  "meta.getter.jome"
+  "meta.getter.jome",
+  "meta.caller.jome"
 ]
 
 const OPERAND_TYPES = [
@@ -387,6 +388,19 @@ const TOKENS = {
     compile: compileBlock
   },
   'constant.language.jome': tokenAsIs,
+  // obj->callFunc
+  "meta.caller.jome": {
+    validate: (node) => {
+      if (node.children.length !== 1) {
+        return "Missing operand before getter"
+      }
+    },
+    compile: (node) => {
+      let funcName = node.parts[1].raw
+      return `${compileNode(node.children[0])}.${funcName}()`
+    },
+  },
+  // obj.property
   "meta.getter.jome": {
     validate: (node) => {
       if (node.children.length !== 1) {

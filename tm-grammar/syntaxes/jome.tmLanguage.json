@@ -107,6 +107,7 @@
         { "include": "#strings" },
         { "include": "#scripts" },
         { "include": "#arrow" },
+        { "include": "#caller" },
         { "include": "#state-var" },
         { "include": "#operators" },
         { "include": "#parameter" },
@@ -453,6 +454,16 @@
           "match": "\\w+"
         }
       ]
+		},
+    "caller": {
+			"patterns": [{
+				"name": "meta.caller.jome",
+				"match": "(->)(\\w+)",
+        "captures": {
+          "1": {"name": "punctuation.arrow.jome"},
+          "2": {"name": "entity.name.function.jome"}
+        }
+			}]
 		},
     "getter": {
 			"patterns": [{

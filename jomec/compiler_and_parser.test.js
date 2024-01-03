@@ -48,6 +48,12 @@ function compile(code) {
   return compilePP(topNodes)
 }
 
+describe("Test arrow call", () => {
+  test('obj->call', () => {
+    expect(compile(`obj->call`)).toMatch(/obj.call\(\)/);
+  })
+})
+
 describe("Test function call", () => {
   test('Function call with parens', () => {
     expect(compile(`
@@ -308,3 +314,20 @@ describe('Test "ternary"', () => {
     expect(compile('false ? 1 : 0')).toMatch(/false \? 1 : 0/);
   })
 })
+
+
+
+// ************************************************************
+// ************************************************************
+// ************************************************************
+// ********************** TODO ********************************
+// ************************************************************
+// ************************************************************
+// ************************************************************
+
+// You can pass arguments for a single object without using curly braces.
+
+//   ```jome
+//   let add = ({x, y}) => x + y
+//   add x: 10, y: 5
+//   ```
