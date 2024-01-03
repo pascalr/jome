@@ -289,6 +289,7 @@ const OPERAND_TYPES = [
   "constant.numeric.integer.jome",
   "keyword.operator.jome",
   "keyword.operator.logical.unary.jome",
+  "keyword.operator.existential.jome",
   "constant.numeric.float.jome",
   "meta.group.jome",
   "meta.square-bracket.jome",
@@ -311,7 +312,12 @@ const PRECEDENCES = {
   }),
   // arithmetic operators are higher than comparison: x + 10 < y - 20
   'keyword.operator.comparison.jome': 500,
-  // Comparison is higher than arrow function: isEqual = |x, y| => x == y
+  // Comparison is higher than nullish coalescing: x ?? y > z
+  'keyword.operator.nullish-coalescing.jome': 450,
+  // In javascript, nullish coalescing has higher precedence than ternary.
+  'keyword.operator.existential.jome': 400,
+  'keyword.operator.colon.jome': 399,
+  // Ternary is higher than arrow function: inspectTruthness = |x| => x ? 'truthy' : 'falsy'
   'keyword.arrow.jome': 300,
   // Arrow function is higher than assignment: add5 = |x| => x + 5
   'keyword.operator.assignment.jome': 250,
@@ -454,6 +460,34 @@ const TOKENS = {
   'keyword.operator.jome': {
     validate: validateOperator,
     compile: compileOperator,
+    captureLeft: true,
+    captureRight: true,
+  },
+  'keyword.operator.existential.jome': {
+    validate: validateOperator,
+    compile: (node) => {
+      return `${compileNode(node.children[0])} ? ${compileNode(node.children[1])} : null`
+    },
+    captureLeft: true,
+    captureRight: true,
+  },
+  //'keyword.operator.nullish-coalescing.jome'
+  'keyword.operator.colon.jome': {
+    validate: (node) => {
+      if (node.children.length !== 2) {
+        return "A colon operator must have a two operands"
+      }
+      if (node.children[0].type !== 'keyword.operator.existential.jome') {
+        return `Expecting ? before : in ternary expression.`
+      }
+      let child = node.children[1]
+      if (!OPERAND_TYPES.includes(child.type)) {
+        return `Invalid operand type for operator ${node.type}. Was: ${child.type}`
+      }
+    },
+    compile: (node) => {
+      return `${compileNode(node.children[0].children[0])} ? ${compileNode(node.children[0].children[1])} : ${compileNode(node.children[1])}`
+    },
     captureLeft: true,
     captureRight: true,
   },

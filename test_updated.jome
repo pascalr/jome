@@ -8,6 +8,8 @@ end
 
 def sayHello(name) #log("hello", name) end
 
+let test5656 = true ? 1 : false
+
 type StringOrNull = string | null
 type Person
   name: string
