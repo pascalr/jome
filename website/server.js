@@ -1,7 +1,7 @@
 const jome = require('jome')
 
 
-const {JomeBuilder} = require("../src/builder.js");
+const {JomeBuilder} = require("jomec");
 const {ExpressServer} = require("../lib/express_server.built.js");
 const execSh = require("jome/lib/exec_sh");
 

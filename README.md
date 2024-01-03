@@ -21,9 +21,9 @@ code is bundled together. But it's nice if it can be used standalone too. Or use
 
 The command line application to run .jome files.
 
-## jome-website
+## website
 
-The source code for the website that contains the documentation and examples.
+The source code for the website that contains the documentation, examples and an online editor.
 
 ## tm-grammar
 
