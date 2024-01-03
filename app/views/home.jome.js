@@ -109,6 +109,8 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   \`\`\`jome
   obj->density // same as obj.density()
+  obj->density = 1.05 // def density=(val) // TODO: WIP
+  obj->save
   \`\`\`
 
   You can use \`do ... end\` to create functions. You pass arguments between vertical bars.
@@ -132,6 +134,7 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   // A function
   let angle = #sin(x)
+  let logarithmic = #log10(2)
   #log("The angle is:", angle) // #log is a shorthand for console.log
   \`\`\`
 
@@ -151,7 +154,7 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   ## Types
 
-  You can specify types for variables. It can be primitives like string, number, integer or float. It can also be class names.
+  You can specify types for variables. It can be primitives like string, number, integer or float. It can also be class names or interfaces.
 
   \`\`\`jome
   def greet(name: string, greeting: string = "Hello") : string
@@ -163,7 +166,7 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   end
   \`\`\`
 
-  You add a question mark after the type is the variable can be null.
+  You add a question mark after the type if the variable can be null.
 
   \`\`\`jome
   def sayHello(anybody: Person?): string
@@ -171,11 +174,10 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   end
   \`\`\`
 
-  There are no unions or intersect like in typescript. If the function is too overloaded and it is too complicated, than don't use types and use documentation comments instead.
+  In a node block, you can specify the types of keys like so:
 
-  In a node block, you will be able to specify the types of keys like so:
   \`\`\`jome
-  type MyObject = {
+  {
     [key: string]: nb; // Here nb is a string
   };
   \`\`\`
@@ -189,66 +191,7 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
       someFuncCallReturnsString : string // Nooooooo, because it clashes with parameters...
   }
 
-  ## Modules and exports
-
-  There are many ways to export items, but they are all compiled the same. Either using module.exports or export depending on jome config.
-
-  \`\`\`jome
-  module
-    def someFunc
-    end
-    let someVar = 10
-  end
-  \`\`\`
-
-  Compiles to
-
-  \`\`\`js
-  module.exports = {
-    someFunc: () => {
-    },
-    someVar: 10
-  }
-  // or
-  export function someFunc() {
-  }
-  export const someVar = 10
-  \`\`\`
-
-  You can give a name to the module, which simply creates an object that holds everything inside.
-
-  \`\`\`jome
-  module SomeModule
-    def someFunc
-    end
-    let someVar = 10
-  end
-
-  // usage:
-  // import {SomeModule} from './some_file.jome'
-  // let ten = SomeModule.someVar
-  \`\`\`
-
-  You can also export functions and constants individually.
-
-  \`\`\`jome
-  export def someFunc
-  end
-  export let someVar = 10
-
-  // usage:
-  // import {someFunc, someVar} from './some_file.jome'
-  \`\`\`
-
-  To export the default or an object, use the main keyword. It allows you to return a value from a file.
-
-  \`\`\`jome
-  // sum.jome
-  main |a, b| => (a + b)
-
-  // usage:
-  // import sum from './sum.jome'
-  \`\`\`
+  You can create custom types. See interfaces and types. (TODO: link)
 
   <h2 id="blocks">Blocks</h2>
 
@@ -702,6 +645,67 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   ### Inheritence
 
   ?
+
+  ## Modules and exports
+
+  There are many ways to export items, but they are all compiled the same. Either using module.exports or export depending on jome config.
+
+  \`\`\`jome
+  module
+    def someFunc
+    end
+    let someVar = 10
+  end
+  \`\`\`
+
+  Compiles to
+
+  \`\`\`js
+  module.exports = {
+    someFunc: () => {
+    },
+    someVar: 10
+  }
+  // or
+  export function someFunc() {
+  }
+  export const someVar = 10
+  \`\`\`
+
+  You can give a name to the module, which simply creates an object that holds everything inside.
+
+  \`\`\`jome
+  module SomeModule
+    def someFunc
+    end
+    let someVar = 10
+  end
+
+  // usage:
+  // import {SomeModule} from './some_file.jome'
+  // let ten = SomeModule.someVar
+  \`\`\`
+
+  You can also export functions and constants individually.
+
+  \`\`\`jome
+  export def someFunc
+  end
+  export let someVar = 10
+
+  // usage:
+  // import {someFunc, someVar} from './some_file.jome'
+  \`\`\`
+
+  To export the default or an object, use the main keyword. It allows you to return a value from a file.
+
+  \`\`\`jome
+  // sum.jome
+  main |a, b| => (a + b)
+
+  // usage:
+  // import sum from './sum.jome'
+  \`\`\`
 
   ## Interfaces and types
 
