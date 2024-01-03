@@ -747,10 +747,10 @@ main {
 
   ### Inheritence
 
-  You can use the extends keyword for extending an interface.
+  You can use < for extending an interface.
 
    ```jome
-  interface Dim3d extends Dimensions
+  interface Dim3d < Dimensions
     depth: number
   end
   ```
@@ -803,10 +803,10 @@ main {
 
   By default, you cannot redeclare an interface and it adds to the previous one.
 
-  You have to use another syntax to do this. Maybe interface extends
+  You have to use another syntax to do this. Maybe interface <
 
   ```jome
-  interface extends Options
+  interface < Options
     arg: string = 'one more option'
   end
   ```
@@ -816,6 +816,11 @@ main {
   A class can extend an interface.
 
   Interface default values will given given to the instance by default in the constructor.
+
+  ```jome
+  class SomeClass(props) < SomeInterface(props)
+  end
+  ```
 
   ### Source for decisions
 
