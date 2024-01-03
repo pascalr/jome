@@ -411,6 +411,16 @@ const TOKENS = {
     captureLeft: true,
     captureRight: true,
   },
+  // class
+  "meta.class.jome": {
+    compile: (node) => {
+      let name = node.parts[1].raw
+      let parts = node.parts.slice(2,-1)
+      let methods = parts.filter(p => p.type === 'meta.def.jome')
+      let compiledMethods = ""
+      return `class ${name} {\n${compiledMethods}\n}`
+    }
+  },
   // interface
   "meta.interface.jome": {
     compile: (node) => {
