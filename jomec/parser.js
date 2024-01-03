@@ -10,15 +10,27 @@ function compileTokenRaw(token) {
   }
 }
 
+// TODO: Make sure no infinite loop
+function validateAllNodes(nodes) {
+  nodes.forEach(node => {
+    if (node.validate) {
+      let err = node.validate(node)
+      if (err) {
+        throw new Error(err)
+      }  
+    }
+    if (node.children?.length) {
+      validateAllNodes(node.children)
+    }
+    if (node.parts?.length) {
+      validateAllNodes(node.parts)
+    }
+  });
+}
+
 function compileNode(node) {
   if (!node.compile) {
     throw new Error("Can't compile node of type "+node.type)
-  }
-  if (node.validate) {
-    let err = node.validate(node)
-    if (err) {
-      throw new Error(err)
-    }
   }
   return node.compile(node)
 }
@@ -555,6 +567,7 @@ const TOKENS = {
 
 // That a list of ASTNode and return js code
 function compilePP(nodes) {
+  validateAllNodes(nodes)
   return nodes.map(node => compileNode(node)).join('')
 }
 
