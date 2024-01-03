@@ -1,5 +1,5 @@
-import {HtmlPage} from '../../lib/html-page.jome'
-import {Div, renderHtmlTag} from '../../lib/html.jome'
+import {HtmlPage} from '../../../lib/html-page.jome'
+import {Div, renderHtmlTag} from '../../../lib/html.jome'
 // import {Col, Row, Screen, Panel} from '../../lib/jome-html.jome'
 
 interface BoxParams |

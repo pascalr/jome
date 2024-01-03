@@ -1,8 +1,8 @@
 const jome = require('jome')
 
 
-const {HtmlPage} = require("../../lib/html-page.built.js");
-const {Div, renderHtmlTag} = require("../../lib/html.built.js");
+const {HtmlPage} = require("../../../lib/html-page.built.js");
+const {Div, renderHtmlTag} = require("../../../lib/html.built.js");
 
 const boxCss = (obj) => {
   return {width: obj.width, height: obj.height, "background-color": obj.color, margin: obj.margin, border: obj.border, "flex-grow": obj.grow, "flex-shrink": obj.shrink}

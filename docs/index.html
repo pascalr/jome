@@ -74,17 +74,24 @@ has some original features.</p>
 <p>Example Jome code: TODO: Make this like the examples so you can click see compiled and result</p>
 <p>Here is some code to show what Jome looks like. You can look at the <a href="/jome/examples">examples</a> page to see more.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Classes</span>
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">Character</span> |<span class="hljs-variable">@name</span>, <span class="hljs-variable">@weapon</span>?| =&gt; {
-  attack: |<span class="hljs-variable">enemy</span>| =&gt; (
+<span class="hljs-keyword">class</span> <span class="hljs-title function_">Character</span>(<span class="hljs-variable">name</span>, <span class="hljs-variable">props</span>)
+  <span class="hljs-variable">@name</span> = <span class="hljs-variable">name</span>
+  <span class="hljs-variable">@weapon</span> = <span class="hljs-variable">props</span>.<span class="hljs-variable">weapon</span>
+  <span class="hljs-keyword">def</span> <span class="hljs-title function_">attack</span>(<span class="hljs-variable">enemy</span>)
 
-  )
-}
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">Weapon</span> |<span class="hljs-variable">damage</span>?, <span class="hljs-variable">range</span>?| =&gt; {}
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">Weapon</span>
+  damage: <span class="hljs-variable">number</span>
+  range: <span class="hljs-variable">int</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-comment">// When you inherit from an interface, you can call super on the interface to initialize some values</span>
 
 <span class="hljs-comment">// Inheritence and properties</span>
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">Dagger</span> { super: <span class="hljs-title class_">Weapon</span> range: <span class="hljs-number">50</span> }
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">WeakDagger</span> { super: <span class="hljs-title class_">Dagger</span> damage: <span class="hljs-number">50</span> }
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">StrongDagger</span> { super: <span class="hljs-title class_">Dagger</span> damage: <span class="hljs-number">200</span> }
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Dagger</span> &lt; <span class="hljs-title function_">Weapon</span>(range: <span class="hljs-number">50</span>) <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">WeakDagger</span> &lt; <span class="hljs-title function_">Dagger</span>(damage: <span class="hljs-number">50</span>) <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">StrongDagger</span> &lt; <span class="hljs-title function_">Dagger</span>(damage: <span class="hljs-number">200</span>) <span class="hljs-keyword">end</span>
 
 <span class="hljs-comment">// Instantiation</span>
 <span class="hljs-keyword">var</span> <span class="hljs-variable">startingWeapon</span> = { <span class="hljs-title class_">WeakDagger</span> }
@@ -94,9 +101,9 @@ has some original features.</p>
 <span class="hljs-keyword">var</span> <span class="hljs-variable">gameSaved</span> = <span class="language-shell">&lt;sh&gt;cat &quot;saved-gamed.json&quot;&lt;/sh&gt;</span>
 
 <span class="hljs-comment">// Functions</span>
-<span class="hljs-keyword">def</span> <span class="hljs-variable">announceGameIsStarted</span> = -&gt; (
-  <span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Game started!&#x27;</span>)
-)
+<span class="hljs-keyword">def</span> <span class="hljs-variable">announceGameIsStarted</span>
+  <span class="hljs-title function_">#log</span> <span class="hljs-string">&#x27;Game started!&#x27;</span>
+<span class="hljs-keyword">end</span>
 <span class="hljs-title function_">announceGameIsStarted</span>()
 </code></pre>
 <h2>Disclaimer</h2>
@@ -421,8 +428,8 @@ example name.</p>
 </code></pre>
 <p>Le keyword then peut être utiliser pour mettre la valeur sur la même ligne que la condition</p>
 <pre><code class="language-jome"><span class="hljs-variable">someVar</span> = {
-  <span class="hljs-keyword">if</span> <span class="hljs-variable">someCond</span> <span class="hljs-variable">then</span> <span class="hljs-string">&quot;someVal&quot;</span>
-  <span class="hljs-keyword">elsif</span> <span class="hljs-variable">someOtherCond</span> <span class="hljs-variable">then</span> <span class="hljs-string">&quot;some other val&quot;</span>
+  <span class="hljs-keyword">if</span> <span class="hljs-variable">someCond</span> <span class="hljs-keyword">then</span> <span class="hljs-string">&quot;someVal&quot;</span>
+  <span class="hljs-keyword">elsif</span> <span class="hljs-variable">someOtherCond</span> <span class="hljs-keyword">then</span> <span class="hljs-string">&quot;some other val&quot;</span>
   <span class="hljs-keyword">else</span> <span class="hljs-string">&quot;some default&quot;</span> <span class="hljs-keyword">end</span>
 }
 </code></pre>
@@ -525,6 +532,11 @@ Les when sont simplement remplacé par &quot;if (expression du case)&quot;</p>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <p>Idée: Quand une classe inhérite d'un interface, mettre les valeurs par défaut dans le prototype.</p>
+<h3>Deconstructings</h3>
+<p>I want to be able to name deconstructed arguments in a method. Maybe with keyword as?</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">example</span>(<span class="hljs-variable">props</span> <span class="hljs-variable">as</span> {<span class="hljs-variable">arg1</span>, <span class="hljs-variable">arg2</span>})
+<span class="hljs-keyword">end</span>
+</code></pre>
 <h3>Class arguments</h3>
 <pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">Tag</span>(<span class="hljs-variable">tag</span>, <span class="hljs-variable">content</span>)
   <span class="hljs-keyword">def</span> <span class="hljs-variable">toString</span> = =&gt; <span class="hljs-string">`&lt;{tag}{renderHTMLAttrs(@)}&gt;{content||&#x27;&#x27;}{renderHTMLChildren(@)}&lt;/{tag}&gt;`</span>
@@ -616,10 +628,19 @@ the confusion, you cannot declare an object with type. So you use interface for 
 <span class="hljs-keyword">end</span>
 </code></pre>
 <h3>Inheritence</h3>
-<p>You can use the extends keyword for extending an interface.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Dim3d</span> <span class="hljs-variable">extends</span> <span class="hljs-title class_">Dimensions</span>
+<p>You can use &lt; for extending an interface.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Dim3d</span> &lt; <span class="hljs-title class_">Dimensions</span>
  depth: <span class="hljs-variable">number</span>
 <span class="hljs-keyword">end</span>
+</code></pre>
+<pre><code class="language-jome"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Weapon</span> <span class="hljs-variable">damage</span>, <span class="hljs-variable">range</span> <span class="hljs-keyword">end</span>
+
+<span class="hljs-comment">// When you inherit from an interface, you can call super on the interface to initialize some values</span>
+
+<span class="hljs-comment">// Inheritence and properties</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Dagger</span> &lt; <span class="hljs-title function_">Weapon</span>(range: <span class="hljs-number">50</span>) <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">WeakDagger</span> &lt; <span class="hljs-title function_">Dagger</span>(damage: <span class="hljs-number">50</span>) <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">StrongDagger</span> &lt; <span class="hljs-title function_">Dagger</span>(damage: <span class="hljs-number">200</span>) <span class="hljs-keyword">end</span>
 </code></pre>
 <h3>Intersection</h3>
 <p>You can use intersection to create a type that combines the properties of two interfaces together.</p>
@@ -643,14 +664,17 @@ the confusion, you cannot declare an object with type. So you use interface for 
 </code></pre>
 <h3>Declaration Merging</h3>
 <p>By default, you cannot redeclare an interface and it adds to the previous one.</p>
-<p>You have to use another syntax to do this. Maybe interface extends</p>
-<pre><code class="language-jome"><span class="hljs-keyword">interface</span> <span class="hljs-variable">extends</span> <span class="hljs-title class_">Options</span>
+<p>You have to use another syntax to do this. Maybe interface &lt;</p>
+<pre><code class="language-jome"><span class="hljs-keyword">interface</span> &lt; <span class="hljs-title class_">Options</span>
   arg: <span class="hljs-variable">string</span> = <span class="hljs-string">&#x27;one more option&#x27;</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <h3>Class extends interface</h3>
 <p>A class can extend an interface.</p>
 <p>Interface default values will given given to the instance by default in the constructor.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">SomeClass</span>(<span class="hljs-variable">props</span>) &lt; <span class="hljs-title function_">SomeInterface</span>(<span class="hljs-variable">props</span>)
+<span class="hljs-keyword">end</span>
+</code></pre>
 <h3>Source for decisions</h3>
 <p>https://stackoverflow.com/questions/37233735/interfaces-vs-types-in-typescript</p>
 <h3>Functions</h3>

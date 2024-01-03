@@ -24,17 +24,24 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   \`\`\`jome
   // Classes
-  class Character |@name, @weapon?| => {
-    attack: |enemy| => (
+  class Character(name, props)
+    @name = name
+    @weapon = props.weapon
+    def attack(enemy)
 
-    )
-  }
-  class Weapon |damage?, range?| => {}
+    end
+  end
+  interface Weapon
+    damage: number
+    range: int
+  end
+
+  // When you inherit from an interface, you can call super on the interface to initialize some values
 
   // Inheritence and properties
-  class Dagger { super: Weapon range: 50 }
-  class WeakDagger { super: Dagger damage: 50 }
-  class StrongDagger { super: Dagger damage: 200 }
+  class Dagger < Weapon(range: 50) end
+  class WeakDagger < Dagger(damage: 50) end
+  class StrongDagger < Dagger(damage: 200) end
 
   // Instantiation
   var startingWeapon = { WeakDagger }
@@ -44,9 +51,9 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   var gameSaved = <sh>cat "saved-gamed.json"</sh>
 
   // Functions
-  def announceGameIsStarted = -> (
-    console.log('Game started!')
-  )
+  def announceGameIsStarted
+    #log 'Game started!'
+  end
   announceGameIsStarted()
   \`\`\`
   
@@ -614,6 +621,15 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   Idée: Quand une classe inhérite d'un interface, mettre les valeurs par défaut dans le prototype.
 
+  ### Deconstructings
+
+  I want to be able to name deconstructed arguments in a method. Maybe with keyword as?
+
+  \`\`\`jome
+  def example(props as {arg1, arg2})
+  end
+  \`\`\`
+
   ### Class arguments
 
   \`\`\`jome
@@ -734,12 +750,23 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   ### Inheritence
 
-  You can use the extends keyword for extending an interface.
+  You can use < for extending an interface.
 
    \`\`\`jome
-  interface Dim3d extends Dimensions
+  interface Dim3d < Dimensions
     depth: number
   end
+  \`\`\`
+
+  \`\`\`jome
+  interface Weapon damage, range end
+
+  // When you inherit from an interface, you can call super on the interface to initialize some values
+
+  // Inheritence and properties
+  class Dagger < Weapon(range: 50) end
+  class WeakDagger < Dagger(damage: 50) end
+  class StrongDagger < Dagger(damage: 200) end
   \`\`\`
 
   ### Intersection
@@ -779,10 +806,10 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   By default, you cannot redeclare an interface and it adds to the previous one.
 
-  You have to use another syntax to do this. Maybe interface extends
+  You have to use another syntax to do this. Maybe interface <
 
   \`\`\`jome
-  interface extends Options
+  interface < Options
     arg: string = 'one more option'
   end
   \`\`\`
@@ -792,6 +819,11 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   A class can extend an interface.
 
   Interface default values will given given to the instance by default in the constructor.
+
+  \`\`\`jome
+  class SomeClass(props) < SomeInterface(props)
+  end
+  \`\`\`
 
   ### Source for decisions
 
