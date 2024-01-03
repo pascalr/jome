@@ -21,8 +21,8 @@ main {
 
   ```jome
   // Classes
-  class Character(name, props)
-    include name, props
+  class Character(@name, props)
+    include props
     def attack(enemy)
 
     end
@@ -635,6 +635,31 @@ main {
 
   ### Class arguments
 
+  Class arguments are read-only. They are available from everywhere inside the class, every method not just constructor.
+
+  If you want the value to be set for the instance, use an ampersand before the variable name.
+
+  ```jome
+  class Tag(@name)
+  end
+  ```
+
+  ```js
+  class Tag {
+    constructor(name) {
+      this.name = name
+    }
+  }
+  ```
+
+  If you want to add everything from an object, what to do then? Keyword include?
+
+  ```jome
+  class Tag(props)
+    include props
+  end
+  ```
+
   ```jome
   class Tag(tag, content)
     def toString = => `<{tag}{renderHTMLAttrs(@)}>{content||''}{renderHTMLChildren(@)}</{tag}>`
@@ -665,6 +690,20 @@ main {
 
   WIP
 
+  ### Constructor
+
+  No constructor? If you want to call a method like a constructor, then call it.
+
+  ```jome
+  class SomeClass(options)
+    @init()
+
+    def init
+      
+    end
+  end
+  ```
+
   ### Inject object
 
   I want to be able to inject an object into an instance. But what syntax to use???
@@ -672,7 +711,7 @@ main {
   Keyword include?
 
   ```jome
-  export class ExpressServer(options)
+  class ExpressServer(options)
 
     include options
   end
