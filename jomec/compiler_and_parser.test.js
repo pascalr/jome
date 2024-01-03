@@ -62,6 +62,12 @@ describe("Test arrow call", () => {
   })
 })
 
+describe("Test regex call", () => {
+  test('/test1212/', () => {
+    expect(compile(`/test1212/`)).toMatch("/test1212/");
+  })
+})
+
 describe("Test function call", () => {
   test('Function call with parens', () => {
     expect(compile(`

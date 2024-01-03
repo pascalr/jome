@@ -1,3 +1,6 @@
+// TODO: Seperate this into parser, compiler and ...
+// All in this file yet because I am waiting to remove the previous version first to reuse filenames.
+
 const fs = require('fs');
 const path = require('path');
 const {tokenize} = require('./tokenizer.js')
@@ -436,6 +439,7 @@ const TOKENS = {
   'entity.name.function.jome': tokenAsIs,
   'constant.numeric.integer.jome': tokenAsIs,
   'constant.numeric.float.jome': tokenAsIs,
+  "string.regexp.js": tokenAsIs,
   // let foo
   // var bar
   'meta.declaration.jome': {
@@ -673,11 +677,8 @@ function compilePP(nodes) {
   return nodes.map(node => compileNode(node)).join('')
 }
 
+// FIXME: This does not belong here
 function compilePPAndSaveFile(absPath) {
-
-  if (!absPath.endsWith('.jome')) {
-    throw new Error('Cannot compile file without .jome extension', absPath);
-  }
 
   if (!fs.existsSync(absPath)) {
     throw new Error("Can't compile and save missing file " + absPath)
@@ -691,7 +692,10 @@ function compilePPAndSaveFile(absPath) {
   //topNodes.forEach(top => printTree(top))
   let result = compilePP(topNodes)
 
-  const buildFileName = path.basename(absPath.replace(/\.jome$/, '.js')); // FIXME: Only replace .jome at the end of the filename
+  if (!absPath.endsWith('.jome')) {
+    throw new Error('Cannot compile file without .jome extension', absPath);
+  }
+  const buildFileName = absPath.slice(0,-5)+'.js' // remove .jome and replace extension with js
 
   try {
     // Write the result to the file synchronously
@@ -711,6 +715,8 @@ module.exports = {
 }
 
 /*
+  TODO: Only keep parser
+
   Tant qu'à faire des test de compilation correctement, j'aimerais faire un compilateur correctement.
 
   Mon idée est de créer une fonction analyze qui prend en entrée tous les tokens du fichiers et crée
