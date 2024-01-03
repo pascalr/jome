@@ -14,6 +14,10 @@ A package that contains the compiler that converts .jome file to .js files.
 
 ## jome-lib
 
+Everything currently inside jome/jome should go into jome-lib
+
+TODO: Merge /jome and /lib into /jome-lib
+
 The .js files that are used by Jome. Not sure about that one. Ideally, the files belong to jomec and the
 code is bundled together. But it's nice if it can be used standalone too. Or useless?
 
