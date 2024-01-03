@@ -282,9 +282,11 @@ function compileStandaloneFunction(node) {
 }
 
 function compileFuncCall(node) {
-  let called = compileNode(node.parts[0])
-  let args = node.parts.slice(1).map(p => compileNode(p)).join('')//.filter(p => p && p.length).join(', ')
-  return `${called}(${args})`
+  let hasDot = node.parts[0].type === 'punctuation.dot.jome'
+  let parts = hasDot ? node.parts.slice(1) : node.parts
+  let called = compileNode(parts[0])
+  let args = parts.slice(1).map(p => compileNode(p)).join('')//.filter(p => p && p.length).join(', ')
+  return `${hasDot ? '.' : ''}${called}(${args})`
 }
 
 // Chainable types have the highest precedence and are all equal
@@ -426,6 +428,7 @@ const TOKENS = {
   },
   'variable.other.jome': tokenAsIs,
   'variable.assignment.jome': tokenAsIs,
+  'support.variable.jome': tokenAsIs,
   'entity.name.function.jome': tokenAsIs,
   'constant.numeric.integer.jome': tokenAsIs,
   'constant.numeric.float.jome': tokenAsIs,

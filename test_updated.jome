@@ -6,6 +6,10 @@ class Person
   end
 end
 
+[1,2,3,4,5].each do |i|
+  console.log i
+end
+
 def sayHello(name) #log("hello", name) end
 
 let test5656 = !true === !!false

@@ -48,6 +48,14 @@ function compile(code) {
   return compilePP(topNodes)
 }
 
+test('Test each do end', () => {
+  expect(compile(`
+[1,2,3,4,5].each do |i|
+  console.log i
+end
+`)).toMatch(/\s*\[1, 2, 3, 4, 5\]\.each\(function \(i\) \{\s*console\.log\(i\)\s*\}\)\s*/);
+})
+
 describe("Test arrow call", () => {
   test('obj->call', () => {
     expect(compile(`obj->call`)).toMatch(/obj.call\(\)/);
