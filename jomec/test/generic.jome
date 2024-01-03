@@ -1,0 +1,5 @@
+def sayHello
+  #log "Hello!"
+end
+
+sayHello()

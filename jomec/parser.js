@@ -669,6 +669,35 @@ function compilePP(nodes) {
   return nodes.map(node => compileNode(node)).join('')
 }
 
+// function compilePPAndSaveFile(file, ext) {
+
+//   let {result, context, relPath} = this.compileFileAndDeps(absPath, ext)
+
+//   let dir = path.dirname(relPath)
+//   let buildDir = path.join(this.projectAbsPath, dir)
+//   // let buildDir = path.join(this.buildAbsPath, dir)
+//   // Reproduce the directory structure inside the build directory.
+//   if (!fs.existsSync(buildDir)) (
+//     fs.mkdirSync(buildDir, { recursive: true })
+//   )
+
+//   // Generate the build file name
+//   const buildFileName = path.basename(absPath.replace(/\.jome$/, ext));
+//   const outFileName = path.join(buildDir, buildFileName)
+
+//   try {
+//     // Write the result to the file synchronously
+//     fs.writeFileSync(outFileName, result);
+
+//     console.log(`Successfully wrote to '${buildFileName}'.`);
+//   } catch (err) {
+//     console.error('Error writing to the file:', err);
+//     return null
+//   }
+
+//   return {buildFileName, context, outFileName, result}
+// }
+
 module.exports = {
   parse,
   compilePP
