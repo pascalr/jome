@@ -53,10 +53,10 @@ describe("Test class", () => {
     expect(compile(`
 class Person
   def sayHello
-    #log 'Hello!'
+    #log("Hello!")
   end
 end
-`)).toMatch(/\s*class Person\s*\{\s+sayHello = \(\) => console.log\("Hello!"\)\s*\}/);
+`)).toMatch(/\s*class Person\s*\{\s+sayHello = \(\) => \{\s*console.log\("Hello!"\)\s*\}\s*\}/);
   })
 })
 

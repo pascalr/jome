@@ -217,7 +217,6 @@ function compileArgs(node) {
   if (node.type === 'variable.other.jome') {
     return node.raw
   }
-  // TODO: Validate args!
   let cs = node.parts.slice(1, -1) // remove vertical bars
   //let args = 
   //let todo = 10
@@ -225,7 +224,6 @@ function compileArgs(node) {
 }
 
 function compileEntry(node) {
-  // TODO: Validate entry!
   let name = node.parts[0].raw
   let value = compileNode(node.children[0])
   return `${name}: ${value}`
@@ -238,6 +236,39 @@ function compileBlock(node) {
   }
   // A value is only on a single line, except if using parentheses.
   return '{}'
+}
+
+function compileArrowFunction(node) {
+  if (node.children.length > 1) {
+    let args = node.children[0]
+    return `${compileArgs(args)} => (${node.children.slice(1).map(c => compileNode(c)).join('')})`
+  } else {
+    return `() => (${compileNode(node.children[0])})`
+  }
+}
+
+// A def inside a class
+function compileMethod(node) {
+  let name = node.parts[1].raw
+  let cs = node.parts.slice(2,-1) // Remove keywords def, end, and function name
+  let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
+  if (args) {
+    return `${name} = ${compileArgs(args)} => {\n${cs.slice(1).map(c => compileNode(c)).join('')}\n}`
+  } else {
+    return `${name} = () => {\n${cs.map(c => compileNode(c)).join('')}\n}`
+  }
+}
+
+// A def outside a class
+function compileFunction(node) {
+  let name = node.parts[1].raw
+  let cs = node.parts.slice(2,-1) // Remove keywords def, end, and function name
+  let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
+  if (args) {
+    return `function ${name}${compileArgs(args)} {${cs.slice(1).map(c => compileNode(c)).join('')}}`
+  } else {
+    return `function ${name}() {${cs.map(c => compileNode(c)).join('')}}`
+  }
 }
 
 // Chainable types have the highest precedence and are all equal
@@ -398,16 +429,7 @@ const TOKENS = {
         return "Syntax error. Arguments should always be at the beginning of the function block."
       }
     },
-    compile: (node) => {
-      let name = node.parts[1].raw
-      let cs = node.parts.slice(2,-1) // Remove keywords def, end, and function name
-      let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
-      if (args) {
-        return `function ${name}${compileArgs(args)} {${cs.slice(1).map(c => compileNode(c)).join('')}}`
-      } else {
-        return `function ${name}() {${cs.map(c => compileNode(c)).join('')}}`
-      }
-    },
+    compile: compileFunction,
   },
   'meta.if-block.jome': regular((node) => {
     let cs = node.parts.slice(1, -1) // remove if and end
@@ -429,7 +451,7 @@ const TOKENS = {
       let name = node.parts[1].raw
       let parts = node.parts.slice(2,-1)
       let methods = parts.filter(p => p.type === 'meta.def.jome')
-      let compiledMethods = ""
+      let compiledMethods = methods.map(m => compileMethod(m)).join('\n')
       return `class ${name} {\n${compiledMethods}\n}`
     }
   },
@@ -465,14 +487,7 @@ const TOKENS = {
         return "Syntax error. Arrow function expects one or two operands."
       }
     },
-    compile: (node) => {
-      if (node.children.length > 1) {
-        let args = node.children[0]
-        return `${compileArgs(args)} => (${node.children.slice(1).map(c => compileNode(c)).join('')})`
-      } else {
-        return `() => (${compileNode(node.children[0])})`
-      }
-    },
+    compile: compileArrowFunction,
   },
   // !
   "keyword.operator.logical.unary.jome": {
