@@ -48,6 +48,21 @@ function compile(code) {
   return compilePP(topNodes)
 }
 
+describe("Test function call", () => {
+  test('Function call with parens', () => {
+    expect(compile(`
+let add = (x,y) => x + y
+add(10, 5)
+`)).toMatch(/\s*let add = \(x, ?y\) => \(?x \+ y\)?\s+;?add\(10, ?5\)/);
+  })
+  test('Function call without parens', () => {
+    expect(compile(`
+let add = (x,y) => x + y
+add 10, 5
+`)).toMatch(/\s*let add = \(x, ?y\) => \(?x \+ y\)?\s+;?add\(10, ?5\)/);
+  })
+})
+
 describe("Test class", () => {
   test('Class with one method', () => {
     expect(compile(`

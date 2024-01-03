@@ -8,7 +8,7 @@ end
 
 def sayHello(name) #log("hello", name) end
 
-let test5656 = true ? 1 : false
+let test5656 = !true === !!false
 
 type StringOrNull = string | null
 type Person

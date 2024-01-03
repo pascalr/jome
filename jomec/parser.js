@@ -409,6 +409,7 @@ const TOKENS = {
   },
   'variable.other.jome': tokenAsIs,
   'variable.assignment.jome': tokenAsIs,
+  'entity.name.function.jome': tokenAsIs,
   'constant.numeric.integer.jome': tokenAsIs,
   'constant.numeric.float.jome': tokenAsIs,
   // let foo
