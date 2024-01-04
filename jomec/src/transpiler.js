@@ -264,6 +264,13 @@ const TRANSPILERS = {
     let elems = node.parts.slice(1,-1).filter((e, i) => i % 2 === 0)
     return `[${elems.map(c => transpile(c)).join(', ')}]`
   },
+  // exec
+  //   someFunc()
+  //   someOtherFunc()
+  // end
+  "meta.exec.jome": (node) => {
+    throw new Error("TODO: meta.exec.jome")
+  },
   // =
   'keyword.operator.assignment.jome': compileOperator,
   // let

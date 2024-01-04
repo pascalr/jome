@@ -6,8 +6,8 @@ function validateAllNodes(nodes) {
     let validator = VALIDATORS[node.type]
     if (validator) {
       let err = validator(node)
-      if (err) {
-        throw new Error(err)
+      if (err || node.errors.length) {
+        throw new Error(err || node.errors[0])
       }
     }
     if (node.children?.length) {
@@ -17,6 +17,38 @@ function validateAllNodes(nodes) {
       validateAllNodes(node.parts)
     }
   });
+}
+
+function ensureStartRaw(node, str) {
+  if (node.parts[0]?.raw !== str) {
+    node.errors.push(`Internal error. ${node.type} should always start with token ${str}`)
+  }
+}
+function ensureStartType(node, str) {
+  if (node.parts[0]?.type !== str) {
+    node.errors.push(`Internal error. ${node.type} should always start with token of type ${str}`)
+  }
+}
+function ensureEndRaw(node, str) {
+  if (node.parts[node.parts.length-1]?.raw !== str) {
+    node.errors.push(`Internal error. ${node.type} should always end with token ${str}`)
+  }
+}
+function ensureEndType(node, str) {
+  if (node.parts[node.parts.length-1]?.type !== str) {
+    node.errors.push(`Internal error. ${node.type} should always end with token of type ${str}`)
+  }
+}
+function ensureAllType(node, list, str) {
+  list.forEach(el => {
+    if (el.type !== str) {
+      node.errors.push(`Error. ${node.type} should only contain tokens of type ${str}`)
+    }
+  })
+}
+
+function filterNewlines(list) {
+  return list.filter(el => el.type !== 'newline')
 }
 
 // const validateChildren = (nb, types) => (node) => {
@@ -194,6 +226,19 @@ const VALIDATORS = {
     // } else if (!OPERAND_TYPES.includes(node.children[1].type)) {
     //   return `Invalid value for assignement ${node.type}. Was: ${node.type}`
     }
+  },
+  // exec
+  //   someFunc()
+  //   someOtherFunc()
+  // end
+  "meta.exec.jome": (node) => {
+    ensureStartRaw(node, 'exec')
+    ensureStartType(node, 'keyword.control.jome')
+    ensureEndRaw(node, 'end')
+    ensureEndType(node, 'keyword.control.jome')
+    let parts = filterNewlines(node.parts.slice(1,-1)) // remove exec, end keyword, and remove newlines
+    ensureAllType(node, parts, ['support.function-call.WIP.jome', 'support.function-call.jome'])
+    node.data = {calls: parts}
   },
 }
 

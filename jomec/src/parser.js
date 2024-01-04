@@ -50,14 +50,13 @@ class ASTNode {
       // Parts represent the inner components of the node
       this.parts = parse(token.children)
     }
+    this.errors = []
     let data = TOKENS[this.type]
     if (data) {
       this.captureLeft = data.captureLeft
       this.captureRight = data.captureRight
       this.minRequiredChildren = data.minRequiredChildren
       this.allowedChildren = data.allowedChildren
-      this.compile = data.compile
-      this.validate = data.validate
     }
   }
 }
