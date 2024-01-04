@@ -42,7 +42,7 @@ javascript because it is more stable. It is a little weird to compile tests in i
 //   add 2
 // end
 
-test.only('WIP', () => {
+test('WIP', () => {
   expect(compile(`
 express() exec
   get '/' do |req, res|

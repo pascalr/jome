@@ -1,5 +1,5 @@
 const { parse } = require("./parser")
-const { transpile } = require("./transpiler")
+const { genCode } = require("./code_generator.js")
 const { tokenize } = require('./tokenizer.js')
 const { validateAllNodes } = require("./validator")
 
@@ -49,17 +49,17 @@ function printTree(node, depth = 0) {
 // That a list of ASTNode and return js code
 function compileNodes(nodes) {
   validateAllNodes(nodes)
-  return nodes.map(node => transpile(node)).join('')
+  return nodes.map(node => genCode(node)).join('')
 }
 
 function compile(code) {
   let tokens = tokenize(code).children
   let topNodes = parse(tokens)
-  let info = ""
-  topNodes.forEach(top =>
-    info += '\n'+debugOpTree(top)
-  )
-  console.log(info)
+  // let info = ""
+  // topNodes.forEach(top =>
+  //   info += '\n'+debugOpTree(top)
+  // )
+  // console.log(info)
   return compileNodes(topNodes)
 }
 

@@ -1,17 +1,17 @@
-function transpile(node) {
-  let transpiler = TRANSPILERS[node.type]
-  if (!transpiler) {
+function genCode(node) {
+  let generator = CODE_GENERATORS[node.type]
+  if (!generator) {
     throw new Error("Can't compile node of type "+node.type)
   }
-  return transpiler(node)
+  return generator(node)
 }
 
 function compileOperatorUnary(node) {
-  return `${node.raw}${transpile(node.operands[0])}`
+  return `${node.raw}${genCode(node.operands[0])}`
 }
 
 function compileOperator(node) {
-  return `${transpile(node.operands[0])} ${node.raw} ${transpile(node.operands[1])}`
+  return `${genCode(node.operands[0])} ${node.raw} ${genCode(node.operands[1])}`
 }
 
 function compileRaw(node) {
@@ -29,9 +29,9 @@ function compileUtility(node, isInline) {
   let val = _compileUtility(name)
   if (node.operands) {
     if (isInline) {
-      return `${val}(${node.operands.map(c => transpile(c)).join('')})`
+      return `${val}(${node.operands.map(c => genCode(c)).join('')})`
     }
-    return `${val}${node.operands.map(c => transpile(c)).join('')}`
+    return `${val}${node.operands.map(c => genCode(c)).join('')}`
   }
   return val
 }
@@ -43,12 +43,12 @@ function compileArgs(node) {
   let cs = node.parts.slice(1, -1) // remove vertical bars
   //let args = 
   //let todo = 10
-  return `(${cs.map(c => transpile(c)).join('')})`
+  return `(${cs.map(c => genCode(c)).join('')})`
 }
 
 function compileEntry(node) {
   let name = node.parts[0].raw
-  let value = transpile(node.operands[0])
+  let value = genCode(node.operands[0])
   return `${name}: ${value}`
 }
 
@@ -64,9 +64,9 @@ function compileBlock(node) {
 function compileArrowFunction(node) {
   if (node.operands.length > 1) {
     let args = node.operands[0]
-    return `${compileArgs(args)} => (${node.operands.slice(1).map(c => transpile(c)).join('')})`
+    return `${compileArgs(args)} => (${node.operands.slice(1).map(c => genCode(c)).join('')})`
   } else {
-    return `() => (${transpile(node.operands[0])})`
+    return `() => (${genCode(node.operands[0])})`
   }
 }
 
@@ -76,9 +76,9 @@ function compileMethod(node) {
   let cs = node.parts.slice(2,-1) // Remove keywords def, end, and function name
   let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
   if (args) {
-    return `${name} = ${compileArgs(args)} => {\n${cs.slice(1).map(c => transpile(c)).join('')}\n}`
+    return `${name} = ${compileArgs(args)} => {\n${cs.slice(1).map(c => genCode(c)).join('')}\n}`
   } else {
-    return `${name} = () => {\n${cs.map(c => transpile(c)).join('')}\n}`
+    return `${name} = () => {\n${cs.map(c => genCode(c)).join('')}\n}`
   }
 }
 
@@ -88,9 +88,9 @@ function compileDefFunction(node) {
   let cs = node.parts.slice(2,-1) // Remove keywords def, end, and function name
   let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
   if (args) {
-    return `function ${name}${compileArgs(args)} {${cs.slice(1).map(c => transpile(c)).join('')}}`
+    return `function ${name}${compileArgs(args)} {${cs.slice(1).map(c => genCode(c)).join('')}}`
   } else {
-    return `function ${name}() {${cs.map(c => transpile(c)).join('')}}`
+    return `function ${name}() {${cs.map(c => genCode(c)).join('')}}`
   }
 }
 
@@ -98,17 +98,17 @@ function compileStandaloneFunction(node) {
   let cs = node.parts.slice(1,-1) // Remove keywords do and end
   let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
   if (args) {
-    return `function ${compileArgs(args)} {${cs.slice(1).map(c => transpile(c)).join('')}}`
+    return `function ${compileArgs(args)} {${cs.slice(1).map(c => genCode(c)).join('')}}`
   } else {
-    return `function () {${cs.map(c => transpile(c)).join('')}}`
+    return `function () {${cs.map(c => genCode(c)).join('')}}`
   }
 }
 
 function compileFuncCall(node) {
   let hasDot = node.parts[0].type === 'punctuation.dot.jome'
   let parts = hasDot ? node.parts.slice(1) : node.parts
-  let called = transpile(parts[0])
-  let args = parts.slice(1).filter(p => p.type !== 'punctuation.separator.delimiter.jome').map(p => transpile(p)).join(', ')
+  let called = genCode(parts[0])
+  let args = parts.slice(1).filter(p => p.type !== 'punctuation.separator.delimiter.jome').map(p => genCode(p)).join(', ')
   //let args = parts.slice(1).map(p => compileNode(p)).join('')//.filter(p => p && p.length).join(', ')
   return `${hasDot ? '.' : ''}${called}(${args})`
 }
@@ -151,7 +151,7 @@ const PRECEDENCES = {
   'keyword.control.inline-conditional.jome': 200,
 }
 
-const TRANSPILERS = {
+const CODE_GENERATORS = {
   'comment.block.jome': () => "",
   'newline': () => '\n',
   'punctuation.terminator.statement.jome': compileRaw,
@@ -178,16 +178,16 @@ const TRANSPILERS = {
   // obj->callFunc
   "meta.caller.jome": (node) => {
     let funcName = node.parts[1].raw
-    return `${transpile(node.operands[0])}.${funcName}()`
+    return `${genCode(node.operands[0])}.${funcName}()`
   },
   // obj.property
   "meta.getter.jome": (node) => {
-    return `${transpile(node.operands[0])}${node.raw}`
+    return `${genCode(node.operands[0])}${node.raw}`
   },
   'meta.group.jome': (node) => {
     // If a function call
     if (node.operands) {
-      return `${node.operands.map(c => transpile(c)).join('')}${node.raw}`
+      return `${node.operands.map(c => genCode(c)).join('')}${node.raw}`
     }
     // If simply a group
     return node.raw
@@ -210,7 +210,7 @@ const TRANSPILERS = {
   'meta.def.jome': compileDefFunction,
   'meta.if-block.jome': (node) => {
     let cs = node.parts.slice(1, -1) // remove if and end
-    return `if (${transpile(cs[0])}) {${cs.slice(1).map(c => transpile(c)).join('')}}`
+    return `if (${genCode(cs[0])}) {${cs.slice(1).map(c => genCode(c)).join('')}}`
   },
   "support.function-call.WIP.jome": compileFuncCall,
   "support.function-call.jome": compileFuncCall,
@@ -220,11 +220,11 @@ const TRANSPILERS = {
   // + - * / ^
   'keyword.operator.jome': compileOperator,
   'keyword.operator.existential.jome': (node) => {
-    return `${transpile(node.operands[0])} ? ${transpile(node.operands[1])} : null`
+    return `${genCode(node.operands[0])} ? ${genCode(node.operands[1])} : null`
   },
   //'keyword.operator.nullish-coalescing.jome'
   'keyword.operator.colon.jome': (node) => {
-    return `${transpile(node.operands[0].operands[0])} ? ${transpile(node.operands[0].operands[1])} : ${transpile(node.operands[1])}`
+    return `${genCode(node.operands[0].operands[0])} ? ${genCode(node.operands[0].operands[1])} : ${genCode(node.operands[1])}`
   },
   // class
   "meta.class.jome": (node) => {
@@ -255,14 +255,14 @@ const TRANSPILERS = {
   'keyword.operator.comparison.jome': compileOperator,
   // statement if cond
   'keyword.control.inline-conditional.jome': (node) => {
-    return `if (${transpile(node.operands[1])}) {${transpile(node.operands[0])}}`
+    return `if (${genCode(node.operands[1])}) {${genCode(node.operands[0])}}`
   },
   // [1,2,3]
   // x[0]
   // called square-bracket because it can be an array or an operator
   "meta.square-bracket.jome": (node) => {
     let elems = node.parts.slice(1,-1).filter((e, i) => i % 2 === 0)
-    return `[${elems.map(c => transpile(c)).join(', ')}]`
+    return `[${elems.map(c => genCode(c)).join(', ')}]`
   },
   // exec
   //   someFunc()
@@ -282,5 +282,5 @@ const TRANSPILERS = {
 }
 
 module.exports = {
-  transpile
+  genCode
 }
