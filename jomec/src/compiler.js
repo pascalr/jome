@@ -1,5 +1,7 @@
-const { parse, validateAllNodes, compileNode } = require("./parser")
+const { parse, compileNode } = require("./parser")
 const {tokenize} = require('./tokenizer.js')
+const { validateAllNodes } = require("./validator")
+
 
 const fs = require('fs');
 //const path = require('path');
