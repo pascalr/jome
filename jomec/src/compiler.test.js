@@ -80,13 +80,13 @@ describe("Test function call", () => {
     expect(compile(`
 let add = (x,y) => x + y
 add(10, 5)
-`)).toMatch(/\s*let add = \(x, ?y\) => \(?x \+ y\)?\s+;?add\(10, ?5\)/);
+`)).toMatch(/\s*let add = \(x, ?y\) => \(?x \+ y\)?;?\s*add\(10, ?5\);?/);
   })
   test('Function call without parens', () => {
     expect(compile(`
 let add = (x,y) => x + y
 add 10, 5
-`)).toMatch(/\s*let add = \(x, ?y\) => \(?x \+ y\)?\s+;?add\(10, ?5\)/);
+`)).toMatch(/\s*let add = \(x, ?y\) => \(?x \+ y\)?;?\s*add\(10, ?5\);?/);
   })
 })
 
@@ -98,7 +98,7 @@ class Person
     #log("Hello!")
   end
 end
-`)).toMatch(/\s*class Person\s*\{\s+sayHello = \(\) => \{\s*console.log\("Hello!"\)\s*\}\s*\}/);
+`)).toMatch(/\s*class Person\s*\{\s+sayHello = \(\) => \{\s*console.log\("Hello!"\);?\s*\};?\s*\}/);
   })
 })
 
@@ -113,7 +113,7 @@ describe("Test utils", () => {
     expect(compile('#log "Hello world!"')).toMatch(/console.log\("Hello world!"\)/);
   })
   test('{x:1}.#log', () => {
-    expect(compile('{x:1}.#log')).toMatch(/console.log\(\{x\: ?1\}\)/);
+    expect(compile('{x:1}.#log')).toMatch(/console.log\(\{ ?x\: ?1 ?\}\);?/);
   })
 })
 
@@ -141,17 +141,17 @@ describe("Test functions creation", () => {
   // let giveMe5 = => 5
   // *** KEYWORD def ***
   test('def keyword', () => {
-    expect(compile('def sayHello #log("hello") end')).toMatch(/function sayHello\(\) {\s*console.log\("hello"\)\s*}/);
+    expect(compile('def sayHello #log("hello") end')).toMatch(/function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
   })
   test('def keyword with args', () => {
-    expect(compile('def sayHello(name) #log("hello", name) end')).toMatch(/function sayHello\(name\) {\s*console.log\("hello", ?name\)\s*}/);
+    expect(compile('def sayHello(name) #log("hello", name) end')).toMatch(/function sayHello\(name\) {\s*console.log\("hello", ?name\);?\s*}/);
   })
   // *** KEYWORD let ***
   test('let keyword with function end', () => {
-    expect(compile('let sayHello = function #log("hello") end')).toMatch(/let sayHello = function \(\) {\s*console.log\("hello"\)\s*}/);
+    expect(compile('let sayHello = function #log("hello") end')).toMatch(/let sayHello = function \(\) {\s*console.log\("hello"\);?\s*}/);
   })
   test('let keyword with function end with args', () => {
-    expect(compile('let sayHello = function(name) #log("hello", name) end')).toMatch(/let sayHello = function \(name\) {\s*console.log\("hello", ?name\)\s*}/);
+    expect(compile('let sayHello = function(name) #log("hello", name) end')).toMatch(/let sayHello = function \(name\) {\s*console.log\("hello", ?name\);?\s*}/);
   })
   test('let keyword with arrow function', () => {
     expect(compile('let giveMe5 = () => 5')).toMatch(/let giveMe5 = \(\) => \(?5\)?/);
@@ -161,10 +161,10 @@ describe("Test functions creation", () => {
   })
   // *** inline ***
   test('inline with function end', () => {
-    expect(compile('function #log("hello") end')).toMatch(/function \(\) {\s*console.log\("hello"\)\s*}/);
+    expect(compile('let f = function #log("hello") end')).toMatch(/let f = function \(\) {\s*console.log\("hello"\);?\s*}/);
   })
   test('inline with function end with args', () => {
-    expect(compile('function(x, name) #log("hello", name) end')).toMatch(/function \(x,\s*name\) {\s*console.log\("hello", ?name\)\s*}/);
+    expect(compile('let f = function(x, name) #log("hello", name) end')).toMatch(/let f = function \(x,\s*name\) {\s*console.log\("hello", ?name\);?\s*}/);
   })
   test('inline with arrow function', () => {
     expect(compile('() => 5')).toMatch(/\(\) => \(?5\)?/);
@@ -177,10 +177,10 @@ describe("Test functions creation", () => {
   })
   // *** KEYWORD do ***
   test('let keyword with do end', () => {
-    expect(compile('let sayHello = do #log("hello") end')).toMatch(/let sayHello = function \(\) {\s*console.log\("hello"\)\s*}/);
+    expect(compile('let sayHello = do #log("hello") end')).toMatch(/let sayHello = function \(\) {\s*console.log\("hello"\);?\s*}/);
   })
   test('let keyword with do end with args', () => {
-    expect(compile('let sayHello = do |name| #log("hello", name) end')).toMatch(/let sayHello = function \(name\) {\s*console.log\("hello", ?name\)\s*}/);
+    expect(compile('let sayHello = do |name| #log("hello", name) end')).toMatch(/let sayHello = function \(name\) {\s*console.log\("hello", ?name\);?\s*}/);
   })
 })
 
@@ -190,22 +190,22 @@ describe("Test if statements", () => {
   })
   // An if modifier executes everything to it's left only if the condition is true
   test('if modifier', () => {
-    expect(compile('let x; x = "10" if true')).toMatch(/let x;\s*if \(?true\)? \{x = "10"\}/);
+    expect(compile('let x; x = "10" if true')).toMatch(/let x;\s*if \(?true\)? \{\s*x = "10";?\s*\}/);
   })
 })
 
 describe("Test attribute accessor", () => {
-  test('{x:5}.x', () => {
-    expect(compile('{x:5}.x')).toMatch(/\{x\: ?5\}\.x/);
+  test('({x:5}).x', () => {
+    expect(compile('({x:5}).x')).toMatch(/\(\{ ?x\: ?5 ?\}\)\.x/);
   })
   test('let o; o.x', () => {
-    expect(compile('let o; o.x')).toMatch(/let o; ?o\.x/);
+    expect(compile('let o; o.x')).toMatch(/let o;\s*?o\.x;?/);
   })
 })
 
 describe("Test attribute setter", () => {
   test('let o; o.x = 10', () => {
-    expect(compile('let o; o.x = 10')).toMatch(/let o; ?o\.x ?= ?10/);
+    expect(compile('let o; o.x = 10')).toMatch(/let o;\s*?o\.x ?= ?10;?/);
   })
 })
 
@@ -298,16 +298,16 @@ describe("Test values", () => {
   test('string', () => {
     expect(compile('"hello"')).toMatch(/"hello"/);
     expect(compile('`hello`')).toMatch(/`hello`/);
-    expect(compile(`'hello'`)).toMatch(/'hello'/);
+    expect(compile(`'hello'`)).toMatch(/'hello'|"hello"/);
   })
 })
 
 describe("Test objects", () => {
-  test('{}', () => {
-    expect(compile('{}')).toMatch(/\{\}/);
+  test('({})', () => {
+    expect(compile('({})')).toMatch(/\(\{\}\)/);
   })
   test('{x: 1}', () => {
-    expect(compile('{x: 1}')).toMatch(/\{x\: ?1\}/);
+    expect(compile('{x: 1}')).toMatch(/\{\s*x\: ?1;?\s*\}/);
   })
 })
 

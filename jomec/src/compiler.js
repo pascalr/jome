@@ -2,6 +2,7 @@ const { parse } = require("./parser")
 const { genCode } = require("./code_generator.js")
 const { tokenize } = require('./tokenizer.js')
 const { validateAllNodes } = require("./validator")
+const prettier = require("prettier")
 
 const fs = require('fs');
 //const path = require('path');
@@ -60,7 +61,9 @@ function compile(code) {
   //   info += '\n'+debugOpTree(top)
   // )
   // console.log(info)
-  return compileNodes(topNodes)
+  let generated = compileNodes(topNodes)
+  let formated = prettier.format(generated, {parser: "babel"})
+  return formated
 }
 
 // FIXME: This does not belong here

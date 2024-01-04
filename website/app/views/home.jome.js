@@ -357,6 +357,8 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   You can create an execution block using exec ... end.
 
+  Exec returns the value of the last command?
+
   \`\`\`jome
   // Create a server, add a get handler and start it
   ExpressServer port: 3000 exec
@@ -403,15 +405,15 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   let port = 3000
 
-  var __chain_express;
-
-  __chain_express = express()
-  __chain_express.get('/', (req, res) => {
+  (() => {
+    let __chain = express()
+    __chain.get('/', (req, res) => {
       res.send('Hello world!')
     })
-  __chain_express.listen(port, () => {
+    return __chain.listen(port, () => {
       console.log(\`Server listening on port {port}\`)
     })
+  })()
   \`\`\`
 
   ### Lists inside blocks

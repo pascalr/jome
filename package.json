@@ -33,7 +33,7 @@
     "morgan": "^1.10.0",
     "node-fetch": "^3.3.0",
     "node-html-parser": "^6.1.4",
-    "prettier": "^3.0.3",
+    "prettier": "^2.8.8",
     "vscode-oniguruma": "^2.0.0",
     "vscode-textmate": "^9.0.0"
   },
