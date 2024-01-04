@@ -41,12 +41,35 @@ javascript because it is more stable. It is a little weird to compile tests in i
 //   }
 // }
 
+// class Counter(@count = 0)
+//   def add(amount)
+//     @count += amount
+//   end
+// end
+// Counter() exec
+//   add 1
+//   add 2
+// end
+
 function compile(code) {
   let tokens = tokenize(code).children
   let topNodes = parse(tokens)
   //topNodes.forEach(top => printTree(top))
   return compilePP(topNodes)
 }
+
+test('WIP', () => {
+  expect(compile(`
+express() exec
+  get '/' do |req, res|
+    res.send('Hello world!')
+  end
+  listen port do
+    #log \`Server listening on port {port}\`
+  end
+end
+`)).toBe("WIP");
+})
 
 test('Test each do end', () => {
   expect(compile(`
