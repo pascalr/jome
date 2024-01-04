@@ -269,7 +269,23 @@ const CODE_GENERATORS = {
   //   someOtherFunc()
   // end
   "meta.exec.jome": (node) => {
-    throw new Error("TODO: meta.exec.jome")
+
+    let calls = node.data.calls
+    if (calls.length < 1) {
+      return genCode(node.operands[0])
+    }
+    if (calls.length === 1) {
+      return genCode(node.operands[0])+'.'+genCode(calls[0])
+    }
+    
+    let lastCall = calls[calls.length-1]
+    let otherCalls = calls.slice(0, -1)
+
+    return `(() => {
+  let __chain = ${genCode(node.operands[0])}
+  ${otherCalls.map(call => '__chain.'+genCode(call))}
+  return __chain.${genCode(lastCall)}
+})()`
   },
   // =
   'keyword.operator.assignment.jome': compileOperator,

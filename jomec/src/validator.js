@@ -19,6 +19,15 @@ function validateAllNodes(nodes) {
   });
 }
 
+function ensureLhsOperand(node) {
+  // return validateoperands(2, OPERAND_TYPES)(node)
+  if (node.operands.length !== 1) {
+    node.errors.push(`Missing left hand side operand for token ${node.type}`)
+  }
+  if (node.operands.length && !OPERAND_TYPES.includes(node.operands[0].type)) {
+    node.errors.push(`Invalid operand type for operator ${node.type}. Was: ${node.operands[0].type}`)
+  }
+}
 function ensureStartRaw(node, str) {
   if (node.parts[0]?.raw !== str) {
     node.errors.push(`Internal error. ${node.type} should always start with token ${str}. Was ${node.parts[0]?.raw}`)
@@ -68,6 +77,7 @@ function filterNewlines(list) {
 //   }
 // }
 
+// Depreacted: Use ensureLhsOperand instead.
 function validateOperatorUnary(node) {
   // return validateoperands(2, OPERAND_TYPES)(node)
   if (node.operands.length !== 1) {
@@ -245,6 +255,7 @@ const VALIDATORS = {
     ensureStartType(node, 'keyword.control.jome')
     ensureEndRaw(node, 'end')
     ensureEndType(node, 'keyword.control.jome')
+    ensureLhsOperand(node)
     let parts = filterNewlines(node.parts.slice(1,-1)) // remove exec, end keyword, and remove newlines
     ensureAllTypeIn(node, parts, ['support.function-call.WIP.jome', 'support.function-call.jome'])
     node.data = {calls: parts}

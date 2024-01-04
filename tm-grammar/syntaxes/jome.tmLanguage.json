@@ -423,7 +423,7 @@
             "1": {"name": "punctuation.dot.jome"},
             "2": { "name": "entity.name.function.utility.jome" }
           },
-          "end": "\r\n|\n|$",
+          "end": "\r\n|\n|$|exec",
           "patterns": [{ "include": "#expression" }]
         },
         {
@@ -433,7 +433,7 @@
             "1": {"name": "punctuation.dot.jome"},
             "2": { "name": "entity.name.function.jome" }
           },
-          "end": "\r\n|\n|$",
+          "end": "\r\n|\n|$|exec",
           "patterns": [{ "include": "#expression" }]
         }
       ]

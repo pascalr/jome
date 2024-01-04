@@ -21,7 +21,9 @@ const OPERAND_TYPES = [
   "meta.square-bracket.jome",
   "meta.block.jome",
   "variable.other.jome",
-  "constant.language.jome"
+  "constant.language.jome",
+  "support.function-call.jome",
+  "support.function-call.WIP.jome",
 ]
 
 function compileTokenRaw(token) {
@@ -143,7 +145,8 @@ const CHAINABLE_TYPES = [
   "meta.square-bracket.jome",
   "entity.name.function.utility-inline.jome",
   "meta.getter.jome",
-  "meta.caller.jome"
+  "meta.caller.jome",
+  "meta.exec.jome",
 ]
 
 const PRECEDENCES = {
