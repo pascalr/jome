@@ -4,6 +4,6 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "jomec": "./jomec-cli.js"
+    "jomec": "./src/jomec-cli.js"
   }
 }

@@ -4,7 +4,7 @@
 
 const { globSync } = require('glob')
 
-const { compilePPAndSaveFile } = require('./index.js');
+const { compilePPAndSaveFile } = require('./parser.js');
 const path = require('path');
 
 const args = process.argv.slice(2); // Exclude the first two arguments (node executable and script file)
