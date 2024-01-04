@@ -505,6 +505,5 @@ const TOKENS = {
 
 module.exports = {
   parse,
-  compileNode,
   OPERAND_TYPES
 }
