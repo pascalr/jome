@@ -1,5 +1,6 @@
 //const {compile} = require('./compiler.js')
-const {parse,compilePP} = require('./parser.js')
+const {parse} = require('./parser.js')
+const {compileNodes} = require('./compiler.js')
 const {tokenize} = require('./tokenizer.js')
 
 /*
@@ -55,7 +56,7 @@ function compile(code) {
   let tokens = tokenize(code).children
   let topNodes = parse(tokens)
   //topNodes.forEach(top => printTree(top))
-  return compilePP(topNodes)
+  return compileNodes(topNodes)
 }
 
 test('WIP', () => {
@@ -235,7 +236,7 @@ test('let x = 1', () => {
 
 
 /*****************************************************/
-/*********** TEST PARSER AND COMPILER_PP *************/
+/*********** TEST PARSER AND COMPILER *************/
 /*****************************************************/
 
 describe("Parse operation", () => {
@@ -248,7 +249,7 @@ describe("Parse operation", () => {
     expect(ast?.children?.[0]?.raw).toBe('1')
     expect(ast?.children?.[1]?.raw).toBe('2')
 
-    let out = compilePP(list)
+    let out = compileNodes(list)
     expect(out).toMatch(/1\s*\+\s*2/)
   })
 

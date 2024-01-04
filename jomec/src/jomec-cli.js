@@ -4,7 +4,7 @@
 
 const { globSync } = require('glob')
 
-const { compilePPAndSaveFile } = require('./parser.js');
+const { compileAndSaveFile } = require('./compiler.js');
 const path = require('path');
 
 const args = process.argv.slice(2); // Exclude the first two arguments (node executable and script file)
@@ -19,5 +19,5 @@ const cwd = process.cwd()
 let files = globSync(args[0])
 files.forEach(fileName => {
   const fullPath = path.join(cwd, fileName)
-  compilePPAndSaveFile(fullPath)
+  compileAndSaveFile(fullPath)
 })
