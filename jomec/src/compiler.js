@@ -1,9 +1,20 @@
-const { validateAllNodes, compileNode } = require("./parser")
+const { parse, validateAllNodes, compileNode } = require("./parser")
+const {tokenize} = require('./tokenizer.js')
+
+const fs = require('fs');
+//const path = require('path');
 
 // That a list of ASTNode and return js code
 function compileNodes(nodes) {
   validateAllNodes(nodes)
   return nodes.map(node => compileNode(node)).join('')
+}
+
+function compile(code) {
+  let tokens = tokenize(code).children
+  let topNodes = parse(tokens)
+  //topNodes.forEach(top => printTree(top))
+  return compileNodes(topNodes)
 }
 
 // FIXME: This does not belong here
@@ -38,6 +49,7 @@ function compileAndSaveFile(absPath) {
 }
 
 module.exports = {
+  compile,
   compileNodes,
   compileAndSaveFile
 }

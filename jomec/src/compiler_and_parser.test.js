@@ -1,6 +1,6 @@
 //const {compile} = require('./compiler.js')
 const {parse} = require('./parser.js')
-const {compileNodes} = require('./compiler.js')
+const {compile, compileNodes} = require('./compiler.js')
 const {tokenize} = require('./tokenizer.js')
 
 /*
@@ -51,13 +51,6 @@ javascript because it is more stable. It is a little weird to compile tests in i
 //   add 1
 //   add 2
 // end
-
-function compile(code) {
-  let tokens = tokenize(code).children
-  let topNodes = parse(tokens)
-  //topNodes.forEach(top => printTree(top))
-  return compileNodes(topNodes)
-}
 
 test('WIP', () => {
   expect(compile(`

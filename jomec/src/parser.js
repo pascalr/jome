@@ -1,10 +1,3 @@
-// TODO: Seperate this into parser, compiler and ...
-// All in this file yet because I am waiting to remove the previous version first to reuse filenames.
-
-const fs = require('fs');
-const path = require('path');
-const {tokenize} = require('./tokenizer.js')
-
 function compileTokenRaw(token) {
   if (Array.isArray(token)) {
     return token.map(n => compileTokenRaw(n)).join('')
