@@ -233,7 +233,7 @@ main {
   }
 
   // values
-  let obj = {Obj prop: 'val'} // instantiate and object
+  let obj = {Obj prop: 'val'} // instantiate an object
   let objRunResult = {
     Obj prop: 'val'
       .run 'some arg'
@@ -276,13 +276,11 @@ main {
   I am not sure yet how I want to handle when you want to call new for a function and not a class, well I am not even sure I want to support this in Jome...
 
   identifier // if identifier is a class, then new identifier(), otherwise identifier()
-  key: identifier // pass identifier to the constructor as a property of the object
+  key: identifier // set identifier as a property of the instance
   =identifier // add identifier as a children of the node
   key = identifier // add identifier as a property of the object and as a children
   :identifier // pass identifier to the constructor as a property of the object
-
-  // if you want to set attributes without passing it to the constructor, you can use:
-  .set attr: 'value' // set is a method on Node
+  .identifier // call function on parent
 
   Le désavantage que je vois de faire key: identifier pour une propriété, est que c'est tanant pour le type.
   Avec un = c'est facile rajouter le type. Mais d'un autre côté, est-ce qu'on veut vraiment mettre un type
@@ -301,7 +299,7 @@ main {
     Step `Put {@1} into {@2}...` // @1 is the first children
     Step "Mix ..."
     Step "Blah blah ..."
-    prepare 'The recipe'
+    .prepare 'The recipe'
     Ing ...
   }
   ```
@@ -310,32 +308,16 @@ main {
   // Create a server, add a get handler and start it
   {
     ExpressServer port: 3000
-      get '/' do |req, res|
+      .get '/' do |req, res|
         res.send(homePage)
       end
-      start
+      .start
   }
   ```
 
-  ### Idée juste comme ça
+  ### Construction block
 
-  Un patern récurrent est que juste un objet. J'aimerais pouvoir faire de quoi du genre mettre l'objet avant les curly braces.
-
-  Voir les exemples ci-bas pour que ce soit plus clair.
-
-  << would be an operator that takes a Node at left and an object at right.
-
-  Maybe << calls push. On an array it's push, create a method push on Node, you can push an object to incorporate
-  all it's values into the object, and 
-
-  Or maybe you can add a block after a class instantiation. A little like ruby, but it's a different kind of block.
-  Because the block on it's own does not mean much. It's a list of operations to be acted on the instance.
-
-  How to make a difference between creating an object that you pass to the constructor, and creating a block of operations
-  that are given to the instance?
-
-  Use #{ } ?
-  Use .{ } ?
+  You can apply a block onto an instance using #{ }.
 
   ```jome
   with
@@ -363,18 +345,36 @@ main {
     Step `Put {@1} into {@2}...` // @1 is the first children
     Step "Mix ..."
     Step "Blah blah ..."
-    prepare 'The recipe'
+    .prepare 'The recipe'
     Ing ...
   }
   ```
 
+  ### Execution block
+
+  You can create an execution block using exec ... end.
+
   ```jome
   // Create a server, add a get handler and start it
-  ExpressServer port: 3000 #{
+  ExpressServer port: 3000 exec
     get '/' do |req, res|
       res.send(homePage)
     end
     start
+  end
+  ```
+
+  ```jome
+  // Create a server, add a get handler and start it
+  {
+    ExpressServer port: 3000
+      someProp: 'someVal'
+      exec
+        get '/' do |req, res|
+          res.send(homePage)
+        end
+        start
+      end
   }
   ```
 
