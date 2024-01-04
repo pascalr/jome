@@ -146,7 +146,7 @@ const CHAINABLE_TYPES = [
   "entity.name.function.utility-inline.jome",
   "meta.getter.jome",
   "meta.caller.jome",
-  "meta.exec.jome",
+  "meta.chain.jome",
 ]
 
 const PRECEDENCES = {

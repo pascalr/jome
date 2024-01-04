@@ -268,7 +268,7 @@ const CODE_GENERATORS = {
   //   someFunc()
   //   someOtherFunc()
   // end
-  "meta.exec.jome": (node) => {
+  "meta.chain.jome": (node) => {
 
     let calls = node.data.calls
     if (calls.length < 1) {

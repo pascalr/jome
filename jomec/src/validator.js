@@ -250,7 +250,7 @@ const VALIDATORS = {
   //   someFunc()
   //   someOtherFunc()
   // end
-  "meta.exec.jome": (node) => {
+  "meta.chain.jome": (node) => {
     ensureStartRaw(node, 'exec')
     ensureStartType(node, 'keyword.control.jome')
     ensureEndRaw(node, 'end')

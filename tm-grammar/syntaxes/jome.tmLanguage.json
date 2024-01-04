@@ -98,7 +98,7 @@
         { "include": "#class" },
         { "include": "#function" },
         { "include": "#do_end" },
-        { "include": "#execution-bloc" },
+        { "include": "#chain-bloc" },
         { "include": "#type_def" },
         { "include": "#regex" },
         { "include": "#keywords" },
@@ -262,11 +262,11 @@
         }
       ]
     },
-    "execution-bloc": {
+    "chain-bloc": {
       "patterns": [
         {
-          "name": "meta.exec.jome",
-          "begin": "\\b(exec)\\b\\s*",
+          "name": "meta.chain.jome",
+          "begin": "\\b(chain)\\b\\s*",
           "beginCaptures": {
             "1": {"name": "keyword.control.jome"}
           },
@@ -418,22 +418,22 @@
         },
         {
           "name": "support.function-call.WIP.jome",
-          "begin": "(\\.)?(#\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|do|exec|end|\\}|\\?|\\[|\\]))",
+          "begin": "(\\.)?(#\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|do|chain|end|\\}|\\?|\\[|\\]))",
           "beginCaptures": {
             "1": {"name": "punctuation.dot.jome"},
             "2": { "name": "entity.name.function.utility.jome" }
           },
-          "end": "\r\n|\n|$|exec",
+          "end": "\r\n|\n|$|chain",
           "patterns": [{ "include": "#expression" }]
         },
         {
           "name": "support.function-call.WIP.jome",
-          "begin": "(\\.)?\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|do|exec|end|\\}|\\?|\\[|\\]))",
+          "begin": "(\\.)?\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|do|chain|end|\\}|\\?|\\[|\\]))",
           "beginCaptures": {
             "1": {"name": "punctuation.dot.jome"},
             "2": { "name": "entity.name.function.jome" }
           },
-          "end": "\r\n|\n|$|exec",
+          "end": "\r\n|\n|$|chain",
           "patterns": [{ "include": "#expression" }]
         }
       ]

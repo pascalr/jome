@@ -2,7 +2,7 @@ import express from 'express'
 
 let port = 3000
 
-express() exec
+express() chain
   get '/' do |req, res|
     res.send('Hello world!')
   end
