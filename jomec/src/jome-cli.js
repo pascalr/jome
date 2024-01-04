@@ -1,45 +1,76 @@
 #!/usr/bin/env node
 
-// Jome executable
+// Jome CLI
 
-// Description:
-// Executes code written in Jome language by compiling it and passing it to node.js executable
-//
-//
-//
-
-// Usage:
-// jome # Executes index.jome in the current directory
-// jome someFile.jome # Executes someFile.jome
-// jome server # Executes index.jome and pass the string server to it.
+// NAME:
+// jome — Jome runtime
 //
 //
 //
 
-// Args: (any arguments must be at the beginning of the command!)
-// -c "fileToCompile.jome": Compiles the given file to a .js file.
-// -r "fileToRun.jome": Compiles the given file to a .js file and runs it.
+// SYNOPSIS:
+// jome [options] [file] [arguments ...]
+// jome [options] [arguments ...]
+// jome [options]
+//
+//
+//
+
+// DESCRIPTION:
+// Executes code written in the Jome programming language using node.js.
+//
+// Executing without arguments executes index.jome in the current directory.
+// 
+// If the first argument given ends with .jome extension, this file will be executed instead of index.jome.
+//
+// The rest of arguments are simply given to the executable.
+//
+//
+//
+
+// OPTIONS:
 // -e "log('Hello')": Execute some code
-// -h: Config mode
+// -v: Show Jome version
+// -h: Show help message
+// -u: update Jome?
+//
 //
 //
 
-// For anything about Jome command itself, using -h
-// It launches an interactive mode.
-// jome -h
-// Jome version 0.0.1
-//
-// Commands available:
-// u: update
-// x: ...
-// x: ...
-// x: ...
-//
-// What do you want to do? (q or Ctrl^C to exit)
-// > ___
+const path = require('path');
+const {compileAndSaveFile} = require('./compiler')
 
-// Code to run another file in jome.
-// ./node jome.js file.jome
+const args = process.argv.slice(2); // Exclude the first two arguments (node executable and script file)
+
+let wholeArgs = args.filter(arg => !arg.startsWith('-'))
+let fileToRun = 'index.jome' // by default
+let executableArgs = wholeArgs // by default
+
+if (wholeArgs[0]?.endsWith('.jome')) {
+  fileToRun = wholeArgs[0]
+  executableArgs = wholeArgs.slice(1)
+}
+
+let absPath = path.resolve(fileToRun, executableArgs)
+compileAndExecute(absPath)
+
+function compileAndExecute(absPath, args) {
+  let buildFileName = compileAndSaveFile(absPath)
+  execute(buildFileName, args)
+}
+
+// FIXME
+// I would like to be able to execute a file without creating an intermediary .js file, but it is not working.
+// But the issue right now is that in spawn, __dirname is set to '.', and I can't seem to require. Paths are broken.
+// const result = spawnSync('node', [], {
+//   cwd: process.cwd(),
+//   input: scriptCode,
+//   encoding: 'utf-8',
+// });
+function execute(absPath, args) {
+  spawnSync('node', [absPath, '--', ...(args||[])], { encoding: 'utf-8', stdio: 'inherit' });
+}
+
 
 // TODO: use:
 //
@@ -66,50 +97,3 @@
 // nodeProcess.on('close', (code) => {
 //   console.log(`Child process exited with code ${code}`);
 // });
-
-const { JomeBuilder, buildAndRunFile } = require('jomec');
-const path = require('path');
-const { globSync } = require('glob')
-// import { JomeBuilder, buildAndRunFile } from './src/builder.js';
-// import path from 'path';
-// import { fileURLToPath } from 'url';
-
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-
-const args = process.argv.slice(2); // Exclude the first two arguments (node executable and script file)
-
-let compileOnly = args.includes('-c')
-let buildAndRun = args.includes('-r')
-let wholeArgs = args.filter(arg => !arg.startsWith('-'))
-
-let executingCommand = (!wholeArgs[0]?.endsWith('.jome'))
-
-// buildAndRunFile(fullPath)
-
-// Fuck utiliser .jome, simplement compiler les trucs à la même place qu'ils sont.
-// Offrir des options:
-// Rajouter un préfix au fichier '.' ou '~' ou autre.
-// Rajouter un suffix au fichier
-// Le garder pareil
-// Supprimer les fichiers générer une fois terminé
-// Bundle tous les fichiers généré et supprimé les intermédiaires.
-
-
-// TODO: Add error messages that you cannot execute a command at the same time of using the options -c or -r. These three things are always separate.
-
-const cwd = process.cwd()
-let builder = new JomeBuilder({projectAbsPath: cwd})
-if (executingCommand || wholeArgs.length === 0) {
-  builder.execute(path.join(cwd, 'index.jome'), {buildAndRun, argv: wholeArgs})
-} else {
-  const files = globSync(wholeArgs[0])
-  files.forEach(fileName => {
-    const fullPath = path.join(cwd, fileName)
-    if (compileOnly) {
-      builder.compileAndSaveFile(fullPath, '.js')
-    } else {
-      builder.execute(fullPath, {buildAndRun})
-    }
-  })
-}

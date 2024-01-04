@@ -92,9 +92,10 @@ function compileAndSaveFile(absPath) {
 
     console.log(`Successfully wrote to '${buildFileName}'.`);
   } catch (err) {
-    console.error('Error writing to the file:', err);
-    return null
+    throw new Error('Error writing to the file:', err);
   }
+
+  return buildFileName
 }
 
 module.exports = {
