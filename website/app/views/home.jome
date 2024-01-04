@@ -299,6 +299,50 @@ main {
   }
   ```
 
+  ### Idée juste comme ça
+
+  Un patern récurrent est que juste un objet. J'aimerais pouvoir faire de quoi du genre mettre l'objet avant les curly braces.
+
+  Voir les exemples ci-bas pour que ce soit plus clair.
+
+  << would be an operator that takes a Node at left and an object at right.
+
+  Maybe << calls push. On an array it's push, create a method push on Node, you can push an object to incorporate
+  all it's values into the object, and 
+
+  Or maybe you can add a block after a class instantiation. A little like ruby, but it's a different kind of block.
+  Because the block on it's own does not mean much. It's a list of operations to be acted on the instance.
+
+  How to make a difference between creating an object that you pass to the constructor, and creating a block of operations
+  that are given to the instance?
+
+  Use #{ } ?
+
+  ```jome
+  Recipe #{
+    name: 'Chickpea balls'
+    prepare: 1h
+    Ing 1cup, "dry chickpeas"
+    Ing 2cup, "water"
+    Ing 2tbsp, "parmesan"
+    Step `Put {@1} into {@2}...` // @1 is the first children
+    Step "Mix ..."
+    Step "Blah blah ..."
+    prepare 'The recipe'
+    Ing ...
+  }
+  ```
+
+  ```jome
+  // Create a server, add a get handler and start it
+  ExpressServer port: 3000 #{
+    get '/' do |req, res|
+      res.send(homePage)
+    end
+    start
+  }
+  ```
+
   ### Lists inside blocks
 
   A block { } will return only one object. Use {[ ]} to generate a list of objects.
