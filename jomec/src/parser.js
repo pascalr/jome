@@ -44,8 +44,8 @@ class ASTNode {
     this.token = token
     let prec = PRECEDENCES[this.type]
     this.precedence = (typeof prec === 'function') ? prec(token) : (prec || 0)
-    // Children is used for AST nodes by handling captures and precedence
-    this.children = []
+    // Operands is used for AST nodes by handling captures and precedence
+    this.operands = []
     if (token.children && !(token.children.length === 1 && typeof token.children[0] === "string")) {
       // Parts represent the inner components of the node
       this.parts = parse(token.children)
@@ -55,8 +55,6 @@ class ASTNode {
     if (data) {
       this.captureLeft = data.captureLeft
       this.captureRight = data.captureRight
-      this.minRequiredChildren = data.minRequiredChildren
-      this.allowedChildren = data.allowedChildren
     }
   }
 }
@@ -75,7 +73,7 @@ function mergeChainables(nodes) {
   for (let i = 0; i < nodes.length; i++) {
     let lookahead = nodes[i+1]
     if (lookahead && CHAINABLE_TYPES.includes(lookahead.type) && OPERAND_TYPES.includes(current.type)) {
-      lookahead.children.push(current)
+      lookahead.operands.push(current)
     } else {
       merged.push(current)
     }
@@ -100,9 +98,9 @@ function parse(tokens) {
   const parseExpression1 = (lhs, minPrecedence) => {
     if (lhs.captureRight) {
       if (typeof lhs.captureRight === "number" && Number.isInteger(lhs.captureRight)) {
-        lhs.children = nodes.splice(0, lhs.captureRight)
+        lhs.operands = nodes.splice(0, lhs.captureRight)
       } else {
-        lhs.children.push(nodes.shift())
+        lhs.operands.push(nodes.shift())
       }
     }
     let lookahead = nodes[0]
@@ -126,7 +124,7 @@ function parse(tokens) {
         rhs = parseExpression1(rhs, op.precedence + (lookahead.precedence > op.precedence ? 1 : 0));
         lookahead = nodes[0];
       }
-      op.children = [lhs, rhs];
+      op.operands = [lhs, rhs];
       lhs = op;
     }
     return lhs;

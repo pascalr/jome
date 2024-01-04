@@ -7,11 +7,11 @@ function transpile(node) {
 }
 
 function compileOperatorUnary(node) {
-  return `${node.raw}${transpile(node.children[0])}`
+  return `${node.raw}${transpile(node.operands[0])}`
 }
 
 function compileOperator(node) {
-  return `${transpile(node.children[0])} ${node.raw} ${transpile(node.children[1])}`
+  return `${transpile(node.operands[0])} ${node.raw} ${transpile(node.operands[1])}`
 }
 
 function compileRaw(node) {
@@ -27,11 +27,11 @@ function _compileUtility(name) {
 function compileUtility(node, isInline) {
   let name = node.raw.slice(isInline ? 2 : 1)
   let val = _compileUtility(name)
-  if (node.children) {
+  if (node.operands) {
     if (isInline) {
-      return `${val}(${node.children.map(c => transpile(c)).join('')})`
+      return `${val}(${node.operands.map(c => transpile(c)).join('')})`
     }
-    return `${val}${node.children.map(c => transpile(c)).join('')}`
+    return `${val}${node.operands.map(c => transpile(c)).join('')}`
   }
   return val
 }
@@ -48,7 +48,7 @@ function compileArgs(node) {
 
 function compileEntry(node) {
   let name = node.parts[0].raw
-  let value = transpile(node.children[0])
+  let value = transpile(node.operands[0])
   return `${name}: ${value}`
 }
 
@@ -62,11 +62,11 @@ function compileBlock(node) {
 }
 
 function compileArrowFunction(node) {
-  if (node.children.length > 1) {
-    let args = node.children[0]
-    return `${compileArgs(args)} => (${node.children.slice(1).map(c => transpile(c)).join('')})`
+  if (node.operands.length > 1) {
+    let args = node.operands[0]
+    return `${compileArgs(args)} => (${node.operands.slice(1).map(c => transpile(c)).join('')})`
   } else {
-    return `() => (${transpile(node.children[0])})`
+    return `() => (${transpile(node.operands[0])})`
   }
 }
 
@@ -178,16 +178,16 @@ const TRANSPILERS = {
   // obj->callFunc
   "meta.caller.jome": (node) => {
     let funcName = node.parts[1].raw
-    return `${transpile(node.children[0])}.${funcName}()`
+    return `${transpile(node.operands[0])}.${funcName}()`
   },
   // obj.property
   "meta.getter.jome": (node) => {
-    return `${transpile(node.children[0])}${node.raw}`
+    return `${transpile(node.operands[0])}${node.raw}`
   },
   'meta.group.jome': (node) => {
     // If a function call
-    if (node.children) {
-      return `${node.children.map(c => transpile(c)).join('')}${node.raw}`
+    if (node.operands) {
+      return `${node.operands.map(c => transpile(c)).join('')}${node.raw}`
     }
     // If simply a group
     return node.raw
@@ -220,11 +220,11 @@ const TRANSPILERS = {
   // + - * / ^
   'keyword.operator.jome': compileOperator,
   'keyword.operator.existential.jome': (node) => {
-    return `${transpile(node.children[0])} ? ${transpile(node.children[1])} : null`
+    return `${transpile(node.operands[0])} ? ${transpile(node.operands[1])} : null`
   },
   //'keyword.operator.nullish-coalescing.jome'
   'keyword.operator.colon.jome': (node) => {
-    return `${transpile(node.children[0].children[0])} ? ${transpile(node.children[0].children[1])} : ${transpile(node.children[1])}`
+    return `${transpile(node.operands[0].operands[0])} ? ${transpile(node.operands[0].operands[1])} : ${transpile(node.operands[1])}`
   },
   // class
   "meta.class.jome": (node) => {
@@ -255,7 +255,7 @@ const TRANSPILERS = {
   'keyword.operator.comparison.jome': compileOperator,
   // statement if cond
   'keyword.control.inline-conditional.jome': (node) => {
-    return `if (${transpile(node.children[1])}) {${transpile(node.children[0])}}`
+    return `if (${transpile(node.operands[1])}) {${transpile(node.operands[0])}}`
   },
   // [1,2,3]
   // x[0]
@@ -274,7 +274,7 @@ const TRANSPILERS = {
   // =
   'keyword.operator.assignment.jome': compileOperator,
   // let
-  'keyword.control.declaration.jome': (node) => `let ${node.children[0].raw}`,
+  'keyword.control.declaration.jome': (node) => `let ${node.operands[0].raw}`,
   // <...>.#log
   "entity.name.function.utility-inline.jome": (node) => compileUtility(node, true),
   // #log

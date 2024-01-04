@@ -10,8 +10,8 @@ function validateAllNodes(nodes) {
         throw new Error(err || node.errors[0])
       }
     }
-    if (node.children?.length) {
-      validateAllNodes(node.children)
+    if (node.operands?.length) {
+      validateAllNodes(node.operands)
     }
     if (node.parts?.length) {
       validateAllNodes(node.parts)
@@ -51,32 +51,32 @@ function filterNewlines(list) {
   return list.filter(el => el.type !== 'newline')
 }
 
-// const validateChildren = (nb, types) => (node) => {
-//   if (node.children.length !== nb) {
-//     return "Invalid number of children for node."
-//   } else if (!node.children.every(child => types.includes(child.type))) {
-//     return `Invalid children type for node ${node.type}. Was: ${node.type}`
+// const validateoperands = (nb, types) => (node) => {
+//   if (node.operands.length !== nb) {
+//     return "Invalid number of operands for node."
+//   } else if (!node.operands.every(child => types.includes(child.type))) {
+//     return `Invalid operands type for node ${node.type}. Was: ${node.type}`
 //   }
 // }
 
 function validateOperatorUnary(node) {
-  // return validateChildren(2, OPERAND_TYPES)(node)
-  if (node.children.length !== 1) {
+  // return validateoperands(2, OPERAND_TYPES)(node)
+  if (node.operands.length !== 1) {
     return "A unary operator must have a single operand"
   }
-  if (!OPERAND_TYPES.includes(node.children[0].type)) {
-    return `Invalid operand type for operator ${node.type}. Was: ${node.children[0].type}`
+  if (!OPERAND_TYPES.includes(node.operands[0].type)) {
+    return `Invalid operand type for operator ${node.type}. Was: ${node.operands[0].type}`
   }
 }
 
 function validateOperator(node) {
-  // return validateChildren(2, OPERAND_TYPES)(node)
-  if (node.children.length !== 2) {
+  // return validateoperands(2, OPERAND_TYPES)(node)
+  if (node.operands.length !== 2) {
     return "A binary operator must have a two operands"
   }
 
-  for (let i = 0; i < node.children.length; i++) {
-    let child = node.children[i]
+  for (let i = 0; i < node.operands.length; i++) {
+    let child = node.operands[i]
     if (!OPERAND_TYPES.includes(child.type)) {
       return `Invalid operand type for operator ${node.type}. Was: ${child.type}`
     }
@@ -106,13 +106,13 @@ const VALIDATORS = {
   },
   // obj->callFunc
   "meta.caller.jome": (node) => {
-    if (node.children.length !== 1) {
+    if (node.operands.length !== 1) {
       return "Missing operand before getter"
     }
   },
   // obj.property
   "meta.getter.jome": (node) => {
-    if (node.children.length !== 1) {
+    if (node.operands.length !== 1) {
       return "Missing operand before getter"
     }
   },
@@ -161,25 +161,25 @@ const VALIDATORS = {
   'keyword.operator.existential.jome': validateOperator,
   //'keyword.operator.nullish-coalescing.jome'
   'keyword.operator.colon.jome': (node) => {
-    if (node.children.length !== 2) {
+    if (node.operands.length !== 2) {
       return "A colon operator must have a two operands"
     }
-    if (node.children[0].type !== 'keyword.operator.existential.jome') {
+    if (node.operands[0].type !== 'keyword.operator.existential.jome') {
       return `Expecting ? before : in ternary expression.`
     }
-    let child = node.children[1]
+    let child = node.operands[1]
     if (!OPERAND_TYPES.includes(child.type)) {
       return `Invalid operand type for operator ${node.type}. Was: ${child.type}`
     }
   },
   // =>
   'keyword.arrow.jome': (node) => {
-    if (node.children.length === 1) {
+    if (node.operands.length === 1) {
       // No args
       // TODO: Validate right side
-    } else if (node.children.length === 2) {
+    } else if (node.operands.length === 2) {
       // With args
-      let t = node.children[0].type
+      let t = node.operands[0].type
       if (!(t === 'meta.group.jome' || t === 'variable.other.jome')) {
         return "Syntax error. Arrow function expects arguments at it's left side."
       }
@@ -196,9 +196,9 @@ const VALIDATORS = {
   'keyword.operator.comparison.jome': validateOperator,
   // statement if cond
   'keyword.control.inline-conditional.jome': (node) => {
-    if (node.children.length !== 2) {
+    if (node.operands.length !== 2) {
       return "An inline condition must have a two operands"
-    // } else if (!OPERAND_TYPES.includes(node.children[1].type)) {
+    // } else if (!OPERAND_TYPES.includes(node.operands[1].type)) {
     //   return `Invalid value for assignement ${node.type}. Was: ${node.type}`
     }
   },
@@ -212,18 +212,18 @@ const VALIDATORS = {
     if (node.parts[node.parts.length-1].type !== 'punctuation.definition.square-bracket.end.jome') {
       return "Internal error. meta.square-bracket.jome should always end with punctuation.definition.square-bracket.end.jome"
     }
-    // All the even index children should be punctuation.separator.delimiter.jome
+    // All the even index operands should be punctuation.separator.delimiter.jome
     if (node.parts.slice(1,-1).some((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
       return "Syntax error. Expecting commas between every element inside an array"
     }
   },
   // =
   'keyword.operator.assignment.jome': (node) => {
-    if (node.children.length !== 2) {
+    if (node.operands.length !== 2) {
       return "An assignment must have a two operands"
-    // } else if (!['keyword.control.declaration.jome'].includes(node.children[0].type)) {
+    // } else if (!['keyword.control.declaration.jome'].includes(node.operands[0].type)) {
     //   return `Invalid left hand side for assignement ${node.type}. Was: ${node.type}`
-    // } else if (!OPERAND_TYPES.includes(node.children[1].type)) {
+    // } else if (!OPERAND_TYPES.includes(node.operands[1].type)) {
     //   return `Invalid value for assignement ${node.type}. Was: ${node.type}`
     }
   },

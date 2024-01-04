@@ -37,7 +37,7 @@ javascript because it is more stable. It is a little weird to compile tests in i
 
 //   console.log(`${indentation}${node.raw}`);
 
-//   for (const child of node.children) {
+//   for (const child of node.operands) {
 //     printTree(child, depth + 1);
 //   }
 // }
@@ -239,8 +239,8 @@ describe("Parse operation", () => {
     expect(list?.length).toBe(1)
     let ast = list[0]
     expect(ast?.raw).toBe('+')
-    expect(ast?.children?.[0]?.raw).toBe('1')
-    expect(ast?.children?.[1]?.raw).toBe('2')
+    expect(ast?.operands?.[0]?.raw).toBe('1')
+    expect(ast?.operands?.[1]?.raw).toBe('2')
 
     let out = compileNodes(list)
     expect(out).toMatch(/1\s*\+\s*2/)
@@ -251,14 +251,14 @@ describe("Parse operation", () => {
     expect(list?.length).toBe(1)
     let ast = list[0]
     expect(ast?.raw).toBe('==')
-    expect(ast?.children?.[0]?.raw).toBe('+')
-    expect(ast?.children?.[0]?.children?.[0]?.raw).toBe('+')
-    expect(ast?.children?.[0]?.children?.[0]?.children?.[0]?.raw).toBe('2')
-    expect(ast?.children?.[0]?.children?.[0]?.children?.[1]?.raw).toBe('*')
-    expect(ast?.children?.[0]?.children?.[0]?.children?.[1]?.children?.[0]?.raw).toBe('3')
-    expect(ast?.children?.[0]?.children?.[0]?.children?.[1]?.children?.[1]?.raw).toBe('4')
-    expect(ast?.children?.[0]?.children?.[1]?.raw).toBe('5')
-    expect(ast?.children?.[1]?.raw).toBe('19')
+    expect(ast?.operands?.[0]?.raw).toBe('+')
+    expect(ast?.operands?.[0]?.operands?.[0]?.raw).toBe('+')
+    expect(ast?.operands?.[0]?.operands?.[0]?.operands?.[0]?.raw).toBe('2')
+    expect(ast?.operands?.[0]?.operands?.[0]?.operands?.[1]?.raw).toBe('*')
+    expect(ast?.operands?.[0]?.operands?.[0]?.operands?.[1]?.operands?.[0]?.raw).toBe('3')
+    expect(ast?.operands?.[0]?.operands?.[0]?.operands?.[1]?.operands?.[1]?.raw).toBe('4')
+    expect(ast?.operands?.[0]?.operands?.[1]?.raw).toBe('5')
+    expect(ast?.operands?.[1]?.raw).toBe('19')
   })
 })
 
@@ -290,8 +290,8 @@ describe("Parse let assignment", () => {
     expect(list?.length).toBe(1)
     let ast = list[0]
     expect(ast?.parts?.length).toBe(3) // [, 1, ]
-    expect(ast?.children?.length).toBe(1)
-    expect(ast?.children?.[0]?.parts?.length).toBe(3) // [, 0, ]
+    expect(ast?.operands?.length).toBe(1)
+    expect(ast?.operands?.[0]?.parts?.length).toBe(3) // [, 0, ]
   })
 
 })
