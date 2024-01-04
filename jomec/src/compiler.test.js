@@ -32,16 +32,6 @@ I was wondering whether I want to write tests in Jome or in js. But I think I pr
 javascript because it is more stable. It is a little weird to compile tests in itself when the language is not stable yet.
 */
 
-// function printTree(node, depth = 0) {
-//   const indentation = '  '.repeat(depth);
-
-//   console.log(`${indentation}${node.raw}`);
-
-//   for (const child of node.operands) {
-//     printTree(child, depth + 1);
-//   }
-// }
-
 // class Counter(@count = 0)
 //   def add(amount)
 //     @count += amount
@@ -52,7 +42,7 @@ javascript because it is more stable. It is a little weird to compile tests in i
 //   add 2
 // end
 
-test('WIP', () => {
+test.only('WIP', () => {
   expect(compile(`
 express() exec
   get '/' do |req, res|

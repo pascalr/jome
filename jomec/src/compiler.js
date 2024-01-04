@@ -6,6 +6,46 @@ const { validateAllNodes } = require("./validator")
 const fs = require('fs');
 //const path = require('path');
 
+function debugOpTree(node, depth = 0) {
+  const indentation = '  '.repeat(depth);
+
+  let res = `${indentation}${node.type}`
+
+  for (const op of node.operands) {
+    res += '\n' + debugOpTree(op, depth + 1);
+  }
+
+  return res
+}
+
+function debugTreeType(node, depth = 0) {
+  const indentation = '  '.repeat(depth);
+
+  let res = `${indentation}${node.type}`
+
+  if (node.parts) {
+    for (const part of node.parts) {
+      res += '\n' + debugTreeType(part, depth + 1);
+    }
+  }
+
+  for (const op of node.operands) {
+    res += '\n' + debugTreeType(op, depth + 1);
+  }
+
+  return res
+}
+
+function printTree(node, depth = 0) {
+  const indentation = '  '.repeat(depth);
+
+  console.log(`${indentation}${node.raw}`);
+
+  for (const child of node.operands) {
+    printTree(child, depth + 1);
+  }
+}
+
 // That a list of ASTNode and return js code
 function compileNodes(nodes) {
   validateAllNodes(nodes)
@@ -15,7 +55,11 @@ function compileNodes(nodes) {
 function compile(code) {
   let tokens = tokenize(code).children
   let topNodes = parse(tokens)
-  //topNodes.forEach(top => printTree(top))
+  let info = ""
+  topNodes.forEach(top =>
+    info += '\n'+debugOpTree(top)
+  )
+  console.log(info)
   return compileNodes(topNodes)
 }
 

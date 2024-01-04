@@ -271,7 +271,7 @@
             "1": {"name": "keyword.control.jome"}
           },
           "end": "\\b(end)\\b",
-          "endCaptures": {"0": {"name": "keyword.control.jome"}},
+          "endCaptures": {"1": {"name": "keyword.control.jome"}},
           "patterns": [
             {"include": "#expression"}
           ]
