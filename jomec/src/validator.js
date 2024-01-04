@@ -1,3 +1,5 @@
+const {OPERAND_TYPES} = require("./parser.js")
+
 // TODO: Make sure no infinite loop
 function validateAllNodes(nodes) {
   nodes.forEach(node => {
@@ -16,19 +18,6 @@ function validateAllNodes(nodes) {
     }
   });
 }
-
-const OPERAND_TYPES = [
-  "constant.numeric.integer.jome",
-  "keyword.operator.jome",
-  "keyword.operator.logical.unary.jome",
-  "keyword.operator.existential.jome",
-  "constant.numeric.float.jome",
-  "meta.group.jome",
-  "meta.square-bracket.jome",
-  "meta.block.jome",
-  "variable.other.jome",
-  "constant.language.jome"
-]
 
 // const validateChildren = (nb, types) => (node) => {
 //   if (node.children.length !== nb) {

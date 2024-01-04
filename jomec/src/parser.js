@@ -9,7 +9,20 @@ issues found during the parsing process.
 
 Overall, breaking down the compilation process into distinct phases, such as lexical analysis (tokenization)
 and syntax analysis (parsing), helps in creating a modular and maintainable compiler design.
-*/ 
+*/
+
+const OPERAND_TYPES = [
+  "constant.numeric.integer.jome",
+  "keyword.operator.jome",
+  "keyword.operator.logical.unary.jome",
+  "keyword.operator.existential.jome",
+  "constant.numeric.float.jome",
+  "meta.group.jome",
+  "meta.square-bracket.jome",
+  "meta.block.jome",
+  "variable.other.jome",
+  "constant.language.jome"
+]
 
 function compileTokenRaw(token) {
   if (Array.isArray(token)) {
@@ -132,38 +145,6 @@ function parse(tokens) {
   }
 
   return topNodes
-}
-
-// const validateChildren = (nb, types) => (node) => {
-//   if (node.children.length !== nb) {
-//     return "Invalid number of children for node."
-//   } else if (!node.children.every(child => types.includes(child.type))) {
-//     return `Invalid children type for node ${node.type}. Was: ${node.type}`
-//   }
-// }
-
-function validateOperatorUnary(node) {
-  // return validateChildren(2, OPERAND_TYPES)(node)
-  if (node.children.length !== 1) {
-    return "A unary operator must have a single operand"
-  }
-  if (!OPERAND_TYPES.includes(node.children[0].type)) {
-    return `Invalid operand type for operator ${node.type}. Was: ${node.children[0].type}`
-  }
-}
-
-function validateOperator(node) {
-  // return validateChildren(2, OPERAND_TYPES)(node)
-  if (node.children.length !== 2) {
-    return "A binary operator must have a two operands"
-  }
-
-  for (let i = 0; i < node.children.length; i++) {
-    let child = node.children[i]
-    if (!OPERAND_TYPES.includes(child.type)) {
-      return `Invalid operand type for operator ${node.type}. Was: ${child.type}`
-    }
-  }
 }
 
 function compileOperatorUnary(node) {
@@ -294,19 +275,6 @@ const CHAINABLE_TYPES = [
   "meta.caller.jome"
 ]
 
-const OPERAND_TYPES = [
-  "constant.numeric.integer.jome",
-  "keyword.operator.jome",
-  "keyword.operator.logical.unary.jome",
-  "keyword.operator.existential.jome",
-  "constant.numeric.float.jome",
-  "meta.group.jome",
-  "meta.square-bracket.jome",
-  "meta.block.jome",
-  "variable.other.jome",
-  "constant.language.jome"
-]
-
 const PRECEDENCES = {
   // square brackets are higher than arithmetic operators: x[0] + 10 < y - 20
   'keyword.operator.jome': (token => {
@@ -353,49 +321,22 @@ const TOKENS = {
   // },
   // function(arg) end
   "meta.function.jome": {
-    validate: (node) => {
-      if (node.parts[0].raw !== 'function') {
-        return "Internal error. meta.function.jome should always start with keyword function"
-      }
-      if (node.parts[node.parts.length-1].raw !== 'end') {
-        return "Internal error. meta.function.jome should always end with keyword end"
-      }
-      // Arguments, if present, should always be at the beginning
-      if (node.parts.slice(2,-1).find(c => c.type === 'meta.args.jome')) {
-        return "Syntax error. Arguments should always be at the beginning of the function block."
-      }
-    },
     compile: compileStandaloneFunction
   },
   // foo:
   "meta.dictionary-key.jome": {
     captureRight: true,
-    validate: (node) => {
-    },
     compile: (node) => {
       let foo = "bar"
       return `${node.parts[0].raw} ${node.parts[1].raw}`
     },
   },
   "meta.block.jome": {
-    validate: (node) => {
-      if (node.parts[0].type !== 'punctuation.curly-braces.open') {
-        return "Internal error. meta.block.jome should always start with punctuation.curly-braces.open"
-      }
-      if (node.parts[node.parts.length-1].type !== 'punctuation.curly-braces.close') {
-        return "Internal error. meta.block.jome should always end with punctuation.curly-braces.close"
-      }
-    },
     compile: compileBlock
   },
   'constant.language.jome': tokenAsIs,
   // obj->callFunc
   "meta.caller.jome": {
-    validate: (node) => {
-      if (node.children.length !== 1) {
-        return "Missing operand before getter"
-      }
-    },
     compile: (node) => {
       let funcName = node.parts[1].raw
       return `${compileNode(node.children[0])}.${funcName}()`
@@ -403,11 +344,6 @@ const TOKENS = {
   },
   // obj.property
   "meta.getter.jome": {
-    validate: (node) => {
-      if (node.children.length !== 1) {
-        return "Missing operand before getter"
-      }
-    },
     compile: (node) => {
       return `${compileNode(node.children[0])}${node.raw}`
     },
@@ -432,49 +368,16 @@ const TOKENS = {
   // let foo
   // var bar
   'meta.declaration.jome': {
-    validate: (node) => {
-      let keyword = node.parts[0].raw
-      if (node.parts.length !== 2) {
-        return "Missing variable name after keyword "+keyword
-      }
-    },
     compile: (node) => {
       return `${node.parts[0].raw} ${node.parts[1].raw}`
     },
   },
   // do |args| /* ... */ end
   'meta.do-end.jome': {
-    validate: (node) => {
-      if (node.parts[0].raw !== 'do') {
-        return "Internal error. meta.do-end.jome should always start with keyword do"
-      }
-      if (node.parts[node.parts.length-1].raw !== 'end') {
-        return "Internal error. meta.def.jome should always end with keyword end"
-      }
-      // Arguments, if present, should always be right after the function name
-      if (node.parts.slice(2,-1).find(c => c.type === 'meta.args.jome')) {
-        return "Syntax error. Arguments should always be at the beginning of the function block."
-      }
-    },
     compile: compileStandaloneFunction,
   },
   // def someFunc end
   'meta.def.jome': {
-    validate: (node) => {
-      if (node.parts[0].raw !== 'def') {
-        return "Internal error. meta.def.jome should always start with keyword def"
-      }
-      if (node.parts[1].type !== 'entity.name.function.jome') {
-        return "Syntax error. Missing function name after keyword def."
-      }
-      if (node.parts[node.parts.length-1].raw !== 'end') {
-        return "Internal error. meta.def.jome should always end with keyword end"
-      }
-      // Arguments, if present, should always be right after the function name
-      if (node.parts.slice(3,-1).find(c => c.type === 'meta.args.jome')) {
-        return "Syntax error. Arguments should always be at the beginning of the function block."
-      }
-    },
     compile: compileDefFunction,
   },
   'meta.if-block.jome': regular((node) => {
@@ -492,13 +395,11 @@ const TOKENS = {
   // keyword.operator.logical.jome
   // + - * / ^
   'keyword.operator.jome': {
-    validate: validateOperator,
     compile: compileOperator,
     captureLeft: true,
     captureRight: true,
   },
   'keyword.operator.existential.jome': {
-    validate: validateOperator,
     compile: (node) => {
       return `${compileNode(node.children[0])} ? ${compileNode(node.children[1])} : null`
     },
@@ -507,18 +408,6 @@ const TOKENS = {
   },
   //'keyword.operator.nullish-coalescing.jome'
   'keyword.operator.colon.jome': {
-    validate: (node) => {
-      if (node.children.length !== 2) {
-        return "A colon operator must have a two operands"
-      }
-      if (node.children[0].type !== 'keyword.operator.existential.jome') {
-        return `Expecting ? before : in ternary expression.`
-      }
-      let child = node.children[1]
-      if (!OPERAND_TYPES.includes(child.type)) {
-        return `Invalid operand type for operator ${node.type}. Was: ${child.type}`
-      }
-    },
     compile: (node) => {
       return `${compileNode(node.children[0].children[0])} ? ${compileNode(node.children[0].children[1])} : ${compileNode(node.children[1])}`
     },
@@ -552,54 +441,29 @@ const TOKENS = {
   'keyword.arrow.jome': {
     captureLeft: true, // TODO: Allow to optionnally capture left, so allow no arguments
     captureRight: true,
-    validate: (node) => {
-      if (node.children.length === 1) {
-        // No args
-        // TODO: Validate right side
-      } else if (node.children.length === 2) {
-        // With args
-        let t = node.children[0].type
-        if (!(t === 'meta.group.jome' || t === 'variable.other.jome')) {
-          return "Syntax error. Arrow function expects arguments at it's left side."
-        }
-        // TODO: Validate right side
-      } else {
-        return "Syntax error. Arrow function expects one or two operands."
-      }
-    },
     compile: compileArrowFunction,
   },
   // !
   "keyword.operator.logical.unary.jome": {
     captureRight: true,
-    validate: validateOperatorUnary,
     compile: compileOperatorUnary,
   },
   // || &&
   "keyword.operator.logical.jome": {
     captureLeft: true,
     captureRight: true,
-    validate: validateOperator,
     compile: compileOperator,
   },
   // ==, !=, ===, !===
   'keyword.operator.comparison.jome': {
     captureLeft: true,
     captureRight: true,
-    validate: validateOperator,
     compile: compileOperator,
   },
   // statement if cond
   'keyword.control.inline-conditional.jome': {
     captureLeft: true,
     captureRight: true,
-    validate: (node) => {
-      if (node.children.length !== 2) {
-        return "An inline condition must have a two operands"
-      // } else if (!OPERAND_TYPES.includes(node.children[1].type)) {
-      //   return `Invalid value for assignement ${node.type}. Was: ${node.type}`
-      }
-    },
     compile: (node) => {
       return `if (${compileNode(node.children[1])}) {${compileNode(node.children[0])}}`
     },
@@ -608,18 +472,6 @@ const TOKENS = {
   // x[0]
   // called square-bracket because it can be an array or an operator
   "meta.square-bracket.jome": {
-    validate: (node) => {
-      if (node.parts[0].type !== 'punctuation.definition.square-bracket.begin.jome') {
-        return "Internal error. meta.square-bracket.jome should always start with punctuation.definition.square-bracket.begin.jome"
-      }
-      if (node.parts[node.parts.length-1].type !== 'punctuation.definition.square-bracket.end.jome') {
-        return "Internal error. meta.square-bracket.jome should always end with punctuation.definition.square-bracket.end.jome"
-      }
-      // All the even index children should be punctuation.separator.delimiter.jome
-      if (node.parts.slice(1,-1).some((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
-        return "Syntax error. Expecting commas between every element inside an array"
-      }
-    },
     compile: (node) => {
       let elems = node.parts.slice(1,-1).filter((e, i) => i % 2 === 0)
       return `[${elems.map(c => compileNode(c)).join(', ')}]`
@@ -629,15 +481,6 @@ const TOKENS = {
   'keyword.operator.assignment.jome': {
     captureLeft: true,
     captureRight: true,
-    validate: (node) => {
-      if (node.children.length !== 2) {
-        return "An assignment must have a two operands"
-      // } else if (!['keyword.control.declaration.jome'].includes(node.children[0].type)) {
-      //   return `Invalid left hand side for assignement ${node.type}. Was: ${node.type}`
-      // } else if (!OPERAND_TYPES.includes(node.children[1].type)) {
-      //   return `Invalid value for assignement ${node.type}. Was: ${node.type}`
-      }
-    },
     compile: compileOperator,
   },
   // let
@@ -662,5 +505,6 @@ const TOKENS = {
 
 module.exports = {
   parse,
-  compileNode
+  compileNode,
+  OPERAND_TYPES
 }
