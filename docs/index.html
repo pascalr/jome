@@ -74,8 +74,8 @@ has some original features.</p>
 <p>Example Jome code: TODO: Make this like the examples so you can click see compiled and result</p>
 <p>Here is some code to show what Jome looks like. You can look at the <a href="/jome/examples">examples</a> page to see more.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Classes</span>
-<span class="hljs-keyword">class</span> <span class="hljs-title function_">Character</span>(<span class="hljs-variable">name</span>, <span class="hljs-variable">props</span>)
-  <span class="hljs-variable">include</span> <span class="hljs-variable">name</span>, <span class="hljs-variable">props</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title function_">Character</span>(<span class="hljs-variable">@name</span>, <span class="hljs-variable">props</span>)
+  <span class="hljs-variable">include</span> <span class="hljs-variable">props</span>
   <span class="hljs-keyword">def</span> <span class="hljs-title function_">attack</span>(<span class="hljs-variable">enemy</span>)
 
   <span class="hljs-keyword">end</span>
@@ -242,9 +242,12 @@ objects, execute functions and to create <a href="#nodes">nodes</a></p>
 <span class="hljs-comment">// same as</span>
 <span class="hljs-variable">obj</span> = {content: <span class="hljs-variable">content</span>, value: <span class="hljs-variable">value</span>}
 </code></pre>
-<h3>Work in progress</h3>
-<p>identifier // new identifier()
-.identifier // call identifier on the created object
+<h3>Work in progress V2</h3>
+<p>We always know if the identifier is a function or a class. When it's local we know. We it's imported,
+you add an ampersand before the identifier when it's a class.</p>
+<p>import {func, &amp;klass} from 'lib'</p>
+<p>I am not sure yet how I want to handle when you want to call new for a function and not a class, well I am not even sure I want to support this in Jome...</p>
+<p>identifier // if identifier is a class, then new identifier(), otherwise identifier()
 key: identifier // pass identifier to the constructor as a property of the object
 =identifier // add identifier as a children of the node
 key = identifier // add identifier as a property of the object and as a children</p>
@@ -264,32 +267,16 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
   <span class="hljs-title class_">Step</span> <span class="hljs-string">`Put {@1} into {@2}...`</span> <span class="hljs-comment">// @1 is the first children</span>
   <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Mix ...&quot;</span>
   <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Blah blah ...&quot;</span>
-  .<span class="hljs-variable">prepare</span> <span class="hljs-string">&#x27;The recipe&#x27;</span>
+  <span class="hljs-variable">prepare</span> <span class="hljs-string">&#x27;The recipe&#x27;</span>
   <span class="hljs-title class_">Ing</span> ...
 }
 </code></pre>
-<pre><code class="language-jome"><span class="hljs-comment">// Three syntaxes allowed to execute functions</span>
-{[
-  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
-    .<span class="hljs-variable">execFunc</span>
-    .<span class="hljs-variable">execFunc2</span>
-
-  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span> <span class="hljs-variable">exec</span>
-    <span class="hljs-variable">execFunc</span>
-    <span class="hljs-variable">execFunc2</span>
-
-  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
-    <span class="hljs-variable">exec</span>
-      <span class="hljs-variable">execFunc</span>
-      <span class="hljs-variable">execFunc2</span>
-]}
-</code></pre>
 <pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a get handler and start it</span>
 {
-  <span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-variable">exec</span>
-    <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span>, |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>| =&gt; (
+  <span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span>
+    <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
       <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-variable">homePage</span>)
-    )
+    <span class="hljs-keyword">end</span>
     <span class="hljs-variable">start</span>
 }
 </code></pre>
@@ -544,6 +531,22 @@ Les when sont simplement remplacé par &quot;if (expression du case)&quot;</p>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <h3>Class arguments</h3>
+<p>Class arguments are read-only. They are available from everywhere inside the class, every method not just constructor.</p>
+<p>If you want the value to be set for the instance, use an ampersand before the variable name.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">Tag</span>(<span class="hljs-variable">@name</span>)
+<span class="hljs-keyword">end</span>
+</code></pre>
+<pre><code class="language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Tag</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">name</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name
+  }
+}
+</code></pre>
+<p>If you want to add everything from an object, what to do then? Keyword include?</p>
+<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">Tag</span>(<span class="hljs-variable">props</span>)
+  <span class="hljs-variable">include</span> <span class="hljs-variable">props</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
 <pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">Tag</span>(<span class="hljs-variable">tag</span>, <span class="hljs-variable">content</span>)
   <span class="hljs-keyword">def</span> <span class="hljs-variable">toString</span> = =&gt; <span class="hljs-string">`&lt;{tag}{renderHTMLAttrs(@)}&gt;{content||&#x27;&#x27;}{renderHTMLChildren(@)}&lt;/{tag}&gt;`</span>
   <span class="hljs-keyword">def</span> <span class="hljs-variable">createElem</span> = =&gt; <span class="hljs-title function_">createElem</span>(@, <span class="hljs-variable">tag</span>, <span class="hljs-variable">content</span>)
@@ -567,10 +570,20 @@ Les when sont simplement remplacé par &quot;if (expression du case)&quot;</p>
 <p>No constructor. Constructor code directly inside class.</p>
 <h3>Inheritence</h3>
 <p>WIP</p>
+<h3>Constructor</h3>
+<p>No constructor? If you want to call a method like a constructor, then call it.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">SomeClass</span>(<span class="hljs-variable">options</span>)
+  <span class="hljs-variable">@init</span>()
+
+  <span class="hljs-keyword">def</span> <span class="hljs-keyword">init</span>
+    
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
 <h3>Inject object</h3>
 <p>I want to be able to inject an object into an instance. But what syntax to use???</p>
 <p>Keyword include?</p>
-<pre><code class="language-jome"><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title function_">ExpressServer</span>(<span class="hljs-variable">options</span>)
+<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">ExpressServer</span>(<span class="hljs-variable">options</span>)
 
   <span class="hljs-variable">include</span> <span class="hljs-variable">options</span>
 <span class="hljs-keyword">end</span>
@@ -1127,6 +1140,66 @@ I don't want to reserve the keyword params...</p>
 </code></pre>
 <h3>Under the hood</h3>
 <p>TODO: Explain how it works</p>
+<h3>Instantiation</h3>
+<p>I would like to create an instance by calling just like a function. SomeClass() // which would become new SomeClass()</p>
+<p>I want to use the new keyword, because it binds this and when you call a function or a class constructor using new, it creates an empty object, sets the object's prototype to the prototype property of the constructor, and executes the constructor to initialize the object.</p>
+<p>The ideal would be to know the type. Basically, when it is local I know what it refers to. The issue is imports. I don't want
+to have to read the files to know what it is.</p>
+<p>Using capital letters is a convention, but I don't want to use this.</p>
+<p>I think the best to have a syntax when importing that differentiates between classes and functions.</p>
+<p>Wait this does not work, because functions can be called and they can be created using new.</p>
+<p>Simply always use new inside blocks?</p>
+<h2>Work in progress</h2>
+<p>identifier // new identifier()
+.identifier // call identifier on the created object
+key: identifier // pass identifier to the constructor as a property of the object
+=identifier // add identifier as a children of the node
+key = identifier // add identifier as a property of the object and as a children</p>
+<p>// if you want to set attributes without passing it to the constructor, you can use:
+.set attr: 'value' // set is a method on Node</p>
+<p>Le désavantage que je vois de faire key: identifier pour une propriété, est que c'est tanant pour le type.
+Avec un = c'est facile rajouter le type. Mais d'un autre côté, est-ce qu'on veut vraiment mettre un type
+là? Ça devrait être assez explicit en général. Et tu peux quand même le faire avec [key: type].</p>
+<p>You can specify dynamic keys using square brackets. Ex: [<code>key_{name}</code>]</p>
+<pre><code class="language-jome">{
+<span class="hljs-title class_">Recipe</span>
+  name: <span class="hljs-string">&#x27;Chickpea balls&#x27;</span>
+  prepare: <span class="hljs-variable">1h</span>
+  <span class="hljs-title class_">Ing</span> <span class="hljs-variable">1cup</span>, <span class="hljs-string">&quot;dry chickpeas&quot;</span>
+  <span class="hljs-title class_">Ing</span> <span class="hljs-variable">2cup</span>, <span class="hljs-string">&quot;water&quot;</span>
+  <span class="hljs-title class_">Ing</span> <span class="hljs-variable">2tbsp</span>, <span class="hljs-string">&quot;parmesan&quot;</span>
+  <span class="hljs-title class_">Step</span> <span class="hljs-string">`Put {@1} into {@2}...`</span> <span class="hljs-comment">// @1 is the first children</span>
+  <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Mix ...&quot;</span>
+  <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Blah blah ...&quot;</span>
+  .<span class="hljs-variable">prepare</span> <span class="hljs-string">&#x27;The recipe&#x27;</span>
+  <span class="hljs-title class_">Ing</span> ...
+}
+</code></pre>
+<pre><code class="language-jome"><span class="hljs-comment">// Three syntaxes allowed to execute functions</span>
+{[
+  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
+    .<span class="hljs-variable">execFunc</span>
+    .<span class="hljs-variable">execFunc2</span>
+
+  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span> <span class="hljs-variable">exec</span>
+    <span class="hljs-variable">execFunc</span>
+    <span class="hljs-variable">execFunc2</span>
+
+  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
+    <span class="hljs-variable">exec</span>
+      <span class="hljs-variable">execFunc</span>
+      <span class="hljs-variable">execFunc2</span>
+]}
+</code></pre>
+<pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a get handler and start it</span>
+{
+  <span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-variable">exec</span>
+    <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span>, |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>| =&gt; (
+      <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-variable">homePage</span>)
+    )
+    <span class="hljs-variable">start</span>
+}
+</code></pre>
 
               </div>
             </div>

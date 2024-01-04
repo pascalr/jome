@@ -24,8 +24,8 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   \`\`\`jome
   // Classes
-  class Character(name, props)
-    include name, props
+  class Character(@name, props)
+    include props
     def attack(enemy)
 
     end
@@ -252,10 +252,16 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   obj = {content: content, value: value}
   \`\`\`
 
-  ### Work in progress
+  ### Work in progress V2
 
-  identifier // new identifier()
-  .identifier // call identifier on the created object
+  We always know if the identifier is a function or a class. When it's local we know. We it's imported,
+  you add an ampersand before the identifier when it's a class.
+
+  import {func, &klass} from 'lib'
+
+  I am not sure yet how I want to handle when you want to call new for a function and not a class, well I am not even sure I want to support this in Jome...
+
+  identifier // if identifier is a class, then new identifier(), otherwise identifier()
   key: identifier // pass identifier to the constructor as a property of the object
   =identifier // add identifier as a children of the node
   key = identifier // add identifier as a property of the object and as a children
@@ -280,36 +286,18 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
     Step \`Put {@1} into {@2}...\` // @1 is the first children
     Step "Mix ..."
     Step "Blah blah ..."
-    .prepare 'The recipe'
+    prepare 'The recipe'
     Ing ...
   }
   \`\`\`
 
   \`\`\`jome
-  // Three syntaxes allowed to execute functions
-  {[
-    Obj prop: 'val'
-      .execFunc
-      .execFunc2
-
-    Obj prop: 'val' exec
-      execFunc
-      execFunc2
-
-    Obj prop: 'val'
-      exec
-        execFunc
-        execFunc2
-  ]}
-  \`\`\`
-
-  \`\`\`jome
   // Create a server, add a get handler and start it
   {
-    ExpressServer port: 3000 exec
-      get '/', |req, res| => (
+    ExpressServer port: 3000
+      get '/' do |req, res|
         res.send(homePage)
-      )
+      end
       start
   }
   \`\`\`
@@ -638,6 +626,31 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   ### Class arguments
 
+  Class arguments are read-only. They are available from everywhere inside the class, every method not just constructor.
+
+  If you want the value to be set for the instance, use an ampersand before the variable name.
+
+  \`\`\`jome
+  class Tag(@name)
+  end
+  \`\`\`
+
+  \`\`\`js
+  class Tag {
+    constructor(name) {
+      this.name = name
+    }
+  }
+  \`\`\`
+
+  If you want to add everything from an object, what to do then? Keyword include?
+
+  \`\`\`jome
+  class Tag(props)
+    include props
+  end
+  \`\`\`
+
   \`\`\`jome
   class Tag(tag, content)
     def toString = => \`<{tag}{renderHTMLAttrs(@)}>{content||''}{renderHTMLChildren(@)}</{tag}>\`
@@ -668,6 +681,20 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   WIP
 
+  ### Constructor
+
+  No constructor? If you want to call a method like a constructor, then call it.
+
+  \`\`\`jome
+  class SomeClass(options)
+    @init()
+
+    def init
+      
+    end
+  end
+  \`\`\`
+
   ### Inject object
 
   I want to be able to inject an object into an instance. But what syntax to use???
@@ -675,7 +702,7 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   Keyword include?
 
   \`\`\`jome
-  export class ExpressServer(options)
+  class ExpressServer(options)
 
     include options
   end
@@ -1475,9 +1502,84 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   TODO: Explain how it works
 
 
+  ### Instantiation
 
+  I would like to create an instance by calling just like a function. SomeClass() // which would become new SomeClass()
 
+  I want to use the new keyword, because it binds this and when you call a function or a class constructor using new, it creates an empty object, sets the object's prototype to the prototype property of the constructor, and executes the constructor to initialize the object.
 
+  The ideal would be to know the type. Basically, when it is local I know what it refers to. The issue is imports. I don't want
+  to have to read the files to know what it is.
+
+  Using capital letters is a convention, but I don't want to use this.
+
+  I think the best to have a syntax when importing that differentiates between classes and functions.
+
+  Wait this does not work, because functions can be called and they can be created using new.
+
+  Simply always use new inside blocks?
+
+  ## Work in progress
+
+  identifier // new identifier()
+  .identifier // call identifier on the created object
+  key: identifier // pass identifier to the constructor as a property of the object
+  =identifier // add identifier as a children of the node
+  key = identifier // add identifier as a property of the object and as a children
+
+  // if you want to set attributes without passing it to the constructor, you can use:
+  .set attr: 'value' // set is a method on Node
+
+  Le désavantage que je vois de faire key: identifier pour une propriété, est que c'est tanant pour le type.
+  Avec un = c'est facile rajouter le type. Mais d'un autre côté, est-ce qu'on veut vraiment mettre un type
+  là? Ça devrait être assez explicit en général. Et tu peux quand même le faire avec [key: type].
+
+  You can specify dynamic keys using square brackets. Ex: [\`key_{name}\`]
+
+  \`\`\`jome
+  {
+  Recipe
+    name: 'Chickpea balls'
+    prepare: 1h
+    Ing 1cup, "dry chickpeas"
+    Ing 2cup, "water"
+    Ing 2tbsp, "parmesan"
+    Step \`Put {@1} into {@2}...\` // @1 is the first children
+    Step "Mix ..."
+    Step "Blah blah ..."
+    .prepare 'The recipe'
+    Ing ...
+  }
+  \`\`\`
+
+  \`\`\`jome
+  // Three syntaxes allowed to execute functions
+  {[
+    Obj prop: 'val'
+      .execFunc
+      .execFunc2
+
+    Obj prop: 'val' exec
+      execFunc
+      execFunc2
+
+    Obj prop: 'val'
+      exec
+        execFunc
+        execFunc2
+  ]}
+  \`\`\`
+
+  \`\`\`jome
+  // Create a server, add a get handler and start it
+  {
+    ExpressServer port: 3000 exec
+      get '/', |req, res| => (
+        res.send(homePage)
+      )
+      start
+  }
+  \`\`\`
 
 
 
