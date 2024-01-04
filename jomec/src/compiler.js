@@ -1,5 +1,5 @@
 const { parse } = require("./parser")
-const { compileNode } = require("./transpiler")
+const { transpile } = require("./transpiler")
 const { tokenize } = require('./tokenizer.js')
 const { validateAllNodes } = require("./validator")
 
@@ -9,7 +9,7 @@ const fs = require('fs');
 // That a list of ASTNode and return js code
 function compileNodes(nodes) {
   validateAllNodes(nodes)
-  return nodes.map(node => compileNode(node)).join('')
+  return nodes.map(node => transpile(node)).join('')
 }
 
 function compile(code) {

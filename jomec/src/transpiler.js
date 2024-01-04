@@ -1,4 +1,4 @@
-function compileNode(node) {
+function transpile(node) {
   let transpiler = TRANSPILERS[node.type]
   if (!transpiler) {
     throw new Error("Can't compile node of type "+node.type)
@@ -7,11 +7,11 @@ function compileNode(node) {
 }
 
 function compileOperatorUnary(node) {
-  return `${node.raw}${compileNode(node.children[0])}`
+  return `${node.raw}${transpile(node.children[0])}`
 }
 
 function compileOperator(node) {
-  return `${compileNode(node.children[0])} ${node.raw} ${compileNode(node.children[1])}`
+  return `${transpile(node.children[0])} ${node.raw} ${transpile(node.children[1])}`
 }
 
 function compileRaw(node) {
@@ -29,9 +29,9 @@ function compileUtility(node, isInline) {
   let val = _compileUtility(name)
   if (node.children) {
     if (isInline) {
-      return `${val}(${node.children.map(c => compileNode(c)).join('')})`
+      return `${val}(${node.children.map(c => transpile(c)).join('')})`
     }
-    return `${val}${node.children.map(c => compileNode(c)).join('')}`
+    return `${val}${node.children.map(c => transpile(c)).join('')}`
   }
   return val
 }
@@ -43,12 +43,12 @@ function compileArgs(node) {
   let cs = node.parts.slice(1, -1) // remove vertical bars
   //let args = 
   //let todo = 10
-  return `(${cs.map(c => compileNode(c)).join('')})`
+  return `(${cs.map(c => transpile(c)).join('')})`
 }
 
 function compileEntry(node) {
   let name = node.parts[0].raw
-  let value = compileNode(node.children[0])
+  let value = transpile(node.children[0])
   return `${name}: ${value}`
 }
 
@@ -64,9 +64,9 @@ function compileBlock(node) {
 function compileArrowFunction(node) {
   if (node.children.length > 1) {
     let args = node.children[0]
-    return `${compileArgs(args)} => (${node.children.slice(1).map(c => compileNode(c)).join('')})`
+    return `${compileArgs(args)} => (${node.children.slice(1).map(c => transpile(c)).join('')})`
   } else {
-    return `() => (${compileNode(node.children[0])})`
+    return `() => (${transpile(node.children[0])})`
   }
 }
 
@@ -76,9 +76,9 @@ function compileMethod(node) {
   let cs = node.parts.slice(2,-1) // Remove keywords def, end, and function name
   let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
   if (args) {
-    return `${name} = ${compileArgs(args)} => {\n${cs.slice(1).map(c => compileNode(c)).join('')}\n}`
+    return `${name} = ${compileArgs(args)} => {\n${cs.slice(1).map(c => transpile(c)).join('')}\n}`
   } else {
-    return `${name} = () => {\n${cs.map(c => compileNode(c)).join('')}\n}`
+    return `${name} = () => {\n${cs.map(c => transpile(c)).join('')}\n}`
   }
 }
 
@@ -88,9 +88,9 @@ function compileDefFunction(node) {
   let cs = node.parts.slice(2,-1) // Remove keywords def, end, and function name
   let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
   if (args) {
-    return `function ${name}${compileArgs(args)} {${cs.slice(1).map(c => compileNode(c)).join('')}}`
+    return `function ${name}${compileArgs(args)} {${cs.slice(1).map(c => transpile(c)).join('')}}`
   } else {
-    return `function ${name}() {${cs.map(c => compileNode(c)).join('')}}`
+    return `function ${name}() {${cs.map(c => transpile(c)).join('')}}`
   }
 }
 
@@ -98,17 +98,17 @@ function compileStandaloneFunction(node) {
   let cs = node.parts.slice(1,-1) // Remove keywords do and end
   let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
   if (args) {
-    return `function ${compileArgs(args)} {${cs.slice(1).map(c => compileNode(c)).join('')}}`
+    return `function ${compileArgs(args)} {${cs.slice(1).map(c => transpile(c)).join('')}}`
   } else {
-    return `function () {${cs.map(c => compileNode(c)).join('')}}`
+    return `function () {${cs.map(c => transpile(c)).join('')}}`
   }
 }
 
 function compileFuncCall(node) {
   let hasDot = node.parts[0].type === 'punctuation.dot.jome'
   let parts = hasDot ? node.parts.slice(1) : node.parts
-  let called = compileNode(parts[0])
-  let args = parts.slice(1).filter(p => p.type !== 'punctuation.separator.delimiter.jome').map(p => compileNode(p)).join(', ')
+  let called = transpile(parts[0])
+  let args = parts.slice(1).filter(p => p.type !== 'punctuation.separator.delimiter.jome').map(p => transpile(p)).join(', ')
   //let args = parts.slice(1).map(p => compileNode(p)).join('')//.filter(p => p && p.length).join(', ')
   return `${hasDot ? '.' : ''}${called}(${args})`
 }
@@ -178,16 +178,16 @@ const TRANSPILERS = {
   // obj->callFunc
   "meta.caller.jome": (node) => {
     let funcName = node.parts[1].raw
-    return `${compileNode(node.children[0])}.${funcName}()`
+    return `${transpile(node.children[0])}.${funcName}()`
   },
   // obj.property
   "meta.getter.jome": (node) => {
-    return `${compileNode(node.children[0])}${node.raw}`
+    return `${transpile(node.children[0])}${node.raw}`
   },
   'meta.group.jome': (node) => {
     // If a function call
     if (node.children) {
-      return `${node.children.map(c => compileNode(c)).join('')}${node.raw}`
+      return `${node.children.map(c => transpile(c)).join('')}${node.raw}`
     }
     // If simply a group
     return node.raw
@@ -210,7 +210,7 @@ const TRANSPILERS = {
   'meta.def.jome': compileDefFunction,
   'meta.if-block.jome': (node) => {
     let cs = node.parts.slice(1, -1) // remove if and end
-    return `if (${compileNode(cs[0])}) {${cs.slice(1).map(c => compileNode(c)).join('')}}`
+    return `if (${transpile(cs[0])}) {${cs.slice(1).map(c => transpile(c)).join('')}}`
   },
   "support.function-call.WIP.jome": compileFuncCall,
   "support.function-call.jome": compileFuncCall,
@@ -220,11 +220,11 @@ const TRANSPILERS = {
   // + - * / ^
   'keyword.operator.jome': compileOperator,
   'keyword.operator.existential.jome': (node) => {
-    return `${compileNode(node.children[0])} ? ${compileNode(node.children[1])} : null`
+    return `${transpile(node.children[0])} ? ${transpile(node.children[1])} : null`
   },
   //'keyword.operator.nullish-coalescing.jome'
   'keyword.operator.colon.jome': (node) => {
-    return `${compileNode(node.children[0].children[0])} ? ${compileNode(node.children[0].children[1])} : ${compileNode(node.children[1])}`
+    return `${transpile(node.children[0].children[0])} ? ${transpile(node.children[0].children[1])} : ${transpile(node.children[1])}`
   },
   // class
   "meta.class.jome": (node) => {
@@ -255,14 +255,14 @@ const TRANSPILERS = {
   'keyword.operator.comparison.jome': compileOperator,
   // statement if cond
   'keyword.control.inline-conditional.jome': (node) => {
-    return `if (${compileNode(node.children[1])}) {${compileNode(node.children[0])}}`
+    return `if (${transpile(node.children[1])}) {${transpile(node.children[0])}}`
   },
   // [1,2,3]
   // x[0]
   // called square-bracket because it can be an array or an operator
   "meta.square-bracket.jome": (node) => {
     let elems = node.parts.slice(1,-1).filter((e, i) => i % 2 === 0)
-    return `[${elems.map(c => compileNode(c)).join(', ')}]`
+    return `[${elems.map(c => transpile(c)).join(', ')}]`
   },
   // =
   'keyword.operator.assignment.jome': compileOperator,
@@ -275,5 +275,5 @@ const TRANSPILERS = {
 }
 
 module.exports = {
-  compileNode
+  transpile
 }
