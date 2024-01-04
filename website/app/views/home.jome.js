@@ -23,6 +23,23 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   Here is some code to show what Jome looks like. You can look at the [examples](${global._URL}/examples) page to see more.
 
   \`\`\`jome
+  with
+    name: string
+    weapon: Weapon
+  class Character(@name)
+    def attack(enemy)
+    end
+  end
+
+  interface CharacterProps
+    name: string
+    weapon: Weapon
+  end
+  class Character(@name) < CharacterProps
+    def attack(enemy)
+    end
+  end
+
   // Classes
   class Character(@name, props)
     include props
@@ -265,6 +282,7 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   key: identifier // pass identifier to the constructor as a property of the object
   =identifier // add identifier as a children of the node
   key = identifier // add identifier as a property of the object and as a children
+  :identifier // pass identifier to the constructor as a property of the object
 
   // if you want to set attributes without passing it to the constructor, you can use:
   .set attr: 'value' // set is a method on Node
@@ -299,6 +317,67 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
         res.send(homePage)
       end
       start
+  }
+  \`\`\`
+
+  ### Idée juste comme ça
+
+  Un patern récurrent est que juste un objet. J'aimerais pouvoir faire de quoi du genre mettre l'objet avant les curly braces.
+
+  Voir les exemples ci-bas pour que ce soit plus clair.
+
+  << would be an operator that takes a Node at left and an object at right.
+
+  Maybe << calls push. On an array it's push, create a method push on Node, you can push an object to incorporate
+  all it's values into the object, and 
+
+  Or maybe you can add a block after a class instantiation. A little like ruby, but it's a different kind of block.
+  Because the block on it's own does not mean much. It's a list of operations to be acted on the instance.
+
+  How to make a difference between creating an object that you pass to the constructor, and creating a block of operations
+  that are given to the instance?
+
+  Use #{ } ?
+  Use .{ } ?
+
+  \`\`\`jome
+  with
+    name: string
+    prepare: int
+  class Recipe
+    def prepare(str)
+    end
+  end
+
+  class Ing(qty: int along qtyFormat, @name)
+  end
+
+  class Step(@instructions)
+  end
+  \`\`\`
+
+  \`\`\`jome
+  Recipe #{
+    name: 'Chickpea balls'
+    prepare: 1h
+    Ing 1cup, "dry chickpeas"
+    Ing 2cup, "water"
+    Ing 2tbsp, "parmesan"
+    Step \`Put {@1} into {@2}...\` // @1 is the first children
+    Step "Mix ..."
+    Step "Blah blah ..."
+    prepare 'The recipe'
+    Ing ...
+  }
+  \`\`\`
+
+  \`\`\`jome
+  // Create a server, add a get handler and start it
+  ExpressServer port: 3000 #{
+    get '/' do |req, res|
+      res.send(homePage)
+    end
+    start
   }
   \`\`\`
 

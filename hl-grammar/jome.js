@@ -48,7 +48,7 @@ const highlighter = function(hljs) {
 
   const KEYWORD = {
     scope: "keyword",
-    begin: '\\b(init|attr|parent|exe|then|end|if|si|class|export|import|from|for|in|while|do|def|var|let|code|unit|false|true|null|return|module|interface|main|type|else|elif|elsif)\\b'
+    begin: '\\b(init|attr|with|parent|exe|then|end|if|si|class|export|import|from|for|in|while|do|def|var|let|code|unit|false|true|null|return|module|interface|main|type|else|elif|elsif)\\b'
   }
 
   const CLASS_NAME = {

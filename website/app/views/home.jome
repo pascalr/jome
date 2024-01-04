@@ -20,6 +20,23 @@ main {
   Here is some code to show what Jome looks like. You can look at the [examples](<%= $URL %>/examples) page to see more.
 
   ```jome
+  with
+    name: string
+    weapon: Weapon
+  class Character(@name)
+    def attack(enemy)
+    end
+  end
+
+  interface CharacterProps
+    name: string
+    weapon: Weapon
+  end
+  class Character(@name) < CharacterProps
+    def attack(enemy)
+    end
+  end
+
   // Classes
   class Character(@name, props)
     include props
@@ -262,6 +279,7 @@ main {
   key: identifier // pass identifier to the constructor as a property of the object
   =identifier // add identifier as a children of the node
   key = identifier // add identifier as a property of the object and as a children
+  :identifier // pass identifier to the constructor as a property of the object
 
   // if you want to set attributes without passing it to the constructor, you can use:
   .set attr: 'value' // set is a method on Node
@@ -317,6 +335,23 @@ main {
   that are given to the instance?
 
   Use #{ } ?
+  Use .{ } ?
+
+  ```jome
+  with
+    name: string
+    prepare: int
+  class Recipe
+    def prepare(str)
+    end
+  end
+
+  class Ing(qty: int along qtyFormat, @name)
+  end
+
+  class Step(@instructions)
+  end
+  ```
 
   ```jome
   Recipe #{
