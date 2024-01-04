@@ -381,6 +381,39 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   }
   \`\`\`
 
+  \`\`\`jome
+  import express from 'express'
+
+  let port = 3000
+
+  express exec
+    get '/' do |req, res|
+      res.send('Hello world!')
+    end
+    listen port do
+      #log \`Server listening on port {port}\`
+    end
+  end
+  \`\`\`
+
+  Compiles to
+
+  \`\`\`js
+  import express from 'express'
+
+  let port = 3000
+
+  var __chain_express;
+
+  __chain_express = express()
+  __chain_express.get('/', (req, res) => {
+      res.send('Hello world!')
+    })
+  __chain_express.listen(port, () => {
+      console.log(\`Server listening on port {port}\`)
+    })
+  \`\`\`
+
   ### Lists inside blocks
 
   A block { } will return only one object. Use {[ ]} to generate a list of objects.

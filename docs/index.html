@@ -348,6 +348,34 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
     <span class="hljs-keyword">end</span>
 }
 </code></pre>
+<pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-variable">express</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;express&#x27;</span>
+
+<span class="hljs-keyword">let</span> <span class="hljs-variable">port</span> = <span class="hljs-number">3000</span>
+
+<span class="hljs-variable">express</span> <span class="hljs-keyword">exec</span>
+  <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
+    <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-string">&#x27;Hello world!&#x27;</span>)
+  <span class="hljs-keyword">end</span>
+  <span class="hljs-variable">listen</span> <span class="hljs-variable">port</span> <span class="hljs-keyword">do</span>
+    <span class="hljs-title function_">#log</span> <span class="hljs-string">`Server listening on port {port}`</span>
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p>Compiles to</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> express <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;express&#x27;</span>
+
+<span class="hljs-keyword">let</span> port = <span class="hljs-number">3000</span>
+
+<span class="hljs-keyword">var</span> __chain_express;
+
+__chain_express = <span class="hljs-title function_">express</span>()
+__chain_express.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+    res.<span class="hljs-title function_">send</span>(<span class="hljs-string">&#x27;Hello world!&#x27;</span>)
+  })
+__chain_express.<span class="hljs-title function_">listen</span>(port, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Server listening on port {port}`</span>)
+  })
+</code></pre>
 <h3>Lists inside blocks</h3>
 <p>A block { } will return only one object. Use {[ ]} to generate a list of objects.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">listObjs</span> = {[

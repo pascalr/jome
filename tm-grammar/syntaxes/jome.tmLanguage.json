@@ -98,6 +98,7 @@
         { "include": "#class" },
         { "include": "#function" },
         { "include": "#do_end" },
+        { "include": "#execution-bloc" },
         { "include": "#type_def" },
         { "include": "#regex" },
         { "include": "#keywords" },
@@ -256,6 +257,22 @@
           },
           "patterns": [
             {"include": "#paren-args"},
+            {"include": "#expression"}
+          ]
+        }
+      ]
+    },
+    "execution-bloc": {
+      "patterns": [
+        {
+          "name": "meta.exec.jome",
+          "begin": "\\b(exec)\\b\\s*",
+          "beginCaptures": {
+            "1": {"name": "keyword.control.jome"}
+          },
+          "end": "\\b(end)\\b",
+          "endCaptures": {"0": {"name": "keyword.control.jome"}},
+          "patterns": [
             {"include": "#expression"}
           ]
         }
