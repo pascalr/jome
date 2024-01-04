@@ -353,15 +353,15 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   }
   \`\`\`
 
-  ### Execution block
+  ### Chain block
 
-  You can create an execution block using exec ... end.
+  You can create a chain block using chain ... end.
 
-  Exec returns the value of the last command?
+  Chain returns the value of the last command.
 
   \`\`\`jome
   // Create a server, add a get handler and start it
-  ExpressServer port: 3000 exec
+  ExpressServer port: 3000 chain
     get '/' do |req, res|
       res.send(homePage)
     end
@@ -374,7 +374,7 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   {
     ExpressServer port: 3000
       someProp: 'someVal'
-      exec
+      chain
         get '/' do |req, res|
           res.send(homePage)
         end
@@ -388,7 +388,7 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   let port = 3000
 
-  express exec
+  express chain
     get '/' do |req, res|
       res.send('Hello world!')
     end

@@ -326,11 +326,11 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
   <span class="hljs-title class_">Ing</span> ...
 }
 </code></pre>
-<h3>Execution block</h3>
-<p>You can create an execution block using exec ... end.</p>
-<p>Exec returns the value of the last command?</p>
+<h3>Chain block</h3>
+<p>You can create a chain block using chain ... end.</p>
+<p>Chain returns the value of the last command.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a get handler and start it</span>
-<span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-keyword">exec</span>
+<span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-variable">chain</span>
   <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
     <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-variable">homePage</span>)
   <span class="hljs-keyword">end</span>
@@ -341,7 +341,7 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
 {
   <span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span>
     someProp: <span class="hljs-string">&#x27;someVal&#x27;</span>
-    <span class="hljs-keyword">exec</span>
+    <span class="hljs-variable">chain</span>
       <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
         <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-variable">homePage</span>)
       <span class="hljs-keyword">end</span>
@@ -353,7 +353,7 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
 
 <span class="hljs-keyword">let</span> <span class="hljs-variable">port</span> = <span class="hljs-number">3000</span>
 
-<span class="hljs-variable">express</span> <span class="hljs-keyword">exec</span>
+<span class="hljs-variable">express</span> <span class="hljs-variable">chain</span>
   <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
     <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-string">&#x27;Hello world!&#x27;</span>)
   <span class="hljs-keyword">end</span>

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "bin": {
+    "jome": "./src/jome-cli.js",
     "jomec": "./src/jomec-cli.js"
   }
 }
