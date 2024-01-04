@@ -418,7 +418,7 @@
         },
         {
           "name": "support.function-call.WIP.jome",
-          "begin": "(\\.)?(#\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|end|\\}|\\?|\\[|\\]))",
+          "begin": "(\\.)?(#\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|do|exec|end|\\}|\\?|\\[|\\]))",
           "beginCaptures": {
             "1": {"name": "punctuation.dot.jome"},
             "2": { "name": "entity.name.function.utility.jome" }
@@ -428,7 +428,7 @@
         },
         {
           "name": "support.function-call.WIP.jome",
-          "begin": "(\\.)?\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|end|\\}|\\?|\\[|\\]))",
+          "begin": "(\\.)?\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|do|exec|end|\\}|\\?|\\[|\\]))",
           "beginCaptures": {
             "1": {"name": "punctuation.dot.jome"},
             "2": { "name": "entity.name.function.jome" }

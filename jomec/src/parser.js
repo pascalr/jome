@@ -39,8 +39,8 @@ function compileTokenRaw(token) {
 // An abstract syntax tree (AST) node
 class ASTNode {
   constructor(token) {
-    this.raw = compileTokenRaw(token.children)
     this.type = token.type
+    this.raw = compileTokenRaw(token.children)
     this.token = token
     let prec = PRECEDENCES[this.type]
     this.precedence = (typeof prec === 'function') ? prec(token) : (prec || 0)

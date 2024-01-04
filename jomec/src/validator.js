@@ -21,28 +21,37 @@ function validateAllNodes(nodes) {
 
 function ensureStartRaw(node, str) {
   if (node.parts[0]?.raw !== str) {
-    node.errors.push(`Internal error. ${node.type} should always start with token ${str}`)
+    node.errors.push(`Internal error. ${node.type} should always start with token ${str}. Was ${node.parts[0]?.raw}`)
   }
 }
 function ensureStartType(node, str) {
   if (node.parts[0]?.type !== str) {
-    node.errors.push(`Internal error. ${node.type} should always start with token of type ${str}`)
+    node.errors.push(`Internal error. ${node.type} should always start with token of type ${str}. Was ${node.parts[0]?.type !== str}`)
   }
 }
 function ensureEndRaw(node, str) {
-  if (node.parts[node.parts.length-1]?.raw !== str) {
-    node.errors.push(`Internal error. ${node.type} should always end with token ${str}`)
+  let s = node.parts[node.parts.length-1]?.raw
+  if (s !== str) {
+    node.errors.push(`Internal error. ${node.type} should always end with token ${str}. Was ${s}`)
   }
 }
 function ensureEndType(node, str) {
-  if (node.parts[node.parts.length-1]?.type !== str) {
-    node.errors.push(`Internal error. ${node.type} should always end with token of type ${str}`)
+  let s = node.parts[node.parts.length-1]?.type
+  if (s !== str) {
+    node.errors.push(`Internal error. ${node.type} should always end with token of type ${str}. Was ${s}`)
   }
 }
 function ensureAllType(node, list, str) {
   list.forEach(el => {
     if (el.type !== str) {
-      node.errors.push(`Error. ${node.type} should only contain tokens of type ${str}`)
+      node.errors.push(`Error. ${node.type} should only contain tokens of type ${str}. Was ${el.type}`)
+    }
+  })
+}
+function ensureAllTypeIn(node, list, arr) {
+  list.forEach(el => {
+    if (!arr.includes(el.type)) {
+      node.errors.push(`Error. ${node.type} malformed expression. Unexpected children token type ${el.type}`)
     }
   })
 }
@@ -237,7 +246,7 @@ const VALIDATORS = {
     ensureEndRaw(node, 'end')
     ensureEndType(node, 'keyword.control.jome')
     let parts = filterNewlines(node.parts.slice(1,-1)) // remove exec, end keyword, and remove newlines
-    ensureAllType(node, parts, ['support.function-call.WIP.jome', 'support.function-call.jome'])
+    ensureAllTypeIn(node, parts, ['support.function-call.WIP.jome', 'support.function-call.jome'])
     node.data = {calls: parts}
   },
 }
