@@ -67,6 +67,9 @@ class ASTNode {
   }
 }
 
+// function defaultStringTokens(array) {
+//   return array.map(e => typeof e === 'string' ? {type: 'string', children: [e]} : e)
+// }
 // function filterSpaces(array) {
 //   return array.filter(e => !/^\s*$/.test(e))
 // }

@@ -1,5 +1,5 @@
-// import {ExpressServer} from './express_server.js'
+const {execSh} = require("./execSh/execSh.js")
 
-// module.exports = {
-//   ExpressServer
-// }
+module.exports = {
+  execSh,
+}
