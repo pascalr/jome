@@ -7,9 +7,9 @@ const execSh = require("jome/lib/exec_sh");
 
 var cmd = global.jome_argv[1]
 if (cmd === 'test') {
-  execSh(`jome -- test.jome`);
+  execSh(`jome_old -- test.jome`);
 } else if (cmd === 's' || cmd === 'server') {
-  execSh(`jome -- website/server.jome`);
+  execSh(`jome_old -- website/server.jome`);
 } else {
   console.log(`Jome App v0.0.0.0.1
 
