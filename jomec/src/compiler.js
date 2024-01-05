@@ -75,11 +75,7 @@ function compileAndSaveFile(absPath) {
 
   // Read the contents of the file synchronously
   const data = fs.readFileSync(absPath, 'utf8');
-
-  let tokens = tokenize(data).children
-  let topNodes = parse(tokens)
-  //topNodes.forEach(top => printTree(top))
-  let result = compileNodes(topNodes)
+  let result = compile(data)
 
   if (!absPath.endsWith('.jome')) {
     throw new Error('Cannot compile file without .jome extension', absPath);
