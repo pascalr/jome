@@ -50,6 +50,11 @@ test('# documentation comment', () => {
   expect(compile(`# documentation comment`)).toMatch(/\/\/ documentation comment/);
 })
 
+// test('WIP2', () => {
+//   expect(compile(`
+// `)).toBe("WIP2");
+// })
+
 test('WIP', () => {
   expect(compile(`
 express() exec

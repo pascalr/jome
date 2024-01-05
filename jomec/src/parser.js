@@ -60,7 +60,7 @@ class ASTNode {
     this.operands = [] // Operands is used for AST nodes by handling captures and precedence
     if (token.children && !(token.children.length === 1 && typeof token.children[0] === "string")) {
       // Parts represent the inner components of the node
-      this.parts = parse(token.children, this)
+      this.parts = parse(token.children, this, lexEnv)
     }
     this.errors = []
     let data = TOKENS[this.type]

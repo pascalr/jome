@@ -317,7 +317,7 @@
         {
           "name": "meta.if-block.jome",
           "begin": "(?:^|\\G)\\s*\\b(if)\\b",
-          "beginCaptures": {"0": {"name": "keyword.control.conditional.jome"}},
+          "beginCaptures": {"1": {"name": "keyword.control.conditional.jome"}},
           "end": "\\b(end)\\b",
           "endCaptures": {"0": {"name": "keyword.control.jome"}},
           "patterns": [
