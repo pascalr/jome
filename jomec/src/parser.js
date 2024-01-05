@@ -39,6 +39,8 @@ function compileTokenRaw(token) {
     return '\n'
   } else if (typeof token === 'string') {
     return token
+  } else if (token.type === "raw") {
+    return token.raw
   } else {
     return token.children.map(n => compileTokenRaw(n)).join('')
   }
@@ -74,6 +76,11 @@ class ASTNode {
 //   return array.filter(e => !/^\s*$/.test(e))
 // }
 function filterStrings(array) {
+  array.forEach(el => {
+    if (typeof el === 'string') {
+      console.log("Filtering string: '"+el+"'")
+    }
+  });
   return array.filter(e => typeof e !== 'string')
 }
 

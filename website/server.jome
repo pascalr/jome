@@ -3,6 +3,8 @@ import {ExpressServer} from '../lib/express_server.jome'
 
 $URL = '/jome'
 
+<sh>ls</sh>
+
 <sh>
   touch docs/useless # Otherwise rm complains when the folder is empty
   rm -R docs/* # FIXME: Use the variables above
