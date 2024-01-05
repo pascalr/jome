@@ -1,3 +1,5 @@
+const { compileTokenRaw } = require("./parser")
+
 function genCode(node) {
   let generator = CODE_GENERATORS[node.type]
   if (!generator) {
@@ -165,7 +167,7 @@ const CODE_GENERATORS = {
   "string.quoted.double.verbatim.jome": (node) => `"${node.token.children[1]}"`,
   "string.quoted.single.jome": (node) => `'${node.token.children[1]}'`,
   "string.quoted.double.jome": (node) => `"${node.token.children[1]}"`,
-  "string.quoted.backtick.jome": (node) => `\`${node.token.children[1]}\``,
+  "string.quoted.backtick.jome": (node) => compileTokenRaw(node.token),
   // "string.quoted.backtick.jome": (node, ctx) => {
   //   return '`'+node.children.slice(1,-1).map(c => c.type === 'newline' ? '\n' : c).map(
   //     c => typeof c === 'string' ? c : '${'+compileJsBlock(c.children.slice(1,-1), ctx)+'}'

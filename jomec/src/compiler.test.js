@@ -50,7 +50,7 @@ test('# documentation comment', () => {
   expect(compile(`# documentation comment`)).toMatch(/\/\/ documentation comment/);
 })
 
-// test('WIP2', () => {
+// test.only('WIP2', () => {
 //   expect(compile(`
 // `)).toBe("WIP2");
 // })
@@ -322,6 +322,8 @@ describe("Test values", () => {
     expect(compile('"hello"')).toMatch(/"hello"/);
     expect(compile('`hello`')).toMatch(/`hello`/);
     expect(compile(`'hello'`)).toMatch(/'hello'|"hello"/);
+    expect(compile(`\`multi
+line\``)).toMatch(/`multi\r?\nline`/);
   })
 })
 

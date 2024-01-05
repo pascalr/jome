@@ -38,7 +38,8 @@
 //
 
 const path = require('path');
-const {compileAndSaveFile} = require('./compiler')
+const {compileAndSaveFile} = require('./compiler');
+const { spawnSync } = require('child_process');
 
 const args = process.argv.slice(2); // Exclude the first two arguments (node executable and script file)
 
