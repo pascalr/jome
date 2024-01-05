@@ -18,10 +18,22 @@ function compileRaw(node) {
   return node.raw
 }
 
+const UTILS = {
+  log: () => "console.log",
+  PI: () => "Math.PI",
+  argv: () => "process.argv",
+  // argv: () => {
+  //   // TODO: Add import {argv} from "jome-lib"
+  //   return `argv()`
+  // }
+}
+
 function _compileUtility(name) {
-  switch (name) {
-    case 'log': return 'console.log'
+  let utils = UTILS[name]
+  if (!utils) {
+    throw new Error("Unkown util "+name)
   }
+  return utils()
 }
 
 function compileUtility(node, isInline) {
