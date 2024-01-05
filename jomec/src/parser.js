@@ -48,17 +48,19 @@ function compileTokenRaw(token) {
 
 // An abstract syntax tree (AST) node
 class ASTNode {
-  constructor(token) {
+  constructor(token, parent, lexEnv) {
     this.type = token.type
     this.raw = compileTokenRaw(token.children)
     this.token = token
+    this.parent = parent
     let prec = PRECEDENCES[this.type]
     this.precedence = (typeof prec === 'function') ? prec(token) : (prec || 0)
-    // Operands is used for AST nodes by handling captures and precedence
-    this.operands = []
+    // FIXME: Depending on the type of the node, create a nested lexical environment (for functions, if blocks, ...)
+    this.lexEnv = lexEnv // Keep a reference to the lexical environment
+    this.operands = [] // Operands is used for AST nodes by handling captures and precedence
     if (token.children && !(token.children.length === 1 && typeof token.children[0] === "string")) {
       // Parts represent the inner components of the node
-      this.parts = parse(token.children)
+      this.parts = parse(token.children, this)
     }
     this.errors = []
     let data = TOKENS[this.type]
@@ -101,10 +103,10 @@ function mergeChainables(nodes) {
 }
 
 // Create an abstract syntax tree (AST) from tokens. Returns a list of ASTNode.
-function parse(tokens) {
+function parse(tokens, parent, lexEnv) {
 
   // All the tokens converted to nodes
-  let allNodes = filterStrings(tokens).map(tok => new ASTNode(tok))
+  let allNodes = filterStrings(tokens).map(tok => new ASTNode(tok, parent, lexEnv))
   // Only the top nodes
   let topNodes = []
 

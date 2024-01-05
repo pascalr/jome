@@ -6,6 +6,17 @@ function genCode(node) {
   return generator(node)
 }
 
+function genImports(ctxFile) {
+  let result = ""
+  let files = new Set([...Object.keys(ctxFile.namedImportsByFile), ...Object.keys(ctxFile.defaultImportsByFile)])
+  files.forEach(file => {
+    let def = ctxFile.defaultImportsByFile[file]
+    let named = ctxFile.namedImportsByFile[file]
+    result += ""
+  })
+  return result
+}
+
 function escapeBackticks(inputString) {
   return inputString.replace(/`/g, '\u005c`').replace(/\$\{/g, '\u005c\$\{').replace(/\\\\`/g, '\\\\\\`')
 }
@@ -280,11 +291,12 @@ const CODE_GENERATORS = {
   "variable.other.constant.utility.jome": (node) => compileUtility(node, false),
   // <sh></sh>
   "meta.embedded.block.shell": (node) => {
-    // node.file.addImport('jome/lib/exec_sh'], {default: ['execSh']})
+    node.lexEnv.ctxFile.addImport('jome/lib/exec_sh', 'execSh')
     return "execSh(`"+escapeBackticks(node.data.command)+"`);"
   }
 }
 
 module.exports = {
+  genImports,
   genCode
 }

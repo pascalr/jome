@@ -1,7 +1,8 @@
 const { parse } = require("./parser")
-const { genCode } = require("./code_generator.js")
+const { genCode, genImports } = require("./code_generator.js")
 const { tokenize } = require('./tokenizer.js')
 const { validateAllNodes } = require("./validator")
+const { ContextFile } = require("./context.js")
 const prettier = require("prettier")
 
 const fs = require('fs');
@@ -55,13 +56,15 @@ function compileNodes(nodes) {
 
 function compile(code) {
   let tokens = tokenize(code).children
-  let topNodes = parse(tokens)
+  let ctxFile = new ContextFile()
+  let topNodes = parse(tokens, null, ctxFile.lexEnv)
   // let info = ""
   // topNodes.forEach(top =>
   //   info += '\n'+debugOpTree(top)
   // )
   // console.log(info)
   let generated = compileNodes(topNodes)
+  let head = genImports(ctxFile)
   let formated = prettier.format(generated, {parser: "babel"})
   return formated
 }
