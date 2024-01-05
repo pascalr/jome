@@ -21,7 +21,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "command": "jome s"
+      "command": "jome index_v2.jome s"
     },
     {
       "type": "node-terminal",

@@ -1,5 +1,6 @@
+const argv = require("jome-lib/argv");
 const execSh = require("jome-lib/execSh");
-let cmd = process.argv[1];
+let cmd = argv()[1];
 
 if (cmd === "test") {
   execSh(`jome test.jome`);

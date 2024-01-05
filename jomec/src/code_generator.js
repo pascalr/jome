@@ -52,24 +52,20 @@ function compileRaw(node) {
 const UTILS = {
   log: () => "console.log",
   PI: () => "Math.PI",
-  argv: () => "process.argv",
-  // argv: () => {
-  //   // TODO: Add import {argv} from "jome-lib"
-  //   return `argv()`
-  // }
-}
-
-function _compileUtility(name) {
-  let utils = UTILS[name]
-  if (!utils) {
-    throw new Error("Unkown util "+name)
+  // argv: () => "process.argv",
+  argv: (node) => {
+    node.lexEnv.ctxFile.addImport('jome-lib/argv', 'argv')
+    return `argv()`
   }
-  return utils()
 }
 
 function compileUtility(node, isInline) {
   let name = node.raw.slice(isInline ? 2 : 1)
-  let val = _compileUtility(name)
+  let utils = UTILS[name]
+  if (!utils) {
+    throw new Error("Unkown util "+name)
+  }
+  let val = utils(node)
   if (node.operands) {
     if (isInline) {
       return `${val}(${node.operands.map(c => genCode(c)).join('')})`
