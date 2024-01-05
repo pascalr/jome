@@ -129,44 +129,6 @@ function compileFuncCall(node) {
   return `${hasDot ? '.' : ''}${called}(${args})`
 }
 
-// Chainable types have the highest precedence and are all equal
-const CHAINABLE_TYPES = [
-  "meta.group.jome",
-  "meta.square-bracket.jome",
-  "entity.name.function.utility-inline.jome",
-  "meta.getter.jome",
-  "meta.caller.jome"
-]
-
-const PRECEDENCES = {
-  // square brackets are higher than arithmetic operators: x[0] + 10 < y - 20
-  'keyword.operator.jome': (token => {
-    let op = token.text()
-    if (op === '+' || op === '-') {
-      return 1000
-    } else if (op === '*' || op === '/') {
-      return 1100
-    } else if (op === '^') {
-      return 1200
-    }
-  }),
-  // arithmetic operators are higher than comparison: x + 10 < y - 20
-  'keyword.operator.comparison.jome': 500,
-  // Comparison is higher than nullish coalescing: x ?? y > z
-  'keyword.operator.nullish-coalescing.jome': 450,
-  // In javascript, nullish coalescing has higher precedence than ternary.
-  'keyword.operator.existential.jome': 400,
-  'keyword.operator.colon.jome': 399,
-  // Ternary is higher than arrow function: inspectTruthness = |x| => x ? 'truthy' : 'falsy'
-  'keyword.arrow.jome': 300,
-  // Arrow function is higher than assignment: add5 = |x| => x + 5
-  'keyword.operator.assignment.jome': 250,
-  // Assigment and dictionary key have the same precedence. (They should never be used together)
-  'meta.dictionary-key.jome': 250,
-  // Assignment is higher than inline conditional: x = 10 if true
-  'keyword.control.inline-conditional.jome': 200,
-}
-
 const CODE_GENERATORS = {
   'comment.block.jome': () => "",
   'comment.line.double-slash.jome': () => "",
@@ -225,9 +187,11 @@ const CODE_GENERATORS = {
   'meta.do-end.jome': compileStandaloneFunction,
   // def someFunc end
   'meta.def.jome': compileDefFunction,
+  // if ... end
   'meta.if-block.jome': (node) => {
-    let cs = node.parts.slice(1, -1) // remove if and end
-    return `if (${genCode(cs[0])}) {${cs.slice(1).map(c => genCode(c)).join('')}}`
+    return node.data.sections.map(sect => {
+      return `${sect.keyword} ${sect.cond ? `(${genCode(sect.cond)})` : ''} {${sect.statements.map(c => genCode(c)).join('')}}`
+    }).join(' ');
   },
   "support.function-call.WIP.jome": compileFuncCall,
   "support.function-call.jome": compileFuncCall,

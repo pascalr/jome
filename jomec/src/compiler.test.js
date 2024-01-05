@@ -192,6 +192,16 @@ describe("Test if statements", () => {
   test('if modifier', () => {
     expect(compile('let x; x = "10" if true')).toMatch(/let x;\s*if \(?true\)? \{\s*x = "10";?\s*\}/);
   })
+  test('if statements blocks', () => {
+    expect(compile(`if true
+  x = 1
+elsif false
+  x = 2
+else
+  x = 3
+end
+`)).toMatch(/\s*if \(true\) \{\s*x = 1;\s*\} else if \(false\) \{\s*x = 2;\s*\} else \{\s*x = 3;\s*\}/);
+  })
 })
 
 describe("Test attribute accessor", () => {

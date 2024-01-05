@@ -150,7 +150,7 @@
 			"patterns": [
         {
           "name": "keyword.control.conditional.jome",
-          "match": "\\b(elseif|elsif|else if)\\b"
+          "match": "\\b(elif|elsif|else if)\\b"
 			  },
         {
           "name": "keyword.control.conditional.else.jome",

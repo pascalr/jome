@@ -230,6 +230,10 @@ const TOKENS = {
     captureLeft: true,
     captureRight: true,
   },
+  // elif, elsif, else if
+  'keyword.control.conditional.jome': {
+    captureRight: true,
+  },
   // =
   'keyword.operator.assignment.jome': {
     captureLeft: true,
