@@ -6,13 +6,27 @@ function genCode(node) {
   return generator(node)
 }
 
-function genImports(ctxFile) {
+function genImports(ctxFile, compilerOptions) {
   let result = ""
   let files = new Set([...Object.keys(ctxFile.namedImportsByFile), ...Object.keys(ctxFile.defaultImportsByFile)])
   files.forEach(file => {
     let def = ctxFile.defaultImportsByFile[file]
     let named = ctxFile.namedImportsByFile[file]
-    result += ""
+    if (compilerOptions.useCommonJS) {
+      if (def) {
+        result += `const ${def} = require("${file}");\n`
+      } else {
+        throw new Error("TODO: 23489ashdf89h23")
+        result += ""
+      }
+    } else {
+      if (def) {
+        result += `import ${def} from "${file}";\n`
+      } else {
+        throw new Error("TODO: 23498s9dfh98i2")
+        result += ""
+      }
+    }
   })
   return result
 }
@@ -292,7 +306,7 @@ const CODE_GENERATORS = {
   "variable.other.constant.utility.jome": (node) => compileUtility(node, false),
   // <sh></sh>
   "meta.embedded.block.shell": (node) => {
-    node.lexEnv.ctxFile.addImport('jome/lib/exec_sh', 'execSh')
+    node.lexEnv.ctxFile.addImport('jome-lib/execSh', 'execSh')
     return "execSh(`"+escapeBackticks(node.data.command)+"`);"
   }
 }

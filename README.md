@@ -2,11 +2,11 @@
 
 TODO: Avoir seulement un README.md et des dossiers
 
+TODO: Utiliser vscode smart stuff. Je veux m'assurer d'être capable de le faire. Je ne veux pas devoir réécrire mes trucs une 5e fois pour être compatible...
+
 TODO: License file
 
-## TODO
-
-Test ruby heredoc. Test syntax highlighting as defined in ruby.tmLanguage.json. Maybe it will solve my problems with scripts.
+TODO: Test ruby heredoc. Test syntax highlighting as defined in ruby.tmLanguage.json. Maybe it will solve my problems with scripts.
 
 ## installation
 

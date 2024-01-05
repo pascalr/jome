@@ -43,7 +43,7 @@ javascript because it is more stable. It is a little weird to compile tests in i
 // end
 
 test('<sh>ls</sh>', () => {
-  expect(compile(`<sh>ls</sh>`)).toMatch("/import {execSh} from \"jome-lib/execSh\";\s*execSh(`ls`);/");
+  expect(compile(`<sh>ls</sh>`)).toMatch(/const execSh = require\("jome-lib\/execSh"\);\s*execSh\(`ls`\);/);
 })
 
 test('# documentation comment', () => {

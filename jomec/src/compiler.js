@@ -55,7 +55,7 @@ function compileNodes(nodes) {
 }
 
 const DEFAULT_COMPILER_OPTIONS = {
-
+  useCommonJS: true // Whether imports and exports use common JS or ESM
 }
 
 /**
@@ -64,7 +64,7 @@ const DEFAULT_COMPILER_OPTIONS = {
  * @param {*} options See DEFAULT_COMPILER_OPTIONS for more details
  * @returns 
  */
-function compile(code, options) {
+function compile(code, options=DEFAULT_COMPILER_OPTIONS) {
   let tokens = tokenize(code).children
   let ctxFile = new ContextFile()
   let topNodes = parse(tokens, null, ctxFile.lexEnv)
@@ -73,8 +73,9 @@ function compile(code, options) {
   //   info += '\n'+debugOpTree(top)
   // )
   // console.log(info)
-  let generated = compileNodes(topNodes)
-  let head = genImports(ctxFile)
+  let body = compileNodes(topNodes)
+  let head = genImports(ctxFile, options)
+  let generated = head + body
   let formated = prettier.format(generated, {parser: "babel"})
   return formated
 }
