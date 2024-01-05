@@ -1,4 +1,4 @@
-const {OPERAND_TYPES} = require("./parser.js")
+const {OPERAND_TYPES, compileTokenRaw} = require("./parser.js")
 
 // TODO: Make sure no infinite loop
 function validateAllNodes(nodes) {
@@ -260,6 +260,15 @@ const VALIDATORS = {
     ensureAllTypeIn(node, parts, ['support.function-call.WIP.jome', 'support.function-call.jome'])
     node.data = {calls: parts}
   },
+  // <sh></sh>
+  "meta.embedded.block.shell": (node) => {
+    // ensureStartRaw(node, '<sh>') // Can be <sh someParam="someValue">
+    ensureStartType(node, 'meta.script-params.jome')
+    ensureEndRaw(node, '</sh>')
+    //ensureEndType(node, '')
+    let raw = compileTokenRaw(node.parts.slice(1,-1))
+    node.data = {command: raw}
+  }
 }
 
 module.exports = {

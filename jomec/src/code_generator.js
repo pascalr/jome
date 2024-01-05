@@ -6,6 +6,10 @@ function genCode(node) {
   return generator(node)
 }
 
+function escapeBackticks(inputString) {
+  return inputString.replace(/`/g, '\u005c`').replace(/\$\{/g, '\u005c\$\{').replace(/\\\\`/g, '\\\\\\`')
+}
+
 function compileOperatorUnary(node) {
   return `${node.raw}${genCode(node.operands[0])}`
 }
@@ -308,6 +312,13 @@ const CODE_GENERATORS = {
   "entity.name.function.utility-inline.jome": (node) => compileUtility(node, true),
   // #log
   'entity.name.function.utility.jome': (node) => compileUtility(node, false),
+  // #PI
+  "variable.other.constant.utility.jome": (node) => compileUtility(node, false),
+  // <sh></sh>
+  "meta.embedded.block.shell": (node) => {
+    // node.file.addImport('jome/lib/exec_sh'], {default: ['execSh']})
+    return "execSh(`"+escapeBackticks(node.data.command)+"`);"
+  }
 }
 
 module.exports = {

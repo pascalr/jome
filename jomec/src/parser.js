@@ -239,5 +239,6 @@ const TOKENS = {
 
 module.exports = {
   parse,
+  compileTokenRaw,
   OPERAND_TYPES
 }
