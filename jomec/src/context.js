@@ -7,9 +7,7 @@ class ContextFile {
     this.defaultImportsByFile = {}
   }
 
-  // node.lexEnv.ctxFile.addImport('jome/lib/exec_sh', {default: ['execSh']})
-  // For default exports, use {default: ...}
-  addImport(file, defaultImport, namedImports) {
+  addImport(defaultImport, namedImports, file) {
     if (defaultImport) {
       if (this.defaultImportsByFile[file] && this.defaultImportsByFile[file] !== defaultImport) {
         throw new Error("Two default imports on the same file not supported for now.")

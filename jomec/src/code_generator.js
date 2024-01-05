@@ -54,7 +54,7 @@ const UTILS = {
   PI: () => "Math.PI",
   // argv: () => "process.argv",
   argv: (node) => {
-    node.lexEnv.ctxFile.addImport('jome-lib/argv', 'argv')
+    node.lexEnv.ctxFile.addImport('argv', null, 'jome-lib/argv')
     return `argv()`
   }
 }
@@ -304,7 +304,7 @@ const CODE_GENERATORS = {
   "variable.other.constant.utility.jome": (node) => compileUtility(node, false),
   // <sh></sh>
   "meta.embedded.block.shell": (node) => {
-    node.lexEnv.ctxFile.addImport('jome-lib/execSh', 'execSh')
+    node.lexEnv.ctxFile.addImport('execSh', null, 'jome-lib/execSh')
     return "execSh(`"+escapeBackticks(node.data.command)+"`);"
   }
 }
