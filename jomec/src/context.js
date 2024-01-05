@@ -14,7 +14,7 @@ class ContextFile {
       }
       this.defaultImportsByFile[file] = defaultImport
     }
-    if (namedImports) {
+    if (namedImports && namedImports.length) {
       if (!this.namedImportsByFile[file]) {
         this.namedImportsByFile[file] = new Set()
       }

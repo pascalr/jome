@@ -1,4 +1,4 @@
-const {OPERAND_TYPES, compileTokenRaw} = require("./parser.js")
+const {OPERAND_TYPES, filterSpaces, filterStrings, compileTokenRaw} = require("./parser.js")
 
 // TODO: Make sure no infinite loop
 function validateAllNodes(nodes) {
@@ -246,17 +246,17 @@ const VALIDATORS = {
     //   return `Invalid value for assignement ${node.type}. Was: ${node.type}`
     }
   },
-  // exec
+  // chain
   //   someFunc()
   //   someOtherFunc()
   // end
   "meta.chain.jome": (node) => {
-    ensureStartRaw(node, 'exec')
+    ensureStartRaw(node, 'chain')
     ensureStartType(node, 'keyword.control.jome')
     ensureEndRaw(node, 'end')
     ensureEndType(node, 'keyword.control.jome')
     ensureLhsOperand(node)
-    let parts = filterNewlines(node.parts.slice(1,-1)) // remove exec, end keyword, and remove newlines
+    let parts = filterNewlines(node.parts.slice(1,-1)) // remove chain, end keyword, and remove newlines
     ensureAllTypeIn(node, parts, ['support.function-call.WIP.jome', 'support.function-call.jome'])
     node.data = {calls: parts}
   },
@@ -297,6 +297,57 @@ const VALIDATORS = {
     })
     node.data = {sections}
   },
+  // import defaultExport from "module-name";
+  // import * as name from "module-name";
+  // import { export1 } from "module-name";
+  // import { export1 as alias1 } from "module-name";
+  // import { default as alias } from "module-name";
+  // import { export1, export2 } from "module-name";
+  // import { export1, export2 as alias2, /* … */ } from "module-name";
+  // import { "string name" as alias } from "module-name";
+  // import defaultExport, { export1, /* … */ } from "module-name";
+  // import defaultExport, * as name from "module-name";
+  // // import "module-name"; TODO: Not written yet in the parser
+  "meta.statement.import.jome": (node) => {
+    ensureStartRaw(node, 'import')
+    ensureStartType(node, 'keyword.control.jome')
+
+    let file;
+    let defaultImport = ''
+    let namedImports = []
+    let list = filterStrings(node.parts.slice(1)) // remove import keyword
+    list.forEach(item => {
+      if (item.type === 'meta.named-imports.jome') {
+        throw new Error("TODO 789h2359f79sdu")
+        // filterSpaces(item.children.slice(1, -1)).forEach(imp => {
+        //   if (imp.type === 'variable.other.named-import.jome') {
+        //     let name = imp.text()
+        //     namedImports.push(name)
+        //     ctx.addBinding(name, {type: 'named-import'})
+        //   } else if (imp.type === 'meta.import-alias.jome') {
+        //     throw new Error("TODO: import {foo as bar} syntax")
+        //   }
+        // })
+      } else if (item.type === 'meta.import-file.jome') {
+        let cs = filterSpaces(item.parts)
+        file = cs[cs.length-1].raw.slice(1,-1)
+      } else if (item.type === 'variable.other.default-import.jome') {
+        defaultImport = item.raw
+        // ctx.addBinding(defaultImport, {type: 'default-import'}) TODO!!!!!!!!!!!!!!!!
+      } else {
+        throw new Error("Error 234j90s7adfg1")
+      }
+    })
+
+    // let relPath = getRelativePath(file, ctx)
+    // let ext = path.extname(relPath)
+    // if (ext === '.jome') {
+    //   ctx.dependencies.push(relPath)
+    //   relPath = relPath.slice(0, relPath.length-4)+"built.js"
+    //   // relPath = relPath.slice(0, relPath.length-4)+(ctx.useESM ? 'built.js' : 'built.cjs')
+    // }
+    node.data = {file, defaultImport, namedImports}
+  }
 }
 
 module.exports = {

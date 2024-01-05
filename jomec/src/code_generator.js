@@ -294,6 +294,7 @@ const CODE_GENERATORS = {
   },
   // =
   'keyword.operator.assignment.jome': compileOperator,
+  //'keyword.operator.assignment.jome': (node) => (compileOperator(node)+";"),
   // let
   'keyword.control.declaration.jome': (node) => `let ${node.operands[0].raw}`,
   // <...>.#log
@@ -306,6 +307,23 @@ const CODE_GENERATORS = {
   "meta.embedded.block.shell": (node) => {
     node.lexEnv.ctxFile.addImport('execSh', null, 'jome-lib/execSh')
     return "execSh(`"+escapeBackticks(node.data.command)+"`);"
+  },
+  // import defaultExport from "module-name";
+  // import * as name from "module-name";
+  // import { export1 } from "module-name";
+  // import { export1 as alias1 } from "module-name";
+  // import { default as alias } from "module-name";
+  // import { export1, export2 } from "module-name";
+  // import { export1, export2 as alias2, /* … */ } from "module-name";
+  // import { "string name" as alias } from "module-name";
+  // import defaultExport, { export1, /* … */ } from "module-name";
+  // import defaultExport, * as name from "module-name";
+  // // import "module-name"; TODO: Not written yet in the parser
+  "meta.statement.import.jome": (node) => {
+    let {file, defaultImport, namedImports} = node.data
+    node.lexEnv.ctxFile.addImport(defaultImport, namedImports, file)
+    // ctx.addBinding(defaultImport, {type: 'default-import'}) TODO!!!!!!!!!!!!!!!!
+    // ctx.addBinding(name, {type: 'named-import'})
   }
 }
 

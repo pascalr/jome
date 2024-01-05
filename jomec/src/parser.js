@@ -74,9 +74,9 @@ class ASTNode {
 // function defaultStringTokens(array) {
 //   return array.map(e => typeof e === 'string' ? {type: 'string', children: [e]} : e)
 // }
-// function filterSpaces(array) {
-//   return array.filter(e => !/^\s*$/.test(e))
-// }
+function filterSpaces(array) {
+  return array.filter(e => !/^\s*$/.test(e))
+}
 function filterStrings(array) {
   return array.filter(e => typeof e !== 'string')
 }
@@ -251,5 +251,7 @@ const TOKENS = {
 module.exports = {
   parse,
   compileTokenRaw,
+  filterSpaces,
+  filterStrings,
   OPERAND_TYPES
 }

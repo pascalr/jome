@@ -12,7 +12,7 @@
       "patterns": [
         {
           "name": "meta.statement.import.jome",
-          "begin": "^(import)( \\w+)?",
+          "begin": "^(import) ?(\\b\\w+\\b)?",
           "beginCaptures": {
             "1": {"name": "keyword.control.jome"},
             "2": {"name": "variable.other.default-import.jome"}
