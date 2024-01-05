@@ -78,11 +78,6 @@ class ASTNode {
 //   return array.filter(e => !/^\s*$/.test(e))
 // }
 function filterStrings(array) {
-  array.forEach(el => {
-    if (typeof el === 'string') {
-      console.log("Filtering string: '"+el+"'")
-    }
-  });
   return array.filter(e => typeof e !== 'string')
 }
 

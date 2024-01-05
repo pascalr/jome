@@ -46,6 +46,10 @@ test('<sh>ls</sh>', () => {
   expect(compile(`<sh>ls</sh>`)).toMatch("/import {execSh} from \"jome-lib/execSh\";\s*execSh(`ls`);/");
 })
 
+test('# documentation comment', () => {
+  expect(compile(`# documentation comment`)).toMatch(/\/\/ documentation comment/);
+})
+
 test('WIP', () => {
   expect(compile(`
 express() exec

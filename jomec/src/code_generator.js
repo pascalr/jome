@@ -141,6 +141,7 @@ function compileFuncCall(node) {
 }
 
 const CODE_GENERATORS = {
+  "comment.line.documentation.jome": (node) => `// ${node.raw.slice(2)}`,
   'comment.block.jome': () => "",
   'comment.line.double-slash.jome': () => "",
   'newline': () => '\n',

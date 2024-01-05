@@ -900,6 +900,12 @@
           "name": "comment.line.double-slash.jome"
         },
         {
+					"begin": "# ",
+					"beginCaptures": {"0": {"name": "punctuation.definition.comment.jome"}},
+					"end": "$\\n?",
+					"name": "comment.line.documentation.jome"
+				},
+        {
           "begin": "\\/\\*\\*",
           "beginCaptures": {"0": {"name": "punctuation.definition.comment.jome"}},
           "end": "\\*\\/",

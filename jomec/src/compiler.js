@@ -54,7 +54,17 @@ function compileNodes(nodes) {
   return nodes.map(node => genCode(node)).join('')
 }
 
-function compile(code) {
+const DEFAULT_COMPILER_OPTIONS = {
+
+}
+
+/**
+ * Compile the given code based on the options.
+ * @param {string} code 
+ * @param {*} options See DEFAULT_COMPILER_OPTIONS for more details
+ * @returns 
+ */
+function compile(code, options) {
   let tokens = tokenize(code).children
   let ctxFile = new ContextFile()
   let topNodes = parse(tokens, null, ctxFile.lexEnv)
@@ -70,7 +80,7 @@ function compile(code) {
 }
 
 // FIXME: This does not belong here
-function compileAndSaveFile(absPath) {
+function compileAndSaveFile(absPath, options) {
 
   if (!fs.existsSync(absPath)) {
     throw new Error("Can't compile and save missing file " + absPath)
@@ -78,7 +88,7 @@ function compileAndSaveFile(absPath) {
 
   // Read the contents of the file synchronously
   const data = fs.readFileSync(absPath, 'utf8');
-  let result = compile(data)
+  let result = compile(data, options)
 
   if (!absPath.endsWith('.jome')) {
     throw new Error('Cannot compile file without .jome extension', absPath);

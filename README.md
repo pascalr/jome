@@ -4,6 +4,10 @@ TODO: Avoir seulement un README.md et des dossiers
 
 TODO: License file
 
+## TODO
+
+Test ruby heredoc. Test syntax highlighting as defined in ruby.tmLanguage.json. Maybe it will solve my problems with scripts.
+
 ## installation
 
 Development: npm link

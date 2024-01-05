@@ -623,6 +623,26 @@ main {
 
   Et j'aimerais que dans ce cas, ça retourne automatiquement '' au lieu de undefined ou null
 
+  ## comments
+
+  Use // and /* */ for regular comments.
+
+  Use # for documentation comments. NOTE: It must have a space after the # , otherwise it's a utils.
+
+  ```jome
+  // This is a regular comment
+
+  # This is a documentation comment that describes the function below.
+  # Second line of same documentation comment.
+  with
+    arg: string # Documentation comment that describes what this argument is
+  def someFunc
+    /* TODO: implement this function */
+  end
+  ```
+
+  By default, regular comments are discarded when compiled and documentation comments are kept.
+
   ### Switch / case
 
   Mon idée, tu fais:
@@ -1001,6 +1021,27 @@ main {
 
   Je ne veux pas que le user n'aie à faire la distinction entre une fonction et une arrow fonction.
   Trouver une manière de gérer cela.
+
+  ### With keyword
+
+  Usefull to define interfaces of classes and functions.
+
+  ```jome
+  with
+    name: String # Full name of the personnellement
+  class Person
+  end
+
+  with
+    x: float # The base value
+    y: integer # The factor
+  def multiply
+  end
+  ```
+
+  This allows easy documentation of the code without having to repeat yourself in the comments.
+
+  It would be nice is there was a short way to start a single line documentation comment.
 
   ## State variables
 
