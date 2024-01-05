@@ -1,0 +1,15 @@
+let cmd = #argv[1]
+
+if (cmd === 'test')
+  <sh>jome test.jome</sh>
+elsif (cmd === 's' || cmd === 'server')
+  <sh>jome website/server.jome</sh>
+else
+  #log `Jome App v0.0.0.0.1
+
+Usage:
+jome # get this help message
+jome s # start server (or jome server)
+jome test # launch the tests
+`
+end

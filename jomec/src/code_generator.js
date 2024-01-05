@@ -153,6 +153,7 @@ const PRECEDENCES = {
 
 const CODE_GENERATORS = {
   'comment.block.jome': () => "",
+  'comment.line.double-slash.jome': () => "",
   'newline': () => '\n',
   'punctuation.terminator.statement.jome': compileRaw,
   'punctuation.separator.delimiter.jome': compileRaw,

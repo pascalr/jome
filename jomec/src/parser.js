@@ -12,11 +12,17 @@ and syntax analysis (parsing), helps in creating a modular and maintainable comp
 */
 
 const OPERAND_TYPES = [
-  "constant.numeric.integer.jome",
   "keyword.operator.jome",
   "keyword.operator.logical.unary.jome",
   "keyword.operator.existential.jome",
+  "keyword.operator.comparison.jome",
+  "constant.numeric.integer.jome",
   "constant.numeric.float.jome",
+  "string.quoted.single.jome",
+  "string.quoted.double.jome",
+  "string.quoted.backtick.jome",
+  "string.quoted.double.verbatim.jome",
+  "string.quoted.backtick.verbatim.jome",
   "meta.group.jome",
   "meta.square-bracket.jome",
   "meta.block.jome",

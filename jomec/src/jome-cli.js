@@ -51,8 +51,8 @@ if (wholeArgs[0]?.endsWith('.jome')) {
   executableArgs = wholeArgs.slice(1)
 }
 
-let absPath = path.resolve(fileToRun, executableArgs)
-compileAndExecute(absPath)
+let absPath = path.resolve(fileToRun)
+compileAndExecute(absPath, executableArgs)
 
 function compileAndExecute(absPath, args) {
   let buildFileName = compileAndSaveFile(absPath)

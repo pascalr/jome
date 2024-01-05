@@ -8,7 +8,7 @@
     {
       "type": "node-terminal",
       "request": "launch",
-      "name": "Run server",
+      "name": "Run server (Old)",
       "skipFiles": [
         "<node_internals>/**"
       ],
@@ -17,7 +17,16 @@
     {
       "type": "node-terminal",
       "request": "launch",
-      "name": "Run tests",
+      "name": "Run server",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "command": "jome s"
+    },
+    {
+      "type": "node-terminal",
+      "request": "launch",
+      "name": "Run tests (Old)",
       "skipFiles": [
         "<node_internals>/**"
       ],
