@@ -1259,15 +1259,6 @@ main {
   }
   func(10, "g")
 
-  <h2 id="verbatim">Verbatim string literals</h2>
-
-  Verbatim string literals are strings that do not interpolate. The idea is taken from C#. But in C# it also includes backslashes without escaping
-  them I don't know if I want to do that. Or I want to offer multiple possibilities.
-  
-  ```jome
-  str = @"This is a string that does ${not} interpolate"
-  ```
-
   ## signals
   
   Signals are used for events. They are not very much implemented yet. TODO: Check how Godot handles events, check how js handles events.
@@ -1376,18 +1367,53 @@ main {
   debug(nomDeVariable, "nomDeVariable")
   ```
 
-  ## String modifier
+  ## Strings
 
-  Idée:
+  Only support double quote strings for now because I have not decided what to do yet with single quote string and backticks.
 
-  J'aimerais pouvoir faire
-  $"$URL/stylesheet.css"
-  ou
-  "$URL/stylesheet.css"$
-  ou
-  au lieu de
-  `{$URL}/stylesheet.css`
-  Ça serait plus simple mettre le modificateur avec pour parser, mais c'est plus beau après.
+  Why the hell is "" not allowed multiline in programming languages??????
+
+  Ideas:
+  - "Hello {name}!" // name is interpolated
+  - """Hello {{name}}! Can use single " or double "" inside too!""" // name is interpolated
+  - @"Hello \ {name}!" // verbatim, \ only escapes the double quote, no interpolation
+  - @"""Hello \ {{name}}!""" // verbatim, \ only escapes the double quote, but ALLOWS interpolation
+  - #"Hello #name! How are you #{name}? ##PI is almost 3.1416" // #identifier and #{identifier} are both allowed for interpolation
+  - $"Hello ${name}!" // exactly like backticks in js
+
+  ### Formatting
+
+  Formatting nomenclature:
+
+  x: trim
+  s: whole string
+  l: line
+  i: indent (trim, but keep indentation, check for least amount of spaces before, than trim, spaces and tabs not allowed combined, never with s (string))
+  t: tab
+  _: space
+
+  // Explicit characters like \t and \n are not trimmed.
+  ""%xs // Trim at the beginning of the string
+  ""%xsx // Trim at the beginning and the end of the string
+  ""%sx // Trim at the end of the string
+  ""%xl // Trim everyline before
+  ""%xlx // Trim everyline before and after
+  ""%lx // Trim everyline after
+  ""%xsxt // Trim at the beginning of the string and the end of every line
+  ""%xlsx // Trim at the beginning of every line and the end of the string
+  ""%i__lx // Keep indentation at the beginning of everyline starting with two spaces and trim the end
+
+  I could allow adding spaces and tabs, but unfortunatly it starts with the same letters as trim and string, and I don't want it to become too
+  complicated. Use real code if you want something more complicated. This is already pretty good.
+
+  <h3 id="verbatim">Verbatim string literals</h3>
+
+  Verbatim string literals are strings that do not interpolate. The idea is taken from C#. But in C# it also includes backslashes without escaping
+  them I don't know if I want to do that. Or I want to offer multiple possibilities.
+  
+  ```jome
+  str = @"This is a string that does ${not} interpolate"
+  ```
 
   ## Main
 

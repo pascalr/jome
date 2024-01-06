@@ -1,6 +1,6 @@
 const express = require("express");
-
-let port = 3000(() => {
+let port = 3000;
+(() => {
   let __chain = express();
   __chain.get("/", function (req, res) {
     res.send("Hello world!");

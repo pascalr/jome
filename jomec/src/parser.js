@@ -27,6 +27,7 @@ const OPERAND_TYPES = [
   "meta.square-bracket.jome",
   "meta.block.jome",
   "variable.other.jome",
+  "variable.other.constant.utility.jome",
   "constant.language.jome",
   "support.function-call.jome",
   "support.function-call.WIP.jome",
