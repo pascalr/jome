@@ -1369,17 +1369,23 @@ main {
 
   ## Strings
 
-  Only support double quote strings for now because I have not decided what to do yet with single quote string and backticks.
+  Single and double quotes are to be the same and can be used interchangibly. Like in js and python.
 
-  Why the hell is "" not allowed multiline in programming languages??????
+  Backticks are not to be supported for now. I don't know what I what to do with them.
+
+  All string are allowed to be multiline.
 
   Ideas:
-  - "Hello {name}!" // name is interpolated
-  - """Hello {{name}}! Can use single " or double "" inside too!""" // name is interpolated
-  - @"Hello \ {name}!" // verbatim, \ only escapes the double quote, no interpolation
-  - @"""Hello \ {{name}}!""" // verbatim, \ only escapes the double quote, but ALLOWS interpolation
+  - "Hello {name}!" // name is interpolated with single {}
+  - """Hello {{name}}! Can use single " or double "" inside too!""" // name is interpolated with double {{}}
+  - @"Hello {name}! \n not escaped" // verbatim, \ only escapes the double quote, no interpolation
+  - @"""Hello \ {{name}}!""" // verbatim, \ only escapes the double quote, but ALLOWS interpolation with double {{}}
+  Maybe:
   - #"Hello #name! How are you #{name}? ##PI is almost 3.1416" // #identifier and #{identifier} are both allowed for interpolation
   - $"Hello ${name}!" // exactly like backticks in js
+
+  Maybe use ' and ''' instead of @" and @"""? In ruby, this is what they do. It's just that I don't think it's that common.
+  And honestly I did not know that. @ is more explicit. Otherwise you might think they can be used interchangibly like in python.
 
   ### Formatting
 
@@ -1405,6 +1411,8 @@ main {
 
   I could allow adding spaces and tabs, but unfortunatly it starts with the same letters as trim and string, and I don't want it to become too
   complicated. Use real code if you want something more complicated. This is already pretty good.
+
+  Maybe allow formatting after scripts too? <html></html>%xs
 
   <h3 id="verbatim">Verbatim string literals</h3>
 

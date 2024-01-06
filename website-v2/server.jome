@@ -1,12 +1,12 @@
-import express from 'express'
+import express from "express"
 
 let port = 3000
 
 express() chain
-  get '/' do |req, res|
-    res.send('Hello world!')
+  get "/" do |req, res|
+    res.send("Hello world!")
   end
   listen port do
-    #log `Server listening on port {port}`
+    #log "Server listening on port {port}"
   end
 end
