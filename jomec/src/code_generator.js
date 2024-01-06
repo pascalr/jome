@@ -152,6 +152,14 @@ function compileFuncCall(node) {
   return `${hasDot ? '.' : ''}${called}(${args})`
 }
 
+function compileString(node) {
+  let {raw, interpolated} = node.data
+  if (!interpolated) {
+    return `"${raw}"`
+  }
+  return `"${raw}"`
+}
+
 const CODE_GENERATORS = {
   "comment.line.documentation.jome": (node) => `// ${node.raw.slice(2)}`,
   'comment.block.jome': () => "",
@@ -162,7 +170,7 @@ const CODE_GENERATORS = {
   "string.quoted.backtick.verbatim.jome": (node) => `\`${node.token.children[1]}\``,
   "string.quoted.double.verbatim.jome": (node) => `"${node.token.children[1]}"`,
   "string.quoted.single.jome": (node) => `'${node.token.children[1]}'`,
-  "string.quoted.double.jome": (node) => `"${node.token.children[1]}"`,
+  "string.quoted.double.jome": compileString,
   "string.quoted.backtick.jome": (node) => compileTokenRaw(node.token),
   // "string.quoted.backtick.jome": (node, ctx) => {
   //   return '`'+node.children.slice(1,-1).map(c => c.type === 'newline' ? '\n' : c).map(

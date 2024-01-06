@@ -642,10 +642,10 @@
           "beginCaptures": {"0": {"name": "punctuation.definition.string.begin.jome"}},
           "end": "\"",
           "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}},
-          "patterns": [{
-            "name": "constant.character.escape.jome",
-            "match": "\\\\."
-          }]
+          "patterns": [
+            {"include": "#template-literal"},
+            {"include": "#escape-char"}
+          ]
         },
         {
           "name": "string.quoted.single.jome",
@@ -653,32 +653,34 @@
           "beginCaptures": {"0": {"name": "punctuation.definition.string.begin.jome"}},
           "end": "'",
           "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}},
-          "patterns": [{
-            "name": "constant.character.escape.jome",
-            "match": "\\\\."
-          }]
+          "patterns": [
+            {"include": "#template-literal"},
+            {"include": "#escape-char"}
+          ]
         },
         {
           "name": "string.quoted.backtick.jome",
           "begin": "`",
           "end": "`",
           "patterns": [
-            {
-              "name": "meta.string-template-literal.jome",
-              "begin": "\\{",
-              "beginCaptures": {"0": {"name": "punctuation.definition.template-expression.begin.jome"}},
-              "end": "\\}",
-              "endCaptures": {"0": {"name": "punctuation.definition.template-expression.end.jome"}},
-              "patterns": [{ "include": "#expression" }]
-            },
-            {
-              "name": "constant.character.escape.jome",
-              "match": "\\\\."
-            }
+            {"include": "#template-literal"},
+            {"include": "#escape-char"}
           ]
         }
       ]
 		},
+    "escape-char": {
+      "name": "constant.character.escape.jome",
+      "match": "\\\\."
+    },
+    "template-literal": {
+      "name": "meta.string-template-literal.jome",
+      "begin": "\\{",
+      "beginCaptures": {"0": {"name": "punctuation.definition.template-expression.begin.jome"}},
+      "end": "\\}",
+      "endCaptures": {"0": {"name": "punctuation.definition.template-expression.end.jome"}},
+      "patterns": [{ "include": "#expression" }]
+    },
     "paren-expression": {
       "begin": "\\(",
       "end": "\\)",

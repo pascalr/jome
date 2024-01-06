@@ -6,6 +6,6 @@ let port = 3000;
     res.send("Hello world!");
   });
   return __chain.listen(port, function () {
-    console.log(`Server listening on port {port}`);
+    console.log("Server listening on port {port}");
   });
 })();

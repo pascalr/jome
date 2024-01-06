@@ -35,7 +35,7 @@ function ensureStartRaw(node, str) {
 }
 function ensureStartType(node, str) {
   if (node.parts[0]?.type !== str) {
-    node.errors.push(`Internal error. ${node.type} should always start with token of type ${str}. Was ${node.parts[0]?.type !== str}`)
+    node.errors.push(`Internal error. ${node.type} should always start with token of type ${str}. Was ${node.parts[0]?.type}`)
   }
 }
 function ensureEndRaw(node, str) {
@@ -358,7 +358,24 @@ const VALIDATORS = {
     //   // relPath = relPath.slice(0, relPath.length-4)+(ctx.useESM ? 'built.js' : 'built.cjs')
     // }
     node.data = {file, defaultImport, namedImports}
-  }
+  },
+
+  "string.quoted.double.jome": (node) => {
+    ensureStartRaw(node, '"')
+    ensureStartType(node, 'punctuation.definition.string.begin.jome')
+    ensureEndRaw(node, '"')
+    ensureEndType(node, 'punctuation.definition.string.end.jome')
+    // TODO: Check if contains interpolation, if yes, then use a template literal
+    
+    // let raw = compileTokenRaw(node.parts.slice(1,-1))
+    let raw = node.raw.slice(1,-1)
+    let interpolated = /(?<!\\){/.test(raw)
+    node.data = {raw, interpolated}
+
+      // return '`'+node.children.slice(1,-1).map(c => c.type === 'newline' ? '\n' : c).map(
+      //   c => typeof c === 'string' ? c : '${'+compileJsBlock(c.children.slice(1,-1), ctx)+'}'
+      // ).join('')+'`'
+  },
 }
 
 module.exports = {
