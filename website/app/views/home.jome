@@ -1406,9 +1406,9 @@ main {
   ""%xl // Trim everyline before
   ""%xlx // Trim everyline before and after
   ""%lx // Trim everyline after
-  ""%xsxt // Trim at the beginning of the string and the end of every line
-  ""%xlsx // Trim at the beginning of every line and the end of the string
-  ""%i__lx // Keep indentation at the beginning of everyline starting with two spaces and trim the end
+  ""%xs%xt // Trim at the beginning of the string and the end of every line
+  ""%xl%sx // Trim at the beginning of every line and the end of the string
+  ""%i__ // Keep indentation at the beginning of everyline starting with two spaces
 
   let description = "This is a text description
                      on many lines. It stays many
@@ -1418,9 +1418,19 @@ main {
   let singleLine = "This is written on multiple
                     lines but will all be joined
                     on a single line.
-                    "%xlxj_
+                    "%xlx%j_
 
   Maybe allow formatting after scripts too? <html></html>%xs
+
+  ### Default string format
+
+  You can use the keyword `use` to set a default format for the strings that comes after in the current scope.
+
+  ```jome
+  use %xlx%j_
+  let str = "some multi
+             line string" // will use the format above
+  ```
 
   <h3 id="verbatim">Verbatim string literals</h3>
 
