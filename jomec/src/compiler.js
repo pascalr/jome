@@ -51,11 +51,12 @@ function printTree(node, depth = 0) {
 // That a list of ASTNode and return js code
 function compileNodes(nodes) {
   validateAllNodes(nodes)
-  return nodes.map(node => genCode(node)).join('')
+  return nodes.map(node => genCode(node)).join(';')+';'
 }
 
 const DEFAULT_COMPILER_OPTIONS = {
-  useCommonJS: true // Whether imports and exports use common JS or ESM
+  useCommonJS: true, // Whether imports and exports use common JS or ESM
+  prettier: true, // Whether to format the code using the prettier library
 }
 
 /**
@@ -64,7 +65,8 @@ const DEFAULT_COMPILER_OPTIONS = {
  * @param {*} options See DEFAULT_COMPILER_OPTIONS for more details
  * @returns 
  */
-function compile(code, options=DEFAULT_COMPILER_OPTIONS) {
+function compile(code, options={}) {
+  options = {...DEFAULT_COMPILER_OPTIONS, ...options}
   let tokens = tokenize(code).children
   let ctxFile = new ContextFile()
   let topNodes = parse(tokens, null, ctxFile.lexEnv)
@@ -76,8 +78,10 @@ function compile(code, options=DEFAULT_COMPILER_OPTIONS) {
   let body = compileNodes(topNodes)
   let head = genImports(ctxFile, options)
   let generated = head + body
-  let formated = prettier.format(generated, {parser: "babel"})
-  return formated
+  if (options.prettier) {
+    generated = prettier.format(generated, {parser: "babel"})
+  }
+  return generated
 }
 
 // FIXME: This does not belong here

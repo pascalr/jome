@@ -231,9 +231,20 @@ const VALIDATORS = {
     if (node.parts[node.parts.length-1].type !== 'punctuation.definition.square-bracket.end.jome') {
       return "Internal error. meta.square-bracket.jome should always end with punctuation.definition.square-bracket.end.jome"
     }
-    // All the even index operands should be punctuation.separator.delimiter.jome
-    if (node.parts.slice(1,-1).some((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
-      return "Syntax error. Expecting commas between every element inside an array"
+    let isOperator = node.operands.length
+    let items = node.parts.slice(1,-1)
+    if (isOperator) {
+      if (items.length !== 1) {
+        return "Syntax error. Square bracket operator expects one and only one expression."
+      }
+      node.data = {isOperator, operand: node.operands[0], expression: items[0]}
+    } else {
+      // All the even index operands should be punctuation.separator.delimiter.jome
+      if (items.some((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
+        return "Syntax error. Expecting commas between every element inside an array"
+      }
+      let elems = node.parts.slice(1,-1).filter((e, i) => i % 2 === 0)
+      node.data = {elems}
     }
   },
   // =

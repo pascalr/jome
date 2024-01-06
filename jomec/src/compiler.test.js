@@ -42,6 +42,10 @@ javascript because it is more stable. It is a little weird to compile tests in i
 //   add 2
 // end
 
+test('let shouldAddSemiToDec = 1', () => {
+  expect(compile(`let shouldAddSemiToDec = foo()[0]`, {prettier: false})).toMatch(/;$/);
+})
+
 test('<sh>ls</sh>', () => {
   expect(compile(`<sh>ls</sh>`)).toMatch(/const execSh = require\("jome-lib\/execSh"\);\s*execSh\(`ls`\);/);
 })

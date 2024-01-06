@@ -266,8 +266,12 @@ const CODE_GENERATORS = {
   // x[0]
   // called square-bracket because it can be an array or an operator
   "meta.square-bracket.jome": (node) => {
-    let elems = node.parts.slice(1,-1).filter((e, i) => i % 2 === 0)
-    return `[${elems.map(c => genCode(c)).join(', ')}]`
+    let {isOperator, operand, expression, elems} = node.data
+    if (isOperator) {
+      return `${genCode(operand)}[${genCode(expression)}]`
+    } else {
+      return `[${elems.map(c => genCode(c)).join(', ')}]`
+    }
   },
   // exec
   //   someFunc()
