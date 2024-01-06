@@ -1378,8 +1378,8 @@ main {
   Ideas:
   - "Hello {name}!" // name is interpolated with single {}
   - """Hello {{name}}! Can use single " or double "" inside too!""" // name is interpolated with double {{}}
-  - @"Hello {name}! \n not escaped" // verbatim, \ only escapes the double quote, no interpolation
-  - @"""Hello \ {{name}}!""" // verbatim, \ only escapes the double quote, but ALLOWS interpolation with double {{}}
+  - @"Hello {name}! \n not escaped" // verbatim, \ only escapes the quote, no interpolation
+  - @"""Hello \ {{name}}!""" // verbatim, \ only escapes the quote, but ALLOWS interpolation with double {{}}
   Maybe:
   - #"Hello #name! How are you #{name}? ##PI is almost 3.1416" // #identifier and #{identifier} are both allowed for interpolation
   - $"Hello ${name}!" // exactly like backticks in js
@@ -1397,6 +1397,7 @@ main {
   i: indent (trim, but keep indentation, check for least amount of spaces before, than trim, spaces and tabs not allowed combined, never with s (string))
   t: tab
   _: space
+  j: join (must be at the end of the format. joins all lines with the character after if any, or nothing if ends with j)
 
   // Explicit characters like \t and \n are not trimmed.
   ""%xs // Trim at the beginning of the string
@@ -1409,8 +1410,15 @@ main {
   ""%xlsx // Trim at the beginning of every line and the end of the string
   ""%i__lx // Keep indentation at the beginning of everyline starting with two spaces and trim the end
 
-  I could allow adding spaces and tabs, but unfortunatly it starts with the same letters as trim and string, and I don't want it to become too
-  complicated. Use real code if you want something more complicated. This is already pretty good.
+  let description = "This is a text description
+                     on many lines. It stays many
+                     lines but trims beginning.
+                    "%xlsx
+
+  let singleLine = "This is written on multiple
+                    lines but will all be joined
+                    on a single line.
+                    "%xlxj_
 
   Maybe allow formatting after scripts too? <html></html>%xs
 
@@ -1422,6 +1430,36 @@ main {
   ```jome
   str = @"This is a string that does ${not} interpolate"
   ```
+
+  ## Threads
+
+  Exactly the same as JavaScript? await, async, ...
+
+  ```jome
+  async def someMethod
+  end
+
+  let someFunc = async () => {x: 1, y: 2}
+  ```
+
+  ## Private
+
+  For private fields inside classes, you can use a private block.
+  You can also use the private before a method.
+
+  ```
+  class SomeClass
+    private
+      def somePrivateMethod
+      end
+    end
+
+    private def someOtherPrivateMethod
+    end
+  end
+  ```
+
+  It compiles in javascript using a # before the names of fields.
 
   ## Main
 
