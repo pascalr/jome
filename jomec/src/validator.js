@@ -365,16 +365,20 @@ const VALIDATORS = {
     ensureStartType(node, 'punctuation.definition.string.begin.jome')
     ensureEndRaw(node, '"')
     ensureEndType(node, 'punctuation.definition.string.end.jome')
-    // TODO: Check if contains interpolation, if yes, then use a template literal
-    
-    // let raw = compileTokenRaw(node.parts.slice(1,-1))
-    let raw = node.raw.slice(1,-1)
-    let interpolated = /(?<!\\){/.test(raw)
-    node.data = {raw, interpolated}
+    let parts = node.parts.slice(1,-1)
+    node.data = {parts}
+  },
 
-      // return '`'+node.children.slice(1,-1).map(c => c.type === 'newline' ? '\n' : c).map(
-      //   c => typeof c === 'string' ? c : '${'+compileJsBlock(c.children.slice(1,-1), ctx)+'}'
-      // ).join('')+'`'
+  "meta.string-template-literal.jome": (node) => {
+    ensureStartRaw(node, '{')
+    ensureStartType(node, 'punctuation.definition.template-expression.begin.jome')
+    ensureEndRaw(node, '}')
+    ensureEndType(node, 'punctuation.definition.template-expression.end.jome')
+    if (node.parts.length !== 3) {
+      return "Error a template literal should only contain a single expression inside template."
+    }
+    let code = node.parts[1]
+    node.data = {code}
   },
 }
 

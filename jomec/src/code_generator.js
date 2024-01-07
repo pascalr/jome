@@ -153,11 +153,21 @@ function compileFuncCall(node) {
 }
 
 function compileString(node) {
-  let {raw, interpolated} = node.data
-  if (!interpolated) {
-    return `"${raw}"`
-  }
-  return `"${raw}"`
+  let result = ""
+  let isTemplateLiteral = false
+  node.data.parts.forEach(part => {
+    if (part.type === 'raw') {
+      result += part.raw
+    } else if (part.type === 'meta.string-template-literal.jome') {
+      isTemplateLiteral = true
+      result += "${"+genCode(part.data.code)+"}"
+    }
+  })
+
+  // return '`'+node.children.slice(1,-1).map(c => c.type === 'newline' ? '\n' : c).map(
+  //   c => typeof c === 'string' ? c : '${'+compileJsBlock(c.children.slice(1,-1), ctx)+'}'
+  // ).join('')+'`'
+  return isTemplateLiteral ? `\`${result}\`` : `"${result}"`
 }
 
 const CODE_GENERATORS = {

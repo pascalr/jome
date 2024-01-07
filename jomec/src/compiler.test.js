@@ -43,7 +43,7 @@ javascript because it is more stable. It is a little weird to compile tests in i
 // end
 
 test('String interpolation "{1+1}"', () => {
-  expect(compile(`"1 + 1 = {1+1}"`)).toMatch(/`1 + 1 = \$\{1+1\}`/);
+  expect(compile(`"1 + 1 = {1+1}"`)).toMatch(/`1 \+ 1 = \$\{1 ?\+ ?1\}`/);
 })
 
 test('let shouldAddSemiToDec = 1', () => {
