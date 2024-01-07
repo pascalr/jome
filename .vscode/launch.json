@@ -26,6 +26,15 @@
     {
       "type": "node-terminal",
       "request": "launch",
+      "name": "Just jome",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "command": "jome index_v2.jome"
+    },
+    {
+      "type": "node-terminal",
+      "request": "launch",
       "name": "Run tests (Old)",
       "skipFiles": [
         "<node_internals>/**"

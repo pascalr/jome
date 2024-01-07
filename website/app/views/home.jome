@@ -1424,6 +1424,8 @@ main {
 
   ### Default string format
 
+  I think I want the default format to be %i%xsx.
+
   You can use the keyword `use` to set a default format for the strings that comes after in the current scope.
 
   ```jome
@@ -1431,6 +1433,36 @@ main {
   let str = "some multi
              line string" // will use the format above
   ```
+
+  The formats do not add up to each other. When you specify a format, it replaces the previous one.
+
+  Maybe allow to give names to format that you can reuse?
+
+  Or simply numbers?
+
+  set format 0 %xlx%j_
+
+  then you do "some string"%0
+
+  When there is a default format and you want none, use only % like "str"%
+
+  Maybe define single digits aliases myself to be the most commonly used formats. This way you can know what it means without looking
+  it up if you are an expert.
+
+  Or maybe define named aliases myself.
+
+  %_html => string like in html, joins the lines with a single space
+
+  Maybe it would be nice if I could modify only some flag instead of all. Let's say, I always want xsx, but only sometimes xl,
+  I don't want to have to redefine xsx every time.
+
+  Peut-être quand dans le fond faire que ce sont tous des flags.
+
+  Tu peux faire %s pour reset string settings, %l pour line settings, %s%l%i%j équivalerais à % qui reset tout
+
+  Je ne sais pas pour %i par contre, mais celui n'est pas encore tout à fais clair. Ça garde juste le nested indent?
+
+  Si %i active, comment désactivé?
 
   <h3 id="verbatim">Verbatim string literals</h3>
 

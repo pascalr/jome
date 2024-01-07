@@ -11,6 +11,5 @@ if (cmd === "test") {
 Usage:
 jome # get this help message
 jome s # start server (or jome server)
-jome test # launch the tests
-`);
+jome test # launch the tests`);
 }

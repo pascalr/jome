@@ -187,7 +187,15 @@ function compileString(node) {
         }
       } else if (mod.includes('s')) {
         // The whole string modifier
-        throw new Error("sf78923h89rh2389ryh")
+        if (!(mod === 'xs' || mod === 'sx' || mod === 'xsx')) {
+          throw new Error("Unkown string format %"+mod)
+        }
+        if (mod[0] === 'x' && !(lines[0]?.length)) {
+          lines = lines.slice(1)
+        }
+        if (mod.slice(-1) === 'x' && !(lines[lines.length-1]?.length)) {
+          lines = lines.slice(0, -1)
+        }
       } else if (mod.includes('j')) {
         // A join modifier
         throw new Error("sf8h902340ij0sdfsd")
