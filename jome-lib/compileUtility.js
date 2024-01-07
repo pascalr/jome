@@ -12,7 +12,7 @@ const UTILS = {
     node.lexEnv.ctxFile.addImport(null, ['write'], 'jome-lib/write')
     return `write`
   },
-  writeSync: (node) => {
+  "write!": (node) => {
     node.lexEnv.ctxFile.addImport(null, ['writeSync'], 'jome-lib/write')
     return `writeSync`
   },
