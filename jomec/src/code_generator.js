@@ -153,23 +153,52 @@ function compileFuncCall(node) {
 }
 
 function compileString(node) {
-  let result = ""
+  let currentLine = ""
+  let lines = []
   let isTemplateLiteral = false
   node.data.parts.forEach(part => {
     if (part.type === 'raw') {
-      result += part.raw
+      currentLine += part.raw
     } else if (part.type === 'meta.string-template-literal.jome') {
       isTemplateLiteral = true
-      result += "${"+genCode(part.data.code)+"}"
+      currentLine += "${"+genCode(part.data.code)+"}"
     } else if (part.type === 'newline') {
       isTemplateLiteral = true
-      result += "\n"
+      lines.push(currentLine)
+      currentLine = ""
     }
   })
+  lines.push(currentLine)
 
-  // return '`'+node.children.slice(1,-1).map(c => c.type === 'newline' ? '\n' : c).map(
-  //   c => typeof c === 'string' ? c : '${'+compileJsBlock(c.children.slice(1,-1), ctx)+'}'
-  // ).join('')+'`'
+  let format = node.data.format
+  if (format) {
+    let mods = format.slice(1).split('%')
+    mods.forEach(mod => {
+      if (mod.includes('l')) {
+        // A line modifier
+        if (mod === 'xl') {
+          lines = lines.map(l => l.trimLeft())
+        } else if (mod === 'lx') {
+          lines = lines.map(l => l.trimRight())
+        } else if (mod === 'xlx') {
+          lines = lines.map(l => l.trim())
+        } else {
+          throw new Error("Unkown string format %"+mod)
+        }
+      } else if (mod.includes('s')) {
+        // The whole string modifier
+        throw new Error("sf78923h89rh2389ryh")
+      } else if (mod.includes('j')) {
+        // A join modifier
+        throw new Error("sf8h902340ij0sdfsd")
+      } else if (mod.includes('i')) {
+        // An indent modifier
+        throw new Error("93845h978sgh789fg3")
+      }
+    })
+  }
+
+  let result = lines.join('\n')
   return isTemplateLiteral ? `\`${result}\`` : `"${result}"`
 }
 

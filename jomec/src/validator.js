@@ -102,6 +102,20 @@ function validateOperator(node) {
   }
 }
 
+function validateString(node, char) {
+  let last = node.parts[node.parts.length-1]
+  let format;
+  if (last.type === 'keyword.other.jome') { // If it is a format
+    format = last.raw
+  }
+  ensureStartRaw(node, char)
+  ensureStartType(node, 'punctuation.definition.string.begin.jome')
+  // ensureEndRaw(node, char)
+  // ensureEndType(node, 'punctuation.definition.string.end.jome')
+  let parts = node.parts.slice(1, format ? -2 : -1)
+  node.data = {parts, format}
+}
+
 const VALIDATORS = {
   "meta.function.jome": (node) => {
     if (node.parts[0].raw !== 'function') {
@@ -360,23 +374,8 @@ const VALIDATORS = {
     node.data = {file, defaultImport, namedImports}
   },
 
-  "string.quoted.double.jome": (node) => {
-    ensureStartRaw(node, '"')
-    ensureStartType(node, 'punctuation.definition.string.begin.jome')
-    ensureEndRaw(node, '"')
-    ensureEndType(node, 'punctuation.definition.string.end.jome')
-    let parts = node.parts.slice(1,-1)
-    node.data = {parts}
-  },
-
-  "string.quoted.single.jome": (node) => {
-    ensureStartRaw(node, "'")
-    ensureStartType(node, 'punctuation.definition.string.begin.jome')
-    ensureEndRaw(node, "'")
-    ensureEndType(node, 'punctuation.definition.string.end.jome')
-    let parts = node.parts.slice(1,-1)
-    node.data = {parts}
-  },
+  "string.quoted.double.jome": (node) => validateString(node, '"'),
+  "string.quoted.single.jome": (node) => validateString(node, "'"),
 
   "meta.string-template-literal.jome": (node) => {
     ensureStartRaw(node, '{')

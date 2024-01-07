@@ -1400,9 +1400,9 @@ main {
   j: join (must be at the end of the format. joins all lines with the character after if any, or nothing if ends with j)
 
   // Explicit characters like \t and \n are not trimmed.
-  ""%xs // Trim at the beginning of the string
-  ""%xsx // Trim at the beginning and the end of the string
-  ""%sx // Trim at the end of the string
+  ""%xs // Trim empty lines at the beginning of the string
+  ""%xsx // Trim empty lines at the beginning and the end of the string
+  ""%sx // Trim empty lines at the end of the string
   ""%xl // Trim everyline before
   ""%xlx // Trim everyline before and after
   ""%lx // Trim everyline after

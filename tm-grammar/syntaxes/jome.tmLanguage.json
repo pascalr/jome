@@ -640,8 +640,11 @@
           "name": "string.quoted.double.jome",
           "begin": "\"",
           "beginCaptures": {"0": {"name": "punctuation.definition.string.begin.jome"}},
-          "end": "\"",
-          "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}},
+          "end": "(\")((%\\w*)*)",
+          "endCaptures": {
+            "1": {"name": "punctuation.definition.string.end.jome"},
+            "2": {"name": "keyword.other.jome"}
+          },
           "patterns": [
             {"include": "#template-literal"},
             {"include": "#escape-char"}

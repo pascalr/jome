@@ -42,6 +42,10 @@ javascript because it is more stable. It is a little weird to compile tests in i
 //   add 2
 // end
 
+test('String format " test"%xl', () => {
+  expect(compile(`" test"%xl`)).toMatch(/"test"/);
+})
+
 test('String interpolation "{1+1}"', () => {
   expect(compile(`"1 + 1 = {1+1}"`)).toMatch(/`1 \+ 1 = \$\{1 ?\+ ?1\}`/);
 })
