@@ -143,13 +143,21 @@ function compileStandaloneFunction(node) {
   }
 }
 
-function compileFuncCall(node) {
-  let hasDot = node.parts[0].type === 'punctuation.dot.jome'
-  let parts = hasDot ? node.parts.slice(1) : node.parts
+// No dot before the func call
+function compileSupportFuncCall(node) {
+  let called = genCode(node.parts[0])
+  let args = node.parts.slice(1).filter(p => p.type !== 'punctuation.separator.delimiter.jome').map(p => genCode(p)).join(', ')
+  //let args = parts.slice(1).map(p => compileNode(p)).join('')//.filter(p => p && p.length).join(', ')
+  return `${called}(${args})`
+}
+
+// With a dot before the func call
+function compileMetaFuncCall(node) {
+  let parts = node.parts.slice(1)
   let called = genCode(parts[0])
   let args = parts.slice(1).filter(p => p.type !== 'punctuation.separator.delimiter.jome').map(p => genCode(p)).join(', ')
   //let args = parts.slice(1).map(p => compileNode(p)).join('')//.filter(p => p && p.length).join(', ')
-  return `${hasDot ? '.' : ''}${called}(${args})`
+  return `${genCode(node.operands[0])}.${called}(${args})`
 }
 
 function compileString(node) {
@@ -276,8 +284,10 @@ const CODE_GENERATORS = {
       return `${sect.keyword} ${sect.cond ? `(${genCode(sect.cond)})` : ''} {${sect.statements.map(c => genCode(c)).join('')}}`
     }).join(' ');
   },
-  "support.function-call.WIP.jome": compileFuncCall,
-  "support.function-call.jome": compileFuncCall,
+  "support.function-call.WIP.jome": compileSupportFuncCall,
+  "support.function-call.jome": compileSupportFuncCall,
+  "meta.function-call.WIP.jome": compileMetaFuncCall,
+  "meta.function-call.jome": compileMetaFuncCall,
   // js uses more specifically:
   // keyword.operator.arithmetic.jome
   // keyword.operator.logical.jome

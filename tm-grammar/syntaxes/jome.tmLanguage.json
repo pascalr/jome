@@ -397,8 +397,8 @@
     "function_call": {
 			"patterns": [
         {
-          "name": "support.function-call.jome",
-          "begin": "(\\.)?(\\w+)\\(",
+          "name": "meta.function-call.jome",
+          "begin": "(\\.)(\\w+)\\(",
           "beginCaptures": {
             "1": {"name": "punctuation.dot.jome"},
             "2": { "name": "entity.name.function.jome" }
@@ -407,8 +407,8 @@
           "patterns": [{ "include": "#expression" }]
         },
         {
-          "name": "support.function-call.jome",
-          "begin": "(\\.)?(#\\w+)\\(",
+          "name": "meta.function-call.jome",
+          "begin": "(\\.)(#\\w+)\\(",
           "beginCaptures": {
             "1": {"name": "punctuation.dot.jome"},
             "2": { "name": "entity.name.function.utility.jome" }
@@ -417,8 +417,8 @@
           "patterns": [{ "include": "#expression" }]
         },
         {
-          "name": "support.function-call.WIP.jome",
-          "begin": "(\\.)?(#\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|do|chain|end|\\}|\\?|\\[|\\]))",
+          "name": "meta.function-call.WIP.jome",
+          "begin": "(\\.)(#\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|do|chain|end|\\}|\\?|\\[|\\]))",
           "beginCaptures": {
             "1": {"name": "punctuation.dot.jome"},
             "2": { "name": "entity.name.function.utility.jome" }
@@ -427,12 +427,40 @@
           "patterns": [{ "include": "#expression" }]
         },
         {
-          "name": "support.function-call.WIP.jome",
-          "begin": "(\\.)?\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|do|chain|end|\\}|\\?|\\[|\\]))",
+          "name": "meta.function-call.WIP.jome",
+          "begin": "(\\.)\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|do|chain|end|\\}|\\?|\\[|\\]))",
           "beginCaptures": {
             "1": {"name": "punctuation.dot.jome"},
             "2": { "name": "entity.name.function.jome" }
           },
+          "end": "\r\n|\n|$|chain",
+          "patterns": [{ "include": "#expression" }]
+        },
+        {
+          "name": "support.function-call.jome",
+          "begin": "(\\w+)\\(",
+          "beginCaptures": {"1": { "name": "entity.name.function.jome" }},
+          "end": "\\)",
+          "patterns": [{ "include": "#expression" }]
+        },
+        {
+          "name": "support.function-call.jome",
+          "begin": "(#\\w+)\\(",
+          "beginCaptures": {"1": { "name": "entity.name.function.utility.jome" }},
+          "end": "\\)",
+          "patterns": [{ "include": "#expression" }]
+        },
+        {
+          "name": "support.function-call.WIP.jome",
+          "begin": "(#\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|do|chain|end|\\}|\\?|\\[|\\]))",
+          "beginCaptures": {"1": { "name": "entity.name.function.utility.jome" }},
+          "end": "\r\n|\n|$|chain",
+          "patterns": [{ "include": "#expression" }]
+        },
+        {
+          "name": "support.function-call.WIP.jome",
+          "begin": "\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|along|do|chain|end|\\}|\\?|\\[|\\]))",
+          "beginCaptures": {"1": { "name": "entity.name.function.jome" }},
           "end": "\r\n|\n|$|chain",
           "patterns": [{ "include": "#expression" }]
         }

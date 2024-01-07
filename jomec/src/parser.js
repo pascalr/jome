@@ -172,6 +172,8 @@ const CHAINABLE_TYPES = [
   "meta.getter.jome",
   "meta.caller.jome",
   "meta.chain.jome",
+  "meta.function-call.jome",
+  "meta.function-call.WIP.jome",
 ]
 
 const PRECEDENCES = {
