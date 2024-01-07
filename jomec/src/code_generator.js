@@ -129,19 +129,23 @@ function compileStandaloneFunction(node) {
   }
 }
 
-function toPrimitive(inputString) {
+function toPrimitive(str) {
   // Check if the string represents an integer
-  if (/^-?\d+$/.test(inputString)) {
-    return parseInt(inputString, 10);
+  if (/^-?\d+$/.test(str)) {
+    return parseInt(str, 10);
   }
 
   // Check if the string represents a floating-point number
-  if (/^-?\d+\.\d+$/.test(inputString)) {
-    return parseFloat(inputString);
+  if (/^-?\d+\.\d+$/.test(str)) {
+    return parseFloat(str);
   }
 
-  // If neither integer nor float, return the original string
-  return inputString;
+  // Check if the string is a string
+  if (str.startsWith('"') || str.startsWith("'")) {
+    return str.slice(1,-1)
+  }
+
+  throw new Error("TODO fas02934n890fhsn0n1")
 }
 
 // Combine all the named parameters given into a single object
