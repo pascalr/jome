@@ -40,7 +40,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "command": "jome tmp.jome"
+      "command": "jome jomec/test/generic.test.jome"
     },
     {
       "type": "node-terminal",

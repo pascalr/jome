@@ -22,45 +22,45 @@ function validateAllNodes(nodes) {
 function ensureLhsOperand(node) {
   // return validateoperands(2, OPERAND_TYPES)(node)
   if (node.operands.length !== 1) {
-    node.errors.push(`Missing left hand side operand for token ${node.type}`)
+    throw new Error(`Missing left hand side operand for token ${node.type}`)
   }
   if (node.operands.length && !OPERAND_TYPES.includes(node.operands[0].type)) {
-    node.errors.push(`Invalid operand type for operator ${node.type}. Was: ${node.operands[0].type}`)
+    throw new Error(`Invalid operand type for operator ${node.type}. Was: ${node.operands[0].type}`)
   }
 }
 function ensureStartRaw(node, str) {
   if (node.parts[0]?.raw !== str) {
-    node.errors.push(`Internal error. ${node.type} should always start with token ${str}. Was ${node.parts[0]?.raw}`)
+    throw new Error(`Internal error. ${node.type} should always start with token ${str}. Was ${node.parts[0]?.raw}`)
   }
 }
 function ensureStartType(node, str) {
   if (node.parts[0]?.type !== str) {
-    node.errors.push(`Internal error. ${node.type} should always start with token of type ${str}. Was ${node.parts[0]?.type}`)
+    throw new Error(`Internal error. ${node.type} should always start with token of type ${str}. Was ${node.parts[0]?.type}`)
   }
 }
 function ensureEndRaw(node, str) {
   let s = node.parts[node.parts.length-1]?.raw
   if (s !== str) {
-    node.errors.push(`Internal error. ${node.type} should always end with token ${str}. Was ${s}`)
+    throw new Error(`Internal error. ${node.type} should always end with token ${str}. Was ${s}`)
   }
 }
 function ensureEndType(node, str) {
   let s = node.parts[node.parts.length-1]?.type
   if (s !== str) {
-    node.errors.push(`Internal error. ${node.type} should always end with token of type ${str}. Was ${s}`)
+    throw new Error(`Internal error. ${node.type} should always end with token of type ${str}. Was ${s}`)
   }
 }
 function ensureAllType(node, list, str) {
   list.forEach(el => {
     if (el.type !== str) {
-      node.errors.push(`Error. ${node.type} should only contain tokens of type ${str}. Was ${el.type}`)
+      throw new Error(`Error. ${node.type} should only contain tokens of type ${str}. Was ${el.type}`)
     }
   })
 }
 function ensureAllTypeIn(node, list, arr) {
   list.forEach(el => {
     if (!arr.includes(el.type)) {
-      node.errors.push(`Error. ${node.type} malformed expression. Unexpected children token type ${el.type}`)
+      throw new Error(`Error. ${node.type} malformed expression. Unexpected children token type ${el.type}`)
     }
   })
 }
@@ -68,7 +68,7 @@ function ensureAllTypeIn(node, list, arr) {
 function ensureListSeparatedByCommas(node, items) {
   // All the even index operands should be punctuation.separator.delimiter.jome
   if (items.some((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
-    node.errors.push("Syntax error. Expecting commas between every element inside a list")
+    throw new Error("Syntax error. Expecting commas between every element inside a list")
   }
 }
 
@@ -135,8 +135,13 @@ function validateFuncCall(node, hasDot) {
     return "Internal error. Function calls should always start with a name."
   }
   let parts = node.parts.slice(hasDot ? 2 : 1)
+  let args = [];
+  if (parts.length && parts[parts.length-1].type === 'meta.do-end.jome') {
+    args.push(parts[parts.length-1])
+    parts = parts.slice(0, -1)
+  }
   ensureListSeparatedByCommas(node, parts)
-  let args = parts.filter((e, i) => i % 2 === 0)
+  args = [...parts.filter((e, i) => i % 2 === 0), ...args]
 
   node.data = {nameTok, args}
 }
@@ -338,7 +343,7 @@ const VALIDATORS = {
         sections.push(currentSection)
       } else if (p.type === 'keyword.control.conditional.else.jome') {
         if (currentSection.keyword === 'else') {
-          return node.errors.push("A condition block can only have a single else statement.")
+          throw new Error("A condition block can only have a single else statement.")
         }
         currentSection = {keyword: 'else', statements: []}
         sections.push(currentSection)
@@ -369,7 +374,7 @@ const VALIDATORS = {
     let list = filterStrings(node.parts.slice(1)) // remove import keyword
     list.forEach(item => {
       if (item.type === 'meta.named-imports.jome') {
-        throw new Error("TODO 789h2359f79sdu")
+        namedImports.push(filterSpaces(item.parts)[0].raw)
         // filterSpaces(item.children.slice(1, -1)).forEach(imp => {
         //   if (imp.type === 'variable.other.named-import.jome') {
         //     let name = imp.text()

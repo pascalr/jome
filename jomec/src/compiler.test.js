@@ -71,18 +71,10 @@ test('# documentation comment', () => {
 // `)).toBe("WIP2");
 // })
 
-test('WIP', () => {
-  expect(compile(`
-express() exec
-  get '/' do |req, res|
-    res.send('Hello world!')
-  end
-  listen port do
-    #log \`Server listening on port {port}\`
-  end
-end
-`)).toBe("WIP");
-})
+// test('WIP', () => {
+//   expect(compile(`
+// `)).toBe("WIP");
+// })
 
 test('Test each do end', () => {
   expect(compile(`
