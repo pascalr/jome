@@ -1,5 +1,4 @@
 const { compileUtility } = require("jome-lib/compileUtility")
-const { compileTokenRaw } = require("./parser")
 
 function genCode(node) {
   let generator = CODE_GENERATORS[node.type]
@@ -19,15 +18,13 @@ function genImports(ctxFile, compilerOptions) {
       if (def) {
         result += `const ${def} = require("${file}");\n`
       } else {
-        throw new Error("TODO: 23489ashdf89h23")
-        result += ""
+        result += `const {${[...named].join(', ')}} = require("${file}");\n`
       }
     } else {
       if (def) {
         result += `import ${def} from "${file}";\n`
       } else {
-        throw new Error("TODO: 23498s9dfh98i2")
-        result += ""
+        result += `import {${[...named].join(', ')}} from "${file}";\n`
       }
     }
   })
@@ -52,14 +49,16 @@ function compileRaw(node) {
 
 function compUtility(node, isInline) {
   let name = node.raw.slice(isInline ? 2 : 1)
-  let val = compileUtility(name, node)
+  let args = '';
   if (node.operands) {
     if (isInline) {
-      return `${val}(${node.operands.map(c => genCode(c)).join('')})`
+      args = `(${node.operands.map(c => genCode(c)).join('')})`
+    } else {
+      args = `${node.operands.map(c => genCode(c)).join('')}`
     }
-    return `${val}${node.operands.map(c => genCode(c)).join('')}`
   }
-  return val
+  let val = compileUtility(name, node)
+  return `${val}${args}`
 }
 
 function compileArgs(node) { 
