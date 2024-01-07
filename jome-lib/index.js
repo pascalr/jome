@@ -1,5 +1,8 @@
-const {execSh} = require("./execSh/execSh.js")
+const execSh = require("./execSh.js")
+const {write, writeSync} = require("./write.js")
 
 module.exports = {
   execSh,
+  write,
+  writeSync
 }

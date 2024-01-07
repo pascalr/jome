@@ -179,6 +179,11 @@ main {
   process: #argv, #env, #cwd...
   underscore.js: #map, #reduce, ...
 
+  For functions that have a sync and async version, use the exclamation mark after to use the sync version.
+  ```jome
+  #write! './somefile.txt', 'Some content', overwrite: true
+  ```
+
   ## Types
 
   You can specify types for variables. It can be primitives like string, number, integer or float. It can also be class names or interfaces.
@@ -450,6 +455,14 @@ main {
   ```jome
   let firstChild = @1 // Child index starts at 1
   let secondChild = @2
+  ```
+
+  ### Exclamation mark in objects
+
+  Inside an object, you can use an exclamation mark after a variable name so it sets it value to true.
+
+  ```jome
+  let obj = {someCond!} // same as {someCond: true}
   ```
 
   ## Loops
