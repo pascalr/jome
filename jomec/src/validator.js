@@ -65,6 +65,13 @@ function ensureAllTypeIn(node, list, arr) {
   })
 }
 
+function ensureListSeparatedByCommas(items) {
+  // All the even index operands should be punctuation.separator.delimiter.jome
+  if (items.some((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
+    node.errors.push("Syntax error. Expecting commas between every element inside a list")
+  }
+}
+
 function filterNewlines(list) {
   return list.filter(el => el.type !== 'newline')
 }
@@ -114,6 +121,24 @@ function validateString(node, char) {
   // ensureEndType(node, 'punctuation.definition.string.end.jome')
   let parts = node.parts.slice(1, format ? -2 : -1)
   node.data = {parts, format}
+}
+
+function validateFuncCall(node, hasDot) {
+  if (hasDot && node.parts[0].type !== "punctuation.dot.jome") {
+    return "Internal error. Expected dot before function call in this circonstance."
+  }
+  if (hasDot && node.operands.length !== 1) {
+    return "Internal error. A function call with a dot should have a left operand."
+  }
+  let nameTok = node.parts[hasDot ? 1 : 0]
+  if (nameTok.type !== 'entity.name.function.jome' && nameTok.type !== "entity.name.function.utility.jome") {
+    return "Internal error. Function calls should always start with a name."
+  }
+  let parts = node.parts.slice(hasDot ? 2 : 1)
+  ensureListSeparatedByCommas(parts)
+  let args = parts.filter((e, i) => i % 2 === 0)
+
+  node.data = {nameTok, args}
 }
 
 const VALIDATORS = {
@@ -197,13 +222,17 @@ const VALIDATORS = {
     if (node.operands.length !== 2) {
       return "A colon operator must have a two operands"
     }
-    if (node.operands[0].type !== 'keyword.operator.existential.jome') {
-      return `Expecting ? before : in ternary expression.`
-    }
+    // A colon can we used for the else of a ternary, but also for creating en entry
+    // if (node.operands[0].type !== 'keyword.operator.existential.jome') {
+    //   return `Expecting ? before : in ternary expression.`
+    // }
     let child = node.operands[1]
     if (!OPERAND_TYPES.includes(child.type)) {
       return `Invalid operand type for operator ${node.type}. Was: ${child.type}`
     }
+    // node.data = {
+    //   isTernary: node.operands[0].type === 'keyword.operator.existential.jome'
+    // }
   },
   // =>
   'keyword.arrow.jome': (node) => {
@@ -253,10 +282,7 @@ const VALIDATORS = {
       }
       node.data = {isOperator, operand: node.operands[0], expression: items[0]}
     } else {
-      // All the even index operands should be punctuation.separator.delimiter.jome
-      if (items.some((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
-        return "Syntax error. Expecting commas between every element inside an array"
-      }
+      ensureListSeparatedByCommas(items)
       let elems = node.parts.slice(1,-1).filter((e, i) => i % 2 === 0)
       node.data = {elems}
     }
@@ -388,6 +414,11 @@ const VALIDATORS = {
     let code = node.parts[1]
     node.data = {code}
   },
+
+  "support.function-call.WIP.jome": (node) => validateFuncCall(node, false,),
+  "support.function-call.jome": (node) => validateFuncCall(node, false),
+  "meta.function-call.WIP.jome": (node) => validateFuncCall(node, true),
+  "meta.function-call.jome": (node) => validateFuncCall(node, true),
 }
 
 module.exports = {
