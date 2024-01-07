@@ -369,6 +369,15 @@ const VALIDATORS = {
     node.data = {parts}
   },
 
+  "string.quoted.single.jome": (node) => {
+    ensureStartRaw(node, "'")
+    ensureStartType(node, 'punctuation.definition.string.begin.jome')
+    ensureEndRaw(node, "'")
+    ensureEndType(node, 'punctuation.definition.string.end.jome')
+    let parts = node.parts.slice(1,-1)
+    node.data = {parts}
+  },
+
   "meta.string-template-literal.jome": (node) => {
     ensureStartRaw(node, '{')
     ensureStartType(node, 'punctuation.definition.template-expression.begin.jome')
