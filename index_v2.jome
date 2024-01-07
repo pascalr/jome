@@ -5,11 +5,11 @@ if (cmd === 'test')
 elsif (cmd === 's' || cmd === 'server')
   <sh>jome website-v2/server.jome</sh>
 else
-  #log `Jome App v0.0.0.0.1
+  #log "Jome App v0.0.0.0.1
 
 Usage:
 jome # get this help message
 jome s # start server (or jome server)
 jome test # launch the tests
-`
+"
 end
