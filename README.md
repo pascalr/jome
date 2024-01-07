@@ -2,6 +2,7 @@
 
 TODO: Avoir seulement un README.md et des dossiers
 
+TODO: Implement a language server protocol
 TODO: Utiliser vscode smart stuff. Je veux m'assurer d'être capable de le faire. Je ne veux pas devoir réécrire mes trucs une 5e fois pour être compatible...
 
 TODO: License file
@@ -24,6 +25,10 @@ TODO: Merge /jome and /lib into /jome-lib
 
 The .js files that are used by Jome. Not sure about that one. Ideally, the files belong to jomec and the
 code is bundled together. But it's nice if it can be used standalone too. Or useless?
+
+## jome-lsp
+
+A language server protocol (LSP) implementation. This is to provide smart coding functionality to IDEs.
 
 ## jome-cli
 

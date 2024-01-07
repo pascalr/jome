@@ -1,6 +1,8 @@
 let cmd = #argv[1]
 
 if (cmd === 'test')
+  // #run! 'test.jome'
+  // load 'test.jome'
   <sh>jome test.jome</sh>
 elsif (cmd === 's' || cmd === 'server')
   <sh>jome website-v2/server.jome</sh>

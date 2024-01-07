@@ -465,6 +465,55 @@ main {
   let obj = {someCond!} // same as {someCond: true}
   ```
 
+  ## Paths
+
+  I want to be able to create paths easily. I am thinking of using the # here again.
+
+  ```jome
+  let absPathOfCurrentFileDirectory = #.
+  let sameDirFile = #./someFile.jome
+  let absPath = #/some/absolute/path.txt
+  let back = #../otherDir/someFile.txt
+  ```
+
+  Spaces are now allowed. But you can escape them. Any other character is allowed?
+
+  At compile time, the path is simply replaced with a string.
+
+  Wait, but what to do with the string? I should output an absolute path to make sure it points to the proper file, but do I want
+  this?
+
+  ```jome
+  import {someFunc} from #./someOtherFile // Here I want that it stays relative.
+  ```
+
+  What I want is that let's say I have a relative path in some file, well I want to be able to give this path to someone else.
+
+  Right now, what is a relative path relative to? In an import, it's relative to a current file.
+
+  When you try to read or write a file, I guess it's relative to the current working directory.
+
+  Do I say that imports are a special kind and should use strings.
+
+  For other things you can use these paths, and they are simply converted to absolute path.
+
+  The issue with absolute path is that let's say I compile my code and only have js code now. I give it to someone to run.
+  The absolute path won't be the same so I can't use this.
+
+  Let's say the current working directory is ~/project.
+  Let's say we are in a source file at ~/project/src/code.jome
+  In this file, we reference a file at ~/project/assets/image.jpg
+
+  In code.jome, with do #../assets/image.jpg
+  
+  I think I want this to be converted to: "./assets/image.jpg"
+
+  OK, so #./relativePath.txt converts a file from the relative path of the source file to a relative path of the current working directory.
+
+  What's the point, why not simply use "./assets/image.jpg"???
+
+  Let's keep thinking about this...
+
   ## Loops
 
   Loops are used exactly like in javascript, but with the end keyword.
