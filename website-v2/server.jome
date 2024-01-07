@@ -3,7 +3,9 @@ import express from "express"
 let port = 3000
 
 express() chain
+  //use '/jome', express.static('docs');
   get "/" do |req, res|
+    //res.redirect('/jome')
     res.send("Hello world!")
   end
   listen port do

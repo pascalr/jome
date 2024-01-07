@@ -86,11 +86,11 @@ function filterSpaces(array) {
 function filterStrings(array) {
   return array.filter(e => typeof e !== 'string')
 }
-function partialFilterStrings(node, array) {
+function filterNodes(node, array) {
   if (node && node.type.startsWith("string")) { // don't filter strings of strings
     return array
   }
-  return array.filter(e => typeof e !== 'string')
+  return array.filter(e => typeof e !== 'string' && e.type !== 'comment.block.jome' && e.type !== 'comment.line.double-slash.jome')
 }
 
 // someFunc(someVal)[someIndex].someProp.#someFunc // These should all be merged into a single node
@@ -113,7 +113,7 @@ function mergeChainables(nodes) {
 function parse(tokens, parent, lexEnv) {
 
   // All the tokens converted to nodes
-  let allNodes = partialFilterStrings(parent, tokens).map(tok => new ASTNode(tok, parent, lexEnv))
+  let allNodes = filterNodes(parent, tokens).map(tok => new ASTNode(tok, parent, lexEnv))
   // Only the top nodes
   let topNodes = []
 
@@ -172,6 +172,7 @@ const CHAINABLE_TYPES = [
   "meta.getter.jome",
   "meta.caller.jome",
   "meta.chain.jome",
+  "support.function-call.jome",
 ]
 
 const PRECEDENCES = {
