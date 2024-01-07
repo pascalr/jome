@@ -65,7 +65,7 @@ function ensureAllTypeIn(node, list, arr) {
   })
 }
 
-function ensureListSeparatedByCommas(items) {
+function ensureListSeparatedByCommas(node, items) {
   // All the even index operands should be punctuation.separator.delimiter.jome
   if (items.some((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
     node.errors.push("Syntax error. Expecting commas between every element inside a list")
@@ -135,7 +135,7 @@ function validateFuncCall(node, hasDot) {
     return "Internal error. Function calls should always start with a name."
   }
   let parts = node.parts.slice(hasDot ? 2 : 1)
-  ensureListSeparatedByCommas(parts)
+  ensureListSeparatedByCommas(node, parts)
   let args = parts.filter((e, i) => i % 2 === 0)
 
   node.data = {nameTok, args}
@@ -282,7 +282,7 @@ const VALIDATORS = {
       }
       node.data = {isOperator, operand: node.operands[0], expression: items[0]}
     } else {
-      ensureListSeparatedByCommas(items)
+      ensureListSeparatedByCommas(node, items)
       let elems = node.parts.slice(1,-1).filter((e, i) => i % 2 === 0)
       node.data = {elems}
     }

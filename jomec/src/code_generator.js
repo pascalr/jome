@@ -129,11 +129,44 @@ function compileStandaloneFunction(node) {
   }
 }
 
+function toPrimitive(inputString) {
+  // Check if the string represents an integer
+  if (/^-?\d+$/.test(inputString)) {
+    return parseInt(inputString, 10);
+  }
+
+  // Check if the string represents a floating-point number
+  if (/^-?\d+\.\d+$/.test(inputString)) {
+    return parseFloat(inputString);
+  }
+
+  // If neither integer nor float, return the original string
+  return inputString;
+}
+
+// Combine all the named parameters given into a single object
+function mergeNamedParameters(args) {
+  let merged = []
+  let obj = {}
+  args.forEach(arg => {
+    if (arg.type === 'keyword.operator.colon.jome') {
+      obj[arg.operands[0].raw] = toPrimitive(genCode(arg.operands[1]))
+    } else {
+      merged.push(arg)
+    }
+  })
+  if (Object.keys(obj).length) {
+    merged.push({type: "plain", raw: JSON.stringify(obj)})
+  }
+  return merged
+}
+
 // No dot before the func call
 function compileFuncCall(node) {
   let called = genCode(node.data.nameTok)
-  let args = node.data.args.map(p => genCode(p)).join(', ')
-  return `${called}(${args})`
+  let args = mergeNamedParameters(node.data.args)
+  let str = args.map(p => genCode(p)).join(', ')
+  return `${called}(${str})`
 }
 
 // With a dot before the func call
@@ -200,6 +233,7 @@ function compileString(node) {
 }
 
 const CODE_GENERATORS = {
+  "plain": (node) => node.raw,
   "comment.line.documentation.jome": (node) => `// ${node.raw.slice(2)}`,
   'comment.block.jome': () => "",
   'comment.line.double-slash.jome': () => "",

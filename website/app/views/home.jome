@@ -469,6 +469,9 @@ main {
 
   Loops are used exactly like in javascript, but with the end keyword.
 
+  Nooooooooooo. They are disguting. There is for...in, for...of, it's ugly. I don't even know
+  how to use them properly... Check other languages to find a better way.
+
   Note: There is no do ... while, because the do keyword is used for functions.
   Maybe exec ... while ???
 

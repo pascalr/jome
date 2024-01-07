@@ -43,7 +43,7 @@ javascript because it is more stable. It is a little weird to compile tests in i
 // end
 
 test('Pass named parameters to functions', () => {
-  expect(compile(`add x: 1, y: 2`)).toMatch(/add\(\{x: 1, y: 2\}\)/);
+  expect(compile(`add x: 1, y: 2`)).toMatch(/add\(\{ x: 1, y: 2 \}\)/);
 })
 
 test('String format " test"%xl', () => {
