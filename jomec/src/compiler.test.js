@@ -81,7 +81,7 @@ test('Test each do end', () => {
 [1,2,3,4,5].each do |i|
   console.log i
 end
-`)).toMatch(/\s*\[1, 2, 3, 4, 5\]\.each\(function \(i\) \{\s*console\.log\(i\)\s*\}\)\s*/);
+`)).toMatch(/\s*\[1, 2, 3, 4, 5\]\.each\(function \(i\) \{\s*console\.log\(i\);?\s*\}\)\s*/);
 })
 
 describe("Test arrow call", () => {

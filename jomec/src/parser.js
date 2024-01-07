@@ -29,6 +29,7 @@ const OPERAND_TYPES = [
   "variable.other.jome",
   "variable.other.constant.utility.jome",
   "constant.language.jome",
+  "support.variable.jome",
   "support.function-call.jome",
   "support.function-call.WIP.jome",
 ]
