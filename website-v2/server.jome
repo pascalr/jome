@@ -2,14 +2,13 @@ import express from "express"
 
 /*
 def build(source, dest)
-  #watch './views/test.jome' do |content|
-    #write '../docs/test/index.html', #eval(content), overwrite!, makeParent!
+  #watch './views/test.jome' do |file|
+    #write '../docs/test/index.html', require(file.path), overwrite!, makeParent!
   end
 end
 
 build './views/test.jome', '../docs/test/index.html'
 */
-
 
 let port = 3000
 

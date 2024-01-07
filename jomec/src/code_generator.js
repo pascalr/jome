@@ -1,3 +1,4 @@
+const { compileUtility } = require("jome-lib/compileUtility")
 const { compileTokenRaw } = require("./parser")
 
 function genCode(node) {
@@ -49,23 +50,9 @@ function compileRaw(node) {
   return node.raw
 }
 
-const UTILS = {
-  log: () => "console.log",
-  PI: () => "Math.PI",
-  // argv: () => "process.argv",
-  argv: (node) => {
-    node.lexEnv.ctxFile.addImport('argv', null, 'jome-lib/argv')
-    return `argv()`
-  }
-}
-
-function compileUtility(node, isInline) {
+function compUtility(node, isInline) {
   let name = node.raw.slice(isInline ? 2 : 1)
-  let utils = UTILS[name]
-  if (!utils) {
-    throw new Error("Unkown util "+name)
-  }
-  let val = utils(node)
+  let val = compileUtility(name, node)
   if (node.operands) {
     if (isInline) {
       return `${val}(${node.operands.map(c => genCode(c)).join('')})`
@@ -371,11 +358,11 @@ const CODE_GENERATORS = {
   // let
   'keyword.control.declaration.jome': (node) => `let ${node.operands[0].raw}`,
   // <...>.#log
-  "entity.name.function.utility-inline.jome": (node) => compileUtility(node, true),
+  "entity.name.function.utility-inline.jome": (node) => compUtility(node, true),
   // #log
-  'entity.name.function.utility.jome': (node) => compileUtility(node, false),
+  'entity.name.function.utility.jome': (node) => compUtility(node, false),
   // #PI
-  "variable.other.constant.utility.jome": (node) => compileUtility(node, false),
+  "variable.other.constant.utility.jome": (node) => compUtility(node, false),
   // <sh></sh>
   "meta.embedded.block.shell": (node) => {
     node.lexEnv.ctxFile.addImport('execSh', null, 'jome-lib/execSh')
