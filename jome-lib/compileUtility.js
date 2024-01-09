@@ -1,5 +1,7 @@
 // FIXME: Change the name of imports and functions when there is name clashes.
 
+const path = require('path')
+
 const UTILS = {
   log: () => "console.log",
   PI: () => "Math.PI",
@@ -29,3 +31,20 @@ function compileUtility(name, node) {
 module.exports = {
   compileUtility
 }
+
+
+// function _run(node, sync) {
+//   let filepath = args // FIXME!!!!!
+//   // FIXME: Capture the args given!
+//   // Inside validate parse the args and give them to the node.data for utils???
+//   // return ['outstring'] // When inside an arary it means that it captured?
+//   throw new Error("Error f030340rfn034hnf")
+//   if (filepath[0] !== '.' && filepath[0] !== '/') {
+//     filepath = './'+filepath
+//   }
+//   let name = 'run_'+path.parse(filepath).name
+//   node.lexEnv.ctxFile.addImport(name, null, filepath)
+//   return sync ? `await ${}()` : name
+// }
+// run: (node) => _run(node, false),
+// "run!": (node) => _run(node, true),

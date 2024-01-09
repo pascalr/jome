@@ -567,6 +567,59 @@ main {
   pas simple d'appeler plusieurs fois le même fichier. Ce qui est un peu tanant c'est qu'il faut que je fasse
   node -e "require('some_compiled_file.js')()" au lieu de juste node some_compiled_file.js
 
+  ## Include
+
+  Jome file are executables. They are compiled to a function. You can use return inside the Jome file.
+
+  Jome files can be included into other jome files. This allows you to easily create partials and file improved with Jome.
+
+  data.json.jome
+  ```jome
+  return <json>
+    {
+      "some": "data",
+      "title": <% title %>,
+      "math": <% 1 + 2 %>
+    }
+  </json>
+  ```
+
+  some_file.jome
+  ```jome
+  let data = include './data.json.jome', title: 'Some title!'
+  ```
+
+  You can specify the variables you expect to be given to the partial file with a with block.
+  ```jome
+  with
+    title: string
+  end
+
+  return <html>
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><% title %></title>
+    </head>
+  </html>
+  ```
+
+  To execute a script from the command line, you can use the Jome CLI. Specify locals with named parameters.
+
+  ```sh
+  jome get_html_head.html.jome title: 'My title!'
+  ```
+
+  A Jome script is compiled into a function whose locals are given as a single object parameter deconstructed.
+
+  ```js
+  module.exports = ({localOne, localTwo}) => {
+    // ...
+  }
+  ```
+
+  When given a with block, these are the locals. Otherwise, every unreferenced variable is assumed to be a local.
+
   ## Loops
 
   Loops are used exactly like in javascript, but with the end keyword.
