@@ -166,7 +166,7 @@
 			  },
         {
           "name": "keyword.control.jome",
-          "match": "\\b(yield|while|for|return|from|import|retourne|ret|export|await|async|default|interface)\\b"
+          "match": "\\b(yield|while|for|return|include|from|import|ret|retn|export|await|async|default|interface)\\b"
 			  },
         {
           "name": "keyword.operator.typeof.jome",
@@ -650,6 +650,11 @@
 		},
     "strings": {
 			"patterns": [
+        {
+          "comment": "Allow #~ for home too?",
+          "name": "string.other.path.jome",
+          "match": "(#\\.{0,2}/[^ ]*)|(#cwd/[^ ]*)|(#\\.{1,2})"
+        },
         {
           "name": "string.quoted.double.verbatim.jome",
           "begin": "@\"",
