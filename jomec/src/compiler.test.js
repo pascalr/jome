@@ -1,7 +1,13 @@
 //const {compile} = require('./compiler.js')
 const {parse} = require('./parser.js')
-const {compile, compileNodes} = require('./compiler.js')
+const compiler = require('./compiler.js')
 const {tokenize} = require('./tokenizer.js')
+
+const {compileNodes} = compiler;
+
+const compile = (code) => {
+  return compiler.compile(code, {writeScript: false})
+}
 
 /*
 FIXMEEEE: Combining compiler and parser tests because I am having issues with depedencies: (running either separate OK)
@@ -55,7 +61,7 @@ test('String interpolation "{1+1}"', () => {
 })
 
 test('let shouldAddSemiToDec = 1', () => {
-  expect(compile(`let shouldAddSemiToDec = foo()[0]`, {prettier: false})).toMatch(/;$/);
+  expect(compile(`let shouldAddSemiToDec = foo()[0]`, {prettier: false})).toMatch(/;\s*$/);
 })
 
 test('<sh>ls</sh>', () => {

@@ -57,6 +57,7 @@ function compileNodes(nodes) {
 const DEFAULT_COMPILER_OPTIONS = {
   useCommonJS: true, // Whether imports and exports use common JS or ESM
   prettier: true, // Whether to format the code using the prettier library
+  writeScript: true // Whether to wrap the code inside a function to be exported
 }
 
 /**
@@ -76,6 +77,15 @@ function compile(code, options={}) {
   // )
   // console.log(info)
   let body = compileNodes(topNodes)
+  if (options.writeScript) {
+    // Wrap the body into a function
+    // FIXME: Don't allow exports when compiling a script (.jome)
+    if (options.useCommonJS) {
+      body = `module.exports = (() => {${body}})`
+    } else {
+      body = `export default (() => {${body}})`
+    }
+  }
   let head = genImports(ctxFile, options)
   let generated = head + body
   if (options.prettier) {
