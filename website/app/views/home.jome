@@ -620,6 +620,25 @@ main {
 
   When given a with block, these are the locals. Otherwise, every unreferenced variable is assumed to be a local.
 
+  J'hésite entre utiliser le keyword include, require ou load. C'est load que je préfère.
+
+  C'est load que je préfère, mais je n'aime pas trop réservé ce keyword... #load?
+
+  J'aimerais que ce soit un keyword, mais j'aimerais qu'il puisse être inline avec des parenthèses, et je trouve ça
+  un peu anormale par exemple include ()
+
+  #run et #load qui font tous les deux la même chose?
+  et
+  #run! et #load!
+
+  Comment gérer le fichier dynamiquement?
+
+  #load('file.jome')
+  #load(nameOfFile)
+
+  Ça ne change rien en fait, c'est juste que ça va être dynamique ou pas. Dans tous les cas je vais faire require sur place
+  ou await import sur place.
+
   ## Loops
 
   Loops are used exactly like in javascript, but with the end keyword.

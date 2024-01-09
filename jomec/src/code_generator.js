@@ -49,16 +49,10 @@ function compileRaw(node) {
 
 function compUtility(node, isInline) {
   let name = node.raw.slice(isInline ? 2 : 1)
-  let args = '';
-  if (node.operands) {
-    if (isInline) {
-      args = `(${node.operands.map(c => genCode(c)).join('')})`
-    } else {
-      args = `${node.operands.map(c => genCode(c)).join('')}`
-    }
-  }
-  let val = compileUtility(name, node)
-  return `${val}${args}`
+  let args = (node.operands||[]).map(c => genCode(c));
+  let val = compileUtility(name, node) // #run 'someFile.jome', arg: 'some val'
+  let argsStr = args.join('')
+  return isInline ? `${val}(${argsStr})` : `${val}${argsStr}`
 }
 
 function compileArgs(node) { 
