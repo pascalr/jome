@@ -69,9 +69,8 @@ function compileAndExecute(absPath, args) {
 //   encoding: 'utf-8',
 // });
 function execute(absPath, args) {
-  spawnSync('node', [absPath, '--', ...(args||[])], { encoding: 'utf-8', stdio: 'inherit' });
+  spawnSync('node', ['-e', `require('${absPath}')()`, '--', ...(args||[])], { encoding: 'utf-8', stdio: 'inherit' });
 }
-
 
 // TODO: use:
 //

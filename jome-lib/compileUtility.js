@@ -3,11 +3,11 @@
 const UTILS = {
   log: () => "console.log",
   PI: () => "Math.PI",
-  // argv: () => "process.argv",
-  argv: (node) => {
-    node.lexEnv.ctxFile.addImport('argv', null, 'jome-lib/argv')
-    return `argv()`
-  },
+  argv: () => "process.argv",
+  // argv: (node) => {
+  //   node.lexEnv.ctxFile.addImport('argv', null, 'jome-lib/argv')
+  //   return `argv()`
+  // },
   write: (node) => {
     node.lexEnv.ctxFile.addImport(null, ['write'], 'jome-lib/write')
     return `write`
