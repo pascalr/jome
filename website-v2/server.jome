@@ -19,7 +19,7 @@ express() chain
   get "/", (req, res) => res.redirect('/jome')
 
   listen(port, do
-    #log "Server listening on port {port}"
+    #log("Server listening on port {port}")
   end)
 
 end

@@ -47,14 +47,6 @@ function compileRaw(node) {
   return node.raw
 }
 
-function compUtility(node, isInline) {
-  let name = node.raw.slice(isInline ? 2 : 1)
-  let args = (node.operands||[]).map(c => genCode(c));
-  let val = compileUtility(name, node) // #run 'someFile.jome', arg: 'some val'
-  let argsStr = args.join('')
-  return isInline ? `${val}(${argsStr})` : `${val}${argsStr}`
-}
-
 function compileArgs(node) { 
   if (node.type === 'variable.other.jome') {
     return node.raw
@@ -159,8 +151,27 @@ function mergeNamedParameters(args) {
   return merged
 }
 
+function compUtility(node) {
+  let name = node.raw.slice(1)
+  return compileUtility(name, node)
+}
+
+function compInlineUtility(node) {
+  let name = node.raw.slice(2)
+  let args = node.operands.map(c => genCode(c));
+  return compileUtility(name, node, args)
+}
+
 // No dot before the func call
 function compileFuncCall(node) {
+  let tok = node.data.nameTok
+  let isInlineUtil = tok.type === 'entity.name.function.utility-inline.jome' // .#
+  if (tok.type === 'entity.name.function.utility.jome' || isInlineUtil) {
+    let name = tok.raw.slice(isInlineUtil ? 2 : 1)
+    let args = [...node.operands, ...mergeNamedParameters(node.data.args)].map(c => genCode(c));
+    let val = compileUtility(name, node, args)
+    return `${val}(${args.join(', ')})`
+  }
   let called = genCode(node.data.nameTok)
   let args = mergeNamedParameters(node.data.args)
   let str = args.map(p => genCode(p)).join(', ')
@@ -297,10 +308,13 @@ const CODE_GENERATORS = {
       return `${sect.keyword} ${sect.cond ? `(${genCode(sect.cond)})` : ''} {${sect.statements.map(c => genCode(c)).join('')}}`
     }).join(' ');
   },
-  "support.function-call.WIP.jome": compileFuncCall,
-  "support.function-call.jome": compileFuncCall,
-  "meta.function-call.WIP.jome": compileMetaFuncCall,
-  "meta.function-call.jome": compileMetaFuncCall,
+  "entity.name.function.utility-inline.jome": (node) => compInlineUtility(node), // "Hello".#log  
+  'entity.name.function.utility.jome': (node) => compUtility(node), // #log
+  "variable.other.constant.utility.jome": (node) => compUtility(node), // #PI
+  "support.function-call.WIP.jome": compileFuncCall, // someFunc "some arg"
+  "support.function-call.jome": compileFuncCall, // someFunc("some arg")
+  "meta.function-call.WIP.jome": compileMetaFuncCall, // .someFunc "some arg"
+  "meta.function-call.jome": compileMetaFuncCall, // .someFunc("some arg")
   // js uses more specifically:
   // keyword.operator.arithmetic.jome
   // keyword.operator.logical.jome
@@ -383,12 +397,6 @@ const CODE_GENERATORS = {
   //'keyword.operator.assignment.jome': (node) => (compileOperator(node)+";"),
   // let
   'keyword.control.declaration.jome': (node) => `let ${node.operands[0].raw}`,
-  // <...>.#log
-  "entity.name.function.utility-inline.jome": (node) => compUtility(node, true),
-  // #log
-  'entity.name.function.utility.jome': (node) => compUtility(node, false),
-  // #PI
-  "variable.other.constant.utility.jome": (node) => compUtility(node, false),
   // <sh></sh>
   "meta.embedded.block.shell": (node) => {
     node.lexEnv.ctxFile.addImport('execSh', null, 'jome-lib/execSh')
