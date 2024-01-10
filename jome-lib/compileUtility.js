@@ -38,12 +38,12 @@ const UTILS = {
   "load!": (node) => _run(node, true),
 }
 
-function compileUtility(name, node) {
+function compileUtility(name, node, args) {
   let utils = UTILS[name]
   if (!utils) {
     throw new Error("Unkown util "+name)
   }
-  return utils(node)
+  return `${utils(node)}(${(args||[]).join(', ')})`
 }
 
 module.exports = {

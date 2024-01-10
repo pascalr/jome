@@ -169,8 +169,7 @@ function compileFuncCall(node) {
   if (tok.type === 'entity.name.function.utility.jome' || isInlineUtil) {
     let name = tok.raw.slice(isInlineUtil ? 2 : 1)
     let args = [...node.operands, ...mergeNamedParameters(node.data.args)].map(c => genCode(c));
-    let val = compileUtility(name, node, args)
-    return `${val}(${args.join(', ')})`
+    return compileUtility(name, node, args)
   }
   let called = genCode(node.data.nameTok)
   let args = mergeNamedParameters(node.data.args)
