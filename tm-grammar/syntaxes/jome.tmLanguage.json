@@ -103,6 +103,7 @@
         { "include": "#regex" },
         { "include": "#keywords" },
         { "include": "#declaration" },
+        { "include": "#with-args" },
         { "include": "#vbars-args" },
         { "include": "#def" },
         { "include": "#paren-expression" },
@@ -206,6 +207,22 @@
           "endCaptures": {
             "0": {"name": "punctuation.vertical-bar.end.jome"}
           },
+          "patterns": [
+            {"include": "#argument"},
+            {"include": "#along"},
+            {"include": "#expression"}
+          ]
+        }
+      ]
+    },
+    "with-args": {
+      "patterns": [
+        {
+          "name": "meta.with-args.jome",
+          "begin": "with",
+          "beginCaptures": {"0": {"name": "keyword.control.jome"}},
+          "end": "end|(?:def)|(?:class)",
+          "endCaptures": {"0": {"name": "keyword.control.jome"}},
           "patterns": [
             {"include": "#argument"},
             {"include": "#along"},

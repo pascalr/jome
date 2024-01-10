@@ -1,3 +1,5 @@
+//with cmd end
+
 let cmd = #argv[1]
 
 if (cmd === 'test')
