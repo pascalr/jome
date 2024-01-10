@@ -2,40 +2,38 @@
 
 const path = require('path')
 
-function _run(node, sync) {
-  let filepath = args // FIXME!!!!!
-  // FIXME: Capture the args given!
-  // Inside validate parse the args and give them to the node.data for utils???
-  // return ['outstring'] // When inside an arary it means that it captured?
-  throw new Error("Error f030340rfn034hnf")
-  // if (filepath[0] !== '.' && filepath[0] !== '/') {
-  //   filepath = './'+filepath
-  // }
-  // let name = 'run_'+path.parse(filepath).name
-  // node.lexEnv.ctxFile.addImport(name, null, filepath)
-  // return sync ? `await ${}()` : name
+function _run(node, sync, args) {
+  let filepath = args[0].slice(1,-1)
+  let name = 'run_'+path.parse(filepath).name
+  node.lexEnv.ctxFile.addDependency(filepath)
+  if (!filepath.endsWith('.jome')) {
+    throw new Error('Cannot run file without .jome extension. Was: '+filepath);
+  }
+  let jsFile = filepath.slice(0,-5)+'.js' // remove .jome and replace extension with js
+  node.lexEnv.ctxFile.addImport(name, null, jsFile)
+  return sync ? `await ${name}()` : `${name}()`
 }
 
 const UTILS = {
-  log: () => "console.log",
+  log: (node, args) => `console.log(${(args).join(', ')})`,
   PI: () => "Math.PI",
   argv: () => "process.argv",
   // argv: (node) => {
   //   node.lexEnv.ctxFile.addImport('argv', null, 'jome-lib/argv')
   //   return `argv()`
   // },
-  write: (node) => {
+  write: (node, args) => {
     node.lexEnv.ctxFile.addImport(null, ['write'], 'jome-lib/write')
-    return `write`
+    return `write(${(args).join(', ')})`
   },
-  "write!": (node) => {
+  "write!": (node, args) => {
     node.lexEnv.ctxFile.addImport(null, ['writeSync'], 'jome-lib/write')
-    return `writeSync`
+    return `writeSync(${(args).join(', ')})`
   },
-  run: (node) => _run(node, false),
-  "run!": (node) => _run(node, true),
-  load: (node) => _run(node, false),
-  "load!": (node) => _run(node, true),
+  run: (node, args) => _run(node, false, args),
+  "run!": (node, args) => _run(node, true, args),
+  load: (node, args) => _run(node, false, args),
+  "load!": (node, args) => _run(node, true, args),
 }
 
 function compileUtility(name, node, args) {
@@ -43,7 +41,7 @@ function compileUtility(name, node, args) {
   if (!utils) {
     throw new Error("Unkown util "+name)
   }
-  return `${utils(node)}(${(args||[]).join(', ')})`
+  return `${utils(node, args||[])}`
 }
 
 module.exports = {

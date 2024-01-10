@@ -5,6 +5,7 @@ class ContextFile {
     this.lexEnv.ctxFile = this
     this.namedImportsByFile = {}
     this.defaultImportsByFile = {}
+    this.dependencies = [] // Files that need to be compiled too for this file to run
   }
 
   addImport(defaultImport, namedImports, file) {
@@ -22,6 +23,10 @@ class ContextFile {
         this.namedImportsByFile[file].add(imp)
       })
     }
+  }
+
+  addDependency(filename) {
+    this.dependencies.push(filename)
   }
 }
 
