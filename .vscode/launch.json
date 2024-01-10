@@ -4,17 +4,6 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-
-
-    {
-      "type": "node-terminal",
-      "request": "launch",
-      "name": "Run server (Old)",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "command": "jome_old s"
-    },
     {
       "type": "node-terminal",
       "request": "launch",
@@ -22,7 +11,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "command": "jome index_v2.jome s"
+      "command": "jome s"
     },
     {
       "type": "node-terminal",
@@ -31,7 +20,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "command": "jome index_v2.jome"
+      "command": "jome"
     },
     {
       "type": "node-terminal",

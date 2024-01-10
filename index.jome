@@ -1,18 +1,23 @@
-// //<sh>jome bin/server.jome</sh>
-// // FIXME: Hardcoded path, sh is not using my bash_aliases jome command
+//with cmd end
 
 let cmd = #argv[1]
 
-if (cmd === 'test') (
-  <sh>jome_old -- test.jome</sh>
-) else if (cmd === 's' || cmd === 'server') (
-  <sh>jome_old -- website/server.jome</sh>
-) else (
-  #log(`Jome App v0.0.0.0.1
+if (cmd === 'test')
+  // #run #./test.jome
+  // include #./test.jome
+  <sh>jome test.jome</sh>
+elsif (cmd === 's' || cmd === 'server')
+  #run('./website-v2/server.jome')
+  //#run(#./website-v2/server.jome)
+  // include #./website-v2/server.jome
+  //<sh>jome website-v2/server.jome</sh>
+else
+  #log "
+    Jome App v0.0.0.0.1
 
-Usage:
-jome # get this help message
-jome s # start server (or jome server)
-jome test # launch the tests
-`)
-)
+    Usage:
+    jome # get this help message
+    jome s # start server (or jome server)
+    jome test # launch the tests
+  "%xl%xsx
+end
