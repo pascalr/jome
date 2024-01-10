@@ -25,11 +25,20 @@
     {
       "type": "node-terminal",
       "request": "launch",
-      "name": "Tmp jome",
+      "name": "Jest tests written in Jome",
       "skipFiles": [
         "<node_internals>/**"
       ],
       "command": "jome jomec/test/generic.test.jome"
+    },
+    {
+      "type": "node-terminal",
+      "request": "launch",
+      "name": "Tmp jome",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "command": "jome tmp.jome"
     },
     {
       "type": "node-terminal",
