@@ -482,17 +482,15 @@ main {
 
   Spaces are not allowed, but you can escape them. Any other character is allowed?
 
-  I'd like a way to quote paths, but I don't way to use #" " for paths, I want to maybe use this for strings...
+  You can use quotes inside paths, just not at the beginning. You can use like like so:
 
+  ```jome
   let test = #./'some/file with spaces.txt'
   let test = #/'some/file with spaces.txt'
   let test = #./"some/file with spaces.txt"
   let test = #/"some path/file with spaces.txt"
   let test = #/some/path/to/some/"file with spaces.txt"
-
-  It's not too pretty, but this will do.
-
-  Wow I am chocked but it works already in the shell! ls ../jome/"cli"
+  ```
 
   If you want quotes inside your filename, than you need to escape them.
 
@@ -501,77 +499,24 @@ main {
   Paths always use the /, but maybe they are converted when compiling for Windows?
 
   ## Executing jome files
-  
-  J'aimerais que ce soit super facile d'exécuter des fichiers.
 
-  J'aimerais avoir un keyword. run, launch ou load, mais je n'ose pas trop réservé de keyword
+  .jome files are compiled into a function. When you use jome CLI to run a .jome file, you are executing this
+  function and passing args to the function.
 
-  Mais je trouve ça ordinaire quand il n'y a pas de keyword.
+  You can use return inside a .jome file to exit prematurly or to return a value.
 
-  Dans le fond, je pense qu'il faudrait avoir une extension qui spécifie que le fichier est supposé être exécuté.
-  
-  Dans ce cas, le fichier est compilé pour exporter une fonction, et quand on le run, on fais simplement exécuter la fonction.
+  You can use #run or #load to run another .jome file within jome.
 
-  J'aimerais bien l'extension .job, mais probablement déjà utilisé...
-
-  index.job?
-
-  .jome
-  .jobj
-  .job
-  .joms
-  .jexe
-  .jomes
-
-  index.joms
-  index.jomes
-  index.jexe
-  index.jsh
-
-  #run './some_file.jome' // comiles to import run_some_file from 'some_file.jome' // and // run_some_file()
-
-  Cette partie là ça va.
-
-  C'est que j'aimerais que dans le fichier some_file.jome, je n'aie pas à créer de fonction. Comme c'est là, il faudrait
-  que je fasse main def someFunc /* ... */ end, et c'est c'est function qui est retourner par défaut.
-
-  Mais ce n'est pas ce que je veux.
-
-  Je veux que TOUS le code devienne à l'intérieur d'une fonction. (Sauf les imports bien sûr.)
-
-  Peut-être que je peux avoir un keyword qui dit que c'est un script?
-
-  À voir pour générer des types de fichiers aussi.
-
-  some_file.json.jome, si je fais #run 'some_file.json.jome', je m'attends à recevoir une string de JSON.
-
-  Un script pourrait simplement être .js.json?
-
-  index.js.jome
-
-  OU BIEN, .jome est la version exécutable? .jobj pour un fichier objet et .jmod pour un fichier module?
-
-  Ouiiiiiii j'aime ça!
-
-  .jome compile en un fichier .js qui peut être exécuter.
-
-  some_page.html.jome, dans ce cas un fichier some_page.html.js est généré, il n'est pas exécuter automatiquement.
-
-  Tu peux faire:
-
-  #write #run(#./some_page.html.jome), to: #./some_page.html
-  ou peut-être fournir un shortcut genre
-  #compile #./some_page.html.jome
-
-  Compiler tous les fichiers .jome avec un default export de function pour le script. Parce que présentement, ce n'est
-  pas simple d'appeler plusieurs fois le même fichier. Ce qui est un peu tanant c'est qu'il faut que je fasse
-  node -e "require('some_compiled_file.js')()" au lieu de juste node some_compiled_file.js
-
-  ## Include
-
-  Jome file are executables. They are compiled to a function. You can use return inside the Jome file.
+  ```jome
+  #run './some_file.jome'
+  // compiles to:
+  // import run_some_file from 'some_file.jome'
+  // run_some_file()
+  ```
 
   Jome files can be included into other jome files. This allows you to easily create partials and file improved with Jome.
+
+  C'est utile pour générer des fichiers d'autres types aussi.
 
   data.json.jome
   ```jome
@@ -586,13 +531,27 @@ main {
 
   some_file.jome
   ```jome
-  let data = include './data.json.jome', title: 'Some title!'
+  let data: string = #run './data.json.jome', title: 'Some title!'
   ```
 
-  You can specify the variables you expect to be given to the partial file with a with block.
+  Je ne sais pas encore pour des fichiers jome avec des modules et des exports. Peut-être un type de fichier différent? .jomm?
+
+  some_page.html.jome, dans ce cas un fichier some_page.html.js est généré, il n'est pas exécuter automatiquement.
+
+  Tu peux faire:
+
+  #write #run(#./some_page.html.jome), to: #./some_page.html
+  ou peut-être fournir un shortcut genre
+  #compile #./some_page.html.jome
+
+  Compiler tous les fichiers .jome avec un default export de function pour le script. Parce que présentement, ce n'est
+  pas simple d'appeler plusieurs fois le même fichier. Ce qui est un peu tanant c'est qu'il faut que je fasse
+  node -e "require('some_compiled_file.js')()" au lieu de juste node some_compiled_file.js
+
+  You specify the variables you expect to be given to the partial file with a with block.
   ```jome
   with
-    title: string
+    {title: string}
   end
 
   return <html>
@@ -604,29 +563,13 @@ main {
   </html>
   ```
 
-  To execute a script from the command line, you can use the Jome CLI. Specify locals with named parameters.
-
-  ```sh
-  jome get_html_head.html.jome title: 'My title!'
-  ```
-
-  A Jome script is compiled into a function whose locals are given as a single object parameter deconstructed.
+  A Jome script is compiled into a function with the parameters described from the with block.
 
   ```js
-  module.exports = ({localOne, localTwo}) => {
+  module.exports = ({title}) => {
     // ...
   }
   ```
-
-  When given a with block, these are the locals. Otherwise, every unreferenced variable is assumed to be a local.
-
-  J'hésite entre utiliser le keyword include, require ou load. C'est load que je préfère.
-
-  C'est load que je préfère, mais je n'aime pas trop réservé ce keyword... #load?
-
-  J'aimerais que ce soit un keyword, mais j'aimerais qu'il puisse être inline avec des parenthèses, et je trouve ça
-  un peu anormale par exemple include ()
-
   #run et #load qui font tous les deux la même chose?
   et
   #run! et #load!
