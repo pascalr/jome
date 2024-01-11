@@ -441,6 +441,9 @@ const CODE_GENERATORS = {
     if (!node.lexEnv.ctxFile.compilerOptions.useCommonJS) {
       throw new Error("fu3h7f23h98rfha07hd0237230u")
     }
+    if (p.startsWith('..')) {
+      return `path.join(__dirname, "${p}")`
+    }
     return `path.join(__dirname, "${p.slice(2)}")`
   },
 }

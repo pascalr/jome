@@ -67,6 +67,15 @@ describe("Jome paths", () => {
   test('#cwd/some_file.ext', () => {
     expect(compile(`#cwd/some_file.ext`)).toMatch(/path.resolve\("\.\/some_file\.ext"\)/);
   })
+  test('#..', () => {
+    expect(compile(`#..`)).toMatch(/path.join\(__dirname, ".."\)/);
+  })
+  test('#../', () => {
+    expect(compile(`#../`)).toMatch(/path.join\(__dirname, "..\/"\)/);
+  })
+  test('#../some_file.ext', () => {
+    expect(compile(`#../some_file.ext`)).toMatch(/path.join\(__dirname, "..\/some_file\.ext"\)/);
+  })
 })
 
 test('Pass named parameters to functions', () => {
