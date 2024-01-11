@@ -417,7 +417,32 @@ const CODE_GENERATORS = {
     node.lexEnv.ctxFile.addImport(defaultImport, namedImports, file)
     // ctx.addBinding(defaultImport, {type: 'default-import'}) TODO!!!!!!!!!!!!!!!!
     // ctx.addBinding(name, {type: 'named-import'})
-  }
+  },
+
+  // #.
+  // #./
+  // #./some_file.ext
+  // #/path/to/file.ext
+  // #cwd/some_file.ext
+  "string.other.path.jome": (node) => {
+    let p = node.raw.slice(1)
+    if (p === '.' || p === './') {
+      if (!node.lexEnv.ctxFile.compilerOptions.useCommonJS) {
+        throw new Error("sf823yf78902y30f9823323f")
+      }
+      return '__dirname'
+    }
+    if (p[0] === '/') {
+      return `"${p}"`
+    }
+    if (p.startsWith('cwd/')) {
+      return `path.resolve("./${p.slice(4)}")`
+    }
+    if (!node.lexEnv.ctxFile.compilerOptions.useCommonJS) {
+      throw new Error("fu3h7f23h98rfha07hd0237230u")
+    }
+    return `path.join(__dirname, "${p.slice(2)}")`
+  },
 }
 
 module.exports = {

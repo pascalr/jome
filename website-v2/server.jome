@@ -23,6 +23,8 @@ express() chain
 
   use '/jome', express.static('docs')
 
+  //get "/test", (req, res) => res.send(#./views/test.html.jome)
+
   get "/", (req, res) => res.redirect('/jome')
 
   listen(port, do

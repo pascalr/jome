@@ -48,6 +48,27 @@ javascript because it is more stable. It is a little weird to compile tests in i
 //   add 2
 // end
 
+describe("Jome paths", () => {
+  test('#.', () => {
+    expect(compile(`#.`)).toMatch(/__dirname/);
+  })
+  test('#./', () => {
+    expect(compile(`#./`)).toMatch(/__dirname/);
+  })
+  test('#/', () => {
+    expect(compile(`#/`)).toMatch(/"\/"/);
+  })
+  test('#/some/path.ext', () => {
+    expect(compile(`#/some/path.ext`)).toMatch(/"\/some\/path\.ext"/);
+  })
+  test('#./some_file.ext', () => {
+    expect(compile(`#./some_file.ext`)).toMatch(/path.join\(__dirname, "some_file\.ext"\)/);
+  })
+  test('#cwd/some_file.ext', () => {
+    expect(compile(`#cwd/some_file.ext`)).toMatch(/path.resolve\("\.\/some_file\.ext"\)/);
+  })
+})
+
 test('Pass named parameters to functions', () => {
   expect(compile(`add x: 1, y: 2`)).toMatch(/add\(\{ x: 1, y: 2 \}\)/);
 })

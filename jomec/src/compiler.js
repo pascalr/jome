@@ -70,6 +70,7 @@ function compile(code, options={}) {
   options = {...DEFAULT_COMPILER_OPTIONS, ...options}
   let tokens = tokenize(code).children
   let ctxFile = new ContextFile()
+  ctxFile.compilerOptions = options
   let topNodes = parse(tokens, null, ctxFile.lexEnv)
   // let info = ""
   // topNodes.forEach(top =>
