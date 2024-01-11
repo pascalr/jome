@@ -1,6 +1,4 @@
-// I want test.jome to be a script to be ran by the server.
-
-<html>
+return <html>
   <!DOCTYPE html>
   <HTML lang="en">
     <head>
