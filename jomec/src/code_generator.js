@@ -1,5 +1,6 @@
 const { compileUtility } = require("jome-lib/compileUtility")
 const Argument = require("./argument")
+const {compileTokenRaw} = require("./parser.js")
 
 function genCode(node) {
   let generator = CODE_GENERATORS[node.type]
@@ -397,11 +398,6 @@ const CODE_GENERATORS = {
   //'keyword.operator.assignment.jome': (node) => (compileOperator(node)+";"),
   // let
   'keyword.control.declaration.jome': (node) => `let ${node.operands[0].raw}`,
-  // <sh></sh>
-  "meta.embedded.block.shell": (node) => {
-    node.lexEnv.ctxFile.addImport('execSh', null, 'jome-lib/execSh')
-    return "execSh(`"+escapeBackticks(node.data.command)+"`);"
-  },
   // import defaultExport from "module-name";
   // import * as name from "module-name";
   // import { export1 } from "module-name";
@@ -452,7 +448,26 @@ const CODE_GENERATORS = {
     if (node.raw === 'return') {
       return 'return '+genCode(node.operands[0])+';'
     }
-  }, 
+  },
+
+  // <sh></sh>
+  "meta.embedded.block.shell": (node) => {
+    node.lexEnv.ctxFile.addImport('execSh', null, 'jome-lib/execSh')
+    return "execSh(`"+escapeBackticks(node.data.command)+"`);"
+  },
+  // <html></html>
+  "meta.embedded.block.html": (node) => {
+    //   let args = parseScriptTagArgs(node.children[0])
+    //   let b = ''
+    //   let a = ''
+    //   if ('root' in args) {
+    //     b = '<!DOCTYPE html>\n<html>'
+    //     a = '</html>'
+    //   }
+    //   return '`'+b+compileInterpolate(compileRaw(node.children.slice(1,-1)), ctx)+a+'`'
+    let content = compileTokenRaw(node.parts.slice(1,-1))
+    return '`'+content+'`'
+  },
 
   "meta.with-args.jome": (node) => {
     let parts = filterArgParts(node.parts.slice(1, -1)) // Remove 'with' and 'end' keyword // FIXME: Not necessarly end keyword, maybe was before def or class
