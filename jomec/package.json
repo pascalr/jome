@@ -6,5 +6,8 @@
   "bin": {
     "jome": "./src/jome-cli.js",
     "jomec": "./src/jomec-cli.js"
+  },
+  "dependencies": {
+    "minimist": "^1.2.8"
   }
 }

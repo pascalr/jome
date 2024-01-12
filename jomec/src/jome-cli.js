@@ -40,16 +40,22 @@
 const path = require('path');
 const {compileAndSaveFile} = require('./compiler');
 const { spawnSync } = require('child_process');
+const minimist = require('minimist')
 
-const args = process.argv.slice(2); // Exclude the first two arguments (node executable and script file)
+const args = minimist(process.argv.slice(2)); // Exclude the first two arguments (node executable and script file)
 
-let wholeArgs = args.filter(arg => !arg.startsWith('-'))
+let wholeArgs = args._
 let fileToRun = 'index.jome' // by default
-let executableArgs = wholeArgs // by default
+let executableArgs = wholeArgs
+
+let {_, ...dashedArgs} = args
+if (Object.keys(dashedArgs).length) {
+  executableArgs = [...wholeArgs, dashedArgs]
+}
 
 if (wholeArgs[0]?.endsWith('.jome')) {
   fileToRun = wholeArgs[0]
-  executableArgs = wholeArgs.slice(1)
+  executableArgs = executableArgs.slice(1)
 }
 
 let absPath = path.resolve(fileToRun)
@@ -69,7 +75,8 @@ function compileAndExecute(absPath, args) {
 //   encoding: 'utf-8',
 // });
 function execute(absPath, args) {
-  spawnSync('node', ['-e', `require('${absPath}')()`, '--', ...(args||[])], { encoding: 'utf-8', stdio: 'inherit' });
+  let code = `require('${absPath}')(${args.map(a => JSON.stringify(a)).join(', ')})`
+  spawnSync('node', ['-e', code], { encoding: 'utf-8', stdio: 'inherit' });
 }
 
 // TODO: use:
