@@ -2,12 +2,12 @@
  * An argument given to a function. Stores all the information about it.
  */
 class Argument {
-  constructor(name) {
+  constructor(name, type, value) {
     this.name = name
-    this.type = null // A string with the type of the argument
+    this.type = type // A string with the type of the argument
     this.unit = null
     this.along = null
-    this.defaultValue = null
+    this.defaultValue = value // As a string
     this.akas = []
     this.deconstructed = []
   }
@@ -17,7 +17,7 @@ class Argument {
   }
 
   compile() {
-    return this.name
+    return this.name + (this.defaultValue ? ' = ' + this.defaultValue : '')
   }
 }
 

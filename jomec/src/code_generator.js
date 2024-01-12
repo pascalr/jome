@@ -453,6 +453,8 @@ const CODE_GENERATORS = {
     parts.forEach(part => {
       if (part.type === 'variable.other.jome') {
         node.lexEnv.ctxFile.fileArguments.push(new Argument(part.raw))
+      } else if (part.type === 'keyword.operator.assignment.jome') { 
+        node.lexEnv.ctxFile.fileArguments.push(new Argument(part.operands[0].raw, null, genCode(part.operands[1])))
       }
     })
     return ''
