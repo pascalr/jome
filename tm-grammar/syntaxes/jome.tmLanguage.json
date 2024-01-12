@@ -166,6 +166,10 @@
           "match": "\\b(main)\\b"
 			  },
         {
+          "name": "keyword.control.return.jome",
+          "match": "\\b(return)\\b"
+			  },
+        {
           "name": "keyword.control.jome",
           "match": "\\b(yield|while|for|return|include|from|import|ret|retn|export|await|async|default|interface)\\b"
 			  },

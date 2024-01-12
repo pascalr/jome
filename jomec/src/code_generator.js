@@ -448,6 +448,12 @@ const CODE_GENERATORS = {
     return `path.join(__dirname, "${p.slice(2)}")`
   },
 
+  "keyword.control.return.jome": (node) => {
+    if (node.raw === 'return') {
+      return 'return '+genCode(node.operands[0])+';'
+    }
+  }, 
+
   "meta.with-args.jome": (node) => {
     let parts = filterArgParts(node.parts.slice(1, -1)) // Remove 'with' and 'end' keyword // FIXME: Not necessarly end keyword, maybe was before def or class
     parts.forEach(part => {

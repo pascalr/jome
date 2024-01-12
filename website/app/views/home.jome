@@ -506,6 +506,13 @@ main {
 
   Paths always use the /, but maybe they are converted when compiling for Windows?
 
+  Si je me retrouve à tout le temps faire #run(#./some_file.ext), ça serait nice d'avoir un
+  shortcut.
+
+  Par exemple, r#./some_file.html.jome
+
+  Ce que j'aime du r ici c'est que ça veut dire run et ça veut dire read aussi.
+
   ## Executing jome files
 
   .jome files are compiled into a function. When you use jome CLI to run a .jome file, you are executing this

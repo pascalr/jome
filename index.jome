@@ -6,9 +6,6 @@ if (cmd === 'test')
   <sh>jome test.jome</sh>
 elsif (cmd === 's' || cmd === 'server')
   #run(#./website-v2/server.jome, port: 3000)
-  //#run(#./website-v2/server.jome)
-  // include #./website-v2/server.jome
-  //<sh>jome website-v2/server.jome</sh>
 else
   #log "
     Jome App v0.0.0.0.1

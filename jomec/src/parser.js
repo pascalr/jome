@@ -269,6 +269,10 @@ const TOKENS = {
     captureLeft: true,
     captureRight: true,
   },
+  // return
+  "keyword.control.return.jome": {
+    captureRight: true
+  }
 }
 
 module.exports = {
