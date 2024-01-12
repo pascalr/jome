@@ -870,7 +870,8 @@
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
           "name": "meta.embedded.block.shell",
-          "patterns": [{ "name": "raw", "match": ".+?(?=<\\/sh>)", "captures": {"0": {"patterns": [{"include": "source.shell" }]}}}]
+          "contentName": "raw",
+          "patterns": [{ "include": "source.shell" }]
         },
         {
           "begin": "\\<css(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
@@ -886,6 +887,7 @@
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
           "name": "meta.embedded.block.html",
+          "contentName": "raw",
           "patterns": [{ "include": "text.html.derivative" }]
         }
       ]

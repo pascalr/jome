@@ -513,6 +513,10 @@ main {
 
   Ce que j'aime du r ici c'est que ça veut dire run et ça veut dire read aussi.
 
+  En fait c'est peut-être run! que j'utilise plus souvent.
+
+  Utiliser !#./some_file.html.jome // Comme shortcut?
+
   ## Executing jome files
 
   .jome files are compiled into a function. When you use jome CLI to run a .jome file, you are executing this

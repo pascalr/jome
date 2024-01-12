@@ -29,7 +29,7 @@ function jomePath(importMeta, relPath) {
 async function run(jomeFileAbsPath, ...args) {
   let jsFile = compileJomeFile(jomeFileAbsPath)
   let func = await import(jsFile)
-  func(...args)
+  return func(...args)
 }
 
 module.exports = {
