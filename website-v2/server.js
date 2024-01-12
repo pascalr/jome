@@ -1,5 +1,6 @@
 const express = require("express");
-module.exports = () => {
+module.exports = (arg) => {
+  console.log(arg);
   let port = 3000;
   (() => {
     let __chain = express();

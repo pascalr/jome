@@ -1,4 +1,5 @@
 const { compileUtility } = require("jome-lib/compileUtility")
+const Argument = require("./argument")
 
 function genCode(node) {
   let generator = CODE_GENERATORS[node.type]
@@ -445,6 +446,16 @@ const CODE_GENERATORS = {
       return `path.join(__dirname, "${p}")`
     }
     return `path.join(__dirname, "${p.slice(2)}")`
+  },
+
+  "meta.with-args.jome": (node) => {
+    let parts = node.parts.slice(1, -1) // Remove 'with' and 'end' keyword // FIXME: Not necessarly end keyword, maybe was before def or class
+    parts.forEach(part => {
+      if (part.type === 'variable.other.jome') {
+        node.lexEnv.ctxFile.fileArguments.push(new Argument(part.raw))
+      }
+    })
+    return ''
   },
 }
 

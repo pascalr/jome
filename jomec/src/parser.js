@@ -76,6 +76,14 @@ class ASTNode {
       this.captureRight = data.captureRight
     }
   }
+
+  // // TODO: Try this: node.ctxFile instead of node.lexEnv.ctxFile
+  // get ctxFile() {
+  //   return this.lexEnv.ctxFile
+  // }
+  // get compilerOptions() {
+  //   return this.lexEnv.ctxFile.compilerOptions
+  // }
 }
 
 // function defaultStringTokens(array) {

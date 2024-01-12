@@ -79,12 +79,13 @@ function compile(code, options={}) {
   // console.log(info)
   let body = compileNodes(topNodes)
   if (options.writeScript) {
+    let args = ctxFile.fileArguments.map(arg => arg.compile()).join(', ')
     // Wrap the body into a function
     // FIXME: Don't allow exports when compiling a script (.jome)
     if (options.useCommonJS) {
-      body = `module.exports = (() => {${body}})`
+      body = `module.exports = ((${args}) => {${body}})`
     } else {
-      body = `export default (() => {${body}})`
+      body = `export default ((${args}) => {${body}})`
     }
   }
   let head = genImports(ctxFile, options)
