@@ -17,7 +17,11 @@ class Argument {
   }
 
   compile() {
-    return this.name + (this.defaultValue ? ' = ' + this.defaultValue : '')
+    if (this.isDeconstructed()) {
+      return `{${this.deconstructed.map(arg => arg.compile()).join(', ')}}`
+    } else {
+      return this.name + (this.defaultValue ? ' = ' + this.defaultValue : '')
+    }
   }
 }
 

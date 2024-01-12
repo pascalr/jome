@@ -1,15 +1,6 @@
 import express from "express"
 
-with first, arg = 3002 end
-
-#log(arg)
-
-/*
-with
-  {port = 3000}
-  {port}
-end
-*/
+with {port = 3000} end
 
 /*
 def build(source, dest)
@@ -20,8 +11,6 @@ end
 
 build './views/test.jome', '../docs/test/index.html'
 */
-
-let port = 3000
 
 express() chain
 

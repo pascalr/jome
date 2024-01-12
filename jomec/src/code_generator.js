@@ -449,16 +449,33 @@ const CODE_GENERATORS = {
   },
 
   "meta.with-args.jome": (node) => {
-    let parts = node.parts.slice(1, -1) // Remove 'with' and 'end' keyword // FIXME: Not necessarly end keyword, maybe was before def or class
+    let parts = filterArgParts(node.parts.slice(1, -1)) // Remove 'with' and 'end' keyword // FIXME: Not necessarly end keyword, maybe was before def or class
     parts.forEach(part => {
-      if (part.type === 'variable.other.jome') {
-        node.lexEnv.ctxFile.fileArguments.push(new Argument(part.raw))
-      } else if (part.type === 'keyword.operator.assignment.jome') { 
-        node.lexEnv.ctxFile.fileArguments.push(new Argument(part.operands[0].raw, null, genCode(part.operands[1])))
-      }
+      node.lexEnv.ctxFile.fileArguments.push(parseArgument(part))
     })
     return ''
   },
+}
+
+function parseArgument(node) {
+  if (node.type === 'variable.other.jome') {
+    return new Argument(node.raw)
+  } else if (node.type === 'keyword.operator.assignment.jome') { 
+    return new Argument(node.operands[0].raw, null, genCode(node.operands[1]))
+  } else if (node.type === 'meta.deconstructed-arg.jome') {
+    let parts = filterArgParts(node.parts.slice(1,-1)) // Remove curly braces
+    let arg = new Argument()
+    parts.forEach(part => {
+      arg.deconstructed.push(parseArgument(part))
+    })
+    return arg
+  } else {
+    throw new Error("sf8923jr890shf89h2389r2h")
+  }
+}
+
+function filterArgParts(parts) {
+  return parts.filter(p => p.type !== "punctuation.separator.delimiter.jome")
 }
 
 module.exports = {
