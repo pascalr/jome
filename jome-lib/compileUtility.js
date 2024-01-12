@@ -3,24 +3,24 @@
 const path = require('path')
 
 function _run(node, sync, args) {
-  // TODO: Check if the first arg is a string, if it is, use normal import,
-  // Otherwise use dynamic import
-  // Dynamic import is not the best, because it means that when the code will be run, then
-  // it will compile the .jome file as needed and run it. But that's OK.
-  // let filepath = args[0].slice(1,-1)
-  // let name = 'run_'+path.parse(filepath).name
-  // node.lexEnv.ctxFile.addDependency(filepath)
-  // if (!filepath.endsWith('.jome')) {
-  //   throw new Error('Cannot run file without .jome extension. Was: '+filepath);
-  // }
-  // let jsFile = filepath.slice(0,-5)+'.js' // remove .jome and replace extension with js
-  // node.lexEnv.ctxFile.addImport(name, null, jsFile)
-  // return sync ? `await ${name}()` : `${name}()`
-  // TODO: Pass the rest of the args too into the function call
-  let lib = node.lexEnv.ctxFile.compilerOptions.useCommonJS ? 'cjs' : 'esm'
-  let str = `run(${args.join(', ')})`
-  node.lexEnv.ctxFile.addImport(null, ['run'], 'jome-lib/'+lib)
-  return sync ? `await ${str}` : `${str}`
+  if (args[0][0] === '"' || args[0][0] === "'") {
+    let filepath = args[0].slice(1,-1)
+    let name = 'run_'+path.parse(filepath).name.replace(/\./g, '_');
+    node.lexEnv.ctxFile.addDependency(filepath)
+    if (!filepath.endsWith('.jome')) {
+      throw new Error('Cannot run file without .jome extension. Was: '+filepath);
+    }
+    let jsFile = filepath.slice(0,-5)+'.js' // remove .jome and replace extension with js
+    node.lexEnv.ctxFile.addImport(name, null, jsFile)
+    let str = `${name}(${args.slice(1).join(', ')})`
+    return sync ? `await ${str}` : `${str}`
+    // TODO: Pass the rest of the args too into the function call
+  } else {
+    let lib = node.lexEnv.ctxFile.compilerOptions.useCommonJS ? 'cjs' : 'esm'
+    let str = `run(${args.join(', ')})`
+    node.lexEnv.ctxFile.addImport(null, ['run'], 'jome-lib/'+lib)
+    return sync ? `await ${str}` : `${str}`
+  }
 }
 
 const UTILS = {

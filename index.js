@@ -1,10 +1,10 @@
-const { run } = require("jome-lib/cjs");
 const execSh = require("jome-lib/execSh");
+const run_server = require("./website-v2/server.js");
 module.exports = (cmd) => {
   if (cmd === "test") {
     execSh(`jome test.jome`);
   } else if (cmd === "s" || cmd === "server") {
-    run(path.join(__dirname, "website-v2/server.jome"), { port: 3000 });
+    run_server({ port: 3000 });
   } else {
     console.log(`Jome App v0.0.0.0.1
 

@@ -16,7 +16,7 @@ express() chain
 
   use '/jome', express.static('docs')
 
-  get "/test", (req, res) => res.send(#run(#./views/test.html.jome))
+  get "/test", (req, res) => res.send(#run('./views/test.html.jome'))
 
   get "/", (req, res) => res.redirect('/jome')
 
