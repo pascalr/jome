@@ -2,8 +2,5 @@
   "name": "jome-lib",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
-  "dependencies": {
-    "sanitize-filename": "^1.6.3"
-  }
+  "main": "index.js"
 }

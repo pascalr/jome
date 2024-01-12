@@ -18,6 +18,6 @@ if (args.length < 1) {
 const cwd = process.cwd()
 let files = globSync(args[0])
 files.forEach(fileName => {
-  const fullPath = path.join(cwd, fileName)
+  const fullPath = fileName[0] === '/' ? fileName : path.join(cwd, fileName)
   compileAndSaveFile(fullPath)
 })

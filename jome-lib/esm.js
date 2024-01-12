@@ -2,8 +2,7 @@
 
 const { fileURLToPath } = require('url')
 const path = require('path')
-const {execSync} = require("child_process");
-const sanitize = require("sanitize-filename");
+const compileJomeFile = require('./lib/compile_jome_file.js')
 
 // For #filename
 // Ex: filename(import.meta)
@@ -28,12 +27,10 @@ function jomePath(importMeta, relPath) {
 // FIXME: If you can run async multiple times on the same time, it will call jomec multiple times
 // TODO: Find a way to cache and make sure that jomec and await import are executed only once.
 async function run(jomeFileAbsPath, ...args) {
-  execSync("jomec "+sanitize(jomeFileAbsPath))
-  let jsFile = jomeFileAbsPath.slice(0,-5)+'.js' // remove .jome and replace extension with js
+  let jsFile = compileJomeFile(jomeFileAbsPath)
   let func = await import(jsFile)
   func(...args)
 }
-
 
 module.exports = {
   jomePath,
