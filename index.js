@@ -5,7 +5,7 @@ module.exports = () => {
   if (cmd === "test") {
     execSh(`jome test.jome`);
   } else if (cmd === "s" || cmd === "server") {
-    run(path.join(__dirname, "website-v2/server.jome"));
+    run(path.join(__dirname, "website-v2/server.jome"), { port: 3001 });
   } else {
     console.log(`Jome App v0.0.0.0.1
 

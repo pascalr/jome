@@ -670,7 +670,7 @@
         {
           "comment": "Allow #~ for home too?",
           "name": "string.other.path.jome",
-          "match": "(#\\.{0,2}/[^ \\)]*)|(#cwd/[^ \\)]*)|(#\\.{1,2})"
+          "match": "(#\\.{0,2}/[^ \\)\\,]*)|(#cwd/[^ \\)\\,]*)|(#\\.{1,2})"
         },
         {
           "name": "string.quoted.double.verbatim.jome",

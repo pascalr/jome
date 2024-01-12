@@ -1508,6 +1508,30 @@ main {
   debug(nomDeVariable, "nomDeVariable")
   ```
 
+  ## aka or alias
+
+  I want to be able to give many possible names to a parameter.
+
+  For example, the port, it can be 'port' or 'p'
+
+  In js, you have to do:
+
+  ```js
+  let run = ({port, p}) => {
+    port = port || p
+  }
+  ```
+
+  In Jome, you can simply do:
+
+  ```jome
+  let run = ({port aka p}) => {
+    // ...
+  }
+  ```
+
+  It will automatically be compiled to the code above.
+
   ## Strings
 
   Single and double quotes are to be the same and can be used interchangibly. Like in js and python.
