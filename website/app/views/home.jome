@@ -601,6 +601,10 @@ main {
   Ça ne change rien en fait, c'est juste que ça va être dynamique ou pas. Dans tous les cas je vais faire require sur place
   ou await import sur place.
 
+  FIXMEEEE run avec ESM doit utiliser await import, mais je ne veux pas toujours retourner une valeur async...
+
+  Mais mon trouble là c'est avec les dynamic imports. Mettre ça de côté pour l'instant
+
   ## Loops
 
   Loops are used exactly like in javascript, but with the end keyword.
