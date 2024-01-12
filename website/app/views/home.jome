@@ -467,7 +467,15 @@ main {
 
   ## Paths
 
-  You can use # to define paths. They must start by '/' or '.' though.
+  The issue with relative paths is that you don't know what they are relative to. In js, in include files,
+  the relative path is relative to the current file. If you try to open and write a file, than it is relative
+  to the current working directory.
+
+  In Jome, this is more explicit using paths. '#./' is used for paths relative to current file, '#cwd/' is used for
+  paths relative to the current working directory. They are compiled to become absolute, so you can pass it to
+  a function in another file and you are sure it will reference the proper file.
+
+  You can use # to define paths. They must start by '/', '.' or 'cwd/'. (Maybe '~' too)
 
   ```jome
   let path0 = #. // same as __dirname
