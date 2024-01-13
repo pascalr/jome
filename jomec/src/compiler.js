@@ -66,11 +66,12 @@ const DEFAULT_COMPILER_OPTIONS = {
  * @param {*} options See DEFAULT_COMPILER_OPTIONS for more details
  * @returns 
  */
-function compileCode(code, options={}) {
+function compileCode(code, options={}, compiler) {
   options = {...DEFAULT_COMPILER_OPTIONS, ...options}
   let tokens = tokenize(code).children
   let ctxFile = new ContextFile()
-  ctxFile.compilerOptions = options
+  ctxFile.compiler = compiler
+  ctxFile.compilerOptions = options // TODO: Get the options through the compiler, not compilerOptions
   let topNodes = parse(tokens, null, ctxFile.lexEnv)
   // let info = ""
   // topNodes.forEach(top =>
@@ -114,23 +115,21 @@ class Compiler {
   
     // Read the contents of the file synchronously
     const data = fs.readFileSync(absPath, 'utf8');
-    let result = compileCode(data, this.options)
+    let result = this.compileCode(data, this.options)
   
     if (!absPath.endsWith('.jome')) {
       throw new Error('Cannot compile file without .jome extension', absPath);
     }
     const buildFileName = absPath.slice(0,-5)+'.js' // remove .jome and replace extension with js
   
-    try {
-      // Write the result to the file synchronously
-      fs.writeFileSync(buildFileName, result);
-  
-      console.log(`Successfully wrote to '${buildFileName}'.`);
-    } catch (err) {
-      throw new Error('Error writing to the file:', err);
-    }
+    // Write the result to the file synchronously
+    fs.writeFileSync(buildFileName, result);
+    console.log(`Successfully wrote to '${buildFileName}'.`);
   
     return buildFileName
+  }
+  compileCode(code, options={}) {
+    return compileCode(code, options, this)
   }
 }
 
