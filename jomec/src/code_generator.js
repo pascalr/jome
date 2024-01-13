@@ -1,5 +1,6 @@
 const { compileUtility } = require("jome-lib/compileUtility")
 const {compileTokenRaw} = require("./parser.js")
+const Argument = require("./argument")
 
 function genCode(node) {
   let generator = CODE_GENERATORS[node.type]
@@ -146,6 +147,27 @@ function toPrimitive(str) {
   }
 
   throw new Error("TODO fas02934n890fhsn0n1")
+}
+
+function parseArgument(node) {
+  if (node.type === 'variable.other.jome') {
+    return new Argument(node.raw)
+  } else if (node.type === 'keyword.operator.assignment.jome') { 
+    return new Argument(node.operands[0].raw, null, genCode(node.operands[1]))
+  } else if (node.type === 'meta.deconstructed-arg.jome') {
+    let parts = filterCommas(filterNewlines(node.parts.slice(1,-1))) // Remove curly braces
+    let arg = new Argument()
+    parts.forEach(part => {
+      arg.deconstructed.push(parseArgument(part))
+    })
+    return arg
+  } else if (node.type === 'support.type.property-name.attribute.jome') {
+    let arg = new Argument(node.raw.slice(1))
+    arg.isClassProperty = true
+    return arg
+  } else {
+    throw new Error("sf8923jr890shf89h2389r2h")
+  }
 }
 
 // Combine all the named parameters given into a single object
@@ -483,10 +505,11 @@ const CODE_GENERATORS = {
   },
 
   "meta.with-args.jome": (node) => {
+    let args = node.data.argsToken.map(a => parseArgument(a))
     if (node.data.isFileArguments) {
-      node.ctxFile.fileArguments = node.data.args
+      node.ctxFile.fileArguments = args
     } else {
-      node.ctxFile.currentArguments = node.data.args
+      node.ctxFile.currentArguments = args
     }
     return ''
   },

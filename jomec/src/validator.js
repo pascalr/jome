@@ -1,5 +1,4 @@
 const {OPERAND_TYPES, filterSpaces, filterStrings, compileTokenRaw} = require("./parser.js")
-const Argument = require("./argument")
 
 // TODO: Make sure no infinite loop
 function validateAllNodes(nodes) {
@@ -88,27 +87,6 @@ function filterCommas(list) {
 //     return `Invalid operands type for node ${node.type}. Was: ${node.type}`
 //   }
 // }
-
-function parseArgument(node) {
-  if (node.type === 'variable.other.jome') {
-    return new Argument(node.raw)
-  } else if (node.type === 'keyword.operator.assignment.jome') { 
-    return new Argument(node.operands[0].raw, null, genCode(node.operands[1]))
-  } else if (node.type === 'meta.deconstructed-arg.jome') {
-    let parts = filterCommas(filterNewlines(node.parts.slice(1,-1))) // Remove curly braces
-    let arg = new Argument()
-    parts.forEach(part => {
-      arg.deconstructed.push(parseArgument(part))
-    })
-    return arg
-  } else if (node.type === 'support.type.property-name.attribute.jome') {
-    let arg = new Argument(node.raw.slice(1))
-    arg.isClassProperty = true
-    return arg
-  } else {
-    throw new Error("sf8923jr890shf89h2389r2h")
-  }
-}
 
 // Depreacted: Use ensureLhsOperand instead.
 function validateOperatorUnary(node) {
@@ -463,10 +441,7 @@ const VALIDATORS = {
       parts = parts.slice(0, -1) // Remove 'end' keyword
     }
     parts = filterCommas(filterNewlines(parts))
-    parts.forEach(part => {
-      args.push(parseArgument(part))
-    })
-    node.data = {isFileArguments, args}
+    node.data = {isFileArguments, argsToken: parts}
   },
 }
 
