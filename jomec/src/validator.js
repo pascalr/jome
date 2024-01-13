@@ -446,5 +446,7 @@ const VALIDATORS = {
 }
 
 module.exports = {
-  validateAllNodes
+  validateAllNodes,
+  filterCommas,
+  filterNewlines
 }

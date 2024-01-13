@@ -72,6 +72,9 @@ class Compiler {
   }
 
   compileFile(absPath) {
+    if (this.filesCompiled.has(absPath)) {
+      return; // Skip files already compiled
+    }
     if (!fs.existsSync(absPath)) {
       throw new Error("Can't compile and save missing file " + absPath)
     }
@@ -91,9 +94,8 @@ class Compiler {
     console.log(`Successfully wrote to '${buildFileName}'.`);
 
     this.filesCompiled.add(absPath)
-    let deps = ctxFile.dependencies
-    ;(deps||[]).forEach(dep => {
-      console.log('DEPENDENCY: ', dep)
+    ctxFile.getDependencies().forEach(dep => {
+      this.compileFile(dep)
     })
   
     return buildFileName

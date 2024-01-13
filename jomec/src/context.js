@@ -1,3 +1,5 @@
+const path = require('path')
+
 // The scope of the file. So it handles imports especially.
 class ContextFile {
   constructor(absPath) {
@@ -44,6 +46,13 @@ class ContextFile {
 
   addDependency(filename) {
     this.dependencies.push(filename)
+  }
+
+  // Returns abs paths
+  getDependencies() {
+    return this.dependencies.map(dep => {
+      return path.resolve(this.absPath, '..', dep)
+    })
   }
 }
 

@@ -1,5 +1,6 @@
 const { compileUtility } = require("jome-lib/compileUtility")
 const {compileTokenRaw} = require("./parser.js")
+const {filterCommas, filterNewlines} = require("./validator.js")
 const Argument = require("./argument")
 
 function genCode(node) {
