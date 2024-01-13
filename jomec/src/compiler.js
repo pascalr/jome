@@ -66,7 +66,7 @@ const DEFAULT_COMPILER_OPTIONS = {
  * @param {*} options See DEFAULT_COMPILER_OPTIONS for more details
  * @returns 
  */
-function compile(code, options={}) {
+function compileCode(code, options={}) {
   options = {...DEFAULT_COMPILER_OPTIONS, ...options}
   let tokens = tokenize(code).children
   let ctxFile = new ContextFile()
@@ -100,7 +100,7 @@ function compile(code, options={}) {
   return generated
 }
 
-exports.compile = compile
+exports.compileCode = compileCode
 const { genCode, genImports } = require("./code_generator.js")
 
 // FIXME: This does not belong here
@@ -112,7 +112,7 @@ function compileAndSaveFile(absPath, options) {
 
   // Read the contents of the file synchronously
   const data = fs.readFileSync(absPath, 'utf8');
-  let result = compile(data, options)
+  let result = compileCode(data, options)
 
   if (!absPath.endsWith('.jome')) {
     throw new Error('Cannot compile file without .jome extension', absPath);

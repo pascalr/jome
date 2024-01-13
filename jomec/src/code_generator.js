@@ -1,7 +1,7 @@
 const { compileUtility } = require("jome-lib/compileUtility")
 const {compileTokenRaw} = require("./parser.js")
 const Argument = require("./argument")
-const compiler = require("./compiler.js") // Circular, but I don't really have a choice for use inside scripts template literals
+const {compileCode} = require("./compiler.js") // Circular, but I don't really have a choice for use inside scripts template literals
 
 function genCode(node) {
   let generator = CODE_GENERATORS[node.type]
@@ -150,7 +150,7 @@ function compileInterpolate(str, escSeqBeg = '${', escSeqEnd = '}') {
 
   return str.replace(/<%=((.|\n)*?)%>/g, (match, group) => {
     let raw = group.trim()
-    let out = compiler.compile(raw, {inline: true})
+    let out = compileCode(raw, {inline: true})
     return escSeqBeg+out+escSeqEnd
   });
 }

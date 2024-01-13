@@ -1,4 +1,3 @@
-const Webpage = require("./website-v2/src/test_mod.js");
 const execSh = require("jome-lib/execSh");
 const run_server = require("./website-v2/server.js");
 module.exports = (cmd) => {
