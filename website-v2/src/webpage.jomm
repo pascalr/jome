@@ -1,11 +1,12 @@
 let navbar = #run #../views/partials/navbar.html.jome
 let sidebar = #run #../views/partials/sidebar.html.jome
 
+# The base template for most webpages on this website.
 with
-  title
-  content
+  title # The html title of the page
+  content # Content to be displayed inside the body
 end // FIXME: Remove end
-export class Webpage
+main class Webpage
   def render
     return <html>
       <!DOCTYPE html>
