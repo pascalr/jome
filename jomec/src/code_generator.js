@@ -1,5 +1,4 @@
 const { compileUtility } = require("jome-lib/compileUtility")
-const Argument = require("./argument")
 const {compileTokenRaw} = require("./parser.js")
 
 function genCode(node) {
@@ -470,33 +469,13 @@ const CODE_GENERATORS = {
   },
 
   "meta.with-args.jome": (node) => {
-    let parts = filterArgParts(node.parts.slice(1, -1)) // Remove 'with' and 'end' keyword // FIXME: Not necessarly end keyword, maybe was before def or class
-    parts.forEach(part => {
-      node.lexEnv.ctxFile.fileArguments.push(parseArgument(part))
-    })
+    if (node.data.isFileArguments) {
+      node.lexEnv.ctxFile.fileArguments = node.data.args
+    } else {
+      throw new Error("sfn3478f7hs9078r3")
+    }
     return ''
   },
-}
-
-function parseArgument(node) {
-  if (node.type === 'variable.other.jome') {
-    return new Argument(node.raw)
-  } else if (node.type === 'keyword.operator.assignment.jome') { 
-    return new Argument(node.operands[0].raw, null, genCode(node.operands[1]))
-  } else if (node.type === 'meta.deconstructed-arg.jome') {
-    let parts = filterArgParts(node.parts.slice(1,-1)) // Remove curly braces
-    let arg = new Argument()
-    parts.forEach(part => {
-      arg.deconstructed.push(parseArgument(part))
-    })
-    return arg
-  } else {
-    throw new Error("sf8923jr890shf89h2389r2h")
-  }
-}
-
-function filterArgParts(parts) {
-  return parts.filter(p => p.type !== "punctuation.separator.delimiter.jome")
 }
 
 module.exports = {

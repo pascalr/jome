@@ -16,3 +16,9 @@ else
     jome test # launch the tests
   "%xl%xsx
 end
+
+// with
+//   @title
+//   @content
+// main class Webpage
+// end

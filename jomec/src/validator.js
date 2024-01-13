@@ -1,4 +1,5 @@
 const {OPERAND_TYPES, filterSpaces, filterStrings, compileTokenRaw} = require("./parser.js")
+const Argument = require("./argument")
 
 // TODO: Make sure no infinite loop
 function validateAllNodes(nodes) {
@@ -83,6 +84,24 @@ function filterNewlines(list) {
 //     return `Invalid operands type for node ${node.type}. Was: ${node.type}`
 //   }
 // }
+
+function parseArgument(node) {
+  if (node.type === 'variable.other.jome') {
+    return new Argument(node.raw)
+  } else if (node.type === 'keyword.operator.assignment.jome') { 
+    return new Argument(node.operands[0].raw, null, genCode(node.operands[1]))
+  } else if (node.type === 'meta.deconstructed-arg.jome') {
+    let parts = node.parts.slice(1,-1) // Remove curly braces
+    parts = parts.filter(p => p.type !== "punctuation.separator.delimiter.jome") // Remove commas
+    let arg = new Argument()
+    parts.forEach(part => {
+      arg.deconstructed.push(parseArgument(part))
+    })
+    return arg
+  } else {
+    throw new Error("sf8923jr890shf89h2389r2h")
+  }
+}
 
 // Depreacted: Use ensureLhsOperand instead.
 function validateOperatorUnary(node) {
@@ -424,6 +443,24 @@ const VALIDATORS = {
   "support.function-call.jome": (node) => validateFuncCall(node, false),
   "meta.function-call.WIP.jome": (node) => validateFuncCall(node, true),
   "meta.function-call.jome": (node) => validateFuncCall(node, true),
+
+  "meta.with-args.jome": (node) => {
+    ensureStartRaw(node, 'with')
+    ensureStartType(node, 'keyword.control.jome')
+    let parts = node.parts.slice(1) // Remove 'with' keyword
+    // Whether is is a with ... end block to define file arguments
+    let isFileArguments = false
+    let args = []
+    if (node.parts[node.parts.length-1]?.raw === 'end') {
+      isFileArguments = true
+      parts = parts.slice(0, -1) // Remove 'end' keyword
+    }
+    parts = parts.filter(p => p.type !== "punctuation.separator.delimiter.jome") // Remove commas
+    parts.forEach(part => {
+      args.push(parseArgument(part))
+    })
+    node.data = {isFileArguments, args}
+  },
 }
 
 module.exports = {
