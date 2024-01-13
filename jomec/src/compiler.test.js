@@ -1,12 +1,10 @@
 //const {compile} = require('./compiler.js')
 const {parse} = require('./parser.js')
-const compiler = require('./compiler.js')
+const {compileNodes, compileCode} = require('./compiler.js')
 const {tokenize} = require('./tokenizer.js')
 
-const {compileNodes} = compiler;
-
 const compile = (code) => {
-  return compiler.compile(code, {writeScript: false})
+  return compileCode(code, {writeScript: false})
 }
 
 /*

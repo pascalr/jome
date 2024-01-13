@@ -103,35 +103,45 @@ function compileCode(code, options={}) {
 exports.compileCode = compileCode
 const { genCode, genImports } = require("./code_generator.js")
 
+class Compiler {
+  constructor(options) {
+    this.options = options
+  }
+  compile(absPath) {
+    if (!fs.existsSync(absPath)) {
+      throw new Error("Can't compile and save missing file " + absPath)
+    }
+  
+    // Read the contents of the file synchronously
+    const data = fs.readFileSync(absPath, 'utf8');
+    let result = compileCode(data, this.options)
+  
+    if (!absPath.endsWith('.jome')) {
+      throw new Error('Cannot compile file without .jome extension', absPath);
+    }
+    const buildFileName = absPath.slice(0,-5)+'.js' // remove .jome and replace extension with js
+  
+    try {
+      // Write the result to the file synchronously
+      fs.writeFileSync(buildFileName, result);
+  
+      console.log(`Successfully wrote to '${buildFileName}'.`);
+    } catch (err) {
+      throw new Error('Error writing to the file:', err);
+    }
+  
+    return buildFileName
+  }
+}
+
 // FIXME: This does not belong here
 function compileAndSaveFile(absPath, options) {
-
-  if (!fs.existsSync(absPath)) {
-    throw new Error("Can't compile and save missing file " + absPath)
-  }
-
-  // Read the contents of the file synchronously
-  const data = fs.readFileSync(absPath, 'utf8');
-  let result = compileCode(data, options)
-
-  if (!absPath.endsWith('.jome')) {
-    throw new Error('Cannot compile file without .jome extension', absPath);
-  }
-  const buildFileName = absPath.slice(0,-5)+'.js' // remove .jome and replace extension with js
-
-  try {
-    // Write the result to the file synchronously
-    fs.writeFileSync(buildFileName, result);
-
-    console.log(`Successfully wrote to '${buildFileName}'.`);
-  } catch (err) {
-    throw new Error('Error writing to the file:', err);
-  }
-
-  return buildFileName
+  let compiler = new Compiler(options)
+  return compiler.compile(absPath)
 }
 
 module.exports = {
+  compileCode,
   compileNodes,
   compileAndSaveFile
 }
