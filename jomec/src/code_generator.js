@@ -15,19 +15,24 @@ function genImports(ctxFile, compilerOptions) {
   let result = ""
   let files = new Set([...Object.keys(ctxFile.namedImportsByFile), ...Object.keys(ctxFile.defaultImportsByFile)])
   files.forEach(file => {
+    let jsfile = file
+    if (file.endsWith('.jomm')) {
+      ctxFile.addDependency(file)
+      jsfile = file.slice(0,-5)+'.js' // remove .jome and replace extension with js
+    }
     let def = ctxFile.defaultImportsByFile[file]
     let named = ctxFile.namedImportsByFile[file]
     if (compilerOptions.useCommonJS) {
       if (def) {
-        result += `const ${def} = require("${file}");\n`
+        result += `const ${def} = require("${jsfile}");\n`
       } else {
-        result += `const {${[...named].join(', ')}} = require("${file}");\n`
+        result += `const {${[...named].join(', ')}} = require("${jsfile}");\n`
       }
     } else {
       if (def) {
-        result += `import ${def} from "${file}";\n`
+        result += `import ${def} from "${jsfile}";\n`
       } else {
-        result += `import {${[...named].join(', ')}} from "${file}";\n`
+        result += `import {${[...named].join(', ')}} from "${jsfile}";\n`
       }
     }
   })

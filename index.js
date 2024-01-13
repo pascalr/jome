@@ -1,3 +1,4 @@
+const Webpage = require("./website-v2/src/test_mod.js");
 const execSh = require("jome-lib/execSh");
 const run_server = require("./website-v2/server.js");
 module.exports = (cmd) => {
@@ -13,12 +14,4 @@ jome # get this help message
 jome s # start server (or jome server)
 jome test # launch the tests`);
   }
-  class Webpage {
-    contructor(title, content = "Default content") {
-      this.title = title;
-      this.content = content;
-    }
-  }
-  let hello = "Hello";
-  return `<div>${hello}</div>`;
 };
