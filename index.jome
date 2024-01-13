@@ -1,3 +1,5 @@
+import &Webpage from './website-v2/src/test_mod.jomm'
+
 with cmd end
 
 if (cmd === 'test')
@@ -16,13 +18,3 @@ else
     jome test # launch the tests
   "%xl%xsx
 end
-
-// main class Webpage
-with
-  @title
-  @content = "Default content"
-class Webpage
-end
-
-let hello = "Hello"
-return <html><div><%= hello %></div></html>

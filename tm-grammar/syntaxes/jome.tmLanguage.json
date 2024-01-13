@@ -8,14 +8,26 @@
     {"include": "#expression"}
   ],
 	"repository": {
+    "import-identifier": {
+      "patterns": [
+        {
+          "match": "&?\\w+",
+          "name": "entity.name.class.jome"
+        },
+        {
+          "match": "\\w+",
+          "name": "variable.other.jome"
+        }
+      ]
+    },
     "statement": {
       "patterns": [
         {
           "name": "meta.statement.import.jome",
-          "begin": "^(import) ?(\\b\\w+\\b)?",
+          "begin": "^(import) ?(&?\\w+)?",
           "beginCaptures": {
             "1": {"name": "keyword.control.jome"},
-            "2": {"name": "variable.other.default-import.jome"}
+            "2": {"name": "variable.other.default-import.jome", "patterns": [{"include": "#import-identifier"}]}
           },
           "end": "\r\n|\n|$",
           "patterns": [
@@ -44,9 +56,9 @@
               "patterns": [
                 {
                   "name": "meta.import-alias.jome",
-                  "match": "(\\w+) (as) (\\w+)",
+                  "match": "(&?\\w+) (as) (\\w+)",
                   "captures": {
-                    "1": {"name": "variable.other.readwrite.jome"},
+                    "1": {"name": "variable.other.readwrite.jome", "patterns": [{"include": "#import-identifier"}]},
                     "2": {"name": "keyword.control.jome"},
                     "3": {"name": "variable.other.readwrite.alias.jome"}
                   }
@@ -62,7 +74,8 @@
                 },
                 {
                   "name": "variable.other.named-import.jome",
-                  "match": "\\w+"
+                  "match": "&?\\w+",
+                  "patterns": [{"include": "#import-identifier"}]
                 },
                 {
                   "match": ",",

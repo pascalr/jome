@@ -1,0 +1,5 @@
+with
+  @title
+  @content = "Default content"
+main class Webpage
+end
