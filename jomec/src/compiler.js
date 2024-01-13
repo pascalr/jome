@@ -54,6 +54,10 @@ function compileNodes(nodes) {
   return nodes.map(node => genCode(node)).join(';')+';'
 }
 
+function compileCode(code, options) {
+  return new Compiler(options).compileCode(code)
+}
+
 const DEFAULT_COMPILER_OPTIONS = {
   useCommonJS: true, // Whether imports and exports use common JS or ESM
   prettier: true, // Whether to format the code using the prettier library
@@ -61,20 +65,11 @@ const DEFAULT_COMPILER_OPTIONS = {
   inline: false, // Inside a script template literal the code is compiled inline for example
 }
 
-/**
- * Compile the given code based on the options.
- * @param {string} code 
- * @param {*} options See DEFAULT_COMPILER_OPTIONS for more details
- * @returns 
- */
-function compileCode(code, options) {
-  return new Compiler(options).compileCode(code, options)
-}
-
 class Compiler {
-  constructor(options) {
-    this.options = options
+  constructor(options={}) {
+    this.options = {...DEFAULT_COMPILER_OPTIONS, ...options}
   }
+
   compile(absPath) {
     if (!fs.existsSync(absPath)) {
       throw new Error("Can't compile and save missing file " + absPath)
@@ -95,12 +90,13 @@ class Compiler {
   
     return buildFileName
   }
+
   compileCode(code, options={}) {
-    options = {...DEFAULT_COMPILER_OPTIONS, ...options}
+    let opts = {...this.options, ...options}
     let tokens = tokenize(code).children
     let ctxFile = new ContextFile()
     ctxFile.compiler = this
-    ctxFile.compilerOptions = options // TODO: Get the options through the compiler, not compilerOptions
+    ctxFile.compilerOptions = this.options // TODO: Get the options through the compiler, not compilerOptions
     let topNodes = parse(tokens, null, ctxFile.lexEnv)
     // let info = ""
     // topNodes.forEach(top =>
@@ -108,30 +104,29 @@ class Compiler {
     // )
     // console.log(info)
     let body = compileNodes(topNodes)
-    if (options.inline) {
+    if (opts.inline) {
       let generated = prettier.format(body, {parser: "babel", semi: false}) // No semicolons
       return generated
     }
-    if (options.writeScript) {
+    if (opts.writeScript) {
       let args = ctxFile.fileArguments.map(arg => arg.compile()).join(', ')
       // Wrap the body into a function
       // FIXME: Don't allow exports when compiling a script (.jome)
-      if (options.useCommonJS) {
+      if (opts.useCommonJS) {
         body = `module.exports = ((${args}) => {${body}})`
       } else {
         body = `export default ((${args}) => {${body}})`
       }
     }
-    let head = genImports(ctxFile, options)
+    let head = genImports(ctxFile, opts)
     let generated = head + body
-    if (options.prettier) {
+    if (opts.prettier) {
       generated = prettier.format(generated, {parser: "babel"})
     }
     return generated
   }
 }
 
-// FIXME: This does not belong here
 function compileAndSaveFile(absPath, options) {
   let compiler = new Compiler(options)
   return compiler.compile(absPath)
