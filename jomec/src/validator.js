@@ -77,6 +77,10 @@ function filterNewlines(list) {
   return list.filter(el => el.type !== 'newline')
 }
 
+function filterCommas(list) {
+  return list.filter(el => el.type !== 'commas')
+}
+
 // const validateoperands = (nb, types) => (node) => {
 //   if (node.operands.length !== nb) {
 //     return "Invalid number of operands for node."
@@ -91,12 +95,15 @@ function parseArgument(node) {
   } else if (node.type === 'keyword.operator.assignment.jome') { 
     return new Argument(node.operands[0].raw, null, genCode(node.operands[1]))
   } else if (node.type === 'meta.deconstructed-arg.jome') {
-    let parts = node.parts.slice(1,-1) // Remove curly braces
-    parts = parts.filter(p => p.type !== "punctuation.separator.delimiter.jome") // Remove commas
+    let parts = filterCommas(filterNewlines(node.parts.slice(1,-1))) // Remove curly braces
     let arg = new Argument()
     parts.forEach(part => {
       arg.deconstructed.push(parseArgument(part))
     })
+    return arg
+  } else if (node.type === 'support.type.property-name.attribute.jome') {
+    let arg = new Argument(node.raw.slice(1))
+    arg.isClassProperty = true
     return arg
   } else {
     throw new Error("sf8923jr890shf89h2389r2h")
@@ -455,7 +462,7 @@ const VALIDATORS = {
       isFileArguments = true
       parts = parts.slice(0, -1) // Remove 'end' keyword
     }
-    parts = parts.filter(p => p.type !== "punctuation.separator.delimiter.jome") // Remove commas
+    parts = filterCommas(filterNewlines(parts))
     parts.forEach(part => {
       args.push(parseArgument(part))
     })

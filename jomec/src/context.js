@@ -7,6 +7,7 @@ class ContextFile {
     this.defaultImportsByFile = {}
     this.dependencies = [] // Files that need to be compiled too for this file to run
     this.fileArguments = [] // A list of Argument
+    this.currentArguments = [] // The arguments defined just before classes and functions
   }
 
   addImport(defaultImport, namedImports, file) {

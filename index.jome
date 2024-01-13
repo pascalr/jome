@@ -17,8 +17,9 @@ else
   "%xl%xsx
 end
 
-// with
-//   @title
-//   @content
 // main class Webpage
-// end
+with
+  @title
+  @content
+class Webpage
+end

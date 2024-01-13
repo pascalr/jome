@@ -10,6 +10,7 @@ class Argument {
     this.defaultValue = value // As a string
     this.akas = []
     this.deconstructed = []
+    this.isClassProperty = false // @someClassProperty
   }
 
   isDeconstructed() {

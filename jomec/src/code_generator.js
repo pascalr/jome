@@ -472,7 +472,7 @@ const CODE_GENERATORS = {
     if (node.data.isFileArguments) {
       node.lexEnv.ctxFile.fileArguments = node.data.args
     } else {
-      throw new Error("sfn3478f7hs9078r3")
+      node.lexEnv.ctxFile.currentArguments = node.data.args
     }
     return ''
   },
