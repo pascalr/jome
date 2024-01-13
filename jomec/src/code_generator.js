@@ -82,6 +82,19 @@ function compileArrowFunction(node) {
   }
 }
 
+function compileConstrutor(node) {
+  let args = node.ctxFile.currentArguments
+  if (args) {
+    return `contructor(${args.map(a => a.compile()).join(', ')}) {
+      ${args.filter(a => a.isClassProperty).map(a => {
+        return `this.${a.name} = ${a.name}`
+      }).join('\n')}  
+    }\n`
+    node.ctxFile.currentArguments = null
+  }
+  return ''
+}
+
 // A def inside a class
 function compileMethod(node) {
   let name = node.parts[1].raw
@@ -332,7 +345,8 @@ const CODE_GENERATORS = {
     let name = node.parts[1].raw
     let parts = node.parts.slice(2,-1)
     let methods = parts.filter(p => p.type === 'meta.def.jome')
-    let compiledMethods = methods.map(m => compileMethod(m)).join('\n')
+    let compiledMethods = compileConstrutor(node)
+    compiledMethods += methods.map(m => compileMethod(m)).join('\n')
     return `class ${name} {\n${compiledMethods}\n}`
   },
   // interface
