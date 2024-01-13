@@ -70,7 +70,7 @@ class Compiler {
     this.options = {...DEFAULT_COMPILER_OPTIONS, ...options}
   }
 
-  compile(absPath) {
+  compileFile(absPath) {
     if (!fs.existsSync(absPath)) {
       throw new Error("Can't compile and save missing file " + absPath)
     }
@@ -129,7 +129,7 @@ class Compiler {
 
 function compileAndSaveFile(absPath, options) {
   let compiler = new Compiler(options)
-  return compiler.compile(absPath)
+  return compiler.compileFile(absPath)
 }
 
 module.exports = {
