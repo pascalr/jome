@@ -828,15 +828,24 @@ main {
 
   ## Classes
 
+  Normal arguments are only available inside the constructor.
+  The constructor is everything inside the class before the first def ... end.
+  If you use @someArgument, then it will automatically set it for you.
+
   ```jome
+  class Person(favoriteColor)
+    @firstName: string = "John"
+    @lastName: string = "Doe"
+    @age: number
+    @favoriteColor = favoriteColor || 'brown'
+  end
+
+  with
+    @favoriteColor = 'brown'
   class Person
     @firstName: string = "John"
     @lastName: string = "Doe"
     @age: number
-  
-    def constructor(favoriteColor)
-      @favoriteColor = favoriteColor || 'brown'
-    end
   end
 
   class Person

@@ -3,8 +3,8 @@ let sidebar = #run #../views/partials/sidebar.html.jome
 
 # The base template for most webpages on this website.
 with
-  title # The html title of the page
-  content # Content to be displayed inside the body
+  @title # The html title of the page
+  @content # Content to be displayed inside the body
 main class Webpage
   def render
     return <html>
@@ -13,7 +13,7 @@ main class Webpage
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title><%= title %></title>
+          <title><%= @title %></title>
           <link rel="stylesheet" type="text/css" href="<%= {$URL} %>/stylesheet.css">
           <link rel="stylesheet" type="text/css" href="<%= {$URL} %>/highlight.js.min.css">
           <link rel="apple-touch-icon" sizes="180x180" href="<%= {$URL} %>/apple-touch-icon.png">
@@ -29,7 +29,7 @@ main class Webpage
             <%= sidebar %>
             <div class="scrollable" style="width: 100%;">
               <div class="app-content">
-                <%= content %>
+                <%= @content %>
               </div>
             </div>
           </div>
