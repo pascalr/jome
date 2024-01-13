@@ -410,7 +410,7 @@ const CODE_GENERATORS = {
   // // import "module-name"; TODO: Not written yet in the parser
   "meta.statement.import.jome": (node) => {
     let {file, defaultImport, namedImports} = node.data
-    node.lexEnv.ctxFile.addImport(defaultImport, namedImports, file)
+    node.ctxFile.addImport(defaultImport, namedImports, file)
     // ctx.addBinding(defaultImport, {type: 'default-import'}) TODO!!!!!!!!!!!!!!!!
     // ctx.addBinding(name, {type: 'named-import'})
   },
@@ -423,7 +423,7 @@ const CODE_GENERATORS = {
   "string.other.path.jome": (node) => {
     let p = node.raw.slice(1)
     if (p === '.' || p === './') {
-      if (!node.lexEnv.ctxFile.compilerOptions.useCommonJS) {
+      if (!node.compilerOptions.useCommonJS) {
         throw new Error("sf823yf78902y30f9823323f")
       }
       return '__dirname'
@@ -434,7 +434,7 @@ const CODE_GENERATORS = {
     if (p.startsWith('cwd/')) {
       return `path.resolve("./${p.slice(4)}")`
     }
-    if (!node.lexEnv.ctxFile.compilerOptions.useCommonJS) {
+    if (!node.compilerOptions.useCommonJS) {
       throw new Error("fu3h7f23h98rfha07hd0237230u")
     }
     if (p.startsWith('..')) {
@@ -451,7 +451,7 @@ const CODE_GENERATORS = {
 
   // <sh></sh>
   "meta.embedded.block.shell": (node) => {
-    node.lexEnv.ctxFile.addImport('execSh', null, 'jome-lib/execSh')
+    node.ctxFile.addImport('execSh', null, 'jome-lib/execSh')
     return "execSh(`"+escapeBackticks(node.data.command)+"`);"
   },
   // <html></html>
@@ -470,9 +470,9 @@ const CODE_GENERATORS = {
 
   "meta.with-args.jome": (node) => {
     if (node.data.isFileArguments) {
-      node.lexEnv.ctxFile.fileArguments = node.data.args
+      node.ctxFile.fileArguments = node.data.args
     } else {
-      node.lexEnv.ctxFile.currentArguments = node.data.args
+      node.ctxFile.currentArguments = node.data.args
     }
     return ''
   },
