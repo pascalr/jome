@@ -18,3 +18,5 @@ else
     jome test # launch the tests
   "%xl%xsx
 end
+
+return <html><div><%= "Hello" %></div></html>

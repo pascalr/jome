@@ -1,5 +1,6 @@
 const { parse } = require("./parser")
 const { tokenize } = require('./tokenizer.js')
+const { genCode, genImports } = require("./code_generator.js")
 const { validateAllNodes } = require("./validator")
 const { ContextFile } = require("./context.js")
 const prettier = require("prettier")
@@ -100,9 +101,6 @@ function compileCode(code, options={}, compiler) {
   }
   return generated
 }
-
-exports.compileCode = compileCode
-const { genCode, genImports } = require("./code_generator.js")
 
 class Compiler {
   constructor(options) {

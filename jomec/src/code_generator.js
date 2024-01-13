@@ -1,7 +1,6 @@
 const { compileUtility } = require("jome-lib/compileUtility")
 const {compileTokenRaw} = require("./parser.js")
 const Argument = require("./argument")
-const {compileCode} = require("./compiler.js") // Circular, but I don't really have a choice for use inside scripts template literals
 
 function genCode(node) {
   let generator = CODE_GENERATORS[node.type]
@@ -136,7 +135,7 @@ function compileStandaloneFunction(node) {
   }
 }
 
-function compileInterpolate(str, escSeqBeg = '${', escSeqEnd = '}') {
+function compileInterpolate(node, str, escSeqBeg = '${', escSeqEnd = '}') {
   // FIXME: This is a simplify method that does not allow "%>" to be for example inside a string
   // FIXME: <html><%= "%>" %></html> // DOES NOT WORK
   // A proper solution would be to have all the tmLanguage files to tokenize properly, and inject
@@ -150,7 +149,7 @@ function compileInterpolate(str, escSeqBeg = '${', escSeqEnd = '}') {
 
   return str.replace(/<%=((.|\n)*?)%>/g, (match, group) => {
     let raw = group.trim()
-    let out = compileCode(raw, {inline: true})
+    let out = node.ctxFile.compiler.compileCode(raw, {inline: true})
     return escSeqBeg+out+escSeqEnd
   });
 }
@@ -527,7 +526,7 @@ const CODE_GENERATORS = {
     //     a = '</html>'
     //   }
     //   return '`'+b+compileInterpolate(compileRaw(node.children.slice(1,-1)), ctx)+a+'`'
-    let content = compileInterpolate(compileTokenRaw(node.parts.slice(1,-1)))
+    let content = compileInterpolate(node, compileTokenRaw(node.parts.slice(1,-1)))
     return '`'+content+'`'
   },
 

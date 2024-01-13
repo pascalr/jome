@@ -13,4 +13,5 @@ jome # get this help message
 jome s # start server (or jome server)
 jome test # launch the tests`);
   }
+  return `<div>${"Hello"}</div>`;
 };
