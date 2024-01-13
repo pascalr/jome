@@ -1,5 +1,4 @@
 const { parse } = require("./parser")
-const { genCode, genImports } = require("./code_generator.js")
 const { tokenize } = require('./tokenizer.js')
 const { validateAllNodes } = require("./validator")
 const { ContextFile } = require("./context.js")
@@ -57,7 +56,8 @@ function compileNodes(nodes) {
 const DEFAULT_COMPILER_OPTIONS = {
   useCommonJS: true, // Whether imports and exports use common JS or ESM
   prettier: true, // Whether to format the code using the prettier library
-  writeScript: true // Whether to wrap the code inside a function to be exported
+  writeScript: true, // Whether to wrap the code inside a function to be exported
+  inline: false, // Inside a script template literal the code is compiled inline for example
 }
 
 /**
@@ -78,6 +78,10 @@ function compile(code, options={}) {
   // )
   // console.log(info)
   let body = compileNodes(topNodes)
+  if (options.inline) {
+    let generated = prettier.format(body, {parser: "babel", semi: false}) // No semicolons
+    return generated
+  }
   if (options.writeScript) {
     let args = ctxFile.fileArguments.map(arg => arg.compile()).join(', ')
     // Wrap the body into a function
@@ -95,6 +99,9 @@ function compile(code, options={}) {
   }
   return generated
 }
+
+exports.compile = compile
+const { genCode, genImports } = require("./code_generator.js")
 
 // FIXME: This does not belong here
 function compileAndSaveFile(absPath, options) {
@@ -125,7 +132,6 @@ function compileAndSaveFile(absPath, options) {
 }
 
 module.exports = {
-  compile,
   compileNodes,
   compileAndSaveFile
 }

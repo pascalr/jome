@@ -1,6 +1,7 @@
 const { compileUtility } = require("jome-lib/compileUtility")
 const {compileTokenRaw} = require("./parser.js")
 const Argument = require("./argument")
+const compiler = require("./compiler.js") // Circular, but I don't really have a choice for use inside scripts template literals
 
 function genCode(node) {
   let generator = CODE_GENERATORS[node.type]
@@ -128,6 +129,25 @@ function compileStandaloneFunction(node) {
   } else {
     return `function () {${cs.map(c => genCode(c)).join('')}}`
   }
+}
+
+function compileInterpolate(str, escSeqBeg = '${', escSeqEnd = '}') {
+  // FIXME: This is a simplify method that does not allow "%>" to be for example inside a string
+  // FIXME: <html><%= "%>" %></html> // DOES NOT WORK
+  // A proper solution would be to have all the tmLanguage files to tokenize properly, and inject
+  // into the grammar files my interpolation tag.
+  // But this does not fix the problem that syntax highlighting does not work...
+  // So keep it simple for now
+
+  // One part of the solution I think is to tokenize and check that if all the groups were close
+  // In order to handle <% if (true) ( %> Blah blah <% ) %>
+  // TODO: Checker comment ils font dans eta.js
+
+  return str.replace(/<%=((.|\n)*?)%>/g, (match, group) => {
+    let raw = group.trim()
+    let out = compiler.compile(raw, {inline: true})
+    return escSeqBeg+out+escSeqEnd
+  });
 }
 
 function toPrimitive(str) {
@@ -502,7 +522,7 @@ const CODE_GENERATORS = {
     //     a = '</html>'
     //   }
     //   return '`'+b+compileInterpolate(compileRaw(node.children.slice(1,-1)), ctx)+a+'`'
-    let content = compileTokenRaw(node.parts.slice(1,-1))
+    let content = compileInterpolate(compileTokenRaw(node.parts.slice(1,-1)))
     return '`'+content+'`'
   },
 

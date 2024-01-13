@@ -23,3 +23,6 @@ with
   @content = "Default content"
 class Webpage
 end
+
+let hello = "Hello"
+return <html><div><%= hello %></div></html>

@@ -19,4 +19,6 @@ jome test # launch the tests`);
       this.content = content;
     }
   }
+  let hello = "Hello";
+  return `<div>${hello}</div>`;
 };
