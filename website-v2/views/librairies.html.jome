@@ -1,4 +1,4 @@
-import {&Webpage} from '../src/webpage.jome'
+import &Webpage from '../src/webpage.jomm'
 
 content = <md>
   ## Jome librairies

@@ -17,7 +17,7 @@
     "languages": [{
       "id": "jome",
       "aliases": ["Jome", "jome"],
-      "extensions": [".jome"],
+      "extensions": [".jome", ".jomm"],
       "configuration": "./language-configuration.json"
     }],
     "grammars": [{
