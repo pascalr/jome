@@ -1,6 +1,7 @@
 // The scope of the file. So it handles imports especially.
 class ContextFile {
-  constructor() {
+  constructor(absPath) {
+    this.absPath = absPath
     this.lexEnv = new LexicalEnvironment()
     this.lexEnv.ctxFile = this
     this.namedImportsByFile = {}

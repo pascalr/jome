@@ -68,6 +68,7 @@ const DEFAULT_COMPILER_OPTIONS = {
 class Compiler {
   constructor(options={}) {
     this.options = {...DEFAULT_COMPILER_OPTIONS, ...options}
+    this.filesCompiled = new Set()
   }
 
   compileFile(absPath) {
@@ -77,7 +78,8 @@ class Compiler {
   
     // Read the contents of the file synchronously
     const data = fs.readFileSync(absPath, 'utf8');
-    let result = this.compileCode(data, this.options)
+    let ctxFile = new ContextFile(absPath)
+    let result = this.compileCode(data, this.options, ctxFile)
   
     if (!absPath.endsWith('.jome')) {
       throw new Error('Cannot compile file without .jome extension', absPath);
@@ -87,14 +89,20 @@ class Compiler {
     // Write the result to the file synchronously
     fs.writeFileSync(buildFileName, result);
     console.log(`Successfully wrote to '${buildFileName}'.`);
+
+    this.filesCompiled.add(absPath)
+    let deps = ctxFile.dependencies
+    ;(deps||[]).forEach(dep => {
+      console.log('DEPENDENCY: ', dep)
+    })
   
     return buildFileName
   }
 
-  compileCode(code, options={}) {
+  compileCode(code, options={}, ctxFile) {
     let opts = {...this.options, ...options}
     let tokens = tokenize(code).children
-    let ctxFile = new ContextFile()
+    ctxFile = ctxFile || new ContextFile()
     ctxFile.compiler = this
     ctxFile.compilerOptions = this.options // TODO: Get the options through the compiler, not compilerOptions
     let topNodes = parse(tokens, null, ctxFile.lexEnv)
