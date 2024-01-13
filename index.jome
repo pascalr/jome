@@ -20,6 +20,6 @@ end
 // main class Webpage
 with
   @title
-  @content
+  @content = "Default content"
 class Webpage
 end

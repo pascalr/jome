@@ -152,8 +152,10 @@ function toPrimitive(str) {
 function parseArgument(node) {
   if (node.type === 'variable.other.jome') {
     return new Argument(node.raw)
-  } else if (node.type === 'keyword.operator.assignment.jome') { 
-    return new Argument(node.operands[0].raw, null, genCode(node.operands[1]))
+  } else if (node.type === 'keyword.operator.assignment.jome') {
+    let arg = parseArgument(node.operands[0])
+    arg.defaultValue = genCode(node.operands[1])
+    return arg
   } else if (node.type === 'meta.deconstructed-arg.jome') {
     let parts = filterCommas(filterNewlines(node.parts.slice(1,-1))) // Remove curly braces
     let arg = new Argument()

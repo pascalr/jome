@@ -14,7 +14,7 @@ jome s # start server (or jome server)
 jome test # launch the tests`);
   }
   class Webpage {
-    contructor(title, content) {
+    contructor(title, content = "Default content") {
       this.title = title;
       this.content = content;
     }
