@@ -562,8 +562,8 @@ const CODE_GENERATORS = {
           current.docComment = a.raw.slice(2)
         }
       } else {
-        current = a;
-        args.push(parseArgument(a))
+        current = parseArgument(a);
+        args.push(current)
       }
     })
     if (node.data.isFileArguments) {

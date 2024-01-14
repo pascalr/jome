@@ -2,8 +2,8 @@ const { run } = require("jome-lib/cjs");
 let navbar = run(path.join(__dirname, "../views/partials/navbar.html.jome"));
 let sidebar = run(path.join(__dirname, "../views/partials/sidebar.html.jome"));  // The base template for most webpages on this website.;
 /**
- * @param {*} title
- * @param {*} content
+ * @param {*} title The html title of the page
+ * @param {*} content Content to be displayed inside the body
  */
 module.exports = class Webpage {
   contructor(title, content) {
