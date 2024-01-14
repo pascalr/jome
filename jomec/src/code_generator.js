@@ -3,6 +3,8 @@ const {compileTokenRaw} = require("./parser.js")
 const {filterCommas, filterNewlines} = require("./validator.js")
 const Argument = require("./argument")
 
+const GLOBAL_PREFIX = 'g_'
+
 function genCode(node) {
   let generator = CODE_GENERATORS[node.type]
   if (!generator) {
@@ -355,7 +357,12 @@ const CODE_GENERATORS = {
     return node.raw
   },
   'variable.other.jome': compileRaw,
-  'variable.assignment.jome': compileRaw,
+  'variable.assignment.jome': (node) => {
+    if (node.raw[0] === '$') {
+      return `global.${GLOBAL_PREFIX}${node.raw.slice(1)}`
+    }
+    return node.raw
+  },
   'support.variable.jome': compileRaw,
   'entity.name.function.jome': compileRaw,
   'constant.numeric.integer.jome': compileRaw,
@@ -595,7 +602,7 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
   "variable.other.global.jome": (node) => {
     // Adding an underscore so the name does not collide with Node.js default variables (ex: URL)
     // https://nodejs.org/api/globals.html#url
-    return `global._${node.raw.slice(1)}`
+    return `global.${GLOBAL_PREFIX}${node.raw.slice(1)}`
   },
 
 }

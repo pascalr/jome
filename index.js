@@ -2,7 +2,7 @@ const execSh = require("jome-lib/execSh");
 const run_build = require("./website-v2/build.js");
 const run_server = require("./website-v2/server.js");
 module.exports = (cmd) => {
-  $URL = "/jome";
+  global.g_URL = "/jome";
   if (cmd === "test") {
     execSh(`jome test.jome`);
   } else if (cmd === "b" || cmd === "build") {
