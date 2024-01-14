@@ -73,32 +73,48 @@ class Compiler {
 
   compileFile(absPath) {
     if (this.filesCompiled.has(absPath)) {
+      console.log('Skipping compiling file', absPath, 'because it is already compiled.')
       return; // Skip files already compiled
     }
     if (!fs.existsSync(absPath)) {
       throw new Error("Can't compile and save missing file " + absPath)
     }
+
+    const destFile = absPath.slice(0,-5)+'.js' // remove .jome and replace extension with js
+
+    if (!absPath.endsWith('.jome')) {
+      throw new Error('Cannot compile file without .jome extension', absPath);
+    }
+    // FIXME: This does not work because it does not check for dependencies.
+    // If I want to do this, I must keep a dependency tree somewhere.
+    // Or do I?
+    // if (fs.existsSync(destFile)) {
+    //   // Check if the file needs to be compiled
+    //   const srcStats = fs.statSync(absPath);
+    //   const destStats = fs.statSync(destFile);
+    //   if (destStats.mtime.getTime() > srcStats.mtime.getTime()) {
+    //     console.log('Skipping compiling file', absPath, 'because it is already up to date.')
+    //     return; // File is already up to date
+    //   }
+    // }
   
     // Read the contents of the file synchronously
     const data = fs.readFileSync(absPath, 'utf8');
     let ctxFile = new ContextFile(absPath)
     let result = this.compileCode(data, this.options, ctxFile)
   
-    if (!absPath.endsWith('.jome')) {
-      throw new Error('Cannot compile file without .jome extension', absPath);
-    }
-    const buildFileName = absPath.slice(0,-5)+'.js' // remove .jome and replace extension with js
+    
   
     // Write the result to the file synchronously
-    fs.writeFileSync(buildFileName, result);
-    console.log(`Successfully wrote to '${buildFileName}'.`);
+    fs.writeFileSync(destFile, result);
+    console.log(`Successfully wrote to '${destFile}'.`);
 
     this.filesCompiled.add(absPath)
     ctxFile.getDependencies().forEach(dep => {
       this.compileFile(dep)
     })
   
-    return buildFileName
+    return destFile
   }
 
   compileCode(code, options={}, ctxFile) {
