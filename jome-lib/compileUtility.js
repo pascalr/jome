@@ -16,6 +16,7 @@ function _run(node, sync, args) {
     return sync ? `await ${str}` : `${str}`
     // TODO: Pass the rest of the args too into the function call
   } else {
+    throw new Error('Dynamic #run not supported for now')
     let lib = node.lexEnv.ctxFile.compilerOptions.useCommonJS ? 'cjs' : 'esm'
     let str = `run(${args.join(', ')})`
     node.lexEnv.ctxFile.addImport(null, ['run'], 'jome-lib/'+lib)

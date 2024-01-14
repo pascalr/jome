@@ -867,6 +867,7 @@
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
           "name": "meta.embedded.block.javascript",
+          "contentName": "raw",
           "patterns": [{ "include": "source.js" }]
         },
         {
@@ -875,6 +876,7 @@
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
           "name": "meta.embedded.block.markdown",
+          "contentName": "raw",
           "patterns": [{ "include": "text.html.markdown" }]
         },
         {
@@ -892,6 +894,7 @@
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
           "name": "meta.embedded.block.css",
+          "contentName": "raw",
           "patterns": [{ "include": "source.css" }]
         },
         {

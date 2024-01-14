@@ -94,7 +94,7 @@ function compileArrowFunction(node) {
 function compileConstrutor(node) {
   let args = node.ctxFile.currentArguments
   if (args) {
-    return `contructor(${args.map(a => a.compile()).join(', ')}) {
+    return `constructor(${args.map(a => a.compile()).join(', ')}) {
       ${args.filter(a => a.isClassProperty).map(a => {
         return `this.${a.name} = ${a.name}`
       }).join('\n')}  
