@@ -43,6 +43,11 @@ const UTILS = {
   "run!": (node, args) => _run(node, true, args),
   load: (node, args) => _run(node, false, args),
   "load!": (node, args) => _run(node, true, args),
+  // TODO: build!
+  build: (node, args) => {
+    node.lexEnv.ctxFile.addImport('build', null, 'jome-lib/build')
+    return `build(${(args).join(', ')})`
+  },
 }
 
 function compileUtility(name, node, args) {

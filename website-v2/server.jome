@@ -2,21 +2,9 @@ import express from "express"
 
 with {port = 3000} end
 
-/*
-def build(source, dest)
-  #watch './views/test.jome' do |file|
-    #write '../docs/test/index.html', require(file.path), overwrite!, makeParent!
-  end
-end
-
-build './views/test.jome', '../docs/test/index.html'
-*/
-
 express() chain
 
   use '/jome', express.static('docs')
-
-  get "/test", (req, res) => res.send(#run('./views/test.html.jome'))
 
   get "/", (req, res) => res.redirect('/jome')
 

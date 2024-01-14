@@ -11,7 +11,7 @@
     "import-identifier": {
       "patterns": [
         {
-          "match": "&?\\w+",
+          "match": "&\\w+",
           "name": "entity.name.class.jome"
         },
         {

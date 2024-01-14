@@ -1,8 +1,11 @@
 const execSh = require("jome-lib/execSh");
+const run_build = require("./website-v2/build.js");
 const run_server = require("./website-v2/server.js");
 module.exports = (cmd) => {
   if (cmd === "test") {
     execSh(`jome test.jome`);
+  } else if (cmd === "b" || cmd === "build") {
+    run_build({ port: 3000 });
   } else if (cmd === "s" || cmd === "server") {
     run_server({ port: 3000 });
   } else {

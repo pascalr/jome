@@ -1,0 +1,19 @@
+/*
+def build(source, dest)
+  #watch './views/test.jome' do |file|
+    #write '../docs/test/index.html', require(file.path), overwrite!, makeParent!
+  end
+end
+
+TODO: (but later) Implement a #watch function and give it the folder website for example, and anytime there is a change, then
+to recompile the file.
+
+TODO: Implement a compile method that checks if the modification of the compiled file is later than the modification
+of the source file.
+
+#compile takes one are two arguments, by default the second argument is the same, but by removing the .jome extension
+
+#compile './views/test.jome', '../docs/test/index.html'
+*/
+
+#build #./views/test.html.jome, #../docs/test/index.html
