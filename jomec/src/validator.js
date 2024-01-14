@@ -116,7 +116,7 @@ function validateOperator(node) {
 function validateString(node, char) {
   let last = node.parts[node.parts.length-1]
   let format;
-  if (last.type === 'keyword.other.jome') { // If it is a format
+  if (last.type === 'keyword.other.string-format.jome') {
     format = last.raw
   }
   ensureStartRaw(node, char)

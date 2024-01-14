@@ -711,7 +711,7 @@
           "end": "(\")((%\\w*)*)",
           "endCaptures": {
             "1": {"name": "punctuation.definition.string.end.jome"},
-            "2": {"name": "keyword.other.jome"}
+            "2": {"name": "keyword.other.string-format.jome"}
           },
           "patterns": [
             {"include": "#template-literal"},
@@ -856,6 +856,20 @@
         {
           "match": ">$",
           "name": "punctuation.definition.template-expression.end.punctuation.script.js.open"
+        }
+      ]
+    },
+    "generic-script": {
+      "patterns": [
+        {
+          "comment": "Work in progress",
+          "begin": "(?<=<)([a-zA-Z]\\w*)(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
+          "end": "\\<\\/js\\>",
+          "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
+          "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
+          "name": "meta.embedded.block.javascript",
+          "contentName": "raw",
+          "patterns": [{ "include": "source.js" }]
         }
       ]
     },

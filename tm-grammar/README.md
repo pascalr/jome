@@ -1,3 +1,20 @@
+TODO: Use \\1 insides the regexes for example when there is an optional quote: This explains it well:
+
+The regular expression you've provided seems to be part of a syntax definition or pattern matching context. It is not complete on its own, and it appears to be designed to match a specific pattern within a larger string.
+
+Breaking down the provided components:
+
+    "begin": "(?=(?><<[-~](\"?)((?:[_\\w]+_|)HTML)\\b\\1))":
+        (?> ... ): This is an atomic group that prevents backtracking into the enclosed pattern.
+        <<[-~](\"?): Matches << followed by a character in the range [-~] (ASCII characters between hyphen and tilde), and captures an optional double quote.
+        ((?:[_\\w]+_|)HTML): Captures a group containing either one or more word characters or underscores followed by an underscore, or just HTML.
+        \\b: Asserts a word boundary.
+        \\1: Backreference to the captured optional double quote (matching the one captured earlier).
+        (?= ... ): This is a positive lookahead assertion, ensuring that the enclosed pattern exists ahead in the string without consuming characters.
+
+    "end": "(?!\\G)":
+        (?!\\G): This is a negative lookahead assertion, ensuring that the current position is not immediately following the end of the previous match (\G).
+
 # Installation
 
 ## Linux
