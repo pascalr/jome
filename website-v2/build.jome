@@ -16,5 +16,5 @@ of the source file.
 #compile './views/test.jome', '../docs/test/index.html'
 */
 
-#build(#./views/test.html.jome, #../docs/test/index.html)
-#build(#./views/librairies.html.jome, #../docs/lib/index.html)
+#build(#./views/test.html.jome, #../docs/test/index.html, force: true)
+#build(#./views/librairies.html.jome, #../docs/lib/index.html, force: true)

@@ -1,19 +1,17 @@
 const { run } = require("jome-lib/cjs");
-module.exports = () => {
-  let navbar = run(path.join(__dirname, "../views/partials/navbar.html.jome"));
-  let sidebar = run(
-    path.join(__dirname, "../views/partials/sidebar.html.jome")
-  );  // The base template for most webpages on this website.;
-  /**
-   * @param {*} title ,* @param {*} content
-   */
-  module.exports = class Webpage {
-    contructor(title, content) {
-      this.title = title;
-      this.content = content;
-    }
-    render = () => {
-      return `
+let navbar = run(path.join(__dirname, "../views/partials/navbar.html.jome"));
+let sidebar = run(path.join(__dirname, "../views/partials/sidebar.html.jome"));  // The base template for most webpages on this website.;
+/**
+ * @param {*} title
+ * @param {*} content
+ */
+module.exports = class Webpage {
+  contructor(title, content) {
+    this.title = title;
+    this.content = content;
+  }
+  render = () => {
+    return `
       <!DOCTYPE html>
       <HTML lang="en">
         <head>
@@ -42,6 +40,5 @@ module.exports = () => {
         </body>
       </HTML>
     `;
-    };
   };
 };

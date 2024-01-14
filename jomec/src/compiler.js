@@ -134,7 +134,7 @@ class Compiler {
       let generated = prettier.format(body, {parser: "babel", semi: false}) // No semicolons
       return generated
     }
-    if (opts.writeScript) {
+    if (opts.writeScript && ctxFile.absPath.endsWith('.jome')) {
       let args = ctxFile.fileArguments.map(arg => arg.compile()).join(', ')
       // Wrap the body into a function
       // FIXME: Don't allow exports when compiling a script (.jome)

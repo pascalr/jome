@@ -171,6 +171,9 @@ function toPrimitive(str) {
     return str.slice(1,-1)
   }
 
+  if (str === 'true') {return true}
+  if (str === 'false') {return false}
+
   throw new Error("TODO fas02934n890fhsn0n1")
 }
 
@@ -569,7 +572,7 @@ const CODE_GENERATORS = {
       node.ctxFile.currentArguments = args
       if (args.length) {
         return `/**
-${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`)}
+${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
 */`
       }   
     }
