@@ -7,7 +7,7 @@ if (cmd === 'test')
   // include #./test.jome
   <sh>jome test.jome</sh>
 elsif (cmd === 'b' || cmd === 'build')
-  #run('./website-v2/build.jome', port: 3000)
+  #run('./website-v2/build.jome')
 elsif (cmd === 's' || cmd === 'server')
   #run('./website-v2/server.jome', port: 3000)
 else

@@ -16,11 +16,11 @@
     {
       "type": "node-terminal",
       "request": "launch",
-      "name": "Just jome",
+      "name": "jome build",
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "command": "jome"
+      "command": "jome b"
     },
     {
       "type": "node-terminal",
@@ -30,15 +30,6 @@
         "<node_internals>/**"
       ],
       "command": "jome jomec/test/generic.test.jome"
-    },
-    {
-      "type": "node-terminal",
-      "request": "launch",
-      "name": "Tmp jome",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "command": "jome tmp.jome"
     },
     {
       "type": "node-terminal",

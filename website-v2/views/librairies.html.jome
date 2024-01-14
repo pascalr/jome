@@ -3,7 +3,7 @@ import &Webpage from '../src/webpage.jomm'
 content = <md>
   ## Jome librairies
 
-  Librairies should be distributed the same way as CoffeeScript librairies. So I think it is mainly through npm.
+  Jome compiles into JavaScript. So librairies are distributed through npm like other JavaScript librairies.
 
   ### Common librairies
 

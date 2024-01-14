@@ -2,6 +2,8 @@ import express from "express"
 
 with {port = 3000} end
 
+//#run('./website-v2/build.jome')
+
 express() chain
 
   use '/jome', express.static('docs')
