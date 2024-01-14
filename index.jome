@@ -2,6 +2,8 @@
 
 with cmd end
 
+$URL = '/jome'
+
 if (cmd === 'test')
   // #run #./test.jome
   // include #./test.jome

@@ -457,6 +457,12 @@ main {
   let secondChild = @2
   ```
 
+  TODO: Use the keyword self instead of this, this makes it clear that it refers to self inside a class,
+  and that it is a little different than this in javascript in that it always refer to the class instance.
+
+  Use #evt to get current event
+  Use window or #window to get the window
+
   ### Exclamation mark in objects
 
   Inside an object, you can use an exclamation mark after a variable name so it sets it value to true.

@@ -527,7 +527,7 @@
     "variable": {
 			"patterns": [
         {
-          "name": "variable.other.environment.jome",
+          "name": "variable.other.global.jome",
           "match": "\\$\\w+"
 		  	},
         {

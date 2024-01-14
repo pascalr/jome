@@ -271,7 +271,11 @@ const TOKENS = {
   // return
   "keyword.control.return.jome": {
     captureRight: true
-  }
+  },
+  // main
+  "keyword.control.main.jome": {
+    captureRight: true
+  },
 }
 
 module.exports = {

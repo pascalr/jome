@@ -574,14 +574,21 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`)}
 
   "keyword.control.main.jome": (node) => {
     if (node.compilerOptions.useCommonJS) {
-      return "module.exports = "
+      return `module.exports = ${genCode(node.operands[0])}`
     } else {
-      return "export default "
+      return `export default ${genCode(node.operands[0])}`
     }
   },
 
   "support.type.property-name.attribute.jome": (node) => {
     return `this.${node.raw.slice(1)}`
+  },
+
+  // $GLOBAL_VARIABLE
+  "variable.other.global.jome": (node) => {
+    // Adding an underscore so the name does not collide with Node.js default variables (ex: URL)
+    // https://nodejs.org/api/globals.html#url
+    return `global._${node.raw.slice(1)}`
   },
 
 }
