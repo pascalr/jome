@@ -530,6 +530,15 @@ const CODE_GENERATORS = {
     let content = compileInterpolate(node, compileTokenRaw(node.parts.slice(1,-1)))
     return '`'+content+'`'
   },
+  "meta.embedded.block.markdown": (node) => {
+    // let r = compileRaw(node.children.slice(1,-1))
+    // r = escapeBackticks(r)
+    // r = compileInterpolate(r, ctx)
+    // ctx.imports['jome/lib/render_markdown'] = {default: ['renderMarkdown']}
+    // return 'renderMarkdown(`'+r+'`)'
+    let content = compileInterpolate(node, compileTokenRaw(node.parts.slice(1,-1)))
+    return '`'+content+'`'
+  },
 
   "meta.with-args.jome": (node) => {
     let args = node.data.argsToken.map(a => parseArgument(a))
@@ -540,6 +549,7 @@ const CODE_GENERATORS = {
     }
     return ''
   },
+
 }
 
 module.exports = {

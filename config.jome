@@ -1,0 +1,14 @@
+/*
+Dans config.jome, définir tout ce qui est réutiliser par tous les fichiers .jome du dossier.
+
+Mettre le format pour les strings multiligne de base
+
+use %xl%xsx
+
+Mettre l'interpreteur de base pour les scripts utilisé
+
+use %.mdToHtml for md
+use %.execSh for sh
+
+Permettre d'importer des fonctions aussi pour pouvoir les utiliser avec le use et spécifier c'est de quel fonction il s'agit.
+*/

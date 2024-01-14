@@ -82,8 +82,8 @@ class Compiler {
 
     const destFile = absPath.slice(0,-5)+'.js' // remove .jome and replace extension with js
 
-    if (!absPath.endsWith('.jome')) {
-      throw new Error('Cannot compile file without .jome extension', absPath);
+    if (!(absPath.endsWith('.jome')||absPath.endsWith('.jomm'))) {
+      throw new Error('Cannot compile file without .jome or .jomm extension. ' + absPath);
     }
     // FIXME: This does not work because it does not check for dependencies.
     // If I want to do this, I must keep a dependency tree somewhere.
