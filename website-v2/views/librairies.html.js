@@ -10,5 +10,5 @@ module.exports = () => {
 
 
 `;
-  return Webpage("Jome librairies", content).render();
+  return new Webpage("Jome librairies", content).render();
 };

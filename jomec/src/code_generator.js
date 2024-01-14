@@ -235,6 +235,9 @@ function compileFuncCall(node) {
     return compileUtility(name, node, args)
   }
   let called = genCode(node.data.nameTok)
+  if (node.ctxFile.classIdentifiers.has(called)) {
+    called = `new ${called}`
+  }
   let args = mergeNamedParameters(node.data.args)
   let str = args.map(p => genCode(p)).join(', ')
   return `${called}(${str})`
@@ -392,6 +395,7 @@ const CODE_GENERATORS = {
   // class
   "meta.class.jome": (node) => {
     let name = node.parts[1].raw
+    node.ctxFile.classIdentifiers.add(name)
     let parts = node.parts.slice(2,-1)
     let methods = parts.filter(p => p.type === 'meta.def.jome')
     let compiledMethods = compileConstrutor(node)
