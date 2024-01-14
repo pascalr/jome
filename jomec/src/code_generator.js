@@ -572,6 +572,18 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`)}
     return ''
   },
 
+  "keyword.control.main.jome": (node) => {
+    if (node.compilerOptions.useCommonJS) {
+      return "module.exports = "
+    } else {
+      return "export default "
+    }
+  },
+
+  "support.type.property-name.attribute.jome": (node) => {
+    return `this.${node.raw.slice(1)}`
+  },
+
 }
 
 module.exports = {
