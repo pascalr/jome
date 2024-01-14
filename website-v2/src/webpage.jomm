@@ -1,5 +1,5 @@
-let navbar = #run #../views/partials/navbar.html.jome
-let sidebar = #run #../views/partials/sidebar.html.jome
+let navbar = #run(#../views/partials/navbar.html.jome)
+let sidebar = #run(#../views/partials/sidebar.html.jome)
 
 # The base template for most webpages on this website.
 with

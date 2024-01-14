@@ -541,11 +541,33 @@ const CODE_GENERATORS = {
   },
 
   "meta.with-args.jome": (node) => {
-    let args = node.data.argsToken.map(a => parseArgument(a))
+    let current; let args = []
+    node.data.argsToken.forEach(a => {
+      // TODO: Allow two ways of commenting, either a single inline after, or multiple lines before
+      // # Some doc
+      // # For arg
+      // arg
+      // OR
+      // arg # Some doc
+      // I am only supporting the single inline after for now
+      if (a.type === 'comment.line.documentation.jome') {
+        if (current) {
+          current.docComment = a.raw.slice(2)
+        }
+      } else {
+        current = a;
+        args.push(parseArgument(a))
+      }
+    })
     if (node.data.isFileArguments) {
       node.ctxFile.fileArguments = args
     } else {
       node.ctxFile.currentArguments = args
+      if (args.length) {
+        return `/**
+${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`)}
+*/`
+      }   
     }
     return ''
   },

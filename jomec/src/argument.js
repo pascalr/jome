@@ -11,6 +11,7 @@ class Argument {
     this.akas = []
     this.deconstructed = []
     this.isClassProperty = false // @someClassProperty
+    this.docComment = null
   }
 
   isDeconstructed() {
