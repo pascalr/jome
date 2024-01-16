@@ -253,6 +253,45 @@ function compileMetaFuncCall(node) {
   return `${genCode(node.operands[0])}.${compileFuncCall(node)}`
 }
 
+function formatLines(lines, format) {
+  let _lines = [...lines]
+  if (format) {
+    let mods = format.slice(1).split('%')
+    mods.forEach(mod => {
+      if (mod.includes('l')) {
+        // A line modifier
+        if (mod === 'xl') {
+          _lines = _lines.map(l => l.trimLeft())
+        } else if (mod === 'lx') {
+          _lines = _lines.map(l => l.trimRight())
+        } else if (mod === 'xlx') {
+          _lines = _lines.map(l => l.trim())
+        } else {
+          throw new Error("Unkown string format %"+mod)
+        }
+      } else if (mod.includes('s')) {
+        // The whole string modifier
+        if (!(mod === 'xs' || mod === 'sx' || mod === 'xsx')) {
+          throw new Error("Unkown string format %"+mod)
+        }
+        if (mod[0] === 'x' && !(_lines[0]?.length)) {
+          _lines = _lines.slice(1)
+        }
+        if (mod.slice(-1) === 'x' && !(_lines[_lines.length-1]?.length)) {
+          _lines = _lines.slice(0, -1)
+        }
+      } else if (mod.includes('j')) {
+        // A join modifier
+        throw new Error("sf8h902340ij0sdfsd")
+      } else if (mod.includes('i')) {
+        // An indent modifier
+        throw new Error("93845h978sgh789fg3")
+      }
+    })
+  }
+  return _lines
+}
+
 function compileString(node) {
   let currentLine = ""
   let lines = []
@@ -270,43 +309,7 @@ function compileString(node) {
     }
   })
   lines.push(currentLine)
-
-  let format = node.data.format
-  if (format) {
-    let mods = format.slice(1).split('%')
-    mods.forEach(mod => {
-      if (mod.includes('l')) {
-        // A line modifier
-        if (mod === 'xl') {
-          lines = lines.map(l => l.trimLeft())
-        } else if (mod === 'lx') {
-          lines = lines.map(l => l.trimRight())
-        } else if (mod === 'xlx') {
-          lines = lines.map(l => l.trim())
-        } else {
-          throw new Error("Unkown string format %"+mod)
-        }
-      } else if (mod.includes('s')) {
-        // The whole string modifier
-        if (!(mod === 'xs' || mod === 'sx' || mod === 'xsx')) {
-          throw new Error("Unkown string format %"+mod)
-        }
-        if (mod[0] === 'x' && !(lines[0]?.length)) {
-          lines = lines.slice(1)
-        }
-        if (mod.slice(-1) === 'x' && !(lines[lines.length-1]?.length)) {
-          lines = lines.slice(0, -1)
-        }
-      } else if (mod.includes('j')) {
-        // A join modifier
-        throw new Error("sf8h902340ij0sdfsd")
-      } else if (mod.includes('i')) {
-        // An indent modifier
-        throw new Error("93845h978sgh789fg3")
-      }
-    })
-  }
-
+  lines = formatLines(lines, node.data.format)
   let result = lines.join('\n')
   return isTemplateLiteral ? `\`${result}\`` : `"${result}"`
 }
