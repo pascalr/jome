@@ -253,8 +253,9 @@ function compileMetaFuncCall(node) {
   return `${genCode(node.operands[0])}.${compileFuncCall(node)}`
 }
 
-function formatLines(lines, format) {
+function formatLines(lines, format, isTemplateLiteral=true) {
   let _lines = [...lines]
+  let transformers = []
   if (format) {
     let mods = format.slice(1).split('%')
     mods.forEach(mod => {
@@ -288,7 +289,7 @@ function formatLines(lines, format) {
         throw new Error("93845h978sgh789fg3")
       } else if (mod.includes(':')) {
         // A transformer
-        let transformer = mod.slice(1)
+        transformers.push(mod.slice(1))
         //throw new Error("f3948hf934hf903hf3")
       } else {
         throw new Error("fsj8932h897w0gf0792g3b4")
@@ -296,15 +297,15 @@ function formatLines(lines, format) {
     })
   }
   let result = _lines.join('\n')
-  return result
+  // transformers.forEach(transfo => {
+  //   result = `${transfo}(${result})`
+  // })
+  return isTemplateLiteral ? `\`${result}\`` : `"${result}"`
 }
 
 function compileHeredoc(node) {
-  let content = node.data.content
-  if (node.data.format) {
-    let lines = node.data.content.split('\n')
-    content = formatLines(lines, node.data.format)
-  }
+  let lines = node.data.content.split('\n')
+  let content = formatLines(lines, node.data.format)
   return compileInterpolate(node, content)
 }
 
@@ -325,8 +326,8 @@ function compileString(node) {
     }
   })
   lines.push(currentLine)
-  let result = formatLines(lines, node.data.format)
-  return isTemplateLiteral ? `\`${result}\`` : `"${result}"`
+  let result = formatLines(lines, node.data.format, isTemplateLiteral)
+  return result
 }
 
 const CODE_GENERATORS = {
@@ -551,25 +552,9 @@ const CODE_GENERATORS = {
     return "execSh(`"+escapeBackticks(node.data.content)+"`);"
   },
   // <html></html>
-  "meta.embedded.block.html": (node) => {
-    //   let args = parseScriptTagArgs(node.children[0])
-    //   let b = ''
-    //   let a = ''
-    //   if ('root' in args) {
-    //     b = '<!DOCTYPE html>\n<html>'
-    //     a = '</html>'
-    //   }
-    //   return '`'+b+compileInterpolate(compileRaw(node.children.slice(1,-1)), ctx)+a+'`'    
-    return '`'+compileHeredoc(node)+'`'
-  },
-  "meta.embedded.block.markdown": (node) => {
-    // let r = compileRaw(node.children.slice(1,-1))
-    // r = escapeBackticks(r)
-    // r = compileInterpolate(r, ctx)
-    // ctx.imports['jome/lib/render_markdown'] = {default: ['renderMarkdown']}
-    // return 'renderMarkdown(`'+r+'`)'
-    return '`'+compileHeredoc(node)+'`'
-  },
+  "meta.embedded.block.html": compileHeredoc,
+  // <md></md>
+  "meta.embedded.block.markdown": compileHeredoc,
 
   "meta.with-args.jome": (node) => {
     let current; let args = []
