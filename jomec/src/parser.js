@@ -43,6 +43,8 @@ function compileTokenRaw(token) {
     return token
   } else if (token.type === "raw") {
     return token.raw
+  } else if (!token.children) {
+    throw new Error('sf780h9273ghf74923h34')
   } else {
     return token.children.map(n => compileTokenRaw(n)).join('')
   }

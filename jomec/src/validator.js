@@ -150,6 +150,28 @@ function validateFuncCall(node, hasDot) {
   node.data = {nameTok, args}
 }
 
+function validateHeredoc(node) {
+  if (!node.type.startsWith("meta.embedded.block")) {
+    throw new Error(`Internal error. An heredoc should always start with type meta.embedded.block. Was ${node.type}`)
+  }
+  if (!node.parts[0]?.type.startsWith("meta.script-params.jome")) {
+    throw new Error(`Internal error. An heredoc should always start with token of type meta.script-params.jome. Was ${node.parts[0]?.type}`)
+  }
+  let closingIdx = node.parts.length-1
+  let format;
+  if (node.parts[closingIdx].type === 'keyword.other.string-format.jome') {
+    format = node.parts[closingIdx].raw
+    closingIdx = closingIdx - 1
+  }
+  let openingTagName = node.parts[0].parts[0].raw.slice(1)
+  let closingTagName = node.parts[closingIdx].raw.slice(2,-1)
+  if (openingTagName !== closingTagName) {
+    throw new Error(`Internal error. Heredoc should always have a matching closing tage. Opening: ${openingTagName}. Closing: ${closingTagName}`)
+  }
+  let content = compileTokenRaw(node.parts.slice(1,closingIdx))
+  node.data = {content, format}
+}
+
 const VALIDATORS = {
   "meta.function.jome": (node) => {
     if (node.parts[0].raw !== 'function') {
@@ -320,15 +342,6 @@ const VALIDATORS = {
     ensureAllTypeIn(node, parts, ['support.function-call.WIP.jome', 'support.function-call.jome'])
     node.data = {calls: parts}
   },
-  // <sh></sh>
-  "meta.embedded.block.shell": (node) => {
-    // ensureStartRaw(node, '<sh>') // Can be <sh someParam="someValue">
-    ensureStartType(node, 'meta.script-params.jome')
-    ensureEndRaw(node, '</sh>')
-    //ensureEndType(node, '')
-    let raw = compileTokenRaw(node.parts.slice(1,-1))
-    node.data = {command: raw}
-  },
   // if ... end
   "meta.if-block.jome": (node) => {
     ensureStartRaw(node, 'if')
@@ -443,6 +456,10 @@ const VALIDATORS = {
     parts = filterCommas(filterNewlines(parts))
     node.data = {isFileArguments, argsToken: parts}
   },
+
+  "meta.embedded.block.shell": validateHeredoc,
+  "meta.embedded.block.html": validateHeredoc,
+  "meta.embedded.block.markdown": validateHeredoc,
 }
 
 module.exports = {

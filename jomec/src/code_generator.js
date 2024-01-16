@@ -529,7 +529,7 @@ const CODE_GENERATORS = {
   // <sh></sh>
   "meta.embedded.block.shell": (node) => {
     node.ctxFile.addImport('execSh', null, 'jome-lib/execSh')
-    return "execSh(`"+escapeBackticks(node.data.command)+"`);"
+    return "execSh(`"+escapeBackticks(node.data.content)+"`);"
   },
   // <html></html>
   "meta.embedded.block.html": (node) => {
@@ -541,7 +541,7 @@ const CODE_GENERATORS = {
     //     a = '</html>'
     //   }
     //   return '`'+b+compileInterpolate(compileRaw(node.children.slice(1,-1)), ctx)+a+'`'
-    let content = compileInterpolate(node, compileTokenRaw(node.parts.slice(1,-1)))
+    let content = compileInterpolate(node, node.data.content)
     return '`'+content+'`'
   },
   "meta.embedded.block.markdown": (node) => {
@@ -550,7 +550,7 @@ const CODE_GENERATORS = {
     // r = compileInterpolate(r, ctx)
     // ctx.imports['jome/lib/render_markdown'] = {default: ['renderMarkdown']}
     // return 'renderMarkdown(`'+r+'`)'
-    let content = compileInterpolate(node, compileTokenRaw(node.parts.slice(1,-1)))
+    let content = compileInterpolate(node, node.data.content)
     return '`'+content+'`'
   },
 
