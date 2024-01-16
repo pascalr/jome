@@ -286,10 +286,26 @@ function formatLines(lines, format) {
       } else if (mod.includes('i')) {
         // An indent modifier
         throw new Error("93845h978sgh789fg3")
+      } else if (mod.includes(':')) {
+        // A transformer
+        let transformer = mod.slice(1)
+        //throw new Error("f3948hf934hf903hf3")
+      } else {
+        throw new Error("fsj8932h897w0gf0792g3b4")
       }
     })
   }
-  return _lines
+  let result = _lines.join('\n')
+  return result
+}
+
+function compileHeredoc(node) {
+  let content = node.data.content
+  if (node.data.format) {
+    let lines = node.data.content.split('\n')
+    content = formatLines(lines, node.data.format)
+  }
+  return compileInterpolate(node, content)
 }
 
 function compileString(node) {
@@ -309,8 +325,7 @@ function compileString(node) {
     }
   })
   lines.push(currentLine)
-  lines = formatLines(lines, node.data.format)
-  let result = lines.join('\n')
+  let result = formatLines(lines, node.data.format)
   return isTemplateLiteral ? `\`${result}\`` : `"${result}"`
 }
 
@@ -532,6 +547,7 @@ const CODE_GENERATORS = {
   // <sh></sh>
   "meta.embedded.block.shell": (node) => {
     node.ctxFile.addImport('execSh', null, 'jome-lib/execSh')
+    // FIXME: Don't hardcode execSh, it's just the default, there could be any other transformer other than execSh
     return "execSh(`"+escapeBackticks(node.data.content)+"`);"
   },
   // <html></html>
@@ -543,9 +559,8 @@ const CODE_GENERATORS = {
     //     b = '<!DOCTYPE html>\n<html>'
     //     a = '</html>'
     //   }
-    //   return '`'+b+compileInterpolate(compileRaw(node.children.slice(1,-1)), ctx)+a+'`'
-    let content = compileInterpolate(node, node.data.content)
-    return '`'+content+'`'
+    //   return '`'+b+compileInterpolate(compileRaw(node.children.slice(1,-1)), ctx)+a+'`'    
+    return '`'+compileHeredoc(node)+'`'
   },
   "meta.embedded.block.markdown": (node) => {
     // let r = compileRaw(node.children.slice(1,-1))
@@ -553,8 +568,7 @@ const CODE_GENERATORS = {
     // r = compileInterpolate(r, ctx)
     // ctx.imports['jome/lib/render_markdown'] = {default: ['renderMarkdown']}
     // return 'renderMarkdown(`'+r+'`)'
-    let content = compileInterpolate(node, node.data.content)
-    return '`'+content+'`'
+    return '`'+compileHeredoc(node)+'`'
   },
 
   "meta.with-args.jome": (node) => {
