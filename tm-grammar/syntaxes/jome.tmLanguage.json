@@ -877,45 +877,60 @@
       "patterns": [
         {
           "begin": "\\<js(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          "end": "\\<\\/js\\>",
+          "end": "(\\<\\/js\\>)((%\\w*)*)",
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
-          "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
+          "endCaptures": {
+            "1": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" },
+            "2": {"name": "keyword.other.string-format.jome"}
+          },
           "name": "meta.embedded.block.javascript",
           "contentName": "raw",
           "patterns": [{ "include": "source.js" }]
         },
         {
           "begin": "\\<md(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          "end": "\\<\\/md\\>",
+          "end": "(\\<\\/md\\>)((%\\w*)*)",
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
-          "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
+          "endCaptures": {
+            "1": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" },
+            "2": {"name": "keyword.other.string-format.jome"}
+          },
           "name": "meta.embedded.block.markdown",
           "contentName": "raw",
           "patterns": [{ "include": "text.html.markdown" }]
         },
         {
           "begin": "\\<sh(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          "end": "\\<\\/sh\\>",
+          "end": "(\\<\\/sh\\>)((%\\w*)*)",
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
-          "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
+          "endCaptures": {
+            "1": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" },
+            "2": {"name": "keyword.other.string-format.jome"}
+          },
           "name": "meta.embedded.block.shell",
           "contentName": "raw",
           "patterns": [{ "include": "source.shell" }]
         },
         {
           "begin": "\\<css(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          "end": "\\<\\/css\\>",
+          "end": "(\\<\\/css\\>)((%\\w*)*)",
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
-          "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
+          "endCaptures": {
+            "1": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" },
+            "2": {"name": "keyword.other.string-format.jome"}
+          },
           "name": "meta.embedded.block.css",
           "contentName": "raw",
           "patterns": [{ "include": "source.css" }]
         },
         {
           "begin": "\\<html(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          "end": "\\<\\/html\\>",
+          "end": "(\\<\\/html\\>)((%\\w*)*)",
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
-          "endCaptures": {"0": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" }},
+          "endCaptures": {
+            "1": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" },
+            "2": {"name": "keyword.other.string-format.jome"}
+          },
           "name": "meta.embedded.block.html",
           "contentName": "raw",
           "patterns": [{ "include": "text.html.derivative" }]

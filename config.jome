@@ -7,10 +7,25 @@ use %xl%xsx
 
 Mettre l'interpreteur de base pour les scripts utilisé
 
-use %.mdToHtml for md
-use %.execSh for sh
+use %:mdToHtml for md
+use %:execSh for sh
 
 Permettre d'importer des fonctions aussi pour pouvoir les utiliser avec le use et spécifier c'est de quel fonction il s'agit.
 */
 
 // $URL = '/jome'
+
+/*
+This is where you would define units too
+*/
+
+/*
+return {
+  compiler: {
+    semi: true
+  },
+  linker: {
+    someConfig: 'someVal'
+  }
+}
+*/
