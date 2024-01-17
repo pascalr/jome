@@ -253,7 +253,7 @@ function compileMetaFuncCall(node) {
   return `${genCode(node.operands[0])}.${compileFuncCall(node)}`
 }
 
-function formatLines(lines, format, isTemplateLiteral=true) {
+function formatLines(node, lines, format, isTemplateLiteral=true) {
   let _lines = [...lines]
   let transformers = []
   if (format) {
@@ -296,15 +296,20 @@ function formatLines(lines, format, isTemplateLiteral=true) {
     })
   }
   let result = _lines.join('\n')
+  result = isTemplateLiteral ? `\`${result}\`` : `"${result}"`
   transformers.forEach(transfo => {
-    result = `${transfo}(${result})`
+    if (transfo[0] === '#') {
+      result = compileUtility(transfo.slice(1), node, [result])
+    } else {
+      result = `${transfo}(${result})`
+    }
   })
-  return isTemplateLiteral ? `\`${result}\`` : `"${result}"`
+  return result
 }
 
 function compileHeredoc(node) {
   let lines = node.data.content.split('\n')
-  let content = formatLines(lines, node.data.format)
+  let content = formatLines(node, lines, node.data.format)
   return compileInterpolate(node, content)
 }
 
@@ -325,7 +330,7 @@ function compileString(node) {
     }
   })
   lines.push(currentLine)
-  let result = formatLines(lines, node.data.format, isTemplateLiteral)
+  let result = formatLines(node, lines, node.data.format, isTemplateLiteral)
   return result
 }
 
