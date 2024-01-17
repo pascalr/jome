@@ -10,4 +10,9 @@ module.exports = () => {
     path.join(__dirname, "../docs/lib/index.html"),
     { force: true }
   );
+  build(
+    path.join(__dirname, "views/utils.html.jome"),
+    path.join(__dirname, "../docs/utils/index.html"),
+    { force: true }
+  );
 };

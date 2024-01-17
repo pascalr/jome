@@ -45,6 +45,11 @@ function escapeBackticks(inputString) {
   return inputString.replace(/`/g, '\u005c`').replace(/\$\{/g, '\u005c\$\{').replace(/\\\\`/g, '\\\\\\`')
 }
 
+function escapeDoubleQuotes(inputString) {
+  // FIXMEEEEEEEEEEEEEEEE
+  return inputString
+}
+
 function compileOperatorUnary(node) {
   return `${node.raw}${genCode(node.operands[0])}`
 }
@@ -296,7 +301,11 @@ function formatLines(node, lines, format, isTemplateLiteral=true) {
     })
   }
   let result = _lines.join('\n')
-  result = isTemplateLiteral ? `\`${result}\`` : `"${result}"`
+  if (isTemplateLiteral) {
+    result = `\`${escapeBackticks(result)}\``
+  } else {
+    result = `"${escapeDoubleQuotes(result)}"`
+  }
   transformers.forEach(transfo => {
     if (transfo[0] === '#') {
       result = compileUtility(transfo.slice(1), node, [result])

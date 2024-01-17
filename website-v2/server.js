@@ -5,7 +5,7 @@ module.exports = ({ port = 3000 }) => {
     __chain.use("/jome", express.static("docs")),
       __chain.get("/", (req, res) => res.redirect("/jome"));
     return __chain.listen(port, function () {
-      console.log(`Server listening on port ${port}`);
+      console.log(`Server listening on port \${port}`);
     });
   })();
 };

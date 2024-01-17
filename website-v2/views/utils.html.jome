@@ -1,10 +1,6 @@
-const jome = require('jome')
+import &Webpage from '../src/webpage.jomm'
 
-
-const {AppPage} = require("../lib/app.built.js");
-const renderMarkdown = require("jome/lib/render_markdown");
-
-var content = renderMarkdown(`
+content = <md>
   ## Utils
 
   Je veux que this fasse toujours référence à un this normal comme dans un autre language.
@@ -51,7 +47,7 @@ var content = renderMarkdown(`
 
   It can be a constant, a function or a function acting upon a variable.
 
-  \`\`\`jome
+  ```jome
   // A constant
   let x = #PI/2
   let e = #e // Euler's number
@@ -66,14 +62,14 @@ var content = renderMarkdown(`
 
   // Chaining example
   obj.#keys.#filter(key -> key.startsWith(':')).#each(el => /* ... */)
-  \`\`\`
+  ```
 
   Idée: #1, #2, ... fait référence aux arguments d'une fonction. Pas obliger de les déclarer. Ça peut être court comme syntaxe
   pour des filters par exemple.
 
-  \`\`\`jome
+  ```jome
   let even = [1,2,3,4,5,6,7,8,9].filter(#1 mod 2)
-  \`\`\`
+  ```
 
   ### Jome specific utils
 
@@ -130,5 +126,6 @@ var content = renderMarkdown(`
   - #red: 0xFF0000
   - ...
   Maybe #red_i32 or stuff like that, but that's ugly?
-`)
-module.exports = new AppPage({title: 'Jome utils', className: "utils-page", content: content}).toString()
+</md>
+
+return Webpage('Jome utils', content).render()
