@@ -41,8 +41,12 @@ function genImports(ctxFile, compilerOptions) {
   return result
 }
 
+function escapeTemplateLiteral(inputString) {
+  return inputString.replace(/\$\{/g, '\u005c\$\{')
+}
+
 function escapeBackticks(inputString) {
-  return inputString.replace(/`/g, '\u005c`').replace(/\$\{/g, '\u005c\$\{').replace(/\\\\`/g, '\\\\\\`')
+  return inputString.replace(/`/g, '\u005c`').replace(/\\\\`/g, '\\\\\\`')
 }
 
 function escapeDoubleQuotes(inputString) {
@@ -258,7 +262,7 @@ function compileMetaFuncCall(node) {
   return `${genCode(node.operands[0])}.${compileFuncCall(node)}`
 }
 
-function formatLines(node, lines, format, isTemplateLiteral=true) {
+function formatLines(node, lines, format, isTemplateLiteral=true, escapeTemplateLit) {
   let _lines = [...lines]
   let transformers = []
   if (format) {
@@ -302,6 +306,7 @@ function formatLines(node, lines, format, isTemplateLiteral=true) {
   }
   let result = _lines.join('\n')
   if (isTemplateLiteral) {
+    if (escapeTemplateLit) {result = escapeTemplateLiteral(result)}
     result = `\`${escapeBackticks(result)}\``
   } else {
     result = `"${escapeDoubleQuotes(result)}"`
@@ -318,7 +323,7 @@ function formatLines(node, lines, format, isTemplateLiteral=true) {
 
 function compileHeredoc(node) {
   let lines = node.data.content.split('\n')
-  let content = formatLines(node, lines, node.data.format)
+  let content = formatLines(node, lines, node.data.format, true, false)
   return compileInterpolate(node, content)
 }
 
