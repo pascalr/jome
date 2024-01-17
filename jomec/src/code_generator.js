@@ -259,7 +259,10 @@ function formatLines(lines, format, isTemplateLiteral=true) {
   if (format) {
     let mods = format.slice(1).split('%')
     mods.forEach(mod => {
-      if (mod.includes('l')) {
+      if (mod.includes(':')) {
+        // A transformer
+        transformers.push(mod.slice(1))
+      } else if (mod.includes('l')) {
         // A line modifier
         if (mod === 'xl') {
           _lines = _lines.map(l => l.trimLeft())
@@ -287,19 +290,15 @@ function formatLines(lines, format, isTemplateLiteral=true) {
       } else if (mod.includes('i')) {
         // An indent modifier
         throw new Error("93845h978sgh789fg3")
-      } else if (mod.includes(':')) {
-        // A transformer
-        transformers.push(mod.slice(1))
-        //throw new Error("f3948hf934hf903hf3")
       } else {
         throw new Error("fsj8932h897w0gf0792g3b4")
       }
     })
   }
   let result = _lines.join('\n')
-  // transformers.forEach(transfo => {
-  //   result = `${transfo}(${result})`
-  // })
+  transformers.forEach(transfo => {
+    result = `${transfo}(${result})`
+  })
   return isTemplateLiteral ? `\`${result}\`` : `"${result}"`
 }
 

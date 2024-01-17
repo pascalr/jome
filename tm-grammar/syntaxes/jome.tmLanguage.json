@@ -708,7 +708,7 @@
           "name": "string.quoted.double.jome",
           "begin": "\"",
           "beginCaptures": {"0": {"name": "punctuation.definition.string.begin.jome"}},
-          "end": "(\")((%:?\\w*)*)",
+          "end": "(\")((%:?(:\\#)?\\w*)*)",
           "endCaptures": {
             "1": {"name": "punctuation.definition.string.end.jome"},
             "2": {"name": "keyword.other.string-format.jome"}
@@ -877,7 +877,7 @@
       "patterns": [
         {
           "begin": "\\<js(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          "end": "(\\<\\/js\\>)((%:?\\w*)*)",
+          "end": "(\\<\\/js\\>)((%:?(:\\#)?\\w*)*)",
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {
             "1": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" },
@@ -889,7 +889,7 @@
         },
         {
           "begin": "\\<md(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          "end": "(\\<\\/md\\>)((%:?\\w*)*)",
+          "end": "(\\<\\/md\\>)((%(:\\#)?:?\\w*)*)",
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {
             "1": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" },
@@ -901,7 +901,7 @@
         },
         {
           "begin": "\\<sh(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          "end": "(\\<\\/sh\\>)((%:?\\w*)*)",
+          "end": "(\\<\\/sh\\>)((%:?(:\\#)?\\w*)*)",
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {
             "1": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" },
@@ -913,7 +913,7 @@
         },
         {
           "begin": "\\<css(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          "end": "(\\<\\/css\\>)((%:?\\w*)*)",
+          "end": "(\\<\\/css\\>)((%:?(:\\#)?\\w*)*)",
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {
             "1": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" },
@@ -925,7 +925,7 @@
         },
         {
           "begin": "\\<html(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          "end": "(\\<\\/html\\>)((%:?\\w*)*)",
+          "end": "(\\<\\/html\\>)((%:?(:\\#)?\\w*)*)",
           "beginCaptures": {"0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}},
           "endCaptures": {
             "1": { "name": "punctuation.definition.template-expression.end.punctuation.script.js.close" },

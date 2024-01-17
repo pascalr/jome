@@ -1,6 +1,6 @@
 const Webpage = require("../src/webpage.js");
 module.exports = () => {
-  content = `
+  content = `#mdToHtml(
   ## Jome librairies
 
   Jome compiles into JavaScript. So librairies are distributed through npm like other JavaScript librairies.
@@ -9,6 +9,6 @@ module.exports = () => {
 
   - [Html](${global.g_URL}/lib/html)
 
-`;
+)`;
   return new Webpage("Jome librairies", content).render();
 };
