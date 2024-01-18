@@ -1,6 +1,6 @@
-use %xl%xsx
-use %:#mdToHtml for md
-use %:#execSh for sh
+with %xl%xsx
+with %:#mdToHtml for md
+with %:#execSh for sh
 
 /*
 Dans config.jome, définir tout ce qui est réutiliser par tous les fichiers .jome du dossier.

@@ -113,7 +113,7 @@
         { "include": "#do_end" },
         { "include": "#chain-bloc" },
         { "include": "#type_def" },
-        { "include": "#use" },
+        { "include": "#with-format" },
         { "include": "#regex" },
         { "include": "#keywords" },
         { "include": "#declaration" },
@@ -860,24 +860,24 @@
         }
       ]
     },
-    "use": {
+    "with-format": {
       "patterns": [
         {
-          "name": "meta.use.jome",
-          "match": "(use)\\b\\s*((?:%(?::|:#)?\\w*)*)\\s*\\b(for)\\b(\\w*)",
+          "name": "meta.with-format.jome",
+          "match": "(with)\\b\\s*((?:%(?::|:#)?\\w*)+)\\s*\\b(for)\\b\\s*(\\w*)",
           "captures": {
-            "1": {"name": "keyword.control.jome.1"},
-            "2": {"name": "keyword.other.string-format.jome.2"},
-            "3": {"name": "keyword.control.jome.3"},
-            "4": {"name": "string.unquoted.jome.4"}
+            "1": {"name": "keyword.control.jome"},
+            "2": {"name": "keyword.other.string-format.jome"},
+            "3": {"name": "keyword.control.jome"},
+            "4": {"name": "keyword.other.tag-name.jome"}
           }
         },
         {
-          "name": "meta.use.jome",
-          "match": "(use)\\b\\s*((%(?::|:#)?\\w*)*)?",
+          "name": "meta.with-format.jome",
+          "match": "(with)\\b\\s*((%(?::|:#)?\\w*)+)",
           "captures": {
-            "1": {"name": "keyword.control.jome.5"},
-            "2": {"name": "keyword.other.string-format.jome.6"}
+            "1": {"name": "keyword.control.jome"},
+            "2": {"name": "keyword.other.string-format.jome"}
           }
         }
       ]

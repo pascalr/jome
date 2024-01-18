@@ -16,7 +16,7 @@
     {
       "type": "node-terminal",
       "request": "launch",
-      "name": "jome build",
+      "name": "Build website",
       "skipFiles": [
         "<node_internals>/**"
       ],

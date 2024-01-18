@@ -72,6 +72,8 @@ class Compiler {
   }
 
   compileFile(absPath) {
+    console.log(`Compiling '${absPath}'...`);
+
     if (this.filesCompiled.has(absPath)) {
       console.log('Skipping compiling file', absPath, 'because it is already compiled.')
       return; // Skip files already compiled

@@ -625,6 +625,10 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
     return `global.${GLOBAL_PREFIX}${node.raw.slice(1)}`
   },
 
+  "meta.with-format.jome": (node) => {
+    return ''
+  }
+
 }
 
 module.exports = {
