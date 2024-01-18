@@ -113,6 +113,7 @@
         { "include": "#do_end" },
         { "include": "#chain-bloc" },
         { "include": "#type_def" },
+        { "include": "#use" },
         { "include": "#regex" },
         { "include": "#keywords" },
         { "include": "#declaration" },
@@ -856,6 +857,28 @@
         {
           "match": ">$",
           "name": "punctuation.definition.template-expression.end.punctuation.script.js.open"
+        }
+      ]
+    },
+    "use": {
+      "patterns": [
+        {
+          "name": "meta.use.jome",
+          "match": "(use)\\b\\s*((?:%(?::|:#)?\\w*)*)\\s*\\b(for)\\b(\\w*)",
+          "captures": {
+            "1": {"name": "keyword.control.jome.1"},
+            "2": {"name": "keyword.other.string-format.jome.2"},
+            "3": {"name": "keyword.control.jome.3"},
+            "4": {"name": "string.unquoted.jome.4"}
+          }
+        },
+        {
+          "name": "meta.use.jome",
+          "match": "(use)\\b\\s*((%(?::|:#)?\\w*)*)?",
+          "captures": {
+            "1": {"name": "keyword.control.jome.5"},
+            "2": {"name": "keyword.other.string-format.jome.6"}
+          }
         }
       ]
     },

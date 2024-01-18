@@ -1,14 +1,15 @@
+use %xl%xsx
+use %:#mdToHtml for md
+use %:#execSh for sh
+
 /*
 Dans config.jome, définir tout ce qui est réutiliser par tous les fichiers .jome du dossier.
 
 Mettre le format pour les strings multiligne de base
 
-use %xl%xsx
+
 
 Mettre l'interpreteur de base pour les scripts utilisé
-
-use %:#mdToHtml for md
-use %:#execSh for sh
 
 Permettre d'importer des fonctions aussi pour pouvoir les utiliser avec le use et spécifier c'est de quel fonction il s'agit.
 */
@@ -43,3 +44,12 @@ Pour mettre ensemble:
 quand tu fais jome, ça regarde le config.jome le plus près, quand tu compiles un fichier, ça regarde config.jome le plus près?
 c'est quoi le fichier maitre? C'est index.jome. config.jome doit être dans le même dossier que index.jome pour être utilisé
 */
+
+// TODO: Allow two types of transform formating, before interpolation or after.
+// Let's say for markdown, you could insert markdown content into the string, or you could insert html content.
+// It would be nice if you can format the
+// %>func means apply the function to the whole string
+// %<func means apply the function to ??? Wait this does not make any sense
+// What I need is a different syntax for the interpolation <%= someVar %> // means insert it in the string, than transform it all
+// I need something like <%& someVar %> // means take everything before this and transform it, add it to this, and add it to everything after and transform it.
+// This would be the equivalent of doing this for md: </md>+someVar+<md>
