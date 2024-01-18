@@ -169,7 +169,7 @@ function validateHeredoc(node) {
     throw new Error(`Internal error. Heredoc should always have a matching closing tage. Opening: ${openingTagName}. Closing: ${closingTagName}`)
   }
   let content = compileTokenRaw(node.parts.slice(1,closingIdx))
-  node.data = {content, format}
+  node.data = {content, format, tagName: openingTagName}
 }
 
 const VALIDATORS = {

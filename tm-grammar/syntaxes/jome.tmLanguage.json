@@ -863,7 +863,7 @@
     "with-format": {
       "patterns": [
         {
-          "name": "meta.with-format.jome",
+          "name": "meta.with-format-for.jome",
           "match": "(with)\\b\\s*((?:%(?::|:#)?\\w*)+)\\s*\\b(for)\\b\\s*(\\w*)",
           "captures": {
             "1": {"name": "keyword.control.jome"},

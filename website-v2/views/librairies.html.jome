@@ -9,6 +9,6 @@ content = <md>
 
   - [Html](<%= $URL %>/lib/html)
 
-</md>%:#mdToHtml
+</md>
 
 return Webpage('Jome librairies', content).render()

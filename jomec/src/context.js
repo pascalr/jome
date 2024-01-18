@@ -13,6 +13,12 @@ class ContextFile {
     this.fileArguments = [] // A list of Argument
     this.currentArguments = null // The arguments defined just before classes and functions
     this.compiler = null // A reference to the compiler
+    // These are the default formats. They can be overridden using the keyword with
+    this.defaultMultilineFormat = "%xsx" // "%xsx%i" // Keep indent
+    this.defaultFormatByTagName = {
+      md: "%:#mdToHtml",
+      sh: "%:#execSh"
+    }
   }
 
   addImport(defaultImport, namedImports, file) {

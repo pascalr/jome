@@ -323,7 +323,8 @@ function formatLines(node, lines, format, isTemplateLiteral=true, escapeTemplate
 
 function compileHeredoc(node) {
   let lines = node.data.content.split('\n')
-  let content = formatLines(node, lines, node.data.format, true, false)
+  let format = node.data.format || node.ctxFile.defaultFormatByTagName[node.data.tagName]
+  let content = formatLines(node, lines, format, true, false)
   return compileInterpolate(node, content)
 }
 
@@ -344,7 +345,8 @@ function compileString(node) {
     }
   })
   lines.push(currentLine)
-  let result = formatLines(node, lines, node.data.format, isTemplateLiteral)
+  let format = node.data.format || node.ctxFile.defaultMultilineFormat
+  let result = formatLines(node, lines, format, isTemplateLiteral)
   return result
 }
 
@@ -564,11 +566,7 @@ const CODE_GENERATORS = {
   },
 
   // <sh></sh>
-  "meta.embedded.block.shell": (node) => {
-    node.ctxFile.addImport('execSh', null, 'jome-lib/execSh')
-    // FIXME: Don't hardcode execSh, it's just the default, there could be any other transformer other than execSh
-    return "execSh(`"+escapeBackticks(node.data.content)+"`);"
-  },
+  "meta.embedded.block.shell": compileHeredoc,
   // <html></html>
   "meta.embedded.block.html": compileHeredoc,
   // <md></md>
@@ -626,8 +624,14 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
   },
 
   "meta.with-format.jome": (node) => {
+    node.ctxFile.defaultMultilineFormat = node.parts[1].raw
     return ''
-  }
+  },
+
+  "meta.with-format-for.jome": (node) => {
+    node.ctxFile.defaultFormatByTagName[node.parts[3].raw] = node.parts[1].raw
+    return ''
+  },
 
 }
 

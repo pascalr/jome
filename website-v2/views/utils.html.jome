@@ -1,5 +1,6 @@
 import &Webpage from '../src/webpage.jomm'
 
+with %xsx
 with %:#mdToHtml for md
 
 content = <md>
