@@ -1,4 +1,5 @@
-//import &Webpage from './website-v2/src/test_mod.jomm'
+import build from './website-v2/build.jome'
+import server from './website-v2/server.jome'
 
 with cmd end
 
@@ -9,9 +10,11 @@ if (cmd === 'test')
   // include #./test.jome
   <sh>jome test.jome</sh>
 elsif (cmd === 'b' || cmd === 'build')
-  #run('./website-v2/build.jome')
+  build()
+  // #run('./website-v2/build.jome')
 elsif (cmd === 's' || cmd === 'server')
-  #run('./website-v2/server.jome', port: 3000)
+  server(port: 3000)
+  // #run('./website-v2/server.jome', port: 3000)
 else
   #log "
     Jome App v0.0.0.0.1

@@ -18,7 +18,7 @@ function genImports(ctxFile, compilerOptions) {
   let files = new Set([...Object.keys(ctxFile.namedImportsByFile), ...Object.keys(ctxFile.defaultImportsByFile)])
   files.forEach(file => {
     let jsfile = file
-    if (file.endsWith('.jomm')) {
+    if (file.endsWith('.jomm') || file.endsWith('.jome')) {
       ctxFile.addDependency(file)
       jsfile = file.slice(0,-5)+'.js' // remove .jome and replace extension with js
     }
@@ -321,9 +321,19 @@ function formatLines(node, lines, format, isTemplateLiteral=true, escapeTemplate
   return result
 }
 
+function mergeFormat(format, defaultFormat) {
+  // TODO: Keep every part of the default format, than only modify those that are specified by format
+  // Let's say: default: %xsx%xl
+  // And format is %l
+  // This means we don't want to trim the lines
+  // The merge should be %xsx%l
+  // Use %0 to reset everything
+  return format || defaultFormat
+}
+
 function compileHeredoc(node) {
   let lines = node.data.content.split('\n')
-  let format = node.data.format || node.ctxFile.defaultFormatByTagName[node.data.tagName]
+  let format = mergeFormat(node.data.format, node.ctxFile.defaultFormatByTagName[node.data.tagName])
   let content = formatLines(node, lines, format, true, false)
   return compileInterpolate(node, content)
 }
@@ -345,7 +355,7 @@ function compileString(node) {
     }
   })
   lines.push(currentLine)
-  let format = node.data.format || node.ctxFile.defaultMultilineFormat
+  let format = mergeFormat(node.data.format, node.ctxFile.defaultMultilineFormat)
   let result = formatLines(node, lines, format, isTemplateLiteral)
   return result
 }
