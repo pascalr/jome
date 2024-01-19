@@ -279,12 +279,13 @@ function formatLines(node, lines, format, isTemplateLiteral=true, escapeTemplate
           _lines = _lines.map(l => l.trimRight())
         } else if (mod === 'xlx') {
           _lines = _lines.map(l => l.trim())
+        } else if (mod === 'l') { // do nothing
         } else {
           throw new Error("Unkown string format %"+mod)
         }
       } else if (mod.includes('s')) {
         // The whole string modifier
-        if (!(mod === 'xs' || mod === 'sx' || mod === 'xsx')) {
+        if (!(mod === 'xs' || mod === 'sx' || mod === 'xsx' || mod === 's')) {
           throw new Error("Unkown string format %"+mod)
         }
         if (mod[0] === 'x' && !(_lines[0]?.length)) {
@@ -322,13 +323,27 @@ function formatLines(node, lines, format, isTemplateLiteral=true, escapeTemplate
 }
 
 function mergeFormat(format, defaultFormat) {
-  // TODO: Keep every part of the default format, than only modify those that are specified by format
+  // Keep every part of the default format, than only modify those that are specified by format
   // Let's say: default: %xsx%xl
   // And format is %l
   // This means we don't want to trim the lines
   // The merge should be %xsx%l
-  // Use %0 to reset everything
-  return format || defaultFormat
+  // Use %0 to reset (don't use default format)
+  let mods = {}
+  let formats = format?.includes('%0') ? [format] : [defaultFormat, format].filter(f => f)
+  formats.forEach(f => {
+    let parts = f.split('%').slice(1)
+    parts.forEach(part => {
+      ;[':', 's', 'l'].forEach(ch => {
+        if (part.includes(ch)) {
+          mods[ch] = part
+        }
+      })
+    })
+  })
+  if (!Object.keys(mods).length) {return null}
+  let result = Object.keys(mods).map(m => `%${mods[m]}`).join('')
+  return result
 }
 
 function compileHeredoc(node) {

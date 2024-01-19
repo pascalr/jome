@@ -6,15 +6,11 @@ with cmd end
 $URL = '/jome'
 
 if (cmd === 'test')
-  // #run #./test.jome
-  // include #./test.jome
   <sh>jome test.jome</sh>
 elsif (cmd === 'b' || cmd === 'build')
   build()
-  // #run('./website-v2/build.jome')
 elsif (cmd === 's' || cmd === 'server')
   server(port: 3000)
-  // #run('./website-v2/server.jome', port: 3000)
 else
   #log "
     Jome App v0.0.0.0.1
@@ -23,7 +19,12 @@ else
     jome # get this help message
     jome s # start server (or jome server)
     jome test # launch the tests
-  "%xl%xsx
+  "%xl
 end
 
 return <html><div><%= "Hello" %></div></html>
+
+// #run #./test.jome
+// include #./test.jome
+// #run('./website-v2/build.jome')
+// #run('./website-v2/server.jome', port: 3000)
