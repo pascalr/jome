@@ -1,7 +1,8 @@
 const Webpage = require("../src/webpage.js");
 const mdToHtml = require("jome-lib/mdToHtml");
 module.exports = () => {
-  content = mdToHtml(`
+  content = mdToHtml(
+    mdToHtml(`
   ## Utils
 
   Je veux que this fasse toujours référence à un this normal comme dans un autre language.
@@ -127,6 +128,7 @@ module.exports = () => {
   - #red: 0xFF0000
   - ...
   Maybe #red_i32 or stuff like that, but that's ugly?
-`);
+`)
+  );
   return new Webpage("Jome utils", content).render();
 };

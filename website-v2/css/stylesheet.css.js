@@ -1,8 +1,5 @@
-// Est-ce que ça serait possible d'améliorer le CSS avec jome?
-// Une librairie pour le CSS?
-// Genre pour gérer le nested comme SCSS.
-
-main <css>
+module.exports = () => {
+  return `
   body {
     margin: 0;
     background-color: #f9f4f4;
@@ -133,4 +130,5 @@ main <css>
     padding: 14px 16px;
     font-weight: bold;
   }
-</css>
+`;
+};

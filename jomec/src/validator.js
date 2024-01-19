@@ -460,6 +460,7 @@ const VALIDATORS = {
   "meta.embedded.block.shell": validateHeredoc,
   "meta.embedded.block.html": validateHeredoc,
   "meta.embedded.block.markdown": validateHeredoc,
+  "meta.embedded.block.css": validateHeredoc,
 }
 
 module.exports = {

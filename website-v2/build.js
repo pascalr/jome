@@ -15,4 +15,9 @@ module.exports = () => {
     path.join(__dirname, "../docs/utils/index.html"),
     { force: true }
   );
+  build(
+    path.join(__dirname, "css/stylesheet.css.jome"),
+    path.join(__dirname, "../docs/stylesheet.css"),
+    { force: true }
+  );
 };

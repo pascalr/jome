@@ -19,3 +19,10 @@ of the source file.
 #build(#./views/test.html.jome, #../docs/test/index.html, force: true)
 #build(#./views/librairies.html.jome, #../docs/lib/index.html, force: true)
 #build(#./views/utils.html.jome, #../docs/utils/index.html, force: true)
+
+// TODO: Copy reset.css and jome-html.css too?
+// #cp #./css/reset.css, #../docs/
+// Create utils #cp, #ls, #mkdir, #cd, #cat, #whoami ??
+// To list files in current file directory, #ls #. // That would be nice
+// ls, cd, cp, mv, rm, mkdir, rmdir, chmod, chown, ps, kill, grep, man, pwd, echo, cat, head, tail
+#build(#./css/stylesheet.css.jome, #../docs/stylesheet.css, force: true)
