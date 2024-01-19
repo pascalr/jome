@@ -554,7 +554,7 @@ si tu veux mettre à un attribute, mais pas children, alors utiliser @attr</p>
         <span class="hljs-title class_">Link</span> <span class="hljs-string">&quot;Arts&quot;</span>, to: <span class="hljs-string">&#x27;/arts&#x27;</span>
     <span class="hljs-title class_">Body</span>
       <span class="hljs-title class_">Txt</span> &lt; <span class="hljs-variable">md</span> &gt;
-        # <span class="hljs-title class_">Welcome</span>
+        <span class="hljs-comment"># Welcome</span>
         <span class="hljs-title class_">Welcome</span> <span class="hljs-variable">to</span> <span class="hljs-variable">this</span> <span class="hljs-variable">website</span>! <span class="hljs-title class_">You</span> <span class="hljs-variable">can</span> <span class="hljs-variable">browse</span> <span class="hljs-variable">links</span> <span class="hljs-variable">at</span> <span class="hljs-variable">the</span> <span class="hljs-variable">top</span>.
       &lt; / <span class="hljs-variable">md</span>&gt;
 &gt;&gt;
@@ -622,10 +622,11 @@ example name.</p>
 <p>Use // and /* */ for regular comments.</p>
 <p>Use # for documentation comments. NOTE: It must have a space after the # , otherwise it's a utils.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// This is a regular comment</span>
-<h1><span class="hljs-title class_">This</span> <span class="hljs-variable">is</span> <span class="hljs-variable">a</span> <span class="hljs-variable">documentation</span> <span class="hljs-variable">comment</span> <span class="hljs-variable">that</span> <span class="hljs-variable">describes</span> <span class="hljs-variable">the</span> <span class="hljs-variable">function</span> <span class="hljs-variable">below</span>.</h1>
-<h1><span class="hljs-title class_">Second</span> <span class="hljs-variable">line</span> <span class="hljs-variable">of</span> <span class="hljs-variable">same</span> <span class="hljs-variable">documentation</span> <span class="hljs-variable">comment</span>.</h1>
-<p><span class="hljs-keyword">with</span>
-arg: <span class="hljs-variable">string</span> # <span class="hljs-title class_">Documentation</span> <span class="hljs-variable">comment</span> <span class="hljs-variable">that</span> <span class="hljs-variable">describes</span> <span class="hljs-variable">what</span> <span class="hljs-variable">this</span> <span class="hljs-variable">argument</span> <span class="hljs-variable">is</span>
+<p><span class="hljs-keyword">let</span> <span class="hljs-variable">foo</span> = <span class="hljs-number">10</span> <span class="hljs-comment"># comment after?</span></p>
+<p><span class="hljs-comment"># This is a documentation comment that describes the function below.</span>
+<span class="hljs-comment"># Second line of same documentation comment.</span>
+<span class="hljs-keyword">with</span>
+arg: <span class="hljs-variable">string</span> <span class="hljs-comment"># Documentation comment that describes what this argument is</span>
 <span class="hljs-keyword">def</span> <span class="hljs-variable">someFunc</span>
 <span class="hljs-comment">/* <span class="hljs-doctag">TODO:</span> implement this function */</span>
 <span class="hljs-keyword">end</span>
@@ -889,12 +890,12 @@ Trouver une manière de gérer cela.</p>
 <h3>With keyword</h3>
 <p>Usefull to define interfaces of classes and functions.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span>
-  name: <span class="hljs-title class_">String</span> # <span class="hljs-title class_">Full</span> <span class="hljs-variable">name</span> <span class="hljs-variable">of</span> <span class="hljs-variable">the</span> <span class="hljs-variable">personnellement</span>
+  name: <span class="hljs-title class_">String</span> <span class="hljs-comment"># Full name of the personnellement</span>
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span>
 <span class="hljs-keyword">end</span>
 <p><span class="hljs-keyword">with</span>
-x: <span class="hljs-variable">float</span> # <span class="hljs-title class_">The</span> <span class="hljs-variable">base</span> <span class="hljs-variable">value</span>
-y: <span class="hljs-variable">integer</span> # <span class="hljs-title class_">The</span> <span class="hljs-variable">factor</span>
+x: <span class="hljs-variable">float</span> <span class="hljs-comment"># The base value</span>
+y: <span class="hljs-variable">integer</span> <span class="hljs-comment"># The factor</span>
 <span class="hljs-keyword">def</span> <span class="hljs-variable">multiply</span>
 <span class="hljs-keyword">end</span>
 </code></pre></p>

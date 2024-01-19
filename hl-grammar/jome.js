@@ -113,7 +113,8 @@ const highlighter = function(hljs) {
         variants: [
           // JSDOC_COMMENT,
           hljs.C_BLOCK_COMMENT_MODE,
-          hljs.C_LINE_COMMENT_MODE
+          hljs.C_LINE_COMMENT_MODE,
+          hljs.COMMENT('# ', '$',)
         ]
       },
       NUMBER,

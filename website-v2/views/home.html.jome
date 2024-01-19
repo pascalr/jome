@@ -793,8 +793,10 @@ let content = <md>
   ```jome
   // This is a regular comment
 
-  # This is a documentation comment that describes the function below.
-  # Second line of same documentation comment.
+  let foo = 10 # comment after?
+
+   # This is a documentation comment that describes the function below.
+   # Second line of same documentation comment.
   with
     arg: string # Documentation comment that describes what this argument is
   def someFunc

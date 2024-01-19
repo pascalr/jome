@@ -23,6 +23,9 @@ of the source file.
 
 // TODO: Copy reset.css and jome-html.css too?
 // #cp #./css/reset.css, #../docs/
+// Noooo, use #sync instead of copy, the difference is that sync would check if it needs to be copied or not
+// TODO: Sync favicon
+
 // Create utils #cp, #ls, #mkdir, #cd, #cat, #whoami ??
 // To list files in current file directory, #ls #. // That would be nice
 // ls, cd, cp, mv, rm, mkdir, rmdir, chmod, chown, ps, kill, grep, man, pwd, echo, cat, head, tail
