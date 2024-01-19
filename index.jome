@@ -5,6 +5,11 @@ with cmd end
 
 $URL = '/jome'
 
+// I am not a big fan of ===, check out other languages is decide if == is always ===,
+// and maybe === would be something else like check if it is exactly the same object reference
+
+// FIXMEEEEEEE: Without parentheses does not work below for if
+
 if (cmd === 'test')
   <sh>jome test.jome</sh>
 elsif (cmd === 'b' || cmd === 'build')

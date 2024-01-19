@@ -19,6 +19,7 @@ of the source file.
 #build(#./views/test.html.jome, #../docs/test/index.html, force: true)
 #build(#./views/librairies.html.jome, #../docs/lib/index.html, force: true)
 #build(#./views/utils.html.jome, #../docs/utils/index.html, force: true)
+#build(#./views/home.html.jome, #../docs/index.html, force: true)
 
 // TODO: Copy reset.css and jome-html.css too?
 // #cp #./css/reset.css, #../docs/

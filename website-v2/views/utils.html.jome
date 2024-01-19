@@ -3,7 +3,7 @@ import &Webpage from '../src/webpage.jomm'
 with %xsx
 with %:#mdToHtml for md
 
-content = <md>
+let content = <md>
   ## Utils
 
   Je veux que this fasse toujours référence à un this normal comme dans un autre language.

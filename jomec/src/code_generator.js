@@ -349,7 +349,7 @@ function mergeFormat(format, defaultFormat) {
 function compileHeredoc(node) {
   let lines = node.data.content.split('\n')
   let format = mergeFormat(node.data.format, node.ctxFile.defaultFormatByTagName[node.data.tagName])
-  let content = formatLines(node, lines, format, true, false)
+  let content = formatLines(node, lines, format, true, true)
   return compileInterpolate(node, content)
 }
 

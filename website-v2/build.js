@@ -16,6 +16,11 @@ module.exports = () => {
     { force: true }
   );
   build(
+    path.join(__dirname, "views/home.html.jome"),
+    path.join(__dirname, "../docs/index.html"),
+    { force: true }
+  );
+  build(
     path.join(__dirname, "css/stylesheet.css.jome"),
     path.join(__dirname, "../docs/stylesheet.css"),
     { force: true }

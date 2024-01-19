@@ -1,7 +1,7 @@
 const Webpage = require("../src/webpage.js");
 const mdToHtml = require("jome-lib/mdToHtml");
 module.exports = () => {
-  content = mdToHtml(
+  let content = mdToHtml(
     mdToHtml(`
   ## Jome librairies
 

@@ -1,10 +1,8 @@
-const jome = require('jome')
-
-
-const {AppPage} = require("../lib/app.built.js");
-const renderMarkdown = require("jome/lib/render_markdown");
-
-module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdown(`
+const Webpage = require("../src/webpage.js");
+const mdToHtml = require("jome-lib/mdToHtml");
+module.exports = () => {
+  let content = mdToHtml(
+    mdToHtml(`
 
   # Jome v-0.0.0.0.1
 
@@ -20,7 +18,7 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   Example Jome code: TODO: Make this like the examples so you can click see compiled and result
 
-  Here is some code to show what Jome looks like. You can look at the [examples](${global._URL}/examples) page to see more.
+  Here is some code to show what Jome looks like. You can look at the [examples](${global.g_URL}/examples) page to see more.
 
   \`\`\`jome
   with
@@ -155,7 +153,7 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.
 
-  For the complete list of utils: see the [utils page](${global._URL}/utils).
+  For the complete list of utils: see the [utils page](${global.g_URL}/utils).
 
   \`\`\`jome
   // A constant
@@ -181,6 +179,11 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   console: #log, ...
   process: #argv, #env, #cwd...
   underscore.js: #map, #reduce, ...
+
+  For functions that have a sync and async version, use the exclamation mark after to use the sync version.
+  \`\`\`jome
+  #write! './somefile.txt', 'Some content', overwrite: true
+  \`\`\`
 
   ## Types
 
@@ -455,9 +458,166 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   let secondChild = @2
   \`\`\`
 
+  TODO: Use the keyword self instead of this, this makes it clear that it refers to self inside a class,
+  and that it is a little different than this in javascript in that it always refer to the class instance.
+
+  Use #evt to get current event
+  Use window or #window to get the window
+
+  ### Exclamation mark in objects
+
+  Inside an object, you can use an exclamation mark after a variable name so it sets it value to true.
+
+  \`\`\`jome
+  let obj = {someCond!} // same as {someCond: true}
+  \`\`\`
+
+  ## Paths
+
+  The issue with relative paths is that you don't know what they are relative to. In js, in include files,
+  the relative path is relative to the current file. If you try to open and write a file, than it is relative
+  to the current working directory.
+
+  In Jome, this is more explicit using paths. '#./' is used for paths relative to current file, '#cwd/' is used for
+  paths relative to the current working directory. They are compiled to become absolute, so you can pass it to
+  a function in another file and you are sure it will reference the proper file.
+
+  You can use # to define paths. They must start by '/', '.' or 'cwd/'. (Maybe '~' too)
+
+  \`\`\`jome
+  let path0 = #. // same as __dirname
+  let path1 = #/some/absolute/path.txt
+  let path2 = #./someFile.jome
+  let path3 = #../otherDir/"some file with spaces.txt"
+  let path4 = #cwd/someFile.txt // Allow paths after #cwd to get files inside current working directory.
+  let path5 = #~/Downloads/someFile.txt // Maybe
+  \`\`\`
+  
+  Relative paths are converted to absolute paths. It's the same as joining __dirname with the relative path.
+
+  Spaces are not allowed, but you can escape them. Any other character is allowed?
+
+  You can use quotes inside paths, just not at the beginning. You can use like like so:
+
+  \`\`\`jome
+  let test = #./'some/file with spaces.txt'
+  let test = #/'some/file with spaces.txt'
+  let test = #./"some/file with spaces.txt"
+  let test = #/"some path/file with spaces.txt"
+  let test = #/some/path/to/some/"file with spaces.txt"
+  \`\`\`
+
+  If you want quotes inside your filename, than you need to escape them.
+
+  No interpolation inside jome paths?
+
+  Paths always use the /, but maybe they are converted when compiling for Windows?
+
+  Si je me retrouve à tout le temps faire #run(#./some_file.ext), ça serait nice d'avoir un
+  shortcut.
+
+  Par exemple, r#./some_file.html.jome
+
+  Ce que j'aime du r ici c'est que ça veut dire run et ça veut dire read aussi.
+
+  En fait c'est peut-être run! que j'utilise plus souvent.
+
+  Utiliser !#./some_file.html.jome // Comme shortcut?
+
+  ## Executing jome files
+
+  .jome files are compiled into a function. When you use jome CLI to run a .jome file, you are executing this
+  function and passing args to the function.
+
+  You can use return inside a .jome file to exit prematurly or to return a value.
+
+  You can use #run or #load to run another .jome file within jome.
+
+  \`\`\`jome
+  #run './some_file.jome'
+  // compiles to:
+  // import run_some_file from 'some_file.jome'
+  // run_some_file()
+  \`\`\`
+
+  Jome files can be included into other jome files. This allows you to easily create partials and file improved with Jome.
+
+  C'est utile pour générer des fichiers d'autres types aussi.
+
+  data.json.jome
+  \`\`\`jome
+  return <json>
+    {
+      "some": "data",
+      "title": <% title %>,
+      "math": <% 1 + 2 %>
+    }
+  </json>
+  \`\`\`
+
+  some_file.jome
+  \`\`\`jome
+  let data: string = #run './data.json.jome', title: 'Some title!'
+  \`\`\`
+
+  Je ne sais pas encore pour des fichiers jome avec des modules et des exports. Peut-être un type de fichier différent? .jomm?
+
+  some_page.html.jome, dans ce cas un fichier some_page.html.js est généré, il n'est pas exécuter automatiquement.
+
+  Tu peux faire:
+
+  #write #run(#./some_page.html.jome), to: #./some_page.html
+  ou peut-être fournir un shortcut genre
+  #compile #./some_page.html.jome
+
+  Compiler tous les fichiers .jome avec un default export de function pour le script. Parce que présentement, ce n'est
+  pas simple d'appeler plusieurs fois le même fichier. Ce qui est un peu tanant c'est qu'il faut que je fasse
+  node -e "require('some_compiled_file.js')()" au lieu de juste node some_compiled_file.js
+
+  You specify the variables you expect to be given to the partial file with a with block.
+  \`\`\`jome
+  with
+    {title: string}
+  end
+
+  return <html>
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><% title %></title>
+    </head>
+  </html>
+  \`\`\`
+
+  A Jome script is compiled into a function with the parameters described from the with block.
+
+  \`\`\`js
+  module.exports = ({title}) => {
+    // ...
+  }
+  \`\`\`
+  #run et #load qui font tous les deux la même chose?
+  et
+  #run! et #load!
+
+  Comment gérer le fichier dynamiquement?
+
+  #load('file.jome')
+  #load(nameOfFile)
+
+  Ça ne change rien en fait, c'est juste que ça va être dynamique ou pas. Dans tous les cas je vais faire require sur place
+  ou await import sur place.
+
+  FIXMEEEE run avec ESM doit utiliser await import, mais je ne veux pas toujours retourner une valeur async...
+
+  Mais mon trouble là c'est avec les dynamic imports. Mettre ça de côté pour l'instant
+
   ## Loops
 
   Loops are used exactly like in javascript, but with the end keyword.
+
+  Nooooooooooo. They are disguting. There is for...in, for...of, it's ugly. I don't even know
+  how to use them properly... Check other languages to find a better way.
 
   Note: There is no do ... while, because the do keyword is used for functions.
   Maybe exec ... while ???
@@ -626,6 +786,26 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   Et j'aimerais que dans ce cas, ça retourne automatiquement '' au lieu de undefined ou null
 
+  ## comments
+
+  Use // and /* */ for regular comments.
+
+  Use # for documentation comments. NOTE: It must have a space after the # , otherwise it's a utils.
+
+  \`\`\`jome
+  // This is a regular comment
+
+  # This is a documentation comment that describes the function below.
+  # Second line of same documentation comment.
+  with
+    arg: string # Documentation comment that describes what this argument is
+  def someFunc
+    /* TODO: implement this function */
+  end
+  \`\`\`
+
+  By default, regular comments are discarded when compiled and documentation comments are kept.
+
   ### Switch / case
 
   Mon idée, tu fais:
@@ -655,15 +835,24 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
   ## Classes
 
+  Normal arguments are only available inside the constructor.
+  The constructor is everything inside the class before the first def ... end.
+  If you use @someArgument, then it will automatically set it for you.
+
   \`\`\`jome
+  class Person(favoriteColor)
+    @firstName: string = "John"
+    @lastName: string = "Doe"
+    @age: number
+    @favoriteColor = favoriteColor || 'brown'
+  end
+
+  with
+    @favoriteColor = 'brown'
   class Person
     @firstName: string = "John"
     @lastName: string = "Doe"
     @age: number
-  
-    def constructor(favoriteColor)
-      @favoriteColor = favoriteColor || 'brown'
-    end
   end
 
   class Person
@@ -1005,6 +1194,27 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   Je ne veux pas que le user n'aie à faire la distinction entre une fonction et une arrow fonction.
   Trouver une manière de gérer cela.
 
+  ### With keyword
+
+  Usefull to define interfaces of classes and functions.
+
+  \`\`\`jome
+  with
+    name: String # Full name of the personnellement
+  class Person
+  end
+
+  with
+    x: float # The base value
+    y: integer # The factor
+  def multiply
+  end
+  \`\`\`
+
+  This allows easy documentation of the code without having to repeat yourself in the comments.
+
+  It would be nice is there was a short way to start a single line documentation comment.
+
   ## State variables
 
   Nodes can have state variables that start with a percentage sign like \`%stateVar = 10\`
@@ -1221,15 +1431,6 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   }
   func(10, "g")
 
-  <h2 id="verbatim">Verbatim string literals</h2>
-
-  Verbatim string literals are strings that do not interpolate. The idea is taken from C#. But in C# it also includes backslashes without escaping
-  them I don't know if I want to do that. Or I want to offer multiple possibilities.
-  
-  \`\`\`jome
-  str = @"This is a string that does \${not} interpolate"
-  \`\`\`
-
   ## signals
   
   Signals are used for events. They are not very much implemented yet. TODO: Check how Godot handles events, check how js handles events.
@@ -1338,18 +1539,165 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   debug(nomDeVariable, "nomDeVariable")
   \`\`\`
 
-  ## String modifier
+  ## aka or alias
 
-  Idée:
+  I want to be able to give many possible names to a parameter.
 
-  J'aimerais pouvoir faire
-  $"$URL/stylesheet.css"
-  ou
-  "$URL/stylesheet.css"$
-  ou
-  au lieu de
-  \`{$URL}/stylesheet.css\`
-  Ça serait plus simple mettre le modificateur avec pour parser, mais c'est plus beau après.
+  For example, the port, it can be 'port' or 'p'
+
+  In js, you have to do:
+
+  \`\`\`js
+  let run = ({port, p}) => {
+    port = port || p
+  }
+  \`\`\`
+
+  In Jome, you can simply do:
+
+  \`\`\`jome
+  let run = ({port aka p}) => {
+    // ...
+  }
+  \`\`\`
+
+  It will automatically be compiled to the code above.
+
+  ## Strings
+
+  Single and double quotes are to be the same and can be used interchangibly. Like in js and python.
+
+  Backticks are not to be supported for now. I don't know what I what to do with them.
+
+  All string are allowed to be multiline.
+
+  Ideas:
+  - "Hello {name}!" // name is interpolated with single {}
+  - """Hello {{name}}! Can use single " or double "" inside too!""" // name is interpolated with double {{}}
+  - @"Hello {name}! \n not escaped" // verbatim, \ only escapes the quote, no interpolation
+  - @"""Hello \ {{name}}!""" // verbatim, \ only escapes the quote, but ALLOWS interpolation with double {{}}
+  Maybe:
+  - #"Hello #name! How are you #{name}? ##PI is almost 3.1416" // #identifier and #{identifier} are both allowed for interpolation
+  - $"Hello \${name}!" // exactly like backticks in js
+
+  Maybe use ' and ''' instead of @" and @"""? In ruby, this is what they do. It's just that I don't think it's that common.
+  And honestly I did not know that. @ is more explicit. Otherwise you might think they can be used interchangibly like in python.
+
+  ### Formatting
+
+  Formatting nomenclature:
+
+  x: trim
+  s: whole string
+  l: line
+  i: indent (trim, but keep indentation, check for least amount of spaces before, than trim, spaces and tabs not allowed combined, never with s (string))
+  t: tab
+  _: space
+  j: join (must be at the end of the format. joins all lines with the character after if any, or nothing if ends with j)
+
+  // Explicit characters like \t and \n are not trimmed.
+  ""%xs // Trim empty lines at the beginning of the string
+  ""%xsx // Trim empty lines at the beginning and the end of the string
+  ""%sx // Trim empty lines at the end of the string
+  ""%xl // Trim everyline before
+  ""%xlx // Trim everyline before and after
+  ""%lx // Trim everyline after
+  ""%xs%xt // Trim at the beginning of the string and the end of every line
+  ""%xl%sx // Trim at the beginning of every line and the end of the string
+  ""%i__ // Keep indentation at the beginning of everyline starting with two spaces
+
+  let description = "This is a text description
+                     on many lines. It stays many
+                     lines but trims beginning.
+                    "%xlsx
+
+  let singleLine = "This is written on multiple
+                    lines but will all be joined
+                    on a single line.
+                    "%xlx%j_
+
+  Maybe allow formatting after scripts too? <html></html>%xs
+
+  ### Default string format
+
+  I think I want the default format to be %i%xsx.
+
+  You can use the keyword \`use\` to set a default format for the strings that comes after in the current scope.
+
+  \`\`\`jome
+  use %xlx%j_
+  let str = "some multi
+             line string" // will use the format above
+  \`\`\`
+
+  The formats do not add up to each other. When you specify a format, it replaces the previous one.
+
+  Maybe allow to give names to format that you can reuse?
+
+  Or simply numbers?
+
+  set format 0 %xlx%j_
+
+  then you do "some string"%0
+
+  When there is a default format and you want none, use only % like "str"%
+
+  Maybe define single digits aliases myself to be the most commonly used formats. This way you can know what it means without looking
+  it up if you are an expert.
+
+  Or maybe define named aliases myself.
+
+  %_html => string like in html, joins the lines with a single space
+
+  Maybe it would be nice if I could modify only some flag instead of all. Let's say, I always want xsx, but only sometimes xl,
+  I don't want to have to redefine xsx every time.
+
+  Peut-être quand dans le fond faire que ce sont tous des flags.
+
+  Tu peux faire %s pour reset string settings, %l pour line settings, %s%l%i%j équivalerais à % qui reset tout
+
+  Je ne sais pas pour %i par contre, mais celui n'est pas encore tout à fais clair. Ça garde juste le nested indent?
+
+  Si %i active, comment désactivé?
+
+  <h3 id="verbatim">Verbatim string literals</h3>
+
+  Verbatim string literals are strings that do not interpolate. The idea is taken from C#. But in C# it also includes backslashes without escaping
+  them I don't know if I want to do that. Or I want to offer multiple possibilities.
+  
+  \`\`\`jome
+  str = @"This is a string that does \${not} interpolate"
+  \`\`\`
+
+  ## Threads
+
+  Exactly the same as JavaScript? await, async, ...
+
+  \`\`\`jome
+  async def someMethod
+  end
+
+  let someFunc = async () => {x: 1, y: 2}
+  \`\`\`
+
+  ## Private
+
+  For private fields inside classes, you can use a private block.
+  You can also use the private before a method.
+
+  \`\`\`
+  class SomeClass
+    private
+      def somePrivateMethod
+      end
+    end
+
+    private def someOtherPrivateMethod
+    end
+  end
+  \`\`\`
+
+  It compiles in javascript using a # before the names of fields.
 
   ## Main
 
@@ -1537,6 +1885,8 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
   - [Units](#units) - You can add units to numbers. ex: "density = 105g / 98mL"
   - [Hyphen](#hyphens) - You can use hyphens in variable names like left-panel. The minus operator should always be surrounded by spaces.
 
+  Pouvoir caller une fonction locale comme .#, en utilisant .: ? arg.:funcLocal
+
   ## bugs
 
   FIXME: The indentation is super important in markdown. For example, adding tabs inside md scripts, if only one tab html tags will work,
@@ -1699,4 +2049,7 @@ module.exports = new AppPage({title: 'Simple HTML Page', content: (renderMarkdow
 
 
 
-`))}).toString()
+`)
+  );
+  return new Webpage("Jome", content).render();
+};

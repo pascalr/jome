@@ -1,6 +1,6 @@
 import &Webpage from '../src/webpage.jomm'
 
-content = <md>
+let content = <md>
   ## Jome librairies
 
   Jome compiles into JavaScript. So librairies are distributed through npm like other JavaScript librairies.

@@ -1,7 +1,6 @@
-import {AppPage} from '../lib/app.jome'
+import &Webpage from '../src/webpage.jomm'
 
-main {
-  AppPage title: 'Simple HTML Page', content: (<md>
+let content = <md>
 
   # Jome v-0.0.0.0.1
 
@@ -2048,5 +2047,6 @@ main {
 
 
 
-</md>)
-}.toString()
+</md>
+
+return Webpage('Jome', content).render()
