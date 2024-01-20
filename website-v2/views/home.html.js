@@ -1,14 +1,13 @@
 const Webpage = require("../src/webpage.js");
 const mdToHtml = require("jome-lib/mdToHtml");
 module.exports = () => {
-  let content = mdToHtml(
-    mdToHtml(`
+  let content = mdToHtml(`
 
   # Jome v-0.0.0.0.1
 
   Jome is a language that compiles to JavaScript. It has a node structure like in Godot, types like Typescript,
   goodies like CoffeeScript and underscore.js, syntax similar to ruby, it handles state like in React and it
-  has some original features.
+  has some original features.......
 
   Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.
 
@@ -2075,7 +2074,6 @@ module.exports = () => {
 
 
 
-`)
-  );
+`);
   return new Webpage("Jome", content).render();
 };

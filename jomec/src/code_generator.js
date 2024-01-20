@@ -338,11 +338,13 @@ function mergeFormat(format, defaultFormat) {
   formats.forEach(f => {
     let parts = f.split('%').slice(1)
     parts.forEach(part => {
-      ;[':', 's', 'l'].forEach(ch => {
-        if (part.includes(ch)) {
-          mods[ch] = part
-        }
-      })
+      if (part[0] === ':') {
+        mods[':'] = part
+      } else if (part.includes('s')) { // Careful this is dangerous this must be put at the end, because it catches a lot (ex: :s, which is wrong should be :, not s)
+        mods['s'] = part
+      } else if (part.includes('l')) { // Careful this is dangerous this must be put at the end, because it catches a lot (ex: :l, which is wrong should be :, not l)
+        mods['l'] = part
+      }
     })
   })
   if (!Object.keys(mods).length) {return null}
