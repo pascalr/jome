@@ -1,5 +1,9 @@
 # Jome
 
+Goal, version 0.1: as is right now, no more features
+Later versions:
+Nodes in a tree, reactive variables, units
+
 TODO: Avoir seulement un README.md et des dossiers
 
 TODO: Implement a language server protocol

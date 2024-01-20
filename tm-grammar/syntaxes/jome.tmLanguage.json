@@ -109,6 +109,7 @@
         { "include": "#if_block" },
         { "include": "#interface" },
         { "include": "#class" },
+        { "include": "#symbol" },
         { "include": "#function" },
         { "include": "#do_end" },
         { "include": "#chain-bloc" },
@@ -197,6 +198,12 @@
 			  }
       ]
 		},
+    "symbol": {
+      "patterns": [{
+        "match": ":([\\p{L}~]\\w*)",
+        "name": "variable.symbol.jome"
+      }]
+    },
     "arrow": {
 			"patterns": [{
 				"name": "keyword.arrow.jome",
@@ -807,10 +814,6 @@
           "captures": {
             "1": { "name": "support.type.property-name.jome" }
           }
-        },
-        {
-          "match": ":([\\p{L}~]\\w*)",
-          "name": "variable.dict-symbol.jome"
         },
         {
           "match": ",",

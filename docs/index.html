@@ -712,6 +712,25 @@ If you use @someArgument, then it will automatically set it for you.</p>
 <span class="hljs-keyword">end</span>
 </code></pre></p>
 <p>Idée: Quand une classe inhérite d'un interface, mettre les valeurs par défaut dans le prototype.</p>
+<h3>Inline methods</h3>
+<p>Pouvoir définir une méthode sur une seule ligne avec def &lt; funcName &gt; =</p>
+<pre><code>class SomeClass
+  def inlineMethod = &quot;someText&quot; // Careful here it is a function, not only a string
+  // same as
+  def inlineMethod
+    return &quot;someText&quot;
+  end
+<p>def inlineMethod2 = {
+key: 'value'
+}
+// same as
+def inlineMethod2
+return {
+key: 'value'
+}
+end
+end
+</code></pre></p>
 <h3>Deconstructings</h3>
 <p>I want to be able to name deconstructed arguments in a method. Maybe with keyword as?</p>
 <pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">example</span>(<span class="hljs-variable">props</span> <span class="hljs-variable">as</span> {<span class="hljs-variable">arg1</span>, <span class="hljs-variable">arg2</span>})

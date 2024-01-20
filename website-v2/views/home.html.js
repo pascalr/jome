@@ -920,6 +920,30 @@ module.exports = () => {
 
   Idée: Quand une classe inhérite d'un interface, mettre les valeurs par défaut dans le prototype.
 
+  ### Inline methods
+
+  Pouvoir définir une méthode sur une seule ligne avec def < funcName > =
+
+  \`\`\`
+  class SomeClass
+    def inlineMethod = "someText" // Careful here it is a function, not only a string
+    // same as
+    def inlineMethod
+      return "someText"
+    end
+
+    def inlineMethod2 = {
+      key: 'value'
+    }
+    // same as
+    def inlineMethod2
+      return {
+        key: 'value'
+      }
+    end
+  end
+  \`\`\`
+
   ### Deconstructings
 
   I want to be able to name deconstructed arguments in a method. Maybe with keyword as?

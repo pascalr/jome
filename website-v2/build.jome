@@ -21,10 +21,10 @@ of the source file.
 #compile './views/test.jome', '../docs/test/index.html'
 */
 
-#build(#./views/test.html.jome, #../docs/test/index.html, force: force) // :force
-#build(#./views/librairies.html.jome, #../docs/lib/index.html, force: force)
-#build(#./views/utils.html.jome, #../docs/utils/index.html, force: force)
-#build(#./views/home.html.jome, #../docs/index.html, force: force)
+#build(#./views/test.html.jome, #../docs/test/index.html, :force)
+#build(#./views/librairies.html.jome, #../docs/lib/index.html, :force)
+#build(#./views/utils.html.jome, #../docs/utils/index.html, :force)
+#build(#./views/home.html.jome, #../docs/index.html, :force)
 
 // TODO: Copy reset.css and jome-html.css too?
 // #cp #./css/reset.css, #../docs/
@@ -34,4 +34,4 @@ of the source file.
 // Create utils #cp, #ls, #mkdir, #cd, #cat, #whoami ??
 // To list files in current file directory, #ls #. // That would be nice
 // ls, cd, cp, mv, rm, mkdir, rmdir, chmod, chown, ps, kill, grep, man, pwd, echo, cat, head, tail
-#build(#./css/stylesheet.css.jome, #../docs/stylesheet.css, force: force)
+#build(#./css/stylesheet.css.jome, #../docs/stylesheet.css, :force)

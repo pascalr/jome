@@ -920,7 +920,7 @@ let content = <md>
 
   ### Inline methods
 
-  Pouvoir définir une méthode sur une seule ligne avec def =
+  Pouvoir définir une méthode sur une seule ligne avec def < funcName > =
 
   ```
   class SomeClass

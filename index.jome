@@ -1,7 +1,7 @@
 import build from './website-v2/build.jome'
 import server from './website-v2/server.jome'
 
-with cmd end
+with cmd, args end
 
 $URL = '/jome'
 
@@ -13,8 +13,9 @@ $URL = '/jome'
 if (cmd === 'test')
   <sh>jome test.jome</sh>
 elsif (cmd === 'b' || cmd === 'build')
-  build()
+  build(args)
 elsif (cmd === 's' || cmd === 'server')
+  build();
   server(port: 3000)
 else
   #log "

@@ -20,7 +20,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "command": "jome b"
+      "command": "jome b -f"
     },
     {
       "type": "node-terminal",

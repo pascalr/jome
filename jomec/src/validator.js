@@ -76,8 +76,8 @@ function filterNewlines(list) {
   return list.filter(el => el.type !== 'newline')
 }
 
-function filterCommas(list) {
-  return list.filter(el => el.type !== 'commas')
+function filterCommas(list) { // 'commas'?
+  return list.filter(el => el.type !== 'commas' && el.type !== 'punctuation.separator.delimiter.jome')
 }
 
 // const validateoperands = (nb, types) => (node) => {

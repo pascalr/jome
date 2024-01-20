@@ -179,7 +179,8 @@ function toPrimitive(str) {
 
   // Check if the string is a string
   if (str.startsWith('"') || str.startsWith("'")) {
-    return str.slice(1,-1)
+    //return str.slice(1,-1)
+    return str
   }
 
   if (str === 'true') {return true}
@@ -218,12 +219,15 @@ function mergeNamedParameters(args) {
   args.forEach(arg => {
     if (arg.type === 'keyword.operator.colon.jome') {
       obj[arg.operands[0].raw] = toPrimitive(genCode(arg.operands[1]))
+    } else if (arg.type === 'variable.symbol.jome') {
+      let name = arg.raw.slice(1)
+      obj[name] = name
     } else {
       merged.push(arg)
     }
   })
   if (Object.keys(obj).length) {
-    merged.push({type: "plain", raw: JSON.stringify(obj)})
+    merged.push({type: "plain", raw: `{${Object.keys(obj).map(k => `${k}: ${obj[k]}`)}}`})
   }
   return merged
 }
