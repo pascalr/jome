@@ -1,0 +1,9 @@
+import &Webpage from '../src/webpage.jomm'
+
+let content = <md>
+
+  # Jome v-0.2
+
+</md>
+
+return Webpage('Jome', content).render()

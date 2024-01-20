@@ -3,7 +3,7 @@ const mdToHtml = require("jome-lib/mdToHtml");
 module.exports = () => {
   let content = mdToHtml(`
 
-  # Jome v-0.0.0.0.1
+  # Jome v-0.1
 
   Jome is a language that compiles to JavaScript. It has a node structure like in Godot, types like Typescript,
   goodies like CoffeeScript and underscore.js, syntax similar to ruby, it handles state like in React and it

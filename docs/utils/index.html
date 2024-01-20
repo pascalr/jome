@@ -102,15 +102,18 @@ genre, la version de la function #uuid qui a été utilisé.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// A constant</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-variable">#PI</span>/<span class="hljs-number">2</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">e</span> = <span class="hljs-title function_">#e</span> <span class="hljs-comment">// Euler&#x27;s number</span>
-<p><span class="hljs-comment">// A function</span>
+
+<span class="hljs-comment">// A function</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">angle</span> = <span class="hljs-title function_">#sin</span>(<span class="hljs-variable">x</span>)
-<span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;The angle is:&quot;</span>, <span class="hljs-variable">angle</span>) <span class="hljs-comment">// #log is a shorthand for console.log</span></p>
-<p><span class="hljs-comment">// A function acting upon a variable</span>
+<span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;The angle is:&quot;</span>, <span class="hljs-variable">angle</span>) <span class="hljs-comment">// #log is a shorthand for console.log</span>
+
+<span class="hljs-comment">// A function acting upon a variable</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">keys</span> = <span class="hljs-variable">obj</span>.<span class="hljs-title function_">#keys</span> <span class="hljs-comment">// === #keys(obj) === Object.keys(obj)</span>
-<span class="hljs-number">10.</span><span class="hljs-title function_">#times</span>(<span class="hljs-variable">i</span> =&gt; <span class="hljs-comment">/* ... */</span>)</p>
-<p><span class="hljs-comment">// Chaining example</span>
-<span class="hljs-variable">obj</span>.<span class="hljs-title function_">#keys</span>.<span class="hljs-title function_">#filter</span>(<span class="hljs-variable">key</span> -&gt; <span class="hljs-variable">key</span>.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">':'</span>)).<span class="hljs-title function_">#each</span>(<span class="hljs-variable">el</span> =&gt; <span class="hljs-comment">/* ... */</span>)
-</code></pre></p>
+<span class="hljs-number">10.</span><span class="hljs-title function_">#times</span>(<span class="hljs-variable">i</span> =&gt; <span class="hljs-comment">/* ... */</span>)
+
+<span class="hljs-comment">// Chaining example</span>
+<span class="hljs-variable">obj</span>.<span class="hljs-title function_">#keys</span>.<span class="hljs-title function_">#filter</span>(<span class="hljs-variable">key</span> -&gt; <span class="hljs-variable">key</span>.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;:&#x27;</span>)).<span class="hljs-title function_">#each</span>(<span class="hljs-variable">el</span> =&gt; <span class="hljs-comment">/* ... */</span>)
+</code></pre>
 <p>Idée: #1, #2, ... fait référence aux arguments d'une fonction. Pas obliger de les déclarer. Ça peut être court comme syntaxe
 pour des filters par exemple.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">even</span> = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>].<span class="hljs-title function_">filter</span>(<span class="hljs-title function_">#1</span> <span class="hljs-variable">mod</span> <span class="hljs-number">2</span>)

@@ -17,8 +17,18 @@ module.exports = (f) => {
     { force: force }
   );
   build(
-    path.join(__dirname, "views/home.html.jome"),
+    path.join(__dirname, "views/v0_2.html.jome"),
+    path.join(__dirname, "../docs/v0.2/index.html"),
+    { force: force }
+  );
+  build(
+    path.join(__dirname, "views/v0_1.html.jome"),
     path.join(__dirname, "../docs/index.html"),
+    { force: force }
+  );
+  build(
+    path.join(__dirname, "views/v0_0.html.jome"),
+    path.join(__dirname, "../docs/v0.0/index.html"),
     { force: force }
   );
   build(
