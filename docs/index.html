@@ -165,7 +165,7 @@ And you use the end keyword instead of curly braces.</p>
 </code></pre>
 <p>You can use <code>do ... end</code> to create functions. You pass arguments between vertical bars.</p>
 <pre><code class="language-jome">[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>].<span class="hljs-variable">each</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">i</span>|
-  <span class="hljs-variable">console</span>.<span class="hljs-variable">log</span> <span class="hljs-variable">i</span>
+  <span class="hljs-title function_">#log</span> <span class="hljs-variable">i</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <p>You can create an instance of a class without using the <code>new</code> keyword, simply call it as a function.</p>
@@ -180,6 +180,7 @@ And you use the end keyword instead of curly braces.</p>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">someInstance</span> = <span class="hljs-title function_">SomeClass</span>()
 <span class="hljs-keyword">let</span> <span class="hljs-variable">otherInstance</span> = <span class="hljs-variable">new</span> <span class="hljs-title function_">SomeClass</span>() <span class="hljs-comment">// You can also still use the new keyword</span>
 </code></pre>
+<p>The advantage of this will be more apparent in Jome version 0.2.</p>
 <h3>Shorthand key syntax</h3>
 <p>The short key syntax is different that in javascript, because it could be confusing with children (a feature coming in v0.2). In Jome, it starts with a colon</p>
 <pre><code class="language-jome"><span class="hljs-variable">obj</span> = {:<span class="hljs-variable">content</span>, :<span class="hljs-variable">value</span>}
@@ -248,11 +249,15 @@ Use window or #window to get the window</p>
 <p>Inside an object, you can use an exclamation mark after a variable name so it sets it value to true.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">obj</span> = {<span class="hljs-variable">someCond</span>!} <span class="hljs-comment">// same as {someCond: true}</span>
 </code></pre>
+<p>I am not yet sure about that one. Maybe symbols with an exclamation mark at the end means true?
+This makes it less confusing and this could allow us to create methods using an exclamation mark at the end.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">obj</span> = {:<span class="hljs-variable">someCond</span>!} <span class="hljs-comment">// same as {someCond: true}</span>
+</code></pre>
 <h2>Paths</h2>
 <p>The issue with relative paths is that you don't know what they are relative to. In js, in include files,
 the relative path is relative to the current file. If you try to open and write a file, than it is relative
 to the current working directory.</p>
-<p>In Jome, this is more explicit using paths. '#./' is used for paths relative to current file, '#cwd/' is used for
+<p>In Jome, this is more explicit using paths. <code>'#./'</code> is used for paths relative to current file, '#cwd/' is used for
 paths relative to the current working directory. They are compiled to become absolute, so you can pass it to
 a function in another file and you are sure it will reference the proper file.</p>
 <p>You can use # to define paths. They must start by '/', '.' or 'cwd/'. (Maybe '~' too)</p>
@@ -275,16 +280,11 @@ a function in another file and you are sure it will reference the proper file.</
 <p>If you want quotes inside your filename, than you need to escape them.</p>
 <p>No interpolation inside jome paths?</p>
 <p>Paths always use the /, but maybe they are converted when compiling for Windows?</p>
-<p>Si je me retrouve à tout le temps faire #run(#./some_file.ext), ça serait nice d'avoir un
-shortcut.</p>
-<p>Par exemple, r#./some_file.html.jome</p>
-<p>Ce que j'aime du r ici c'est que ça veut dire run et ça veut dire read aussi.</p>
-<p>En fait c'est peut-être run! que j'utilise plus souvent.</p>
-<p>Utiliser !#./some_file.html.jome // Comme shortcut?</p>
 <h2>Loops</h2>
 <p>Loops are used exactly like in javascript, but with the end keyword.</p>
-<p>Nooooooooooo. They are disguting. There is for...in, for...of, it's ugly. I don't even know
-how to use them properly... Check other languages to find a better way.</p>
+<p>Work in progress</p>
+<p>I think I want to support while, and for like in c++. I don't want to support for of and for in because they are confusing I believe.
+Use obj.#keys.#each or arr.#each instead.</p>
 <p>Note: There is no do ... while, because the do keyword is used for functions.
 Maybe exec ... while ???</p>
 <pre><code class="language-jome"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> <span class="hljs-variable">el</span> <span class="hljs-keyword">in</span> <span class="hljs-variable">els</span>)
@@ -299,128 +299,28 @@ Maybe exec ... while ???</p>
   <span class="hljs-comment">// ...</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
-  <h2 id="nodes">Nodes</h2>
-<p>Nodes are objects in a tree structure. They can have a parent and they can have children.</p>
-<p>You create nodes by using blocks.</p>
-<pre><code class="language-jome"><span class="hljs-variable">node</span> = {
-  <span class="hljs-title class_">Obj</span> prop1: <span class="hljs-string">&#x27;val&#x27;</span>, prop2: <span class="hljs-string">&#x27;val2&#x27;</span>
-    prop3: <span class="hljs-string">&#x27;val3&#x27;</span>, prop4: <span class="hljs-string">&#x27;val4&#x27;</span>
-    <span class="hljs-variable">propAndChild1</span> = <span class="hljs-string">&#x27;val5&#x27;</span>
-    <span class="hljs-variable">propAndChild2</span> = <span class="hljs-string">&#x27;val6&#x27;</span>
-}
-</code></pre>
-<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span>
-  <span class="hljs-keyword">def</span> <span class="hljs-title function_">constructor</span>(props: <span class="hljs-title class_">Object</span>)
-    <span class="hljs-title function_">set</span>(<span class="hljs-variable">props</span>)
-    <span class="hljs-variable">this</span>.<span class="hljs-variable">props</span> = <span class="hljs-variable">props</span>
-  <span class="hljs-keyword">end</span>
-
-  <span class="hljs-keyword">def</span> <span class="hljs-title function_">set</span>(attrs: <span class="hljs-title class_">Object</span>)
-    <span class="hljs-comment">// Assign each entry of the object to &#x27;this&#x27;</span>
-    <span class="hljs-keyword">for</span> (<span class="hljs-variable">const</span> <span class="hljs-variable">key</span> <span class="hljs-keyword">in</span> <span class="hljs-variable">props</span>)
-      <span class="hljs-keyword">if</span> (<span class="hljs-variable">props</span>.<span class="hljs-title function_">hasOwnProperty</span>(<span class="hljs-variable">key</span>)) {
-        <span class="hljs-variable">this</span>[<span class="hljs-variable">key</span>] = <span class="hljs-variable">props</span>[<span class="hljs-variable">key</span>];
-      }
-    <span class="hljs-keyword">end</span>
-  <span class="hljs-keyword">end</span>
-<span class="hljs-keyword">end</span>
-</code></pre>
-<h3>Adding children to nodes</h3>
-<p>In order to add children to nodes, you can use the &lt;&lt; operator.</p>
-<pre><code class="language-jome"><span class="hljs-variable">hero</span>.<span class="hljs-variable">inventory</span> &lt;&lt; {[
-  <span class="hljs-title class_">Sword</span> damage: <span class="hljs-number">10</span>, weight: <span class="hljs-variable">500g</span>
-  <span class="hljs-title class_">Shield</span> armor: <span class="hljs-number">8</span>, weight: <span class="hljs-variable">400g</span>
-  <span class="hljs-title class_">Scroll</span> <span class="hljs-string">&quot;Scroll of wisdom&quot;</span>
-  <span class="hljs-title class_">Belt</span>
-    <span class="hljs-title class_">HealingPotion</span> life: <span class="hljs-number">200</span>
-    <span class="hljs-title class_">ManaPotion</span> mana: <span class="hljs-number">100</span>
-]}
-</code></pre>
-<h3>Children attached with key</h3>
-<p>LES NODES N'ONT PAS DE NOM, MAIS TU PEUX LES ATTACHER AVEC UNE CLÉ À UN PARENT
-QUAND TU ATTACHES UN CHILDREN AVEC UNE CLÉ, il est là ET il est dans la liste de children.
-si tu veux mettre à un attribute, mais pas children, alors utiliser @attr</p>
-<pre><code class="language-jome">$ &lt;&lt;
-  someVar: <span class="hljs-number">10</span>
-  page: <span class="hljs-title class_">Page</span>
-    navbar: <span class="hljs-title class_">Navbar</span>
-      list: <span class="hljs-title class_">List</span>
-        <span class="hljs-title class_">Link</span> <span class="hljs-string">&quot;Musics&quot;</span>, to: <span class="hljs-string">&#x27;/musics&#x27;</span>
-        <span class="hljs-title class_">Link</span> <span class="hljs-string">&quot;Sports&quot;</span>, to: <span class="hljs-string">&#x27;/sports&#x27;</span>
-        <span class="hljs-title class_">Link</span> <span class="hljs-string">&quot;Arts&quot;</span>, to: <span class="hljs-string">&#x27;/arts&#x27;</span>
-    <span class="hljs-title class_">Body</span>
-      <span class="hljs-title class_">Txt</span> &lt; <span class="hljs-variable">md</span> &gt;
-        <span class="hljs-comment"># Welcome</span>
-        <span class="hljs-title class_">Welcome</span> <span class="hljs-variable">to</span> <span class="hljs-variable">this</span> <span class="hljs-variable">website</span>! <span class="hljs-title class_">You</span> <span class="hljs-variable">can</span> <span class="hljs-variable">browse</span> <span class="hljs-variable">links</span> <span class="hljs-variable">at</span> <span class="hljs-variable">the</span> <span class="hljs-variable">top</span>.
-      &lt; / <span class="hljs-variable">md</span>&gt;
-&gt;&gt;
-<span class="hljs-keyword">var</span> <span class="hljs-variable">navLinks</span> = $<span class="hljs-variable">page</span>.<span class="hljs-variable">navbar</span>.<span class="hljs-variable">list</span>-&gt;<span class="hljs-variable">children</span>
-</code></pre>
-<h3>Under the hood</h3>
-<p>Underneath, nodes are objects with a property named '$'. The idea of doing it this way is in order to not clash with user defined properties for
-example name.</p>
-<p>The property includes the following attributes:</p>
-<ul>
-<li>children: The list of children of the node.</li>
-<li>parent: A link to the node who is it's parent</li>
-<li>signals: A list of the signals the node listens to</li>
-<li>childrenCount: The number of children of the node. Not sure about this one. TODO: Remove this since I can do children.length</li>
-</ul>
 <h2>Conditions</h2>
+<p>You can use <code>elif</code>, <code>elsif</code> or <code>else if</code>. They are all the same.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">if</span> <span class="hljs-variable">someCond</span>
   <span class="hljs-variable">doSomething</span>
-<span class="hljs-keyword">end</span>
-
-<span class="hljs-keyword">if</span> <span class="hljs-variable">someCond</span>
-  <span class="hljs-variable">doSomething</span>
-<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-variable">someOtherCond</span>
-  <span class="hljs-variable">doSomething</span> <span class="hljs-comment">// all valid</span>
 <span class="hljs-keyword">elsif</span> <span class="hljs-variable">someOtherCond</span>
-  <span class="hljs-variable">doSomething</span> <span class="hljs-comment">// all valid</span>
-<span class="hljs-keyword">elif</span> <span class="hljs-variable">someOtherCond</span>
-  <span class="hljs-variable">doSomething</span> <span class="hljs-comment">// all valid</span>
+  <span class="hljs-variable">doSomething</span>
 <span class="hljs-keyword">else</span>
   <span class="hljs-variable">doSomething</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
-<p>return &quot;some val&quot; if someCond</p>
-<p>An if modifier executes everything to it's left only if the condition is true</p>
-<p>An if does not return anything, except in a block. So you can use a block to assing a value conditionally.</p>
-<pre><code class="language-jome"><span class="hljs-variable">someVar</span> = {
-  <span class="hljs-keyword">if</span> <span class="hljs-variable">someCond</span>
-    <span class="hljs-string">&quot;someVal&quot;</span>
-  <span class="hljs-keyword">elsif</span> <span class="hljs-variable">someOtherCond</span>
-    <span class="hljs-string">&quot;some other val&quot;</span>
-  <span class="hljs-keyword">else</span>
-    <span class="hljs-string">&quot;some default&quot;</span>
-  <span class="hljs-keyword">end</span>
-}
-</code></pre>
-<p>Le keyword then peut être utiliser pour mettre la valeur sur la même ligne que la condition</p>
-<pre><code class="language-jome"><span class="hljs-variable">someVar</span> = {
-  <span class="hljs-keyword">if</span> <span class="hljs-variable">someCond</span> <span class="hljs-keyword">then</span> <span class="hljs-string">&quot;someVal&quot;</span>
-  <span class="hljs-keyword">elsif</span> <span class="hljs-variable">someOtherCond</span> <span class="hljs-keyword">then</span> <span class="hljs-string">&quot;some other val&quot;</span>
-  <span class="hljs-keyword">else</span> <span class="hljs-string">&quot;some default&quot;</span> <span class="hljs-keyword">end</span>
-}
-</code></pre>
-<p>You can use elif, elsif or else if, they are all the same.</p>
-<p>Comment est-ce que ça comporterait un if modifier dans un node block?
-Ça marche pour ajouter des childrens conditionnellement.</p>
-<pre><code class="language-jome"><span class="hljs-variable">someVar</span> = {[
-  <span class="hljs-string">&quot;item1&quot;</span> <span class="hljs-keyword">if</span> <span class="hljs-variable">someCond</span>
-  <span class="hljs-string">&quot;item2&quot;</span> <span class="hljs-keyword">if</span> <span class="hljs-variable">someOtherCond</span>
-  <span class="hljs-string">&quot;item3 always there&quot;</span>
-]}
+<p>You can also add an if after a statement to make it conditional. The statement will only be executed if the condition is true.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">return</span> <span class="hljs-string">&quot;some val&quot;</span> <span class="hljs-keyword">if</span> <span class="hljs-variable">someCond</span>
 </code></pre>
 <p>J'aimerais pouvoir utiliser un if modifier dans un string literal.</p>
 <p>someStr = <code>Hello{' '+name if name}</code></p>
 <p>Et j'aimerais que dans ce cas, ça retourne automatiquement '' au lieu de undefined ou null</p>
-<h2>comments</h2>
+<h2>Comments</h2>
 <p>Use // and /* */ for regular comments.</p>
-<p>Use # for documentation comments. NOTE: It must have a space after the # , otherwise it's a utils.</p>
+<p>Use # for documentation comments. NOTE: It must have a space after the # , otherwise it's a builtin.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// This is a regular comment</span>
 
-<span class="hljs-keyword">let</span> <span class="hljs-variable">foo</span> = <span class="hljs-number">10</span> <span class="hljs-comment"># comment after?</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">foo</span> = <span class="hljs-number">10</span>
 
  <span class="hljs-comment"># This is a documentation comment that describes the function below.</span>
  <span class="hljs-comment"># Second line of same documentation comment.</span>
@@ -455,7 +355,8 @@ Les when sont simplement remplacé par &quot;if (expression du case)&quot;</p>
 <h2>Classes</h2>
 <p>Normal arguments are only available inside the constructor.
 The constructor is everything inside the class before the first def ... end.
-If you use @someArgument, then it will automatically set it for you.</p>
+If you use @someArgument, then it will automatically set it for you.
+You pass arguments to the constructor after the class name or before with the <code>with</code> keyword.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">Person</span>(<span class="hljs-variable">favoriteColor</span>)
   <span class="hljs-variable">@firstName</span>: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;John&quot;</span>
   <span class="hljs-variable">@lastName</span>: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;Doe&quot;</span>
@@ -480,24 +381,7 @@ If you use @someArgument, then it will automatically set it for you.</p>
   @<span class="hljs-variable">@className</span> = <span class="hljs-string">&quot;Person&quot;</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
-<p>All attributes are public because it is javascript, so no need for attr_reader, attr_accessor...</p>
-<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SomeClass</span>
-
-  <span class="hljs-variable">super</span> <span class="hljs-title class_">AbstractClass</span>
-
-  <span class="hljs-keyword">attr</span> <span class="hljs-variable">someAttr</span> = <span class="hljs-string">&quot;defaultValue&quot;</span>
-
-  <span class="hljs-variable">children</span> {[
-    <span class="hljs-title class_">DefaultChild</span> <span class="hljs-string">&quot;blah&quot;</span>
-    <span class="hljs-title class_">DefaultChild</span> <span class="hljs-string">&quot;blah&quot;</span>
-  ]}
-    
-  <span class="hljs-keyword">def</span> <span class="hljs-variable">someMethod</span> |<span class="hljs-variable">someArg</span>|
-
-  <span class="hljs-keyword">end</span>
-
-<span class="hljs-keyword">end</span>
-</code></pre>
+<p>All attributes are public by default. Use the private keyword to make them private. (Not yet implemented)</p>
 <h3>Methods</h3>
 <pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SomeClass</span>
   <span class="hljs-comment">// Multiple lines methods</span>
@@ -506,10 +390,10 @@ If you use @someArgument, then it will automatically set it for you.</p>
   <span class="hljs-keyword">end</span>
 
   <span class="hljs-comment">// Inline methods</span>
-  <span class="hljs-variable">add10</span> = <span class="hljs-variable">x</span> =&gt; <span class="hljs-variable">x</span> + <span class="hljs-number">10</span>
+  <span class="hljs-keyword">def</span> <span class="hljs-variable">add10</span> = <span class="hljs-variable">x</span> =&gt; <span class="hljs-variable">x</span> + <span class="hljs-number">10</span>
 
   <span class="hljs-comment">// Alias</span>
-  <span class="hljs-variable">addTen</span> = <span class="hljs-variable">add10</span>
+  <span class="hljs-keyword">def</span> <span class="hljs-variable">addTen</span> = <span class="hljs-variable">add10</span>
 
   <span class="hljs-comment">// What about constants? Is this allowed?</span>
   <span class="hljs-variable">constant</span> = <span class="hljs-number">125</span> <span class="hljs-comment">// What does this meannnnnnn??</span>
@@ -523,6 +407,12 @@ If you use @someArgument, then it will automatically set it for you.</p>
 
   <span class="hljs-keyword">def</span> @<span class="hljs-variable">@staticMethod</span>
   <span class="hljs-keyword">end</span>
+
+  <span class="hljs-comment">// Noon je ne trouve pas ça tant beau</span>
+  <span class="hljs-comment">// Je préfère utiliser le static keyword</span>
+
+  <span class="hljs-keyword">def</span> <span class="hljs-variable">static</span> <span class="hljs-variable">staticMethod</span>
+  <span class="hljs-keyword">end</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <p>Idée: Quand une classe inhérite d'un interface, mettre les valeurs par défaut dans le prototype.</p>
@@ -530,116 +420,22 @@ If you use @someArgument, then it will automatically set it for you.</p>
 <p>Pouvoir définir une méthode sur une seule ligne avec def &lt; funcName &gt; =</p>
 <pre><code>class SomeClass
   def inlineMethod = &quot;someText&quot; // Careful here it is a function, not only a string
-  // same as
-  def inlineMethod
-    return &quot;someText&quot;
-  end
 
   def inlineMethod2 = {
     key: 'value'
   }
-  // same as
-  def inlineMethod2
-    return {
-      key: 'value'
-    }
-  end
 end
 </code></pre>
 <h3>Deconstructings</h3>
-<p>I want to be able to name deconstructed arguments in a method. Maybe with keyword as?</p>
+<p>I want to be able to name deconstructed arguments in a method. Maybe with keyword as? aka? alias?</p>
 <pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">example</span>(<span class="hljs-variable">props</span> <span class="hljs-variable">as</span> {<span class="hljs-variable">arg1</span>, <span class="hljs-variable">arg2</span>})
 <span class="hljs-keyword">end</span>
 </code></pre>
-<h3>Class arguments</h3>
-<p>Class arguments are read-only. They are available from everywhere inside the class, every method not just constructor.</p>
-<p>If you want the value to be set for the instance, use an ampersand before the variable name.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">Tag</span>(<span class="hljs-variable">@name</span>)
-<span class="hljs-keyword">end</span>
-</code></pre>
-<pre><code class="language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Tag</span> {
-  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">name</span>) {
-    <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name
-  }
-}
-</code></pre>
-<p>If you want to add everything from an object, what to do then? Keyword include?</p>
-<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">Tag</span>(<span class="hljs-variable">props</span>)
-  <span class="hljs-variable">include</span> <span class="hljs-variable">props</span>
-<span class="hljs-keyword">end</span>
-</code></pre>
-<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">Tag</span>(<span class="hljs-variable">tag</span>, <span class="hljs-variable">content</span>)
-  <span class="hljs-keyword">def</span> <span class="hljs-variable">toString</span> = =&gt; <span class="hljs-string">`&lt;{tag}{renderHTMLAttrs(@)}&gt;{content||&#x27;&#x27;}{renderHTMLChildren(@)}&lt;/{tag}&gt;`</span>
-  <span class="hljs-keyword">def</span> <span class="hljs-variable">createElem</span> = =&gt; <span class="hljs-title function_">createElem</span>(@, <span class="hljs-variable">tag</span>, <span class="hljs-variable">content</span>)
-<span class="hljs-keyword">end</span>
-</code></pre>
-<pre><code class="language-jome"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">TagProps</span>
-  foo: <span class="hljs-variable">bar</span>
-<span class="hljs-keyword">end</span>
-
-<span class="hljs-keyword">class</span> <span class="hljs-title function_">Tag</span>(props: <span class="hljs-title class_">TagProps</span>) &lt; <span class="hljs-title function_">Node</span>(<span class="hljs-variable">props</span>)
-
-<span class="hljs-keyword">end</span>
-</code></pre>
-<p>Qu'est-ce que ça implique de faire ça?</p>
-<p>Qu'est-ce que ça peut vouloir dire:</p>
-<ul>
-<li>je veux que le premier argument du constructeur soit tag, et setter this.tag = tag</li>
-<li>je veux avoir accès à tag sans nécessairement le rendre public, encapsulter par une fonction?</li>
-<li>je veux pouvoir faire tag: tag dans le constructeur.</li>
-</ul>
-<p>No constructor. Constructor code directly inside class.</p>
 <h3>Inheritence</h3>
 <p>WIP</p>
-<h3>Constructor</h3>
-<p>No constructor? If you want to call a method like a constructor, then call it.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">SomeClass</span>(<span class="hljs-variable">options</span>)
-  <span class="hljs-variable">@init</span>()
-
-  <span class="hljs-keyword">def</span> <span class="hljs-keyword">init</span>
-    
-  <span class="hljs-keyword">end</span>
-<span class="hljs-keyword">end</span>
-</code></pre>
-<h3>Inject object</h3>
-<p>I want to be able to inject an object into an instance. But what syntax to use???</p>
-<p>Keyword include?</p>
-<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">ExpressServer</span>(<span class="hljs-variable">options</span>)
-
-  <span class="hljs-variable">include</span> <span class="hljs-variable">options</span>
-<span class="hljs-keyword">end</span>
-</code></pre>
 <h2>Modules and exports</h2>
-<p>There are many ways to export items, but they are all compiled the same. Either using module.exports or export depending on jome config.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">module</span>
-  <span class="hljs-keyword">def</span> <span class="hljs-variable">someFunc</span>
-  <span class="hljs-keyword">end</span>
-  <span class="hljs-keyword">let</span> <span class="hljs-variable">someVar</span> = <span class="hljs-number">10</span>
-<span class="hljs-keyword">end</span>
-</code></pre>
-<p>Compiles to</p>
-<pre><code class="language-js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
-  <span class="hljs-attr">someFunc</span>: <span class="hljs-function">() =&gt;</span> {
-  },
-  <span class="hljs-attr">someVar</span>: <span class="hljs-number">10</span>
-}
-<span class="hljs-comment">// or</span>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">someFunc</span>(<span class="hljs-params"></span>) {
-}
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> someVar = <span class="hljs-number">10</span>
-</code></pre>
-<p>You can give a name to the module, which simply creates an object that holds everything inside.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">module</span> <span class="hljs-title class_">SomeModule</span>
-  <span class="hljs-keyword">def</span> <span class="hljs-variable">someFunc</span>
-  <span class="hljs-keyword">end</span>
-  <span class="hljs-keyword">let</span> <span class="hljs-variable">someVar</span> = <span class="hljs-number">10</span>
-<span class="hljs-keyword">end</span>
-
-<span class="hljs-comment">// usage:</span>
-<span class="hljs-comment">// import {SomeModule} from &#x27;./some_file.jome&#x27;</span>
-<span class="hljs-comment">// let ten = SomeModule.someVar</span>
-</code></pre>
-<p>You can also export functions and constants individually.</p>
+<p>You can write modules by writing files with the .jomm extension.</p>
+<p>You can export things with the <code>export</code> keyword.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">export</span> <span class="hljs-keyword">def</span> <span class="hljs-variable">someFunc</span>
 <span class="hljs-keyword">end</span>
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">let</span> <span class="hljs-variable">someVar</span> = <span class="hljs-number">10</span>
@@ -647,96 +443,19 @@ end
 <span class="hljs-comment">// usage:</span>
 <span class="hljs-comment">// import {someFunc, someVar} from &#x27;./some_file.jome&#x27;</span>
 </code></pre>
-<p>To export the default or an object, use the main keyword. It allows you to return a value from a file.</p>
-<pre><code class="language-jome"><span class="hljs-comment">// sum.jome</span>
-<span class="hljs-keyword">main</span> |<span class="hljs-variable">a</span>, <span class="hljs-variable">b</span>| =&gt; (<span class="hljs-variable">a</span> + <span class="hljs-variable">b</span>)
-
-<span class="hljs-comment">// usage:</span>
-<span class="hljs-comment">// import sum from &#x27;./sum.jome&#x27;</span>
-</code></pre>
-<h2>Interfaces and types</h2>
-<p>I find interfaces and types to be confusing in Typescript as someone who does know to language. In order to avoid
-the confusion, you cannot declare an object with type. So you use interface for an object, and type otherwise.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Dimensions</span>
-  width: <span class="hljs-variable">number</span>
-  height: <span class="hljs-variable">number</span>
-<span class="hljs-keyword">end</span>
-
-<span class="hljs-comment">// Alias</span>
-<span class="hljs-keyword">type</span> <span class="hljs-title class_">Dim</span> = <span class="hljs-title class_">Dimensions</span>
-
-<span class="hljs-comment">// Unions</span>
-<span class="hljs-keyword">type</span> <span class="hljs-title class_">DimOrStr</span> = <span class="hljs-title class_">Dim</span> | <span class="hljs-variable">string</span>
-
-<span class="hljs-comment">// Tuples</span>
-<span class="hljs-keyword">type</span> <span class="hljs-title class_">DimAndStr</span> = [<span class="hljs-title class_">Dim</span>, <span class="hljs-variable">string</span>]
-
-<span class="hljs-keyword">def</span> <span class="hljs-title function_">funcWithDimensions</span>(<span class="hljs-variable">dim</span> : <span class="hljs-title class_">Dim</span>)
-  <span class="hljs-comment">// ...</span>
-<span class="hljs-keyword">end</span>
-</code></pre>
-<h3>Inheritence</h3>
-<p>You can use &lt; for extending an interface.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Dim3d</span> &lt; <span class="hljs-title class_">Dimensions</span>
- depth: <span class="hljs-variable">number</span>
-<span class="hljs-keyword">end</span>
-</code></pre>
-<pre><code class="language-jome"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Weapon</span> <span class="hljs-variable">damage</span>, <span class="hljs-variable">range</span> <span class="hljs-keyword">end</span>
-
-<span class="hljs-comment">// When you inherit from an interface, you can call super on the interface to initialize some values</span>
-
-<span class="hljs-comment">// Inheritence and properties</span>
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">Dagger</span> &lt; <span class="hljs-title function_">Weapon</span>(range: <span class="hljs-number">50</span>) <span class="hljs-keyword">end</span>
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">WeakDagger</span> &lt; <span class="hljs-title function_">Dagger</span>(damage: <span class="hljs-number">50</span>) <span class="hljs-keyword">end</span>
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">StrongDagger</span> &lt; <span class="hljs-title function_">Dagger</span>(damage: <span class="hljs-number">200</span>) <span class="hljs-keyword">end</span>
-</code></pre>
-<h3>Intersection</h3>
-<p>You can use intersection to create a type that combines the properties of two interfaces together.</p>
-<h3>Function types</h3>
-<p>You can give a single function signature to a type. You can give function signatures to variables in interfaces.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">type</span> <span class="hljs-variable">log</span> = (val: <span class="hljs-variable">string</span>) =&gt; <span class="hljs-variable">void</span>;
-
-<span class="hljs-keyword">interface</span> <span class="hljs-title class_">WithLog</span>
-  log: (val: <span class="hljs-variable">string</span>) =&gt; <span class="hljs-variable">void</span>;
-<span class="hljs-keyword">end</span>
-</code></pre>
-<p>For function overloading, you can use unions.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">type</span> <span class="hljs-variable">log</span> = (val: <span class="hljs-variable">string</span>) =&gt; <span class="hljs-variable">void</span> | (val: <span class="hljs-variable">number</span>) =&gt; <span class="hljs-variable">void</span>;
-</code></pre>
-<h3>Default values</h3>
-<p>Contrary to Typescript, you can add default values in an interface.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Options</span>
-  method: <span class="hljs-variable">string</span> = <span class="hljs-string">&#x27;get&#x27;</span>
-  ttl: <span class="hljs-variable">number</span> = <span class="hljs-variable">30s</span>
-<span class="hljs-keyword">end</span>
-</code></pre>
-<h3>Declaration Merging</h3>
-<p>By default, you cannot redeclare an interface and it adds to the previous one.</p>
-<p>You have to use another syntax to do this. Maybe interface &lt;</p>
-<pre><code class="language-jome"><span class="hljs-keyword">interface</span> &lt; <span class="hljs-title class_">Options</span>
-  arg: <span class="hljs-variable">string</span> = <span class="hljs-string">&#x27;one more option&#x27;</span>
-<span class="hljs-keyword">end</span>
-</code></pre>
-<h3>Class extends interface</h3>
-<p>A class can extend an interface.</p>
-<p>Interface default values will given given to the instance by default in the constructor.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">SomeClass</span>(<span class="hljs-variable">props</span>) &lt; <span class="hljs-title function_">SomeInterface</span>(<span class="hljs-variable">props</span>)
-<span class="hljs-keyword">end</span>
-</code></pre>
-<h3>Source for decisions</h3>
-<p>https://stackoverflow.com/questions/37233735/interfaces-vs-types-in-typescript</p>
+<p>Use <code>export default</code> works too.</p>
+<p>FIXMEEEEEEEEEEEEeee: Remove everything I created about the main keyword. Let's use export default instead.</p>
 <h3>Functions</h3>
 <pre><code class="language-jome"><span class="hljs-comment">// Utilise la syntaxe comme ruby</span>
 <span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span>
   <span class="hljs-title function_">#log</span>(<span class="hljs-string">&#x27;Hello&#x27;</span>)
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-keyword">def</span> <span class="hljs-variable">sayHelloTo</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">name</span>|
-  <span class="hljs-title function_">#log</span>(<span class="hljs-string">`Hello! {name}`</span>)
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">sayHelloTo</span>(<span class="hljs-variable">name</span>)
+  <span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;Hello! {name}&quot;</span>)
 <span class="hljs-keyword">end</span>
 </code></pre>
-<p>Je ne veux pas que le user n'aie à faire la distinction entre une fonction et une arrow fonction.
-Trouver une manière de gérer cela.</p>
+<p>The idea in Jome is that you don't have to make the distinction between a function and an arrow function. We'll see if this works.</p>
 <h3>With keyword</h3>
 <p>Usefull to define interfaces of classes and functions.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span>
@@ -751,54 +470,7 @@ Trouver une manière de gérer cela.</p>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <p>This allows easy documentation of the code without having to repeat yourself in the comments.</p>
-<p>It would be nice is there was a short way to start a single line documentation comment.</p>
-<h2>State variables</h2>
-<p>Nodes can have state variables that start with a percentage sign like <code>%stateVar = 10</code></p>
-<pre><code class="language-jome">{ <span class="hljs-comment">// %count does not have to be declared in the Btn class, you can attach any state to any node</span>
-  <span class="hljs-title class_">Btn</span> %count: <span class="hljs-number">0</span>, ~click: =&gt; (%<span class="hljs-variable">count</span> += <span class="hljs-number">1</span>)
-    <span class="hljs-title class_">Txt</span> <span class="hljs-string">&quot;Clicked {%count} {%count == 1 ? &#x27;time&#x27; : &#x27;times&#x27;}&quot;</span>  
-}
-<span class="hljs-comment">// Txt does not have a %count state variable, so it checks to see if it&#x27;s parent has one. Yes, Btn has a state variable called %count.</span>
-<span class="hljs-comment">// So Txt will add itself as a dependency on Btn state. It Btn state changes, then Txt will be updated too.</span>
-</code></pre>
-<p>C'est OK, mais j'aimerais pouvoir dire à qui appartient le state au lieu d'être à l'aveugle comme ça.</p>
-<p>J'aimerais pouvoir setter le state à travers un nom de node? Je ne sais pas ce n'est pas si explicit non plus...</p>
-<p>Qu'est-ce qui se passe si le node et ses parents n'ont pas le state?</p>
-<p>State variables inside classes.</p>
-<p>Class using parent state:</p>
-<pre><code class="language-jome"><span class="hljs-comment">// A question mark when dependent on a state or an exclamation mark (silent vs throw exception?)</span>
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">ColoredText</span> |<span class="hljs-variable">@text</span>, %<span class="hljs-variable">theme</span>?| {
-  print: () =&gt; {
-    <span class="hljs-keyword">return</span> <span class="hljs-string">`&lt;p style=&quot;color: {%theme.textColor}&quot;&gt;{%theme}&lt;/p&gt;`</span>
-  }
-}
-</code></pre>
-<p>Class having state:</p>
-<pre><code class="language-jome"><span class="hljs-comment">// No question mark having state</span>
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">App</span> |%<span class="hljs-variable">theme</span>| {
-  <span class="hljs-keyword">init</span>: () =&gt; {
-    %<span class="hljs-variable">theme</span> = {
-      textColor: <span class="hljs-string">&quot;red&quot;</span>
-    }
-  }
-}
-</code></pre>
-<h3>Documenting state variables</h3>
-<p>Declaring state variables is not necessary. You can simply attach them to nodes. But it should be pretty important
-to declare them, in order to know what is available.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Something</span> |%<span class="hljs-variable">someState</span>| =&gt; {
-
-}
-</code></pre>
-<h2>Optional keys</h2>
-<p>:? =&gt; set le key value seulement si il y a une valeur</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">value</span> = <span class="hljs-keyword">null</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">obj</span> = {
- key:? <span class="hljs-variable">value</span>
-}
-<span class="hljs-variable">obj</span> === {} <span class="hljs-comment">// true</span>
-<span class="hljs-string">&quot;key&quot;</span> <span class="hljs-keyword">in</span> <span class="hljs-variable">obj</span> <span class="hljs-comment">// false</span>
-</code></pre>
+<p>It would be nice if there was a short way to start a single line documentation comment.</p>
   <h2 id="scripts">Scripts</h2>
 <p>In jome, the idea is that you could include most other programming languages directly using xml tags.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Execute a shell command in a script</span>
@@ -854,109 +526,6 @@ console.log(exponentialNumber); // Outputs: 1230000</p>
     &lt; % = <span class="hljs-variable">content</span> % &gt;
   &lt;/<span class="hljs-variable">div</span>&gt;
 &lt; / &gt; % &gt;
-</code></pre>
-<p>The behavior will depend on the kind of script.</p>
-<p>On html, it will insert a template literal interpolation.</p>
-<p>On markdown what do I want to do?</p>
-<p>Logically, it would include markdown. But this mean that some markdown would be compiled at compile time,
-and that the text inside the interpolation would be compiled at run time. I don't like this because I don't
-want the built file to include the javascript of markdown-it. But this could be a feature if that is actually
-what the user want.</p>
-<p>But right now, I am the user and this is not what I want. So what I want is that the text to be interpolated
-be removed from the markdown compile, and that inserted compiled using a template literal.</p>
-<p>Basically, I want to inject html and not inject markdown directly.</p>
-<p>Nahhhh, I don't like this.</p>
-<p>What I really what is to add markdown. This means using markdown-it at compile time. I am fine with this.</p>
-<h3>Compile files with different extension</h3>
-<p>You can compile files with a different extension by having the preceding extension just before.</p>
-<p>So if you compile some-page.html.jome, it should first create a some-page.html.js, then this
-file can be executed to make some-page.html</p>
-<h3>.jobj extension</h3>
-<p>Files with a .jobj extension would start already in a block.</p>
-<p>It think this would be pratical for example for config files.</p>
-  <h2 id="instance-driven-dev">Instance driven development</h2>
-  Instance driven development is what I call when the focus is working on concrete objects in Godot software.
-  Most of the time you control objects directly inside the editor and simply modify parameters.
-<p>It's the same thing as object oriented, but the focus is on the concrete object rather than the abstract class.</p>
-  <h2 id="units">Units</h2>
-<pre><code class="language-jome"><span class="hljs-variable">debug</span> = |<span class="hljs-variable">arg</span>, <span class="hljs-keyword">unit</span> <span class="hljs-variable">argUnit</span>| =&gt; (
-  <span class="hljs-comment">/* ... */</span>
-)
-</code></pre>
-<p>You can add units at the end of numbers like 100g. You can also add units at the end of variables using the middle dot.</p>
-<p>This feature is not yet implemented. Right now, it does nothing. The idea, is that if you have a function for example sleep
-that takes a time, then you can give it 1s or 1000ms or 0.000ks and it would all do the same thing.</p>
-<p>I want everything to be handled at compile time. I don't want to create a datastructure for this.</p>
-<p>Also, it's just nice to be able to write a unit beside a number.</p>
-<p>An idea also is that I would like to add an operator like variable-&gt;unit =&gt; which gives the unit has a string.
-So this way, you have the number for the variable directly, but if the program can infer the unit of the variable,
-you can also get it's unit.</p>
-<p>density = 105g / 98mL
-density-&gt;unit =&gt; &quot;g/mL&quot;</p>
-<p>area = 2m * 3m
-area-&gt;unit =&gt; &quot;m^2&quot;</p>
-<p>maybe, for an argument to a function, well it could be anything, so you either specify what unit you are expecting,
-or maybe have a special construct that means that you want the variable and it's unit</p>
-<p>func = |anything| =&gt; anything-&gt;unit
-func(10g)
-// because we are asking for unit here, it means that two args must actually be passed to the function, anything and __unit__anything
-so it would be compiled to
-function func(anything, __unit__anything) {</p>
-<p>}
-func(10, &quot;g&quot;)</p>
-<h2>signals</h2>
-<p>Signals are used for events. They are not very much implemented yet. TODO: Check how Godot handles events, check how js handles events.</p>
-<p>In Jome, signals start with a tilde.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Button</span> {
-  ~<span class="hljs-title function_">click</span>() {
-    <span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Button clicked!&#x27;</span>)
-  }
-}
-
-<span class="hljs-variable">btn</span> = « <span class="hljs-title class_">Button</span> »
-<span class="hljs-variable">btn</span>.<span class="hljs-title function_">click</span>()
-</code></pre>
-<h3>Default signals</h3>
-<p>Default signals are created for very common things.</p>
-<p>Jome signals:</p>
-<ul>
-<li>~created: Called when an object is created. I think this would be soooo nice and would be very usefull.
-This way, you can create an object and call a lot of methods that define how the object will be created.
-Then it will be call automatically. Maybe objects will have a variable isAuto by default true and if true
-then it will executed created automatically.</li>
-</ul>
-<p>Html functions:</p>
-<p>click, ...</p>
-<h3>Under the hood</h3>
-<p>Work in progress</p>
-<p>Signals are compiled as functions where the tilde is replaced by the prefix on_. And another
-function is created with the same same as the signal to force the signal.</p>
-<p>Or maybe just the version without the tilde and that's it?</p>
-<pre><code class="language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Button</span> {
-  <span class="hljs-title function_">on_click</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Button clicked!&#x27;</span>)
-  }
-  <span class="hljs-title function_">click</span>(<span class="hljs-params"></span>) { <span class="hljs-title function_">on_click</span>() }
-  <span class="hljs-comment">// or simply</span>
-  <span class="hljs-title function_">click</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Button clicked!&#x27;</span>)
-  }
-}
-
-btn = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Button</span>()
-btn.<span class="hljs-title function_">click</span>()
-</code></pre>
-  <h2 id="declaration">Declaration</h2>
-<p>When you declare a variable without a keyword, the variable will be a constant. To declare a variable, use the var keyword.
-To declare a function, use de def function.</p>
-<p>TODO: Keywords, var, def, let</p>
-<pre><code class="language-jome"><span class="hljs-title class_">PI</span> = <span class="hljs-number">3.1415</span>
-<span class="hljs-title class_">PI</span> = <span class="hljs-number">10</span> <span class="hljs-comment">// ERROR. PI is not allowed to be redeclared anywhere nested inside the scope</span>
-<span class="hljs-keyword">var</span> <span class="hljs-variable">x</span> = <span class="hljs-number">10</span>
-<span class="hljs-variable">x</span> = <span class="hljs-number">20</span>
-<span class="hljs-keyword">def</span> <span class="hljs-variable">add10</span> = <span class="hljs-variable">x</span> =&gt; <span class="hljs-variable">x</span> + <span class="hljs-number">10</span>
-<span class="hljs-title function_">add10</span>(<span class="hljs-number">20</span>)
-<span class="hljs-variable">add10</span> = <span class="hljs-variable">x</span> =&gt; <span class="hljs-variable">x</span> + <span class="hljs-number">20</span> <span class="hljs-comment">// ERROR. add10 can only be redeclared in a nested scope</span>
 </code></pre>
 <h2>along keyword</h2>
 <p>When you want to also have the unit or the code for a variable, you can use the along keyword.</p>
@@ -1092,23 +661,6 @@ You can also use the private before a method.</p>
 end
 </code></pre>
 <p>It compiles in javascript using a # before the names of fields.</p>
-<h2>Main</h2>
-<p>The <code>main</code> keyword is compiled to <code>export default</code>.</p>
-<p>Waiiiiiiit. Pas sur. Je vais convertir mes trucs en CommonJs, et on va voir après si je peux supporter ça.</p>
-<p>Possiblement tu peux faire main ou export, mais pas les deux en même temps, parce que sois tu exécutes, sois tu exportes des fonctions
-parce que tu ne peux pas avoir l'équivalent de export et export default en CommonJS je crois.</p>
-<h3>Export</h3>
-<p>Au lieu de export, le keyword public?</p>
-<p>Une idée: Tous est export par défault. Pour mettre privé, mettre un underscore au début.</p>
-<p>Ça pourrait être une option de compilation optionelle. (enabled on mode prototypage, disabled en mode securité?)</p>
-<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">publicFunc</span> = =&gt; (
-
-)
-
-<span class="hljs-keyword">def</span> <span class="hljs-variable">_privateFunc</span> = =&gt; (
-  
-)
-</code></pre>
 <h3>Ternary</h3>
 <p>Idée: pas de ternary operator comme d'habitude, parce que je veux pouvoir faire (x ? y) seulement
 sans le :. Le : est très utilisé je trouve. Je n'ai pas tant envie de l'utiliser comme opérateur simple.
@@ -1129,29 +681,6 @@ let r = <code>{x if y}</code> // si x, alors <code>{y}</code>, sinon `` J'aimera
 <p>Global variables start with a dollar sign. For example, <code>$MY_GLOB_VAR = 'foo'</code>.</p>
 <p>Simply equivalent of global._ for now. Adding underscore in order to avoid name clashes. For example,
 I was using $URL, but this does not work because global.URL already exists within Node.</p>
-<h2>Pretty output</h2>
-<p>Idéalement, je ne me soucis pas de l'indentation de l'output et tout le tralala qui peut compliquer le compilateur pour rien.</p>
-<p>Simplement passer le code dans un formatteur de code.</p>
-<p>J'ai essayé prettier et js-beautify.</p>
-<p>Je préfère de loin prettier je trouve son output plus beau personnellement.</p>
-<p>Le problème est que prettier bug et ne veut pas process mes fichiers s'ils sont dans le .gitignore file............</p>
-<h2>TODO</h2>
-<p>Faire que this fais toujours référence à un this normal!!! Caché ce défault de javascript de l'utilisateur.</p>
-<p>Peut-être créer un keyword #evt ou quelque chose du genre pour avoir accès au this dans un évènement html.</p>
-<p>Idée: #1, #2, ... fait référence aux arguments d'une fonction. Pas obliger de les déclarer. Ça peut être court comme syntaxe
-pour des filters par exemple.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">even</span> = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>].<span class="hljs-title function_">filter</span>(<span class="hljs-title function_">#1</span> <span class="hljs-variable">mod</span> <span class="hljs-number">2</span>)
-</code></pre>
-<p>TODO: Try an idea: -&gt; and =&gt; are optional</p>
-<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">addXY</span> = |<span class="hljs-variable">x</span>, <span class="hljs-variable">y</span>| (<span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>)
-[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>].<span class="hljs-title function_">filter</span>(|<span class="hljs-variable">nb</span>| <span class="hljs-variable">nb</span> &gt; <span class="hljs-number">5</span>)
-<span class="hljs-comment">// Et pour quand il n&#x27;y a pas d&#x27;argument?</span>
-<span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span> = | | (<span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;Hello!&quot;</span>)) <span class="hljs-comment">// Noooooon ça c&#x27;est laid...</span>
-</code></pre>
-<p>get and set javascript keyword? Allow this in Jome? Or should use -&gt;?</p>
-<p>Je viens d'apprendre qu'il existe le keyword get en javascript qui permet de faire ça.
-Mais l'avantage d'utiliser un -&gt; est que tu peux définir une méthode avec des arguments optionels.
-C'est impossible avec get. (A getter must have exactly zero parameters)</p>
 <h2>Contributing</h2>
 <p>I recommend using visual studio code for now because it is super usefull for debugging tokenization. You hit Ctrl+Shift+P,
 &quot;inspect editor token and scope&quot;, and you see if it is correct. Also you see using syntax highlighting.</p>
@@ -1173,183 +702,6 @@ C'est impossible avec get. (A getter must have exactly zero parameters)</p>
 <li>express</li>
 <li>markdown-it</li>
 </ul>
-<h2>Thrash</h2>
-<p>It's intented main purpose is to be used for prototyping or small projects. It is usefull for concrete applications like making something visual.</p>
-<pre><code>«
-Page
-  Navbar
-    List
-      Link &quot;Musics&quot;, to: '/musics'
-      Link &quot;Sports&quot;, to: '/sports'
-      Link &quot;Arts&quot;, to: '/arts'
-  Body
-    Txt &lt; md &gt;
-      # Welcome
-      Welcome to this website! You can browse links at the top.
-    &lt; / md&gt;
-</code></pre>
-<p>»</p>
-<pre><code>Il est aussi possible de définir des variables dans un bloc. Les variables sont simplement sorties du block et exécuter avant le bloc.
-</code></pre>
-<p>Avoir un keyword new ou ben simplement toujours utiliser les blocks?</p>
-<pre><code class="language-jome"><span class="hljs-variable">obj</span> = <span class="hljs-variable">new</span> <span class="hljs-title function_">Obj</span>(<span class="hljs-comment">/* ... */</span>) <span class="hljs-comment">// Supporter new?</span>
-<span class="hljs-variable">obj</span> = {<span class="hljs-title class_">Obj</span> <span class="hljs-comment">/* ... */</span>}
-</code></pre>
-<p>The advantage is that there is never confusion. You never have an error that tells you you have to add parentheses. For example, in javascript:</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> <span class="hljs-title function_">someFunction</span> = (<span class="hljs-params"></span>) =&gt; ({<span class="hljs-attr">x</span>: <span class="hljs-number">10</span>}) <span class="hljs-comment">// you often have to add extra parentheses around objects in js</span>
-</code></pre>
-<pre><code class="language-jome"><span class="hljs-comment">// lists</span>
-<span class="hljs-variable">numbers</span> = {<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>} <span class="hljs-comment">// but [1,2,3,4] is preferred when on a single line</span>
-<span class="hljs-variable">names</span> = {
-  <span class="hljs-string">&quot;Jean&quot;</span>
-  <span class="hljs-string">&quot;Jacques&quot;</span>
-  <span class="hljs-string">&quot;Paul&quot;</span>
-}
-<span class="hljs-variable">matrix</span> = {
-  <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>
-  <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>
-  <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>
-}
-</code></pre>
-<h2>Features</h2>
-<p>Main ideas:</p>
-<ul>
-<li><a href="#nodes">Nodes</a> - An object in a tree structure</li>
-<li><a href="#integrated-scripts">Integrated scripts</a> - Incoroporate code from other languages</li>
-<li><a href="#named-parameters">Named parameters and props</a> - Add optional parameters easily</li>
-<li><a href="#instance-driven-dev">Instance driven development</a> - A more approchable way to programming</li>
-</ul>
-<p>Goodies / Syntaxic sugar:</p>
-<ul>
-<li><a href="#arrow-getter">Arrow getter</a> - Allows to save keystrokes and is easier to type. ex: obj-&gt;keys =&gt; Object.keys(obj)</li>
-<li>Optional let - Not sure about that one...</li>
-<li><a href="#verbatim">Verbatim string literals</a> - @`This is a string that does ${not} interpolate`</li>
-<li><a href="#units">Units</a> - You can add units to numbers. ex: &quot;density = 105g / 98mL&quot;</li>
-<li><a href="#hyphens">Hyphen</a> - You can use hyphens in variable names like left-panel. The minus operator should always be surrounded by spaces.</li>
-</ul>
-<p>Pouvoir caller une fonction locale comme .#, en utilisant .: ? arg.:funcLocal</p>
-<h2>bugs</h2>
-<p>FIXME: The indentation is super important in markdown. For example, adding tabs inside md scripts, if only one tab html tags will work,
-otherwise it will not.</p>
-<h1>DEPRECATED</h1>
-  <h2 id="named-parameters">Named parameters and props</h2>
-<p>When calling a function, you can add paramters.</p>
-<pre><code class="language-jome"><span class="hljs-title function_">someFunc</span>(someParam: <span class="hljs-number">10</span>, otherParam: <span class="hljs-string">&#x27;Jean&#x27;</span>)
-</code></pre>
-<p>To define parameters when creating a function, you either add ? at the end for an optional parameter, or you add ! for a required parameter.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">someFunc</span> = |<span class="hljs-variable">someParam</span>?, <span class="hljs-variable">otherParam</span>? = <span class="hljs-string">&#x27;Pierre&#x27;</span>, <span class="hljs-variable">optionalParam</span>?, <span class="hljs-variable">requiredParam</span>!| =&gt; (
-  <span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable">someParam</span>) <span class="hljs-comment">// No need to add ? or ! when refering to a parameter</span>
-)
-</code></pre>
-<p>You can pass a parameter that was not defined in the list.</p>
-<p>BUT YOU CAN'T PASS a parameter to a function if the function does not take any parameter. Because under the hood,
-we add a params argument to the function, so we need at least one to add the argument, then you can pass as many as you want.</p>
-<p>When calling a function with named parameters, the order does not matter. You can put them before arguments, after or even in the middle.</p>
-<h3>PARAMS</h3>
-<p>Get the list of parameters given to a function.</p>
-<pre><code class="language-jome">  <span class="hljs-keyword">def</span> <span class="hljs-variable">someFunc</span> = =&gt; (
-    <span class="hljs-title class_">PARAMS</span> <span class="hljs-comment">// The object containing all the paramters given to the function.</span>
-  )  
-</code></pre>
-<p>FIXME: I don't like using the word PARAMS in capital letters, but I don't have a better idea yet.
-I don't want to reserve the keyword params...</p>
-<p>Use #params instead of PARAMS?</p>
-<h3>Props</h3>
-<p>Props are all the parameters and attributes as parameters passed during an object creation.</p>
-<pre><code class="language-jome">« <span class="hljs-title class_">Obj</span> someProp: <span class="hljs-number">10</span>, someAttr: <span class="hljs-string">&#x27;Paul&#x27;</span> »
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">Obj</span> |<span class="hljs-variable">someProp</span>?, <span class="hljs-variable">@someAttr</span>?| =&gt; {
-}
-<span class="hljs-comment">// compiles to</span>
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">Obj</span> {
-  <span class="hljs-title function_">constructor</span>(<span class="hljs-variable">__props__</span>) {
-    <span class="hljs-variable">this</span>.<span class="hljs-variable">__props__</span> = <span class="hljs-variable">__props__</span>
-    <span class="hljs-keyword">let</span> {<span class="hljs-variable">someAttr</span>, ...<span class="hljs-variable">__params___</span>} = <span class="hljs-variable">__props__</span>
-    <span class="hljs-variable">this</span>.<span class="hljs-variable">__params__</span> = <span class="hljs-variable">__params__</span>
-    <span class="hljs-variable">this</span>.<span class="hljs-variable">someAttr</span> = <span class="hljs-variable">someAttr</span>
-  }
-}
-</code></pre>
-<h3>Under the hood</h3>
-<p>TODO: Explain how it works</p>
-<h3>Instantiation</h3>
-<p>I would like to create an instance by calling just like a function. SomeClass() // which would become new SomeClass()</p>
-<p>I want to use the new keyword, because it binds this and when you call a function or a class constructor using new, it creates an empty object, sets the object's prototype to the prototype property of the constructor, and executes the constructor to initialize the object.</p>
-<p>The ideal would be to know the type. Basically, when it is local I know what it refers to. The issue is imports. I don't want
-to have to read the files to know what it is.</p>
-<p>Using capital letters is a convention, but I don't want to use this.</p>
-<p>I think the best to have a syntax when importing that differentiates between classes and functions.</p>
-<p>Wait this does not work, because functions can be called and they can be created using new.</p>
-<p>Simply always use new inside blocks?</p>
-<h2>Work in progress</h2>
-<p>identifier // new identifier()
-.identifier // call identifier on the created object
-key: identifier // pass identifier to the constructor as a property of the object
-=identifier // add identifier as a children of the node
-key = identifier // add identifier as a property of the object and as a children</p>
-<p>// if you want to set attributes without passing it to the constructor, you can use:
-.set attr: 'value' // set is a method on Node</p>
-<p>Le désavantage que je vois de faire key: identifier pour une propriété, est que c'est tanant pour le type.
-Avec un = c'est facile rajouter le type. Mais d'un autre côté, est-ce qu'on veut vraiment mettre un type
-là? Ça devrait être assez explicit en général. Et tu peux quand même le faire avec [key: type].</p>
-<p>You can specify dynamic keys using square brackets. Ex: [<code>key_{name}</code>]</p>
-<pre><code class="language-jome">{
-<span class="hljs-title class_">Recipe</span>
-  name: <span class="hljs-string">&#x27;Chickpea balls&#x27;</span>
-  prepare: <span class="hljs-variable">1h</span>
-  <span class="hljs-title class_">Ing</span> <span class="hljs-variable">1cup</span>, <span class="hljs-string">&quot;dry chickpeas&quot;</span>
-  <span class="hljs-title class_">Ing</span> <span class="hljs-variable">2cup</span>, <span class="hljs-string">&quot;water&quot;</span>
-  <span class="hljs-title class_">Ing</span> <span class="hljs-variable">2tbsp</span>, <span class="hljs-string">&quot;parmesan&quot;</span>
-  <span class="hljs-title class_">Step</span> <span class="hljs-string">`Put {@1} into {@2}...`</span> <span class="hljs-comment">// @1 is the first children</span>
-  <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Mix ...&quot;</span>
-  <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Blah blah ...&quot;</span>
-  .<span class="hljs-variable">prepare</span> <span class="hljs-string">&#x27;The recipe&#x27;</span>
-  <span class="hljs-title class_">Ing</span> ...
-}
-</code></pre>
-<pre><code class="language-jome"><span class="hljs-comment">// Three syntaxes allowed to execute functions</span>
-{[
-  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
-    .<span class="hljs-variable">execFunc</span>
-    .<span class="hljs-variable">execFunc2</span>
-
-  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span> <span class="hljs-keyword">exec</span>
-    <span class="hljs-variable">execFunc</span>
-    <span class="hljs-variable">execFunc2</span>
-
-  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
-    <span class="hljs-keyword">exec</span>
-      <span class="hljs-variable">execFunc</span>
-      <span class="hljs-variable">execFunc2</span>
-]}
-</code></pre>
-<pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a get handler and start it</span>
-{
-  <span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-keyword">exec</span>
-    <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span>, |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>| =&gt; (
-      <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-variable">homePage</span>)
-    )
-    <span class="hljs-variable">start</span>
-}
-</code></pre>
-<h2>Executing jome files</h2>
-<p>There are two file extensions in Jome:</p>
-<ul>
-<li>.jome: These are function files. The code inside is like a function. It is great for scripts and partials.</li>
-<li>.jomm: These are module files. They are like standard javascript files.</li>
-</ul>
-<p>You specify the variables you expect to be given to the partial file with a with block.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">with</span>
-  {title: <span class="hljs-variable">string</span>}
-<span class="hljs-keyword">end</span>
-
-<span class="hljs-keyword">return</span> &lt;html&gt;
-  &lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-    &lt;title&gt;&lt;% title %&gt;&lt;/title&gt;
-  &lt;/head&gt;
-&lt;/html&gt;
-</code></pre>
 
               </div>
             </div>
