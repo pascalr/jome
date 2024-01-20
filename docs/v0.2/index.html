@@ -65,6 +65,190 @@
             <div class="scrollable" style="width: 100%;">
               <div class="app-content">
                 <h1>Jome v-0.2</h1>
+<p>What's next to come?</p>
+<ul>
+<li>Types similar to typescript.</li>
+</ul>
+<h2>Types</h2>
+<p>You can specify types for variables. It can be primitives like string, number, integer or float. It can also be class names or interfaces.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">greet</span>(name: <span class="hljs-variable">string</span>, greeting: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;Hello&quot;</span>) : <span class="hljs-variable">string</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`${greeting}, ${name}!`</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">attack</span>(enemy: <span class="hljs-title class_">Player</span>)
+  <span class="hljs-comment">/* ... */</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p>You add a question mark after the type if the variable can be null.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">sayHello</span>(anybody: <span class="hljs-title class_">Person</span>?): <span class="hljs-variable">string</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`${greeting}, ${anybody.name}!`</span> <span class="hljs-keyword">if</span> <span class="hljs-variable">anybody</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p>In a node block, you can specify the types of keys like so:</p>
+<pre><code class="language-jome">{
+  [key: <span class="hljs-variable">string</span>]: <span class="hljs-variable">nb</span>; <span class="hljs-comment">// Here nb is a string</span>
+};
+</code></pre>
+<p>But what about the types of children? (string)
+{
+MyNode
+&quot;childString&quot;
+(string) someFuncCallReturnsString
+[string] someFuncCallReturnsString
+someFuncCallReturnsString : string // Nooooooo, because it clashes with parameters...
+}</p>
+<p>You can create custom types. See interfaces and types. (TODO: link)</p>
+  <h2 id="blocks">Blocks</h2>
+<p>Blocks are delimited by curly braces and are used for a lot more than creating objects. You also use then to instantiate
+objects, execute functions and to create <a href="#nodes">nodes</a></p>
+<pre><code class="language-jome"><span class="hljs-comment">// objects</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">details</span> = {
+  distanceX: <span class="hljs-number">30</span>, distanceY: <span class="hljs-number">40</span> <span class="hljs-comment">// comma is optional</span>
+  totalDistance: <span class="hljs-number">50</span>, eta: <span class="hljs-variable">10min</span>
+}
+
+<span class="hljs-comment">// values</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">obj</span> = {<span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>} <span class="hljs-comment">// instantiate an object</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">objRunResult</span> = {
+  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
+    .<span class="hljs-variable">run</span> <span class="hljs-string">&#x27;some arg&#x27;</span>
+}
+
+<span class="hljs-comment">// nodes</span>
+<span class="hljs-variable">node</span> = {
+  <span class="hljs-title class_">Obj</span> someProp: <span class="hljs-string">&#x27;obj&#x27;</span>
+    <span class="hljs-string">&#x27;String child&#x27;</span>
+    <span class="hljs-title class_">Nested</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
+}
+</code></pre>
+<p>Note: A value is only on a single line. Use parentheses if you need multiple lines.</p>
+<pre><code class="language-jome">{
+  x: <span class="hljs-number">1</span> +
+     <span class="hljs-number">2</span> <span class="hljs-comment">// WRONG!</span>
+  y: (<span class="hljs-number">1</span> +
+     <span class="hljs-number">2</span>) <span class="hljs-comment">// OK</span>
+}
+</code></pre>
+<h3>Shorthand key syntax</h3>
+<p>The short key syntax is different that in javascript, because it could be confusing with children. In Jome, it starts with a colon</p>
+<pre><code class="language-jome"><span class="hljs-variable">obj</span> = {:<span class="hljs-variable">content</span>, :<span class="hljs-variable">value</span>}
+<span class="hljs-comment">// same as</span>
+<span class="hljs-variable">obj</span> = {content: <span class="hljs-variable">content</span>, value: <span class="hljs-variable">value</span>}
+</code></pre>
+<h3>Work in progress V2</h3>
+<p>identifier // if identifier is a class, then new identifier(), otherwise identifier()
+key: identifier // set identifier as a property of the instance
+=identifier // add identifier as a children of the node
+key = identifier // add identifier as a property of the object and as a children
+:identifier // pass identifier to the constructor as a property of the object
+.identifier // call function on parent</p>
+<p>Le désavantage que je vois de faire key: identifier pour une propriété, est que c'est tanant pour le type.
+Avec un = c'est facile rajouter le type. Mais d'un autre côté, est-ce qu'on veut vraiment mettre un type
+là? Ça devrait être assez explicit en général. Et tu peux quand même le faire avec [key: type].</p>
+<p>You can specify dynamic keys using square brackets. Ex: [<code>key_{name}</code>]</p>
+<pre><code class="language-jome">{
+<span class="hljs-title class_">Recipe</span>
+  name: <span class="hljs-string">&#x27;Chickpea balls&#x27;</span>
+  prepare: <span class="hljs-variable">1h</span>
+  <span class="hljs-title class_">Ing</span> <span class="hljs-variable">1cup</span>, <span class="hljs-string">&quot;dry chickpeas&quot;</span>
+  <span class="hljs-title class_">Ing</span> <span class="hljs-variable">2cup</span>, <span class="hljs-string">&quot;water&quot;</span>
+  <span class="hljs-title class_">Ing</span> <span class="hljs-variable">2tbsp</span>, <span class="hljs-string">&quot;parmesan&quot;</span>
+  <span class="hljs-title class_">Step</span> <span class="hljs-string">`Put {@1} into {@2}...`</span> <span class="hljs-comment">// @1 is the first children</span>
+  <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Mix ...&quot;</span>
+  <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Blah blah ...&quot;</span>
+  .<span class="hljs-variable">prepare</span> <span class="hljs-string">&#x27;The recipe&#x27;</span>
+  <span class="hljs-title class_">Ing</span> ...
+}
+</code></pre>
+<pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a get handler and start it</span>
+{
+  <span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span>
+    .<span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
+      <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-variable">homePage</span>)
+    <span class="hljs-keyword">end</span>
+    .<span class="hljs-variable">start</span>
+}
+</code></pre>
+<h3>Construction block</h3>
+<p>You can apply a block onto an instance using #{ }.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">with</span>
+  name: <span class="hljs-variable">string</span>
+  prepare: <span class="hljs-variable">int</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Recipe</span>
+  <span class="hljs-keyword">def</span> <span class="hljs-title function_">prepare</span>(<span class="hljs-variable">str</span>)
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title function_">Ing</span>(qty: <span class="hljs-variable">int</span> <span class="hljs-variable">along</span> <span class="hljs-variable">qtyFormat</span>, <span class="hljs-variable">@name</span>)
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title function_">Step</span>(<span class="hljs-variable">@instructions</span>)
+<span class="hljs-keyword">end</span>
+</code></pre>
+<pre><code class="language-jome"><span class="hljs-title class_">Recipe</span> #{
+  name: <span class="hljs-string">&#x27;Chickpea balls&#x27;</span>
+  prepare: <span class="hljs-variable">1h</span>
+  <span class="hljs-title class_">Ing</span> <span class="hljs-variable">1cup</span>, <span class="hljs-string">&quot;dry chickpeas&quot;</span>
+  <span class="hljs-title class_">Ing</span> <span class="hljs-variable">2cup</span>, <span class="hljs-string">&quot;water&quot;</span>
+  <span class="hljs-title class_">Ing</span> <span class="hljs-variable">2tbsp</span>, <span class="hljs-string">&quot;parmesan&quot;</span>
+  <span class="hljs-title class_">Step</span> <span class="hljs-string">`Put {@1} into {@2}...`</span> <span class="hljs-comment">// @1 is the first children</span>
+  <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Mix ...&quot;</span>
+  <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Blah blah ...&quot;</span>
+  .<span class="hljs-variable">prepare</span> <span class="hljs-string">&#x27;The recipe&#x27;</span>
+  <span class="hljs-title class_">Ing</span> ...
+}
+</code></pre>
+<h2>Chain inside objects</h2>
+<pre><code>```jome
+</code></pre>
+<p>// Create a server, add a get handler and start it
+{
+ExpressServer port: 3000
+someProp: 'someVal'
+chain
+get '/' do |req, res|
+res.send(homePage)
+end
+start
+end
+}</p>
+<pre><code>
+```jome
+import express from 'express'
+
+let port = 3000
+
+express chain
+  get '/' do |req, res|
+    res.send('Hello world!')
+  end
+  listen port do
+    #log `Server listening on port {port}`
+  end
+end
+</code></pre>
+<p>Compiles to</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> express <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;express&#x27;</span>
+
+<span class="hljs-keyword">let</span> port = <span class="hljs-number">3000</span>
+
+(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">let</span> __chain = <span class="hljs-title function_">express</span>()
+  __chain.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+    res.<span class="hljs-title function_">send</span>(<span class="hljs-string">&#x27;Hello world!&#x27;</span>)
+  })
+  <span class="hljs-keyword">return</span> __chain.<span class="hljs-title function_">listen</span>(port, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Server listening on port {port}`</span>)
+  })
+})()
+</code></pre>
+<h3>Lists inside blocks</h3>
+<p>A block { } will return only one object. Use {[ ]} to generate a list of objects.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">listObjs</span> = {[
+  <span class="hljs-title class_">Obj</span> name: <span class="hljs-string">&#x27;foo&#x27;</span>
+  <span class="hljs-title class_">Obj</span> name: <span class="hljs-string">&#x27;bar&#x27;</span>
+]}
+</code></pre>
 
               </div>
             </div>

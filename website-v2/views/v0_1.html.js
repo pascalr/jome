@@ -5,9 +5,8 @@ module.exports = () => {
 
   # Jome v-0.1
 
-  Jome is a language that compiles to JavaScript. It has a node structure like in Godot, types like Typescript,
-  goodies like CoffeeScript and underscore.js, syntax similar to ruby, it handles state like in React and it
-  has some original features.......
+  Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, syntax similar to ruby and it
+  has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.
 
   Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.
 
@@ -15,67 +14,7 @@ module.exports = () => {
 
   ## Overview
 
-  Example Jome code: TODO: Make this like the examples so you can click see compiled and result
-
-  Here is some code to show what Jome looks like. You can look at the [examples](${global.g_URL}/examples) page to see more.
-
-  \`\`\`jome
-  with
-    name: string
-    weapon: Weapon
-  class Character(@name)
-    def attack(enemy)
-    end
-  end
-
-  interface CharacterProps
-    name: string
-    weapon: Weapon
-  end
-  class Character(@name) < CharacterProps
-    def attack(enemy)
-    end
-  end
-
-  // Classes
-  class Character(@name, props)
-    include props
-    def attack(enemy)
-
-    end
-  end
-  class Character(name, props)
-    @name = name
-    @weapon = props.weapon
-    def attack(enemy)
-
-    end
-  end
-  interface Weapon
-    damage: number
-    range: int
-  end
-
-  // When you inherit from an interface, you can call super on the interface to initialize some values
-
-  // Inheritence and properties
-  class Dagger < Weapon(range: 50) end
-  class WeakDagger < Dagger(damage: 50) end
-  class StrongDagger < Dagger(damage: 200) end
-
-  // Instantiation
-  var startingWeapon = { WeakDagger }
-  var hero = { Character "Paul", weapon: startingWeapon }
-
-  // Scripts (any language, here shell)
-  var gameSaved = <sh>cat "saved-gamed.json"</sh>
-
-  // Functions
-  def announceGameIsStarted
-    #log 'Game started!'
-  end
-  announceGameIsStarted()
-  \`\`\`
+  TODO
   
   ## Disclaimer
 
@@ -87,7 +26,7 @@ module.exports = () => {
 
   \`\`\`sh
   # FIXME: NPM PACKAGE IS NOT YET CREATED!
-  npm install jome
+  npm install jome -g
   \`\`\`
 
   ## Usage
@@ -103,7 +42,87 @@ module.exports = () => {
 
   This documentation assumes the reader is familiar with javascript.
 
-  Jome is similar to JavaScript, but there are a few distinctions that you must be aware of. Mainly, the syntax is a bit different, there are nodes and scripts.
+  Jome is similar to JavaScript, but there are a few distinctions that you must be aware of.
+  - Execution is different: You execute .jome files using the jome CLI.
+  - The [syntax](#syntax) is a bit different: It is more similar to the ruby programming language.
+  - There are a lot of [builtin functions and constants](#utils). They start with an hashtag (ex: #log is the same as console.log)
+  - There are [heredocs](#heredocs) to include code from other languages (html, css, ...) written as xml tags.
+
+  ## Hello world
+  
+  Create a file \`hello.jome\` with the following content:
+
+  \`\`\`jome
+  #log "Hello world!" // #log is a shortcut for console.log
+  \`\`\`
+
+  Run it with \`jome hello.jome\`
+
+  ### File parameters
+
+  A .jome file is compiled into a function. You can pass arguments to it using the \`with\` keyword.
+
+  Let's modify the file \`hello.jome\`
+
+  \`\`\`jome
+  with name end
+  #log "Hello {name}!"
+  \`\`\`
+
+  The result is
+  \`\`\`sh
+  jome hello.jome Paul
+  # => Hello Paul!
+  \`\`\`
+
+  ### index.jome
+
+  The Jome CLI command checks if the first argument is a .jome source file and executes it if so. Otherwise, it will execute index.jome.
+
+  Let's write inside the file \`index.jome\`
+
+  \`\`\`jome
+  with cmd, name end
+
+  if cmd === 'hello'
+    #log "Hello {name}!"
+  end
+  \`\`\`
+
+  The result is
+  \`\`\`sh
+  jome hello Anna
+  # => Hello Anna!
+  \`\`\`
+
+  ### Creating partials
+
+  .jome files are very practical to write partials. For example, we can write an html navbar we can reuse.
+
+  \`\`\`jome
+  with locale end
+  return <html>
+    <div class="navbar">
+      <span class="navbrand" href="#">Jome</span>
+      <a href="&lt;%= locale %>/editor">Editor</a>
+      <a href="&lt;%= locale %>/">Home</a>
+      <a href="&lt;%= locale %>/utils">Utils</a>
+      <a href="https://github.com/pascalr/jome">GitHub</a>
+    </div>
+  </html>
+  \`\`\`
+
+  .jome file can be executed from the command line, but they can also be imported inside another .jome file.
+
+  \`\`\`jome
+  import navbar from './navbar.html.jome'
+
+  let frenchNavbar = navbar("fr")
+  \`\`\`
+
+  ### Read more
+
+  For full details of options, see [passing arguments to files](#pass_args_to_file)
 
   <h2 id="syntax">Syntax</h2>
 
@@ -148,6 +167,33 @@ module.exports = () => {
   end
   \`\`\`
 
+  You can create an instance of a class without using the \`new\` keyword, simply call it as a function.
+
+  \`\`\`jome
+  class SomeClass end
+
+  let someInstance = SomeClass()
+  let otherInstance = new SomeClass() // You can also still use the new keyword
+  \`\`\`
+
+  For this to work with imported classes, you add an ampersand before the identifier.
+
+  \`\`\`jome
+  import &SomeClass from './some_lib.js'
+
+  let someInstance = SomeClass()
+  let otherInstance = new SomeClass() // You can also still use the new keyword
+  \`\`\`
+
+  ### Shorthand key syntax
+
+  The short key syntax is different that in javascript, because it could be confusing with children (a feature coming in v0.2). In Jome, it starts with a colon
+  \`\`\`jome
+  obj = {:content, :value}
+  // same as
+  obj = {content: content, value: value}
+  \`\`\`
+
   <h2 id="utils">Utils</h2>
 
   The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.
@@ -184,185 +230,12 @@ module.exports = () => {
   #write! './somefile.txt', 'Some content', overwrite: true
   \`\`\`
 
-  ## Types
+  ### Chaining methods
 
-  You can specify types for variables. It can be primitives like string, number, integer or float. It can also be class names or interfaces.
-
-  \`\`\`jome
-  def greet(name: string, greeting: string = "Hello") : string
-    return \`\${greeting}, \${name}!\`
-  end
-
-  def attack(enemy: Player)
-    /* ... */
-  end
-  \`\`\`
-
-  You add a question mark after the type if the variable can be null.
+  You can execute multiple methods on the same object using the \`chain\` keyword.
 
   \`\`\`jome
-  def sayHello(anybody: Person?): string
-    return \`\${greeting}, \${anybody.name}!\` if anybody
-  end
-  \`\`\`
-
-  In a node block, you can specify the types of keys like so:
-
-  \`\`\`jome
-  {
-    [key: string]: nb; // Here nb is a string
-  };
-  \`\`\`
-
-  But what about the types of children? (string)
-  {
-    MyNode
-      "childString"
-      (string) someFuncCallReturnsString
-      [string] someFuncCallReturnsString
-      someFuncCallReturnsString : string // Nooooooo, because it clashes with parameters...
-  }
-
-  You can create custom types. See interfaces and types. (TODO: link)
-
-  <h2 id="blocks">Blocks</h2>
-
-  Blocks are delimited by curly braces and are used for a lot more than creating objects. You also use then to instantiate
-  objects, execute functions and to create [nodes](#nodes)
-
-  \`\`\`jome
-  // objects
-  let details = {
-    distanceX: 30, distanceY: 40 // comma is optional
-    totalDistance: 50, eta: 10min
-  }
-
-  // values
-  let obj = {Obj prop: 'val'} // instantiate an object
-  let objRunResult = {
-    Obj prop: 'val'
-      .run 'some arg'
-  }
-
-  // nodes
-  node = {
-    Obj someProp: 'obj'
-      'String child'
-      Nested prop: 'val'
-  }
-  \`\`\`
-
-  Note: A value is only on a single line. Use parentheses if you need multiple lines.
-  \`\`\`jome
-  {
-    x: 1 +
-       2 // WRONG!
-    y: (1 +
-       2) // OK
-  }
-  \`\`\`
-
-  ### Shorthand key syntax
-
-  The short key syntax is different that in javascript, because it could be confusing with children. In Jome, it starts with a colon
-  \`\`\`jome
-  obj = {:content, :value}
-  // same as
-  obj = {content: content, value: value}
-  \`\`\`
-
-  ### Work in progress V2
-
-  We always know if the identifier is a function or a class. When it's local we know. We it's imported,
-  you add an ampersand before the identifier when it's a class.
-
-  import {func, &klass} from 'lib'
-
-  I am not sure yet how I want to handle when you want to call new for a function and not a class, well I am not even sure I want to support this in Jome...
-
-  identifier // if identifier is a class, then new identifier(), otherwise identifier()
-  key: identifier // set identifier as a property of the instance
-  =identifier // add identifier as a children of the node
-  key = identifier // add identifier as a property of the object and as a children
-  :identifier // pass identifier to the constructor as a property of the object
-  .identifier // call function on parent
-
-  Le désavantage que je vois de faire key: identifier pour une propriété, est que c'est tanant pour le type.
-  Avec un = c'est facile rajouter le type. Mais d'un autre côté, est-ce qu'on veut vraiment mettre un type
-  là? Ça devrait être assez explicit en général. Et tu peux quand même le faire avec [key: type].
-
-  You can specify dynamic keys using square brackets. Ex: [\`key_{name}\`]
-
-  \`\`\`jome
-  {
-  Recipe
-    name: 'Chickpea balls'
-    prepare: 1h
-    Ing 1cup, "dry chickpeas"
-    Ing 2cup, "water"
-    Ing 2tbsp, "parmesan"
-    Step \`Put {@1} into {@2}...\` // @1 is the first children
-    Step "Mix ..."
-    Step "Blah blah ..."
-    .prepare 'The recipe'
-    Ing ...
-  }
-  \`\`\`
-
-  \`\`\`jome
-  // Create a server, add a get handler and start it
-  {
-    ExpressServer port: 3000
-      .get '/' do |req, res|
-        res.send(homePage)
-      end
-      .start
-  }
-  \`\`\`
-
-  ### Construction block
-
-  You can apply a block onto an instance using #{ }.
-
-  \`\`\`jome
-  with
-    name: string
-    prepare: int
-  class Recipe
-    def prepare(str)
-    end
-  end
-
-  class Ing(qty: int along qtyFormat, @name)
-  end
-
-  class Step(@instructions)
-  end
-  \`\`\`
-
-  \`\`\`jome
-  Recipe #{
-    name: 'Chickpea balls'
-    prepare: 1h
-    Ing 1cup, "dry chickpeas"
-    Ing 2cup, "water"
-    Ing 2tbsp, "parmesan"
-    Step \`Put {@1} into {@2}...\` // @1 is the first children
-    Step "Mix ..."
-    Step "Blah blah ..."
-    .prepare 'The recipe'
-    Ing ...
-  }
-  \`\`\`
-
-  ### Chain block
-
-  You can create a chain block using chain ... end.
-
-  Chain returns the value of the last command.
-
-  \`\`\`jome
-  // Create a server, add a get handler and start it
+  // Create a server, add a route and start it
   ExpressServer port: 3000 chain
     get '/' do |req, res|
       res.send(homePage)
@@ -371,63 +244,7 @@ module.exports = () => {
   end
   \`\`\`
 
-  \`\`\`jome
-  // Create a server, add a get handler and start it
-  {
-    ExpressServer port: 3000
-      someProp: 'someVal'
-      chain
-        get '/' do |req, res|
-          res.send(homePage)
-        end
-        start
-      end
-  }
-  \`\`\`
-
-  \`\`\`jome
-  import express from 'express'
-
-  let port = 3000
-
-  express chain
-    get '/' do |req, res|
-      res.send('Hello world!')
-    end
-    listen port do
-      #log \`Server listening on port {port}\`
-    end
-  end
-  \`\`\`
-
-  Compiles to
-
-  \`\`\`js
-  import express from 'express'
-
-  let port = 3000
-
-  (() => {
-    let __chain = express()
-    __chain.get('/', (req, res) => {
-      res.send('Hello world!')
-    })
-    return __chain.listen(port, () => {
-      console.log(\`Server listening on port {port}\`)
-    })
-  })()
-  \`\`\`
-
-  ### Lists inside blocks
-
-  A block { } will return only one object. Use {[ ]} to generate a list of objects.
-
-  \`\`\`jome
-  let listObjs = {[
-    Obj name: 'foo'
-    Obj name: 'bar'
-  ]}
-  \`\`\`
+  Chain returns the value of the last command.
 
   ### At (@)
 
@@ -522,94 +339,6 @@ module.exports = () => {
   En fait c'est peut-être run! que j'utilise plus souvent.
 
   Utiliser !#./some_file.html.jome // Comme shortcut?
-
-  ## Executing jome files
-
-  .jome files are compiled into a function. When you use jome CLI to run a .jome file, you are executing this
-  function and passing args to the function.
-
-  You can use return inside a .jome file to exit prematurly or to return a value.
-
-  You can use #run or #load to run another .jome file within jome.
-
-  \`\`\`jome
-  #run './some_file.jome'
-  // compiles to:
-  // import run_some_file from 'some_file.jome'
-  // run_some_file()
-  \`\`\`
-
-  Jome files can be included into other jome files. This allows you to easily create partials and file improved with Jome.
-
-  C'est utile pour générer des fichiers d'autres types aussi.
-
-  data.json.jome
-  \`\`\`jome
-  return <json>
-    {
-      "some": "data",
-      "title": <% title %>,
-      "math": <% 1 + 2 %>
-    }
-  </json>
-  \`\`\`
-
-  some_file.jome
-  \`\`\`jome
-  let data: string = #run './data.json.jome', title: 'Some title!'
-  \`\`\`
-
-  Je ne sais pas encore pour des fichiers jome avec des modules et des exports. Peut-être un type de fichier différent? .jomm?
-
-  some_page.html.jome, dans ce cas un fichier some_page.html.js est généré, il n'est pas exécuter automatiquement.
-
-  Tu peux faire:
-
-  #write #run(#./some_page.html.jome), to: #./some_page.html
-  ou peut-être fournir un shortcut genre
-  #compile #./some_page.html.jome
-
-  Compiler tous les fichiers .jome avec un default export de function pour le script. Parce que présentement, ce n'est
-  pas simple d'appeler plusieurs fois le même fichier. Ce qui est un peu tanant c'est qu'il faut que je fasse
-  node -e "require('some_compiled_file.js')()" au lieu de juste node some_compiled_file.js
-
-  You specify the variables you expect to be given to the partial file with a with block.
-  \`\`\`jome
-  with
-    {title: string}
-  end
-
-  return <html>
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title><% title %></title>
-    </head>
-  </html>
-  \`\`\`
-
-  A Jome script is compiled into a function with the parameters described from the with block.
-
-  \`\`\`js
-  module.exports = ({title}) => {
-    // ...
-  }
-  \`\`\`
-  #run et #load qui font tous les deux la même chose?
-  et
-  #run! et #load!
-
-  Comment gérer le fichier dynamiquement?
-
-  #load('file.jome')
-  #load(nameOfFile)
-
-  Ça ne change rien en fait, c'est juste que ça va être dynamique ou pas. Dans tous les cas je vais faire require sur place
-  ou await import sur place.
-
-  FIXMEEEE run avec ESM doit utiliser await import, mais je ne veux pas toujours retourner une valeur async...
-
-  Mais mon trouble là c'est avec les dynamic imports. Mettre ça de côté pour l'instant
 
   ## Loops
 
@@ -2073,6 +1802,38 @@ module.exports = () => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+  ## Executing jome files
+
+  There are two file extensions in Jome:
+  - .jome: These are function files. The code inside is like a function. It is great for scripts and partials.
+  - .jomm: These are module files. They are like standard javascript files.
+
+  You specify the variables you expect to be given to the partial file with a with block.
+  \`\`\`jome
+  with
+    {title: string}
+  end
+
+  return <html>
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><% title %></title>
+    </head>
+  </html>
+  \`\`\`
 
 `);
   return new Webpage("Jome", content).render();
