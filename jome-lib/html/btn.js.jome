@@ -1,0 +1,29 @@
+with
+  content
+class Btn
+  // called when the component is created
+  // creates elements/nodes, adds attributes and wires up event 
+  def create
+    @e0 = document.createElement("button")
+    if (content && typeof content === 'string')
+      @t1 = document.createTextNode(content)
+    end
+    @cs = @.#children.map(c => c.create())
+  end
+  // called when the component is mounted to the `target`
+  // it just appends things
+  def mount(target)
+    if (@t1) {
+      @e0.appendChild(@t1)
+    }
+    @cs.forEach(c => @e0.appendChild(c))
+    target.append(@e0)
+  end
+  // called to change the value of props
+  def update(changes)
+  end
+  // called to remove the component from the DOM, remove event listeners...
+  def detach(target)
+    target.removeChild(@e0)
+  end
+end

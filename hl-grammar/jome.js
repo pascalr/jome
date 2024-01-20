@@ -63,7 +63,7 @@ const highlighter = function(hljs) {
 
   const UTIL_FUNC = {
     scope: "title function_",
-    begin: '#\\w+'
+    begin: '#\\w+!?'
   }
 
   const FUNC_CALL = {

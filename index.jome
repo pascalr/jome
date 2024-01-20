@@ -33,3 +33,132 @@ return <html><div><%= "Hello" %></div></html>
 // include #./test.jome
 // #run('./website-v2/build.jome')
 // #run('./website-v2/server.jome', port: 3000)
+
+
+
+/*
+Reactive variables
+
+with
+  %times =  0
+class ClickCounter
+  def click
+    %times += 1
+  end
+  // This method would be reinjected
+  def onChange
+  end
+end
+
+let counter = ClickCounter()
+let ""
+counter.click()
+
+let %count = 0
+
+let content = {
+  Div
+    Txt "Clicked {%count} times."
+    Btn ~click: () => (%count += 1)
+}
+LiveJome.render(content, target: '#placeholder')
+
+
+
+
+with
+  %count =  0
+class ClickCounter
+  def render
+    return {
+      Div
+        Txt "Clicked {%count} times."
+        Btn ~click: () => (%count += 1)
+    }
+  end
+end
+
+// The scene is three counters. I want to rerender only the counter which has been clicked.
+let scene = [
+  ClickCounter
+  ClickCounter
+  ClickCounter
+]
+
+LiveJome.render(scene, target: '#placeholder')
+
+// ClickCounter in js would be:
+
+class ClickCounter
+  constructor() {
+    this.count = 0
+  }
+  render() {
+    // ...
+    // onClick = () => { // function which is given to the button
+    //   
+    // }
+  }
+end
+
+
+
+
+
+
+%"" returns a function that gives a string.
+
+// Btn either takes a string as content or takes children
+
+{
+  Btn
+    %count = 0
+    ~click: %count += 1
+    Txt %"Clicked {count}	{count === 1 ? 'time' : 'times'}"
+}
+
+
+
+Let's try something different instead of trying to reimplement Svelte, before it is freaking complicated.
+What I am thinking is that when a "reactive" variable changes, it sends a signal. It sends it up the node tree.
+I just have to do a magical top node that handles it all!
+
+with
+  %count = 0
+class Counter
+  def handleClick
+    %count += 1 // Here assigning a reactive variable will update it's children who depends on this variable
+  end
+  // It's not render, it's declarative. You give the subcomponents of the component.
+  def components = {
+    Btn onClick: handleClick
+      "Clicked {%count}" // This is a child string that depends on it's parent %count
+      %count === 1 ? 'time' : 'times' // This is another child string that depends on it's parent %count
+  }
+end
+
+let content = {
+  Btn onClick: handleClick
+    %count = 0 // A state variable is assigned to the node Btn
+    "Clicked {%count}" // A text childen is added. A callback will be attached to the state variable count too.
+    %count === 1 ? 'time' : 'times' // A text childen is added. A callback will be attached to the state variable count too.
+}
+
+<script>
+	let count = 0;
+
+	function handleClick() {
+		count += 1;
+	}
+</script>
+
+<button on:click={handleClick}>
+	Clicked {count}
+	{count === 1 ? 'time' : 'times'}
+</button>
+
+
+
+
+
+*/

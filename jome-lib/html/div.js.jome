@@ -1,0 +1,36 @@
+with
+  content 
+class Div
+  // called when the component is created
+  // creates elements/nodes, adds attributes and wires up event 
+  def create
+    @e0 = document.createElement("div")
+    @t1 = document.createTextNode("content")
+    // b2 = document.createTextNode(name)
+    // t3 = document.createTextNode("!")
+    // e0.setAttribute("class", "snazzy")
+    // e0.addEventListener("click", handleClick)
+  end
+  // called when the component is mounted to the `target`
+  // it just appends things
+  def mount(target)
+    e0.appendChild(t1)
+    e0.appendChild(b2)
+    e0.appendChild(t3)
+
+    target.append(e0)
+  end
+  // called to change the value of props
+  def update(changes)
+    // check if name changed
+    if (changes.name) {
+      // update `name` variable and all binding to `name`
+      b2.data = name = changes.name
+    }
+  end
+  // called to remove the component from the DOM
+  def detach(target)
+    e0.removeEventListener("click", handleClick)
+    target.removeChild(e0)
+  end
+end
