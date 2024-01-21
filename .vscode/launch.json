@@ -16,11 +16,11 @@
     {
       "type": "node-terminal",
       "request": "launch",
-      "name": "Build website",
+      "name": "Build and run website",
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "command": "jome b -f"
+      "command": "jome dev"
     },
     {
       "type": "node-terminal",

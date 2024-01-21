@@ -33,7 +33,7 @@ module.exports = class Webpage {
             <div class="d-flex" style="height: 100%;">
             ${sidebar}
             <div class="scrollable" style="width: 100%;">
-              <div class="app-content">
+              <div class="main">
                 ${this.content}
               </div>
             </div>

@@ -33,12 +33,12 @@ module.exports = () => {
   pre {
     background-color: #dce0e8;
     padding: 1em;
-    border-radius: 8px;
+    border-radius: 4px;
   }
   code:not(pre code) {
     background-color: #dce0e8;
     padding: 0.2em;
-    border-radius: 8px;
+    border-radius: 4px;
   }
 
   ul.nav-list {
@@ -75,9 +75,22 @@ module.exports = () => {
     background-color: #f0f0f0;
   }
 
-  .app-content {
+  .main {
     font-size: 16px;
     max-width: 60em;
+  }
+
+  .main li {
+    margin-bottom: 0.6em;
+  }
+
+  .main p {
+    line-height: 1.7;
+  }
+
+  .main a {
+    color: blue;
+    text-decoration: none;
   }
 
   #left-nav {

@@ -5,8 +5,9 @@ module.exports = (cmd, args) => {
   global.g_URL = "/jome";
   if (cmd === "test") {
     execSh(`jome test.jome`);
-  } else if (cmd === "b" || cmd === "build") {
-    build(args);
+  } else if (cmd === "dev") {
+    build({ force: true });
+    server({ port: 3000 });
   } else if (cmd === "s" || cmd === "server") {
     build();
     server({ port: 3000 });

@@ -12,8 +12,9 @@ $URL = '/jome'
 
 if (cmd === 'test')
   <sh>jome test.jome</sh>
-elsif (cmd === 'b' || cmd === 'build')
-  build(args)
+elsif (cmd === 'dev')
+  build(force: true);
+  server(port: 3000)
 elsif (cmd === 's' || cmd === 'server')
   build();
   server(port: 3000)
