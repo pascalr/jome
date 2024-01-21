@@ -47,33 +47,31 @@ javascript because it is more stable. It is a little weird to compile tests in i
 // end
 
 describe("Jome paths", () => {
-  test('#.', () => {
+  test('Dirname shortcuts', () => {
     expect(compile(`#.`)).toMatch(/__dirname/);
-  })
-  test('#./', () => {
     expect(compile(`#./`)).toMatch(/__dirname/);
   })
-  test('#/', () => {
+  test('Absolute paths', () => {
     expect(compile(`#/`)).toMatch(/"\/"/);
-  })
-  test('#/some/path.ext', () => {
     expect(compile(`#/some/path.ext`)).toMatch(/"\/some\/path\.ext"/);
   })
-  test('#./some_file.ext', () => {
+  test('Path relative to current file', () => {
     expect(compile(`#./some_file.ext`)).toMatch(/path.join\(__dirname, "some_file\.ext"\)/);
   })
-  test('#cwd/some_file.ext', () => {
+  test('Path relative to the current working directory', () => {
     expect(compile(`#cwd/some_file.ext`)).toMatch(/path.resolve\("\.\/some_file\.ext"\)/);
   })
-  test('#..', () => {
+  test('Path in the current file parent folder', () => {
     expect(compile(`#..`)).toMatch(/path.join\(__dirname, ".."\)/);
-  })
-  test('#../', () => {
     expect(compile(`#../`)).toMatch(/path.join\(__dirname, "..\/"\)/);
-  })
-  test('#../some_file.ext', () => {
     expect(compile(`#../some_file.ext`)).toMatch(/path.join\(__dirname, "..\/some_file\.ext"\)/);
   })
+  // I am not yet sure if I want to support this. It would be nice, but maybe #~ could be used for something else? Like signals?
+  // test('Path in the home directory', () => {
+  //   expect(compile(`#~`)).toMatch(/require\('os'\); os.homedir\(\)/);
+  //   expect(compile(`#~/`)).toMatch(/require\('os'\); os.homedir\(\)/);
+  //   expect(compile(`#~/some_file.ext`)).toMatch(/require\('os'\); path.join\(os.homedir\(\), 'some_file.ext'\)/);
+  // })
 })
 
 test('Pass named parameters to functions', () => {
