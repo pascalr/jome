@@ -9,20 +9,41 @@ return <html>
   <div id="left-nav" class="scrollable">
     <ul class="nav-list">
       <li><a href="<%= $URL %>/">Home</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="<%= $URL %>/lib/html">Overview</a></li>
+        <li><a href="<%= $URL %>/lib/html-layout">Install</a></li>
+        <li><a href="<%= $URL %>/lib/express-server">Usage</a></li>
+        <li><a href="<%= $URL %>/lib/express-server">Hello world</a></li>
+        <li><a href="<%= $URL %>/lib/express-server">index.jome</a></li>
+        <li><a href="<%= $URL %>/lib/express-server">Partials</a></li>
+      </ul>
       <li><a href="<%= $URL %>/#lang-ref">Language Reference</a></li>
       <ul class="nav-list nav-sub">
         <li><a href="<%= $URL %>/#syntax">Syntax</a></li>
-        <li><a href="<%= $URL %>/#blocks">Blocks</a></li>
-        <li><a href="<%= $URL %>/#nodes">Nodes</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="<%= $URL %>/lib/html">Keywords</a></li>
+        </ul>
+        <li><a href="<%= $URL %>/#built-ins">Built-Ins</a></li>
         <li><a href="<%= $URL %>/#scripts">Scripts</a></li>
-        <li><a href="<%= $URL %>/#named-parameters">Named parameters</a></li>
+        <li><a href="<%= $URL %>/#chain">Chain</a></li>
+        <li><a href="<%= $URL %>/#instance-props">Instance properties (@)</a></li>
+        <li><a href="<%= $URL %>/#paths">Paths</a></li>
+        <li><a href="<%= $URL %>/#loops">Loops</a></li>
+        <li><a href="<%= $URL %>/#conditions">Conditions</a></li>
+        <li><a href="<%= $URL %>/#comments">Comments</a></li>
+        <li><a href="<%= $URL %>/#switch-case">Switch/Case</a></li>
         <li><a href="<%= $URL %>/#classes">Classes</a></li>
-        <li><a href="<%= $URL %>/#interfaces">Interfaces</a></li>
-        <li><a href="<%= $URL %>/#arrow-getter">Arrow getter</a></li>
-        <li><a href="<%= $URL %>/#instance-driven-dev">Instance driven development</a></li>
-        <li><a href="<%= $URL %>/#verbatim">Verbatim string literals</a></li>
-        <li><a href="<%= $URL %>/#units">Units</a></li>
-        <li><a href="<%= $URL %>/#hyphens">Hyphen</a></li>
+        <li><a href="<%= $URL %>/#exports">Modules and exports</a></li>
+        <li><a href="<%= $URL %>/#with">With keyword</a></li>
+        <li><a href="<%= $URL %>/#along">Along keyword</a></li>
+        <li><a href="<%= $URL %>/#strings">Strings</a></li>
+        <li><a href="<%= $URL %>/#formating">Formatting</a></li>
+        <li><a href="<%= $URL %>/#threads">Threads</a></li>
+        <li><a href="<%= $URL %>/#private">Private</a></li>
+        <li><a href="<%= $URL %>/#env">Environment variables</a></li>
+        <li><a href="<%= $URL %>/#global">Global variables</a></li>
+        <li><a href="<%= $URL %>/#contributing">Contributing</a></li>
+        <li><a href="<%= $URL %>/#ack">Acknowledgements</a></li>
       </ul>
       <li><a href="<%= $URL %>/lib">Librairies</a></li>
       <ul class="nav-list nav-sub">

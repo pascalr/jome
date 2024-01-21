@@ -3,7 +3,7 @@ const mdToHtml = require("jome-lib/mdToHtml");
 module.exports = () => {
   let content = mdToHtml(`
 
-  # Jome v-0.1
+  # Jome v0.1
 
   Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, syntax similar to ruby and it
   has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.
@@ -38,16 +38,6 @@ module.exports = () => {
   jome server start # pass the arguments "server" and "start" to index.jome executable
   \`\`\`
 
-  <h2 id="lang-ref">Language Reference</h2>
-
-  This documentation assumes the reader is familiar with javascript.
-
-  Jome is similar to JavaScript, but there are a few distinctions that you must be aware of.
-  - Execution is different: You execute .jome files using the jome CLI.
-  - The [syntax](#syntax) is a bit different: It is more similar to the ruby programming language.
-  - There are a lot of [builtin functions and constants](#utils). They start with an hashtag (ex: #log is the same as console.log)
-  - There are [heredocs](#heredocs) to include code from other languages (html, css, ...) written as xml tags.
-
   ## Hello world
   
   Create a file \`hello.jome\` with the following content:
@@ -75,7 +65,7 @@ module.exports = () => {
   # => Hello Paul!
   \`\`\`
 
-  ### index.jome
+  ## index.jome
 
   The Jome CLI command checks if the first argument is a .jome source file and executes it if so. Otherwise, it will execute index.jome.
 
@@ -95,7 +85,7 @@ module.exports = () => {
   # => Hello Anna!
   \`\`\`
 
-  ### Creating partials
+  ## Creating partials
 
   .jome files are very practical to write partials. For example, we can write an html navbar we can reuse.
 
@@ -123,6 +113,16 @@ module.exports = () => {
   ### Read more
 
   For full details of options, see [passing arguments to files](#pass_args_to_file)
+
+  <h2 id="lang-ref">Language Reference</h2>
+
+  This documentation assumes the reader is familiar with javascript.
+
+  Jome is similar to JavaScript, but there are a few distinctions that you must be aware of.
+  - Execution is different: You execute .jome files using the jome CLI.
+  - The [syntax](#syntax) is a bit different: It is more similar to the ruby programming language.
+  - There are a lot of [builtin functions and constants](#utils). They start with an hashtag (ex: #log is the same as console.log)
+  - There are [heredocs](#heredocs) to include code from other languages (html, css, ...) written as xml tags.
 
   <h2 id="syntax">Syntax</h2>
 
@@ -196,7 +196,7 @@ module.exports = () => {
   obj = {content: content, value: value}
   \`\`\`
 
-  <h2 id="utils">Utils</h2>
+  <h2 id="utils">Built-Ins</h2>
 
   The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.
 
@@ -248,7 +248,7 @@ module.exports = () => {
 
   Chain returns the value of the last command.
 
-  ### At (@)
+  ### Instance properties (@)
 
   One of the objective of Jome is to remove the weird thing that is this.
 

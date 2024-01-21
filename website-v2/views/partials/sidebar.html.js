@@ -3,20 +3,41 @@ module.exports = () => {
   <div id="left-nav" class="scrollable">
     <ul class="nav-list">
       <li><a href="${global.g_URL}/">Home</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="${global.g_URL}/lib/html">Overview</a></li>
+        <li><a href="${global.g_URL}/lib/html-layout">Install</a></li>
+        <li><a href="${global.g_URL}/lib/express-server">Usage</a></li>
+        <li><a href="${global.g_URL}/lib/express-server">Hello world</a></li>
+        <li><a href="${global.g_URL}/lib/express-server">index.jome</a></li>
+        <li><a href="${global.g_URL}/lib/express-server">Partials</a></li>
+      </ul>
       <li><a href="${global.g_URL}/#lang-ref">Language Reference</a></li>
       <ul class="nav-list nav-sub">
         <li><a href="${global.g_URL}/#syntax">Syntax</a></li>
-        <li><a href="${global.g_URL}/#blocks">Blocks</a></li>
-        <li><a href="${global.g_URL}/#nodes">Nodes</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="${global.g_URL}/lib/html">Keywords</a></li>
+        </ul>
+        <li><a href="${global.g_URL}/#built-ins">Built-Ins</a></li>
         <li><a href="${global.g_URL}/#scripts">Scripts</a></li>
-        <li><a href="${global.g_URL}/#named-parameters">Named parameters</a></li>
+        <li><a href="${global.g_URL}/#chain">Chain</a></li>
+        <li><a href="${global.g_URL}/#instance-props">Instance properties (@)</a></li>
+        <li><a href="${global.g_URL}/#paths">Paths</a></li>
+        <li><a href="${global.g_URL}/#loops">Loops</a></li>
+        <li><a href="${global.g_URL}/#conditions">Conditions</a></li>
+        <li><a href="${global.g_URL}/#comments">Comments</a></li>
+        <li><a href="${global.g_URL}/#switch-case">Switch/Case</a></li>
         <li><a href="${global.g_URL}/#classes">Classes</a></li>
-        <li><a href="${global.g_URL}/#interfaces">Interfaces</a></li>
-        <li><a href="${global.g_URL}/#arrow-getter">Arrow getter</a></li>
-        <li><a href="${global.g_URL}/#instance-driven-dev">Instance driven development</a></li>
-        <li><a href="${global.g_URL}/#verbatim">Verbatim string literals</a></li>
-        <li><a href="${global.g_URL}/#units">Units</a></li>
-        <li><a href="${global.g_URL}/#hyphens">Hyphen</a></li>
+        <li><a href="${global.g_URL}/#exports">Modules and exports</a></li>
+        <li><a href="${global.g_URL}/#with">With keyword</a></li>
+        <li><a href="${global.g_URL}/#along">Along keyword</a></li>
+        <li><a href="${global.g_URL}/#strings">Strings</a></li>
+        <li><a href="${global.g_URL}/#formating">Formatting</a></li>
+        <li><a href="${global.g_URL}/#threads">Threads</a></li>
+        <li><a href="${global.g_URL}/#private">Private</a></li>
+        <li><a href="${global.g_URL}/#env">Environment variables</a></li>
+        <li><a href="${global.g_URL}/#global">Global variables</a></li>
+        <li><a href="${global.g_URL}/#contributing">Contributing</a></li>
+        <li><a href="${global.g_URL}/#ack">Acknowledgements</a></li>
       </ul>
       <li><a href="${global.g_URL}/lib">Librairies</a></li>
       <ul class="nav-list nav-sub">

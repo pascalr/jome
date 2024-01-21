@@ -32,20 +32,41 @@
   <div id="left-nav" class="scrollable">
     <ul class="nav-list">
       <li><a href="/jome/">Home</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/jome/lib/html">Overview</a></li>
+        <li><a href="/jome/lib/html-layout">Install</a></li>
+        <li><a href="/jome/lib/express-server">Usage</a></li>
+        <li><a href="/jome/lib/express-server">Hello world</a></li>
+        <li><a href="/jome/lib/express-server">index.jome</a></li>
+        <li><a href="/jome/lib/express-server">Partials</a></li>
+      </ul>
       <li><a href="/jome/#lang-ref">Language Reference</a></li>
       <ul class="nav-list nav-sub">
         <li><a href="/jome/#syntax">Syntax</a></li>
-        <li><a href="/jome/#blocks">Blocks</a></li>
-        <li><a href="/jome/#nodes">Nodes</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="/jome/lib/html">Keywords</a></li>
+        </ul>
+        <li><a href="/jome/#built-ins">Built-Ins</a></li>
         <li><a href="/jome/#scripts">Scripts</a></li>
-        <li><a href="/jome/#named-parameters">Named parameters</a></li>
+        <li><a href="/jome/#chain">Chain</a></li>
+        <li><a href="/jome/#instance-props">Instance properties (@)</a></li>
+        <li><a href="/jome/#paths">Paths</a></li>
+        <li><a href="/jome/#loops">Loops</a></li>
+        <li><a href="/jome/#conditions">Conditions</a></li>
+        <li><a href="/jome/#comments">Comments</a></li>
+        <li><a href="/jome/#switch-case">Switch/Case</a></li>
         <li><a href="/jome/#classes">Classes</a></li>
-        <li><a href="/jome/#interfaces">Interfaces</a></li>
-        <li><a href="/jome/#arrow-getter">Arrow getter</a></li>
-        <li><a href="/jome/#instance-driven-dev">Instance driven development</a></li>
-        <li><a href="/jome/#verbatim">Verbatim string literals</a></li>
-        <li><a href="/jome/#units">Units</a></li>
-        <li><a href="/jome/#hyphens">Hyphen</a></li>
+        <li><a href="/jome/#exports">Modules and exports</a></li>
+        <li><a href="/jome/#with">With keyword</a></li>
+        <li><a href="/jome/#along">Along keyword</a></li>
+        <li><a href="/jome/#strings">Strings</a></li>
+        <li><a href="/jome/#formating">Formatting</a></li>
+        <li><a href="/jome/#threads">Threads</a></li>
+        <li><a href="/jome/#private">Private</a></li>
+        <li><a href="/jome/#env">Environment variables</a></li>
+        <li><a href="/jome/#global">Global variables</a></li>
+        <li><a href="/jome/#contributing">Contributing</a></li>
+        <li><a href="/jome/#ack">Acknowledgements</a></li>
       </ul>
       <li><a href="/jome/lib">Librairies</a></li>
       <ul class="nav-list nav-sub">
@@ -64,7 +85,7 @@
 
             <div class="scrollable" style="width: 100%;">
               <div class="app-content">
-                <h1>Jome v-0.1</h1>
+                <h1>Jome v0.1</h1>
 <p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, syntax similar to ruby and it
 has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>
 <p>Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.</p>
@@ -84,15 +105,6 @@ jome <span class="hljs-comment"># executes index.jome in current or ancestor dir
 jome file.jome <span class="hljs-comment"># execute the given file</span>
 jome server start <span class="hljs-comment"># pass the arguments &quot;server&quot; and &quot;start&quot; to index.jome executable</span>
 </code></pre>
-  <h2 id="lang-ref">Language Reference</h2>
-<p>This documentation assumes the reader is familiar with javascript.</p>
-<p>Jome is similar to JavaScript, but there are a few distinctions that you must be aware of.</p>
-<ul>
-<li>Execution is different: You execute .jome files using the jome CLI.</li>
-<li>The <a href="#syntax">syntax</a> is a bit different: It is more similar to the ruby programming language.</li>
-<li>There are a lot of <a href="#utils">builtin functions and constants</a>. They start with an hashtag (ex: #log is the same as console.log)</li>
-<li>There are <a href="#heredocs">heredocs</a> to include code from other languages (html, css, ...) written as xml tags.</li>
-</ul>
 <h2>Hello world</h2>
 <p>Create a file <code>hello.jome</code> with the following content:</p>
 <pre><code class="language-jome"><span class="hljs-title function_">#log</span> <span class="hljs-string">&quot;Hello world!&quot;</span> <span class="hljs-comment">// #log is a shortcut for console.log</span>
@@ -108,7 +120,7 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <pre><code class="language-sh">jome hello.jome Paul
 <span class="hljs-comment"># =&gt; Hello Paul!</span>
 </code></pre>
-<h3>index.jome</h3>
+<h2>index.jome</h2>
 <p>The Jome CLI command checks if the first argument is a .jome source file and executes it if so. Otherwise, it will execute index.jome.</p>
 <p>Let's write inside the file <code>index.jome</code></p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">cmd</span>, <span class="hljs-variable">name</span> <span class="hljs-keyword">end</span>
@@ -121,7 +133,7 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <pre><code class="language-sh">jome hello Anna
 <span class="hljs-comment"># =&gt; Hello Anna!</span>
 </code></pre>
-<h3>Creating partials</h3>
+<h2>Creating partials</h2>
 <p>.jome files are very practical to write partials. For example, we can write an html navbar we can reuse.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">locale</span> <span class="hljs-keyword">end</span>
 <span class="hljs-keyword">return</span> &lt;html&gt;
@@ -141,6 +153,15 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 </code></pre>
 <h3>Read more</h3>
 <p>For full details of options, see <a href="#pass_args_to_file">passing arguments to files</a></p>
+  <h2 id="lang-ref">Language Reference</h2>
+<p>This documentation assumes the reader is familiar with javascript.</p>
+<p>Jome is similar to JavaScript, but there are a few distinctions that you must be aware of.</p>
+<ul>
+<li>Execution is different: You execute .jome files using the jome CLI.</li>
+<li>The <a href="#syntax">syntax</a> is a bit different: It is more similar to the ruby programming language.</li>
+<li>There are a lot of <a href="#utils">builtin functions and constants</a>. They start with an hashtag (ex: #log is the same as console.log)</li>
+<li>There are <a href="#heredocs">heredocs</a> to include code from other languages (html, css, ...) written as xml tags.</li>
+</ul>
   <h2 id="syntax">Syntax</h2>
 <p>The syntax is similar to the ruby programming language. You use the keyword def instead of function.
 And you use the end keyword instead of curly braces.</p>
@@ -187,7 +208,7 @@ And you use the end keyword instead of curly braces.</p>
 <span class="hljs-comment">// same as</span>
 <span class="hljs-variable">obj</span> = {content: <span class="hljs-variable">content</span>, value: <span class="hljs-variable">value</span>}
 </code></pre>
-  <h2 id="utils">Utils</h2>
+  <h2 id="utils">Built-Ins</h2>
 <p>The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.</p>
 <p>For the complete list of utils: see the <a href="/jome/utils">utils page</a>.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// A constant</span>
@@ -222,7 +243,7 @@ underscore.js: #map, #reduce, ...</p>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <p>Chain returns the value of the last command.</p>
-<h3>At (@)</h3>
+<h3>Instance properties (@)</h3>
 <p>One of the objective of Jome is to remove the weird thing that is this.</p>
 <p>I want in Jome this to refer to the current instance when inside a method and that's it.</p>
 <p>In order to do this, I should bind automatically all the functions inside the class to the proper this.

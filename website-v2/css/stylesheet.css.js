@@ -65,6 +65,12 @@ module.exports = () => {
     font-size: 0.9em;
   }
 
+  ul.nav-list.nav-sub-sub li a {
+    margin-top: -7px;
+    padding: 7px 10px 7px 40px;
+    font-size: 0.85em;
+  }
+
   ul.nav-list li a:hover {
     background-color: #f0f0f0;
   }
