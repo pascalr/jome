@@ -1,6 +1,19 @@
 const Webpage = require("../src/webpage.js");
 const mdToHtml = require("jome-lib/mdToHtml");
 module.exports = () => {
+  let PARTIAL = mdToHtml(`
+  \`\`\`xml
+  <html>
+    <div class="navbar">
+      <span class="navbrand" href="#">Jome</span>
+      <a href="\<%= locale %>/editor">Editor</a>
+      <a href="\<%= locale %>/">Home</a>
+      <a href="\<%= locale %>/utils">Utils</a>
+      <a href="https://github.com/pascalr/jome">GitHub</a>
+    </div>
+  </html>
+  \`\`\`
+`);
   let content = mdToHtml(`
 
   # Jome v0.1
@@ -91,15 +104,7 @@ module.exports = () => {
 
   \`\`\`jome
   with locale end
-  return <html>
-    <div class="navbar">
-      <span class="navbrand" href="#">Jome</span>
-      <a href="\<%= locale %>/editor">Editor</a>
-      <a href="\<%= locale %>/">Home</a>
-      <a href="\<%= locale %>/utils">Utils</a>
-      <a href="https://github.com/pascalr/jome">GitHub</a>
-    </div>
-  </html>
+  return fba5cdfa4bcb408f641c743519a0fe19
   \`\`\`
 
   .jome file can be executed from the command line, but they can also be imported inside another .jome file.
@@ -233,7 +238,7 @@ module.exports = () => {
   obj = {content: content, value: value}
   \`\`\`
 
-  <h2 id="utils">Built-Ins</h2>
+  <h2 id="builtins">Built-Ins</h2>
 
   The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.
 
@@ -266,7 +271,7 @@ module.exports = () => {
 
   For functions that have a sync and async version, use the exclamation mark after to use the sync version.
   \`\`\`jome
-  #write! './somefile.txt', 'Some content', overwrite: true
+  #write! 'Some content', to: './somefile.txt', overwrite: true
   \`\`\`
 
   ### Chaining methods
@@ -844,6 +849,11 @@ module.exports = () => {
   str = @"This is a string that does \${not} interpolate"
   \`\`\`
 
+  ### Substitutions
+
+  You can insert stuff after the transformers using \`\<%s varName %>\`. Under the hood, a hash is created for varName, it is inserted into the string
+  and it is substituted after the transformers are called.
+
   ## Threads
 
   Exactly the same as JavaScript? await, async, ...
@@ -930,6 +940,6 @@ module.exports = () => {
   Librairies used:
   - express
   - markdown-it
-`);
+`).replace("fba5cdfa4bcb408f641c743519a0fe19", PARTIAL);
   return new Webpage("Jome", content).render();
 };

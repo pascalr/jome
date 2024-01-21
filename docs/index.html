@@ -47,7 +47,7 @@
           <li><a href="/jome/#keywords">Keywords</a></li>
           <li><a href="/jome/#comments">Comments</a></li>
         </ul>
-        <li><a href="/jome/#built-ins">Built-Ins</a></li>
+        <li><a href="/jome/#builtins">Built-Ins</a></li>
         <li><a href="/jome/#scripts">Scripts</a></li>
         <li><a href="/jome/#chain">Chain</a></li>
         <li><a href="/jome/#instance-props">Instance properties (@)</a></li>
@@ -137,15 +137,17 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
   <h2 id="partials">Partials</h2> 
 <p>.jome files are very practical to write partials. For example, we can write an html navbar we can reuse using a <a href="#heredoc">heredoc</a>.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">locale</span> <span class="hljs-keyword">end</span>
-<span class="hljs-keyword">return</span> &lt;html&gt;
-  &lt;div class=&quot;navbar&quot;&gt;
-    &lt;span class=&quot;navbrand&quot; href=&quot;#&quot;&gt;Jome&lt;/span&gt;
-    &lt;a href=&quot;&lt;%= locale %&gt;/editor&quot;&gt;Editor&lt;/a&gt;
-    &lt;a href=&quot;&lt;%= locale %&gt;/&quot;&gt;Home&lt;/a&gt;
-    &lt;a href=&quot;&lt;%= locale %&gt;/utils&quot;&gt;Utils&lt;/a&gt;
-    &lt;a href=&quot;https://github.com/pascalr/jome&quot;&gt;GitHub&lt;/a&gt;
-  &lt;/div&gt;
-&lt;/html&gt;
+<span class="hljs-keyword">return</span> <span class="hljs-variable"><pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbar&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbrand&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span>&gt;</span>Jome<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/editor&quot;</span>&gt;</span>Editor<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/&quot;</span>&gt;</span>Home<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/utils&quot;</span>&gt;</span>Utils<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://github.com/pascalr/jome&quot;</span>&gt;</span>GitHub<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+</span>
 </code></pre>
 <p>.jome file can be executed from the command line, but they can also be imported inside another .jome file.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-variable">navbar</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./navbar.html.jome&#x27;</span>
@@ -240,7 +242,7 @@ And you use the end keyword instead of curly braces.</p>
 <span class="hljs-comment">// same as</span>
 <span class="hljs-variable">obj</span> = {content: <span class="hljs-variable">content</span>, value: <span class="hljs-variable">value</span>}
 </code></pre>
-  <h2 id="utils">Built-Ins</h2>
+  <h2 id="builtins">Built-Ins</h2>
 <p>The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.</p>
 <p>For the complete list of utils: see the <a href="/jome/utils">utils page</a>.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// A constant</span>
@@ -262,7 +264,7 @@ console: #log, ...
 process: #argv, #env, #cwd...
 underscore.js: #map, #reduce, ...</p>
 <p>For functions that have a sync and async version, use the exclamation mark after to use the sync version.</p>
-<pre><code class="language-jome"><span class="hljs-title function_">#write!</span> <span class="hljs-string">&#x27;./somefile.txt&#x27;</span>, <span class="hljs-string">&#x27;Some content&#x27;</span>, overwrite: <span class="hljs-keyword">true</span>
+<pre><code class="language-jome"><span class="hljs-title function_">#write!</span> <span class="hljs-string">&#x27;Some content&#x27;</span>, to: <span class="hljs-string">&#x27;./somefile.txt&#x27;</span>, overwrite: <span class="hljs-keyword">true</span>
 </code></pre>
 <h3>Chaining methods</h3>
 <p>You can execute multiple methods on the same object using the <code>chain</code> keyword.</p>
@@ -677,6 +679,9 @@ I don't want to have to redefine xsx every time.</p>
 them I don't know if I want to do that. Or I want to offer multiple possibilities.</p>
 <pre><code class="language-jome"><span class="hljs-variable">str</span> = @<span class="hljs-string">&quot;This is a string that does ${not} interpolate&quot;</span>
 </code></pre>
+<h3>Substitutions</h3>
+<p>You can insert stuff after the transformers using <code>&lt;%s varName %&gt;</code>. Under the hood, a hash is created for varName, it is inserted into the string
+and it is substituted after the transformers are called.</p>
 <h2>Threads</h2>
 <p>Exactly the same as JavaScript? await, async, ...</p>
 <pre><code class="language-jome"><span class="hljs-variable">async</span> <span class="hljs-keyword">def</span> <span class="hljs-variable">someMethod</span>

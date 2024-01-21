@@ -1,5 +1,22 @@
 import &Webpage from '../src/webpage.jomm'
 
+// I don't understand how highlight.js is supposed to detected nested languages...
+// So let's do it separately for now.
+
+let PARTIAL = <md>
+  ```xml
+  <html>
+    <div class="navbar">
+      <span class="navbrand" href="#">Jome</span>
+      <a href="\<%= locale %>/editor">Editor</a>
+      <a href="\<%= locale %>/">Home</a>
+      <a href="\<%= locale %>/utils">Utils</a>
+      <a href="https://github.com/pascalr/jome">GitHub</a>
+    </div>
+  </html>
+  ```
+</md>//.slice(18, (-16)) // Lazy way to remove the pre code... Ugly...
+
 let content = <md>
 
   # Jome v0.1
@@ -90,15 +107,7 @@ let content = <md>
 
   ```jome
   with locale end
-  return <html>
-    <div class="navbar">
-      <span class="navbrand" href="#">Jome</span>
-      <a href="\<%= locale %>/editor">Editor</a>
-      <a href="\<%= locale %>/">Home</a>
-      <a href="\<%= locale %>/utils">Utils</a>
-      <a href="https://github.com/pascalr/jome">GitHub</a>
-    </div>
-  </html>
+  return <%s PARTIAL %>
   ```
 
   .jome file can be executed from the command line, but they can also be imported inside another .jome file.
@@ -193,6 +202,7 @@ let content = <md>
   - [end](#end): Replaces curly braces for statement blocks
   - [elif](#elif): Same as `else if`
   - [elsif](#elsif): Same as `else if`
+  - [chain](#chain): Allows to call multiple methods on the same instance and return the last.
   - [private](#private): Comming soon...
   - [along](#along): Comming soon...
   - [code](#code): Comming soon...
@@ -232,7 +242,7 @@ let content = <md>
   obj = {content: content, value: value}
   ```
 
-  <h2 id="utils">Built-Ins</h2>
+  <h2 id="builtins">Built-Ins</h2>
 
   The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.
 
@@ -265,24 +275,8 @@ let content = <md>
 
   For functions that have a sync and async version, use the exclamation mark after to use the sync version.
   ```jome
-  #write! './somefile.txt', 'Some content', overwrite: true
+  #write! 'Some content', to: './somefile.txt', overwrite: true
   ```
-
-  ### Chaining methods
-
-  You can execute multiple methods on the same object using the `chain` keyword.
-
-  ```jome
-  // Create a server, add a route and start it
-  ExpressServer port: 3000 chain
-    get '/' do |req, res|
-      res.send(homePage)
-    end
-    start
-  end
-  ```
-
-  Chain returns the value of the last command.
 
   ### Instance properties (@)
 
@@ -843,6 +837,11 @@ let content = <md>
   str = @"This is a string that does ${not} interpolate"
   ```
 
+  ### Substitutions
+
+  You can insert stuff after the transformers using `\<%s varName %>`. Under the hood, a hash is created for varName, it is inserted into the string
+  and it is substituted after the transformers are called.
+
   ## Threads
 
   Exactly the same as JavaScript? await, async, ...
@@ -901,6 +900,22 @@ let content = <md>
 
   Simply equivalent of global._ for now. Adding underscore in order to avoid name clashes. For example,
   I was using $URL, but this does not work because global.URL already exists within Node.
+
+  ### Chaining methods
+
+  You can execute multiple methods on the same object using the `chain` keyword.
+
+  ```jome
+  // Create a server, add a route and start it
+  ExpressServer port: 3000 chain
+    get '/' do |req, res|
+      res.send(homePage)
+    end
+    start
+  end
+  ```
+
+  Chain returns the value of the last command.
 
   ## Contributing
 

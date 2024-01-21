@@ -2,6 +2,7 @@ const { compileUtility } = require("jome-lib/compileUtility")
 const {compileTokenRaw} = require("./parser.js")
 const {filterCommas, filterNewlines} = require("./validator.js")
 const Argument = require("./argument")
+const crypto = require('crypto');
 
 const GLOBAL_PREFIX = 'g_'
 
@@ -353,10 +354,21 @@ function mergeFormat(format, defaultFormat) {
 }
 
 function compileHeredoc(node) {
-  let lines = node.data.content.split('\n')
+  let raw = node.data.content
+  let substitutions = {}
+  let withSubs = raw.replace(/(?<!\\)<%s\s+(\w+)\s*%>/g, (match, group) => {
+    let hash = crypto.createHash('md5').update(group).digest("hex")
+    substitutions[hash] = group
+    return hash
+  });
+  let lines = withSubs.split('\n')
   let format = mergeFormat(node.data.format, node.ctxFile.defaultFormatByTagName[node.data.tagName])
   let content = formatLines(node, lines, format, true, true)
-  return compileInterpolate(node, content)
+  let result = compileInterpolate(node, content)
+  Object.keys(substitutions).forEach(hash => {
+    result = result + `.replace('${hash}', ${substitutions[hash]})`
+  })
+  return result
 }
 
 function compileString(node) {

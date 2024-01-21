@@ -32,6 +32,12 @@ const OPERAND_TYPES = [
   "support.variable.jome",
   "support.function-call.jome",
   "support.function-call.WIP.jome",
+  // FIXME: These should be renamed, they should end with .jome ... meta.embedded.js.jome, meta.embedded.md.jome, etc
+  "meta.embedded.block.javascript",
+  "meta.embedded.block.shell",
+  "meta.embedded.block.markdown",
+  "meta.embedded.block.css",
+  "meta.embedded.block.html",
 ]
 
 function compileTokenRaw(token) {

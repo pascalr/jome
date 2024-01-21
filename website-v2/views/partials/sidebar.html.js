@@ -18,7 +18,7 @@ module.exports = () => {
           <li><a href="${global.g_URL}/#keywords">Keywords</a></li>
           <li><a href="${global.g_URL}/#comments">Comments</a></li>
         </ul>
-        <li><a href="${global.g_URL}/#built-ins">Built-Ins</a></li>
+        <li><a href="${global.g_URL}/#builtins">Built-Ins</a></li>
         <li><a href="${global.g_URL}/#scripts">Scripts</a></li>
         <li><a href="${global.g_URL}/#chain">Chain</a></li>
         <li><a href="${global.g_URL}/#instance-props">Instance properties (@)</a></li>

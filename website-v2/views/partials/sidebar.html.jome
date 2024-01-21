@@ -24,7 +24,7 @@ return <html>
           <li><a href="<%= $URL %>/#keywords">Keywords</a></li>
           <li><a href="<%= $URL %>/#comments">Comments</a></li>
         </ul>
-        <li><a href="<%= $URL %>/#built-ins">Built-Ins</a></li>
+        <li><a href="<%= $URL %>/#builtins">Built-Ins</a></li>
         <li><a href="<%= $URL %>/#scripts">Scripts</a></li>
         <li><a href="<%= $URL %>/#chain">Chain</a></li>
         <li><a href="<%= $URL %>/#instance-props">Instance properties (@)</a></li>
