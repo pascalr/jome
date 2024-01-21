@@ -48,18 +48,22 @@
           <li><a href="/jome/#comments">Comments</a></li>
         </ul>
         <li><a href="/jome/#builtins">Built-Ins</a></li>
-        <li><a href="/jome/#scripts">Scripts</a></li>
-        <li><a href="/jome/#paths">Paths</a></li>
+        <li><a href="/jome/#strings">Strings</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="/jome/#formatting">Formatting</a></li>
+          <li><a href="/jome/#heredocs">Heredocs</a></li>
+          <li><a href="/jome/#paths">Paths</a></li>
+        </ul>
         <li><a href="/jome/#conditions">Conditions</a></li>
         <li><a href="/jome/#loops">Loops</a></li>
         <li><a href="/jome/#switch-case">Switch/Case</a></li>
         <li><a href="/jome/#with">With keyword</a></li>
         <li><a href="/jome/#classes">Classes</a></li>
-        <li><a href="/jome/#instance-props">Instance properties (@)</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="/jome/#formatting">Instance properties (@)</a></li>
+        </ul>
         <li><a href="/jome/#exports">Modules and exports</a></li>
         <li><a href="/jome/#along">Along keyword</a></li>
-        <li><a href="/jome/#strings">Strings</a></li>
-        <li><a href="/jome/#formating">Formatting</a></li>
         <li><a href="/jome/#threads">Threads</a></li>
         <li><a href="/jome/#private">Private</a></li>
         <li><a href="/jome/#env">Environment variables</a></li>
@@ -565,6 +569,16 @@ function is created with the same same as the signal to force the signal.</p>
 btn = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Button</span>()
 btn.<span class="hljs-title function_">click</span>()
 </code></pre>
+<h2>Strings</h2>
+<p>Ideas:</p>
+<ul>
+<li>@&quot;Hello {name}!
+not escaped&quot; // verbatim,  only escapes the quote, no interpolation</li>
+<li>@&quot;&quot;&quot;Hello  {{name}}!&quot;&quot;&quot; // verbatim,  only escapes the quote, but ALLOWS interpolation with double {{}}
+Maybe:</li>
+<li>#&quot;Hello #name! How are you #{name}? ##PI is almost 3.1416&quot; // #identifier and #{identifier} are both allowed for interpolation</li>
+<li>$&quot;Hello ${name}!&quot; // exactly like backticks in js</li>
+</ul>
 <h2>TODO</h2>
 <p>Idée: #1, #2, ... fait référence aux arguments d'une fonction. Pas obliger de les déclarer. Ça peut être court comme syntaxe
 pour des filters par exemple.</p>

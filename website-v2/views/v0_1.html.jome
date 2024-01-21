@@ -21,6 +21,8 @@ let content = <md>
 
   # Jome v0.1
 
+  TODO: Check for grammar and vocabulary mistakes! aspell?
+
   Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, syntax similar to ruby and it
   has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.
 
@@ -278,6 +280,226 @@ let content = <md>
   #write! 'Some content', to: './somefile.txt', overwrite: true
   ```
 
+  <h2 id="strings">Strings</h2>
+
+  They are many kinds of quotes in Jome that should handle every use case. There is:
+  - Single quotes: Rendered as is. `let code = 'if (cond) {return 0;}'`
+  - Triple single quotes: Rendered as is. Allows to insert single quotes inside the string.
+  - Double quotes: Allows template literals. Insert content using curly braces. `"Hello {name}!"`
+  - Triple double quotes: Allows template literals. Insert content using double curly braces. `"""Hello {{name}}!"""`
+  - Verbatim strings (@): Render the string as is without escaping. `let windowsPath = @"C:\Users\Pascal\Documents\File.txt"`
+
+  Backticks are not supported for now. It's not yet decided how to handle them.
+
+  Note: All strings are allowed to be multiline.
+
+  <h3 id="formatting">Formatting</h3>
+
+  You can add a formatting to strings by appending it right after. They start with the symbol `%`.
+
+  You can do many things with formatting:
+  - Tranformation: `%:funcToApply` applies the given function to the string
+  - Whole string trimming: `%s`, add an `x` before or after to specify position. Ex: `%xsx` trims both ends of the string.
+  - Line trimming: `%l`, add an `x` before or after to specify position. Ex: `%xl` trims the beginning of every line.
+  - Indent trimming: `%i`, same as line trimming, but keeps the nested indentation.
+  
+  Formatting nomenclature:
+
+  i: indent (trim, but keep indentation, check for least amount of spaces before, than trim, spaces and tabs not allowed combined, never with s (string))
+  t: tab
+  _: space
+  j: join (must be at the end of the format. joins all lines with the character after if any, or nothing if ends with j)
+
+  // Explicit characters like \t and \n are not trimmed.
+  ""%xs // Trim empty lines at the beginning of the string
+  ""%xsx // Trim empty lines at the beginning and the end of the string
+  ""%sx // Trim empty lines at the end of the string
+  ""%xl // Trim everyline before
+  ""%xlx // Trim everyline before and after
+  ""%lx // Trim everyline after
+  ""%xs%xt // Trim at the beginning of the string and the end of every line
+  ""%xl%sx // Trim at the beginning of every line and the end of the string
+  ""%i__ // Keep indentation at the beginning of everyline starting with two spaces
+
+  let description = "This is a text description
+                     on many lines. It stays many
+                     lines but trims beginning.
+                    "%xlsx
+
+  let singleLine = "This is written on multiple
+                    lines but will all be joined
+                    on a single line.
+                    "%xlx%j_
+
+  Maybe allow formatting after scripts too? <html></html>%xs
+
+  ### Default string format
+
+  I think I want the default format to be %i%xsx.
+
+  You can use the keyword `use` to set a default format for the strings that comes after in the current scope.
+
+  ```jome
+  use %xlx%j_
+  let str = "some multi
+             line string" // will use the format above
+  ```
+
+  The formats do not add up to each other. When you specify a format, it replaces the previous one.
+
+  Maybe allow to give names to format that you can reuse?
+
+  Or simply numbers?
+
+  set format 0 %xlx%j_
+
+  then you do "some string"%0
+
+  When there is a default format and you want none, use only % like "str"%
+
+  Maybe define single digits aliases myself to be the most commonly used formats. This way you can know what it means without looking
+  it up if you are an expert.
+
+  Or maybe define named aliases myself.
+
+  %_html => string like in html, joins the lines with a single space
+
+  Maybe it would be nice if I could modify only some flag instead of all. Let's say, I always want xsx, but only sometimes xl,
+  I don't want to have to redefine xsx every time.
+
+  Peut-être quand dans le fond faire que ce sont tous des flags.
+
+  Tu peux faire %s pour reset string settings, %l pour line settings, %s%l%i%j équivalerais à % qui reset tout
+
+  Je ne sais pas pour %i par contre, mais celui n'est pas encore tout à fais clair. Ça garde juste le nested indent?
+
+  Si %i active, comment désactivé?
+
+  <h3 id="verbatim">Verbatim string literals</h3>
+
+  Verbatim string literals are strings that do not interpolate. The idea is taken from C#. But in C# it also includes backslashes without escaping
+  them I don't know if I want to do that. Or I want to offer multiple possibilities.
+  
+  ```jome
+  str = @"This is a string that does ${not} interpolate"
+  ```
+
+  <h2 id="heredocs">Heredocs</h2>
+
+  In jome, the idea is that you could include most other programming languages directly using xml tags.
+
+  ```jome
+  // Execute a shell command in a script
+  <sh>ls -A</sh>
+
+  // Ruby is a pretty nice language for scripts too 
+  <rb>puts (1..10).select(&:even?).sum</rb>
+  ```
+
+  Supported list for now:
+  - sh
+  - html
+  - md
+  - js
+
+  TODO list:
+  - css
+  - bin
+  - oct
+  - hex
+  - rb
+  - sql
+  - txt et/ou str
+  - C
+  - cpp
+
+  MAYBE list:
+  - col: For color, need a way to let the editor know that we want to be picking a color.
+
+  ### Scripts for data
+
+  TODO:
+
+  En jome, c'est <bin>01010101</bin> pour faire du binaire et <hex>FF00AA</hex> pour faire de l'hexadécimal.
+  <oct>12345678</oct> compile en 0o
+  
+  Ne pas supporter 0xFF00AA et ne pas supporter non plus 0b01010101, ceci est confondant avec les unités.
+
+  bin et hex compile en utilisant 0x et 0b
+
+  TODO: Rajouter du syntax highligh au hex pour changer de couleur à toute les 2 charactères? Afficher comme des
+  string et à tous les 2 charactères mettre comme si escaped string pour que la couleur change un peu.
+
+  TODO: Supporter la syntaxe 123e4 par contre
+  let exponentialNumber = 123e4;
+  console.log(exponentialNumber); // Outputs: 1230000
+
+  ### Scripts interpolation
+
+  You can add data inside the scripts using the < % =    % > syntax.
+
+  Contrary to other template languages like ejs, you must finish the expression given inside the interpolation tag.
+
+  If you want to do a condition for example, you use a nesting tag < > ... < / >
+
+  ```jome
+  < % = if true < >
+    <div class="content">
+      < % = content % >
+    </div>
+  else < >
+    <div class="content">
+      < % = content % >
+    </div>
+  < / > % >
+  ```
+
+  ### Substitutions
+
+  You can insert stuff after the transformers using `\<%s varName %>`. Under the hood, a hash is created for varName, it is inserted into the string
+  and it is substituted after the transformers are called.
+
+  <h3 id="paths">Paths</h3>
+
+  The issue with relative paths is that you don't know what they are relative to. In js, in include files,
+  the relative path is relative to the current file. If you try to open and write a file, than it is relative
+  to the current working directory.
+
+  In Jome, this is more explicit using paths. `'#./'` is used for paths relative to current file, '#cwd/' is used for
+  paths relative to the current working directory. They are compiled to become absolute, so you can pass it to
+  a function in another file and you are sure it will reference the proper file.
+
+  You can use # to define paths. They must start by '/', '.' or 'cwd/'. (Maybe '~' too)
+
+  ```jome
+  let path0 = #. // same as __dirname
+  let path1 = #/some/absolute/path.txt
+  let path2 = #./someFile.jome
+  let path3 = #../otherDir/"some file with spaces.txt"
+  let path4 = #cwd/someFile.txt // Allow paths after #cwd to get files inside current working directory.
+  let path5 = #~/Downloads/someFile.txt // Maybe
+  ```
+  
+  Relative paths are converted to absolute paths. It's the same as joining __dirname with the relative path.
+
+  Spaces are not allowed, but you can escape them. Any other character is allowed?
+
+  You can use quotes inside paths, just not at the beginning. You can use like like so:
+
+  ```jome
+  let test = #./'some/file with spaces.txt'
+  let test = #/'some/file with spaces.txt'
+  let test = #./"some/file with spaces.txt"
+  let test = #/"some path/file with spaces.txt"
+  let test = #/some/path/to/some/"file with spaces.txt"
+  ```
+
+  If you want quotes inside your filename, than you need to escape them.
+
+  No interpolation inside jome paths?
+
+  Paths always use the /, but maybe they are converted when compiling for Windows?
+
   ### Instance properties (@)
 
   One of the objective of Jome is to remove the weird thing that is this.
@@ -326,47 +548,6 @@ let content = <md>
   ```jome
   let obj = {:someCond!} // same as {someCond: true}
   ```
-
-  ## Paths
-
-  The issue with relative paths is that you don't know what they are relative to. In js, in include files,
-  the relative path is relative to the current file. If you try to open and write a file, than it is relative
-  to the current working directory.
-
-  In Jome, this is more explicit using paths. `'#./'` is used for paths relative to current file, '#cwd/' is used for
-  paths relative to the current working directory. They are compiled to become absolute, so you can pass it to
-  a function in another file and you are sure it will reference the proper file.
-
-  You can use # to define paths. They must start by '/', '.' or 'cwd/'. (Maybe '~' too)
-
-  ```jome
-  let path0 = #. // same as __dirname
-  let path1 = #/some/absolute/path.txt
-  let path2 = #./someFile.jome
-  let path3 = #../otherDir/"some file with spaces.txt"
-  let path4 = #cwd/someFile.txt // Allow paths after #cwd to get files inside current working directory.
-  let path5 = #~/Downloads/someFile.txt // Maybe
-  ```
-  
-  Relative paths are converted to absolute paths. It's the same as joining __dirname with the relative path.
-
-  Spaces are not allowed, but you can escape them. Any other character is allowed?
-
-  You can use quotes inside paths, just not at the beginning. You can use like like so:
-
-  ```jome
-  let test = #./'some/file with spaces.txt'
-  let test = #/'some/file with spaces.txt'
-  let test = #./"some/file with spaces.txt"
-  let test = #/"some path/file with spaces.txt"
-  let test = #/some/path/to/some/"file with spaces.txt"
-  ```
-
-  If you want quotes inside your filename, than you need to escape them.
-
-  No interpolation inside jome paths?
-
-  Paths always use the /, but maybe they are converted when compiling for Windows?
 
   ## Loops
 
@@ -601,76 +782,6 @@ let content = <md>
   This allows easy documentation of the code without having to repeat yourself in the comments.
 
   It would be nice if there was a short way to start a single line documentation comment.
-
-  <h2 id="heredocs">Heredocs</h2>
-
-  In jome, the idea is that you could include most other programming languages directly using xml tags.
-
-  ```jome
-  // Execute a shell command in a script
-  <sh>ls -A</sh>
-
-  // Ruby is a pretty nice language for scripts too 
-  <rb>puts (1..10).select(&:even?).sum</rb>
-  ```
-
-  Supported list for now:
-  - sh
-  - html
-  - md
-  - js
-
-  TODO list:
-  - css
-  - bin
-  - oct
-  - hex
-  - rb
-  - sql
-  - txt et/ou str
-  - C
-  - cpp
-
-  MAYBE list:
-  - col: For color, need a way to let the editor know that we want to be picking a color.
-
-  ### Scripts for data
-
-  TODO:
-
-  En jome, c'est <bin>01010101</bin> pour faire du binaire et <hex>FF00AA</hex> pour faire de l'hexadécimal.
-  <oct>12345678</oct> compile en 0o
-  
-  Ne pas supporter 0xFF00AA et ne pas supporter non plus 0b01010101, ceci est confondant avec les unités.
-
-  bin et hex compile en utilisant 0x et 0b
-
-  TODO: Rajouter du syntax highligh au hex pour changer de couleur à toute les 2 charactères? Afficher comme des
-  string et à tous les 2 charactères mettre comme si escaped string pour que la couleur change un peu.
-
-  TODO: Supporter la syntaxe 123e4 par contre
-  let exponentialNumber = 123e4;
-  console.log(exponentialNumber); // Outputs: 1230000
-
-  ### Scripts interpolation
-
-  You can add data inside the scripts using the < % =    % > syntax.
-
-  Contrary to other template languages like ejs, you must finish the expression given inside the interpolation tag.
-
-  If you want to do a condition for example, you use a nesting tag < > ... < / >
-
-  ```jome
-  < % = if true < >
-    <div class="content">
-      < % = content % >
-    </div>
-  else < >
-    <div class="content">
-      < % = content % >
-    </div>
-  < / > % >
-  ```
   
   ## along keyword
 
@@ -730,117 +841,6 @@ let content = <md>
   ```
 
   It will automatically be compiled to the code above.
-
-  ## Strings
-
-  Single and double quotes are to be the same and can be used interchangibly. Like in js and python.
-
-  Backticks are not to be supported for now. I don't know what I what to do with them.
-
-  All string are allowed to be multiline.
-
-  Ideas:
-  - "Hello {name}!" // name is interpolated with single {}
-  - """Hello {{name}}! Can use single " or double "" inside too!""" // name is interpolated with double {{}}
-  - @"Hello {name}! \n not escaped" // verbatim, \ only escapes the quote, no interpolation
-  - @"""Hello \ {{name}}!""" // verbatim, \ only escapes the quote, but ALLOWS interpolation with double {{}}
-  Maybe:
-  - #"Hello #name! How are you #{name}? ##PI is almost 3.1416" // #identifier and #{identifier} are both allowed for interpolation
-  - $"Hello ${name}!" // exactly like backticks in js
-
-  Maybe use ' and ''' instead of @" and @"""? In ruby, this is what they do. It's just that I don't think it's that common.
-  And honestly I did not know that. @ is more explicit. Otherwise you might think they can be used interchangibly like in python.
-
-  ### Formatting
-
-  Formatting nomenclature:
-
-  x: trim
-  s: whole string
-  l: line
-  i: indent (trim, but keep indentation, check for least amount of spaces before, than trim, spaces and tabs not allowed combined, never with s (string))
-  t: tab
-  _: space
-  j: join (must be at the end of the format. joins all lines with the character after if any, or nothing if ends with j)
-
-  // Explicit characters like \t and \n are not trimmed.
-  ""%xs // Trim empty lines at the beginning of the string
-  ""%xsx // Trim empty lines at the beginning and the end of the string
-  ""%sx // Trim empty lines at the end of the string
-  ""%xl // Trim everyline before
-  ""%xlx // Trim everyline before and after
-  ""%lx // Trim everyline after
-  ""%xs%xt // Trim at the beginning of the string and the end of every line
-  ""%xl%sx // Trim at the beginning of every line and the end of the string
-  ""%i__ // Keep indentation at the beginning of everyline starting with two spaces
-
-  let description = "This is a text description
-                     on many lines. It stays many
-                     lines but trims beginning.
-                    "%xlsx
-
-  let singleLine = "This is written on multiple
-                    lines but will all be joined
-                    on a single line.
-                    "%xlx%j_
-
-  Maybe allow formatting after scripts too? <html></html>%xs
-
-  ### Default string format
-
-  I think I want the default format to be %i%xsx.
-
-  You can use the keyword `use` to set a default format for the strings that comes after in the current scope.
-
-  ```jome
-  use %xlx%j_
-  let str = "some multi
-             line string" // will use the format above
-  ```
-
-  The formats do not add up to each other. When you specify a format, it replaces the previous one.
-
-  Maybe allow to give names to format that you can reuse?
-
-  Or simply numbers?
-
-  set format 0 %xlx%j_
-
-  then you do "some string"%0
-
-  When there is a default format and you want none, use only % like "str"%
-
-  Maybe define single digits aliases myself to be the most commonly used formats. This way you can know what it means without looking
-  it up if you are an expert.
-
-  Or maybe define named aliases myself.
-
-  %_html => string like in html, joins the lines with a single space
-
-  Maybe it would be nice if I could modify only some flag instead of all. Let's say, I always want xsx, but only sometimes xl,
-  I don't want to have to redefine xsx every time.
-
-  Peut-être quand dans le fond faire que ce sont tous des flags.
-
-  Tu peux faire %s pour reset string settings, %l pour line settings, %s%l%i%j équivalerais à % qui reset tout
-
-  Je ne sais pas pour %i par contre, mais celui n'est pas encore tout à fais clair. Ça garde juste le nested indent?
-
-  Si %i active, comment désactivé?
-
-  <h3 id="verbatim">Verbatim string literals</h3>
-
-  Verbatim string literals are strings that do not interpolate. The idea is taken from C#. But in C# it also includes backslashes without escaping
-  them I don't know if I want to do that. Or I want to offer multiple possibilities.
-  
-  ```jome
-  str = @"This is a string that does ${not} interpolate"
-  ```
-
-  ### Substitutions
-
-  You can insert stuff after the transformers using `\<%s varName %>`. Under the hood, a hash is created for varName, it is inserted into the string
-  and it is substituted after the transformers are called.
 
   ## Threads
 

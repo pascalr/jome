@@ -25,18 +25,22 @@ return <html>
           <li><a href="<%= $URL %>/#comments">Comments</a></li>
         </ul>
         <li><a href="<%= $URL %>/#builtins">Built-Ins</a></li>
-        <li><a href="<%= $URL %>/#heredocs">Heredocs</a></li>
-        <li><a href="<%= $URL %>/#paths">Paths</a></li>
+        <li><a href="<%= $URL %>/#strings">Strings</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="<%= $URL %>/#formatting">Formatting</a></li>
+          <li><a href="<%= $URL %>/#heredocs">Heredocs</a></li>
+          <li><a href="<%= $URL %>/#paths">Paths</a></li>
+        </ul>
         <li><a href="<%= $URL %>/#conditions">Conditions</a></li>
         <li><a href="<%= $URL %>/#loops">Loops</a></li>
         <li><a href="<%= $URL %>/#switch-case">Switch/Case</a></li>
         <li><a href="<%= $URL %>/#with">With keyword</a></li>
         <li><a href="<%= $URL %>/#classes">Classes</a></li>
-        <li><a href="<%= $URL %>/#instance-props">Instance properties (@)</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="<%= $URL %>/#formatting">Instance properties (@)</a></li>
+        </ul>
         <li><a href="<%= $URL %>/#exports">Modules and exports</a></li>
         <li><a href="<%= $URL %>/#along">Along keyword</a></li>
-        <li><a href="<%= $URL %>/#strings">Strings</a></li>
-        <li><a href="<%= $URL %>/#formating">Formatting</a></li>
         <li><a href="<%= $URL %>/#threads">Threads</a></li>
         <li><a href="<%= $URL %>/#private">Private</a></li>
         <li><a href="<%= $URL %>/#env">Environment variables</a></li>

@@ -644,6 +644,15 @@ let content = <md>
   btn.click()
   ```
 
+  ## Strings
+
+  Ideas:
+  - @"Hello {name}! \n not escaped" // verbatim, \ only escapes the quote, no interpolation
+  - @"""Hello \ {{name}}!""" // verbatim, \ only escapes the quote, but ALLOWS interpolation with double {{}}
+  Maybe:
+  - #"Hello #name! How are you #{name}? ##PI is almost 3.1416" // #identifier and #{identifier} are both allowed for interpolation
+  - $"Hello ${name}!" // exactly like backticks in js
+
   ## TODO
 
   Idée: #1, #2, ... fait référence aux arguments d'une fonction. Pas obliger de les déclarer. Ça peut être court comme syntaxe

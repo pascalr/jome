@@ -48,18 +48,22 @@
           <li><a href="/jome/#comments">Comments</a></li>
         </ul>
         <li><a href="/jome/#builtins">Built-Ins</a></li>
-        <li><a href="/jome/#heredocs">Heredocs</a></li>
-        <li><a href="/jome/#paths">Paths</a></li>
+        <li><a href="/jome/#strings">Strings</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="/jome/#formatting">Formatting</a></li>
+          <li><a href="/jome/#heredocs">Heredocs</a></li>
+          <li><a href="/jome/#paths">Paths</a></li>
+        </ul>
         <li><a href="/jome/#conditions">Conditions</a></li>
         <li><a href="/jome/#loops">Loops</a></li>
         <li><a href="/jome/#switch-case">Switch/Case</a></li>
         <li><a href="/jome/#with">With keyword</a></li>
         <li><a href="/jome/#classes">Classes</a></li>
-        <li><a href="/jome/#instance-props">Instance properties (@)</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="/jome/#formatting">Instance properties (@)</a></li>
+        </ul>
         <li><a href="/jome/#exports">Modules and exports</a></li>
         <li><a href="/jome/#along">Along keyword</a></li>
-        <li><a href="/jome/#strings">Strings</a></li>
-        <li><a href="/jome/#formating">Formatting</a></li>
         <li><a href="/jome/#threads">Threads</a></li>
         <li><a href="/jome/#private">Private</a></li>
         <li><a href="/jome/#env">Environment variables</a></li>
@@ -86,6 +90,7 @@
             <div class="scrollable" style="width: 100%;">
               <div class="app-content">
                 <h1>Jome v0.1</h1>
+<p>TODO: Check for grammar and vocabulary mistakes! aspell?</p>
 <p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, syntax similar to ruby and it
 has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>
 <p>Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.</p>
@@ -266,6 +271,165 @@ underscore.js: #map, #reduce, ...</p>
 <p>For functions that have a sync and async version, use the exclamation mark after to use the sync version.</p>
 <pre><code class="language-jome"><span class="hljs-title function_">#write!</span> <span class="hljs-string">&#x27;Some content&#x27;</span>, to: <span class="hljs-string">&#x27;./somefile.txt&#x27;</span>, overwrite: <span class="hljs-keyword">true</span>
 </code></pre>
+  <h2 id="strings">Strings</h2>
+<p>They are many kinds of quotes in Jome that should handle every use case. There is:</p>
+<ul>
+<li>Single quotes: Rendered as is. <code>let code = 'if (cond) {return 0;}'</code></li>
+<li>Triple single quotes: Rendered as is. Allows to insert single quotes inside the string.</li>
+<li>Double quotes: Allows template literals. Insert content using curly braces. <code>&quot;Hello {name}!&quot;</code></li>
+<li>Triple double quotes: Allows template literals. Insert content using double curly braces. <code>&quot;&quot;&quot;Hello {{name}}!&quot;&quot;&quot;</code></li>
+<li>Verbatim strings (@): Render the string as is without escaping. <code>let windowsPath = @&quot;C:UsersPascalDocumentsFile.txt&quot;</code></li>
+</ul>
+<p>Backticks are not supported for now. It's not yet decided how to handle them.</p>
+<p>Note: All strings are allowed to be multiline.</p>
+  <h3 id="formatting">Formatting</h3>
+<p>You can add a formatting to strings by appending it right after. They start with the symbol <code>%</code>.</p>
+<p>You can do many things with formatting:</p>
+<ul>
+<li>Tranformation: <code>%:funcToApply</code> applies the given function to the string</li>
+<li>Whole string trimming: <code>%s</code>, add an <code>x</code> before or after to specify position. Ex: <code>%xsx</code> trims both ends of the string.</li>
+<li>Line trimming: <code>%l</code>, add an <code>x</code> before or after to specify position. Ex: <code>%xl</code> trims the beginning of every line.</li>
+<li>Indent trimming: <code>%i</code>, same as line trimming, but keeps the nested indentation.</li>
+</ul>
+<p>Formatting nomenclature:</p>
+<p>i: indent (trim, but keep indentation, check for least amount of spaces before, than trim, spaces and tabs not allowed combined, never with s (string))
+t: tab
+_: space
+j: join (must be at the end of the format. joins all lines with the character after if any, or nothing if ends with j)</p>
+<p>// Explicit characters like 	 and
+are not trimmed.
+&quot;&quot;%xs // Trim empty lines at the beginning of the string
+&quot;&quot;%xsx // Trim empty lines at the beginning and the end of the string
+&quot;&quot;%sx // Trim empty lines at the end of the string
+&quot;&quot;%xl // Trim everyline before
+&quot;&quot;%xlx // Trim everyline before and after
+&quot;&quot;%lx // Trim everyline after
+&quot;&quot;%xs%xt // Trim at the beginning of the string and the end of every line
+&quot;&quot;%xl%sx // Trim at the beginning of every line and the end of the string
+&quot;&quot;%i__ // Keep indentation at the beginning of everyline starting with two spaces</p>
+<p>let description = &quot;This is a text description
+on many lines. It stays many
+lines but trims beginning.
+&quot;%xlsx</p>
+<p>let singleLine = &quot;This is written on multiple
+lines but will all be joined
+on a single line.
+&quot;%xlx%j_</p>
+<p>Maybe allow formatting after scripts too? <html></html>%xs</p>
+<h3>Default string format</h3>
+<p>I think I want the default format to be %i%xsx.</p>
+<p>You can use the keyword <code>use</code> to set a default format for the strings that comes after in the current scope.</p>
+<pre><code class="language-jome"><span class="hljs-variable">use</span> %<span class="hljs-variable">xlx</span>%<span class="hljs-variable">j_</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">str</span> = <span class="hljs-string">&quot;some multi
+           line string&quot;</span> <span class="hljs-comment">// will use the format above</span>
+</code></pre>
+<p>The formats do not add up to each other. When you specify a format, it replaces the previous one.</p>
+<p>Maybe allow to give names to format that you can reuse?</p>
+<p>Or simply numbers?</p>
+<p>set format 0 %xlx%j_</p>
+<p>then you do &quot;some string&quot;%0</p>
+<p>When there is a default format and you want none, use only % like &quot;str&quot;%</p>
+<p>Maybe define single digits aliases myself to be the most commonly used formats. This way you can know what it means without looking
+it up if you are an expert.</p>
+<p>Or maybe define named aliases myself.</p>
+<p>%_html =&gt; string like in html, joins the lines with a single space</p>
+<p>Maybe it would be nice if I could modify only some flag instead of all. Let's say, I always want xsx, but only sometimes xl,
+I don't want to have to redefine xsx every time.</p>
+<p>Peut-être quand dans le fond faire que ce sont tous des flags.</p>
+<p>Tu peux faire %s pour reset string settings, %l pour line settings, %s%l%i%j équivalerais à % qui reset tout</p>
+<p>Je ne sais pas pour %i par contre, mais celui n'est pas encore tout à fais clair. Ça garde juste le nested indent?</p>
+<p>Si %i active, comment désactivé?</p>
+  <h3 id="verbatim">Verbatim string literals</h3>
+<p>Verbatim string literals are strings that do not interpolate. The idea is taken from C#. But in C# it also includes backslashes without escaping
+them I don't know if I want to do that. Or I want to offer multiple possibilities.</p>
+<pre><code class="language-jome"><span class="hljs-variable">str</span> = @<span class="hljs-string">&quot;This is a string that does ${not} interpolate&quot;</span>
+</code></pre>
+  <h2 id="heredocs">Heredocs</h2>
+<p>In jome, the idea is that you could include most other programming languages directly using xml tags.</p>
+<pre><code class="language-jome"><span class="hljs-comment">// Execute a shell command in a script</span>
+<span class="language-shell">&lt;sh&gt;ls -A&lt;/sh&gt;</span>
+
+<span class="hljs-comment">// Ruby is a pretty nice language for scripts too </span>
+&lt;<span class="hljs-variable">rb</span>&gt;<span class="hljs-variable">puts</span> (<span class="hljs-number">1.</span><span class="hljs-number">.10</span>).<span class="hljs-title function_">select</span>(&amp;:<span class="hljs-variable">even</span>?).<span class="hljs-variable">sum</span>&lt;/<span class="hljs-variable">rb</span>&gt;
+</code></pre>
+<p>Supported list for now:</p>
+<ul>
+<li>sh</li>
+<li>html</li>
+<li>md</li>
+<li>js</li>
+</ul>
+<p>TODO list:</p>
+<ul>
+<li>css</li>
+<li>bin</li>
+<li>oct</li>
+<li>hex</li>
+<li>rb</li>
+<li>sql</li>
+<li>txt et/ou str</li>
+<li>C</li>
+<li>cpp</li>
+</ul>
+<p>MAYBE list:</p>
+<ul>
+<li>col: For color, need a way to let the editor know that we want to be picking a color.</li>
+</ul>
+<h3>Scripts for data</h3>
+<p>TODO:</p>
+<p>En jome, c'est <bin>01010101</bin> pour faire du binaire et <hex>FF00AA</hex> pour faire de l'hexadécimal.
+<oct>12345678</oct> compile en 0o</p>
+<p>Ne pas supporter 0xFF00AA et ne pas supporter non plus 0b01010101, ceci est confondant avec les unités.</p>
+<p>bin et hex compile en utilisant 0x et 0b</p>
+<p>TODO: Rajouter du syntax highligh au hex pour changer de couleur à toute les 2 charactères? Afficher comme des
+string et à tous les 2 charactères mettre comme si escaped string pour que la couleur change un peu.</p>
+<p>TODO: Supporter la syntaxe 123e4 par contre
+let exponentialNumber = 123e4;
+console.log(exponentialNumber); // Outputs: 1230000</p>
+<h3>Scripts interpolation</h3>
+<p>You can add data inside the scripts using the &lt; % =    % &gt; syntax.</p>
+<p>Contrary to other template languages like ejs, you must finish the expression given inside the interpolation tag.</p>
+<p>If you want to do a condition for example, you use a nesting tag &lt; &gt; ... &lt; / &gt;</p>
+<pre><code class="language-jome">&lt; % = <span class="hljs-keyword">if</span> <span class="hljs-keyword">true</span> &lt; &gt;
+  &lt;<span class="hljs-variable">div</span> <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;
+    &lt; % = <span class="hljs-variable">content</span> % &gt;
+  &lt;/<span class="hljs-variable">div</span>&gt;
+<span class="hljs-keyword">else</span> &lt; &gt;
+  &lt;<span class="hljs-variable">div</span> <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;
+    &lt; % = <span class="hljs-variable">content</span> % &gt;
+  &lt;/<span class="hljs-variable">div</span>&gt;
+&lt; / &gt; % &gt;
+</code></pre>
+<h3>Substitutions</h3>
+<p>You can insert stuff after the transformers using <code>&lt;%s varName %&gt;</code>. Under the hood, a hash is created for varName, it is inserted into the string
+and it is substituted after the transformers are called.</p>
+  <h3 id="paths">Paths</h3>
+<p>The issue with relative paths is that you don't know what they are relative to. In js, in include files,
+the relative path is relative to the current file. If you try to open and write a file, than it is relative
+to the current working directory.</p>
+<p>In Jome, this is more explicit using paths. <code>'#./'</code> is used for paths relative to current file, '#cwd/' is used for
+paths relative to the current working directory. They are compiled to become absolute, so you can pass it to
+a function in another file and you are sure it will reference the proper file.</p>
+<p>You can use # to define paths. They must start by '/', '.' or 'cwd/'. (Maybe '~' too)</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">path0</span> = #. <span class="hljs-comment">// same as __dirname</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">path1</span> = #/<span class="hljs-variable">some</span>/<span class="hljs-variable">absolute</span>/<span class="hljs-variable">path</span>.<span class="hljs-variable">txt</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">path2</span> = #./<span class="hljs-variable">someFile</span>.<span class="hljs-variable">jome</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">path3</span> = #../<span class="hljs-variable">otherDir</span>/<span class="hljs-string">&quot;some file with spaces.txt&quot;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">path4</span> = <span class="hljs-variable">#cwd</span>/<span class="hljs-variable">someFile</span>.<span class="hljs-variable">txt</span> <span class="hljs-comment">// Allow paths after #cwd to get files inside current working directory.</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">path5</span> = #~/<span class="hljs-title class_">Downloads</span>/<span class="hljs-variable">someFile</span>.<span class="hljs-variable">txt</span> <span class="hljs-comment">// Maybe</span>
+</code></pre>
+<p>Relative paths are converted to absolute paths. It's the same as joining __dirname with the relative path.</p>
+<p>Spaces are not allowed, but you can escape them. Any other character is allowed?</p>
+<p>You can use quotes inside paths, just not at the beginning. You can use like like so:</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #./<span class="hljs-string">&#x27;some/file with spaces.txt&#x27;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #/<span class="hljs-string">&#x27;some/file with spaces.txt&#x27;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #./<span class="hljs-string">&quot;some/file with spaces.txt&quot;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #/<span class="hljs-string">&quot;some path/file with spaces.txt&quot;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #/<span class="hljs-variable">some</span>/<span class="hljs-variable">path</span>/<span class="hljs-variable">to</span>/<span class="hljs-variable">some</span>/<span class="hljs-string">&quot;file with spaces.txt&quot;</span>
+</code></pre>
+<p>If you want quotes inside your filename, than you need to escape them.</p>
+<p>No interpolation inside jome paths?</p>
+<p>Paths always use the /, but maybe they are converted when compiling for Windows?</p>
 <h3>Instance properties (@)</h3>
 <p>One of the objective of Jome is to remove the weird thing that is this.</p>
 <p>I want in Jome this to refer to the current instance when inside a method and that's it.</p>
@@ -297,33 +461,6 @@ Use window or #window to get the window</p>
 This makes it less confusing and this could allow us to create methods using an exclamation mark at the end.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">obj</span> = {:<span class="hljs-variable">someCond</span>!} <span class="hljs-comment">// same as {someCond: true}</span>
 </code></pre>
-<h2>Paths</h2>
-<p>The issue with relative paths is that you don't know what they are relative to. In js, in include files,
-the relative path is relative to the current file. If you try to open and write a file, than it is relative
-to the current working directory.</p>
-<p>In Jome, this is more explicit using paths. <code>'#./'</code> is used for paths relative to current file, '#cwd/' is used for
-paths relative to the current working directory. They are compiled to become absolute, so you can pass it to
-a function in another file and you are sure it will reference the proper file.</p>
-<p>You can use # to define paths. They must start by '/', '.' or 'cwd/'. (Maybe '~' too)</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">path0</span> = #. <span class="hljs-comment">// same as __dirname</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">path1</span> = #/<span class="hljs-variable">some</span>/<span class="hljs-variable">absolute</span>/<span class="hljs-variable">path</span>.<span class="hljs-variable">txt</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">path2</span> = #./<span class="hljs-variable">someFile</span>.<span class="hljs-variable">jome</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">path3</span> = #../<span class="hljs-variable">otherDir</span>/<span class="hljs-string">&quot;some file with spaces.txt&quot;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">path4</span> = <span class="hljs-variable">#cwd</span>/<span class="hljs-variable">someFile</span>.<span class="hljs-variable">txt</span> <span class="hljs-comment">// Allow paths after #cwd to get files inside current working directory.</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">path5</span> = #~/<span class="hljs-title class_">Downloads</span>/<span class="hljs-variable">someFile</span>.<span class="hljs-variable">txt</span> <span class="hljs-comment">// Maybe</span>
-</code></pre>
-<p>Relative paths are converted to absolute paths. It's the same as joining __dirname with the relative path.</p>
-<p>Spaces are not allowed, but you can escape them. Any other character is allowed?</p>
-<p>You can use quotes inside paths, just not at the beginning. You can use like like so:</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #./<span class="hljs-string">&#x27;some/file with spaces.txt&#x27;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #/<span class="hljs-string">&#x27;some/file with spaces.txt&#x27;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #./<span class="hljs-string">&quot;some/file with spaces.txt&quot;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #/<span class="hljs-string">&quot;some path/file with spaces.txt&quot;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #/<span class="hljs-variable">some</span>/<span class="hljs-variable">path</span>/<span class="hljs-variable">to</span>/<span class="hljs-variable">some</span>/<span class="hljs-string">&quot;file with spaces.txt&quot;</span>
-</code></pre>
-<p>If you want quotes inside your filename, than you need to escape them.</p>
-<p>No interpolation inside jome paths?</p>
-<p>Paths always use the /, but maybe they are converted when compiling for Windows?</p>
 <h2>Loops</h2>
 <p>Loops are used exactly like in javascript, but with the end keyword.</p>
 <p>Work in progress</p>
@@ -499,62 +636,6 @@ end
 </code></pre>
 <p>This allows easy documentation of the code without having to repeat yourself in the comments.</p>
 <p>It would be nice if there was a short way to start a single line documentation comment.</p>
-  <h2 id="heredocs">Heredocs</h2>
-<p>In jome, the idea is that you could include most other programming languages directly using xml tags.</p>
-<pre><code class="language-jome"><span class="hljs-comment">// Execute a shell command in a script</span>
-<span class="language-shell">&lt;sh&gt;ls -A&lt;/sh&gt;</span>
-
-<span class="hljs-comment">// Ruby is a pretty nice language for scripts too </span>
-&lt;<span class="hljs-variable">rb</span>&gt;<span class="hljs-variable">puts</span> (<span class="hljs-number">1.</span><span class="hljs-number">.10</span>).<span class="hljs-title function_">select</span>(&amp;:<span class="hljs-variable">even</span>?).<span class="hljs-variable">sum</span>&lt;/<span class="hljs-variable">rb</span>&gt;
-</code></pre>
-<p>Supported list for now:</p>
-<ul>
-<li>sh</li>
-<li>html</li>
-<li>md</li>
-<li>js</li>
-</ul>
-<p>TODO list:</p>
-<ul>
-<li>css</li>
-<li>bin</li>
-<li>oct</li>
-<li>hex</li>
-<li>rb</li>
-<li>sql</li>
-<li>txt et/ou str</li>
-<li>C</li>
-<li>cpp</li>
-</ul>
-<p>MAYBE list:</p>
-<ul>
-<li>col: For color, need a way to let the editor know that we want to be picking a color.</li>
-</ul>
-<h3>Scripts for data</h3>
-<p>TODO:</p>
-<p>En jome, c'est <bin>01010101</bin> pour faire du binaire et <hex>FF00AA</hex> pour faire de l'hexadécimal.
-<oct>12345678</oct> compile en 0o</p>
-<p>Ne pas supporter 0xFF00AA et ne pas supporter non plus 0b01010101, ceci est confondant avec les unités.</p>
-<p>bin et hex compile en utilisant 0x et 0b</p>
-<p>TODO: Rajouter du syntax highligh au hex pour changer de couleur à toute les 2 charactères? Afficher comme des
-string et à tous les 2 charactères mettre comme si escaped string pour que la couleur change un peu.</p>
-<p>TODO: Supporter la syntaxe 123e4 par contre
-let exponentialNumber = 123e4;
-console.log(exponentialNumber); // Outputs: 1230000</p>
-<h3>Scripts interpolation</h3>
-<p>You can add data inside the scripts using the &lt; % =    % &gt; syntax.</p>
-<p>Contrary to other template languages like ejs, you must finish the expression given inside the interpolation tag.</p>
-<p>If you want to do a condition for example, you use a nesting tag &lt; &gt; ... &lt; / &gt;</p>
-<pre><code class="language-jome">&lt; % = <span class="hljs-keyword">if</span> <span class="hljs-keyword">true</span> &lt; &gt;
-  &lt;<span class="hljs-variable">div</span> <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;
-    &lt; % = <span class="hljs-variable">content</span> % &gt;
-  &lt;/<span class="hljs-variable">div</span>&gt;
-<span class="hljs-keyword">else</span> &lt; &gt;
-  &lt;<span class="hljs-variable">div</span> <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;
-    &lt; % = <span class="hljs-variable">content</span> % &gt;
-  &lt;/<span class="hljs-variable">div</span>&gt;
-&lt; / &gt; % &gt;
-</code></pre>
 <h2>along keyword</h2>
 <p>When you want to also have the unit or the code for a variable, you can use the along keyword.</p>
 <p>along is useful to be used alongside:</p>
@@ -594,83 +675,6 @@ def debug = |msg along code as customCodeName along type as customTypeName along
 }
 </code></pre>
 <p>It will automatically be compiled to the code above.</p>
-<h2>Strings</h2>
-<p>Single and double quotes are to be the same and can be used interchangibly. Like in js and python.</p>
-<p>Backticks are not to be supported for now. I don't know what I what to do with them.</p>
-<p>All string are allowed to be multiline.</p>
-<p>Ideas:</p>
-<ul>
-<li>&quot;Hello {name}!&quot; // name is interpolated with single {}</li>
-<li>&quot;&quot;&quot;Hello {{name}}! Can use single &quot; or double &quot;&quot; inside too!&quot;&quot;&quot; // name is interpolated with double {{}}</li>
-<li>@&quot;Hello {name}!
-not escaped&quot; // verbatim,  only escapes the quote, no interpolation</li>
-<li>@&quot;&quot;&quot;Hello  {{name}}!&quot;&quot;&quot; // verbatim,  only escapes the quote, but ALLOWS interpolation with double {{}}
-Maybe:</li>
-<li>#&quot;Hello #name! How are you #{name}? ##PI is almost 3.1416&quot; // #identifier and #{identifier} are both allowed for interpolation</li>
-<li>$&quot;Hello ${name}!&quot; // exactly like backticks in js</li>
-</ul>
-<p>Maybe use ' and ''' instead of @&quot; and @&quot;&quot;&quot;? In ruby, this is what they do. It's just that I don't think it's that common.
-And honestly I did not know that. @ is more explicit. Otherwise you might think they can be used interchangibly like in python.</p>
-<h3>Formatting</h3>
-<p>Formatting nomenclature:</p>
-<p>x: trim
-s: whole string
-l: line
-i: indent (trim, but keep indentation, check for least amount of spaces before, than trim, spaces and tabs not allowed combined, never with s (string))
-t: tab
-_: space
-j: join (must be at the end of the format. joins all lines with the character after if any, or nothing if ends with j)</p>
-<p>// Explicit characters like 	 and
-are not trimmed.
-&quot;&quot;%xs // Trim empty lines at the beginning of the string
-&quot;&quot;%xsx // Trim empty lines at the beginning and the end of the string
-&quot;&quot;%sx // Trim empty lines at the end of the string
-&quot;&quot;%xl // Trim everyline before
-&quot;&quot;%xlx // Trim everyline before and after
-&quot;&quot;%lx // Trim everyline after
-&quot;&quot;%xs%xt // Trim at the beginning of the string and the end of every line
-&quot;&quot;%xl%sx // Trim at the beginning of every line and the end of the string
-&quot;&quot;%i__ // Keep indentation at the beginning of everyline starting with two spaces</p>
-<p>let description = &quot;This is a text description
-on many lines. It stays many
-lines but trims beginning.
-&quot;%xlsx</p>
-<p>let singleLine = &quot;This is written on multiple
-lines but will all be joined
-on a single line.
-&quot;%xlx%j_</p>
-<p>Maybe allow formatting after scripts too? <html></html>%xs</p>
-<h3>Default string format</h3>
-<p>I think I want the default format to be %i%xsx.</p>
-<p>You can use the keyword <code>use</code> to set a default format for the strings that comes after in the current scope.</p>
-<pre><code class="language-jome"><span class="hljs-variable">use</span> %<span class="hljs-variable">xlx</span>%<span class="hljs-variable">j_</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">str</span> = <span class="hljs-string">&quot;some multi
-           line string&quot;</span> <span class="hljs-comment">// will use the format above</span>
-</code></pre>
-<p>The formats do not add up to each other. When you specify a format, it replaces the previous one.</p>
-<p>Maybe allow to give names to format that you can reuse?</p>
-<p>Or simply numbers?</p>
-<p>set format 0 %xlx%j_</p>
-<p>then you do &quot;some string&quot;%0</p>
-<p>When there is a default format and you want none, use only % like &quot;str&quot;%</p>
-<p>Maybe define single digits aliases myself to be the most commonly used formats. This way you can know what it means without looking
-it up if you are an expert.</p>
-<p>Or maybe define named aliases myself.</p>
-<p>%_html =&gt; string like in html, joins the lines with a single space</p>
-<p>Maybe it would be nice if I could modify only some flag instead of all. Let's say, I always want xsx, but only sometimes xl,
-I don't want to have to redefine xsx every time.</p>
-<p>Peut-être quand dans le fond faire que ce sont tous des flags.</p>
-<p>Tu peux faire %s pour reset string settings, %l pour line settings, %s%l%i%j équivalerais à % qui reset tout</p>
-<p>Je ne sais pas pour %i par contre, mais celui n'est pas encore tout à fais clair. Ça garde juste le nested indent?</p>
-<p>Si %i active, comment désactivé?</p>
-  <h3 id="verbatim">Verbatim string literals</h3>
-<p>Verbatim string literals are strings that do not interpolate. The idea is taken from C#. But in C# it also includes backslashes without escaping
-them I don't know if I want to do that. Or I want to offer multiple possibilities.</p>
-<pre><code class="language-jome"><span class="hljs-variable">str</span> = @<span class="hljs-string">&quot;This is a string that does ${not} interpolate&quot;</span>
-</code></pre>
-<h3>Substitutions</h3>
-<p>You can insert stuff after the transformers using <code>&lt;%s varName %&gt;</code>. Under the hood, a hash is created for varName, it is inserted into the string
-and it is substituted after the transformers are called.</p>
 <h2>Threads</h2>
 <p>Exactly the same as JavaScript? await, async, ...</p>
 <pre><code class="language-jome"><span class="hljs-variable">async</span> <span class="hljs-keyword">def</span> <span class="hljs-variable">someMethod</span>

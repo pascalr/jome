@@ -19,18 +19,22 @@ module.exports = () => {
           <li><a href="${global.g_URL}/#comments">Comments</a></li>
         </ul>
         <li><a href="${global.g_URL}/#builtins">Built-Ins</a></li>
-        <li><a href="${global.g_URL}/#heredocs">Heredocs</a></li>
-        <li><a href="${global.g_URL}/#paths">Paths</a></li>
+        <li><a href="${global.g_URL}/#strings">Strings</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="${global.g_URL}/#formatting">Formatting</a></li>
+          <li><a href="${global.g_URL}/#heredocs">Heredocs</a></li>
+          <li><a href="${global.g_URL}/#paths">Paths</a></li>
+        </ul>
         <li><a href="${global.g_URL}/#conditions">Conditions</a></li>
         <li><a href="${global.g_URL}/#loops">Loops</a></li>
         <li><a href="${global.g_URL}/#switch-case">Switch/Case</a></li>
         <li><a href="${global.g_URL}/#with">With keyword</a></li>
         <li><a href="${global.g_URL}/#classes">Classes</a></li>
-        <li><a href="${global.g_URL}/#instance-props">Instance properties (@)</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="${global.g_URL}/#formatting">Instance properties (@)</a></li>
+        </ul>
         <li><a href="${global.g_URL}/#exports">Modules and exports</a></li>
         <li><a href="${global.g_URL}/#along">Along keyword</a></li>
-        <li><a href="${global.g_URL}/#strings">Strings</a></li>
-        <li><a href="${global.g_URL}/#formating">Formatting</a></li>
         <li><a href="${global.g_URL}/#threads">Threads</a></li>
         <li><a href="${global.g_URL}/#private">Private</a></li>
         <li><a href="${global.g_URL}/#env">Environment variables</a></li>
