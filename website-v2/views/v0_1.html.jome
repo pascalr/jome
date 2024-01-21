@@ -11,7 +11,7 @@ let content = <md>
 
   You can read from top to bottom to learn the language, or you can jump to any section if you are only curious.
 
-  ## Overview
+  <h2 id="overview">Overview</h2>
 
   TODO
   
@@ -21,14 +21,14 @@ let content = <md>
 
   I don't have a list of bugs yet, because there are too many.
 
-  ## Installation
+  <h2 id="install">Installation</h2>
 
   ```sh
   # FIXME: NPM PACKAGE IS NOT YET CREATED!
   npm install jome -g
   ```
 
-  ## Usage
+  <h2 id="usage">Usage</h2>
 
   ```sh
   # Usage
@@ -37,7 +37,7 @@ let content = <md>
   jome server start # pass the arguments "server" and "start" to index.jome executable
   ```
 
-  ## Hello world
+  <h2 id="hello-world">Hello world</h2>
   
   Create a file `hello.jome` with the following content:
 
@@ -64,38 +64,38 @@ let content = <md>
   # => Hello Paul!
   ```
 
-  ## index.jome
+  <h2 id="index-jome">index.jome</h2>
 
   The Jome CLI command checks if the first argument is a .jome source file and executes it if so. Otherwise, it will execute index.jome.
 
   Let's write inside the file `index.jome`
 
   ```jome
-  with cmd, name end
+  with cmd, message end
 
-  if cmd === 'hello'
-    #log "Hello {name}!"
+  if cmd === 'say'
+    #log message
   end
   ```
 
   The result is
   ```sh
-  jome hello Anna
+  jome say "Hello Anna!"
   # => Hello Anna!
   ```
 
-  ## Creating partials
+  <h2 id="partials">Partials</h2> 
 
-  .jome files are very practical to write partials. For example, we can write an html navbar we can reuse.
+  .jome files are very practical to write partials. For example, we can write an html navbar we can reuse using a [heredoc](#heredoc).
 
   ```jome
   with locale end
   return <html>
     <div class="navbar">
       <span class="navbrand" href="#">Jome</span>
-      <a href="&lt;%= locale %>/editor">Editor</a>
-      <a href="&lt;%= locale %>/">Home</a>
-      <a href="&lt;%= locale %>/utils">Utils</a>
+      <a href="\<%= locale %>/editor">Editor</a>
+      <a href="\<%= locale %>/">Home</a>
+      <a href="\<%= locale %>/utils">Utils</a>
       <a href="https://github.com/pascalr/jome">GitHub</a>
     </div>
   </html>
@@ -161,7 +161,7 @@ let content = <md>
   You can use `do ... end` to create functions. You pass arguments between vertical bars.
 
   ```jome
-  [1,2,3,4,5].each do |i|
+  [1,2,3,4,5].#each do |i|
     #log i
   end
   ```
@@ -184,7 +184,44 @@ let content = <md>
   let otherInstance = new SomeClass() // You can also still use the new keyword
   ```
 
-  The advantage of this will be more apparent in Jome version 0.2.
+  The advantage of this will be more apparent in latter Jome versions.
+
+  <h3 id="keywords">Keywords</h3>
+
+  Here are the Jome keywords that are different than javascript:
+  - [with](#with): An alternative way to describe parameters
+  - [end](#end): Replaces curly braces for statement blocks
+  - [elif](#elif): Same as `else if`
+  - [elsif](#elsif): Same as `else if`
+  - [private](#private): Comming soon...
+  - [along](#along): Comming soon...
+  - [code](#code): Comming soon...
+  - [unit](#unit): Comming soon...
+  - [type](#type): Comming soon...
+  - [interface](#interface): Comming soon...
+
+  <h3 id="comments">Comments</h3>
+
+  You can use regular js comments with `//` and `/* */`.
+
+  You can also use `# ` for documentation comments. Note: The hashtag must be followed by a space.
+
+  ```jome
+  // This is a regular comment
+
+  # This is a documentation comment that describes the function below.
+  # Second line of same documentation comment.
+  # @returns Some value
+  with
+    str: string # Documentation comment that describes what this argument is
+    nb: number # A multiline description
+    # of the arg nb goes below not above
+  def someFunc
+    /* TODO: implement this function */
+  end
+  ```
+
+  By default, regular comments are discarded when compiled and documentation comments are kept.
 
   ### Shorthand key syntax
 
@@ -388,28 +425,6 @@ let content = <md>
   someStr = `Hello{' '+name if name}`
 
   Et j'aimerais que dans ce cas, ça retourne automatiquement '' au lieu de undefined ou null
-
-  ## Comments
-
-  Use // and /* */ for regular comments.
-
-  Use # for documentation comments. NOTE: It must have a space after the # , otherwise it's a builtin.
-
-  ```jome
-  // This is a regular comment
-
-  let foo = 10
-
-   # This is a documentation comment that describes the function below.
-   # Second line of same documentation comment.
-  with
-    arg: string # Documentation comment that describes what this argument is
-  def someFunc
-    /* TODO: implement this function */
-  end
-  ```
-
-  By default, regular comments are discarded when compiled and documentation comments are kept.
 
   ### Switch / case
 

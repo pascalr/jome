@@ -159,7 +159,7 @@ function compileInterpolate(node, str, escSeqBeg = '${', escSeqEnd = '}') {
   // In order to handle <% if (true) ( %> Blah blah <% ) %>
   // TODO: Checker comment ils font dans eta.js
 
-  return str.replace(/<%=((.|\n)*?)%>/g, (match, group) => {
+  return str.replace(/(?<!\\)<%=((.|\n)*?)%>/g, (match, group) => {
     let raw = group.trim()
     let out = node.ctxFile.compiler.compileCode(raw, {inline: true})
     return escSeqBeg+out+escSeqEnd

@@ -4,18 +4,19 @@ module.exports = () => {
     <ul class="nav-list">
       <li><a href="${global.g_URL}/">Home</a></li>
       <ul class="nav-list nav-sub">
-        <li><a href="${global.g_URL}/lib/html">Overview</a></li>
-        <li><a href="${global.g_URL}/lib/html-layout">Install</a></li>
-        <li><a href="${global.g_URL}/lib/express-server">Usage</a></li>
-        <li><a href="${global.g_URL}/lib/express-server">Hello world</a></li>
-        <li><a href="${global.g_URL}/lib/express-server">index.jome</a></li>
-        <li><a href="${global.g_URL}/lib/express-server">Partials</a></li>
+        <li><a href="${global.g_URL}/#overview">Overview</a></li>
+        <li><a href="${global.g_URL}/#install">Install</a></li>
+        <li><a href="${global.g_URL}/#usage">Usage</a></li>
+        <li><a href="${global.g_URL}/#hello-world">Hello world</a></li>
+        <li><a href="${global.g_URL}/#index-jome">index.jome</a></li>
+        <li><a href="${global.g_URL}/#partials">Partials</a></li>
       </ul>
       <li><a href="${global.g_URL}/#lang-ref">Language Reference</a></li>
       <ul class="nav-list nav-sub">
         <li><a href="${global.g_URL}/#syntax">Syntax</a></li>
         <ul class="nav-list nav-sub-sub">
-          <li><a href="${global.g_URL}/lib/html">Keywords</a></li>
+          <li><a href="${global.g_URL}/#keywords">Keywords</a></li>
+          <li><a href="${global.g_URL}/#comments">Comments</a></li>
         </ul>
         <li><a href="${global.g_URL}/#built-ins">Built-Ins</a></li>
         <li><a href="${global.g_URL}/#scripts">Scripts</a></li>

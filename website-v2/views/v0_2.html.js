@@ -8,6 +8,12 @@ module.exports = () => {
   What's next to come?
 
   - Types similar to typescript.
+  - A REPL environment like Svelte
+  - A language server
+  - Nodes, Blocks
+  - Units
+  - And much more
+  - A tutorial to learn the language step by step?
 
   ## Types
 
