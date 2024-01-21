@@ -25,17 +25,15 @@ return <html>
           <li><a href="<%= $URL %>/#comments">Comments</a></li>
         </ul>
         <li><a href="<%= $URL %>/#builtins">Built-Ins</a></li>
-        <li><a href="<%= $URL %>/#scripts">Scripts</a></li>
-        <li><a href="<%= $URL %>/#chain">Chain</a></li>
-        <li><a href="<%= $URL %>/#instance-props">Instance properties (@)</a></li>
+        <li><a href="<%= $URL %>/#heredocs">Heredocs</a></li>
         <li><a href="<%= $URL %>/#paths">Paths</a></li>
-        <li><a href="<%= $URL %>/#loops">Loops</a></li>
         <li><a href="<%= $URL %>/#conditions">Conditions</a></li>
-        <li><a href="<%= $URL %>/#comments">Comments</a></li>
+        <li><a href="<%= $URL %>/#loops">Loops</a></li>
         <li><a href="<%= $URL %>/#switch-case">Switch/Case</a></li>
-        <li><a href="<%= $URL %>/#classes">Classes</a></li>
-        <li><a href="<%= $URL %>/#exports">Modules and exports</a></li>
         <li><a href="<%= $URL %>/#with">With keyword</a></li>
+        <li><a href="<%= $URL %>/#classes">Classes</a></li>
+        <li><a href="<%= $URL %>/#instance-props">Instance properties (@)</a></li>
+        <li><a href="<%= $URL %>/#exports">Modules and exports</a></li>
         <li><a href="<%= $URL %>/#along">Along keyword</a></li>
         <li><a href="<%= $URL %>/#strings">Strings</a></li>
         <li><a href="<%= $URL %>/#formating">Formatting</a></li>
@@ -43,6 +41,7 @@ return <html>
         <li><a href="<%= $URL %>/#private">Private</a></li>
         <li><a href="<%= $URL %>/#env">Environment variables</a></li>
         <li><a href="<%= $URL %>/#global">Global variables</a></li>
+        <li><a href="<%= $URL %>/#chain">Chain</a></li>
         <li><a href="<%= $URL %>/#contributing">Contributing</a></li>
         <li><a href="<%= $URL %>/#ack">Acknowledgements</a></li>
       </ul>

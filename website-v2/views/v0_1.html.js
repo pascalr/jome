@@ -199,6 +199,7 @@ module.exports = () => {
   - [end](#end): Replaces curly braces for statement blocks
   - [elif](#elif): Same as \`else if\`
   - [elsif](#elsif): Same as \`else if\`
+  - [chain](#chain): Allows to call multiple methods on the same instance and return the last.
   - [private](#private): Comming soon...
   - [along](#along): Comming soon...
   - [code](#code): Comming soon...
@@ -273,22 +274,6 @@ module.exports = () => {
   \`\`\`jome
   #write! 'Some content', to: './somefile.txt', overwrite: true
   \`\`\`
-
-  ### Chaining methods
-
-  You can execute multiple methods on the same object using the \`chain\` keyword.
-
-  \`\`\`jome
-  // Create a server, add a route and start it
-  ExpressServer port: 3000 chain
-    get '/' do |req, res|
-      res.send(homePage)
-    end
-    start
-  end
-  \`\`\`
-
-  Chain returns the value of the last command.
 
   ### Instance properties (@)
 
@@ -614,7 +599,7 @@ module.exports = () => {
 
   It would be nice if there was a short way to start a single line documentation comment.
 
-  <h2 id="scripts">Scripts</h2>
+  <h2 id="heredocs">Heredocs</h2>
 
   In jome, the idea is that you could include most other programming languages directly using xml tags.
 
@@ -912,6 +897,22 @@ module.exports = () => {
 
   Simply equivalent of global._ for now. Adding underscore in order to avoid name clashes. For example,
   I was using $URL, but this does not work because global.URL already exists within Node.
+
+  ### Chaining methods
+
+  You can execute multiple methods on the same object using the \`chain\` keyword.
+
+  \`\`\`jome
+  // Create a server, add a route and start it
+  ExpressServer port: 3000 chain
+    get '/' do |req, res|
+      res.send(homePage)
+    end
+    start
+  end
+  \`\`\`
+
+  Chain returns the value of the last command.
 
   ## Contributing
 

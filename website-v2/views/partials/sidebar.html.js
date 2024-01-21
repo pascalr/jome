@@ -19,17 +19,15 @@ module.exports = () => {
           <li><a href="${global.g_URL}/#comments">Comments</a></li>
         </ul>
         <li><a href="${global.g_URL}/#builtins">Built-Ins</a></li>
-        <li><a href="${global.g_URL}/#scripts">Scripts</a></li>
-        <li><a href="${global.g_URL}/#chain">Chain</a></li>
-        <li><a href="${global.g_URL}/#instance-props">Instance properties (@)</a></li>
+        <li><a href="${global.g_URL}/#heredocs">Heredocs</a></li>
         <li><a href="${global.g_URL}/#paths">Paths</a></li>
-        <li><a href="${global.g_URL}/#loops">Loops</a></li>
         <li><a href="${global.g_URL}/#conditions">Conditions</a></li>
-        <li><a href="${global.g_URL}/#comments">Comments</a></li>
+        <li><a href="${global.g_URL}/#loops">Loops</a></li>
         <li><a href="${global.g_URL}/#switch-case">Switch/Case</a></li>
-        <li><a href="${global.g_URL}/#classes">Classes</a></li>
-        <li><a href="${global.g_URL}/#exports">Modules and exports</a></li>
         <li><a href="${global.g_URL}/#with">With keyword</a></li>
+        <li><a href="${global.g_URL}/#classes">Classes</a></li>
+        <li><a href="${global.g_URL}/#instance-props">Instance properties (@)</a></li>
+        <li><a href="${global.g_URL}/#exports">Modules and exports</a></li>
         <li><a href="${global.g_URL}/#along">Along keyword</a></li>
         <li><a href="${global.g_URL}/#strings">Strings</a></li>
         <li><a href="${global.g_URL}/#formating">Formatting</a></li>
@@ -37,6 +35,7 @@ module.exports = () => {
         <li><a href="${global.g_URL}/#private">Private</a></li>
         <li><a href="${global.g_URL}/#env">Environment variables</a></li>
         <li><a href="${global.g_URL}/#global">Global variables</a></li>
+        <li><a href="${global.g_URL}/#chain">Chain</a></li>
         <li><a href="${global.g_URL}/#contributing">Contributing</a></li>
         <li><a href="${global.g_URL}/#ack">Acknowledgements</a></li>
       </ul>

@@ -602,7 +602,7 @@ let content = <md>
 
   It would be nice if there was a short way to start a single line documentation comment.
 
-  <h2 id="scripts">Scripts</h2>
+  <h2 id="heredocs">Heredocs</h2>
 
   In jome, the idea is that you could include most other programming languages directly using xml tags.
 

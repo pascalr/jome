@@ -48,17 +48,15 @@
           <li><a href="/jome/#comments">Comments</a></li>
         </ul>
         <li><a href="/jome/#builtins">Built-Ins</a></li>
-        <li><a href="/jome/#scripts">Scripts</a></li>
-        <li><a href="/jome/#chain">Chain</a></li>
-        <li><a href="/jome/#instance-props">Instance properties (@)</a></li>
+        <li><a href="/jome/#heredocs">Heredocs</a></li>
         <li><a href="/jome/#paths">Paths</a></li>
-        <li><a href="/jome/#loops">Loops</a></li>
         <li><a href="/jome/#conditions">Conditions</a></li>
-        <li><a href="/jome/#comments">Comments</a></li>
+        <li><a href="/jome/#loops">Loops</a></li>
         <li><a href="/jome/#switch-case">Switch/Case</a></li>
-        <li><a href="/jome/#classes">Classes</a></li>
-        <li><a href="/jome/#exports">Modules and exports</a></li>
         <li><a href="/jome/#with">With keyword</a></li>
+        <li><a href="/jome/#classes">Classes</a></li>
+        <li><a href="/jome/#instance-props">Instance properties (@)</a></li>
+        <li><a href="/jome/#exports">Modules and exports</a></li>
         <li><a href="/jome/#along">Along keyword</a></li>
         <li><a href="/jome/#strings">Strings</a></li>
         <li><a href="/jome/#formating">Formatting</a></li>
@@ -66,6 +64,7 @@
         <li><a href="/jome/#private">Private</a></li>
         <li><a href="/jome/#env">Environment variables</a></li>
         <li><a href="/jome/#global">Global variables</a></li>
+        <li><a href="/jome/#chain">Chain</a></li>
         <li><a href="/jome/#contributing">Contributing</a></li>
         <li><a href="/jome/#ack">Acknowledgements</a></li>
       </ul>
@@ -212,6 +211,7 @@ And you use the end keyword instead of curly braces.</p>
 <li><a href="#end">end</a>: Replaces curly braces for statement blocks</li>
 <li><a href="#elif">elif</a>: Same as <code>else if</code></li>
 <li><a href="#elsif">elsif</a>: Same as <code>else if</code></li>
+<li><a href="#chain">chain</a>: Allows to call multiple methods on the same instance and return the last.</li>
 <li><a href="#private">private</a>: Comming soon...</li>
 <li><a href="#along">along</a>: Comming soon...</li>
 <li><a href="#code">code</a>: Comming soon...</li>
@@ -266,17 +266,6 @@ underscore.js: #map, #reduce, ...</p>
 <p>For functions that have a sync and async version, use the exclamation mark after to use the sync version.</p>
 <pre><code class="language-jome"><span class="hljs-title function_">#write!</span> <span class="hljs-string">&#x27;Some content&#x27;</span>, to: <span class="hljs-string">&#x27;./somefile.txt&#x27;</span>, overwrite: <span class="hljs-keyword">true</span>
 </code></pre>
-<h3>Chaining methods</h3>
-<p>You can execute multiple methods on the same object using the <code>chain</code> keyword.</p>
-<pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a route and start it</span>
-<span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-variable">chain</span>
-  <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
-    <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-variable">homePage</span>)
-  <span class="hljs-keyword">end</span>
-  <span class="hljs-variable">start</span>
-<span class="hljs-keyword">end</span>
-</code></pre>
-<p>Chain returns the value of the last command.</p>
 <h3>Instance properties (@)</h3>
 <p>One of the objective of Jome is to remove the weird thing that is this.</p>
 <p>I want in Jome this to refer to the current instance when inside a method and that's it.</p>
@@ -510,7 +499,7 @@ end
 </code></pre>
 <p>This allows easy documentation of the code without having to repeat yourself in the comments.</p>
 <p>It would be nice if there was a short way to start a single line documentation comment.</p>
-  <h2 id="scripts">Scripts</h2>
+  <h2 id="heredocs">Heredocs</h2>
 <p>In jome, the idea is that you could include most other programming languages directly using xml tags.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Execute a shell command in a script</span>
 <span class="language-shell">&lt;sh&gt;ls -A&lt;/sh&gt;</span>
@@ -723,6 +712,17 @@ let r = <code>{x if y}</code> // si x, alors <code>{y}</code>, sinon `` J'aimera
 <p>Global variables start with a dollar sign. For example, <code>$MY_GLOB_VAR = 'foo'</code>.</p>
 <p>Simply equivalent of global._ for now. Adding underscore in order to avoid name clashes. For example,
 I was using $URL, but this does not work because global.URL already exists within Node.</p>
+<h3>Chaining methods</h3>
+<p>You can execute multiple methods on the same object using the <code>chain</code> keyword.</p>
+<pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a route and start it</span>
+<span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-variable">chain</span>
+  <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
+    <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-variable">homePage</span>)
+  <span class="hljs-keyword">end</span>
+  <span class="hljs-variable">start</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p>Chain returns the value of the last command.</p>
 <h2>Contributing</h2>
 <p>I recommend using visual studio code for now because it is super usefull for debugging tokenization. You hit Ctrl+Shift+P,
 &quot;inspect editor token and scope&quot;, and you see if it is correct. Also you see using syntax highlighting.</p>
