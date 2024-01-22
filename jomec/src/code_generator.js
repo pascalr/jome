@@ -393,7 +393,7 @@ function compileString(node) {
 }
 
 function compileStringSingleQuote(node) {
-  let content = node.raw.slice(1,-1)
+  let content = node.raw.startsWith("'''") ? (node.raw.slice(3,-3)) : (node.raw.slice(1,-1))
   let lines = content.split('\n')
   let format = mergeFormat(node.data.format, node.ctxFile.defaultMultilineFormat)
   let result = formatLines(node, lines, format, lines.length > 1)
@@ -412,6 +412,7 @@ const CODE_GENERATORS = {
   "string.quoted.double.verbatim.jome": (node) => `"${node.token.children[1]}"`,
   "string.quoted.single.jome": compileStringSingleQuote,
   "string.quoted.double.jome": compileString,
+  "string.quoted.multi.jome": compileStringSingleQuote,
   //"string.quoted.backtick.jome": (node) => compileTokenRaw(node.token),
   "string.quoted.backtick.jome": (node) => {throw new Error("Backtick strings not supported for now.")},
   // "string.quoted.backtick.jome": (node, ctx) => {

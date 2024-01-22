@@ -78,7 +78,7 @@ describe("Strings", () => {
   // Single quote strings should be compiled as is
   test('Single quote strings', () => {
     // Note: Prettier replaces the string with double quotes
-    expect(compile(`'hello'`)).toMatch(/"hello"/);
+    expect(compile(`'hello Éric'`)).toMatch(/"hello Éric"/);
     expect(compile("let code = 'if (cond) {return 0;}'")).toMatch(/let code = "if \(cond\) {return 0;}"/);
     // Single quotes are allowed to be multiline in Jome
     expect(compile(`'multi
@@ -92,15 +92,24 @@ describe("Strings", () => {
   test('Regular double quote strings', () => {
     expect(compile('"hello"')).toMatch(/"hello"/);
     expect(compile(`"Hello Éric!"`)).toMatch(/"Hello Éric!"/);
+    // Double quotes are allowed to be multiline in Jome
+    expect(compile(`"multi
+    line"`)).toMatch(/`multi\s+line`/);
+    expect(compile(`"Hello O'Connor"`)).toMatch(/"Hello O'Connor"/);
+    // Test escapes backticks inside
+    expect(compile(`"multi \`line\`
+    with backticks"`)).toMatch(/`multi \\`line\\`\s+with backticks`/);
   })
   test('Double quote strings template literal', () => {
     expect(compile(`"1 + 1 = {1+1}"`)).toMatch(/`1 \+ 1 = \$\{1 ?\+ ?1\}`/);
   })
-  test('string', () => {
-    //expect(compile('`hello`')).toMatch(/`hello`/);
-    expect(compile(`"multi
-line"`)).toMatch(/`multi\r?\nline`/);
+  test('Triple single quote strings', () => {
+    // Note: Prettier replaces the string with double quotes
+    expect(compile(`'''Hello O'Connor'''`)).toMatch(/"Hello O'Connor"/);
   })
+  // TODO: Test """ Triple double quote strings """
+  // TODO: Test """ Triple double quote strings template literals {{ foo }} """
+  // TODO: Test @"Verbatim string" (@'', @"", @''', @""")
 })
 
 describe("Regexes", () => {

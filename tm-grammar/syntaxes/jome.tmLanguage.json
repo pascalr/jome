@@ -694,6 +694,14 @@
     "strings": {
 			"patterns": [
         {
+          "name": "string.quoted.multi.jome",
+          "begin": "'''",
+          "beginCaptures": {"0": {"name": "punctuation.definition.string.begin.jome"}},
+          "end": "'''",
+          "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}},
+          "patterns": [{"include": "#escape-char"}]
+        },
+        {
           "comment": "Allow #~ for home too?",
           "name": "string.other.path.jome",
           "match": "(#\\.{0,2}/[^ \\(\\)\\,]*)|(#cwd/[^ \\(\\)\\,]*)|(#\\.{1,2})"

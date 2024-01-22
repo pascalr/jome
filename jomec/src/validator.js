@@ -424,6 +424,7 @@ const VALIDATORS = {
 
   "string.quoted.double.jome": (node) => validateString(node, '"'),
   "string.quoted.single.jome": (node) => validateString(node, "'"),
+  "string.quoted.multi.jome": (node) => validateString(node, "'''"),
 
   "meta.string-template-literal.jome": (node) => {
     ensureStartRaw(node, '{')
