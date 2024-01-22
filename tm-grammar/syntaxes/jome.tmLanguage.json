@@ -732,10 +732,7 @@
           "beginCaptures": {"0": {"name": "punctuation.definition.string.begin.jome"}},
           "end": "'",
           "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}},
-          "patterns": [
-            {"include": "#template-literal"},
-            {"include": "#escape-char"}
-          ]
+          "patterns": [{"include": "#escape-char"}]
         },
         {
           "name": "string.quoted.backtick.jome",

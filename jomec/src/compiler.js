@@ -51,7 +51,11 @@ function printTree(node, depth = 0) {
 // That a list of ASTNode and return js code
 function compileNodes(nodes) {
   validateAllNodes(nodes)
-  return nodes.map(node => genCode(node)).join(';')+';'
+  return nodes.map(node => {
+    let compiled = genCode(node)
+    return compiled
+  }).join(';')+';'
+  //return nodes.map(node => genCode(node)).join(';')+';'
 }
 
 function compileCode(code, options) {

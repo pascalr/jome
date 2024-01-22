@@ -46,7 +46,7 @@ javascript because it is more stable. It is a little weird to compile tests in i
 //   add 2
 // end
 
-describe("Jome paths", () => {
+describe("Paths", () => {
   test('Dirname shortcuts', () => {
     expect(compile(`#.`)).toMatch(/__dirname/);
     expect(compile(`#./`)).toMatch(/__dirname/);
@@ -74,28 +74,60 @@ describe("Jome paths", () => {
   // })
 })
 
+describe("Strings", () => {
+  // Single quote strings should be compiled as is
+  test('Single quote strings', () => {
+    // Note: Prettier replaces the string with double quotes
+    expect(compile(`'hello'`)).toMatch(/"hello"/);
+    expect(compile("let code = 'if (cond) {return 0;}'")).toMatch(/let code = "if \(cond\) {return 0;}"/);
+    expect(compile(`'multi
+    line'`)).toMatch(/`multi\s+line`/);
+    // TODO: Multiline single quote strings
+  })
+  test('Regular double quote strings', () => {
+    expect(compile('"hello"')).toMatch(/"hello"/);
+    expect(compile(`"Hello Éric!"`)).toMatch(/"Hello Éric!"/);
+  })
+  test('Double quote strings template literal', () => {
+    expect(compile(`"1 + 1 = {1+1}"`)).toMatch(/`1 \+ 1 = \$\{1 ?\+ ?1\}`/);
+  })
+  test('string', () => {
+    //expect(compile('`hello`')).toMatch(/`hello`/);
+    expect(compile(`"multi
+line"`)).toMatch(/`multi\r?\nline`/);
+  })
+})
+
+describe("Regexes", () => {
+  test('/test1212/', () => {
+    expect(compile(`/test1212/`)).toMatch("/test1212/");
+  })
+})
+
+describe("String formatting", () => {
+  test('String format " test"%xl', () => {
+    expect(compile(`" test"%xl`)).toMatch(/"test"/);
+  })
+})
+
+describe("Heredocs", () => {
+  test('<sh>ls</sh>', () => {
+    expect(compile(`<sh>ls</sh>`)).toMatch(/const execSh = require\("jome-lib\/execSh"\);\s*execSh\(`ls`\);/);
+  })
+})
+
+describe("Documentation comments", () => {
+  test('# documentation comment', () => {
+    expect(compile(`# documentation comment`)).toMatch(/\/\/ documentation comment/);
+  })
+})
+
 test('Pass named parameters to functions', () => {
   expect(compile(`add x: 1, y: 2`)).toMatch(/add\(\{ x: 1, y: 2 \}\)/);
 })
 
-test('String format " test"%xl', () => {
-  expect(compile(`" test"%xl`)).toMatch(/"test"/);
-})
-
-test('String interpolation "{1+1}"', () => {
-  expect(compile(`"1 + 1 = {1+1}"`)).toMatch(/`1 \+ 1 = \$\{1 ?\+ ?1\}`/);
-})
-
 test('let shouldAddSemiToDec = 1', () => {
   expect(compile(`let shouldAddSemiToDec = foo()[0]`, {prettier: false})).toMatch(/;\s*$/);
-})
-
-test('<sh>ls</sh>', () => {
-  expect(compile(`<sh>ls</sh>`)).toMatch(/const execSh = require\("jome-lib\/execSh"\);\s*execSh\(`ls`\);/);
-})
-
-test('# documentation comment', () => {
-  expect(compile(`# documentation comment`)).toMatch(/\/\/ documentation comment/);
 })
 
 // test.only('WIP2', () => {
@@ -119,12 +151,6 @@ end
 describe("Test arrow call", () => {
   test('obj->call', () => {
     expect(compile(`obj->call`)).toMatch(/obj.call\(\)/);
-  })
-})
-
-describe("Test regex call", () => {
-  test('/test1212/', () => {
-    expect(compile(`/test1212/`)).toMatch("/test1212/");
   })
 })
 
@@ -155,7 +181,7 @@ end
   })
 })
 
-describe("Test utils", () => {
+describe("Test built-ins", () => {
   test('#log', () => {
     expect(compile('#log')).toMatch(/console.log/);
   })
@@ -357,13 +383,6 @@ describe("Test values", () => {
   test('float', () => {
     expect(compile('1.0')).toMatch(/1.0/);
     expect(compile('12.34')).toMatch(/12.34/);
-  })
-  test('string', () => {
-    expect(compile('"hello"')).toMatch(/"hello"/);
-    //expect(compile('`hello`')).toMatch(/`hello`/);
-    expect(compile(`'hello'`)).toMatch(/'hello'|"hello"/);
-    expect(compile(`"multi
-line"`)).toMatch(/`multi\r?\nline`/);
   })
 })
 
