@@ -707,17 +707,10 @@
           "match": "(#\\.{0,2}/[^ \\(\\)\\,]*)|(#cwd/[^ \\(\\)\\,]*)|(#\\.{1,2})"
         },
         {
-          "name": "string.quoted.double.verbatim.jome",
-          "begin": "@\"",
+          "name": "string.quoted.verbatim.jome",
+          "begin": "@(\"|'|\"\"\"|''')",
           "beginCaptures": {"0": {"name": "punctuation.definition.string.begin.jome"}},
-          "end": "\"",
-          "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}}
-        },
-        {
-          "name": "string.quoted.backtick.verbatim.jome",
-          "begin": "@`",
-          "beginCaptures": {"0": {"name": "punctuation.definition.string.begin.jome"}},
-          "end": "`",
+          "end": "\\1",
           "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}}
         },
         {
@@ -741,15 +734,6 @@
           "end": "'",
           "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}},
           "patterns": [{"include": "#escape-char"}]
-        },
-        {
-          "name": "string.quoted.backtick.jome",
-          "begin": "`",
-          "end": "`",
-          "patterns": [
-            {"include": "#template-literal"},
-            {"include": "#escape-char"}
-          ]
         }
       ]
 		},

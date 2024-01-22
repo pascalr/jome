@@ -109,7 +109,7 @@ describe("Strings", () => {
   })
   // TODO: Test """ Triple double quote strings """
   // TODO: Test """ Triple double quote strings template literals {{ foo }} """
-  // TODO: Test @"Verbatim string" (@'', @"", @''', @""")
+  // TODO: Test @"Verbatim string" Test all 4 possibilities! (@'', @"", @''', @""")
 })
 
 describe("Regexes", () => {

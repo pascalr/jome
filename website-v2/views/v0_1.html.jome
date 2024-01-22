@@ -287,7 +287,7 @@ let content = <md>
   - Triple single quotes: Rendered as is. Allows to insert single quotes inside the string.
   - Double quotes: Allows template literals. Insert content using curly braces. `"Hello {name}!"`
   - Triple double quotes: Allows template literals. Insert content using double curly braces. `"""Hello {{name}}!"""`
-  - Verbatim strings (@): Render the string as is without escaping. `let windowsPath = @"C:\Users\Pascal\Documents\File.txt"`
+  - Verbatim strings (@): Render the string as is without escaping. `let windowsPath = @"C:\Users\Pascal\Documents\File.txt"`. Verbatim strings can be used with any of the kinds above. Interpolation will work for double quoted strings.
 
   Backticks are not supported for now. It's not yet decided how to handle them.
 
