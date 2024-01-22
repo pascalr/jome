@@ -80,9 +80,14 @@ describe("Strings", () => {
     // Note: Prettier replaces the string with double quotes
     expect(compile(`'hello'`)).toMatch(/"hello"/);
     expect(compile("let code = 'if (cond) {return 0;}'")).toMatch(/let code = "if \(cond\) {return 0;}"/);
+    // Single quotes are allowed to be multiline in Jome
     expect(compile(`'multi
     line'`)).toMatch(/`multi\s+line`/);
-    // TODO: Multiline single quote strings
+    // Test escapes double quotes inside
+    expect(compile(`'"hello"'`)).toMatch(/"\\"hello\\""/);
+    // Test escapes backticks inside
+    expect(compile(`'multi \`line\`
+    with backticks'`)).toMatch(/`multi \\`line\\`\s+with backticks`/);
   })
   test('Regular double quote strings', () => {
     expect(compile('"hello"')).toMatch(/"hello"/);

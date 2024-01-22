@@ -51,8 +51,7 @@ function escapeBackticks(inputString) {
 }
 
 function escapeDoubleQuotes(inputString) {
-  // FIXMEEEEEEEEEEEEEEEE
-  return inputString
+  return inputString.replace(/"/g, '\\"')
 }
 
 function compileOperatorUnary(node) {
