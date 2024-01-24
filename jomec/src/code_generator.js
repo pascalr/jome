@@ -686,6 +686,12 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
     return ''
   },
 
+  "keyword.other.string-format.jome": (node) => {
+    let format = node.raw
+    let str = node.operands[0].raw
+    throw new Error("sdfj9834hf9h230h023hf023h")
+  }
+
 }
 
 module.exports = {

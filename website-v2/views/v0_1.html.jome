@@ -293,6 +293,81 @@ let content = <md>
 
   Note: All strings are allowed to be multiline.
 
+  <h3 id="formatting">Formatting v2</h3>
+
+  You can use or define formats to specify how multi strings should be compiled. They start with the symbol `%`.
+
+  There are many formats builtin:
+  - %text: Trims every line and the beginning and the end of the string.
+  - %article: Joins every line with a space, but keeps empty lines.
+  - %none: as is. Keeps spacing.
+  - %ltrim or %trimLeft: Trims every line at the end.
+  - %rtrim or %trimRight: Trims every line at the beginning.
+  - %strim or %trimStart: Remove empty lines at the beginning. (or %ttrim for trimTop?)
+  - %etrim or %trimEnd: Remove empty lines at the end. (or %btrim for trimBottom?)
+  - %ytrim: Remove empty lines at the beginning and at the end.
+  - %xtrim: Trims every line 
+  - %trim: Trims every line and remove empty lines at the beginning and at the end.
+  - %indent: Removes the lowest indentation level everywhere, but keep the nested indentation.
+  - %code: Same as %indent%ytrim
+  - %prepend("  "): Add some string before every lines
+  - %append(";"): Add some string after every lines
+
+  strim: %s/^\s+//
+  etrim: %s/\s+$//
+  let %ytrim = %strim%etrim
+  ltrim: %s/\n\s+/\n/g
+  rtrim: %s/\s+(?=\r?\n)//g
+  let %xtrim = %ltrim%xtrim
+  let trim = %xtrim%ytrim
+  let %text = %ltrim%ytrim
+  article: %s/\n\s*[^\n]//g
+
+  Je ne peux pas faire %indent avec des regex... J'ai besoin d'une fonction
+  def %indent(str)
+  end
+
+  Les fonctions de formattage prennent une string en entrée et ressort une autre string.
+
+
+  If you define custom formats, it should have at least two characters in the name. Because at some point %a, %b, or any character
+  could be reserved to mean something like %s.
+
+  You can combine and apply multiple formats one after the other.
+
+  "str"%trim%clean
+
+  ```
+  let str = "
+    In the heart of the enchanted forest, a hidden cottage stood, surrounded by ancient trees. 
+  The air was filled with the sweet melody of birdsong, creating a tranquil atmosphere.
+
+      As the morning sun filtered through the leaves, a gentle breeze whispered 
+      secrets to the dancing leaves below. Nature's symphony played, orchestrating 
+      a harmonious blend of sounds that resonated with the soul.
+
+  Inside the cottage, a crackling fireplace provided warmth, casting a soft glow 
+  on the worn wooden furniture. The aroma of freshly brewed tea wafted through 
+  the air, inviting anyone who entered to linger and embrace the serenity.
+  "
+  ```
+
+  TODO: Faire un example que tu cliques sur chacun des boutons pour voir la différence de chaque format. Comme ça: https://developer.mozilla.org/en-US/docs/Web/CSS/cursor
+
+  You add a formatting to strings by appending it right after. `let str = "hello"%text`
+
+  You can also define a default format for strings using the keyword with. `with %text`
+
+  You can also create custom formats. Create a function take takes lines, an array, and returns a string.
+
+  ```jome
+  def %txt(lines)
+    return lines.map(l => l.trim()).join(' ')
+  end
+  ```
+
+  Possiblité d'avoir des arguments aux formats? Par exemple, %indent(2spaces) or %indent(2tabs)
+
   <h3 id="formatting">Formatting</h3>
 
   You can add a formatting to strings by appending it right after. They start with the symbol `%`.
