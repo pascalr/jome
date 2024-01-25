@@ -118,15 +118,15 @@ describe("Regexes", () => {
   })
 })
 
-describe("String formatting", () => {
-  test('String format " test"%xl', () => {
-    expect(compile(`" test"%xl`)).toMatch(/"test"/);
-  })
-})
-
 describe("Heredocs", () => {
   test('<sh>ls</sh>', () => {
     expect(compile(`<sh>ls</sh>`)).toMatch(/const execSh = require\("jome-lib\/execSh"\);\s*execSh\(`ls`\);/);
+  })
+})
+
+describe("Heredoc percent syntax", () => {
+  test('"ls"%sh', () => {
+    expect(compile(`"ls"%sh`)).toMatch(/const execSh = require\("jome-lib\/execSh"\);\s*execSh\(`ls`\);/);
   })
 })
 
