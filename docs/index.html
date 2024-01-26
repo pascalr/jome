@@ -285,21 +285,6 @@ underscore.js: #map, #reduce, ...</p>
 <p>TODO: Support them, just not interpolation yet because I don't know which interpolation I want to be able to use.</p>
 <p>Note: All strings are allowed to be multiline.</p>
   <h3 id="formatting">Formatting v5</h3>
-<p>TODO: Create a tab in the website for Tags. List all the tags.</p>
-<ul>
-<li>bin, hex, oct, ...</li>
-<li>sh, rb, lua, ...</li>
-<li>latex</li>
-<li>md</li>
-<li>guitar tab!!!</li>
-<li>music score!!!</li>
-<li>jsx =&gt; create react elements easily!</li>
-<li>html.js =&gt; convert html into js element creation! document.createElement('div')...!!!!!!!!</li>
-<li>svg</li>
-<li>something for diagrams</li>
-<li>something for characters</li>
-<li>something for drawings?</li>
-</ul>
 <p>TODO: The first part of the tag is what is used for syntax highlighting. So for example, html.js, it should highlight like html. .js
 is just a postfix that means compile a certain way</p>
 <p>You can format all kinds of strings and tags by using the syntax <code>forall &lt;tag_name&gt; chain func1[, func2] wrap func3[, func 4] end</code>.</p>
@@ -328,6 +313,8 @@ is just a postfix that means compile a certain way</p>
 </code></pre>
 <p>The difference is that you won't get syntax highlighting for things like html, css, etc. But you will at least get syntax highlighting
 for template literals properly.</p>
+<h3>For more info on tags/formats</h3>
+<p>See the <a href="/formats">formats page</a>.</p>
   <h3 id="formatting">Formatting v3</h3>
 <p>You can specify a function to transform strings of the same type using the keywords <code>for strings</code>.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">for</span> <span class="hljs-variable">strings</span> <span class="hljs-variable">double_quote_multi</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">s</span>|
@@ -484,29 +471,6 @@ them I don't know if I want to do that. Or I want to offer multiple possibilitie
 <span class="hljs-comment">// Ruby is a pretty nice language for scripts too </span>
 &lt;<span class="hljs-variable">rb</span>&gt;<span class="hljs-variable">puts</span> (<span class="hljs-number">1.</span><span class="hljs-number">.10</span>).<span class="hljs-title function_">select</span>(&amp;:<span class="hljs-variable">even</span>?).<span class="hljs-variable">sum</span>&lt;/<span class="hljs-variable">rb</span>&gt;
 </code></pre>
-<p>Supported list for now:</p>
-<ul>
-<li>sh</li>
-<li>html</li>
-<li>md</li>
-<li>js</li>
-</ul>
-<p>TODO list:</p>
-<ul>
-<li>css</li>
-<li>bin</li>
-<li>oct</li>
-<li>hex</li>
-<li>rb</li>
-<li>sql</li>
-<li>txt et/ou str</li>
-<li>C</li>
-<li>cpp</li>
-</ul>
-<p>MAYBE list:</p>
-<ul>
-<li>col: For color, need a way to let the editor know that we want to be picking a color.</li>
-</ul>
 <h3>Scripts for data</h3>
 <p>TODO:</p>
 <p>En jome, c'est <bin>01010101</bin> pour faire du binaire et <hex>FF00AA</hex> pour faire de l'hexadécimal.

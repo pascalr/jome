@@ -294,20 +294,6 @@ module.exports = () => {
 
   <h3 id="formatting">Formatting v5</h3>
 
-  TODO: Create a tab in the website for Tags. List all the tags.
-  - bin, hex, oct, ...
-  - sh, rb, lua, ...
-  - latex
-  - md
-  - guitar tab!!!
-  - music score!!!
-  - jsx => create react elements easily!
-  - html.js => convert html into js element creation! document.createElement('div')...!!!!!!!!
-  - svg
-  - something for diagrams
-  - something for characters
-  - something for drawings?
-
   TODO: The first part of the tag is what is used for syntax highlighting. So for example, html.js, it should highlight like html. .js
   is just a postfix that means compile a certain way
 
@@ -350,6 +336,10 @@ module.exports = () => {
 
   The difference is that you won't get syntax highlighting for things like html, css, etc. But you will at least get syntax highlighting
   for template literals properly.
+
+  ### For more info on tags/formats
+
+  See the [formats page](/formats).
 
   <h3 id="formatting">Formatting v3</h3>
 
@@ -568,26 +558,6 @@ module.exports = () => {
   // Ruby is a pretty nice language for scripts too 
   <rb>puts (1..10).select(&:even?).sum</rb>
   \`\`\`
-
-  Supported list for now:
-  - sh
-  - html
-  - md
-  - js
-
-  TODO list:
-  - css
-  - bin
-  - oct
-  - hex
-  - rb
-  - sql
-  - txt et/ou str
-  - C
-  - cpp
-
-  MAYBE list:
-  - col: For color, need a way to let the editor know that we want to be picking a color.
 
   ### Scripts for data
 
