@@ -284,93 +284,269 @@ module.exports = () => {
   - Triple single quotes: Rendered as is. Allows to insert single quotes inside the string.
   - Double quotes: Allows template literals. Insert content using curly braces. \`"Hello {name}!"\`
   - Triple double quotes: Allows template literals. Insert content using double curly braces. \`"""Hello {{name}}!"""\`
-  - Verbatim strings (@): Render the string as is without escaping. \`let windowsPath = @"C:\Users\Pascal\Documents\File.txt"\`
+  - Verbatim strings (@): Render the string as is without escaping. \`let windowsPath = @"C:\Users\Pascal\Documents\File.txt"\`. Verbatim strings can be used with any of the kinds above. Interpolation will work for double quoted strings.
 
   Backticks are not supported for now. It's not yet decided how to handle them.
 
+  TODO: Support them, just not interpolation yet because I don't know which interpolation I want to be able to use.
+
   Note: All strings are allowed to be multiline.
 
-  <h3 id="formatting">Formatting</h3>
+  <h3 id="formatting">Formatting v5</h3>
 
-  You can add a formatting to strings by appending it right after. They start with the symbol \`%\`.
+  TODO: Create a tab in the website for Tags. List all the tags.
+  - bin, hex, oct, ...
+  - sh, rb, lua, ...
+  - latex
+  - md
+  - guitar tab!!!
+  - music score!!!
+  - jsx => create react elements easily!
+  - html.js => convert html into js element creation! document.createElement('div')...!!!!!!!!
+  - svg
+  - something for diagrams
+  - something for characters
+  - something for drawings?
 
-  You can do many things with formatting:
-  - Tranformation: \`%:funcToApply\` applies the given function to the string
-  - Whole string trimming: \`%s\`, add an \`x\` before or after to specify position. Ex: \`%xsx\` trims both ends of the string.
-  - Line trimming: \`%l\`, add an \`x\` before or after to specify position. Ex: \`%xl\` trims the beginning of every line.
-  - Indent trimming: \`%i\`, same as line trimming, but keeps the nested indentation.
-  
-  Formatting nomenclature:
+  TODO: The first part of the tag is what is used for syntax highlighting. So for example, html.js, it should highlight like html. .js
+  is just a postfix that means compile a certain way
 
-  i: indent (trim, but keep indentation, check for least amount of spaces before, than trim, spaces and tabs not allowed combined, never with s (string))
-  t: tab
-  _: space
-  j: join (must be at the end of the format. joins all lines with the character after if any, or nothing if ends with j)
+  You can format all kinds of strings and tags by using the syntax \`forall <tag_name> chain func1[, func2] wrap func3[, func 4] end\`.
 
-  // Explicit characters like \t and \n are not trimmed.
-  ""%xs // Trim empty lines at the beginning of the string
-  ""%xsx // Trim empty lines at the beginning and the end of the string
-  ""%sx // Trim empty lines at the end of the string
-  ""%xl // Trim everyline before
-  ""%xlx // Trim everyline before and after
-  ""%lx // Trim everyline after
-  ""%xs%xt // Trim at the beginning of the string and the end of every line
-  ""%xl%sx // Trim at the beginning of every line and the end of the string
-  ""%i__ // Keep indentation at the beginning of everyline starting with two spaces
+  The functions given to wrap are added arround the final string and executed at runtime.
 
-  let description = "This is a text description
-                     on many lines. It stays many
-                     lines but trims beginning.
-                    "%xlsx
+  The functions given to chain modify the raw string itself at compile time. They can even convert the strings into raw javascript code.
 
-  let singleLine = "This is written on multiple
-                    lines but will all be joined
-                    on a single line.
-                    "%xlx%j_
+  The input and the output of chain functions are of the same type. They take an array of lines. And each like is an array of strings or TemplateLiteral.
 
-  Maybe allow formatting after scripts too? <html></html>%xs
-
-  ### Default string format
-
-  I think I want the default format to be %i%xsx.
-
-  You can use the keyword \`use\` to set a default format for the strings that comes after in the current scope.
+  For example, the js tag takes a string in input and simply output it all into javascript code.
 
   \`\`\`jome
-  use %xlx%j_
-  let str = "some multi
-             line string" // will use the format above
+  forall js
+    chain do |lines|
+      // First validate that every line contains only a string. Template literals are not allowed in a js tag.
+      if !lines.every(line => line.length === 1 && line.type === 'string')
+        throw new Error("Template literals are not allowed in a js tag.")
+      end
+      // Convert all the string into a single TemplateLiteral
+      return TemplateLiteral(lines.map(l => l[0]).join('\n'))
+    end
+  end
   \`\`\`
 
-  The formats do not add up to each other. When you specify a format, it replaces the previous one.
+  The chain functions must be imported javascript functions.
 
-  Maybe allow to give names to format that you can reuse?
+  Chain function are given the parameter lines, and another parameter ctx or something, that allows to including other files at the top of the file.
 
-  Or simply numbers?
+  Or it returns either lines, an array of array, or an instance of TagWithContext that returns lines and the files required to include.
 
-  set format 0 %xlx%j_
+  ## Content tag percent syntax
 
-  then you do "some string"%0
+  You can define heredoc with xml tags, but you can also simply prepend a percent followed by the tag name.
 
-  When there is a default format and you want none, use only % like "str"%
+  \`\`\`jome
+  let isTrue = <txt>Hello</txt> === "Hello"%txt
+  \`\`\`
 
-  Maybe define single digits aliases myself to be the most commonly used formats. This way you can know what it means without looking
-  it up if you are an expert.
+  The difference is that you won't get syntax highlighting for things like html, css, etc. But you will at least get syntax highlighting
+  for template literals properly.
 
-  Or maybe define named aliases myself.
+  <h3 id="formatting">Formatting v3</h3>
 
-  %_html => string like in html, joins the lines with a single space
+  You can specify a function to transform strings of the same type using the keywords \`for strings\`.
 
-  Maybe it would be nice if I could modify only some flag instead of all. Let's say, I always want xsx, but only sometimes xl,
-  I don't want to have to redefine xsx every time.
+  \`\`\`jome
+  for strings double_quote_multi do |s|
+    return s.#ytrim
+  end
 
-  Peut-être quand dans le fond faire que ce sont tous des flags.
+  // You can specify multiple kinds at once
+  for strings double_quote_inline, double_quote_multi do |s|
+    
+  end
+  \`\`\`
 
-  Tu peux faire %s pour reset string settings, %l pour line settings, %s%l%i%j équivalerais à % qui reset tout
+  You can specify for:
+  - single_quote_inline
+  - single_quote_multi
+  - double_quote_inline
+  - double_quote_multi
+  - triple_single_quote
+  - triple_double_quote
+  - verbatim_double_quote_inline
+  - verbatim_double_quote_multi
 
-  Je ne sais pas pour %i par contre, mais celui n'est pas encore tout à fais clair. Ça garde juste le nested indent?
+  You can also specify transform functions for tags using the keywords \`for tags\`.
 
-  Si %i active, comment désactivé?
+  \`\`\`jome
+  for tags sh do |s|
+    #execSh(s)
+  end
+  \`\`\`
+
+  Is it allowed to use transform functions for data tags such as bin, hex, ...?
+
+  To make this work, let's compile for strings and for tags into functions. And simply wrap the strings with this function every time.
+
+  Let's use j_format_XX as a function name.
+
+  When compiling a string for example and simply trimming both ends, it would be nice to do it at compile time rather than at runtime.
+
+  I am thinking that later functions could be marked as pure, (or deduced to be pure) meaning it has no side effect. Every pure function
+  called on a value that has no variable could already be calculated.
+
+  But unfortunately this does not work for for example " Hello {John} ", because of the template literal...
+
+  DO I WANT TO BE ABLE TO APPLY TRIMMING TO THE STRING BEFORE TEMPLATE LITERAL?
+
+  With the keyword chain?
+
+  \`\`\`jome
+  for strings double_quote_multi chain #ytrim, #ltrim, do |s|
+    return s.#ytrim
+  end
+  \`\`\`
+
+  I like that!
+
+  But chain is not explicit in meaning that it is done before the interpolation...
+
+  Wait... What exactly is the string given to the function?
+
+  let txt = " Hello {name}! "
+
+  Before interpolation the strings would be given directly transform functions:
+  #xtrim would be given " Hello {name}! "
+
+  Maybe use the keyword then and then specify functions that will be called after
+
+  \`\`\`jome
+  for strings double_quote_multi chain #ytrim, #ltrim, do |s|
+    return s.#ytrim
+  end then execSomeFunc1
+  \`\`\`
+
+  I really like to use the keyword then, it's just what to do when I don't want to apply anything before?
+
+  \`\`\`jome
+  for strings double_quote_inline chain then execSomeFunc1, execSomeFunc2
+  \`\`\`
+
+  \`\`\`jome
+  for strings double_quote_inline chain then execSomeFunc1, execSomeFunc2 end
+  for tags sh chain then execSomeFunc1, execSomeFunc2 end
+  // vs
+  for double_quote_inline chain then execSomeFunc1, execSomeFunc2 end
+  for sh chain then execSomeFunc1, execSomeFunc2 end
+  \`\`\`
+
+  I like this. Simply \`for ... chain ... then ... end\`
+
+  ## Calling function left operand
+
+  In the same way that you can do operand.#function, I want to be able to do it with local function as well.
+
+  This would be usefull for formatting strings.
+
+  "some string"%someTransformFunction
+
+  It could be nice for other this too.
+
+  "actual" . equals "expected"
+  "actual" % equals "expected"
+  "actual" >> equals "expected"
+  "actual".(equals) "expected"
+  "actual"() equals "expected"
+  "actual".|equals "expected"
+  
+  Je pense que je préfère \`.|\` pour l'instant. J'aime que ce soit un peu similaire à \`.#\`
+
+  ## Shorthand syntax for function calls
+
+  I want a short syntax for function calls like in ruby.
+
+  I am thinking of using the same.
+
+  \`\`\`jome
+  let names = people.#each(&:name)
+  \`\`\`
+
+  Contrary to ruby, &: does not have any other meaning like defining a block to a symbol. It's just a syntaxic sugar.
+
+  <h3 id="formatting">Formatting v2</h3>
+
+  You can use or define formats to specify how multi strings should be compiled. They start with the symbol \`%\`.
+
+  There are many formats builtin:
+  - %text: Trims every line and the beginning and the end of the string.
+  - %article: Joins every line with a space, but keeps empty lines.
+  - %none: as is. Keeps spacing.
+  - %ltrim or %trimLeft: Trims every line at the end.
+  - %rtrim or %trimRight: Trims every line at the beginning.
+  - %strim or %trimStart: Remove empty lines at the beginning. (or %ttrim for trimTop?)
+  - %etrim or %trimEnd: Remove empty lines at the end. (or %btrim for trimBottom?)
+  - %ytrim: Remove empty lines at the beginning and at the end.
+  - %xtrim: Trims every line 
+  - %trim: Trims every line and remove empty lines at the beginning and at the end.
+  - %indent: Removes the lowest indentation level everywhere, but keep the nested indentation.
+  - %code: Same as %indent%ytrim
+  - %prepend("  "): Add some string before every lines
+  - %append(";"): Add some string after every lines
+
+  strim: %s/^\s+//
+  etrim: %s/\s+$//
+  let %ytrim = %strim%etrim
+  ltrim: %s/\n\s+/\n/g
+  rtrim: %s/\s+(?=\r?\n)//g
+  let %xtrim = %ltrim%xtrim
+  let trim = %xtrim%ytrim
+  let %text = %ltrim%ytrim
+  article: %s/\n\s*[^\n]//g
+
+  Je ne peux pas faire %indent avec des regex... J'ai besoin d'une fonction
+  def %indent(str)
+  end
+
+  Les fonctions de formattage prennent une string en entrée et ressort une autre string.
+
+
+  If you define custom formats, it should have at least two characters in the name. Because at some point %a, %b, or any character
+  could be reserved to mean something like %s.
+
+  You can combine and apply multiple formats one after the other.
+
+  "str"%trim%clean
+
+  \`\`\`
+  let str = "
+    In the heart of the enchanted forest, a hidden cottage stood, surrounded by ancient trees. 
+  The air was filled with the sweet melody of birdsong, creating a tranquil atmosphere.
+
+      As the morning sun filtered through the leaves, a gentle breeze whispered 
+      secrets to the dancing leaves below. Nature's symphony played, orchestrating 
+      a harmonious blend of sounds that resonated with the soul.
+
+  Inside the cottage, a crackling fireplace provided warmth, casting a soft glow 
+  on the worn wooden furniture. The aroma of freshly brewed tea wafted through 
+  the air, inviting anyone who entered to linger and embrace the serenity.
+  "
+  \`\`\`
+
+  TODO: Faire un example que tu cliques sur chacun des boutons pour voir la différence de chaque format. Comme ça: https://developer.mozilla.org/en-US/docs/Web/CSS/cursor
+
+  You add a formatting to strings by appending it right after. \`let str = "hello"%text\`
+
+  You can also define a default format for strings using the keyword with. \`with %text\`
+
+  You can also create custom formats. Create a function take takes lines, an array, and returns a string.
+
+  \`\`\`jome
+  def %txt(lines)
+    return lines.map(l => l.trim()).join(' ')
+  end
+  \`\`\`
+
+  Possiblité d'avoir des arguments aux formats? Par exemple, %indent(2spaces) or %indent(2tabs)
 
   <h3 id="verbatim">Verbatim string literals</h3>
 

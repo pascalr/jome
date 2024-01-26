@@ -21,10 +21,10 @@ function rtrim(lines) {
 }
 
 function strim(lines) {
-  let [firstLine, ...lines] = lines
+  let [firstLine, ...otherLines] = lines
   let [firstPart, ...parts] = firstLine
-  if (typeof firstPart !== 'string') {return lines}
-  return [[firstPart.trimStart(), ...parts], ...lines]
+  if (typeof firstPart !== 'string') {return otherLines}
+  return [[firstPart.trimStart(), ...parts], ...otherLines]
 }
 
 function etrim(lines) {

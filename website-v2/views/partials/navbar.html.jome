@@ -17,6 +17,7 @@ return <html>
     <a href="<%= $URL %>/#lang-ref">Language Reference</a>
     <a href="<%= $URL %>/ex">Examples</a>
     <a href="<%= $URL %>/lib">Librairies</a>
+    <a href="<%= $URL %>/formats">Formats</a>
     <a href="<%= $URL %>/utils">Utils</a>
     <a href="https://github.com/pascalr/jome">GitHub</a>
   </div>
