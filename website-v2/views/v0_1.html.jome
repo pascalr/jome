@@ -320,6 +320,10 @@ let content = <md>
 
   The chain functions must be imported javascript functions.
 
+  Chain function are given the parameter lines, and another parameter ctx or something, that allows to including other files at the top of the file.
+
+  Or it returns either lines, an array of array, or an instance of TagWithContext that returns lines and the files required to include.
+
   ## Content tag percent syntax
 
   You can define heredoc with xml tags, but you can also simply prepend a percent followed by the tag name.
