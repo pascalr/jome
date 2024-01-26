@@ -291,6 +291,8 @@ let content = <md>
 
   Backticks are not supported for now. It's not yet decided how to handle them.
 
+  TODO: Support them, just not interpolation yet because I don't know which interpolation I want to be able to use.
+
   Note: All strings are allowed to be multiline.
 
   <h3 id="formatting">Formatting v5</h3>
@@ -531,88 +533,6 @@ let content = <md>
   ```
 
   Possiblité d'avoir des arguments aux formats? Par exemple, %indent(2spaces) or %indent(2tabs)
-
-  <h3 id="formatting">Formatting</h3>
-
-  You can add a formatting to strings by appending it right after. They start with the symbol `%`.
-
-  You can do many things with formatting:
-  - Tranformation: `%:funcToApply` applies the given function to the string
-  - Whole string trimming: `%s`, add an `x` before or after to specify position. Ex: `%xsx` trims both ends of the string.
-  - Line trimming: `%l`, add an `x` before or after to specify position. Ex: `%xl` trims the beginning of every line.
-  - Indent trimming: `%i`, same as line trimming, but keeps the nested indentation.
-  
-  Formatting nomenclature:
-
-  i: indent (trim, but keep indentation, check for least amount of spaces before, than trim, spaces and tabs not allowed combined, never with s (string))
-  t: tab
-  _: space
-  j: join (must be at the end of the format. joins all lines with the character after if any, or nothing if ends with j)
-
-  // Explicit characters like \t and \n are not trimmed.
-  ""%xs // Trim empty lines at the beginning of the string
-  ""%xsx // Trim empty lines at the beginning and the end of the string
-  ""%sx // Trim empty lines at the end of the string
-  ""%xl // Trim everyline before
-  ""%xlx // Trim everyline before and after
-  ""%lx // Trim everyline after
-  ""%xs%xt // Trim at the beginning of the string and the end of every line
-  ""%xl%sx // Trim at the beginning of every line and the end of the string
-  ""%i__ // Keep indentation at the beginning of everyline starting with two spaces
-
-  let description = "This is a text description
-                     on many lines. It stays many
-                     lines but trims beginning.
-                    "%xlsx
-
-  let singleLine = "This is written on multiple
-                    lines but will all be joined
-                    on a single line.
-                    "%xlx%j_
-
-  Maybe allow formatting after scripts too? <html></html>%xs
-
-  ### Default string format
-
-  I think I want the default format to be %i%xsx.
-
-  You can use the keyword `use` to set a default format for the strings that comes after in the current scope.
-
-  ```jome
-  use %xlx%j_
-  let str = "some multi
-             line string" // will use the format above
-  ```
-
-  The formats do not add up to each other. When you specify a format, it replaces the previous one.
-
-  Maybe allow to give names to format that you can reuse?
-
-  Or simply numbers?
-
-  set format 0 %xlx%j_
-
-  then you do "some string"%0
-
-  When there is a default format and you want none, use only % like "str"%
-
-  Maybe define single digits aliases myself to be the most commonly used formats. This way you can know what it means without looking
-  it up if you are an expert.
-
-  Or maybe define named aliases myself.
-
-  %_html => string like in html, joins the lines with a single space
-
-  Maybe it would be nice if I could modify only some flag instead of all. Let's say, I always want xsx, but only sometimes xl,
-  I don't want to have to redefine xsx every time.
-
-  Peut-être quand dans le fond faire que ce sont tous des flags.
-
-  Tu peux faire %s pour reset string settings, %l pour line settings, %s%l%i%j équivalerais à % qui reset tout
-
-  Je ne sais pas pour %i par contre, mais celui n'est pas encore tout à fais clair. Ça garde juste le nested indent?
-
-  Si %i active, comment désactivé?
 
   <h3 id="verbatim">Verbatim string literals</h3>
 

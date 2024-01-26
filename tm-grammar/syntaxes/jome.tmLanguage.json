@@ -733,6 +733,14 @@
           "end": "'",
           "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}},
           "patterns": [{"include": "#escape-char"}]
+        },
+        {
+          "name": "string.quoted.backtick.jome",
+          "begin": "`",
+          "beginCaptures": {"0": {"name": "punctuation.definition.string.begin.jome"}},
+          "end": "`",
+          "endCaptures": {"0": {"name": "punctuation.definition.string.end.jome"}},
+          "patterns": [{"include": "#escape-char"}]
         }
       ]
 		},

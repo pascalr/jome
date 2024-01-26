@@ -414,7 +414,7 @@ const CODE_GENERATORS = {
   "string.quoted.double.jome": compileString,
   "string.quoted.multi.jome": compileStringSingleQuote,
   //"string.quoted.backtick.jome": (node) => compileTokenRaw(node.token),
-  "string.quoted.backtick.jome": (node) => {throw new Error("Backtick strings not supported for now.")},
+  "string.quoted.backtick.jome": compileStringSingleQuote,
   // "string.quoted.backtick.jome": (node, ctx) => {
   //   return '`'+node.children.slice(1,-1).map(c => c.type === 'newline' ? '\n' : c).map(
   //     c => typeof c === 'string' ? c : '${'+compileJsBlock(c.children.slice(1,-1), ctx)+'}'
