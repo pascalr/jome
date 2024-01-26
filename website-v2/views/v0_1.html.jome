@@ -293,9 +293,9 @@ let content = <md>
 
   Note: All strings are allowed to be multiline.
 
-  <h3 id="formatting">Formatting v4</h3>
+  <h3 id="formatting">Formatting v5</h3>
 
-  You can format all kinds of strings and tags by using the syntax `for <tag_name> chain func1[, func2] wrap func3[, func 4] end`.
+  You can format all kinds of strings and tags by using the syntax `forall <tag_name> chain func1[, func2] wrap func3[, func 4] end`.
 
   The functions given to wrap are added arround the final string and executed at runtime.
 
@@ -306,7 +306,7 @@ let content = <md>
   For example, the js tag takes a string in input and simply output it all into javascript code.
 
   ```jome
-  for js
+  forall js
     chain do |lines|
       // First validate that every line contains only a string. Template literals are not allowed in a js tag.
       if !lines.every(line => line.length === 1 && line.type === 'string')

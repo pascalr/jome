@@ -113,6 +113,7 @@
         { "include": "#format" },
         { "include": "#function" },
         { "include": "#do_end" },
+        { "include": "#for-tag" },
         { "include": "#chain-bloc" },
         { "include": "#type_def" },
         { "include": "#with-format" },
@@ -853,6 +854,7 @@
     "with-format": {
       "patterns": [
         {
+          "comment": "THIS IS DEPRECATED",
           "name": "meta.with-format-for.jome",
           "match": "(with)\\b\\s*((?:%(?::|:#)?\\w*)+)\\s*\\b(for)\\b\\s*(\\w*)",
           "captures": {
@@ -863,12 +865,51 @@
           }
         },
         {
+          "comment": "THIS IS DEPRECATED",
           "name": "meta.with-format.jome",
           "match": "(with)\\b\\s*((%(?::|:#)?\\w*)+)",
           "captures": {
             "1": {"name": "keyword.control.jome"},
             "2": {"name": "keyword.other.string-format.jome"}
           }
+        }
+      ]
+    },
+    "for-tag-func": {
+      "patterns": [{
+        "name": "entity.name.function.jome",
+        "match": "#?\\w+"
+      }]
+    },
+    "for-tag": {
+      "patterns": [
+        {
+          "name": "meta.forall.jome",
+          "begin": "\\b(forall)\\b\\s*(\\w+)?",
+          "beginCaptures": {
+            "1": {"name": "keyword.control.jome"},
+            "2": {"name": "keyword.other.tag-name.jome"}
+          },
+          "end": "\\b(end)\\b",
+          "endCaptures": {"0": {"name": "keyword.control.jome"}},
+          "patterns": [
+            {
+              "name": "meta.forall-chain.jome",
+              "match": "\\b(chain)\\b\\s*((?:#?\\w+(?:,\\s*#?\\w+)*)?)\\s*",
+              "captures": {
+                "1": {"name": "keyword.control.jome"},
+                "2": {"patterns": [{"include": "#for-tag-func"}]}
+              }
+            },
+            {
+              "name": "meta.forall-wrap.jome",
+              "match": "\\b(wrap)\\b\\s*((?:#?\\w+(?:,\\s*#?\\w+)*)?)\\s*",
+              "captures": {
+                "1": {"name": "keyword.control.jome"},
+                "2": {"patterns": [{"include": "#for-tag-func"}]}
+              }
+            }
+          ]
         }
       ]
     },
