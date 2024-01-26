@@ -690,7 +690,13 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
     let format = node.raw
     let str = node.operands[0].raw
     throw new Error("sdfj9834hf9h230h023hf023h")
-  }
+  },
+
+  "meta.forall.jome": (node) => {
+    let todo = 10
+    let foo = 20
+    return ''
+  },
 
 }
 

@@ -462,6 +462,41 @@ const VALIDATORS = {
   "meta.embedded.block.html": validateHeredoc,
   "meta.embedded.block.markdown": validateHeredoc,
   "meta.embedded.block.css": validateHeredoc,
+
+  "meta.forall.jome": (node) => {
+    ensureStartRaw(node, 'forall')
+    ensureStartType(node, 'keyword.control.jome')
+    ensureEndRaw(node, 'end')
+    ensureEndType(node, 'keyword.control.jome')
+    let tagName = node.parts[1].raw
+    let parts = node.parts.slice(2,-1) // skip 2 keywords and tag name
+    let chainFunctions = []
+    let wrapFunctions = []
+    parts.forEach(part => {
+      if (part.type === 'meta.forall-chain.jome') {
+        ensureStartRaw(part, 'chain')
+        ensureStartType(part, 'keyword.control.jome')
+        let funcs = part.parts.slice(1) // skip keyword chain
+        funcs.forEach(func => {
+          if (func.type !== 'entity.name.function.jome') {
+            throw new Error("sdf890230r23j0fj230f230ih")
+          }
+          chainFunctions.push(func.raw)
+        })
+      } else if (part.type === 'meta.forall-wrap.jome') {
+        ensureStartRaw(part, 'wrap')
+        ensureStartType(part, 'keyword.control.jome')
+        let funcs = part.parts.slice(1) // skip keyword wrap
+        funcs.forEach(func => {
+          if (func.type !== 'entity.name.function.jome') {
+            throw new Error("df9h2890fh92uu9sbdf1sdlf")
+          }
+          wrapFunctions.push(func.raw)
+        })
+      }
+    })
+    node.data = {tagName, chainFunctions, wrapFunctions}
+  },
 }
 
 module.exports = {
