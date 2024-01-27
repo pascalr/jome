@@ -137,8 +137,12 @@ class Compiler {
     // console.log(info)
     let body = compileNodes(topNodes)
     if (opts.inline) {
-      let generated = prettier.format(body, {parser: "babel", semi: false}) // No semicolons
-      return generated
+      if (opts.prettier) {
+        let generated = prettier.format(body, {parser: "babel", semi: false}) // No semicolons
+        return generated
+      } else {
+        return body.endsWith(';') ? body.slice(0, -1) : body // No semicolons
+      }
     }
     if (opts.writeScript && ctxFile.absPath.endsWith('.jome')) {
       let args = ctxFile.fileArguments.map(arg => arg.compile()).join(', ')

@@ -462,11 +462,11 @@ function printFormatting(lines, ctxFile) {
   // Otherwise it is a string
   let strIsTemplateLiteral = lines.length > 1;
   let substitutions = {}
-  let content = lines.map(line => {
+  let result = lines.map(line => {
     return line.map(part => {
       let isTemplateLiteral = (typeof part !== 'string')
       strIsTemplateLiteral = strIsTemplateLiteral || isTemplateLiteral
-      if (!isTemplateLiteral) {return part}
+      if (!isTemplateLiteral) {return escapeTemplateLiteral(part)}
       if (part.code) {return "${"+genCode(part.code)+"}"}
       if (part.rawCode) {return "${"+ctxFile.compiler.compileCode(part.rawCode, {inline: true})+"}"}
       if (part.sub) {
@@ -477,7 +477,11 @@ function printFormatting(lines, ctxFile) {
       throw new Error("sf9dh29hf90shf98h3921")
     }).join('')
   }).join('\n')
-  let result = strIsTemplateLiteral ? `\`${content}\`` : `"${content}"`
+  if (strIsTemplateLiteral) {
+    result = `\`${escapeBackticks(result)}\``
+  } else {
+    result = `"${escapeDoubleQuotes(result)}"`
+  }
   Object.keys(substitutions).forEach(hash => {
     result = result + `.replace('${hash}', ${substitutions[hash]})`
   })
