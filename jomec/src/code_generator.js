@@ -421,6 +421,7 @@ function prepareHeredoc(node) {
       lines.push(currentLine)
       lines = [...lines, ...ls.map(l => [l])]
       currentLine = lines[lines.length - 1]
+      return;
     }
     currentLine.push(part)
   })
