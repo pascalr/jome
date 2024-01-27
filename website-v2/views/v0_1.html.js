@@ -241,6 +241,8 @@ module.exports = () => {
   obj = {content: content, value: value}
   \`\`\`
 
+  Also, this allows you to pass a variable as a named parameter to a function. Ex: \`someFunc :someArg\` => \`someFunc({someArg})\`
+
   <h2 id="builtins">Built-Ins</h2>
 
   The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.

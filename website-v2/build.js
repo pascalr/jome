@@ -37,6 +37,11 @@ module.exports = (f) => {
     { force: force }
   );
   build(
+    path.join(__dirname, "views/examples.html.jome"),
+    path.join(__dirname, "../docs/ex/index.html"),
+    { force: force }
+  );
+  build(
     path.join(__dirname, "css/stylesheet.css.jome"),
     path.join(__dirname, "../docs/stylesheet.css"),
     { force: force }

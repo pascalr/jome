@@ -1,5 +1,5 @@
 
-    <!DOCTYPE html>
+      <!DOCTYPE html>
       <HTML lang="en">
         <head>
           <meta charset="UTF-8">
@@ -22,30 +22,55 @@
     <a href="/jome/#lang-ref">Language Reference</a>
     <a href="/jome/ex">Examples</a>
     <a href="/jome/lib">Librairies</a>
+    <a href="/jome/formats">Formats</a>
     <a href="/jome/utils">Utils</a>
     <a href="https://github.com/pascalr/jome">GitHub</a>
   </div>
-
           <div style="flex-grow: 1; height: calc(100vh - 50px);">
             <div class="d-flex" style="height: 100%;">
             
   <div id="left-nav" class="scrollable">
     <ul class="nav-list">
       <li><a href="/jome/">Home</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/jome/#overview">Overview</a></li>
+        <li><a href="/jome/#install">Install</a></li>
+        <li><a href="/jome/#usage">Usage</a></li>
+        <li><a href="/jome/#hello-world">Hello world</a></li>
+        <li><a href="/jome/#index-jome">index.jome</a></li>
+        <li><a href="/jome/#partials">Partials</a></li>
+      </ul>
       <li><a href="/jome/#lang-ref">Language Reference</a></li>
       <ul class="nav-list nav-sub">
         <li><a href="/jome/#syntax">Syntax</a></li>
-        <li><a href="/jome/#blocks">Blocks</a></li>
-        <li><a href="/jome/#nodes">Nodes</a></li>
-        <li><a href="/jome/#scripts">Scripts</a></li>
-        <li><a href="/jome/#named-parameters">Named parameters</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="/jome/#keywords">Keywords</a></li>
+          <li><a href="/jome/#comments">Comments</a></li>
+        </ul>
+        <li><a href="/jome/#builtins">Built-Ins</a></li>
+        <li><a href="/jome/#strings">Strings</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="/jome/#formatting">Formatting</a></li>
+          <li><a href="/jome/#heredocs">Heredocs</a></li>
+          <li><a href="/jome/#paths">Paths</a></li>
+        </ul>
+        <li><a href="/jome/#conditions">Conditions</a></li>
+        <li><a href="/jome/#loops">Loops</a></li>
+        <li><a href="/jome/#switch-case">Switch/Case</a></li>
+        <li><a href="/jome/#with">With keyword</a></li>
         <li><a href="/jome/#classes">Classes</a></li>
-        <li><a href="/jome/#interfaces">Interfaces</a></li>
-        <li><a href="/jome/#arrow-getter">Arrow getter</a></li>
-        <li><a href="/jome/#instance-driven-dev">Instance driven development</a></li>
-        <li><a href="/jome/#verbatim">Verbatim string literals</a></li>
-        <li><a href="/jome/#units">Units</a></li>
-        <li><a href="/jome/#hyphens">Hyphen</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="/jome/#formatting">Instance properties (@)</a></li>
+        </ul>
+        <li><a href="/jome/#exports">Modules and exports</a></li>
+        <li><a href="/jome/#along">Along keyword</a></li>
+        <li><a href="/jome/#threads">Threads</a></li>
+        <li><a href="/jome/#private">Private</a></li>
+        <li><a href="/jome/#env">Environment variables</a></li>
+        <li><a href="/jome/#global">Global variables</a></li>
+        <li><a href="/jome/#chain">Chain</a></li>
+        <li><a href="/jome/#contributing">Contributing</a></li>
+        <li><a href="/jome/#ack">Acknowledgements</a></li>
       </ul>
       <li><a href="/jome/lib">Librairies</a></li>
       <ul class="nav-list nav-sub">
@@ -61,22 +86,10 @@
       </ul>
     </ul>
   </div>
-
             <div class="scrollable" style="width: 100%;">
-              <div class="app-content">
+              <div class="main">
                 <h2>Jome examples</h2>
-  <h3>Testing 1212</h3>
-<div id="Example-1"></div><div id="Example-2"></div>  <h3 id="hello-world">Hello world</h3>
-  <div class='example'>
-    <div class='onglets'>
-      <div class='active'>Code</div>
-      <div>Compiled</div>
-      <div>Output</div>
-    </div>
-    <div class='example-content'><pre><code class="language-jome"><span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>)
-</code></pre>
-</div>
-  </div>
+  <h3 id="hello-world">Hello world</h3>
   <h3 id="html-library">Html library</h3>
 <pre><code class="language-jome"><span class="hljs-variable">html</span> = «
   <span class="hljs-title class_">IFrame</span> <span class="hljs-comment">// for demo only</span>
@@ -150,40 +163,9 @@ jome.<span class="hljs-title function_">createObj</span>($.$.$btn, <span class="
 ))
 </code></pre>
 
-      <script defer>
-        document.getElementById("Example-1").innerHTML = "
-  <div class='example'>
-    <div class='onglets'>
-      <div class='active'>Code</div>
-      <div>Compilé</div>
-      <div>Résultat</div>
-    </div>
-    <div class='example-content'>
-      <pre><code class="language-jome"><span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>)
-</code></pre>
-
-    </div>
-  </div>
-"
-document.getElementById("Example-2").innerHTML = "
-  <div class='example'>
-    <div class='onglets'>
-      <div class='active'>Code</div>
-      <div>Compilé</div>
-      <div>Résultat</div>
-    </div>
-    <div class='example-content'>
-      <pre><code class="language-jome"><span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>)
-</code></pre>
-
-    </div>
-  </div>
-"
-      </script>
-    
               </div>
             </div>
           </div>
         </body>
       </HTML>
-  
+    
