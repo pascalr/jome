@@ -2,7 +2,6 @@ const { ltrim, ytrim } = require("jome-lib/formatting");
 const build = require("./website-v2/build.js");
 const server = require("./website-v2/server.js");
 const execSh = require("jome-lib/execSh");
-const mdToHtml = require("jome-lib/mdToHtml");
 module.exports = (cmd, args) => {
   global.g_URL = "/jome";
   if (cmd === "test") {
@@ -21,7 +20,5 @@ jome # get this help message
 jome s # start server (or jome server)
 jome test # launch the tests`);
   }
-  let content = "# This is a title!";
-  let test = mdToHtml(content);
   return `<div>${"Hello"}</div>`;
 };

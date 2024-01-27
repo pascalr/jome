@@ -347,6 +347,20 @@ module.exports = () => {
   content%txt === <txt>\<%= content %></txt>
   \`\`\`
 
+  ## Config save
+
+  Jome is by default opiniated and provide a lot of default of a lot of formats. They will change over time as librairies or opinions change.
+
+  To make sure it works properly and it is not confusing what it does, every format used will be stored inside config.jome.
+
+  When a new format is encountered in the source code, it is added to config.jome automatically, and librairies that need to be installed
+  will be installed automatically.
+
+  The goal is that it is really easy to do advanced stuff. For example, no need to use create-react-app or anything complicated. If you
+  want a single page of your big application to use react, that use a react format and it will magically work.
+
+  It keeps a snapshot of the formats used and allows to easily know what a format does, just look it up inside config.jome.
+
   ### For more info on tags/formats
 
   See the [formats page](/formats).

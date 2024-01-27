@@ -319,6 +319,14 @@ for template literals properly.</p>
 <p>TODO: You can use percent formating after variable name too:</p>
 <pre><code>content%txt === &lt;txt&gt;&lt;%= content %&gt;&lt;/txt&gt;
 </code></pre>
+<h2>Config save</h2>
+<p>Jome is by default opiniated and provide a lot of default of a lot of formats. They will change over time as librairies or opinions change.</p>
+<p>To make sure it works properly and it is not confusing what it does, every format used will be stored inside config.jome.</p>
+<p>When a new format is encountered in the source code, it is added to config.jome automatically, and librairies that need to be installed
+will be installed automatically.</p>
+<p>The goal is that it is really easy to do advanced stuff. For example, no need to use create-react-app or anything complicated. If you
+want a single page of your big application to use react, that use a react format and it will magically work.</p>
+<p>It keeps a snapshot of the formats used and allows to easily know what a format does, just look it up inside config.jome.</p>
 <h3>For more info on tags/formats</h3>
 <p>See the <a href="/formats">formats page</a>.</p>
   <h3 id="formatting">Formatting v3</h3>

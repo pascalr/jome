@@ -439,6 +439,31 @@ function printFormatting(lines) {
   return strIsTemplateLiteral ? `\`${content}\`` : `"${content}"`
 }
 
+function applyFormat(format, operand) {
+  let forall = operand.ctxFile.foralls[format]
+  let lines = prepareFormatting(operand)
+  if (forall?.chain?.length) {
+    forall.chain.forEach(chainFunc => {
+      lines = chainFunc(lines)
+    })
+  }
+  let str = printFormatting(lines)
+  if (forall?.wrap?.length) {
+    forall.wrap.forEach(wrapFunc => {
+      str = `${wrapFunc}(${str})`
+    })
+  }
+  Object.keys(forall?.imports||{}).forEach(impName => {
+    let imp = forall.imports[impName]
+    if (imp.default) {
+      operand.ctxFile.addImport(impName, [], imp.from)
+    } else {
+      operand.ctxFile.addImport(null, [impName], imp.from)
+    }
+  })
+  return str
+}
+
 const CODE_GENERATORS = {
   "plain": (node) => node.raw,
   "comment.line.documentation.jome": (node) => `// ${node.raw.slice(2)}`,
@@ -730,29 +755,7 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
   },
 
   "keyword.other.string-format.jome": (node) => {
-    let format = node.raw.slice(1)
-    let forall = node.ctxFile.foralls[format]
-    let lines = prepareFormatting(node.operands[0])
-    if (forall?.chain?.length) {
-      forall.chain.forEach(chainFunc => {
-        lines = chainFunc(lines)
-      })
-    }
-    let str = printFormatting(lines)
-    if (forall?.wrap?.length) {
-      forall.wrap.forEach(wrapFunc => {
-        str = `${wrapFunc}(${str})`
-      })
-    }
-    Object.keys(forall?.imports||{}).forEach(impName => {
-      let imp = forall.imports[impName]
-      if (imp.default) {
-        node.ctxFile.addImport(impName, [], imp.from)
-      } else {
-        node.ctxFile.addImport(null, [impName], imp.from)
-      }
-    })
-    return str
+    return applyFormat(node.raw.slice(1), node.operands[0])
   },
 
   "meta.forall.jome": (node) => {
