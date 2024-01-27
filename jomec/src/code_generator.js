@@ -693,8 +693,8 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
   },
 
   "meta.forall.jome": (node) => {
-    let todo = 10
-    let foo = 20
+    let {tagName, chainFunctions, wrapFunctions} = node.data
+    node.ctxFile.addForall(tagName, chainFunctions, wrapFunctions)
     return ''
   },
 

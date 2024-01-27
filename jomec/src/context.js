@@ -19,6 +19,11 @@ class ContextFile {
       md: "%:#mdToHtml",
       sh: "%:#execSh"
     }
+    this.foralls = {}
+  }
+
+  addForall(name, chainFuncs, wrapFuncs) {
+    this.foralls[name] = {chainFuncs, wrapFuncs}
   }
 
   addImport(defaultImport, namedImports, file) {

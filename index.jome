@@ -5,7 +5,7 @@ import {ltrim, xtrim} from 'jome-lib/formatting'
 
 with cmd, args end
 
-//forall text chain ltrim, xtrim end
+forall text chain ltrim, xtrim end
 
 $URL = '/jome'
 
