@@ -513,6 +513,7 @@ console.log(exponentialNumber); // Outputs: 1230000</p>
 <h3>Substitutions</h3>
 <p>You can insert stuff after the transformers using <code>&lt;%s varName %&gt;</code>. Under the hood, a hash is created for varName, it is inserted into the string
 and it is substituted after the transformers are called.</p>
+<p>TODO: Find a syntax to allow the same thing, but for strings. <code>&quot;Hello {%s name}&quot;</code>?</p>
   <h3 id="paths">Paths</h3>
 <p>The issue with relative paths is that you don't know what they are relative to. In js, in include files,
 the relative path is relative to the current file. If you try to open and write a file, than it is relative
@@ -590,6 +591,7 @@ Maybe exec ... while ???</p>
   <span class="hljs-comment">// ...</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
+<p>For of is usefull to loop through a string and handle unicode surrogate pairs</p>
 <h2>Conditions</h2>
 <p>You can use <code>elif</code>, <code>elsif</code> or <code>else if</code>. They are all the same.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">if</span> <span class="hljs-variable">someCond</span>

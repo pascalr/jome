@@ -275,7 +275,7 @@ function formatLines(node, lines, format, isTemplateLiteral=true, escapeTemplate
       if (mod.includes(':')) {
         // A transformer
         transformers.push(mod.slice(1))
-      } else if (mod.includes('l')) {
+      } else if (mod.includes('l')) {
         // A line modifier
         if (mod === 'xl') {
           _lines = _lines.map(l => l.trimLeft())
@@ -353,6 +353,7 @@ function mergeFormat(format, defaultFormat) {
 }
 
 function compileHeredoc(node) {
+  // return applyFormat(node.data.format, node)
   let raw = node.data.content
   let substitutions = {}
   let withSubs = raw.replace(/(?<!\\)<%s\s+(\w+)\s*%>/g, (match, group) => {
@@ -400,10 +401,35 @@ function compileStringSingleQuote(node) {
   return result
 }
 
+// Convert an heredoc into an array of array.
+function prepareHeredoc(node) {
+  let raw = node.data.content
+  let pattern = /(<%.*?%>)|(<%=.*?%>)|(<%s.*?%>)/g;
+  let parts = raw.split(pattern).map(s => {
+    if (s.startsWith('<%=')) {return {sub: s}}
+    return s.startsWith('<%') ? {code: s} : s
+  })
+  let lines = []
+  let currentLine = []
+  parts.forEach(part => {
+    if (typeof part === 'string' && part.includes('\n')) {
+      let [l, ...ls] = part.split('\n')
+      currentLine.push(l)
+      lines = [...lines, ...ls]
+      currentLine = []
+    }
+    currentLine.push(part)
+  })
+  return lines
+}
+
 // Convert the node (string.quoted...) to an array of array for formats to chain.
 function prepareFormatting(node) {
   if (node.type === 'variable.other.jome') {
     return [[{code: node.raw}]]
+  }
+  if (node.type.startsWith('meta.embedded.block')) {
+    return prepareHeredoc(node)
   }
   let currentLine = []
   let lines = []
@@ -429,14 +455,26 @@ function printFormatting(lines) {
   }
   // Otherwise it is a string
   let strIsTemplateLiteral = lines.length > 1;
+  let substitutions = {}
   let content = lines.map(line => {
     return line.map(part => {
       let isTemplateLiteral = (typeof part !== 'string')
       strIsTemplateLiteral = strIsTemplateLiteral || isTemplateLiteral
-      return isTemplateLiteral ? ("${"+genCode(part.code)+"}") : part
+      if (!isTemplateLiteral) {return part}
+      if (part.code) {return "${"+genCode(part.code)+"}"}
+      if (part.sub) {
+        let hash = crypto.createHash('md5').update(group).digest("hex")
+        substitutions[hash] = group
+        return hash
+      }
+      throw new Error("sf9dh29hf90shf98h3921")
     }).join('')
   }).join('\n')
-  return strIsTemplateLiteral ? `\`${content}\`` : `"${content}"`
+  let result = strIsTemplateLiteral ? `\`${content}\`` : `"${content}"`
+  Object.keys(substitutions).forEach(hash => {
+    result = result + `.replace('${hash}', ${substitutions[hash]})`
+  })
+  return result
 }
 
 function applyFormat(format, operand) {

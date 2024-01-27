@@ -626,6 +626,8 @@ module.exports = () => {
   You can insert stuff after the transformers using \`\<%s varName %>\`. Under the hood, a hash is created for varName, it is inserted into the string
   and it is substituted after the transformers are called.
 
+  TODO: Find a syntax to allow the same thing, but for strings. \`"Hello {%s name}"\`?
+
   <h3 id="paths">Paths</h3>
 
   The issue with relative paths is that you don't know what they are relative to. In js, in include files,
@@ -741,6 +743,8 @@ module.exports = () => {
     // ...
   end
   \`\`\`
+
+  For of is usefull to loop through a string and handle unicode surrogate pairs
 
   ## Conditions
 
