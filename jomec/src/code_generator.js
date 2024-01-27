@@ -402,6 +402,9 @@ function compileStringSingleQuote(node) {
 
 // Convert the node (string.quoted...) to an array of array for formats to chain.
 function prepareFormatting(node) {
+  if (node.type === 'variable.other.jome') {
+    return [[{code: node.raw}]]
+  }
   let currentLine = []
   let lines = []
   node.data.parts.forEach(part => {

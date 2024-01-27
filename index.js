@@ -21,6 +21,7 @@ jome # get this help message
 jome s # start server (or jome server)
 jome test # launch the tests`);
   }
-  let test = mdToHtml("# This is a title!");
+  let content = "# This is a title!";
+  let test = mdToHtml(content);
   return `<div>${"Hello"}</div>`;
 };

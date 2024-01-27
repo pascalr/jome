@@ -34,8 +34,8 @@ else
 end
 
 // let content = "# This is a title!"
-//let test = content%md
-let test = "# This is a title!"%md
+// let test = content%md
+// let test = "# This is a title!"%md
 
 return <html><div><%= "Hello" %></div></html>
 
