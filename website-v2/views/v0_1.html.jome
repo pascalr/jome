@@ -387,14 +387,12 @@ let content = <md>
   ```
 
   You can specify for:
-  - single_quote_inline
-  - single_quote_multi
-  - double_quote_inline
-  - double_quote_multi
+  - single_quote
+  - double_quote
   - triple_single_quote
   - triple_double_quote
-  - verbatim_double_quote_inline
-  - verbatim_double_quote_multi
+
+  Allow apply format to verbatim strings or not?
 
   You can also specify transform functions for tags using the keywords `for tags`.
 

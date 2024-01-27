@@ -147,25 +147,6 @@ function compileStandaloneFunction(node) {
   }
 }
 
-function compileInterpolate(node, str, escSeqBeg = '${', escSeqEnd = '}') {
-  // FIXME: This is a simplify method that does not allow "%>" to be for example inside a string
-  // FIXME: <html><%= "%>" %></html> // DOES NOT WORK
-  // A proper solution would be to have all the tmLanguage files to tokenize properly, and inject
-  // into the grammar files my interpolation tag.
-  // But this does not fix the problem that syntax highlighting does not work...
-  // So keep it simple for now
-
-  // One part of the solution I think is to tokenize and check that if all the groups were close
-  // In order to handle <% if (true) ( %> Blah blah <% ) %>
-  // TODO: Checker comment ils font dans eta.js
-
-  return str.replace(/(?<!\\)<%=((.|\n)*?)%>/g, (match, group) => {
-    let raw = group.trim()
-    let out = node.ctxFile.compiler.compileCode(raw, {inline: true})
-    return escSeqBeg+out+escSeqEnd
-  });
-}
-
 function toPrimitive(str) {
   // Check if the string represents an integer
   if (/^-?\d+$/.test(str)) {
@@ -512,11 +493,14 @@ const CODE_GENERATORS = {
   'punctuation.separator.delimiter.jome': compileRaw,
   "string.quoted.backtick.verbatim.jome": (node) => `\`${node.token.children[1]}\``,
   "string.quoted.double.verbatim.jome": (node) => `"${node.token.children[1]}"`,
-  "string.quoted.single.jome": compileStringSingleQuote,
-  "string.quoted.double.jome": compileString,
-  "string.quoted.multi.jome": compileStringSingleQuote,
+  "string.quoted.single.jome": (node) => applyFormat("single_quote", node),
+  "string.quoted.double.jome": (node) => applyFormat("double_quote", node),
+  "string.quoted.multi.jome": (node => {
+    if (node.raw[0] === '"') {return applyFormat("triple_double_quote", node)}
+    return applyFormat("triple_single_quote", node)
+  }),
   //"string.quoted.backtick.jome": (node) => compileTokenRaw(node.token),
-  "string.quoted.backtick.jome": compileStringSingleQuote,
+  "string.quoted.backtick.jome": (node) => applyFormat("backtick_quote", node),
   // "string.quoted.backtick.jome": (node, ctx) => {
   //   return '`'+node.children.slice(1,-1).map(c => c.type === 'newline' ? '\n' : c).map(
   //     c => typeof c === 'string' ? c : '${'+compileJsBlock(c.children.slice(1,-1), ctx)+'}'
