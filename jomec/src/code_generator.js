@@ -336,11 +336,7 @@ function printFormatting(lines, ctxFile) {
   } else {
     result = `"${escapeDoubleQuotes(result)}"`
   }
-  Object.keys(substitutions).forEach(hash => {
-    let subCode = ctxFile.compiler.compileCode(substitutions[hash], {inline: true})
-    result = result + `.replace('${hash}', ${subCode})`
-  })
-  return result
+  return {result, substitutions}
 }
 
 function applyFormat(format, operand) {
@@ -351,12 +347,16 @@ function applyFormat(format, operand) {
       lines = chainFunc(lines)
     })
   }
-  let str = printFormatting(lines, operand.ctxFile)
+  let {result, substitutions} = printFormatting(lines, operand.ctxFile)
   if (forall?.wrap?.length) {
     forall.wrap.forEach(wrapFunc => {
-      str = `${wrapFunc}(${str})`
+      result = `${wrapFunc}(${result})`
     })
   }
+  Object.keys(substitutions).forEach(hash => {
+    let subCode = operand.ctxFile.compiler.compileCode(substitutions[hash], {inline: true})
+    result = result + `.replace('${hash}', ${subCode})`
+  })
   Object.keys(forall?.imports||{}).forEach(impName => {
     let imp = forall.imports[impName]
     if (imp.default) {
@@ -365,7 +365,7 @@ function applyFormat(format, operand) {
       operand.ctxFile.addImport(null, [impName], imp.from)
     }
   })
-  return str
+  return result
 }
 
 const CODE_GENERATORS = {

@@ -13,8 +13,7 @@ module.exports = () => {
     </div>
   `;
   }
-  let content = mdToHtml(
-    `
+  let content = mdToHtml(`
   ## Jome examples
 
   <h3 id="hello-world">Hello world</h3>
@@ -112,10 +111,9 @@ module.exports = () => {
     <sh>sqlite3 -header -csv < % = ARGV[1] % > "select * from < % = table % >;" > < % = table % >.csv</sh>
   ))
   \`\`\`
-`.replace(
-      "83e12e01e1210c36810087d76fbcec01",
-      printExample('#log "Hello, world!"')
-    )
+`).replace(
+    "83e12e01e1210c36810087d76fbcec01",
+    printExample('#log "Hello, world!"')
   );
   return new Webpage("Jome examples", content).render();
 };
