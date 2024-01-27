@@ -1,5 +1,5 @@
-import build from './website-v2/build.jome'
-import server from './website-v2/server.jome'
+import build from './website/build.jome'
+import server from './website/server.jome'
 
 import {ltrim, ytrim} from 'jome-lib/formatting'
 
