@@ -548,8 +548,8 @@ module.exports = () => {
   return <json>
     {
       "some": "data",
-      "title": <% title %>,
-      "math": <% 1 + 2 %>
+      "title": \<% title %>,
+      "math": \<% 1 + 2 %>
     }
   </json>
   \`\`\`
@@ -583,7 +583,7 @@ module.exports = () => {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title><% title %></title>
+      <title>\<% title %></title>
     </head>
   </html>
   \`\`\`
