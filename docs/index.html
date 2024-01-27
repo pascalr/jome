@@ -284,7 +284,7 @@ underscore.js: #map, #reduce, ...</p>
 <p>TODO: Support them, just not interpolation yet because I don't know which interpolation I want to be able to use.</p>
 <p>Note: All strings are allowed to be multiline.</p>
   <h3 id="formatting">Formatting v5</h3>
-<p>TODO: The first part of the tag is what is used for syntax highlighting. So for example, html.js, it should highlight like html. .js
+<p>TODO: The first part of the tag is what is used for syntax highlighting. So for example, html-js, it should highlight like html. -js
 is just a postfix that means compile a certain way</p>
 <p>You can format all kinds of strings and tags by using the syntax <code>forall &lt;tag_name&gt; chain func1[, func2] wrap func3[, func 4] end</code>.</p>
 <p>The functions given to wrap are added arround the final string and executed at runtime.</p>
@@ -320,6 +320,7 @@ for template literals properly.</p>
 <p>TODO: You can use percent formating after variable name too:</p>
 <pre><code>content%txt === &lt;txt&gt;&lt;%= content %&gt;&lt;/txt&gt;
 </code></pre>
+<p>Possiblité d'avoir des arguments aux formats? Par exemple, %indent(2spaces) or %indent(2tabs)</p>
 <h2>Config save</h2>
 <p>Jome is by default opiniated and provide a lot of default of a lot of formats. They will change over time as librairies or opinions change.</p>
 <p>To make sure it works properly and it is not confusing what it does, every format used will be stored inside config.jome.</p>
@@ -331,16 +332,6 @@ want a single page of your big application to use react, that use a react format
 <h3>For more info on tags/formats</h3>
 <p>See the <a href="/formats">formats page</a>.</p>
   <h3 id="formatting">Formatting v3</h3>
-<p>You can specify a function to transform strings of the same type using the keywords <code>for strings</code>.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">for</span> <span class="hljs-variable">strings</span> <span class="hljs-variable">double_quote_multi</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">s</span>|
-  <span class="hljs-keyword">return</span> <span class="hljs-variable">s</span>.<span class="hljs-title function_">#ytrim</span>
-<span class="hljs-keyword">end</span>
-
-<span class="hljs-comment">// You can specify multiple kinds at once</span>
-<span class="hljs-keyword">for</span> <span class="hljs-variable">strings</span> <span class="hljs-variable">double_quote_inline</span>, <span class="hljs-variable">double_quote_multi</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">s</span>|
-  
-<span class="hljs-keyword">end</span>
-</code></pre>
 <p>You can specify for:</p>
 <ul>
 <li>single_quote</li>
@@ -348,46 +339,6 @@ want a single page of your big application to use react, that use a react format
 <li>triple_single_quote</li>
 <li>triple_double_quote</li>
 </ul>
-<p>Allow apply format to verbatim strings or not?</p>
-<p>You can also specify transform functions for tags using the keywords <code>for tags</code>.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">for</span> <span class="hljs-variable">tags</span> <span class="hljs-variable">sh</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">s</span>|
-  <span class="hljs-title function_">#execSh</span>(<span class="hljs-variable">s</span>)
-<span class="hljs-keyword">end</span>
-</code></pre>
-<p>Is it allowed to use transform functions for data tags such as bin, hex, ...?</p>
-<p>To make this work, let's compile for strings and for tags into functions. And simply wrap the strings with this function every time.</p>
-<p>Let's use j_format_XX as a function name.</p>
-<p>When compiling a string for example and simply trimming both ends, it would be nice to do it at compile time rather than at runtime.</p>
-<p>I am thinking that later functions could be marked as pure, (or deduced to be pure) meaning it has no side effect. Every pure function
-called on a value that has no variable could already be calculated.</p>
-<p>But unfortunately this does not work for for example &quot; Hello {John} &quot;, because of the template literal...</p>
-<p>DO I WANT TO BE ABLE TO APPLY TRIMMING TO THE STRING BEFORE TEMPLATE LITERAL?</p>
-<p>With the keyword chain?</p>
-<pre><code class="language-jome"><span class="hljs-keyword">for</span> <span class="hljs-variable">strings</span> <span class="hljs-variable">double_quote_multi</span> <span class="hljs-variable">chain</span> <span class="hljs-title function_">#ytrim</span>, <span class="hljs-title function_">#ltrim</span>, <span class="hljs-keyword">do</span> |<span class="hljs-variable">s</span>|
-  <span class="hljs-keyword">return</span> <span class="hljs-variable">s</span>.<span class="hljs-title function_">#ytrim</span>
-<span class="hljs-keyword">end</span>
-</code></pre>
-<p>I like that!</p>
-<p>But chain is not explicit in meaning that it is done before the interpolation...</p>
-<p>Wait... What exactly is the string given to the function?</p>
-<p>let txt = &quot; Hello {name}! &quot;</p>
-<p>Before interpolation the strings would be given directly transform functions:
-#xtrim would be given &quot; Hello {name}! &quot;</p>
-<p>Maybe use the keyword then and then specify functions that will be called after</p>
-<pre><code class="language-jome"><span class="hljs-keyword">for</span> <span class="hljs-variable">strings</span> <span class="hljs-variable">double_quote_multi</span> <span class="hljs-variable">chain</span> <span class="hljs-title function_">#ytrim</span>, <span class="hljs-title function_">#ltrim</span>, <span class="hljs-keyword">do</span> |<span class="hljs-variable">s</span>|
-  <span class="hljs-keyword">return</span> <span class="hljs-variable">s</span>.<span class="hljs-title function_">#ytrim</span>
-<span class="hljs-keyword">end</span> <span class="hljs-keyword">then</span> <span class="hljs-variable">execSomeFunc1</span>
-</code></pre>
-<p>I really like to use the keyword then, it's just what to do when I don't want to apply anything before?</p>
-<pre><code class="language-jome"><span class="hljs-keyword">for</span> <span class="hljs-variable">strings</span> <span class="hljs-variable">double_quote_inline</span> <span class="hljs-variable">chain</span> <span class="hljs-keyword">then</span> <span class="hljs-variable">execSomeFunc1</span>, <span class="hljs-variable">execSomeFunc2</span>
-</code></pre>
-<pre><code class="language-jome"><span class="hljs-keyword">for</span> <span class="hljs-variable">strings</span> <span class="hljs-variable">double_quote_inline</span> <span class="hljs-variable">chain</span> <span class="hljs-keyword">then</span> <span class="hljs-variable">execSomeFunc1</span>, <span class="hljs-variable">execSomeFunc2</span> <span class="hljs-keyword">end</span>
-<span class="hljs-keyword">for</span> <span class="hljs-variable">tags</span> <span class="hljs-variable">sh</span> <span class="hljs-variable">chain</span> <span class="hljs-keyword">then</span> <span class="hljs-variable">execSomeFunc1</span>, <span class="hljs-variable">execSomeFunc2</span> <span class="hljs-keyword">end</span>
-<span class="hljs-comment">// vs</span>
-<span class="hljs-keyword">for</span> <span class="hljs-variable">double_quote_inline</span> <span class="hljs-variable">chain</span> <span class="hljs-keyword">then</span> <span class="hljs-variable">execSomeFunc1</span>, <span class="hljs-variable">execSomeFunc2</span> <span class="hljs-keyword">end</span>
-<span class="hljs-keyword">for</span> <span class="hljs-variable">sh</span> <span class="hljs-variable">chain</span> <span class="hljs-keyword">then</span> <span class="hljs-variable">execSomeFunc1</span>, <span class="hljs-variable">execSomeFunc2</span> <span class="hljs-keyword">end</span>
-</code></pre>
-<p>I like this. Simply <code>for ... chain ... then ... end</code></p>
 <h2>Calling function left operand</h2>
 <p>In the same way that you can do operand.#function, I want to be able to do it with local function as well.</p>
 <p>This would be usefull for formatting strings.</p>
@@ -406,70 +357,6 @@ called on a value that has no variable could already be calculated.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">names</span> = <span class="hljs-variable">people</span>.<span class="hljs-title function_">#each</span>(&amp;:<span class="hljs-variable">name</span>)
 </code></pre>
 <p>Contrary to ruby, &amp;: does not have any other meaning like defining a block to a symbol. It's just a syntaxic sugar.</p>
-  <h3 id="formatting">Formatting v2</h3>
-<p>You can use or define formats to specify how multi strings should be compiled. They start with the symbol <code>%</code>.</p>
-<p>There are many formats builtin:</p>
-<ul>
-<li>%text: Trims every line and the beginning and the end of the string.</li>
-<li>%article: Joins every line with a space, but keeps empty lines.</li>
-<li>%none: as is. Keeps spacing.</li>
-<li>%ltrim or %trimLeft: Trims every line at the end.</li>
-<li>%rtrim or %trimRight: Trims every line at the beginning.</li>
-<li>%strim or %trimStart: Remove empty lines at the beginning. (or %ttrim for trimTop?)</li>
-<li>%etrim or %trimEnd: Remove empty lines at the end. (or %btrim for trimBottom?)</li>
-<li>%ytrim: Remove empty lines at the beginning and at the end.</li>
-<li>%xtrim: Trims every line</li>
-<li>%trim: Trims every line and remove empty lines at the beginning and at the end.</li>
-<li>%indent: Removes the lowest indentation level everywhere, but keep the nested indentation.</li>
-<li>%code: Same as %indent%ytrim</li>
-<li>%prepend(&quot;  &quot;): Add some string before every lines</li>
-<li>%append(&quot;;&quot;): Add some string after every lines</li>
-</ul>
-<p>strim: %s/^s+//
-etrim: %s/s+$//
-let %ytrim = %strim%etrim
-ltrim: %s/
-s+/
-/g
-rtrim: %s/s+(?=
-?
-)//g
-let %xtrim = %ltrim%xtrim
-let trim = %xtrim%ytrim
-let %text = %ltrim%ytrim
-article: %s/
-s*[^
-]//g</p>
-<p>Je ne peux pas faire %indent avec des regex... J'ai besoin d'une fonction
-def %indent(str)
-end</p>
-<p>Les fonctions de formattage prennent une string en entrée et ressort une autre string.</p>
-<p>If you define custom formats, it should have at least two characters in the name. Because at some point %a, %b, or any character
-could be reserved to mean something like %s.</p>
-<p>You can combine and apply multiple formats one after the other.</p>
-<p>&quot;str&quot;%trim%clean</p>
-<pre><code>let str = &quot;
-  In the heart of the enchanted forest, a hidden cottage stood, surrounded by ancient trees. 
-The air was filled with the sweet melody of birdsong, creating a tranquil atmosphere.
-
-    As the morning sun filtered through the leaves, a gentle breeze whispered 
-    secrets to the dancing leaves below. Nature's symphony played, orchestrating 
-    a harmonious blend of sounds that resonated with the soul.
-
-Inside the cottage, a crackling fireplace provided warmth, casting a soft glow 
-on the worn wooden furniture. The aroma of freshly brewed tea wafted through 
-the air, inviting anyone who entered to linger and embrace the serenity.
-&quot;
-</code></pre>
-<p>TODO: Faire un example que tu cliques sur chacun des boutons pour voir la différence de chaque format. Comme ça: https://developer.mozilla.org/en-US/docs/Web/CSS/cursor</p>
-<p>You add a formatting to strings by appending it right after. <code>let str = &quot;hello&quot;%text</code></p>
-<p>You can also define a default format for strings using the keyword with. <code>with %text</code></p>
-<p>You can also create custom formats. Create a function take takes lines, an array, and returns a string.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">def</span> %<span class="hljs-title function_">txt</span>(<span class="hljs-variable">lines</span>)
-  <span class="hljs-keyword">return</span> <span class="hljs-variable">lines</span>.<span class="hljs-title function_">map</span>(<span class="hljs-variable">l</span> =&gt; <span class="hljs-variable">l</span>.<span class="hljs-title function_">trim</span>()).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27; &#x27;</span>)
-<span class="hljs-keyword">end</span>
-</code></pre>
-<p>Possiblité d'avoir des arguments aux formats? Par exemple, %indent(2spaces) or %indent(2tabs)</p>
   <h3 id="verbatim">Verbatim string literals</h3>
 <p>Verbatim string literals are strings that do not interpolate. The idea is taken from C#. But in C# it also includes backslashes without escaping
 them I don't know if I want to do that. Or I want to offer multiple possibilities.</p>

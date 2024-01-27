@@ -4,6 +4,24 @@ module.exports = () => {
   let content = mdToHtml(`
   # Formats
 
+  \`\`\`jome
+  let str = "
+    In the heart of the enchanted forest, a hidden cottage stood, surrounded by ancient trees. 
+  The air was filled with the sweet melody of birdsong, creating a tranquil atmosphere.
+
+      As the morning sun filtered through the leaves, a gentle breeze whispered 
+      secrets to the dancing leaves below. Nature's symphony played, orchestrating 
+      a harmonious blend of sounds that resonated with the soul.
+
+  Inside the cottage, a crackling fireplace provided warmth, casting a soft glow 
+  on the worn wooden furniture. The aroma of freshly brewed tea wafted through 
+  the air, inviting anyone who entered to linger and embrace the serenity.
+  "
+  \`\`\`
+
+  TODO: Faire un example que tu cliques sur chacun des boutons pour voir la différence de chaque format. Comme ça: https://developer.mozilla.org/en-US/docs/Web/CSS/cursor
+
+
   ## bin, hex, oct
 
   You can't declare the same way a binary, hexadecimal or octodecimal number in Jome because it could be confusing with units.
@@ -99,6 +117,10 @@ module.exports = () => {
   ## something for drawings
 
   ## Chess position
+
+  ## maps
+
+  \<map>An address</map> and it would show a map with this address.
 
   ## TODO
 

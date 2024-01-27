@@ -295,7 +295,7 @@ module.exports = () => {
 
   <h3 id="formatting">Formatting v5</h3>
 
-  TODO: The first part of the tag is what is used for syntax highlighting. So for example, html.js, it should highlight like html. .js
+  TODO: The first part of the tag is what is used for syntax highlighting. So for example, html-js, it should highlight like html. -js
   is just a postfix that means compile a certain way
 
   You can format all kinds of strings and tags by using the syntax \`forall <tag_name> chain func1[, func2] wrap func3[, func 4] end\`.
@@ -351,6 +351,8 @@ module.exports = () => {
   content%txt === <txt>\<%= content %></txt>
   \`\`\`
 
+  Possiblité d'avoir des arguments aux formats? Par exemple, %indent(2spaces) or %indent(2tabs)
+
   ## Config save
 
   Jome is by default opiniated and provide a lot of default of a lot of formats. They will change over time as librairies or opinions change.
@@ -371,92 +373,11 @@ module.exports = () => {
 
   <h3 id="formatting">Formatting v3</h3>
 
-  You can specify a function to transform strings of the same type using the keywords \`for strings\`.
-
-  \`\`\`jome
-  for strings double_quote_multi do |s|
-    return s.#ytrim
-  end
-
-  // You can specify multiple kinds at once
-  for strings double_quote_inline, double_quote_multi do |s|
-    
-  end
-  \`\`\`
-
   You can specify for:
   - single_quote
   - double_quote
   - triple_single_quote
   - triple_double_quote
-
-  Allow apply format to verbatim strings or not?
-
-  You can also specify transform functions for tags using the keywords \`for tags\`.
-
-  \`\`\`jome
-  for tags sh do |s|
-    #execSh(s)
-  end
-  \`\`\`
-
-  Is it allowed to use transform functions for data tags such as bin, hex, ...?
-
-  To make this work, let's compile for strings and for tags into functions. And simply wrap the strings with this function every time.
-
-  Let's use j_format_XX as a function name.
-
-  When compiling a string for example and simply trimming both ends, it would be nice to do it at compile time rather than at runtime.
-
-  I am thinking that later functions could be marked as pure, (or deduced to be pure) meaning it has no side effect. Every pure function
-  called on a value that has no variable could already be calculated.
-
-  But unfortunately this does not work for for example " Hello {John} ", because of the template literal...
-
-  DO I WANT TO BE ABLE TO APPLY TRIMMING TO THE STRING BEFORE TEMPLATE LITERAL?
-
-  With the keyword chain?
-
-  \`\`\`jome
-  for strings double_quote_multi chain #ytrim, #ltrim, do |s|
-    return s.#ytrim
-  end
-  \`\`\`
-
-  I like that!
-
-  But chain is not explicit in meaning that it is done before the interpolation...
-
-  Wait... What exactly is the string given to the function?
-
-  let txt = " Hello {name}! "
-
-  Before interpolation the strings would be given directly transform functions:
-  #xtrim would be given " Hello {name}! "
-
-  Maybe use the keyword then and then specify functions that will be called after
-
-  \`\`\`jome
-  for strings double_quote_multi chain #ytrim, #ltrim, do |s|
-    return s.#ytrim
-  end then execSomeFunc1
-  \`\`\`
-
-  I really like to use the keyword then, it's just what to do when I don't want to apply anything before?
-
-  \`\`\`jome
-  for strings double_quote_inline chain then execSomeFunc1, execSomeFunc2
-  \`\`\`
-
-  \`\`\`jome
-  for strings double_quote_inline chain then execSomeFunc1, execSomeFunc2 end
-  for tags sh chain then execSomeFunc1, execSomeFunc2 end
-  // vs
-  for double_quote_inline chain then execSomeFunc1, execSomeFunc2 end
-  for sh chain then execSomeFunc1, execSomeFunc2 end
-  \`\`\`
-
-  I like this. Simply \`for ... chain ... then ... end\`
 
   ## Calling function left operand
 
@@ -488,81 +409,6 @@ module.exports = () => {
   \`\`\`
 
   Contrary to ruby, &: does not have any other meaning like defining a block to a symbol. It's just a syntaxic sugar.
-
-  <h3 id="formatting">Formatting v2</h3>
-
-  You can use or define formats to specify how multi strings should be compiled. They start with the symbol \`%\`.
-
-  There are many formats builtin:
-  - %text: Trims every line and the beginning and the end of the string.
-  - %article: Joins every line with a space, but keeps empty lines.
-  - %none: as is. Keeps spacing.
-  - %ltrim or %trimLeft: Trims every line at the end.
-  - %rtrim or %trimRight: Trims every line at the beginning.
-  - %strim or %trimStart: Remove empty lines at the beginning. (or %ttrim for trimTop?)
-  - %etrim or %trimEnd: Remove empty lines at the end. (or %btrim for trimBottom?)
-  - %ytrim: Remove empty lines at the beginning and at the end.
-  - %xtrim: Trims every line 
-  - %trim: Trims every line and remove empty lines at the beginning and at the end.
-  - %indent: Removes the lowest indentation level everywhere, but keep the nested indentation.
-  - %code: Same as %indent%ytrim
-  - %prepend("  "): Add some string before every lines
-  - %append(";"): Add some string after every lines
-
-  strim: %s/^\s+//
-  etrim: %s/\s+$//
-  let %ytrim = %strim%etrim
-  ltrim: %s/\n\s+/\n/g
-  rtrim: %s/\s+(?=\r?\n)//g
-  let %xtrim = %ltrim%xtrim
-  let trim = %xtrim%ytrim
-  let %text = %ltrim%ytrim
-  article: %s/\n\s*[^\n]//g
-
-  Je ne peux pas faire %indent avec des regex... J'ai besoin d'une fonction
-  def %indent(str)
-  end
-
-  Les fonctions de formattage prennent une string en entrée et ressort une autre string.
-
-
-  If you define custom formats, it should have at least two characters in the name. Because at some point %a, %b, or any character
-  could be reserved to mean something like %s.
-
-  You can combine and apply multiple formats one after the other.
-
-  "str"%trim%clean
-
-  \`\`\`
-  let str = "
-    In the heart of the enchanted forest, a hidden cottage stood, surrounded by ancient trees. 
-  The air was filled with the sweet melody of birdsong, creating a tranquil atmosphere.
-
-      As the morning sun filtered through the leaves, a gentle breeze whispered 
-      secrets to the dancing leaves below. Nature's symphony played, orchestrating 
-      a harmonious blend of sounds that resonated with the soul.
-
-  Inside the cottage, a crackling fireplace provided warmth, casting a soft glow 
-  on the worn wooden furniture. The aroma of freshly brewed tea wafted through 
-  the air, inviting anyone who entered to linger and embrace the serenity.
-  "
-  \`\`\`
-
-  TODO: Faire un example que tu cliques sur chacun des boutons pour voir la différence de chaque format. Comme ça: https://developer.mozilla.org/en-US/docs/Web/CSS/cursor
-
-  You add a formatting to strings by appending it right after. \`let str = "hello"%text\`
-
-  You can also define a default format for strings using the keyword with. \`with %text\`
-
-  You can also create custom formats. Create a function take takes lines, an array, and returns a string.
-
-  \`\`\`jome
-  def %txt(lines)
-    return lines.map(l => l.trim()).join(' ')
-  end
-  \`\`\`
-
-  Possiblité d'avoir des arguments aux formats? Par exemple, %indent(2spaces) or %indent(2tabs)
 
   <h3 id="verbatim">Verbatim string literals</h3>
 
