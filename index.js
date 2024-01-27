@@ -21,6 +21,6 @@ module.exports = (cmd, args) => {
     jome test # launch the tests
   `);
   }
-  let test = "Hello world!";
+  let test = execSh("ls");
   return `<div>${"Hello"}</div>`;
 };

@@ -731,13 +731,13 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
     let format = node.raw.slice(1)
     let forall = node.ctxFile.foralls[format]
     let lines = prepareFormatting(node.operands[0])
-    if (forall && forall.chain.length) {
+    if (forall?.chain?.length) {
       forall.chain.forEach(chainFunc => {
         lines = chainFunc(lines)
       })
     }
     let str = printFormatting(lines)
-    if (forall && forall.wrap.length) {
+    if (forall?.wrap?.length) {
       forall.wrap.forEach(wrapFunc => {
         str = `${wrapFunc}(${str})`
       })

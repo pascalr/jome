@@ -34,11 +34,7 @@ else
 end
 //%text
 
-let test = "
-
-
-           Hello world!
-           "%text
+let test = "ls"%sh
 
 return <html><div><%= "Hello" %></div></html>
 
