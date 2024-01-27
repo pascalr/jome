@@ -353,7 +353,7 @@ function mergeFormat(format, defaultFormat) {
 }
 
 function compileHeredoc(node) {
-  // return applyFormat(node.data.format, node)
+  //return applyFormat(node.data.format, node)
   let raw = node.data.content
   let substitutions = {}
   let withSubs = raw.replace(/(?<!\\)<%s\s+(\w+)\s*%>/g, (match, group) => {
@@ -405,9 +405,11 @@ function compileStringSingleQuote(node) {
 function prepareHeredoc(node) {
   let raw = node.data.content
   let pattern = /(<%.*?%>)|(<%=.*?%>)|(<%s.*?%>)/g;
-  let parts = raw.split(pattern).map(s => {
-    if (s.startsWith('<%=')) {return {sub: s}}
-    return s.startsWith('<%') ? {code: s} : s
+  // FIXME: Why do I get some undefined?
+  let parts = raw.split(pattern).filter(f => f).map(s => {
+    if (s.startsWith('<%s')) {return {sub: s.slice(3, -2).trim()}}
+    if (s.startsWith('<%=')) {return {rawCode: s.slice(3, -2).trim()}}
+    return s.startsWith('<%') ? {rawCode: s.slice(2, -2)} : s
   })
   let lines = []
   let currentLine = []
@@ -415,11 +417,15 @@ function prepareHeredoc(node) {
     if (typeof part === 'string' && part.includes('\n')) {
       let [l, ...ls] = part.split('\n')
       currentLine.push(l)
-      lines = [...lines, ...ls]
-      currentLine = []
+      lines.push(currentLine)
+      lines = [...lines, ...ls.map(l => [l])]
+      currentLine = lines[lines.length - 1]
     }
     currentLine.push(part)
   })
+  if (currentLine.length) {
+    lines.push(currentLine)
+  }
   return lines
 }
 
@@ -448,7 +454,7 @@ function prepareFormatting(node) {
 }
 
 // Convert the array of array for formats into a string
-function printFormatting(lines) {
+function printFormatting(lines, ctxFile) {
   // If pure code
   if (lines.length === 1 && lines[0].length === 1 && typeof lines[0][0] !== 'string') {
     return lines[0][0].code
@@ -462,9 +468,10 @@ function printFormatting(lines) {
       strIsTemplateLiteral = strIsTemplateLiteral || isTemplateLiteral
       if (!isTemplateLiteral) {return part}
       if (part.code) {return "${"+genCode(part.code)+"}"}
+      if (part.rawCode) {return "${"+ctxFile.compiler.compileCode(part.rawCode, {inline: true})+"}"}
       if (part.sub) {
-        let hash = crypto.createHash('md5').update(group).digest("hex")
-        substitutions[hash] = group
+        let hash = crypto.createHash('md5').update(part.sub).digest("hex")
+        substitutions[hash] = part.sub
         return hash
       }
       throw new Error("sf9dh29hf90shf98h3921")
@@ -485,7 +492,7 @@ function applyFormat(format, operand) {
       lines = chainFunc(lines)
     })
   }
-  let str = printFormatting(lines)
+  let str = printFormatting(lines, operand.ctxFile)
   if (forall?.wrap?.length) {
     forall.wrap.forEach(wrapFunc => {
       str = `${wrapFunc}(${str})`
