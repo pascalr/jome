@@ -694,6 +694,7 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
 
   "meta.forall.jome": (node) => {
     let {tagName, chainFunctions, wrapFunctions} = node.data
+    // TODO: get the source of the wrap functions and add to the forall import list.
     node.ctxFile.addForall(tagName, chainFunctions, wrapFunctions)
     return ''
   },

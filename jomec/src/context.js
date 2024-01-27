@@ -1,5 +1,7 @@
 const path = require('path')
 
+const {DEFAULT_FORALLS} = require('./forall.js')
+
 // The scope of the file. So it handles imports especially.
 class ContextFile {
   constructor(absPath) {
@@ -19,11 +21,11 @@ class ContextFile {
       md: "%:#mdToHtml",
       sh: "%:#execSh"
     }
-    this.foralls = {}
+    this.foralls = DEFAULT_FORALLS
   }
 
   addForall(name, chainFuncs, wrapFuncs) {
-    this.foralls[name] = {chainFuncs, wrapFuncs}
+    this.foralls[name] = {chain: chainFuncs, wrap: wrapFuncs}
   }
 
   addImport(defaultImport, namedImports, file) {
