@@ -837,7 +837,7 @@
     "script-params": {
       "patterns": [
         {
-          "match": "(\\<)([A-Za-z]+)",
+          "match": "(\\<)([A-Za-z]\\w*(?:-\\w+)*)",
           "captures": {
             "1": {"name": "punctuation.definition.tag.begin.jome"},
             "2": {"name": "entity.name.tag.jome"}
@@ -900,11 +900,11 @@
         }
       ]
     },
-    "generic-script": {
+    "tag": {
       "patterns": [
         {
           "comment": "Work in progress",
-          "begin": "\\<([a-zA-Z]\\w*)(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
+          "begin": "\\<([a-zA-Z]\\w*(?:-\\w+)*)(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
           "beginCaptures": {
             "0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}
           },
