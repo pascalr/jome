@@ -741,7 +741,14 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
         str = `${wrapFunc}(${str})`
       })
     }
-    // TODO: Add the imports required
+    Object.keys(forall?.imports||{}).forEach(impName => {
+      let imp = forall.imports[impName]
+      if (imp.default) {
+        node.ctxFile.addImport(impName, [], imp.from)
+      } else {
+        node.ctxFile.addImport(null, [impName], imp.from)
+      }
+    })
     return str
   },
 

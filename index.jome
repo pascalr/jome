@@ -33,7 +33,7 @@ else
   "%text
 end
 
-let test = "1 + 1"%js
+let test = "# This is a title!"%md
 
 return <html><div><%= "Hello" %></div></html>
 
