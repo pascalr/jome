@@ -404,7 +404,8 @@ function compileStringSingleQuote(node) {
 // Convert an heredoc into an array of array.
 function prepareHeredoc(node) {
   let raw = node.data.content
-  let pattern = /(?<!\\)((<%.*?%>)|(<%=.*?%>)|(<%s.*?%>))/g;
+  //let pattern = /(?<!\\)((<%.*?%>)|(<%=.*?%>)|(<%s.*?%>))/g;
+  let pattern = /(?<!\\)(<%=.*?%>|<%s.*?%>)/g;
   // FIXME: Why do I get some undefined?
   let parts = raw.split(pattern).filter(f => f).map(s => {
     if (s.startsWith('<%s')) {return {sub: s.slice(3, -2).trim()}}

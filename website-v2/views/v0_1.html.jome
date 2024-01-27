@@ -333,6 +333,9 @@ let content = <md>
 
   Or it returns either lines, an array of array, or an instance of TagWithContext that returns lines and the files required to include.
 
+  Wait what about \<% %> is this allowed. A heredoc is a string literal so it does not make sense here? I don't really think it makes
+  any sense really...
+
   ## Content tag percent syntax
 
   You can define heredoc with xml tags, but you can also simply prepend a percent followed by the tag name.

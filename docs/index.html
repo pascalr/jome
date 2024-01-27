@@ -310,6 +310,8 @@ a loop nightmare.</p>
 <p>The chain functions must be imported javascript functions.</p>
 <p>Chain function are given the parameter lines, and another parameter ctx or something, that allows to including other files at the top of the file.</p>
 <p>Or it returns either lines, an array of array, or an instance of TagWithContext that returns lines and the files required to include.</p>
+<p>Wait what about &lt;% %&gt; is this allowed. A heredoc is a string literal so it does not make sense here? I don't really think it makes
+any sense really...</p>
 <h2>Content tag percent syntax</h2>
 <p>You can define heredoc with xml tags, but you can also simply prepend a percent followed by the tag name.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">isTrue</span> = &lt;<span class="hljs-variable">txt</span>&gt;<span class="hljs-title class_">Hello</span>&lt;/<span class="hljs-variable">txt</span>&gt; === <span class="hljs-string">&quot;Hello&quot;</span>%<span class="hljs-variable">txt</span>
