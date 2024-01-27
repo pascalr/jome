@@ -12,9 +12,9 @@ module.exports = () => {
       <a href="https://github.com/pascalr/jome">GitHub</a>
     </div>
   </html>
-  \`\`\`
-`);
-  let content = mdToHtml(`
+  \`\`\``);
+  let content = mdToHtml(
+    `
 
   # Jome v0.1
 
@@ -1117,7 +1117,7 @@ module.exports = () => {
 
   Librairies used:
   - express
-  - markdown-it
-`).replace("fba5cdfa4bcb408f641c743519a0fe19", PARTIAL);
+  - markdown-it`.replace("fba5cdfa4bcb408f641c743519a0fe19", PARTIAL)
+  );
   return new Webpage("Jome", content).render();
 };

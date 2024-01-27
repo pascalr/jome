@@ -353,7 +353,7 @@ function mergeFormat(format, defaultFormat) {
 }
 
 function compileHeredoc(node) {
-  //return applyFormat(node.data.format, node)
+  return applyFormat(node.data.tagName, node)
   let raw = node.data.content
   let substitutions = {}
   let withSubs = raw.replace(/(?<!\\)<%s\s+(\w+)\s*%>/g, (match, group) => {
@@ -416,11 +416,13 @@ function prepareHeredoc(node) {
   let currentLine = []
   parts.forEach(part => {
     if (typeof part === 'string' && part.includes('\n')) {
-      let [l, ...ls] = part.split('\n')
-      currentLine.push(l)
+      let [first, ...ls] = part.split('\n')
+      let last = ls[ls.length-1]
+      ls = ls.slice(0, -1)
+      currentLine.push(first)
       lines.push(currentLine)
       lines = [...lines, ...ls.map(l => [l])]
-      currentLine = lines[lines.length - 1]
+      currentLine = last ? [last] : []
       return;
     }
     currentLine.push(part)

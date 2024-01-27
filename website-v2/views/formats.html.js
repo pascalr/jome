@@ -98,6 +98,8 @@ module.exports = () => {
 
   ## something for drawings
 
+  ## Chess position
+
   ## TODO
 
   MAYBE list:
@@ -105,7 +107,6 @@ module.exports = () => {
 
   TODO: Supporter la syntaxe 123e4 par contre
   let exponentialNumber = 123e4;
-  console.log(exponentialNumber); // Outputs: 1230000
-`);
+  console.log(exponentialNumber); // Outputs: 1230000`);
   return new Webpage("Jome formats", content).render();
 };

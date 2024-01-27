@@ -126,7 +126,6 @@ module.exports = () => {
   TODO: All html colors: MAYBEEE? Because I don't know in what format I would want the value to be... so probably don't do this
   - #red: 0xFF0000
   - ...
-  Maybe #red_i32 or stuff like that, but that's ugly?
-`);
+  Maybe #red_i32 or stuff like that, but that's ugly?`);
   return new Webpage("Jome utils", content).render();
 };

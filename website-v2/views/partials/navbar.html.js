@@ -10,6 +10,5 @@ module.exports = () => {
     <a href="${global.g_URL}/formats">Formats</a>
     <a href="${global.g_URL}/utils">Utils</a>
     <a href="https://github.com/pascalr/jome">GitHub</a>
-  </div>
-`;
+  </div>`;
 };

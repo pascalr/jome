@@ -676,7 +676,6 @@ module.exports = () => {
   Je viens d'apprendre qu'il existe le keyword get en javascript qui permet de faire ça.
   Mais l'avantage d'utiliser un -> est que tu peux définir une méthode avec des arguments optionels.
   C'est impossible avec get. (A getter must have exactly zero parameters)
-
 `);
   return new Webpage("Jome", content).render();
 };

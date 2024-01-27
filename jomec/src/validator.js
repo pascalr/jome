@@ -158,6 +158,7 @@ function validateHeredoc(node) {
     throw new Error(`Internal error. An heredoc should always start with token of type meta.script-params.jome. Was ${node.parts[0]?.type}`)
   }
   let closingIdx = node.parts.length-1
+  // TODO: Remove format
   let format;
   if (node.parts[closingIdx].type === 'keyword.other.string-format.jome') {
     format = node.parts[closingIdx].raw

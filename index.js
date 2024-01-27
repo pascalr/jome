@@ -5,7 +5,7 @@ const execSh = require("jome-lib/execSh");
 module.exports = (cmd, args) => {
   global.g_URL = "/jome";
   if (cmd === "test") {
-    execSh(`jome test.jome`);
+    execSh("jome test.jome");
   } else if (cmd === "dev") {
     build({ force: true });
     server({ port: 3000 });

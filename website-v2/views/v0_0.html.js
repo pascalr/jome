@@ -2073,7 +2073,6 @@ module.exports = () => {
 
 
 
-
 `);
   return new Webpage("Jome", content).render();
 };

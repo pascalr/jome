@@ -148,6 +148,5 @@ module.exports = () => {
     font-size: 1.4em;
     padding: 14px 16px;
     font-weight: bold;
-  }
-`;
+  }`;
 };

@@ -56,6 +56,5 @@ module.exports = () => {
         <li><a href="${global.g_URL}/ex">Script</a></li>
       </ul>
     </ul>
-  </div>
-`;
+  </div>`;
 };
