@@ -354,21 +354,6 @@ function mergeFormat(format, defaultFormat) {
 
 function compileHeredoc(node) {
   return applyFormat(node.data.tagName, node)
-  let raw = node.data.content
-  let substitutions = {}
-  let withSubs = raw.replace(/(?<!\\)<%s\s+(\w+)\s*%>/g, (match, group) => {
-    let hash = crypto.createHash('md5').update(group).digest("hex")
-    substitutions[hash] = group
-    return hash
-  });
-  let lines = withSubs.split('\n')
-  let format = mergeFormat(node.data.format, node.ctxFile.defaultFormatByTagName[node.data.tagName])
-  let content = formatLines(node, lines, format, true, true)
-  let result = compileInterpolate(node, content)
-  Object.keys(substitutions).forEach(hash => {
-    result = result + `.replace('${hash}', ${substitutions[hash]})`
-  })
-  return result
 }
 
 function compileString(node) {

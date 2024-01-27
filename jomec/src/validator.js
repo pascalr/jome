@@ -157,20 +157,13 @@ function validateHeredoc(node) {
   if (!node.parts[0]?.type.startsWith("meta.script-params.jome")) {
     throw new Error(`Internal error. An heredoc should always start with token of type meta.script-params.jome. Was ${node.parts[0]?.type}`)
   }
-  let closingIdx = node.parts.length-1
-  // TODO: Remove format
-  let format;
-  if (node.parts[closingIdx].type === 'keyword.other.string-format.jome') {
-    format = node.parts[closingIdx].raw
-    closingIdx = closingIdx - 1
-  }
   let openingTagName = node.parts[0].parts[0].raw.slice(1)
-  let closingTagName = node.parts[closingIdx].raw.slice(2,-1)
+  let closingTagName = node.parts[node.parts.length-1].raw.slice(2,-1)
   if (openingTagName !== closingTagName) {
     throw new Error(`Internal error. Heredoc should always have a matching closing tage. Opening: ${openingTagName}. Closing: ${closingTagName}`)
   }
-  let content = compileTokenRaw(node.parts.slice(1,closingIdx))
-  node.data = {content, format, tagName: openingTagName}
+  let content = compileTokenRaw(node.parts.slice(1,node.parts.length-1))
+  node.data = {content, tagName: openingTagName}
 }
 
 const VALIDATORS = {
