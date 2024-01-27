@@ -421,7 +421,7 @@ function prepareFormatting(node) {
 // Convert the array of array for formats into a string
 function printFormatting(lines) {
   // If pure code
-  if (lines.length === 1 && lines[0].length === 1 && lines[0][0].type !== 'string') {
+  if (lines.length === 1 && lines[0].length === 1 && typeof lines[0][0] !== 'string') {
     return lines[0][0].code
   }
   // Otherwise it is a string

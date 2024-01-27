@@ -341,6 +341,12 @@ module.exports = () => {
   The difference is that you won't get syntax highlighting for things like html, css, etc. But you will at least get syntax highlighting
   for template literals properly.
 
+  TODO: You can use percent formating after variable name too:
+
+  \`\`\`
+  content%txt === <txt>\<%= content %></txt>
+  \`\`\`
+
   ### For more info on tags/formats
 
   See the [formats page](/formats).
