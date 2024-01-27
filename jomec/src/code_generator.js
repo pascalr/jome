@@ -599,6 +599,8 @@ const CODE_GENERATORS = {
   "meta.embedded.block.markdown": compileHeredoc,
   // <css></css>
   "meta.embedded.block.css": compileHeredoc,
+  // <anything></anything>
+  "meta.tag.jome": compileHeredoc,
 
   "meta.with-args.jome": (node) => {
     let current; let args = []
