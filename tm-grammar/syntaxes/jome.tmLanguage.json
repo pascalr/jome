@@ -116,7 +116,6 @@
         { "include": "#for-tag" },
         { "include": "#chain-bloc" },
         { "include": "#type_def" },
-        { "include": "#with-format" },
         { "include": "#regex" },
         { "include": "#keywords" },
         { "include": "#declaration" },
@@ -856,30 +855,6 @@
         {
           "match": ">$",
           "name": "punctuation.definition.template-expression.end.punctuation.script.js.open"
-        }
-      ]
-    },
-    "with-format": {
-      "patterns": [
-        {
-          "comment": "THIS IS DEPRECATED",
-          "name": "meta.with-format-for.jome",
-          "match": "(with)\\b\\s*((?:%(?::|:#)?\\w*)+)\\s*\\b(for)\\b\\s*(\\w*)",
-          "captures": {
-            "1": {"name": "keyword.control.jome"},
-            "2": {"name": "keyword.other.string-format.jome"},
-            "3": {"name": "keyword.control.jome"},
-            "4": {"name": "keyword.other.tag-name.jome"}
-          }
-        },
-        {
-          "comment": "THIS IS DEPRECATED",
-          "name": "meta.with-format.jome",
-          "match": "(with)\\b\\s*((%(?::|:#)?\\w*)+)",
-          "captures": {
-            "1": {"name": "keyword.control.jome"},
-            "2": {"name": "keyword.other.string-format.jome"}
-          }
         }
       ]
     },
