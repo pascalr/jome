@@ -34,12 +34,12 @@ forall jome-ex wrap printExample end
 // </jome>
 // but this could be something implemented only for here, because it is usefull only here
 
-// <%s <jome-ex>#log "Hello, world!"</jome-ex> %>
-
 let content = <md>
   ## Jome examples
 
   <h3 id="hello-world">Hello world</h3>
+
+  <%s <jome-ex>#log "Hello, world!"</jome-ex> %>
 
   <h3 id="html-library">Html library</h3>
   

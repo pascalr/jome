@@ -288,7 +288,7 @@ function prepareFormatting(node) {
   if (node.type === 'variable.other.jome') {
     return [[{code: node.raw}]]
   }
-  if (node.type.startsWith('meta.embedded.block')) {
+  if (node.type.startsWith('meta.embedded.block') || node.type === "meta.tag.jome") {
     return prepareHeredoc(node)
   }
   let currentLine = []

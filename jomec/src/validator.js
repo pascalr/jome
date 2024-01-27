@@ -166,6 +166,22 @@ function validateHeredoc(node) {
   node.data = {content, tagName: openingTagName}
 }
 
+function validateTag(node) { // A generic version of the heredoc. It is not yet clear how to call those things.
+  if (!(node.type === "meta.tag.jome")) {
+    throw new Error(`Internal error. A tag should always start with type meta.embedded.block. Was ${node.type}`)
+  }
+  if (!node.parts[0]?.type.startsWith("meta.script-params.jome")) {
+    throw new Error(`Internal error. An heredoc should always start with token of type meta.script-params.jome. Was ${node.parts[0]?.type}`)
+  }
+  let openingTagName = node.parts[0].parts[1].raw
+  let closingTagName = node.parts[node.parts.length-2].raw;
+  if (openingTagName !== closingTagName) {
+    throw new Error(`Internal error. Heredoc should always have a matching closing tage. Opening: ${openingTagName}. Closing: ${closingTagName}`)
+  }
+  let content = compileTokenRaw(node.parts.slice(1,-3))
+  node.data = {content, tagName: openingTagName}
+}
+
 const VALIDATORS = {
   "meta.function.jome": (node) => {
     if (node.parts[0].raw !== 'function') {
@@ -454,6 +470,7 @@ const VALIDATORS = {
   "meta.embedded.block.html": validateHeredoc,
   "meta.embedded.block.markdown": validateHeredoc,
   "meta.embedded.block.css": validateHeredoc,
+  "meta.tag.jome": validateTag,
 
   "meta.forall.jome": (node) => {
     ensureStartRaw(node, 'forall')
