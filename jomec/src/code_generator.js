@@ -400,12 +400,6 @@ function compileStringSingleQuote(node) {
   return result
 }
 
-class TemplateLiteral {
-  constructor(code) {
-    this.code = code
-  }
-}
-
 // Convert the node (string.quoted...) to an array of array for formats to chain.
 function prepareFormatting(node) {
   let currentLine = []
@@ -414,7 +408,7 @@ function prepareFormatting(node) {
     if (part.type === 'raw') {
       currentLine.push(part.raw)
     } else if (part.type === 'meta.string-template-literal.jome') {
-      currentLine.push(new TemplateLiteral(part.data.code))
+      currentLine.push({code: part.data.code})
     } else if (part.type === 'newline') {
       lines.push(currentLine)
       currentLine = []
@@ -426,6 +420,11 @@ function prepareFormatting(node) {
 
 // Convert the array of array for formats into a string
 function printFormatting(lines) {
+  // If pure code
+  if (lines.length === 1 && lines[0].length === 1 && lines[0][0].type !== 'string') {
+    return lines[0][0].code
+  }
+  // Otherwise it is a string
   let strIsTemplateLiteral = lines.length > 1;
   let content = lines.map(line => {
     return line.map(part => {

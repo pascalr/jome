@@ -20,5 +20,6 @@ jome # get this help message
 jome s # start server (or jome server)
 jome test # launch the tests`);
   }
+  let test = 1 + 1;
   return `<div>${"Hello"}</div>`;
 };

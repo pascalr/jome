@@ -64,8 +64,22 @@ function trim(lines) {
 
 function none(input) { return input }
 
+function stringToPureJs(lines) {
+  let code = lines.map(parts => {
+    if (parts.length !== 1) {
+      throw new Error("sfd9823h978fh2983rh")
+    }
+    let line = parts[0]
+    if (typeof line !== 'string') {
+      throw new Error("Can't convert string literal to pure js.")
+    }
+    return line
+  }).join('\n')
+  return [[{code}]]
+}
+
 module.exports = {
-  strim, etrim, ltrim, rtrim, xtrim, ytrim, trim, none
+  strim, etrim, ltrim, rtrim, xtrim, ytrim, trim, none, stringToPureJs
 }
 
 // function text(str) {

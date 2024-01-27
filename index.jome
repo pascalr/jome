@@ -33,6 +33,8 @@ else
   "%text
 end
 
+let test = "1 + 1"%js
+
 return <html><div><%= "Hello" %></div></html>
 
 // #run #./test.jome
