@@ -1,8 +1,13 @@
 import &Webpage from '../src/webpage.jomm'
 
-// TODO: <jome-example>
+// def parseExample(lines)
+//   let str = lines.map(l => l[0]).join('\n')
+//   //return [str, {rawCode: }]
+// end
 
-// </jome-example>
+// forall jome-example end
+
+// TODO: <jome-example>#log "Hello world!"</jome-example>
 
 // jome tag should do three things
 // give string of jome code

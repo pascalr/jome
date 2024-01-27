@@ -259,8 +259,8 @@ function prepareHeredoc(node) {
   // FIXME: Why do I get some undefined?
   let parts = raw.split(pattern).filter(f => f).map(s => {
     if (s.startsWith('<%s')) {return {sub: s.slice(3, -2).trim()}}
-    if (s.startsWith('<%=')) {return {rawCode: s.slice(3, -2).trim()}}
-    return s.startsWith('<%') ? {rawCode: s.slice(2, -2)} : s
+    if (s.startsWith('<%=')) {return {code: s.slice(3, -2).trim()}}
+    return s.startsWith('<%') ? {code: s.slice(2, -2)} : s
   })
   let lines = []
   let currentLine = []
@@ -297,7 +297,7 @@ function prepareFormatting(node) {
     if (part.type === 'raw') {
       currentLine.push(part.raw)
     } else if (part.type === 'meta.string-template-literal.jome') {
-      currentLine.push({code: part.data.code})
+      currentLine.push({tokens: part.data.code})
     } else if (part.type === 'newline') {
       lines.push(currentLine)
       currentLine = []
@@ -321,8 +321,8 @@ function printFormatting(lines, ctxFile) {
       let isTemplateLiteral = (typeof part !== 'string')
       strIsTemplateLiteral = strIsTemplateLiteral || isTemplateLiteral
       if (!isTemplateLiteral) {return escapeTemplateLiteral(part)}
-      if (part.code) {return "${"+genCode(part.code)+"}"}
-      if (part.rawCode) {return "${"+ctxFile.compiler.compileCode(part.rawCode, {inline: true})+"}"}
+      if (part.tokens) {return "${"+genCode(part.tokens)+"}"}
+      if (part.code) {return "${"+ctxFile.compiler.compileCode(part.code, {inline: true})+"}"}
       if (part.sub) {
         let hash = crypto.createHash('md5').update(part.sub).digest("hex")
         substitutions[hash] = part.sub
