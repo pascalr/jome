@@ -13,14 +13,12 @@ module.exports = (cmd, args) => {
     build();
     server({ port: 3000 });
   } else {
-    console.log(`    Jome App v0.0.0.0.1
+    console.log(`Jome App v0.0.0.0.1
 
-    Usage:
-    jome # get this help message
-    jome s # start server (or jome server)
-    jome test # launch the tests
-  `);
+Usage:
+jome # get this help message
+jome s # start server (or jome server)
+jome test # launch the tests`);
   }
-  let test = execSh("ls");
   return `<div>${"Hello"}</div>`;
 };

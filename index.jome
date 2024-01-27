@@ -30,11 +30,8 @@ else
     jome # get this help message
     jome s # start server (or jome server)
     jome test # launch the tests
-  "
+  "%text
 end
-//%text
-
-let test = "ls"%sh
 
 return <html><div><%= "Hello" %></div></html>
 
