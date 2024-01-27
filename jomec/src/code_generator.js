@@ -400,6 +400,43 @@ function compileStringSingleQuote(node) {
   return result
 }
 
+class TemplateLiteral {
+  constructor(code) {
+    this.code = code
+  }
+}
+
+// Convert the node (string.quoted...) to an array of array for formats to chain.
+function prepareFormatting(node) {
+  let currentLine = []
+  let lines = []
+  node.data.parts.forEach(part => {
+    if (part.type === 'raw') {
+      currentLine.push(part.raw)
+    } else if (part.type === 'meta.string-template-literal.jome') {
+      currentLine.push(new TemplateLiteral(part.data.code))
+    } else if (part.type === 'newline') {
+      lines.push(currentLine)
+      currentLine = []
+    }
+  })
+  lines.push(currentLine)
+  return lines
+}
+
+// Convert the array of array for formats into a string
+function printFormatting(lines) {
+  let strIsTemplateLiteral = lines.length > 1;
+  let content = lines.map(line => {
+    return line.map(part => {
+      let isTemplateLiteral = (typeof part !== 'string')
+      strIsTemplateLiteral = strIsTemplateLiteral || isTemplateLiteral
+      return isTemplateLiteral ? ("${"+genCode(part.code)+"}") : part
+    }).join('')
+  }).join('\n')
+  return strIsTemplateLiteral ? `\`${content}\`` : `"${content}"`
+}
+
 const CODE_GENERATORS = {
   "plain": (node) => node.raw,
   "comment.line.documentation.jome": (node) => `// ${node.raw.slice(2)}`,
@@ -577,9 +614,13 @@ const CODE_GENERATORS = {
   // // import "module-name"; TODO: Not written yet in the parser
   "meta.statement.import.jome": (node) => {
     let {file, defaultImport, namedImports} = node.data
+    if (defaultImport) {
+      node.lexEnv.addBinding(defaultImport, {type: 'default-import', file})
+    }
+    namedImports.forEach(namedImport => {
+      node.lexEnv.addBinding(namedImport, {type: 'named-import', file})
+    })
     node.ctxFile.addImport(defaultImport, namedImports, file)
-    // ctx.addBinding(defaultImport, {type: 'default-import'}) TODO!!!!!!!!!!!!!!!!
-    // ctx.addBinding(name, {type: 'named-import'})
   },
 
   // #.
@@ -689,14 +730,39 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
   "keyword.other.string-format.jome": (node) => {
     let format = node.raw.slice(1)
     let forall = node.ctxFile.foralls[format]
-    let str = node.operands[0].raw
-    throw new Error("sdfj9834hf9h230h023hf023h")
+    let lines = prepareFormatting(node.operands[0])
+    if (forall && forall.chain.length) {
+      forall.chain.forEach(chainFunc => {
+        lines = chainFunc(lines)
+      })
+    }
+    let str = printFormatting(lines)
+    if (forall && forall.wrap.length) {
+      forall.wrap.forEach(wrapFunc => {
+        str = `${wrapFunc}(${str})`
+      })
+    }
+    // TODO: Add the imports required
+    return str
   },
 
   "meta.forall.jome": (node) => {
     let {tagName, chainFunctions, wrapFunctions} = node.data
+    // Get the actual referenced function
+    let chainFuncs = (chainFunctions||[]).map(chainFunc => {
+      let binding = node.lexEnv.getBindingValue(chainFunc)
+      if (!binding) {
+        throw new Error("Missing forall chain function "+chainFunc)
+      }
+      if (binding.type === 'named-import') {
+        let required = require(binding.file)
+        return required[chainFunc]
+      } else {
+        throw new "sfh80h23f023hf0hw0irhf230"
+      }
+    })
     // TODO: get the source of the chain and wrap functions and add to the forall import list.
-    node.ctxFile.addForall(tagName, chainFunctions, wrapFunctions)
+    node.ctxFile.addForall(tagName, chainFuncs, wrapFunctions)
     return ''
   },
 

@@ -391,22 +391,20 @@ const VALIDATORS = {
     let list = filterStrings(node.parts.slice(1)) // remove import keyword
     list.forEach(item => {
       if (item.type === 'meta.named-imports.jome') {
-        namedImports.push(filterSpaces(item.parts)[0].raw)
-        // filterSpaces(item.children.slice(1, -1)).forEach(imp => {
-        //   if (imp.type === 'variable.other.named-import.jome') {
-        //     let name = imp.text()
-        //     namedImports.push(name)
-        //     ctx.addBinding(name, {type: 'named-import'})
+        filterCommas(filterSpaces(item.parts)).forEach(namedImport => {
+          if (namedImport.type !== 'variable.other.named-import.jome') {
+            throw new Error("sfj9234hr9h239rhrf923h3r")
+          }
+          namedImports.push(namedImport.raw)
+        })
         //   } else if (imp.type === 'meta.import-alias.jome') {
         //     throw new Error("TODO: import {foo as bar} syntax")
         //   }
-        // })
       } else if (item.type === 'meta.import-file.jome') {
         let cs = filterSpaces(item.parts)
         file = cs[cs.length-1].raw.slice(1,-1)
       } else if (item.type === 'variable.other.default-import.jome') {
         defaultImport = item.raw
-        // ctx.addBinding(defaultImport, {type: 'default-import'}) TODO!!!!!!!!!!!!!!!!
       } else {
         throw new Error("Error 234j90s7adfg1")
       }

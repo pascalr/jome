@@ -1,4 +1,4 @@
-const { ltrim } = require("jome-lib/formatting");
+const { ltrim, ytrim } = require("jome-lib/formatting");
 const build = require("./website-v2/build.js");
 const server = require("./website-v2/server.js");
 const execSh = require("jome-lib/execSh");
@@ -21,5 +21,7 @@ module.exports = (cmd, args) => {
     jome test # launch the tests
   `);
   }
+  let test = `Hello world!
+`;
   return `<div>${"Hello"}</div>`;
 };

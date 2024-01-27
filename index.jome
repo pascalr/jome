@@ -1,7 +1,7 @@
 import build from './website-v2/build.jome'
 import server from './website-v2/server.jome'
 
-import {ltrim, xtrim} from 'jome-lib/formatting'
+import {ltrim, ytrim} from 'jome-lib/formatting'
 
 with cmd, args end
 
