@@ -1,6 +1,18 @@
 const Webpage = require("../src/webpage.js");
 const mdToHtml = require("jome-lib/mdToHtml");
 module.exports = () => {
+  function printExample(result) {
+    return `
+    <div class='example'>
+      <div class='onglets'>
+        <div class='active'>Code</div>
+        <div>Compiled</div>
+        <div>Output</div>
+      </div>
+      <div class='example-content'>${result}</div>
+    </div>
+  `;
+  }
   let content = mdToHtml(`
   ## Jome examples
 

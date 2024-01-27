@@ -337,7 +337,8 @@ function printFormatting(lines, ctxFile) {
     result = `"${escapeDoubleQuotes(result)}"`
   }
   Object.keys(substitutions).forEach(hash => {
-    result = result + `.replace('${hash}', ${substitutions[hash]})`
+    let subCode = ctxFile.compiler.compileCode(substitutions[hash], {inline: true})
+    result = result + `.replace('${hash}', ${subCode})`
   })
   return result
 }

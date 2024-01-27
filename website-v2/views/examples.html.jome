@@ -1,13 +1,29 @@
+//<jome>#log "Hello, world!"</jome>
+//<jome-ex>#log "Hello, world!"</jome-ex>
+
 import &Webpage from '../src/webpage.jomm'
+
+//def printExample(result along source along code)  
+def printExample(result)  
+  // TODO: Add syntax highlighting without using md
+  return <html>
+    <div class='example'>
+      <div class='onglets'>
+        <div class='active'>Code</div>
+        <div>Compiled</div>
+        <div>Output</div>
+      </div>
+      <div class='example-content'><%= result %></div>
+    </div>
+  </html>
+end
+
+forall jome-ex wrap printExample end
 
 // def parseExample(lines)
 //   let str = lines.map(l => l[0]).join('\n')
-//   //return [str, {rawCode: }]
+//   return [[{code: `["${str}", ${str}]`}]]
 // end
-
-// forall jome-example end
-
-// TODO: <jome-example>#log "Hello world!"</jome-example>
 
 // jome tag should do three things
 // give string of jome code
@@ -18,27 +34,7 @@ import &Webpage from '../src/webpage.jomm'
 // </jome>
 // but this could be something implemented only for here, because it is usefull only here
 
-// def showExample = |data| => (
-  
-//   let src = <md>
-// ```jome
-// <%= data.src %>
-// ```
-// </md>
-
-// <html>
-//   <div class='example'>
-//     <div class='onglets'>
-//       <div class='active'>Code</div>
-//       <div>Compiled</div>
-//       <div>Output</div>
-//     </div>
-//     <div class='example-content'><%= src %></div>
-//   </div>
-// </html>
-// )
-
-// <%= showExample(helloWorld) %>
+// <%s <jome-ex>#log "Hello, world!"</jome-ex> %>
 
 let content = <md>
   ## Jome examples
