@@ -35,6 +35,8 @@ end
 //%text
 
 let test = "
+
+
            Hello world!
            "%text
 

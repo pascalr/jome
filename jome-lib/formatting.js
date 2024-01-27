@@ -21,17 +21,30 @@ function rtrim(lines) {
 }
 
 function strim(lines) {
-  let [firstLine, ...otherLines] = lines
+  // First filter empty lines
+  let firstIdx = 0
+  while (firstIdx < lines.length && (!lines[firstIdx].length || /^\s*$/.test(lines[firstIdx]))) {
+    firstIdx++;
+  }
+  // Then filter the first part of the first non empty line
+  let modLines = lines.slice(firstIdx)
+  let [firstLine, ...otherLines] = modLines
   let [firstPart, ...parts] = firstLine
   if (typeof firstPart !== 'string') {return otherLines}
   return [[firstPart.trimStart(), ...parts], ...otherLines]
 }
 
 function etrim(lines) {
-  let modLines = lines.slice();
+  // First filter empty lines
+  let lastIdx = lines.length-1
+  while (lastIdx >= 0 && (!lines[lastIdx].length || /^\s*$/.test(lines[lastIdx]))) {
+    lastIdx--;
+  }
+  // Then filter the last part of the last non empty line
+  let modLines = lines.slice(0, lastIdx+1);
   let modParts = modLines[modLines.length - 1].slice();
   let lastPart = modParts[modParts.length - 1]
-  if (typeof lastPart !== 'string') {return lines}
+  if (typeof lastPart !== 'string') {return modLines}
   modParts[modParts.length - 1] = lastPart.trimEnd();
   modLines[modLines.length - 1] = modParts;
   return modLines;

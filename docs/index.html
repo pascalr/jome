@@ -292,6 +292,9 @@ is just a postfix that means compile a certain way</p>
 <p>The functions given to chain modify the raw string itself at compile time. They can even convert the strings into raw javascript code.</p>
 <p>The input and the output of chain functions are of the same type. They take an array of lines. And each like is an array of strings or TemplateLiteral.</p>
 <p>For example, the js tag takes a string in input and simply output it all into javascript code.</p>
+<p>FIXME: FIX THE CODE BELOW BECAUSE ONLY JS IMPORTED FUNCTIONS ARE ALLOWED. DO ... END is not allowed.
+This is because what if there are strings inside the jome function of other things it could become
+a loop nightmare.</p>
 <pre><code class="language-jome"><span class="hljs-variable">forall</span> <span class="hljs-variable">js</span>
   <span class="hljs-variable">chain</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">lines</span>|
     <span class="hljs-comment">// First validate that every line contains only a string. Template literals are not allowed in a js tag.</span>

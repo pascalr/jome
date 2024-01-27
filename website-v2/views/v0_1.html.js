@@ -307,6 +307,10 @@ module.exports = () => {
 
   For example, the js tag takes a string in input and simply output it all into javascript code.
 
+  FIXME: FIX THE CODE BELOW BECAUSE ONLY JS IMPORTED FUNCTIONS ARE ALLOWED. DO ... END is not allowed.
+  This is because what if there are strings inside the jome function of other things it could become
+  a loop nightmare.
+
   \`\`\`jome
   forall js
     chain do |lines|
