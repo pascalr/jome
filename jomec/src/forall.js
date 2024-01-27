@@ -1,3 +1,11 @@
+class FuncRef {
+  constructor(name, filepath, isDefault) {
+    this.name = name
+    this.filepath = filepath
+    this.isDefault = isDefault
+  }
+}
+
 // Define the defaults forall
 const DEFAULT_FORALLS = {
   sh: {

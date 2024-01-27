@@ -687,14 +687,15 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
   },
 
   "keyword.other.string-format.jome": (node) => {
-    let format = node.raw
+    let format = node.raw.slice(1)
+    let forall = node.ctxFile.foralls[format]
     let str = node.operands[0].raw
     throw new Error("sdfj9834hf9h230h023hf023h")
   },
 
   "meta.forall.jome": (node) => {
     let {tagName, chainFunctions, wrapFunctions} = node.data
-    // TODO: get the source of the wrap functions and add to the forall import list.
+    // TODO: get the source of the chain and wrap functions and add to the forall import list.
     node.ctxFile.addForall(tagName, chainFunctions, wrapFunctions)
     return ''
   },
