@@ -11,14 +11,16 @@ const REGEX_VARIABLE = "[A-Za-z_$]\\w*" // FIXME: Accents
 // }
 const REGEX_REGULAR_STRING = "\"[^\"]*\"|'[^']*'" // FIXME: Allow backticks and escaped quotes
 
-let MATCH_VARIABLE = {
-  match: REGEX_VARIABLE,
-  name: "variable.other.jome"
-}
-
-function match(regex, name) {
+function PATTERN_SCRIPT(name, sourceTagName, fixmeTmp) {
+  // FIXME: Fix all this... Make it like #tag, not #script
   return {
-    match: regex, name
+    begin: `\\<${name}(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>`,
+    end: `\\<\\/${name}\\>`,
+    beginCaptures: { 0: { name: "meta.script-params.jome", patterns: [{ include: "#script-params" }] } },
+    endCaptures: { 0: { name: "punctuation.definition.template-expression.end.punctuation.script.js.close" } },
+    name: `meta.embedded.block.${fixmeTmp}`,
+    contentName: "raw",
+    patterns: [{ include: sourceTagName }]
   }
 }
 
@@ -38,7 +40,7 @@ let grammar = {
     "import-identifier": {
       patterns: [
         {match: `&${REGEX_CLASS_NAME}`, name: "entity.name.class.jome"},
-        MATCH_VARIABLE
+        {include: "#normal-variable"}
       ]
     },
     statement: {
@@ -889,8 +891,14 @@ let grammar = {
           name: "variable.other.global.jome",
           match: "\\$\\w+"
         },
-        MATCH_VARIABLE
+        {include: "#normal-variable"}
       ]
+    },
+    "normal-variable": {
+      patterns: [{
+        match: REGEX_VARIABLE,
+        name: "variable.other.jome"
+      }]
     },
     caller: {
       patterns: [
@@ -1489,136 +1497,11 @@ let grammar = {
     },
     scripts: {
       patterns: [
-        {
-          begin: "\\<js(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          end: "\\<\\/js\\>",
-          beginCaptures: {
-            0: {
-              name: "meta.script-params.jome",
-              patterns: [
-                {
-                  include: "#script-params"
-                }
-              ]
-            }
-          },
-          endCaptures: {
-            0: {
-              name: "punctuation.definition.template-expression.end.punctuation.script.js.close"
-            }
-          },
-          name: "meta.embedded.block.javascript",
-          contentName: "raw",
-          patterns: [
-            {
-              include: "source.js"
-            }
-          ]
-        },
-        {
-          begin: "\\<md(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          end: "\\<\\/md\\>",
-          beginCaptures: {
-            0: {
-              name: "meta.script-params.jome",
-              patterns: [
-                {
-                  include: "#script-params"
-                }
-              ]
-            }
-          },
-          endCaptures: {
-            0: {
-              name: "punctuation.definition.template-expression.end.punctuation.script.js.close"
-            }
-          },
-          name: "meta.embedded.block.markdown",
-          contentName: "raw",
-          patterns: [
-            {
-              include: "text.html.markdown"
-            }
-          ]
-        },
-        {
-          begin: "\\<sh(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          end: "\\<\\/sh\\>",
-          beginCaptures: {
-            0: {
-              name: "meta.script-params.jome",
-              patterns: [
-                {
-                  include: "#script-params"
-                }
-              ]
-            }
-          },
-          endCaptures: {
-            0: {
-              name: "punctuation.definition.template-expression.end.punctuation.script.js.close"
-            }
-          },
-          name: "meta.embedded.block.shell",
-          contentName: "raw",
-          patterns: [
-            {
-              include: "source.shell"
-            }
-          ]
-        },
-        {
-          begin: "\\<css(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          end: "\\<\\/css\\>",
-          beginCaptures: {
-            0: {
-              name: "meta.script-params.jome",
-              patterns: [
-                {
-                  include: "#script-params"
-                }
-              ]
-            }
-          },
-          endCaptures: {
-            0: {
-              name: "punctuation.definition.template-expression.end.punctuation.script.js.close"
-            }
-          },
-          name: "meta.embedded.block.css",
-          contentName: "raw",
-          patterns: [
-            {
-              include: "source.css"
-            }
-          ]
-        },
-        {
-          begin: "\\<html(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          end: "\\<\\/html\\>",
-          beginCaptures: {
-            0: {
-              name: "meta.script-params.jome",
-              patterns: [
-                {
-                  include: "#script-params"
-                }
-              ]
-            }
-          },
-          endCaptures: {
-            0: {
-              name: "punctuation.definition.template-expression.end.punctuation.script.js.close"
-            }
-          },
-          name: "meta.embedded.block.html",
-          contentName: "raw",
-          patterns: [
-            {
-              include: "text.html.derivative"
-            }
-          ]
-        }
+        PATTERN_SCRIPT("js", "source.js", "javascript"),
+        PATTERN_SCRIPT("md", "text.html.markdown", "markdown"),
+        PATTERN_SCRIPT("sh", "source.shell", "shell"),
+        PATTERN_SCRIPT("css", "source.css", "css"),
+        PATTERN_SCRIPT("html", "text.html.derivative", "html"),
       ]
     },
     "square-bracket": {
