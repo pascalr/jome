@@ -671,17 +671,9 @@ let grammar = {
     "template-literal": {
       name: "meta.string-template-literal.jome",
       begin: "\\{",
-      beginCaptures: {
-        0: {
-          name: "punctuation.definition.template-expression.begin.jome"
-        }
-      },
+      beginCaptures: { 0: { name: "punctuation.definition.template-expression.begin.jome" } },
       end: "\\}",
-      endCaptures: {
-        0: {
-          name: "punctuation.definition.template-expression.end.jome"
-        }
-      },
+      endCaptures: { 0: { name: "punctuation.definition.template-expression.end.jome" } },
       patterns: [{ include: "#expression" }]
     },
     "paren-expression": {
@@ -916,6 +908,26 @@ let grammar = {
         2: { name: "entity.name.tag.jome" },
         3: { name: "punctuation.definition.tag.end.jome" }
       }
+    },
+    "tag-literal": {
+      patterns: [
+        {
+          name: "meta.string-template-literal.jome",
+          begin: "<%=",
+          beginCaptures: { 0: { name: "punctuation.definition.template-expression.begin.jome" } },
+          end: "%>",
+          endCaptures: { 0: { name: "punctuation.definition.template-expression.end.jome" } },
+          patterns: [{ include: "#expression" }]
+        },
+        {
+          name: "meta.string-template-literal.jome",
+          begin: "<%s",
+          beginCaptures: { 0: { name: "punctuation.definition.template-expression.begin.jome" } },
+          end: "%>",
+          endCaptures: { 0: { name: "punctuation.definition.template-expression.end.jome" } },
+          patterns: [{ include: "#expression" }]
+        },
+      ]
     },
     tag: {
       begin: "\\<([a-zA-Z]\\w*(?:-\\w+)*)(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",

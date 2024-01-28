@@ -65,6 +65,24 @@ module.exports = () => {
   };
   \`\`\`
 
+  ## Adder
+
+  Un autre truc simple comme le compteur. 2 input fields, tu additionnes les inputs et tu les affichent.
+
+  Voici le code svelte.
+
+  \`\`\`svelte
+  <script>
+    export let a;
+    export let b;
+  </script>
+
+  <input type="number" bind:value={a}>
+  <input type="number" bind:value={b}>
+
+  <p>{a} + {b} = {a + b}</p>
+  \`\`\`
+
   <h3 id="html-library">Html library</h3>
   
   \`\`\`jome

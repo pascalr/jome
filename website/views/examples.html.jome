@@ -35,6 +35,28 @@ end
 
 forall jome-ex wrap printExample end
 
+// def tabbedContent(contentByTitle)
+//   let tabs = <div>
+//     <%= contentByTitle.#keys.map(title => <div></div>) %>
+//   </div>
+// end
+  // <div class="tabbed-content">
+  //   <div>
+  //     <div class='selected'>Vanilla</div>
+  //     <div>Web components</div>
+  //     <div>React</div>
+  //     <div>Vue.js</div>
+  //     <div>Angular</div>
+  //     <div>Svelte</div>
+  //   </div>
+  //   <div>First tab content</div>
+  //   <div hidden>Second tab content</div>
+  //   <div hidden>Third tab content</div>
+  //   <div hidden>Fourth tab content</div>
+  //   <div hidden>Fifth tab content</div>
+  //   <div hidden>Sixth tab content</div>
+  // </div>
+
 // def parseExample(lines)
 //   let str = lines.map(l => l[0]).join('\n')
 //   return [[{code: `["${str}", ${str}]`}]]

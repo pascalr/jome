@@ -123,6 +123,19 @@ Show the code 75% of the space at the left, and 25% the simple counter button on
   &lt;/<span class="hljs-variable">react</span>&gt;
 };
 </code></pre>
+<h2>Adder</h2>
+<p>Un autre truc simple comme le compteur. 2 input fields, tu additionnes les inputs et tu les affichent.</p>
+<p>Voici le code svelte.</p>
+<pre><code class="language-svelte">&lt;script&gt;
+  export let a;
+  export let b;
+&lt;/script&gt;
+
+&lt;input type=&quot;number&quot; bind:value={a}&gt;
+&lt;input type=&quot;number&quot; bind:value={b}&gt;
+
+&lt;p&gt;{a} + {b} = {a + b}&lt;/p&gt;
+</code></pre>
   <h3 id="html-library">Html library</h3>
 <pre><code class="language-jome"><span class="hljs-variable">html</span> = «
   <span class="hljs-title class_">IFrame</span> <span class="hljs-comment">// for demo only</span>

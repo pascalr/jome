@@ -13,7 +13,7 @@ document.addEventListener "DOMContentLoaded" do
 
   // TODO: A tabbed content
   /*
-  <div id="tabbed-content-will-be-here">
+  <div class="tabbed-content">
     <div>
       <div class='selected'>Vanilla</div>
       <div>Web components</div>
