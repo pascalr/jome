@@ -917,9 +917,7 @@
         {
           "comment": "Work in progress",
           "begin": "\\<([a-zA-Z]\\w*(?:-\\w+)*)(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          "beginCaptures": {
-            "0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}
-          },
+          "beginCaptures": {"0": {"patterns": [{ "include": "#script-params" }]}},
           "end": "(\\<\\/)(\\1)(\\>)",
           "endCaptures": {"0": {"patterns": [{ "include": "#tag-end" }]}},
           "name": "meta.tag.jome",

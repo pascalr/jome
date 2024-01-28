@@ -2,6 +2,11 @@ const build = require("jome-lib/build");
 module.exports = (f) => {
   let force = f;
   build(
+    path.join(__dirname, "views/examples.html.jome"),
+    path.join(__dirname, "../docs/ex/index.html"),
+    { force: force }
+  );
+  build(
     path.join(__dirname, "views/test.html.jome"),
     path.join(__dirname, "../docs/test/index.html"),
     { force: force }
@@ -34,11 +39,6 @@ module.exports = (f) => {
   build(
     path.join(__dirname, "views/v0_0.html.jome"),
     path.join(__dirname, "../docs/v0.0/index.html"),
-    { force: force }
-  );
-  build(
-    path.join(__dirname, "views/examples.html.jome"),
-    path.join(__dirname, "../docs/ex/index.html"),
     { force: force }
   );
   build(
