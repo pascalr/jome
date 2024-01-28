@@ -1,24 +1,24 @@
 // {
 //   Div class: "navbar"
 //     Span "Jome", class: "navbrand", href: "#"
-//     Link "Editor", to: `{$URL}/editor`
-//     Link "Home", to: `{$URL}/`
-//     Link "Language Reference", to: `{$URL}/#lang-ref`
-//     Link "Examples", to: `{$URL}/ex`
-//     Link "Librairies", to: `{$URL}/lib`
+//     Link "Editor", to: `{ROOT}/editor`
+//     Link "Home", to: `{ROOT}/`
+//     Link "Language Reference", to: `{ROOT}/#lang-ref`
+//     Link "Examples", to: `{ROOT}/ex`
+//     Link "Librairies", to: `{ROOT}/lib`
 //     Link "GitHub", to: `https://github.com/pascalr/jome`
 // }
 
 return <html>
   <div class="navbar">
     <span class="navbrand" href="#">Jome</span>
-    <a href="<%= $URL %>/editor">Editor</a>
-    <a href="<%= $URL %>/">Home</a>
-    <a href="<%= $URL %>/#lang-ref">Language Reference</a>
-    <a href="<%= $URL %>/ex">Examples</a>
-    <a href="<%= $URL %>/lib">Librairies</a>
-    <a href="<%= $URL %>/formats">Formats</a>
-    <a href="<%= $URL %>/utils">Utils</a>
+    <a href="<%= ROOT %>/editor">Editor</a>
+    <a href="<%= ROOT %>/">Home</a>
+    <a href="<%= ROOT %>/#lang-ref">Language Reference</a>
+    <a href="<%= ROOT %>/ex">Examples</a>
+    <a href="<%= ROOT %>/lib">Librairies</a>
+    <a href="<%= ROOT %>/formats">Formats</a>
+    <a href="<%= ROOT %>/utils">Utils</a>
     <a href="https://github.com/pascalr/jome">GitHub</a>
   </div>
 </html>

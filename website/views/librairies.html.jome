@@ -7,7 +7,7 @@ let content = <md>
 
   ### Common librairies
 
-  - [Html](<%= $URL %>/lib/html)
+  - [Html](<%= ROOT %>/lib/html)
 
 </md>
 

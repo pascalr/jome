@@ -3,7 +3,7 @@ const build = require("./website/build.js");
 const server = require("./website/server.js");
 const execSh = require("jome-lib/execSh");
 module.exports = (cmd, args) => {
-  global.g_URL = "/jome";
+  global.ROOT = "/jome";
   if (cmd === "test") {
     execSh("jome test.jome");
   } else if (cmd === "dev") {

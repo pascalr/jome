@@ -7,7 +7,7 @@ with cmd, args end
 
 forall text chain ltrim, ytrim end
 
-$URL = '/jome'
+global.ROOT = '/jome'
 
 // I am not a big fan of ===, check out other languages is decide if == is always ===,
 // and maybe === would be something else like check if it is exactly the same object reference

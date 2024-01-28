@@ -8,7 +8,7 @@ module.exports = () => {
 
   ### Common librairies
 
-  - [Html](${global.g_URL}/lib/html)
+  - [Html](${ROOT}/lib/html)
 `);
   return new Webpage("Jome librairies", content).render();
 };

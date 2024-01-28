@@ -249,7 +249,7 @@ And you use the end keyword instead of curly braces.</p>
 <p>Also, this allows you to pass a variable as a named parameter to a function. Ex: <code>someFunc :someArg</code> =&gt; <code>someFunc({someArg})</code></p>
   <h2 id="builtins">Built-Ins</h2>
 <p>The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.</p>
-<p>For the complete list of utils: see the <a href="/jome/utils">utils page</a>.</p>
+<p>For the complete list of utils: see the <a href="undefined/utils">utils page</a>.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// A constant</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-variable">#PI</span>/<span class="hljs-number">2</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">e</span> = <span class="hljs-title function_">#e</span> <span class="hljs-comment">// Euler&#x27;s number</span>
@@ -712,9 +712,13 @@ let r = <code>{x if y}</code> // si x, alors <code>{y}</code>, sinon `` J'aimera
 <pre><code class="language-jome"><span class="hljs-variable">#env</span>.<span class="hljs-title class_">MY_ENV_VAR</span> = <span class="hljs-string">&#x27;foo&#x27;</span> <span class="hljs-comment">// =&gt; process.env.MY_ENV_VAR = &#x27;foo&#x27;</span>
 </code></pre>
 <h2>Global variables</h2>
-<p>Global variables start with a dollar sign. For example, <code>$MY_GLOB_VAR = 'foo'</code>.</p>
-<p>Simply equivalent of global._ for now. Adding underscore in order to avoid name clashes. For example,
-I was using $URL, but this does not work because global.URL already exists within Node.</p>
+<p>Global variables can be set like in javascript with the keyword global.</p>
+<pre><code class="language-jome"><span class="hljs-variable">global</span>.<span class="hljs-title class_">MY_GLOBAL_VARIABLE</span> = <span class="hljs-string">&quot;some value&quot;</span>
+</code></pre>
+<p>TODO: Global variables should always be set inside config.jome.</p>
+<p>This ensures that any way the files are executed with Jome, it will always have access to the global variable.</p>
+<p>What about when compiling and exporting only javascript code? Well, exporting js code is usually to make a library. And I library
+should never use global variables. So it's OK like that.</p>
 <h3>Chaining methods</h3>
 <p>You can execute multiple methods on the same object using the <code>chain</code> keyword.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a route and start it</span>

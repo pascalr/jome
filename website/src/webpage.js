@@ -19,12 +19,12 @@ module.exports = class Webpage {
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>${this.title}</title>
-          <link rel="stylesheet" type="text/css" href="${global.g_URL}/stylesheet.css">
-          <link rel="stylesheet" type="text/css" href="${global.g_URL}/highlight.js.min.css">
-          <link rel="apple-touch-icon" sizes="180x180" href="${global.g_URL}/apple-touch-icon.png">
-          <link rel="icon" type="image/png" sizes="32x32" href="${global.g_URL}/favicon-32x32.png">
-          <link rel="icon" type="image/png" sizes="16x16" href="${global.g_URL}/favicon-16x16.png">
-          <link rel="manifest" href="${global.g_URL}/site.webmanifest">
+          <link rel="stylesheet" type="text/css" href="${ROOT}/stylesheet.css">
+          <link rel="stylesheet" type="text/css" href="${ROOT}/highlight.js.min.css">
+          <link rel="apple-touch-icon" sizes="180x180" href="${ROOT}/apple-touch-icon.png">
+          <link rel="icon" type="image/png" sizes="32x32" href="${ROOT}/favicon-32x32.png">
+          <link rel="icon" type="image/png" sizes="16x16" href="${ROOT}/favicon-16x16.png">
+          <link rel="manifest" href="${ROOT}/site.webmanifest">
         </head>
         <body>
           <div class="d-flex flex-column" style="min-height: 100vh;">

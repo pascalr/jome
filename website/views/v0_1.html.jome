@@ -923,10 +923,18 @@ let content = <md>
 
   ## Global variables
 
-  Global variables start with a dollar sign. For example, `$MY_GLOB_VAR = 'foo'`.
+  Global variables can be set like in javascript with the keyword global.
+  
+  ```jome
+  global.MY_GLOBAL_VARIABLE = "some value"
+  ```
 
-  Simply equivalent of global._ for now. Adding underscore in order to avoid name clashes. For example,
-  I was using $URL, but this does not work because global.URL already exists within Node.
+  TODO: Global variables should always be set inside config.jome.
+
+  This ensures that any way the files are executed with Jome, it will always have access to the global variable.
+
+  What about when compiling and exporting only javascript code? Well, exporting js code is usually to make a library. And I library
+  should never use global variables. So it's OK like that.
 
   ### Chaining methods
 
