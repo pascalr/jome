@@ -551,6 +551,10 @@ module.exports = () => {
   Use #evt to get current event
   Use window or #window to get the window
 
+  FIXME: This clashes with decorators. But it can still work too I believe. Decorators are before class and method definitions. Attribute accessors are inside.
+
+  See https://www.sitepoint.com/javascript-decorators-what-they-are/ to learn decorators.
+
   ### Exclamation mark in objects
 
   Inside an object, you can use an exclamation mark after a variable name so it sets it value to true.

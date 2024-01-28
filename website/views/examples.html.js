@@ -13,12 +13,40 @@ module.exports = () => {
     </div>
   `;
   }
+  let counter = `
+  import React, { useState } from 'react'; // I would be nice if this was optional because implicit because inside react tag
+
+  const Counter = () => {
+    // Define state variable 'count' with initial value 0 and a function 'setCount' to update it
+    const [count, setCount] = useState(0);
+
+    return <button onClick={setCount(count+1)}>
+      Clicked {count} {count === 1 ? 'time' : 'times'}
+    </button>
+  };`;
   let content = mdToHtml(`
   ## Jome examples
 
   <h3 id="hello-world">Hello world</h3>
 
   83e12e01e1210c36810087d76fbcec01
+
+  <h3 id="react-component">React component</h3>
+
+  \`\`\`jome
+  import React, { useState } from 'react';
+
+  const Counter = () => {
+    // Define state variable 'count' with initial value 0 and a function 'setCount' to update it
+    const [count, setCount] = useState(0);
+
+    return <react>
+      <button onClick={setCount(count+1)}>
+        Clicked {count} {count === 1 ? 'time' : 'times'}
+      </button>
+    </react>
+  };
+  \`\`\`
 
   <h3 id="html-library">Html library</h3>
   

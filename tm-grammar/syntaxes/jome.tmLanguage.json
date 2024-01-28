@@ -900,6 +900,18 @@
         }
       ]
     },
+    "tag-end": {
+      "patterns": [
+        {
+          "match": "(\\<\\/)([a-zA-Z]\\w*(?:-\\w+)*)(\\>)",
+          "captures": {
+            "1": {"name": "punctuation.definition.tag.begin.jome"},
+            "2": {"name": "entity.name.tag.jome"},
+            "3": {"name": "punctuation.definition.tag.end.jome"}
+          }
+        }
+      ]
+    },
     "tag": {
       "patterns": [
         {
@@ -909,11 +921,7 @@
             "0": { "name": "meta.script-params.jome", "patterns": [{ "include": "#script-params" }]}
           },
           "end": "(\\<\\/)(\\1)(\\>)",
-          "endCaptures": {
-            "1": {"name": "punctuation.definition.tag.begin.jome"},
-            "2": {"name": "entity.name.tag.jome"},
-            "3": {"name": "punctuation.definition.tag.end.jome"}
-          },
+          "endCaptures": {"0": {"patterns": [{ "include": "#tag-end" }]}},
           "name": "meta.tag.jome",
           "contentName": "raw"
         }

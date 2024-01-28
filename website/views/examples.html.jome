@@ -34,6 +34,19 @@ forall jome-ex wrap printExample end
 // </jome>
 // but this could be something implemented only for here, because it is usefull only here
 
+let counter = <jsx-react>
+  import React, { useState } from 'react'; // I would be nice if this was optional because implicit because inside react tag
+
+  const Counter = () => {
+    // Define state variable 'count' with initial value 0 and a function 'setCount' to update it
+    const [count, setCount] = useState(0);
+
+    return <button onClick={setCount(count+1)}>
+      Clicked {count} {count === 1 ? 'time' : 'times'}
+    </button>
+  };
+</jsx-react>
+
 let content = <md>
   ## Jome examples
 
