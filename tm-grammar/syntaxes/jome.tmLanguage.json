@@ -320,216 +320,184 @@
       "match": "=>| -> "
     },
     "vbars-args": {
+      "name": "meta.args.jome",
+      "begin": "\\|(?!\\|)",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.vertical-bar.begin.jome"
+        }
+      },
+      "end": "\\|",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.vertical-bar.end.jome"
+        }
+      },
       "patterns": [
         {
-          "name": "meta.args.jome",
-          "begin": "\\|(?!\\|)",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.vertical-bar.begin.jome"
-            }
-          },
-          "end": "\\|",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.vertical-bar.end.jome"
-            }
-          },
-          "patterns": [
-            {
-              "include": "#argument"
-            },
-            {
-              "include": "#along"
-            },
-            {
-              "include": "#expression"
-            }
-          ]
+          "include": "#argument"
+        },
+        {
+          "include": "#along"
+        },
+        {
+          "include": "#expression"
         }
       ]
     },
     "with-args": {
+      "name": "meta.with-args.jome",
+      "begin": "with",
+      "beginCaptures": {
+        "0": {
+          "name": "keyword.control.jome"
+        }
+      },
+      "end": "\\b(end|(?=def)|(?=class)|(?=main)|(?=export))\\b",
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.jome"
+        }
+      },
       "patterns": [
         {
-          "name": "meta.with-args.jome",
-          "begin": "with",
-          "beginCaptures": {
-            "0": {
-              "name": "keyword.control.jome"
-            }
-          },
-          "end": "\\b(end|(?=def)|(?=class)|(?=main)|(?=export))\\b",
-          "endCaptures": {
-            "0": {
-              "name": "keyword.control.jome"
-            }
-          },
-          "patterns": [
-            {
-              "include": "#argument"
-            },
-            {
-              "include": "#along"
-            },
-            {
-              "include": "#expression"
-            }
-          ]
+          "include": "#argument"
+        },
+        {
+          "include": "#along"
+        },
+        {
+          "include": "#expression"
         }
       ]
     },
     "paren-args": {
+      "name": "meta.args.jome",
+      "begin": "\\G\\(",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.paren.open"
+        }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.paren.close"
+        }
+      },
       "patterns": [
         {
-          "name": "meta.args.jome",
-          "begin": "\\G\\(",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.paren.open"
-            }
-          },
-          "end": "\\)",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.paren.close"
-            }
-          },
-          "patterns": [
-            {
-              "include": "#argument"
-            },
-            {
-              "include": "#along"
-            },
-            {
-              "include": "#expression"
-            }
-          ]
+          "include": "#argument"
+        },
+        {
+          "include": "#along"
+        },
+        {
+          "include": "#expression"
         }
       ]
     },
     "declaration": {
-      "patterns": [
-        {
-          "name": "meta.declaration.jome",
-          "match": "\\b(let|var)\\b\\s*([A-Za-z_$]\\w*)?",
-          "captures": {
-            "1": {
-              "name": "keyword.control.declaration.jome"
-            },
-            "2": {
-              "name": "variable.other.jome"
-            }
-          }
+      "name": "meta.declaration.jome",
+      "match": "\\b(let|var)\\b\\s*([A-Za-z_$]\\w*)?",
+      "captures": {
+        "1": {
+          "name": "keyword.control.declaration.jome"
+        },
+        "2": {
+          "name": "variable.other.jome"
         }
-      ]
+      }
     },
     "def": {
+      "name": "meta.def.jome",
+      "begin": "\\b(def)\\s*([A-Za-z_$]\\w*)?\\b\\s*",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.jome"
+        },
+        "2": {
+          "name": "entity.name.function.jome"
+        }
+      },
+      "end": "\\b(end)\\b",
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.jome"
+        }
+      },
       "patterns": [
         {
-          "name": "meta.def.jome",
-          "begin": "\\b(def)\\s*(\\w+)?\\b\\s*",
-          "beginCaptures": {
-            "1": {
-              "name": "keyword.control.jome"
-            },
-            "2": {
-              "name": "entity.name.function.jome"
-            }
-          },
-          "end": "\\b(end)\\b",
-          "endCaptures": {
-            "0": {
-              "name": "keyword.control.jome"
-            }
-          },
-          "patterns": [
-            {
-              "include": "#paren-args"
-            },
-            {
-              "include": "#expression"
-            }
-          ]
+          "include": "#paren-args"
+        },
+        {
+          "include": "#expression"
         }
       ]
     },
     "chain-bloc": {
+      "name": "meta.chain.jome",
+      "begin": "\\b(chain)\\b\\s*",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.jome"
+        }
+      },
+      "end": "\\b(end)\\b",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.control.jome"
+        }
+      },
       "patterns": [
         {
-          "name": "meta.chain.jome",
-          "begin": "\\b(chain)\\b\\s*",
-          "beginCaptures": {
-            "1": {
-              "name": "keyword.control.jome"
-            }
-          },
-          "end": "\\b(end)\\b",
-          "endCaptures": {
-            "1": {
-              "name": "keyword.control.jome"
-            }
-          },
-          "patterns": [
-            {
-              "include": "#expression"
-            }
-          ]
+          "include": "#expression"
         }
       ]
     },
     "do_end": {
+      "name": "meta.do-end.jome",
+      "begin": "\\b(do)\\b\\s*",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.jome"
+        }
+      },
+      "end": "\\b(end)\\b",
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.jome"
+        }
+      },
       "patterns": [
         {
-          "name": "meta.do-end.jome",
-          "begin": "\\b(do)\\b\\s*",
-          "beginCaptures": {
-            "1": {
-              "name": "keyword.control.jome"
-            }
-          },
-          "end": "\\b(end)\\b",
-          "endCaptures": {
-            "0": {
-              "name": "keyword.control.jome"
-            }
-          },
-          "patterns": [
-            {
-              "include": "#vbars-args"
-            },
-            {
-              "include": "#expression"
-            }
-          ]
+          "include": "#vbars-args"
+        },
+        {
+          "include": "#expression"
         }
       ]
     },
     "function": {
+      "name": "meta.function.jome",
+      "begin": "\\b(function)\\b\\s*",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.jome"
+        }
+      },
+      "end": "\\b(end)\\b",
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.jome"
+        }
+      },
       "patterns": [
         {
-          "name": "meta.function.jome",
-          "begin": "\\b(function)\\b\\s*",
-          "beginCaptures": {
-            "1": {
-              "name": "keyword.control.jome"
-            }
-          },
-          "end": "\\b(end)\\b",
-          "endCaptures": {
-            "0": {
-              "name": "keyword.control.jome"
-            }
-          },
-          "patterns": [
-            {
-              "include": "#paren-args"
-            },
-            {
-              "include": "#expression"
-            }
-          ]
+          "include": "#paren-args"
+        },
+        {
+          "include": "#expression"
         }
       ]
     },
@@ -1382,41 +1350,32 @@
       ]
     },
     "tag": {
-      "patterns": [
-        {
-          "comment": "Work in progress",
-          "begin": "\\<([a-zA-Z]\\w*(?:-\\w+)*)(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          "beginCaptures": {
-            "0": {
-              "patterns": [
-                {
-                  "include": "#script-params"
-                }
-              ]
+      "begin": "\\<([a-zA-Z]\\w*(?:-\\w+)*)(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
+      "beginCaptures": {
+        "0": {
+          "patterns": [
+            {
+              "include": "#script-params"
             }
-          },
-          "end": "(\\<\\/)(\\1)(\\>)",
-          "endCaptures": {
-            "0": {
-              "patterns": [
-                {
-                  "include": "#tag-end"
-                }
-              ]
-            }
-          },
-          "name": "meta.tag.jome",
-          "contentName": "raw"
+          ]
         }
-      ]
+      },
+      "end": "(\\<\\/)(\\1)(\\>)",
+      "endCaptures": {
+        "0": {
+          "patterns": [
+            {
+              "include": "#tag-end"
+            }
+          ]
+        }
+      },
+      "name": "meta.tag.jome",
+      "contentName": "raw"
     },
     "format": {
-      "patterns": [
-        {
-          "match": "(?<=\"|'|>|\\w)(%:?(:\\#)?\\w+)+",
-          "name": "keyword.other.string-format.jome"
-        }
-      ]
+      "match": "(?<=\"|'|>|\\w)(%:?(:\\#)?\\w+)+",
+      "name": "keyword.other.string-format.jome"
     },
     "scripts": {
       "patterns": [

@@ -143,7 +143,7 @@ let grammar = {
         { include: "#scripts" },
         { include: "#tag" },
         { include: "#arrow" },
-        { include: "#caller" },
+        { include: "#caller" }, // ->something
         { include: "#state-var" },
         { include: "#operators" },
         // { include: "#parameter" },
@@ -155,11 +155,11 @@ let grammar = {
         { include: "#utilities" },
         { include: "#support-items" },
         { include: "#variable" },
-        { include: "#getter" },
+        { include: "#getter" }, // .something
         { include: "#block-array" },
         { include: "#block"},
-        { include: "#semicolon" },
-        { include: "#comma" },
+        { include: "#semicolon" }, // ;
+        { include: "#comma" }, // ,
       ]
     },
     "support-items": {
@@ -221,217 +221,91 @@ let grammar = {
       match: "=>| -> "
     },
     "vbars-args": {
+      name: "meta.args.jome",
+      begin: "\\|(?!\\|)",
+      beginCaptures: { 0: { name: "punctuation.vertical-bar.begin.jome" } },
+      end: "\\|",
+      endCaptures: { 0: { name: "punctuation.vertical-bar.end.jome" } },
       patterns: [
-        {
-          name: "meta.args.jome",
-          begin: "\\|(?!\\|)",
-          beginCaptures: {
-            0: {
-              name: "punctuation.vertical-bar.begin.jome"
-            }
-          },
-          end: "\\|",
-          endCaptures: {
-            0: {
-              name: "punctuation.vertical-bar.end.jome"
-            }
-          },
-          patterns: [
-            {
-              include: "#argument"
-            },
-            {
-              include: "#along"
-            },
-            {
-              include: "#expression"
-            }
-          ]
-        }
+        { include: "#argument" },
+        { include: "#along" },
+        { include: "#expression" }
       ]
     },
     "with-args": {
+      name: "meta.with-args.jome",
+      begin: "with",
+      beginCaptures: { 0: { name: "keyword.control.jome" } },
+      end: "\\b(end|(?=def)|(?=class)|(?=main)|(?=export))\\b",
+      endCaptures: { 0: { name: "keyword.control.jome" } },
       patterns: [
-        {
-          name: "meta.with-args.jome",
-          begin: "with",
-          beginCaptures: {
-            0: {
-              name: "keyword.control.jome"
-            }
-          },
-          end: "\\b(end|(?=def)|(?=class)|(?=main)|(?=export))\\b",
-          endCaptures: {
-            0: {
-              name: "keyword.control.jome"
-            }
-          },
-          patterns: [
-            {
-              include: "#argument"
-            },
-            {
-              include: "#along"
-            },
-            {
-              include: "#expression"
-            }
-          ]
-        }
+        { include: "#argument" },
+        { include: "#along" },
+        { include: "#expression" }
       ]
     },
     "paren-args": {
+      name: "meta.args.jome",
+      begin: "\\G\\(",
+      beginCaptures: { 0: { name: "punctuation.paren.open" } },
+      end: "\\)",
+      endCaptures: { 0: { name: "punctuation.paren.close" } },
       patterns: [
-        {
-          name: "meta.args.jome",
-          begin: "\\G\\(",
-          beginCaptures: {
-            0: {
-              name: "punctuation.paren.open"
-            }
-          },
-          end: "\\)",
-          endCaptures: {
-            0: {
-              name: "punctuation.paren.close"
-            }
-          },
-          patterns: [
-            {
-              include: "#argument"
-            },
-            {
-              include: "#along"
-            },
-            {
-              include: "#expression"
-            }
-          ]
-        }
+        { include: "#argument" },
+        { include: "#along" },
+        { include: "#expression" }
       ]
     },
     declaration: {
-      patterns: [
-        {
-          name: "meta.declaration.jome",
-          match: `\\b(let|var)\\b\\s*(${REGEX_VARIABLE})?`,
-          captures: {
-            1: {
-              name: "keyword.control.declaration.jome"
-            },
-            2: {
-              name: "variable.other.jome"
-            }
-          }
-        }
-      ]
+      name: "meta.declaration.jome",
+      match: `\\b(let|var)\\b\\s*(${REGEX_VARIABLE})?`,
+      captures: {
+        1: { name: "keyword.control.declaration.jome" },
+        2: { name: "variable.other.jome" }
+      }
     },
     def: {
+      name: "meta.def.jome",
+      begin: `\\b(def)\\s*(${REGEX_VARIABLE})?\\b\\s*`,
+      beginCaptures: {
+        1: { name: "keyword.control.jome" },
+        2: { name: "entity.name.function.jome" }
+      },
+      end: "\\b(end)\\b",
+      endCaptures: { 0: { name: "keyword.control.jome" } },
       patterns: [
-        {
-          name: "meta.def.jome",
-          begin: "\\b(def)\\s*(\\w+)?\\b\\s*",
-          beginCaptures: {
-            1: {
-              name: "keyword.control.jome"
-            },
-            2: {
-              name: "entity.name.function.jome"
-            }
-          },
-          end: "\\b(end)\\b",
-          endCaptures: {
-            0: {
-              name: "keyword.control.jome"
-            }
-          },
-          patterns: [
-            {
-              include: "#paren-args"
-            },
-            {
-              include: "#expression"
-            }
-          ]
-        }
+        { include: "#paren-args" },
+        { include: "#expression" }
       ]
     },
     "chain-bloc": {
-      patterns: [
-        {
-          name: "meta.chain.jome",
-          begin: "\\b(chain)\\b\\s*",
-          beginCaptures: {
-            1: {
-              name: "keyword.control.jome"
-            }
-          },
-          end: "\\b(end)\\b",
-          endCaptures: {
-            1: {
-              name: "keyword.control.jome"
-            }
-          },
-          patterns: [
-            {
-              include: "#expression"
-            }
-          ]
-        }
-      ]
+      name: "meta.chain.jome",
+      begin: "\\b(chain)\\b\\s*",
+      beginCaptures: { 1: { name: "keyword.control.jome" } },
+      end: "\\b(end)\\b",
+      endCaptures: { 1: { name: "keyword.control.jome" } },
+      patterns: [{ include: "#expression" }]
     },
     do_end: {
+      name: "meta.do-end.jome",
+      begin: "\\b(do)\\b\\s*",
+      beginCaptures: { 1: { name: "keyword.control.jome" } },
+      end: "\\b(end)\\b",
+      endCaptures: { 0: { name: "keyword.control.jome" } },
       patterns: [
-        {
-          name: "meta.do-end.jome",
-          begin: "\\b(do)\\b\\s*",
-          beginCaptures: {
-            1: {
-              name: "keyword.control.jome"
-            }
-          },
-          end: "\\b(end)\\b",
-          endCaptures: {
-            0: {
-              name: "keyword.control.jome"
-            }
-          },
-          patterns: [
-            {
-              include: "#vbars-args"
-            },
-            {
-              include: "#expression"
-            }
-          ]
-        }
+        { include: "#vbars-args" },
+        { include: "#expression" }
       ]
     },
     function: {
+      name: "meta.function.jome",
+      begin: "\\b(function)\\b\\s*",
+      beginCaptures: { 1: { name: "keyword.control.jome" } },
+      end: "\\b(end)\\b",
+      endCaptures: { 0: { name: "keyword.control.jome" } },
       patterns: [
-        {
-          name: "meta.function.jome",
-          begin: "\\b(function)\\b\\s*",
-          beginCaptures: {
-            1: {
-              name: "keyword.control.jome"
-            }
-          },
-          end: "\\b(end)\\b",
-          endCaptures: {
-            0: {
-              name: "keyword.control.jome"
-            }
-          },
-          patterns: [
-            {
-              include: "#paren-args"
-            },
-            {
-              include: "#expression"
-            }
-          ]
-        }
+        { include: "#paren-args" },
+        { include: "#expression" }
       ]
     },
     if_block: {
@@ -500,26 +374,14 @@ let grammar = {
       name: "meta.interface.jome",
       begin: "\\b(interface)\\b\\s*([a-zA-Z_]\\w*)",
       beginCaptures: {
-        1: {
-          name: "keyword.control.jome"
-        },
-        2: {
-          name: "entity.name.type.interface.jome"
-        }
+        1: { name: "keyword.control.jome" },
+        2: { name: "entity.name.type.interface.jome" }
       },
       end: "\\b(end)\\b",
-      endCaptures: {
-        0: {
-          name: "keyword.control.jome"
-        }
-      },
+      endCaptures: { 0: { name: "keyword.control.jome" } },
       patterns: [
-        {
-          include: "#argument"
-        },
-        {
-          include: "#expression"
-        }
+        { include: "#argument" },
+        { include: "#expression" }
       ]
     },
     function_call: {
@@ -528,12 +390,8 @@ let grammar = {
           name: "meta.function-call.jome",
           begin: "(\\.)(\\w+)\\(",
           beginCaptures: {
-            1: {
-              name: "punctuation.dot.jome"
-            },
-            2: {
-              name: "entity.name.function.jome"
-            }
+            1: { name: "punctuation.dot.jome" },
+            2: { name: "entity.name.function.jome" }
           },
           end: "\\)",
           patterns: [{ include: "#expression" }]
@@ -542,12 +400,8 @@ let grammar = {
           name: "meta.function-call.jome",
           begin: "(\\.)(#\\w+\\!?)\\(",
           beginCaptures: {
-            1: {
-              name: "punctuation.dot.jome"
-            },
-            2: {
-              name: "entity.name.function.utility.jome"
-            }
+            1: { name: "punctuation.dot.jome" },
+            2: { name: "entity.name.function.utility.jome" }
           },
           end: "\\)",
           patterns: [{ include: "#expression" }]
@@ -556,12 +410,8 @@ let grammar = {
           name: "meta.function-call.WIP.jome",
           begin: "(\\.)(#\\w+\\b\\!?)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|along|chain|end|\\}|\\?|\\[|\\]))",
           beginCaptures: {
-            1: {
-              name: "punctuation.dot.jome"
-            },
-            2: {
-              name: "entity.name.function.utility.jome"
-            }
+            1: { name: "punctuation.dot.jome" },
+            2: { name: "entity.name.function.utility.jome" }
           },
           end: "\r\n|\n|$|chain",
           patterns: [{ include: "#expression" }]
@@ -570,12 +420,8 @@ let grammar = {
           name: "meta.function-call.WIP.jome",
           begin: "(\\.)\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|along|chain|end|\\}|\\?|\\[|\\]))",
           beginCaptures: {
-            1: {
-              name: "punctuation.dot.jome"
-            },
-            2: {
-              name: "entity.name.function.jome"
-            }
+            1: { name: "punctuation.dot.jome" },
+            2: { name: "entity.name.function.jome" }
           },
           end: "\r\n|\n|$|chain",
           patterns: [{ include: "#expression" }]
@@ -583,44 +429,28 @@ let grammar = {
         {
           name: "support.function-call.jome",
           begin: "(\\w+)\\(",
-          beginCaptures: {
-            1: {
-              name: "entity.name.function.jome"
-            }
-          },
+          beginCaptures: { 1: { name: "entity.name.function.jome" } },
           end: "\\)",
           patterns: [{ include: "#expression" }]
         },
         {
           name: "support.function-call.jome",
           begin: "(#\\w+\\!?)\\(",
-          beginCaptures: {
-            1: {
-              name: "entity.name.function.utility.jome"
-            }
-          },
+          beginCaptures: { 1: { name: "entity.name.function.utility.jome" } },
           end: "\\)",
           patterns: [{ include: "#expression" }]
         },
         {
           name: "support.function-call.WIP.jome",
           begin: "(#\\w+\\b\\!?)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|along|chain|end|\\}|\\?|\\[|\\]))",
-          beginCaptures: {
-            1: {
-              name: "entity.name.function.utility.jome"
-            }
-          },
+          beginCaptures: { 1: { name: "entity.name.function.utility.jome" } },
           end: "\r\n|\n|$|chain",
           patterns: [{ include: "#expression" }]
         },
         {
           name: "support.function-call.WIP.jome",
           begin: "\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|along|chain|end|\\}|\\?|\\[|\\]))",
-          beginCaptures: {
-            1: {
-              name: "entity.name.function.jome"
-            }
-          },
+          beginCaptures: { 1: { name: "entity.name.function.jome" } },
           end: "\r\n|\n|$|chain",
           patterns: [{ include: "#expression" }]
         }
@@ -631,15 +461,9 @@ let grammar = {
         {
           match: `(${REGEX_VARIABLE})\\s*(:)\\s*([A-Za-z]\\w*)`,
           captures: {
-            1: {
-              name: "variable.other.jome"
-            },
-            2: {
-              name: "keyword.operator.type.annotation.jome"
-            },
-            3: {
-              name: "support.type.jome"
-            }
+            1: { name: "variable.other.jome" },
+            2: { name: "keyword.operator.type.annotation.jome" },
+            3: { name: "support.type.jome" }
           }
         },
         {
@@ -648,24 +472,12 @@ let grammar = {
         {
           name: "meta.deconstructed-arg.jome",
           begin: "\\{",
-          beginCaptures: {
-            0: {
-              name: "punctuation.curly-braces.open.jome"
-            }
-          },
+          beginCaptures: { 0: { name: "punctuation.curly-braces.open.jome" } },
           end: "\\}",
-          endCaptures: {
-            0: {
-              name: "punctuation.curly-braces.close.jome"
-            }
-          },
+          endCaptures: { 0: { name: "punctuation.curly-braces.close.jome" } },
           patterns: [
-            {
-              include: "#argument"
-            },
-            {
-              include: "#expression"
-            }
+            { include: "#argument" },
+            { include: "#expression" }
           ]
         }
       ]
@@ -687,24 +499,16 @@ let grammar = {
       name: "meta.caller.jome",
       match: "(->)(\\w+)",
       captures: {
-        1: {
-          name: "punctuation.arrow.jome"
-        },
-        2: {
-          name: "entity.name.function.jome"
-        }
+        1: { name: "punctuation.arrow.jome" },
+        2: { name: "entity.name.function.jome" }
       }
     },
     getter: {
       name: "meta.getter.jome",
       match: "(\\.)(\\w+)",
       captures: {
-        1: {
-          name: "punctuation.dot.jome"
-        },
-        2: {
-          name: "variable.other.property.jome"
-        }
+        1: { name: "punctuation.dot.jome" },
+        2: { name: "variable.other.property.jome" }
       }
     },
     "inline-utility": {
@@ -727,12 +531,8 @@ let grammar = {
     along: {
       match: "(along)\\s*(type|unit|code|source)",
       captures: {
-        1: {
-          name: "keyword.control.along.jome"
-        },
-        2: {
-          name: "variable.language.jome"
-        }
+        1: { name: "keyword.control.along.jome" },
+        2: { name: "variable.language.jome" }
       }
     },
     "state-var": {
@@ -760,12 +560,8 @@ let grammar = {
         {
           match: "([a-zA-Z_]\\w*)?\\s*(\\+=|-=|\\*=|&&=|\\|\\|=|(?<!\\()/=)",
           captures: {
-            1: {
-              name: "variable.assignment.jome"
-            },
-            2: {
-              name: "keyword.operator.assignment.compound.jome"
-            }
+            1: { name: "variable.assignment.jome" },
+            2: { name: "keyword.operator.assignment.compound.jome" }
           }
         },
         {
@@ -787,29 +583,17 @@ let grammar = {
         {
           match: "([a-zA-Z$_][\\w$]*)?(:)\\s*(\\w+)\\s*(=)(?![>=])",
           captures: {
-            1: {
-              name: "variable.assignment.jome"
-            },
-            2: {
-              name: "keyword.operator.type.annotation.jome"
-            },
-            3: {
-              name: "support.type.jome"
-            },
-            4: {
-              name: "keyword.operator.assignment.jome"
-            }
+            1: { name: "variable.assignment.jome" },
+            2: { name: "keyword.operator.type.annotation.jome" },
+            3: { name: "support.type.jome" },
+            4: { name: "keyword.operator.assignment.jome" }
           }
         },
         {
           match: "([a-zA-Z$_][\\w$]*)?\\s*(=)(?![>=])",
           captures: {
-            1: {
-              name: "variable.assignment.jome"
-            },
-            2: {
-              name: "keyword.operator.assignment.jome"
-            }
+            1: { name: "variable.assignment.jome" },
+            2: { name: "keyword.operator.assignment.jome" }
           }
         },
         {
@@ -843,22 +627,10 @@ let grammar = {
         {
           name: "string.quoted.multi.jome",
           begin: "'''",
-          beginCaptures: {
-            0: {
-              name: "punctuation.definition.string.begin.jome"
-            }
-          },
+          beginCaptures: { 0: { name: "punctuation.definition.string.begin.jome" } },
           end: "'''",
-          endCaptures: {
-            0: {
-              name: "punctuation.definition.string.end.jome"
-            }
-          },
-          patterns: [
-            {
-              include: "#escape-char"
-            }
-          ]
+          endCaptures: { 0: { name: "punctuation.definition.string.end.jome" } },
+          patterns: [{ include: "#escape-char" }]
         },
         {
           comment: "Allow #~ for home too?",
@@ -868,80 +640,36 @@ let grammar = {
         {
           name: "string.quoted.verbatim.jome",
           begin: "@(\"|'|\"\"\"|''')",
-          beginCaptures: {
-            0: {
-              name: "punctuation.definition.string.begin.jome"
-            }
-          },
+          beginCaptures: { 0: { name: "punctuation.definition.string.begin.jome" } },
           end: "\\1",
-          endCaptures: {
-            0: {
-              name: "punctuation.definition.string.end.jome"
-            }
-          }
+          endCaptures: { 0: { name: "punctuation.definition.string.end.jome" } },
         },
         {
           name: "string.quoted.double.jome",
           begin: "\"",
-          beginCaptures: {
-            0: {
-              name: "punctuation.definition.string.begin.jome"
-            }
-          },
+          beginCaptures: { 0: { name: "punctuation.definition.string.begin.jome" } },
           end: "\"",
-          endCaptures: {
-            0: {
-              name: "punctuation.definition.string.end.jome"
-            }
-          },
+          endCaptures: { 0: { name: "punctuation.definition.string.end.jome" } },
           patterns: [
-            {
-              include: "#template-literal"
-            },
-            {
-              include: "#escape-char"
-            }
+            { include: "#template-literal" },
+            { include: "#escape-char" }
           ]
         },
         {
           name: "string.quoted.single.jome",
           begin: "'",
-          beginCaptures: {
-            0: {
-              name: "punctuation.definition.string.begin.jome"
-            }
-          },
+          beginCaptures: { 0: { name: "punctuation.definition.string.begin.jome" } },
           end: "'",
-          endCaptures: {
-            0: {
-              name: "punctuation.definition.string.end.jome"
-            }
-          },
-          patterns: [
-            {
-              include: "#escape-char"
-            }
-          ]
+          endCaptures: { 0: { name: "punctuation.definition.string.end.jome" } },
+          patterns: [{ include: "#escape-char" }]
         },
         {
           name: "string.quoted.backtick.jome",
           begin: "`",
-          beginCaptures: {
-            0: {
-              name: "punctuation.definition.string.begin.jome"
-            }
-          },
+          beginCaptures: { 0: { name: "punctuation.definition.string.begin.jome" } },
           end: "`",
-          endCaptures: {
-            0: {
-              name: "punctuation.definition.string.end.jome"
-            }
-          },
-          patterns: [
-            {
-              include: "#escape-char"
-            }
-          ]
+          endCaptures: { 0: { name: "punctuation.definition.string.end.jome" } },
+          patterns: [{ include: "#escape-char" }]
         }
       ]
     },
@@ -1209,41 +937,16 @@ let grammar = {
       ]
     },
     tag: {
-      patterns: [
-        {
-          comment: "Work in progress",
-          begin: "\\<([a-zA-Z]\\w*(?:-\\w+)*)(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
-          beginCaptures: {
-            0: {
-              patterns: [
-                {
-                  include: "#script-params"
-                }
-              ]
-            }
-          },
-          end: "(\\<\\/)(\\1)(\\>)",
-          endCaptures: {
-            0: {
-              patterns: [
-                {
-                  include: "#tag-end"
-                }
-              ]
-            }
-          },
-          name: "meta.tag.jome",
-          contentName: "raw"
-        }
-      ]
+      begin: "\\<([a-zA-Z]\\w*(?:-\\w+)*)(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
+      beginCaptures: { 0: { patterns: [{ include: "#script-params" }] } },
+      end: "(\\<\\/)(\\1)(\\>)",
+      endCaptures: { 0: { patterns: [{ include: "#tag-end" }] } },
+      name: "meta.tag.jome",
+      contentName: "raw"
     },
     format: {
-      patterns: [
-        {
-          match: "(?<=\"|'|>|\\w)(%:?(:\\#)?\\w+)+",
-          name: "keyword.other.string-format.jome"
-        }
-      ]
+      match: "(?<=\"|'|>|\\w)(%:?(:\\#)?\\w+)+",
+      name: "keyword.other.string-format.jome"
     },
     scripts: {
       patterns: [
@@ -1257,17 +960,9 @@ let grammar = {
     "square-bracket": {
       name: "meta.square-bracket.jome",
       begin: "\\[",
-      beginCaptures: {
-        0: {
-          name: "punctuation.definition.square-bracket.begin.jome"
-        }
-      },
+      beginCaptures: { 0: { name: "punctuation.definition.square-bracket.begin.jome" } },
       end: "\\]",
-      endCaptures: {
-        0: {
-          name: "punctuation.definition.square-bracket.end.jome"
-        }
-      },
+      endCaptures: { 0: { name: "punctuation.definition.square-bracket.end.jome" } },
       patterns: [
         {
           match: "(?<!\\.)\\.{3}",
@@ -1277,9 +972,7 @@ let grammar = {
           match: "(?<!\\.)\\.{2}",
           name: "keyword.operator.slice.inclusive.jome"
         },
-        {
-          include: "#expression"
-        }
+        { include: "#expression" }
       ]
     },
     constants: {
@@ -1287,12 +980,8 @@ let grammar = {
         {
           match: "([+-]?\\d+\\.\\d+)(([a-zA-Z%])+(•[a-zA-Z]+)*(\\/[a-zA-Z]+)*)",
           captures: {
-            1: {
-              name: "constant.numeric.float.jome"
-            },
-            2: {
-              name: "support.constant.unit.jome"
-            }
+            1: { name: "constant.numeric.float.jome" },
+            2: { name: "support.constant.unit.jome" }
           },
           name: "meta.number-with-unit.jome"
         },
@@ -1303,12 +992,8 @@ let grammar = {
         {
           match: "([+-]?\\d+)(([a-zA-Z%])+(•[a-zA-Z]+)*(\\/[a-zA-Z]+)*)",
           captures: {
-            1: {
-              name: "constant.numeric.integer.jome"
-            },
-            2: {
-              name: "support.constant.unit.jome"
-            }
+            1: { name: "constant.numeric.integer.jome" },
+            2: { name: "support.constant.unit.jome" }
           },
           name: "meta.number-with-unit.jome"
         },
@@ -1330,17 +1015,9 @@ let grammar = {
       patterns: [
         {
           begin: "\\/\\*",
-          beginCaptures: {
-            0: {
-              name: "punctuation.definition.comment.jome"
-            }
-          },
+          beginCaptures: { 0: { name: "punctuation.definition.comment.jome" } },
           end: "\\*\\/",
-          endCaptures: {
-            0: {
-              name: "punctuation.definition.comment.jome"
-            }
-          },
+          endCaptures: { 0: { name: "punctuation.definition.comment.jome" } },
           name: "comment.block.jome"
         }
       ]
@@ -1353,32 +1030,18 @@ let grammar = {
         },
         {
           begin: "# ",
-          beginCaptures: {
-            0: {
-              name: "punctuation.definition.comment.jome"
-            }
-          },
+          beginCaptures: { 0: { name: "punctuation.definition.comment.jome" } },
           end: "$\\n?",
           name: "comment.line.documentation.jome"
         },
         {
           begin: "\\/\\*\\*",
-          beginCaptures: {
-            0: {
-              name: "punctuation.definition.comment.jome"
-            }
-          },
+          beginCaptures: { 0: { name: "punctuation.definition.comment.jome" } },
           end: "\\*\\/",
-          endCaptures: {
-            0: {
-              name: "punctuation.definition.comment.jome"
-            }
-          },
+          endCaptures: { 0: { name: "punctuation.definition.comment.jome" } },
           name: "comment.block.documentation.jome"
         },
-        {
-          include: "#block-comment"
-        }
+        { include: "#block-comment" }
       ]
     },
     regex: {
