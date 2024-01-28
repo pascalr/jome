@@ -5,11 +5,13 @@ const {DEFAULT_FORALLS} = require('./forall.js')
 // The scope of the file. So it handles imports especially.
 class ContextFile {
   constructor(absPath) {
+    this.uidNb = 0
     this.absPath = absPath
     this.lexEnv = new LexicalEnvironment()
     this.lexEnv.ctxFile = this
     this.namedImportsByFile = {}
     this.defaultImportsByFile = {}
+    this.namespaceImportsByFile = {}
     this.classIdentifiers = new Set() // The list of identifiers that refer to a class name
     this.dependencies = [] // Files that need to be compiled too for this file to run
     this.fileArguments = [] // A list of Argument
@@ -28,7 +30,7 @@ class ContextFile {
     this.foralls[name] = {chain: chainFuncs, wrap: wrapFuncs}
   }
 
-  addImport(defaultImport, namedImports, file) {
+  addImport(defaultImport, namedImports, file, namespaceImport) {
     if (defaultImport) {
       if (this.defaultImportsByFile[file] && this.defaultImportsByFile[file] !== defaultImport) {
         throw new Error("Two default imports on the same file not supported for now.")
@@ -40,6 +42,14 @@ class ContextFile {
       } else {
         this.defaultImportsByFile[file] = defaultImport
       }
+    }
+    if (namespaceImport) {
+      if (this.namespaceImportsByFile[file] === namespaceImport) {
+        // Nothing to do
+      } else if (this.namespaceImportsByFile[file]) {
+        throw new Error("TODO: Multiple namespace imports with different names for the same file not yet supported.")
+      }
+      this.namespaceImportsByFile[file] = namespaceImport
     }
     if (namedImports && namedImports.length) {
       if (!this.namedImportsByFile[file]) {
@@ -66,6 +76,11 @@ class ContextFile {
     return this.dependencies.map(dep => {
       return path.resolve(this.absPath, '..', dep)
     })
+  }
+
+  // Get unique identifier. Simply prefix j_uid_ than a number that goes up by one every time
+  uid() {
+    return `j_uid_${++this.uidNb}`
   }
 }
 

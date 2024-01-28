@@ -406,6 +406,7 @@ const VALIDATORS = {
     let file;
     let defaultImport = ''
     let namedImports = []
+    let namespaceImport = null // * as namespace_name
     let list = filterStrings(node.parts.slice(1)) // remove import keyword
     list.forEach(item => {
       if (item.type === 'meta.named-imports.jome') {
@@ -423,6 +424,8 @@ const VALIDATORS = {
         file = cs[cs.length-1].raw.slice(1,-1)
       } else if (item.type === 'variable.other.default-import.jome') {
         defaultImport = item.raw
+      } else if (item.type === 'meta.namespace-import.jome') {
+        namespaceImport = item.parts[2].raw
       } else {
         throw new Error("Error 234j90s7adfg1")
       }
@@ -435,7 +438,7 @@ const VALIDATORS = {
     //   relPath = relPath.slice(0, relPath.length-4)+"built.js"
     //   // relPath = relPath.slice(0, relPath.length-4)+(ctx.useESM ? 'built.js' : 'built.cjs')
     // }
-    node.data = {file, defaultImport, namedImports}
+    node.data = {file, defaultImport, namedImports, namespaceImport}
   },
 
   "string.quoted.double.jome": (node) => validateString(node, '"'),

@@ -16,7 +16,11 @@ function genCode(node) {
 
 function genImports(ctxFile, compilerOptions) {
   let result = ""
-  let files = new Set([...Object.keys(ctxFile.namedImportsByFile), ...Object.keys(ctxFile.defaultImportsByFile)])
+  let files = new Set([
+    ...Object.keys(ctxFile.namedImportsByFile),
+    ...Object.keys(ctxFile.defaultImportsByFile),
+    ...Object.keys(ctxFile.namespaceImportsByFile)
+  ])
   files.forEach(file => {
     let jsfile = file
     if (file.endsWith('.jomm') || file.endsWith('.jome')) {
@@ -25,8 +29,12 @@ function genImports(ctxFile, compilerOptions) {
     }
     let def = ctxFile.defaultImportsByFile[file]
     let named = ctxFile.namedImportsByFile[file]
+    let namespace = ctxFile.namespaceImportsByFile[file]
     if (compilerOptions.useCommonJS) {
-      if (def) {
+      if (namespace) {
+        let uid = ctxFile.uid()
+        result += `const ${uid} = require("${jsfile}");\nconst {default: ${def || ctxFile.uid()}, ...${namespace}} = ${uid};\n`
+      } else if (def) {
         result += `const ${def} = require("${jsfile}");\n`
       } else {
         result += `const {${[...named].join(', ')}} = require("${jsfile}");\n`
@@ -547,14 +555,17 @@ const CODE_GENERATORS = {
   // import defaultExport, * as name from "module-name";
   // // import "module-name"; TODO: Not written yet in the parser
   "meta.statement.import.jome": (node) => {
-    let {file, defaultImport, namedImports} = node.data
+    let {file, defaultImport, namedImports, namespaceImport} = node.data
     if (defaultImport) {
       node.lexEnv.addBinding(defaultImport, {type: 'default-import', file})
+    }
+    if (namespaceImport) {
+      node.lexEnv.addBinding(namespaceImport, {type: 'namespace-import', file})
     }
     namedImports.forEach(namedImport => {
       node.lexEnv.addBinding(namedImport, {type: 'named-import', file})
     })
-    node.ctxFile.addImport(defaultImport, namedImports, file)
+    node.ctxFile.addImport(defaultImport, namedImports, file, namespaceImport)
   },
 
   // #.

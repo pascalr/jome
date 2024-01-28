@@ -46,6 +46,50 @@ javascript because it is more stable. It is a little weird to compile tests in i
 //   add 2
 // end
 
+let o = {default: 'Hello', rest: 'there'};
+let {default: foo, ...all} = o;
+
+describe("Imports", () => {
+  // import defaultExport from "module-name";
+  test('Default import', () => {
+    expect(compile(`import name from "module-name"`)).toMatch(/const name = require\("module-name"\)/);
+  })
+  // import * as name from "module-name";
+  test('Star import', () => {
+    expect(compile(`import * as name from "module-name"`)).toMatch(/const (\w+) = require\("module-name"\);\s*const { ?default: \w+, ...name ?} = \1;/);
+  })
+  // import { export1 } from "module-name";
+  // import { export1, export2 } from "module-name";
+  test('Deconstructed import', () => {
+    expect(compile(`import { name } from "module-name"`)).toMatch(/const {name} = require\("module-name"\)/);
+    expect(compile(`import { name, name2 } from "module-name"`)).toMatch(/const {name, name2} = require\("module-name"\)/);
+  })
+  // import { export1 as alias1 } from "module-name";
+  // import { export1, export2 as alias2, /* … */ } from "module-name";
+  test('Alias deconstructed import', () => {
+    expect(compile(`import { name as otherName } from "module-name"`)).toMatch(/const {name as otherName} = require\("module-name"\)/);
+    expect(compile(`import { normal, name as otherName } from "module-name"`)).toMatch(/const {normal, name as otherName} = require\("module-name"\)/);
+  })
+  // import { default as alias } from "module-name";
+  test('Alias deconstructed import', () => {
+    expect(compile(`import { name as otherName } from "module-name"`)).toMatch(/const {name as otherName} = require\("module-name"\)/);
+  })
+  // import { "string name" as alias } from "module-name";
+  // FIXME: Is this valid or not? I saw online yes but it does not seem to work in vscode...
+  // test('Import name inside string', () => {
+  // })
+  // import defaultExport, { export1, /* … */ } from "module-name";
+  test('Default import and deconstructed', () => {
+    expect(compile(`import name, { foo } from "module-name"`)).toMatch(/const \w+ = require\("module-name"\); const name = lib.default; const foo = lib.foo/);
+  })
+  // import defaultExport, * as name from "module-name";
+  test('Default import and star import', () => {
+    expect(compile(`import name, * as all from "module-name"`)).toMatch(/const (\w+) = require\("module-name"\);\s*const { ?default: name, ...all ?} = \1;/);
+  })
+  // import "module-name"; TODO: Not written yet in the parser
+})
+// TODO: Test imports when compiling for ESM.
+
 describe("Paths", () => {
   test('Dirname shortcuts', () => {
     expect(compile(`#.`)).toMatch(/__dirname/);
