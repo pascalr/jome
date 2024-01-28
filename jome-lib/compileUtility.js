@@ -49,6 +49,11 @@ const UTILS = {
     node.lexEnv.ctxFile.addImport('build', null, 'jome-lib/build')
     return `build(${(args).join(', ')})`
   },
+  // TODO: compile!
+  compile: (node, args) => {
+    node.lexEnv.ctxFile.addImport('compile', null, 'jome-lib/compile')
+    return `compile(${(args).join(', ')})`
+  },
   mdToHtml: (node, args) => {
     node.lexEnv.ctxFile.addImport('mdToHtml', null, 'jome-lib/mdToHtml')
     return `mdToHtml(${(args).join(', ')})`

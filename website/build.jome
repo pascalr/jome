@@ -21,6 +21,9 @@ of the source file.
 #compile './views/test.jome', '../docs/test/index.html'
 */
 
+#compile(#./js/ex_vanilla.js.jome, :force)
+// TODO: Copy to docs
+
 #build(#./views/examples.html.jome, #../docs/ex/index.html, :force)
 #build(#./views/test.html.jome, #../docs/test/index.html, :force)
 #build(#./views/librairies.html.jome, #../docs/lib/index.html, :force)

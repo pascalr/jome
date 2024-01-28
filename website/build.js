@@ -1,6 +1,8 @@
+const compile = require("jome-lib/compile");
 const build = require("jome-lib/build");
 module.exports = (f) => {
   let force = f;
+  compile(path.join(__dirname, "js/ex_vanilla.js.jome"), { force: force });
   build(
     path.join(__dirname, "views/examples.html.jome"),
     path.join(__dirname, "../docs/ex/index.html"),

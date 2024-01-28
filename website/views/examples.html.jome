@@ -3,6 +3,21 @@
 
 import &Webpage from '../src/webpage.jomm'
 
+/*
+There are many ways to group code.
+You can decide to divide your code into html, css, and js.
+You can also divide your code into components which have the 3 like in svelte.
+It's just an opinion, there is no wrong way here.
+
+Personally I think a mixture of both worlds is best.
+It's nice to abstract and share some code between components.
+And it's nice to define code only for a particular component.
+
+By spliting into different files, it's more easy because you simply write different files and incorporate them.
+
+But how do I write components? In different files too...
+*/
+
 //def printExample(result along source along code)  
 def printExample(result)  
   // TODO: Add syntax highlighting without using md
