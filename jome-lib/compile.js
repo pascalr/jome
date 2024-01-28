@@ -8,8 +8,8 @@ const compileJomeFile = require('./lib/compile_jome_file.js')
  * TODO: Write the async version. Rename this one compileSync
  */
 function compile(srcFile, options) {
-  if (!srcFile.endsWith('.jome')) {
-    throw new Error("Can't #compile a file with .jome extension.")
+  if (!srcFile.endsWith('.jome') && !srcFile.endsWith('.jomm')) {
+    throw new Error("Can't #compile a file without .jome or .jomm extension.")
   }
   let destFile = srcFile.slice(0, -5) + '.js'
   if (!options.force) {
