@@ -41,6 +41,23 @@ let content = <md>
 
   <%s <jome-ex>#log "Hello, world!"</jome-ex> %>
 
+  <h3 id="react-component">React component</h3>
+
+  ```jome
+  import React, { useState } from 'react';
+
+  const Counter = () => {
+    // Define state variable 'count' with initial value 0 and a function 'setCount' to update it
+    const [count, setCount] = useState(0);
+
+    return <react>
+      <button onClick={setCount(count+1)}>
+        Clicked {count} {count === 1 ? 'time' : 'times'}
+      </button>
+    </react>
+  };
+  ```
+
   <h3 id="html-library">Html library</h3>
   
   ```jome
