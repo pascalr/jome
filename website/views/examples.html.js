@@ -25,15 +25,28 @@ module.exports = () => {
     </button>
   };`;
   let content = mdToHtml(`
-  ## Jome examples
+  # Jome examples
 
-  <h3 id="hello-world">Hello world</h3>
+  TODO: For hello world and the counter, write show the code for vanilla, web components, react, vue, angular, svelte, ...
+  Show the code 75% of the space at the left, and 25% the simple counter button on the right (or Hello world message)
+
+  <h2 id="hello-world">Hello world</h3>
 
   83e12e01e1210c36810087d76fbcec01
 
   <h3>Vanilla js</h3>
 
-  <div id="ex-vanilla-js"></div>
+  <div id="ex-vanilla-hello"></div>
+
+  ## Counter
+
+  A simple button that when you click on it it increments. "Clicked 2 times"
+
+  <h3>Vanilla js</h3>
+
+  <button id="ex-vanilla-counter">Clicked 0 times</button>
+
+  <h3>Web components</h3>
 
   <h3 id="react-component">React component</h3>
 

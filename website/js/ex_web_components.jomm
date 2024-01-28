@@ -1,0 +1,33 @@
+// This is to learn web components, I don't know them at all
+// But they don't sound so nice: https://dev.to/richharris/why-i-don-t-use-web-components-2cia
+// But see also comments that provide counter arguments
+
+// Tabs using web components: https://googlechromelabs.github.io/howto-components/howto-tabs/
+
+// Define the ClickCounter web component
+class ClickCounter extends HTMLElement
+  super();
+
+  // Create a shadow root
+  let shadow = this.attachShadow({ mode: 'open' });
+
+  // Create a button and a count variable
+  let button = document.createElement('button');
+  let count = 0;
+
+  // Update the button text and count when clicked
+  button.addEventListener 'click' do
+    count += 1
+    this.updateButtonText(button, count);
+  end
+
+  // Initial button text setup
+  this.updateButtonText(button, count);
+
+  // Append the button to the shadow DOM
+  shadow.appendChild(button);
+
+  def updateButtonText(button, count)
+    button.textContent = `Clicked ${count} ${count === 1 ? 'time' : 'times'}`;
+  end
+end
