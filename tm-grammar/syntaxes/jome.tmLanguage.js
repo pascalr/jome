@@ -20,7 +20,7 @@ function PATTERN_SCRIPT(name, sourceTagName, fixmeTmp) {
     begin: `\\<${name}(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>`,
     end: `\\<\\/${name}\\>`,
     beginCaptures: { 0: { name: "meta.script-params.jome", patterns: [{ include: "#script-params" }] } },
-    endCaptures: { 0: { name: "punctuation.definition.template-expression.end.punctuation.script.js.close" } },
+    endCaptures: { 0: { patterns: [{ include: "#tag-end" }] } },
     name: `meta.embedded.block.${fixmeTmp}`,
     contentName: "raw",
     patterns: [{ include: sourceTagName }]
@@ -919,22 +919,12 @@ let grammar = {
       ]
     },
     "tag-end": {
-      patterns: [
-        {
-          match: "(\\<\\/)([a-zA-Z]\\w*(?:-\\w+)*)(\\>)",
-          captures: {
-            1: {
-              name: "punctuation.definition.tag.begin.jome"
-            },
-            2: {
-              name: "entity.name.tag.jome"
-            },
-            3: {
-              name: "punctuation.definition.tag.end.jome"
-            }
-          }
-        }
-      ]
+      match: "(\\<\\/)([a-zA-Z]\\w*(?:-\\w+)*)(\\>)",
+      captures: {
+        1: { name: "punctuation.definition.tag.begin.jome" },
+        2: { name: "entity.name.tag.jome" },
+        3: { name: "punctuation.definition.tag.end.jome" }
+      }
     },
     tag: {
       begin: "\\<([a-zA-Z]\\w*(?:-\\w+)*)(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",

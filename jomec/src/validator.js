@@ -158,13 +158,15 @@ function validateHeredoc(node) {
     throw new Error(`Internal error. An heredoc should always start with token of type meta.script-params.jome. Was ${node.parts[0]?.type}`)
   }
   let openingTagName = node.parts[0].parts[1].raw
-  let closingTagName = node.parts[node.parts.length-1].raw.slice(2,-1)
+  let closingTagName = node.parts[node.parts.length-2].raw
   if (openingTagName !== closingTagName) {
     throw new Error(`Internal error. Heredoc should always have a matching closing tage. Opening: ${openingTagName}. Closing: ${closingTagName}`)
   }
-  let content = compileTokenRaw(node.parts.slice(1,node.parts.length-1))
+  let content = compileTokenRaw(node.parts.slice(1,node.parts.length-3))
   node.data = {content, tagName: openingTagName}
 }
+
+// FIXME: Merge validateHeredoc and validateTag, they should be the same. Heredoc is the old version here
 
 function validateTag(node) { // A generic version of the heredoc. It is not yet clear how to call those things.
   if (node.type !== "meta.tag.jome") {

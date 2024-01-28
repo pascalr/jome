@@ -1332,22 +1332,18 @@
       ]
     },
     "tag-end": {
-      "patterns": [
-        {
-          "match": "(\\<\\/)([a-zA-Z]\\w*(?:-\\w+)*)(\\>)",
-          "captures": {
-            "1": {
-              "name": "punctuation.definition.tag.begin.jome"
-            },
-            "2": {
-              "name": "entity.name.tag.jome"
-            },
-            "3": {
-              "name": "punctuation.definition.tag.end.jome"
-            }
-          }
+      "match": "(\\<\\/)([a-zA-Z]\\w*(?:-\\w+)*)(\\>)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.jome"
+        },
+        "2": {
+          "name": "entity.name.tag.jome"
+        },
+        "3": {
+          "name": "punctuation.definition.tag.end.jome"
         }
-      ]
+      }
     },
     "tag": {
       "begin": "\\<([a-zA-Z]\\w*(?:-\\w+)*)(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
@@ -1394,7 +1390,11 @@
           },
           "endCaptures": {
             "0": {
-              "name": "punctuation.definition.template-expression.end.punctuation.script.js.close"
+              "patterns": [
+                {
+                  "include": "#tag-end"
+                }
+              ]
             }
           },
           "name": "meta.embedded.block.javascript",
@@ -1420,7 +1420,11 @@
           },
           "endCaptures": {
             "0": {
-              "name": "punctuation.definition.template-expression.end.punctuation.script.js.close"
+              "patterns": [
+                {
+                  "include": "#tag-end"
+                }
+              ]
             }
           },
           "name": "meta.embedded.block.markdown",
@@ -1446,7 +1450,11 @@
           },
           "endCaptures": {
             "0": {
-              "name": "punctuation.definition.template-expression.end.punctuation.script.js.close"
+              "patterns": [
+                {
+                  "include": "#tag-end"
+                }
+              ]
             }
           },
           "name": "meta.embedded.block.shell",
@@ -1472,7 +1480,11 @@
           },
           "endCaptures": {
             "0": {
-              "name": "punctuation.definition.template-expression.end.punctuation.script.js.close"
+              "patterns": [
+                {
+                  "include": "#tag-end"
+                }
+              ]
             }
           },
           "name": "meta.embedded.block.css",
@@ -1498,7 +1510,11 @@
           },
           "endCaptures": {
             "0": {
-              "name": "punctuation.definition.template-expression.end.punctuation.script.js.close"
+              "patterns": [
+                {
+                  "include": "#tag-end"
+                }
+              ]
             }
           },
           "name": "meta.embedded.block.html",
