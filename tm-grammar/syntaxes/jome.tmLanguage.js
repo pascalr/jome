@@ -1,10 +1,20 @@
 const fs = require('fs');
 const path = require('path');
 
-let REGEX_VARIABLE = "[A-Za-z_$]\\w*" // FIXME: Accents
+const REGEX_CLASS_NAME = "[A-Za-z_$]\\w*" // FIXME: Accents
+const REGEX_VARIABLE = "[A-Za-z_$]\\w*" // FIXME: Accents
+
+const REGEX_INLINE_STRING = "(['\"`])(.*?)\\1"
+
 let MATCH_VARIABLE = {
   match: REGEX_VARIABLE,
   name: "variable.other.jome"
+}
+
+function match(regex, name) {
+  return {
+    match: regex, name
+  }
 }
 
 let grammar = {
@@ -22,10 +32,7 @@ let grammar = {
   repository: {
     "import-identifier": {
       patterns: [
-        {
-          match: "&\\w+",
-          name: "entity.name.class.jome"
-        },
+        {match: `&${REGEX_CLASS_NAME}`, name: "entity.name.class.jome"},
         MATCH_VARIABLE
       ]
     },
@@ -33,38 +40,26 @@ let grammar = {
       patterns: [
         {
           name: "meta.statement.import.jome",
-          begin: "^(import) ?(&?\\w+)?",
+          begin: `^(import) ?(&?${REGEX_VARIABLE})?`,
           beginCaptures: {
-            1: {
-              name: "keyword.control.jome"
-            },
+            1: { name: "keyword.control.jome" },
             2: {
               name: "variable.other.default-import.jome",
               patterns: [
-                {
-                  include: "#import-identifier"
-                }
+                { include: "#import-identifier" }
               ]
             }
           },
           end: "\r\n|\n|$",
           patterns: [
-            {
-              match: "\\s+"
-            },
+            { match: "\\s+" },
             {
               name: "meta.namespace-import.jome",
-              match: "(\\*) (as) (\\w+)",
+              match: `(\\*) (as) (${REGEX_VARIABLE})`,
               captures: {
-                1: {
-                  name: "constant.language.import-export-all.jome"
-                },
-                2: {
-                  name: "keyword.control.jome"
-                },
-                3: {
-                  name: "variable.other.namespace-import.jome"
-                }
+                1: { name: "constant.language.import-export-all.jome" },
+                2: { name: "keyword.control.jome" },
+                3: { name: "variable.other.namespace-import.jome" }
               }
             },
             {

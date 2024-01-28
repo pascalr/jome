@@ -18,7 +18,7 @@
     "import-identifier": {
       "patterns": [
         {
-          "match": "&\\w+",
+          "match": "&[A-Za-z_$]\\w*",
           "name": "entity.name.class.jome"
         },
         {
@@ -31,7 +31,7 @@
       "patterns": [
         {
           "name": "meta.statement.import.jome",
-          "begin": "^(import) ?(&?\\w+)?",
+          "begin": "^(import) ?(&?[A-Za-z_$]\\w*)?",
           "beginCaptures": {
             "1": {
               "name": "keyword.control.jome"
@@ -52,7 +52,7 @@
             },
             {
               "name": "meta.namespace-import.jome",
-              "match": "(\\*) (as) (\\w+)",
+              "match": "(\\*) (as) ([A-Za-z_$]\\w*)",
               "captures": {
                 "1": {
                   "name": "constant.language.import-export-all.jome"
