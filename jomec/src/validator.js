@@ -411,10 +411,14 @@ const VALIDATORS = {
     list.forEach(item => {
       if (item.type === 'meta.named-imports.jome') {
         filterCommas(filterSpaces(item.parts)).forEach(namedImport => {
-          if (namedImport.type !== 'variable.other.named-import.jome') {
+          if (namedImport.type === 'variable.other.named-import.jome') {
+            namedImports.push(namedImport.raw)
+          } else if (namedImport.type === 'meta.import-alias.jome') {
+            throw new Error("TODO 98hr92gh9du23")
+            // namedImports.push(namedImport.raw)
+          } else {
             throw new Error("sfj9234hr9h239rhrf923h3r")
           }
-          namedImports.push(namedImport.raw)
         })
         //   } else if (imp.type === 'meta.import-alias.jome') {
         //     throw new Error("TODO: import {foo as bar} syntax")
