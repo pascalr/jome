@@ -69,6 +69,10 @@ let content = <md>
 
   <%s <jome-ex>#log "Hello, world!"</jome-ex> %>
 
+  <h3>Vanilla js</h3>
+
+  <div id="ex-vanilla-js"></div>
+
   <h3 id="react-component">React component</h3>
 
   ```jome
@@ -178,6 +182,7 @@ let content = <md>
   ))
   ```
 
+  <script src="<%= ROOT %>/js/ex_vanilla.js"></script>
 </md>
 
 return Webpage('Jome examples', content).render()

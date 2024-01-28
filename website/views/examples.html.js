@@ -31,6 +31,10 @@ module.exports = () => {
 
   83e12e01e1210c36810087d76fbcec01
 
+  <h3>Vanilla js</h3>
+
+  <div id="ex-vanilla-js"></div>
+
   <h3 id="react-component">React component</h3>
 
   \`\`\`jome
@@ -139,7 +143,8 @@ module.exports = () => {
     <sh>sqlite3 -header -csv < % = ARGV[1] % > "select * from < % = table % >;" > < % = table % >.csv</sh>
   ))
   \`\`\`
-`).replace(
+
+  <script src="${ROOT}/js/ex_vanilla.js"></script>`).replace(
     "83e12e01e1210c36810087d76fbcec01",
     printExample('#log "Hello, world!"')
   );
