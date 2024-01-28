@@ -37,7 +37,11 @@ forall jome-ex wrap printExample end
 
 // def tabbedContent(contentByTitle)
 //   let tabs = <div>
-//     <%= contentByTitle.#keys.map(title => <div></div>) %>
+//     <%= contentByTitle.#keys.map(title => <div><%= title %></div>) %>
+//   </div>
+//   return <div class="tabbed-content">
+//     <%= tabs %>
+//     <%= contentByTitle.#values.map(content => <div><%= content %></div>) %>
 //   </div>
 // end
   // <div class="tabbed-content">

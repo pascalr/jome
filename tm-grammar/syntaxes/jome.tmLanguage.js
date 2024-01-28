@@ -914,17 +914,17 @@ let grammar = {
         {
           name: "meta.string-template-literal.jome",
           begin: "<%=",
-          beginCaptures: { 0: { name: "punctuation.definition.template-expression.begin.jome" } },
+          beginCaptures: { 0: { name: "punctuation.definition.tag-literal.begin.jome" } },
           end: "%>",
-          endCaptures: { 0: { name: "punctuation.definition.template-expression.end.jome" } },
+          endCaptures: { 0: { name: "punctuation.definition.tag-literal.end.jome" } },
           patterns: [{ include: "#expression" }]
         },
         {
           name: "meta.string-template-literal.jome",
           begin: "<%s",
-          beginCaptures: { 0: { name: "punctuation.definition.template-expression.begin.jome" } },
+          beginCaptures: { 0: { name: "punctuation.definition.tag-literal.begin.jome" } },
           end: "%>",
-          endCaptures: { 0: { name: "punctuation.definition.template-expression.end.jome" } },
+          endCaptures: { 0: { name: "punctuation.definition.tag-literal.end.jome" } },
           patterns: [{ include: "#expression" }]
         },
       ]
@@ -935,7 +935,8 @@ let grammar = {
       end: "(\\<\\/)(\\1)(\\>)",
       endCaptures: { 0: { patterns: [{ include: "#tag-end" }] } },
       name: "meta.tag.jome",
-      contentName: "raw"
+      contentName: "raw",
+      patterns: [{ include: "#tag-literal" }],
     },
     format: {
       match: "(?<=\"|'|>|\\w)(%:?(:\\#)?\\w+)+",

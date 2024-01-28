@@ -1334,6 +1334,50 @@
         }
       }
     },
+    "tag-literal": {
+      "patterns": [
+        {
+          "name": "meta.string-template-literal.jome",
+          "begin": "<%=",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.tag-literal.begin.jome"
+            }
+          },
+          "end": "%>",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.tag-literal.end.jome"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        },
+        {
+          "name": "meta.string-template-literal.jome",
+          "begin": "<%s",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.tag-literal.begin.jome"
+            }
+          },
+          "end": "%>",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.tag-literal.end.jome"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        }
+      ]
+    },
     "tag": {
       "begin": "\\<([a-zA-Z]\\w*(?:-\\w+)*)(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
       "beginCaptures": {
@@ -1356,7 +1400,12 @@
         }
       },
       "name": "meta.tag.jome",
-      "contentName": "raw"
+      "contentName": "raw",
+      "patterns": [
+        {
+          "include": "#tag-literal"
+        }
+      ]
     },
     "format": {
       "match": "(?<=\"|'|>|\\w)(%:?(:\\#)?\\w+)+",
