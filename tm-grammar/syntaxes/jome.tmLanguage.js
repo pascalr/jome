@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // TODO: Use \\p{L} ?
+// Use [:alnum:] ?
 const REGEX_CLASS_NAME = "[A-Za-z_$]\\w*" // FIXME: Accents
 // FIXME: REGEX_CLASS_NAME and REGEX_VARIABLE should be the same otherwise the patterns must be modified
 // I don't know if they are the same, but I think so.
@@ -1038,6 +1039,7 @@ let grammar = {
         { include: "#block-comment" }
       ]
     },
+    // This was copy pasted from JavaScript.tmLanguage.json
     regex: {
       patterns: [
         {
