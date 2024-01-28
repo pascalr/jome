@@ -10,4 +10,24 @@ document.addEventListener "DOMContentLoaded" do
     count = count + 1
     button.textContent = "Clicked {count} {count === 1 ? 'time' : 'times'}"
   end
+
+  // TODO: A tabbed content
+  /*
+  <div id="tabbed-content-will-be-here">
+    <div>
+      <div class='selected'>Vanilla</div>
+      <div>Web components</div>
+      <div>React</div>
+      <div>Vue.js</div>
+      <div>Angular</div>
+      <div>Svelte</div>
+    </div>
+    <div>First tab content</div>
+    <div hidden>Second tab content</div>
+    <div hidden>Third tab content</div>
+    <div hidden>Fourth tab content</div>
+    <div hidden>Fifth tab content</div>
+    <div hidden>Sixth tab content</div>
+  </div>
+  */
 end
