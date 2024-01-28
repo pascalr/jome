@@ -22,7 +22,7 @@
           "name": "entity.name.class.jome"
         },
         {
-          "match": "\\w+",
+          "match": "[A-Za-z_$]\\w*",
           "name": "variable.other.jome"
         }
       ]
@@ -453,7 +453,7 @@
       "patterns": [
         {
           "name": "meta.declaration.jome",
-          "match": "\\b(let|var)\\b\\s*(\\w+)?",
+          "match": "\\b(let|var)\\b\\s*([A-Za-z_$]\\w*)?",
           "captures": {
             "1": {
               "name": "keyword.control.declaration.jome"
@@ -840,7 +840,7 @@
     "argument": {
       "patterns": [
         {
-          "match": "([A-Za-z]\\w*)\\s*(:)\\s*([A-Za-z]\\w*)",
+          "match": "([A-Za-z_$]\\w*)\\s*(:)\\s*([A-Za-z]\\w*)",
           "captures": {
             "1": {
               "name": "variable.other.jome"
@@ -888,8 +888,8 @@
           "match": "\\$\\w+"
         },
         {
-          "name": "variable.other.jome",
-          "match": "[A-Za-z]\\w*"
+          "match": "[A-Za-z_$]\\w*",
+          "name": "variable.other.jome"
         }
       ]
     },

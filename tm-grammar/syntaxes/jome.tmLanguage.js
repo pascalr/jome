@@ -1,6 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 
+let REGEX_VARIABLE = "[A-Za-z_$]\\w*" // FIXME: Accents
+let MATCH_VARIABLE = {
+  match: REGEX_VARIABLE,
+  name: "variable.other.jome"
+}
+
 let grammar = {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   name: "Jome",
@@ -10,12 +16,8 @@ let grammar = {
     ".jomm"
   ],
   patterns: [
-    {
-      include: "#statement"
-    },
-    {
-      include: "#expression"
-    }
+    {include: "#statement"},
+    {include: "#expression"}
   ],
   repository: {
     "import-identifier": {
@@ -24,10 +26,7 @@ let grammar = {
           match: "&\\w+",
           name: "entity.name.class.jome"
         },
-        {
-          match: "\\w+",
-          name: "variable.other.jome"
-        }
+        MATCH_VARIABLE
       ]
     },
     statement: {
@@ -456,7 +455,7 @@ let grammar = {
       patterns: [
         {
           name: "meta.declaration.jome",
-          match: "\\b(let|var)\\b\\s*(\\w+)?",
+          match: `\\b(let|var)\\b\\s*(${REGEX_VARIABLE})?`,
           captures: {
             1: {
               name: "keyword.control.declaration.jome"
@@ -843,7 +842,7 @@ let grammar = {
     argument: {
       patterns: [
         {
-          match: "([A-Za-z]\\w*)\\s*(:)\\s*([A-Za-z]\\w*)",
+          match: `(${REGEX_VARIABLE})\\s*(:)\\s*([A-Za-z]\\w*)`,
           captures: {
             1: {
               name: "variable.other.jome"
@@ -890,10 +889,7 @@ let grammar = {
           name: "variable.other.global.jome",
           match: "\\$\\w+"
         },
-        {
-          name: "variable.other.jome",
-          match: "[A-Za-z]\\w*"
-        }
+        MATCH_VARIABLE
       ]
     },
     caller: {
