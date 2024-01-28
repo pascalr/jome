@@ -42,8 +42,8 @@ let grammar = {
   repository: {
     "import-identifier": {
       patterns: [
-        {match: `&${REGEX_CLASS_NAME}`, name: "entity.name.class.jome"},
-        {include: "#normal-variable"}
+        { match: `&${REGEX_CLASS_NAME}`, name: "entity.name.class.jome" },
+        { include: "#variable" }
       ]
     },
     statement: {
@@ -483,15 +483,6 @@ let grammar = {
       ]
     },
     variable: {
-      patterns: [
-        {
-          name: "variable.other.global.jome",
-          match: "\\$\\w+"
-        },
-        {include: "#normal-variable"}
-      ]
-    },
-    "normal-variable": {
       match: REGEX_VARIABLE,
       name: "variable.other.jome"
     },

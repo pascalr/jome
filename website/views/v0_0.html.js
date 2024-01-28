@@ -17,7 +17,7 @@ module.exports = () => {
 
   Example Jome code: TODO: Make this like the examples so you can click see compiled and result
 
-  Here is some code to show what Jome looks like. You can look at the [examples](${global.g_URL}/examples) page to see more.
+  Here is some code to show what Jome looks like. You can look at the [examples](${ROOT}/examples) page to see more.
 
   \`\`\`jome
   with
@@ -152,7 +152,7 @@ module.exports = () => {
 
   The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.
 
-  For the complete list of utils: see the [utils page](${global.g_URL}/utils).
+  For the complete list of utils: see the [utils page](${ROOT}/utils).
 
   \`\`\`jome
   // A constant

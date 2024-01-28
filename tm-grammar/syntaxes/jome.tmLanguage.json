@@ -22,7 +22,7 @@
           "name": "entity.name.class.jome"
         },
         {
-          "include": "#normal-variable"
+          "include": "#variable"
         }
       ]
     },
@@ -798,17 +798,6 @@
       ]
     },
     "variable": {
-      "patterns": [
-        {
-          "name": "variable.other.global.jome",
-          "match": "\\$\\w+"
-        },
-        {
-          "include": "#normal-variable"
-        }
-      ]
-    },
-    "normal-variable": {
       "match": "[A-Za-z_$]\\w*",
       "name": "variable.other.jome"
     },

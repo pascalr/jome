@@ -246,7 +246,7 @@ module.exports = () => {
 
   The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.
 
-  For the complete list of utils: see the [utils page](${global.g_URL}/utils).
+  For the complete list of utils: see the [utils page](${ROOT}/utils).
 
   \`\`\`jome
   // A constant
