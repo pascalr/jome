@@ -166,117 +166,43 @@ let grammar = {
     },
     expression: {
       patterns: [
-        {
-          include: "#comment"
-        },
-        {
-          include: "#if_block"
-        },
-        {
-          include: "#interface"
-        },
-        {
-          include: "#class"
-        },
-        {
-          include: "#symbol"
-        },
-        {
-          include: "#format"
-        },
-        {
-          include: "#function"
-        },
-        {
-          include: "#do_end"
-        },
-        {
-          include: "#for-tag"
-        },
-        {
-          include: "#chain-bloc"
-        },
-        {
-          include: "#type_def"
-        },
-        {
-          include: "#regex"
-        },
-        {
-          include: "#keywords"
-        },
-        {
-          include: "#declaration"
-        },
-        {
-          include: "#with-args"
-        },
-        {
-          include: "#vbars-args"
-        },
-        {
-          include: "#def"
-        },
-        {
-          include: "#paren-expression"
-        },
-        {
-          include: "#strings"
-        },
-        {
-          include: "#scripts"
-        },
-        {
-          include: "#tag"
-        },
-        {
-          include: "#arrow"
-        },
-        {
-          include: "#caller"
-        },
-        {
-          include: "#state-var"
-        },
-        {
-          include: "#operators"
-        },
-        {
-          include: "#parameter"
-        },
-        {
-          include: "#attribute"
-        },
-        {
-          include: "#square-bracket"
-        },
-        {
-          include: "#constants"
-        },
-        {
-          include: "#inline-utility"
-        },
-        {
-          include: "#function_call"
-        },
-        {
-          include: "#utilities"
-        },
-        {
-          include: "#support-items"
-        },
-        {
-          include: "#variable"
-        },
-        {
-          include: "#getter"
-        },
-        {
-          include: "#block-array"
-        },
-        {
-          include: "#block"
-        },
+        { include: "#comment" },
+        { include: "#if_block" },
+        { include: "#interface" },
+        { include: "#class" },
+        { include: "#symbol" },
+        { include: "#format" },
+        { include: "#function" },
+        { include: "#do_end" },
+        { include: "#for-tag" },
+        { include: "#chain-bloc" },
+        { include: "#type_def" },
+        { include: "#regex" },
+        { include: "#keywords" },
+        { include: "#declaration" },
+        { include: "#with-args" },
+        { include: "#vbars-args" },
+        { include: "#def" },
+        { include: "#paren-expression" },
+        { include: "#strings" },
+        { include: "#scripts" },
+        { include: "#tag" },
+        { include: "#arrow" },
+        { include: "#caller" },
+        { include: "#state-var" },
+        { include: "#operators" },
+        { include: "#parameter" },
+        { include: "#attribute" },
+        { include: "#square-bracket" },
+        { include: "#constants" },
+        { include: "#inline-utility" },
+        { include: "#function_call" },
+        { include: "#utilities" },
+        { include: "#support-items" },
+        { include: "#variable" },
+        { include: "#getter" },
+        { include: "#block-array" },
+        { include: "#block"},
         {
           match: ";",
           name: "punctuation.terminator.statement.jome"
