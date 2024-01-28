@@ -21,8 +21,12 @@ of the source file.
 #compile './views/test.jome', '../docs/test/index.html'
 */
 
-#compile(#./js/ex_vanilla.jomm, :force)
-// TODO: Copy to docs
+// FIXME: There should be an exclamation mark, or better yet cp should be nested inside compile
+// #compile(#./js/ex_vanilla.jomm, :force).then do
+//   #cp(#./js/ex_vanilla.js, #../docs/js/ex_vanilla.js)
+// end
+#compile #./js/ex_vanilla.jomm, :force
+#cp! #./js/ex_vanilla.js, #../docs/js/ex_vanilla.js
 
 #build(#./views/examples.html.jome, #../docs/ex/index.html, :force)
 #build(#./views/test.html.jome, #../docs/test/index.html, :force)

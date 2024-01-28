@@ -144,6 +144,7 @@ function validateFuncCall(node, hasDot) {
     args.push(parts[parts.length-1])
     parts = parts.slice(0, -1)
   }
+  parts = filterNewlines(parts)
   ensureListSeparatedByCommas(node, parts)
   args = [...parts.filter((e, i) => i % 2 === 0), ...args]
 

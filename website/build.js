@@ -1,8 +1,13 @@
 const compile = require("jome-lib/compile");
+const fs = require("fs");
 const build = require("jome-lib/build");
 module.exports = (f) => {
   let force = f;
   compile(path.join(__dirname, "js/ex_vanilla.jomm"), { force: force });
+  fs.copyFileSync(
+    path.join(__dirname, "js/ex_vanilla.js"),
+    path.join(__dirname, "../docs/js/ex_vanilla.js")
+  );
   build(
     path.join(__dirname, "views/examples.html.jome"),
     path.join(__dirname, "../docs/ex/index.html"),
