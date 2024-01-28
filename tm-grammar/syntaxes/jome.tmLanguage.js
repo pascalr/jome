@@ -19,7 +19,7 @@ function PATTERN_SCRIPT(name, sourceTagName, fixmeTmp) {
   return {
     begin: `\\<${name}(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>`,
     end: `\\<\\/${name}\\>`,
-    beginCaptures: { 0: { name: "meta.script-params.jome", patterns: [{ include: "#script-params" }] } },
+    beginCaptures: { 0: { patterns: [{ include: "#script-params" }] } },
     endCaptures: { 0: { patterns: [{ include: "#tag-end" }] } },
     name: `meta.embedded.block.${fixmeTmp}`,
     contentName: "raw",

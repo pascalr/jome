@@ -154,15 +154,18 @@ function validateHeredoc(node) {
   if (!node.type.startsWith("meta.embedded.block")) {
     throw new Error(`Internal error. An heredoc should always start with type meta.embedded.block. Was ${node.type}`)
   }
-  if (!node.parts[0]?.type.startsWith("meta.script-params.jome")) {
-    throw new Error(`Internal error. An heredoc should always start with token of type meta.script-params.jome. Was ${node.parts[0]?.type}`)
+  ensureStartType(node, 'punctuation.definition.tag.begin.jome')
+  if (node.parts[1].type !== "entity.name.tag.jome") {
+    throw new Error(`Internal error. A tag have a name of type entity.name.tag.jome. Was ${node.parts[1].type}`)
   }
-  let openingTagName = node.parts[0].parts[1].raw
+  let openingTagName = node.parts[1].raw
   let closingTagName = node.parts[node.parts.length-2].raw
   if (openingTagName !== closingTagName) {
     throw new Error(`Internal error. Heredoc should always have a matching closing tage. Opening: ${openingTagName}. Closing: ${closingTagName}`)
   }
-  let content = compileTokenRaw(node.parts.slice(1,node.parts.length-3))
+  let contentStartIdx = node.parts.findIndex(p => p.type === 'punctuation.definition.tag.end.jome')+1
+  // TODO: Parse attributes
+  let content = compileTokenRaw(node.parts.slice(contentStartIdx,node.parts.length-3))
   node.data = {content, tagName: openingTagName}
 }
 
