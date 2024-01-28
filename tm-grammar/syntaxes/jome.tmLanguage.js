@@ -130,35 +130,9 @@ let grammar = {
                     }
                   ]
                 },
-                {
-                  match: ",",
-                  name: "punctuation.separator.delimiter.jome"
-                },
-                {
-                  include: "#block-comment"
-                }
+                { include: "#comma" },
+                { include: "#block-comment" },
               ]
-            }
-          ]
-        },
-        {
-          name: "meta.statement.require.jome",
-          begin: "^require|^requiert",
-          beginCaptures: {
-            0: {
-              name: "keyword.control.jome"
-            }
-          },
-          end: "\r\n|\n|$",
-          patterns: [
-            {
-              include: "#keywords"
-            },
-            {
-              include: "#strings"
-            },
-            {
-              include: "#variable"
             }
           ]
         }
@@ -203,14 +177,8 @@ let grammar = {
         { include: "#getter" },
         { include: "#block-array" },
         { include: "#block"},
-        {
-          match: ";",
-          name: "punctuation.terminator.statement.jome"
-        },
-        {
-          match: ",",
-          name: "punctuation.separator.delimiter.jome"
-        }
+        { include: "#semicolon" },
+        { include: "#comma" },
       ]
     },
     "support-items": {
@@ -261,6 +229,8 @@ let grammar = {
         }
       ]
     },
+    comma: { patterns: [{ match: ",", name: "punctuation.separator.delimiter.jome" }] },
+    semicolon: { patterns: [{ match: ";", name: "punctuation.terminator.statement.jome" }] },
     symbol: {
       patterns: [
         {
@@ -1215,13 +1185,8 @@ let grammar = {
             }
           }
         },
-        {
-          match: ",",
-          name: "punctuation.separator.delimiter.jome"
-        },
-        {
-          include: "#expression"
-        }
+        { include: "#comma" },
+        { include: "#expression" }
       ]
     },
     "block-array": {
@@ -1770,3 +1735,29 @@ let grammar = {
 
 let filepath = path.join(__dirname, 'jome.tmLanguage.json')
 fs.writeFileSync(filepath, JSON.stringify(grammar, null, 2), 'utf-8');
+
+
+
+
+
+// {
+//   name: "meta.statement.require.jome",
+//   begin: "^require|^requiert",
+//   beginCaptures: {
+//     0: {
+//       name: "keyword.control.jome"
+//     }
+//   },
+//   end: "\r\n|\n|$",
+//   patterns: [
+//     {
+//       include: "#keywords"
+//     },
+//     {
+//       include: "#strings"
+//     },
+//     {
+//       include: "#variable"
+//     }
+//   ]
+// }

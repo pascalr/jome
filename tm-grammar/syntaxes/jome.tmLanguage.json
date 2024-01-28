@@ -126,34 +126,12 @@
                   ]
                 },
                 {
-                  "match": ",",
-                  "name": "punctuation.separator.delimiter.jome"
+                  "include": "#comma"
                 },
                 {
                   "include": "#block-comment"
                 }
               ]
-            }
-          ]
-        },
-        {
-          "name": "meta.statement.require.jome",
-          "begin": "^require|^requiert",
-          "beginCaptures": {
-            "0": {
-              "name": "keyword.control.jome"
-            }
-          },
-          "end": "\r\n|\n|$",
-          "patterns": [
-            {
-              "include": "#keywords"
-            },
-            {
-              "include": "#strings"
-            },
-            {
-              "include": "#variable"
             }
           ]
         }
@@ -273,12 +251,10 @@
           "include": "#block"
         },
         {
-          "match": ";",
-          "name": "punctuation.terminator.statement.jome"
+          "include": "#semicolon"
         },
         {
-          "match": ",",
-          "name": "punctuation.separator.delimiter.jome"
+          "include": "#comma"
         }
       ]
     },
@@ -327,6 +303,22 @@
         {
           "name": "keyword.other.debugger.jome",
           "match": "\\b(debugger)\\b"
+        }
+      ]
+    },
+    "comma": {
+      "patterns": [
+        {
+          "match": ",",
+          "name": "punctuation.separator.delimiter.jome"
+        }
+      ]
+    },
+    "semicolon": {
+      "patterns": [
+        {
+          "match": ";",
+          "name": "punctuation.terminator.statement.jome"
         }
       ]
     },
@@ -1289,8 +1281,7 @@
           }
         },
         {
-          "match": ",",
-          "name": "punctuation.separator.delimiter.jome"
+          "include": "#comma"
         },
         {
           "include": "#expression"
