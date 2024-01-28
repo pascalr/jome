@@ -34,6 +34,9 @@ function genImports(ctxFile, compilerOptions) {
       if (namespace) {
         let uid = ctxFile.uid()
         result += `const ${uid} = require("${jsfile}");\nconst {default: ${def || ctxFile.uid()}, ...${namespace}} = ${uid};\n`
+      } else if (def && named && named.size) {
+        let uid = ctxFile.uid()
+        result += `const ${uid} = require("${jsfile}");\nconst {default: ${def}, ${[...named].join(', ')}} = ${uid};\n`
       } else if (def) {
         result += `const ${def} = require("${jsfile}");\n`
       } else {

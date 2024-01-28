@@ -61,8 +61,8 @@ describe("Imports", () => {
   // import { export1 } from "module-name";
   // import { export1, export2 } from "module-name";
   test('Deconstructed import', () => {
-    expect(compile(`import { name } from "module-name"`)).toMatch(/const {name} = require\("module-name"\)/);
-    expect(compile(`import { name, name2 } from "module-name"`)).toMatch(/const {name, name2} = require\("module-name"\)/);
+    expect(compile(`import { name } from "module-name"`)).toMatch(/const { ?name ?} = require\("module-name"\)/);
+    expect(compile(`import { name, name2 } from "module-name"`)).toMatch(/const { ?name, name2 ?} = require\("module-name"\)/);
   })
   // import { export1 as alias1 } from "module-name";
   // import { export1, export2 as alias2, /* … */ } from "module-name";
@@ -80,7 +80,7 @@ describe("Imports", () => {
   // })
   // import defaultExport, { export1, /* … */ } from "module-name";
   test('Default import and deconstructed', () => {
-    expect(compile(`import name, { foo } from "module-name"`)).toMatch(/const \w+ = require\("module-name"\); const name = lib.default; const foo = lib.foo/);
+    expect(compile(`import name, { foo } from "module-name"`)).toMatch(/const (\w+) = require\("module-name"\);\s*const { ?default: name, foo ?} = \1;/);
   })
   // import defaultExport, * as name from "module-name";
   test('Default import and star import', () => {
