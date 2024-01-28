@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
+// TODO: Use \\p{L} ?
 const REGEX_CLASS_NAME = "[A-Za-z_$]\\w*" // FIXME: Accents
 // FIXME: REGEX_CLASS_NAME and REGEX_VARIABLE should be the same otherwise the patterns must be modified
 // I don't know if they are the same, but I think so.
@@ -145,7 +146,7 @@ let grammar = {
         { include: "#caller" },
         { include: "#state-var" },
         { include: "#operators" },
-        { include: "#parameter" },
+        // { include: "#parameter" },
         { include: "#attribute" },
         { include: "#square-bracket" },
         { include: "#constants" },
@@ -209,35 +210,15 @@ let grammar = {
         }
       ]
     },
-    comma: { patterns: [{ match: ",", name: "punctuation.separator.delimiter.jome" }] },
-    semicolon: { patterns: [{ match: ";", name: "punctuation.terminator.statement.jome" }] },
+    comma: { match: ",", name: "punctuation.separator.delimiter.jome" },
+    semicolon: { match: ";", name: "punctuation.terminator.statement.jome" },
     symbol: {
-      patterns: [
-        {
-          match: ":([\\p{L}~]\\w*)",
-          name: "variable.symbol.jome"
-        }
-      ]
+      match: `:(${REGEX_VARIABLE})`,
+      name: "variable.symbol.jome"
     },
     arrow: {
-      patterns: [
-        {
-          name: "keyword.arrow.jome",
-          match: "=>| -> "
-        }
-      ]
-    },
-    parameter: {
-      patterns: [
-        {
-          name: "support.type.property-name.parameter.optional.jome",
-          match: "\\w+\\?"
-        },
-        {
-          name: "support.type.property-name.parameter.required.jome",
-          match: "\\w+\\!"
-        }
-      ]
+      name: "keyword.arrow.jome",
+      match: "=>| -> "
     },
     "vbars-args": {
       patterns: [
@@ -454,16 +435,12 @@ let grammar = {
       ]
     },
     if_block: {
-      patterns: [
-        {
-          name: "meta.if-block.jome",
-          begin: "(?:^|\\G)\\s*\\b(if)\\b",
-          beginCaptures: { 1: { name: "keyword.control.conditional.jome" } },
-          end: "\\b(end)\\b",
-          endCaptures: { 0: { name: "keyword.control.jome" } },
-          patterns: [{ include: "#expression" }]
-        }
-      ]
+      name: "meta.if-block.jome",
+      begin: "(?:^|\\G)\\s*\\b(if)\\b",
+      beginCaptures: { 1: { name: "keyword.control.conditional.jome" } },
+      end: "\\b(end)\\b",
+      endCaptures: { 0: { name: "keyword.control.jome" } },
+      patterns: [{ include: "#expression" }]
     },
     type_def: {
       patterns: [
@@ -509,47 +486,39 @@ let grammar = {
       ]
     },
     class: {
-      patterns: [
-        {
-          name: "meta.class.jome",
-          begin: `\\b(class)\\b\\s*(${REGEX_CLASS_NAME})?`,
-          beginCaptures: {
-            1: { name: "keyword.control.jome" },
-            2: { name: "entity.name.type.class.jome" }
-          },
-          end: "\\b(end)\\b",
-          endCaptures: { 0: { name: "keyword.control.jome" } },
-          patterns: [{ include: "#expression" }]
-        }
-      ]
+      name: "meta.class.jome",
+      begin: `\\b(class)\\b\\s*(${REGEX_CLASS_NAME})?`,
+      beginCaptures: {
+        1: { name: "keyword.control.jome" },
+        2: { name: "entity.name.type.class.jome" }
+      },
+      end: "\\b(end)\\b",
+      endCaptures: { 0: { name: "keyword.control.jome" } },
+      patterns: [{ include: "#expression" }]
     },
     interface: {
+      name: "meta.interface.jome",
+      begin: "\\b(interface)\\b\\s*([a-zA-Z_]\\w*)",
+      beginCaptures: {
+        1: {
+          name: "keyword.control.jome"
+        },
+        2: {
+          name: "entity.name.type.interface.jome"
+        }
+      },
+      end: "\\b(end)\\b",
+      endCaptures: {
+        0: {
+          name: "keyword.control.jome"
+        }
+      },
       patterns: [
         {
-          name: "meta.interface.jome",
-          begin: "\\b(interface)\\b\\s*([a-zA-Z_]\\w*)",
-          beginCaptures: {
-            1: {
-              name: "keyword.control.jome"
-            },
-            2: {
-              name: "entity.name.type.interface.jome"
-            }
-          },
-          end: "\\b(end)\\b",
-          endCaptures: {
-            0: {
-              name: "keyword.control.jome"
-            }
-          },
-          patterns: [
-            {
-              include: "#argument"
-            },
-            {
-              include: "#expression"
-            }
-          ]
+          include: "#argument"
+        },
+        {
+          include: "#expression"
         }
       ]
     },
@@ -711,50 +680,36 @@ let grammar = {
       ]
     },
     "normal-variable": {
-      patterns: [{
-        match: REGEX_VARIABLE,
-        name: "variable.other.jome"
-      }]
+      match: REGEX_VARIABLE,
+      name: "variable.other.jome"
     },
     caller: {
-      patterns: [
-        {
-          name: "meta.caller.jome",
-          match: "(->)(\\w+)",
-          captures: {
-            1: {
-              name: "punctuation.arrow.jome"
-            },
-            2: {
-              name: "entity.name.function.jome"
-            }
-          }
+      name: "meta.caller.jome",
+      match: "(->)(\\w+)",
+      captures: {
+        1: {
+          name: "punctuation.arrow.jome"
+        },
+        2: {
+          name: "entity.name.function.jome"
         }
-      ]
+      }
     },
     getter: {
-      patterns: [
-        {
-          name: "meta.getter.jome",
-          match: "(\\.)(\\w+)",
-          captures: {
-            1: {
-              name: "punctuation.dot.jome"
-            },
-            2: {
-              name: "variable.other.property.jome"
-            }
-          }
+      name: "meta.getter.jome",
+      match: "(\\.)(\\w+)",
+      captures: {
+        1: {
+          name: "punctuation.dot.jome"
+        },
+        2: {
+          name: "variable.other.property.jome"
         }
-      ]
+      }
     },
     "inline-utility": {
-      patterns: [
-        {
-          name: "entity.name.function.utility-inline.jome",
-          match: "\\.#\\w+\\!?"
-        }
-      ]
+      name: "entity.name.function.utility-inline.jome",
+      match: "\\.#\\w+\\!?"
     },
     utilities: {
       patterns: [
@@ -770,27 +725,19 @@ let grammar = {
       ]
     },
     along: {
-      patterns: [
-        {
-          match: "(along)\\s*(type|unit|code|source)",
-          captures: {
-            1: {
-              name: "keyword.control.along.jome"
-            },
-            2: {
-              name: "variable.language.jome"
-            }
-          }
+      match: "(along)\\s*(type|unit|code|source)",
+      captures: {
+        1: {
+          name: "keyword.control.along.jome"
+        },
+        2: {
+          name: "variable.language.jome"
         }
-      ]
+      }
     },
     "state-var": {
-      patterns: [
-        {
-          name: "variable.other.state-var.jome",
-          match: "%\\w+"
-        }
-      ]
+      name: "variable.other.state-var.jome",
+      match: "%\\w+"
     },
     attribute: {
       patterns: [
@@ -1673,3 +1620,16 @@ fs.writeFileSync(filepath, JSON.stringify(grammar, null, 2), 'utf-8');
 //     }
 //   ]
 // }
+
+// parameter: {
+//   patterns: [
+//     {
+//       name: "support.type.property-name.parameter.optional.jome",
+//       match: "\\w+\\?"
+//     },
+//     {
+//       name: "support.type.property-name.parameter.required.jome",
+//       match: "\\w+\\!"
+//     }
+//   ]
+// },
