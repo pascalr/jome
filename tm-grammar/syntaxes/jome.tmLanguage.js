@@ -4,7 +4,12 @@ const path = require('path');
 const REGEX_CLASS_NAME = "[A-Za-z_$]\\w*" // FIXME: Accents
 const REGEX_VARIABLE = "[A-Za-z_$]\\w*" // FIXME: Accents
 
-const REGEX_INLINE_STRING = "(['\"`])(.*?)\\1"
+// // If the regex containing this regex has no group, then group number is 1.
+// // Otherwise, you have to add 1 for every group before this one.
+// function REGEX_INLINE_STRING(groupNumber=1) {
+//   return `(['"\`])(.*?)\\${groupNumber}`
+// }
+const REGEX_REGULAR_STRING = "\"[^\"]*\"|'[^']*'" // FIXME: Allow backticks and escaped quotes
 
 let MATCH_VARIABLE = {
   match: REGEX_VARIABLE,
@@ -64,7 +69,7 @@ let grammar = {
             },
             {
               name: "meta.import-file.jome",
-              match: "(from) (\"[^\"]*\"|'[^']*')",
+              match: `(from) (${REGEX_REGULAR_STRING})`,
               captures: {
                 1: {
                   name: "keyword.control.jome"
