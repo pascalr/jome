@@ -83,7 +83,7 @@
               "patterns": [
                 {
                   "name": "meta.import-alias.jome",
-                  "match": "(&?\\w+) (as) (\\w+)",
+                  "match": "(&?[A-Za-z_$]\\w*) (as) ([A-Za-z_$]\\w*)",
                   "captures": {
                     "1": {
                       "name": "variable.other.readwrite.jome",
@@ -103,7 +103,7 @@
                 },
                 {
                   "name": "meta.import-alias.jome",
-                  "match": "(\"[^\"]*\"|'[^']*') (as) (\\w+)",
+                  "match": "(\"[^\"]*\"|'[^']*') (as) ([A-Za-z_$]\\w*)",
                   "captures": {
                     "1": {
                       "name": "string.quoted.jome"
@@ -118,7 +118,7 @@
                 },
                 {
                   "name": "variable.other.named-import.jome",
-                  "match": "&?\\w+",
+                  "match": "&?[A-Za-z_$]\\w*",
                   "patterns": [
                     {
                       "include": "#import-identifier"
@@ -639,7 +639,7 @@
       "patterns": [
         {
           "name": "meta.class.jome",
-          "begin": "\\b(class)\\b\\s*([a-zA-Z_]\\w*)?",
+          "begin": "\\b(class)\\b\\s*([A-Za-z_$]\\w*)?",
           "beginCaptures": {
             "1": {
               "name": "keyword.control.jome"

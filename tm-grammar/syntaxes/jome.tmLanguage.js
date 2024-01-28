@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 const REGEX_CLASS_NAME = "[A-Za-z_$]\\w*" // FIXME: Accents
+// FIXME: REGEX_CLASS_NAME and REGEX_VARIABLE should be the same otherwise the patterns must be modified
+// I don't know if they are the same, but I think so.
 const REGEX_VARIABLE = "[A-Za-z_$]\\w*" // FIXME: Accents
 
 // // If the regex containing this regex has no group, then group number is 1.
@@ -52,9 +54,7 @@ let grammar = {
             1: { name: "keyword.control.jome" },
             2: {
               name: "variable.other.default-import.jome",
-              patterns: [
-                { include: "#import-identifier" }
-              ]
+              patterns: [{ include: "#import-identifier" }]
             }
           },
           end: "\r\n|\n|$",
@@ -73,12 +73,8 @@ let grammar = {
               name: "meta.import-file.jome",
               match: `(from) (${REGEX_REGULAR_STRING})`,
               captures: {
-                1: {
-                  name: "keyword.control.jome"
-                },
-                2: {
-                  name: "string.quoted.jome"
-                }
+                1: { name: "keyword.control.jome" },
+                2: { name: "string.quoted.jome" }
               }
             },
             {
@@ -88,47 +84,31 @@ let grammar = {
               patterns: [
                 {
                   name: "meta.import-alias.jome",
-                  match: "(&?\\w+) (as) (\\w+)",
+                  match: `(&?${REGEX_VARIABLE}) (as) (${REGEX_VARIABLE})`,
                   captures: {
                     1: {
                       name: "variable.other.readwrite.jome",
                       patterns: [
-                        {
-                          include: "#import-identifier"
-                        }
+                        { include: "#import-identifier" }
                       ]
                     },
-                    2: {
-                      name: "keyword.control.jome"
-                    },
-                    3: {
-                      name: "variable.other.readwrite.alias.jome"
-                    }
+                    2: { name: "keyword.control.jome" },
+                    3: { name: "variable.other.readwrite.alias.jome" }
                   }
                 },
                 {
                   name: "meta.import-alias.jome",
-                  match: "(\"[^\"]*\"|'[^']*') (as) (\\w+)",
+                  match: `(${REGEX_REGULAR_STRING}) (as) (${REGEX_VARIABLE})`,
                   captures: {
-                    1: {
-                      name: "string.quoted.jome"
-                    },
-                    2: {
-                      name: "keyword.control.jome"
-                    },
-                    3: {
-                      name: "variable.other.readwrite.alias.jome"
-                    }
+                    1: { name: "string.quoted.jome" },
+                    2: { name: "keyword.control.jome" },
+                    3: { name: "variable.other.readwrite.alias.jome" }
                   }
                 },
                 {
                   name: "variable.other.named-import.jome",
-                  match: "&?\\w+",
-                  patterns: [
-                    {
-                      include: "#import-identifier"
-                    }
-                  ]
+                  match: `&?${REGEX_VARIABLE}`,
+                  patterns: [{ include: "#import-identifier" }]
                 },
                 { include: "#comma" },
                 { include: "#block-comment" },
@@ -478,22 +458,10 @@ let grammar = {
         {
           name: "meta.if-block.jome",
           begin: "(?:^|\\G)\\s*\\b(if)\\b",
-          beginCaptures: {
-            1: {
-              name: "keyword.control.conditional.jome"
-            }
-          },
+          beginCaptures: { 1: { name: "keyword.control.conditional.jome" } },
           end: "\\b(end)\\b",
-          endCaptures: {
-            0: {
-              name: "keyword.control.jome"
-            }
-          },
-          patterns: [
-            {
-              include: "#expression"
-            }
-          ]
+          endCaptures: { 0: { name: "keyword.control.jome" } },
+          patterns: [{ include: "#expression" }]
         }
       ]
     },
@@ -536,11 +504,7 @@ let grammar = {
               name: "keyword.control.jome"
             }
           },
-          patterns: [
-            {
-              include: "#expression"
-            }
-          ]
+          patterns: [{ include: "#expression" }]
         }
       ]
     },
@@ -548,26 +512,14 @@ let grammar = {
       patterns: [
         {
           name: "meta.class.jome",
-          begin: "\\b(class)\\b\\s*([a-zA-Z_]\\w*)?",
+          begin: `\\b(class)\\b\\s*(${REGEX_CLASS_NAME})?`,
           beginCaptures: {
-            1: {
-              name: "keyword.control.jome"
-            },
-            2: {
-              name: "entity.name.type.class.jome"
-            }
+            1: { name: "keyword.control.jome" },
+            2: { name: "entity.name.type.class.jome" }
           },
           end: "\\b(end)\\b",
-          endCaptures: {
-            0: {
-              name: "keyword.control.jome"
-            }
-          },
-          patterns: [
-            {
-              include: "#expression"
-            }
-          ]
+          endCaptures: { 0: { name: "keyword.control.jome" } },
+          patterns: [{ include: "#expression" }]
         }
       ]
     },
@@ -615,11 +567,7 @@ let grammar = {
             }
           },
           end: "\\)",
-          patterns: [
-            {
-              include: "#expression"
-            }
-          ]
+          patterns: [{ include: "#expression" }]
         },
         {
           name: "meta.function-call.jome",
@@ -633,11 +581,7 @@ let grammar = {
             }
           },
           end: "\\)",
-          patterns: [
-            {
-              include: "#expression"
-            }
-          ]
+          patterns: [{ include: "#expression" }]
         },
         {
           name: "meta.function-call.WIP.jome",
@@ -651,11 +595,7 @@ let grammar = {
             }
           },
           end: "\r\n|\n|$|chain",
-          patterns: [
-            {
-              include: "#expression"
-            }
-          ]
+          patterns: [{ include: "#expression" }]
         },
         {
           name: "meta.function-call.WIP.jome",
@@ -669,11 +609,7 @@ let grammar = {
             }
           },
           end: "\r\n|\n|$|chain",
-          patterns: [
-            {
-              include: "#expression"
-            }
-          ]
+          patterns: [{ include: "#expression" }]
         },
         {
           name: "support.function-call.jome",
@@ -684,11 +620,7 @@ let grammar = {
             }
           },
           end: "\\)",
-          patterns: [
-            {
-              include: "#expression"
-            }
-          ]
+          patterns: [{ include: "#expression" }]
         },
         {
           name: "support.function-call.jome",
@@ -699,11 +631,7 @@ let grammar = {
             }
           },
           end: "\\)",
-          patterns: [
-            {
-              include: "#expression"
-            }
-          ]
+          patterns: [{ include: "#expression" }]
         },
         {
           name: "support.function-call.WIP.jome",
@@ -714,11 +642,7 @@ let grammar = {
             }
           },
           end: "\r\n|\n|$|chain",
-          patterns: [
-            {
-              include: "#expression"
-            }
-          ]
+          patterns: [{ include: "#expression" }]
         },
         {
           name: "support.function-call.WIP.jome",
@@ -729,11 +653,7 @@ let grammar = {
             }
           },
           end: "\r\n|\n|$|chain",
-          patterns: [
-            {
-              include: "#expression"
-            }
-          ]
+          patterns: [{ include: "#expression" }]
         }
       ]
     },
@@ -1096,11 +1016,7 @@ let grammar = {
           name: "punctuation.definition.template-expression.end.jome"
         }
       },
-      patterns: [
-        {
-          include: "#expression"
-        }
-      ]
+      patterns: [{ include: "#expression" }]
     },
     "paren-expression": {
       begin: "\\(",
@@ -1116,11 +1032,7 @@ let grammar = {
         }
       },
       name: "meta.group.jome",
-      patterns: [
-        {
-          include: "#expression"
-        }
-      ]
+      patterns: [{ include: "#expression" }]
     },
     "block-content": {
       patterns: [
