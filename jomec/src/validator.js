@@ -527,5 +527,6 @@ const VALIDATORS = {
 module.exports = {
   validateAllNodes,
   filterCommas,
-  filterNewlines
+  filterNewlines,
+  filterSpaces
 }

@@ -14,12 +14,12 @@ module.exports = () => {
   `;
   }
   function tabbedContent(contentByTitle) {
-    let titles = Object.keys(contentByTitle).map(
-      (title) => `<div>${title}</div>`
-    );
-    let contents = Object.values(contentByTitle).map(
-      (content) => `<div>${content}</div>`
-    );
+    let titles = Object.keys(contentByTitle)
+      .map((title) => `<div>${title}</div>`)
+      .join("");
+    let contents = Object.values(contentByTitle)
+      .map((content) => `<div>${content}</div>`)
+      .join("");
     let tabs = `<div>
     ${titles}
   </div>`;
@@ -39,7 +39,13 @@ module.exports = () => {
       Clicked {count} {count === 1 ? 'time' : 'times'}
     </button>
   };`;
-  let counters = {};
+  let counters = {
+    Vanilla: "Clicked 0 times",
+    "Web components": "Clicked 0 times",
+    "Vue.js": "Clicked 0 times",
+    Angular: "Clicked 0 times",
+    Svelte: "Clicked 0 times",
+  };
   let content = mdToHtml(`
   # Jome examples
 

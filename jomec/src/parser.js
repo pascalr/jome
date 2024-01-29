@@ -24,6 +24,7 @@ const OPERAND_TYPES = [
   "string.quoted.double.verbatim.jome",
   "string.quoted.backtick.verbatim.jome",
   "meta.group.jome",
+  "meta.function-call.jome",
   "meta.square-bracket.jome",
   "meta.block.jome",
   "variable.other.jome",
@@ -99,7 +100,7 @@ class ASTNode {
 //   return array.map(e => typeof e === 'string' ? {type: 'string', children: [e]} : e)
 // }
 function filterSpaces(array) {
-  return array.filter(e => !/^\s*$/.test(e))
+  return array.filter(e => !/^\s*$/.test(e)).filter(e => !e.type?.startsWith('punctuation.whitespace'))
 }
 function filterStrings(array) {
   return array.filter(e => typeof e !== 'string')

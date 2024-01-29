@@ -47,8 +47,8 @@ def tabbedContent(contentByTitle)
   //   <%= tabs %>
   //   <%= contentByTitle.#values.map(content => <div><%= content %></div>) %>
   // </div>
-  let titles = contentByTitle.#keys.map(title => "<div>{title}</div>")
-  let contents = contentByTitle.#values.map(content => "<div>{content}</div>")
+  let titles = contentByTitle.#keys.map(title => "<div>{title}</div>").join('\n')
+  let contents = contentByTitle.#values.map(content => "<div>{content}</div>").join('\n')
   let tabs = "<div>
     {titles}
   </div>";
@@ -103,8 +103,8 @@ let counter = <jsx-react>
 
 let counters = {
   Vanilla: "Clicked 0 times",
-  // "Web components": "Clicked 0 times"
-  // "Vue.js": "Clicked 0 times"
+  "Web components": "Clicked 0 times"
+  "Vue.js": "Clicked 0 times"
   Angular: "Clicked 0 times"
   Svelte: "Clicked 0 times"
 }

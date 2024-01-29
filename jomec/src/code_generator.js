@@ -1,6 +1,6 @@
 const { compileUtility } = require("jome-lib/compileUtility")
 const {compileTokenRaw} = require("./parser.js")
-const {filterCommas, filterNewlines} = require("./validator.js")
+const {filterCommas, filterNewlines, filterSpaces} = require("./validator.js")
 const Argument = require("./argument")
 const crypto = require('crypto');
 
@@ -100,7 +100,7 @@ function compileEntry(node) {
 }
 
 function compileBlock(node) {
-  let cs = filterCommas(node.parts.slice(1, -1)) // remove curly braces
+  let cs = filterNewlines(filterSpaces(filterCommas(node.parts.slice(1, -1)))) // remove curly braces
   if (cs.every(c => c.type === 'meta.dictionary-key.jome' || c.type === 'keyword.operator.colon.jome')) {
     return `({${cs.map(c => compileEntry(c))}})`
   }
