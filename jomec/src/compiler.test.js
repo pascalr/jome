@@ -456,6 +456,12 @@ describe("Test objects", () => {
   test('{x: 1}', () => {
     expect(compile('{x: 1}')).toMatch(/\{\s*x\: ?1;?\s*\}/);
   })
+  test('{x: 1, y: 2}', () => {
+    expect(compile('{x: 1, y: 2}')).toMatch(/\{\s*x\: ?1, y: 2\s*\}/);
+  })
+  test('{"x": 1}', () => {
+    expect(compile('{"x": 1}')).toMatch(/\{\s*x\: ?1;?\s*\}/);
+  })
 })
 
 describe("Test arrays", () => {

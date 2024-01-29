@@ -88,15 +88,21 @@ function compileArgs(node) {
 }
 
 function compileEntry(node) {
-  let name = node.parts[0].raw
-  let value = genCode(node.operands[0])
-  return `${name}: ${value}`
+  if (node.type === 'keyword.operator.colon.jome') {
+    let name = node.operands[0].raw
+    let value = genCode(node.operands[1])
+    return `${name}: ${value}`
+  } else {
+    let name = node.parts[0].raw
+    let value = genCode(node.operands[0])
+    return `${name}: ${value}`
+  }
 }
 
 function compileBlock(node) {
-  let cs = node.parts.slice(1, -1) // remove curly braces
-  if (cs.every(c => c.type === 'meta.dictionary-key.jome')) {
-    return `{${cs.map(c => compileEntry(c))}}`
+  let cs = filterCommas(node.parts.slice(1, -1)) // remove curly braces
+  if (cs.every(c => c.type === 'meta.dictionary-key.jome' || c.type === 'keyword.operator.colon.jome')) {
+    return `({${cs.map(c => compileEntry(c))}})`
   }
   // A value is only on a single line, except if using parentheses.
   return '{}'
