@@ -20,12 +20,13 @@ module.exports = () => {
     let contents = Object.values(contentByTitle)
       .map((content) => `<div>${content}</div>`)
       .join("");
-    let tabs = `<div>
-    ${titles}
-  </div>`;
     return `<div class='tabbed-content'>
-    ${tabs}
-    ${contents}
+    <div class='onglets'>
+      ${titles}
+    </div>
+    <div class='example-content'>
+      ${contents}
+    </div>
   </div>`;
   }
   let counter = `
@@ -45,9 +46,12 @@ module.exports = () => {
     "Vue.js": "Clicked 0 times",
     Angular: "Clicked 0 times",
     Svelte: "Clicked 0 times",
+    React: "Clicked 0 times",
   };
   let content = mdToHtml(`
   # Jome examples
+
+  TODO: The result on top, and the tabbed source code for many librairies below.
 
   TODO: For hello world and the counter, write show the code for vanilla, web components, react, vue, angular, svelte, ...
   Show the code 75% of the space at the left, and 25% the simple counter button on the right (or Hello world message)
@@ -62,13 +66,15 @@ module.exports = () => {
 
   ## Counter
 
+  A simple counter that shows a dynamic element and an event listener.
+
+  <div class="example-result"><button id="ex-vanilla-counter">Clicked 0 times</button></div>
+
   ${tabbedContent(counters)}
 
   A simple button that when you click on it it increments. "Clicked 2 times"
 
   <h3>Vanilla js</h3>
-
-  <button id="ex-vanilla-counter">Clicked 0 times</button>
 
   <h3>Web components</h3>
 

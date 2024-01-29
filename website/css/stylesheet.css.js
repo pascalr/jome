@@ -102,11 +102,12 @@ module.exports = () => {
 
   .onglets {
     display: flex;
+    border: 1px solid black;
+    background-color: #eee;
   }
 
   .onglets > * {
-    padding: 10px;
-    background-color: #eee;
+    padding: 7px 12px;
     cursor: pointer;
   }
 
@@ -148,5 +149,14 @@ module.exports = () => {
     font-size: 1.4em;
     padding: 14px 16px;
     font-weight: bold;
+  }
+
+  .example-result {
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 0.8em;
   }`;
 };

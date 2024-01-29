@@ -49,12 +49,13 @@ def tabbedContent(contentByTitle)
   // </div>
   let titles = contentByTitle.#keys.map(title => "<div>{title}</div>").join('\n')
   let contents = contentByTitle.#values.map(content => "<div>{content}</div>").join('\n')
-  let tabs = "<div>
-    {titles}
-  </div>";
   return "<div class='tabbed-content'>
-    {tabs}
-    {contents}
+    <div class='onglets'>
+      {titles}
+    </div>
+    <div class='example-content'>
+      {contents}
+    </div>
   </div>"
 end
   // <div class="tabbed-content">
@@ -101,16 +102,31 @@ let counter = <jsx-react>
   };
 </jsx-react>
 
+// document.addEventListener("DOMContentLoaded", function () {
+//   let el = document.getElementById("ex-vanilla-hello");
+//   el.innerHTML = "Hello world! This is vanilla js!";
+
+//   let count = 0;
+//   let button = document.getElementById("ex-vanilla-counter");
+//   button.addEventListener("click", function () {
+//     count = count + 1;
+//     button.textContent = `Clicked ${count} ${count === 1 ? "time" : "times"}`;
+//   });
+// });
+
 let counters = {
   Vanilla: "Clicked 0 times",
-  "Web components": "Clicked 0 times"
-  "Vue.js": "Clicked 0 times"
-  Angular: "Clicked 0 times"
-  Svelte: "Clicked 0 times"
+  "Web components": "Clicked 0 times",
+  "Vue.js": "Clicked 0 times",
+  Angular: "Clicked 0 times",
+  Svelte: "Clicked 0 times",
+  React: "Clicked 0 times"
 }
 
 let content = <md>
   # Jome examples
+
+  TODO: The result on top, and the tabbed source code for many librairies below.
 
   TODO: For hello world and the counter, write show the code for vanilla, web components, react, vue, angular, svelte, ...
   Show the code 75% of the space at the left, and 25% the simple counter button on the right (or Hello world message)
@@ -125,13 +141,15 @@ let content = <md>
 
   ## Counter
 
+  A simple counter that shows a dynamic element and an event listener.
+
+  <div class="example-result"><button id="ex-vanilla-counter">Clicked 0 times</button></div>
+
   <%= tabbedContent(counters) %>
 
   A simple button that when you click on it it increments. "Clicked 2 times"
 
   <h3>Vanilla js</h3>
-
-  <button id="ex-vanilla-counter">Clicked 0 times</button>
 
   <h3>Web components</h3>
 

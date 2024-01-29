@@ -89,6 +89,7 @@
             <div class="scrollable" style="width: 100%;">
               <div class="main">
                 <h1>Jome examples</h1>
+<p>TODO: The result on top, and the tabbed source code for many librairies below.</p>
 <p>TODO: For hello world and the counter, write show the code for vanilla, web components, react, vue, angular, svelte, ...
 Show the code 75% of the space at the left, and 25% the simple counter button on the right (or Hello world message)</p>
   <h2 id="hello-world">Hello world</h3>
@@ -105,15 +106,18 @@ Show the code 75% of the space at the left, and 25% the simple counter button on
   <h3>Vanilla js</h3>
   <div id="ex-vanilla-hello"></div>
 <h2>Counter</h2>
+<p>A simple counter that shows a dynamic element and an event listener.</p>
+  <div class="example-result"><button id="ex-vanilla-counter">Clicked 0 times</button></div>
   <div class='tabbed-content'>
-    <div>
-    <div>Vanilla</div><div>Web components</div><div>Vue.js</div><div>Angular</div><div>Svelte</div>
-  </div>
-    <div>Clicked 0 times</div><div>Clicked 0 times</div><div>Clicked 0 times</div><div>Clicked 0 times</div><div>Clicked 0 times</div>
+    <div class='onglets'>
+      <div>Vanilla</div><div>Web components</div><div>Vue.js</div><div>Angular</div><div>Svelte</div><div>React</div>
+    </div>
+    <div class='example-content'>
+      <div>Clicked 0 times</div><div>Clicked 0 times</div><div>Clicked 0 times</div><div>Clicked 0 times</div><div>Clicked 0 times</div><div>Clicked 0 times</div>
+    </div>
   </div>
 <p>A simple button that when you click on it it increments. &quot;Clicked 2 times&quot;</p>
   <h3>Vanilla js</h3>
-<p><button id="ex-vanilla-counter">Clicked 0 times</button></p>
   <h3>Web components</h3>
   <h3 id="react-component">React component</h3>
 <pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { <span class="hljs-variable">useState</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
