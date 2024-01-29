@@ -26,6 +26,9 @@ function _run(node, sync, args) {
 
 const UTILS = {
   log: (node, args) => `console.log(${(args).join(', ')})`,
+  keys: (node, args) => `Object.keys(${(args).join(', ')})`,
+  values: (node, args) => `Object.values(${(args).join(', ')})`,
+  entries: (node, args) => `Object.entries(${(args).join(', ')})`,
   PI: () => "Math.PI",
   argv: () => "process.argv",
   // argv: (node) => {

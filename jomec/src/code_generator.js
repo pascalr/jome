@@ -667,16 +667,6 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
     return `global.${GLOBAL_PREFIX}${node.raw.slice(1)}`
   },
 
-  "meta.with-format.jome": (node) => {
-    node.ctxFile.defaultMultilineFormat = node.parts[1].raw
-    return ''
-  },
-
-  "meta.with-format-for.jome": (node) => {
-    node.ctxFile.defaultFormatByTagName[node.parts[3].raw] = node.parts[1].raw
-    return ''
-  },
-
   "keyword.other.string-format.jome": (node) => {
     return applyFormat(node.raw.slice(1), node.operands[0])
   },

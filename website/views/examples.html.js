@@ -13,6 +13,21 @@ module.exports = () => {
     </div>
   `;
   }
+  function tabbedContent(contentByTitle) {
+    let titles = Object.keys(contentByTitle).map(
+      (title) => `<div>${title}</div>`
+    );
+    let contents = Object.values(contentByTitle).map(
+      (content) => `<div>${content}</div>`
+    );
+    let tabs = `<div>
+    ${titles}
+  </div>`;
+    return `<div class='tabbed-content'>
+    ${tabs}
+    ${contents}
+  </div>`;
+  }
   let counter = `
   import React, { useState } from 'react'; // I would be nice if this was optional because implicit because inside react tag
 

@@ -3,7 +3,9 @@
 
 import &Webpage from '../src/webpage.jomm'
 
-// TODO: forall div chain surroundWith('div') end
+// TODO: forall div chain asIs end
+// TODO: Have access to the beginning tag (with args!).
+// As is would be a formatting that includes the tag itself in the string. Would be default for all html tags.
 
 /*
 There are many ways to group code.
@@ -37,15 +39,24 @@ end
 
 forall jome-ex wrap printExample end
 
-// def tabbedContent(contentByTitle)
-//   let tabs = <div>
-//     <%= contentByTitle.#keys.map(title => <div><%= title %></div>) %>
-//   </div>
-//   return <div class="tabbed-content">
-//     <%= tabs %>
-//     <%= contentByTitle.#values.map(content => <div><%= content %></div>) %>
-//   </div>
-// end
+def tabbedContent(contentByTitle)
+  // let tabs = <div>
+  //   <%= contentByTitle.#keys.map(title => <div><%= title %></div>) %>
+  // </div>
+  // return <div class="tabbed-content">
+  //   <%= tabs %>
+  //   <%= contentByTitle.#values.map(content => <div><%= content %></div>) %>
+  // </div>
+  let titles = contentByTitle.#keys.map(title => "<div>{title}</div>")
+  let contents = contentByTitle.#values.map(content => "<div>{content}</div>")
+  let tabs = "<div>
+    {titles}
+  </div>";
+  return "<div class='tabbed-content'>
+    {tabs}
+    {contents}
+  </div>"
+end
   // <div class="tabbed-content">
   //   <div>
   //     <div class='selected'>Vanilla</div>

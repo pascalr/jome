@@ -7,6 +7,11 @@ const compile = (code) => {
   return compileCode(code, {writeScript: false})
 }
 
+// FIXMEEE Nested string does not work, it escapeds the nested string...
+// let tabs = "<div>
+//     {contentByTitle.#keys.map(title => "<div>{title}</div>")}
+//   </div>";
+
 /*
 FIXMEEEE: Combining compiler and parser tests because I am having issues with depedencies: (running either separate OK)
 TypeError: Cannot redefine property: length

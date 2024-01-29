@@ -37,6 +37,10 @@ module.exports = () => {
   TODO: Rajouter du syntax highligh au hex pour changer de couleur à toute les 2 charactères? Afficher comme des
   string et à tous les 2 charactères mettre comme si escaped string pour que la couleur change un peu.
 
+  ## Html formats
+
+  div, p, input, ... They should all be default tags. By default, they would be printed as is. The tag would be incorporated into the string.
+
   ## sh
 
   By default, sh is used for executing shell commands. It is wrapped with \`#execSh\`.
