@@ -101,6 +101,14 @@ let counter = <jsx-react>
   };
 </jsx-react>
 
+let counters = {
+  Vanilla: "Clicked 0 times",
+  // "Web components": "Clicked 0 times"
+  // "Vue.js": "Clicked 0 times"
+  Angular: "Clicked 0 times"
+  Svelte: "Clicked 0 times"
+}
+
 let content = <md>
   # Jome examples
 
@@ -116,6 +124,8 @@ let content = <md>
   <div id="ex-vanilla-hello"></div>
 
   ## Counter
+
+  <%= tabbedContent(counters) %>
 
   A simple button that when you click on it it increments. "Clicked 2 times"
 

@@ -39,6 +39,7 @@ module.exports = () => {
       Clicked {count} {count === 1 ? 'time' : 'times'}
     </button>
   };`;
+  let counters = {};
   let content = mdToHtml(`
   # Jome examples
 
@@ -54,6 +55,8 @@ module.exports = () => {
   <div id="ex-vanilla-hello"></div>
 
   ## Counter
+
+  ${tabbedContent(counters)}
 
   A simple button that when you click on it it increments. "Clicked 2 times"
 
