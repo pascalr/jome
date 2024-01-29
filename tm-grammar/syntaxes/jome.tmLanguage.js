@@ -964,6 +964,7 @@ let grammar = {
     },
     scripts: {
       patterns: [
+        PATTERN_SCRIPT("jome", "source.jome", "jome"),
         PATTERN_SCRIPT("js", "source.js", "javascript"),
         PATTERN_SCRIPT("md", "text.html.markdown", "markdown"),
         PATTERN_SCRIPT("sh", "source.shell", "shell"),

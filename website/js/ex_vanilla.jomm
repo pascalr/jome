@@ -4,12 +4,19 @@ document.addEventListener "DOMContentLoaded" do
   el.innerHTML = "Hello world! This is vanilla js!"
 
   // Button counter
-  let count = 0;
-  let button = document.getElementById("ex-vanilla-counter");
-  button.addEventListener "click", do
-    count = count + 1
-    button.textContent = "Clicked {count} {count === 1 ? 'time' : 'times'}"
+  def renderCounter
+    let count = 0;
+    let button = document.getElementById("ex-vanilla-counter");
+    def handleClick
+      count = count + 1
+      button.textContent = "Clicked {count} {count === 1 ? 'time' : 'times'}"
+    end
+    button.addEventListener "click", handleClick
+    return function
+      button.removeEventListener "click", handleClick
+    end
   end
+  renderCounter()
 
   // TODO: A tabbed content
   /*
