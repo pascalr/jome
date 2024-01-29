@@ -18,10 +18,15 @@ const DEFAULT_FORALLS = {
     wrap: ["mdToHtml"],
     imports: {mdToHtml: {from: 'jome-lib/mdToHtml', default: true}}
   },
-  js: {
-    chain: [stringToPureJs],
-    imports: {mdToHtml: {from: 'jome-lib/mdToHtml', default: true}}
-  },
+  // It seams to be very common to have two things, the language of the content, and how you want to process it.
+  // What should be the standard convention? js-txt? txt.js? ex.js?
+  // js.html would give me js, and the content would be html. I like that. It is familiar to file extension.
+  // TODO: foo.js should be syntax highlighting in javascript.
+  // Do I want js to be converted to pure javascript or do I want it to simply be a normal string by default?
+  // js: {
+  //   chain: [stringToPureJs],
+  //   imports: {mdToHtml: {from: 'jome-lib/mdToHtml', default: true}}
+  // },
 }
 
 module.exports = {

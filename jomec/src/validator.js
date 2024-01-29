@@ -486,6 +486,7 @@ const VALIDATORS = {
   "meta.embedded.block.html": validateHeredoc,
   "meta.embedded.block.markdown": validateHeredoc,
   "meta.embedded.block.css": validateHeredoc,
+  "meta.embedded.block.javascript": validateHeredoc,
   "meta.tag.jome": validateTag,
 
   "meta.forall.jome": (node) => {

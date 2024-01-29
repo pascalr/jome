@@ -8,6 +8,8 @@ const REGEX_CLASS_NAME = "[A-Za-z_$]\\w*" // FIXME: Accents
 // I don't know if they are the same, but I think so.
 const REGEX_VARIABLE = "[A-Za-z_$]\\w*" // FIXME: Accents
 
+const REGEX_XML_NAME = "[_\\:A-Za-z][A-Za-z0-9\\-_\\:\\.]*"
+
 // // If the regex containing this regex has no group, then group number is 1.
 // // Otherwise, you have to add 1 for every group before this one.
 // function REGEX_INLINE_STRING(groupNumber=1) {
@@ -625,6 +627,24 @@ let grammar = {
           patterns: [{ include: "#escape-char" }]
         },
         {
+          name: "string.quoted.multi.jome",
+          begin: "\"\"\"",
+          beginCaptures: { 0: { name: "punctuation.definition.string.begin.jome" } },
+          end: "\"\"\"",
+          endCaptures: { 0: { name: "punctuation.definition.string.end.jome" } },
+          patterns: [
+            {
+              name: "meta.string-template-literal.jome",
+              begin: "\\{\\{",
+              beginCaptures: { 0: { name: "punctuation.definition.template-expression.begin.jome" } },
+              end: "\\}\\}",
+              endCaptures: { 0: { name: "punctuation.definition.template-expression.end.jome" } },
+              patterns: [{ include: "#expression" }]
+            },
+            { include: "#escape-char" }
+          ]
+        },
+        {
           comment: "Allow #~ for home too?",
           name: "string.other.path.jome",
           match: "(#\\.{0,2}/[^ \\(\\)\\,]*)|(#cwd/[^ \\(\\)\\,]*)|(#\\.{1,2})"
@@ -643,7 +663,14 @@ let grammar = {
           end: "\"",
           endCaptures: { 0: { name: "punctuation.definition.string.end.jome" } },
           patterns: [
-            { include: "#template-literal" },
+            {
+              name: "meta.string-template-literal.jome",
+              begin: "\\{",
+              beginCaptures: { 0: { name: "punctuation.definition.template-expression.begin.jome" } },
+              end: "\\}",
+              endCaptures: { 0: { name: "punctuation.definition.template-expression.end.jome" } },
+              patterns: [{ include: "#expression" }]
+            },
             { include: "#escape-char" }
           ]
         },
@@ -668,14 +695,6 @@ let grammar = {
     "escape-char": {
       name: "constant.character.escape.jome",
       match: "\\\\."
-    },
-    "template-literal": {
-      name: "meta.string-template-literal.jome",
-      begin: "\\{",
-      beginCaptures: { 0: { name: "punctuation.definition.template-expression.begin.jome" } },
-      end: "\\}",
-      endCaptures: { 0: { name: "punctuation.definition.template-expression.end.jome" } },
-      patterns: [{ include: "#expression" }]
     },
     "paren-expression": {
       begin: "\\(",

@@ -979,6 +979,46 @@
           ]
         },
         {
+          "name": "string.quoted.multi.jome",
+          "begin": "\"\"\"",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.jome"
+            }
+          },
+          "end": "\"\"\"",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.jome"
+            }
+          },
+          "patterns": [
+            {
+              "name": "meta.string-template-literal.jome",
+              "begin": "\\{\\{",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.template-expression.begin.jome"
+                }
+              },
+              "end": "\\}\\}",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.template-expression.end.jome"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "#expression"
+                }
+              ]
+            },
+            {
+              "include": "#escape-char"
+            }
+          ]
+        },
+        {
           "comment": "Allow #~ for home too?",
           "name": "string.other.path.jome",
           "match": "(#\\.{0,2}/[^ \\(\\)\\,]*)|(#cwd/[^ \\(\\)\\,]*)|(#\\.{1,2})"
@@ -1014,7 +1054,24 @@
           },
           "patterns": [
             {
-              "include": "#template-literal"
+              "name": "meta.string-template-literal.jome",
+              "begin": "\\{",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.template-expression.begin.jome"
+                }
+              },
+              "end": "\\}",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.template-expression.end.jome"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "#expression"
+                }
+              ]
             },
             {
               "include": "#escape-char"
@@ -1066,26 +1123,6 @@
     "escape-char": {
       "name": "constant.character.escape.jome",
       "match": "\\\\."
-    },
-    "template-literal": {
-      "name": "meta.string-template-literal.jome",
-      "begin": "\\{",
-      "beginCaptures": {
-        "0": {
-          "name": "punctuation.definition.template-expression.begin.jome"
-        }
-      },
-      "end": "\\}",
-      "endCaptures": {
-        "0": {
-          "name": "punctuation.definition.template-expression.end.jome"
-        }
-      },
-      "patterns": [
-        {
-          "include": "#expression"
-        }
-      ]
     },
     "paren-expression": {
       "begin": "\\(",

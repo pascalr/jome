@@ -326,13 +326,13 @@ function prepareFormatting(node) {
 
 // Convert the array of array for formats into a string
 function printFormatting(lines, ctxFile) {
+  let substitutions = {}
   // If pure code
   if (lines.length === 1 && lines[0].length === 1 && typeof lines[0][0] !== 'string') {
-    return lines[0][0].code
+    return {result: lines[0][0].code, substitutions}
   }
   // Otherwise it is a string
   let strIsTemplateLiteral = lines.length > 1;
-  let substitutions = {}
   let result = lines.map(line => {
     return line.map(part => {
       let isTemplateLiteral = (typeof part !== 'string')
@@ -619,6 +619,8 @@ const CODE_GENERATORS = {
   "meta.embedded.block.markdown": compileHeredoc,
   // <css></css>
   "meta.embedded.block.css": compileHeredoc,
+  // <js></js>
+  "meta.embedded.block.javascript": compileHeredoc,
   // <anything></anything>
   "meta.tag.jome": compileHeredoc,
 
