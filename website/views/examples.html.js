@@ -24,9 +24,7 @@ module.exports = () => {
     <div class='onglets'>
       ${titles}
     </div>
-    <div class='example-content'>
-      ${contents}
-    </div>
+    <pre class='example-content'><code>${contents}</code></pre>
   </div>`;
   }
   let counter = `
