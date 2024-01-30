@@ -867,9 +867,7 @@ let grammar = {
             2: { name: "keyword.other.tag-name.jome" }
           },
           end: "\\b(end)\\b",
-          endCaptures: {
-            0: { name: "keyword.control.jome" }
-          },
+          endCaptures: { 0: { name: "keyword.control.jome" } },
           patterns: [
             {
               name: "meta.forall-chain.jome",
@@ -1035,48 +1033,24 @@ let grammar = {
         {
           name: "string.regexp.js",
           begin: "(?<!\\+\\+|--|})(?<=[=(:,\\[?+!]|^return|[^\\._$[:alnum:]]return|^case|[^\\._$[:alnum:]]case|=>|&&|\\|\\||\\*\\/)\\s*(\\/)(?![\\/*])(?=(?:[^\\/\\\\\\[\\()]|\\\\.|\\[([^\\]\\\\]|\\\\.)+\\]|\\(([^\\)\\\\]|\\\\.)+\\))+\\/([dgimsuy]+|(?![\\/\\*])|(?=\\/\\*))(?!\\s*[a-zA-Z0-9_$]))",
-          beginCaptures: {
-            1: {
-              name: "punctuation.definition.string.begin.js"
-            }
-          },
+          beginCaptures: { 1: { name: "punctuation.definition.string.begin.js" } },
           end: "(/)([dgimsuy]*)",
           endCaptures: {
-            1: {
-              name: "punctuation.definition.string.end.js"
-            },
-            2: {
-              name: "keyword.other.js"
-            }
+            1: { name: "punctuation.definition.string.end.js" },
+            2: { name: "keyword.other.js" }
           },
-          patterns: [
-            {
-              include: "#regexp"
-            }
-          ]
+          patterns: [{ include: "#regexp" }]
         },
         {
           name: "string.regexp.js",
           begin: "((?<![_$[:alnum:])\\]]|\\+\\+|--|}|\\*\\/)|((?<=^return|[^\\._$[:alnum:]]return|^case|[^\\._$[:alnum:]]case))\\s*)\\/(?![\\/*])(?=(?:[^\\/\\\\\\[]|\\\\.|\\[([^\\]\\\\]|\\\\.)*\\])+\\/([dgimsuy]+|(?![\\/\\*])|(?=\\/\\*))(?!\\s*[a-zA-Z0-9_$]))",
-          beginCaptures: {
-            0: {
-              name: "punctuation.definition.string.begin.js"
-            }
-          },
+          beginCaptures: { 0: { name: "punctuation.definition.string.begin.js" } },
           end: "(/)([dgimsuy]*)",
           endCaptures: {
-            1: {
-              name: "punctuation.definition.string.end.js"
-            },
-            2: {
-              name: "keyword.other.js"
-            }
+            1: { name: "punctuation.definition.string.end.js" },
+            2: { name: "keyword.other.js" }
           },
-          patterns: [
-            {
-              include: "#regexp"
-            }
-          ]
+          patterns: [{ include: "#regexp" }]
         }
       ]
     },
@@ -1089,12 +1063,8 @@ let grammar = {
         {
           match: "\\\\[1-9]\\d*|\\\\k<([a-zA-Z_$][\\w$]*)>",
           captures: {
-            0: {
-              name: "keyword.other.back-reference.regexp"
-            },
-            1: {
-              name: "variable.other.regexp"
-            }
+            0: { name: "keyword.other.back-reference.regexp" },
+            1: { name: "variable.other.regexp" }
           }
         },
         {
@@ -1109,113 +1079,55 @@ let grammar = {
           name: "meta.group.assertion.regexp",
           begin: "(\\()((\\?=)|(\\?!)|(\\?<=)|(\\?<!))",
           beginCaptures: {
-            1: {
-              name: "punctuation.definition.group.regexp"
-            },
-            2: {
-              name: "punctuation.definition.group.assertion.regexp"
-            },
-            3: {
-              name: "meta.assertion.look-ahead.regexp"
-            },
-            4: {
-              name: "meta.assertion.negative-look-ahead.regexp"
-            },
-            5: {
-              name: "meta.assertion.look-behind.regexp"
-            },
-            6: {
-              name: "meta.assertion.negative-look-behind.regexp"
-            }
+            1: { name: "punctuation.definition.group.regexp" },
+            2: { name: "punctuation.definition.group.assertion.regexp" },
+            3: { name: "meta.assertion.look-ahead.regexp" },
+            4: { name: "meta.assertion.negative-look-ahead.regexp" },
+            5: { name: "meta.assertion.look-behind.regexp" },
+            6: { name: "meta.assertion.negative-look-behind.regexp" }
           },
           end: "(\\))",
-          endCaptures: {
-            1: {
-              name: "punctuation.definition.group.regexp"
-            }
-          },
-          patterns: [
-            {
-              include: "#regexp"
-            }
-          ]
+          endCaptures: { 1: { name: "punctuation.definition.group.regexp" } },
+          patterns: [{ include: "#regexp" }]
         },
         {
           name: "meta.group.regexp",
           begin: "\\((?:(\\?:)|(?:\\?<([a-zA-Z_$][\\w$]*)>))?",
           beginCaptures: {
-            0: {
-              name: "punctuation.definition.group.regexp"
-            },
-            1: {
-              name: "punctuation.definition.group.no-capture.regexp"
-            },
-            2: {
-              name: "variable.other.regexp"
-            }
+            0: { name: "punctuation.definition.group.regexp" },
+            1: { name: "punctuation.definition.group.no-capture.regexp" },
+            2: { name: "variable.other.regexp" }
           },
           end: "\\)",
-          endCaptures: {
-            0: {
-              name: "punctuation.definition.group.regexp"
-            }
-          },
-          patterns: [
-            {
-              include: "#regexp"
-            }
-          ]
+          endCaptures: { 0: { name: "punctuation.definition.group.regexp" } },
+          patterns: [{ include: "#regexp" }]
         },
         {
           name: "constant.other.character-class.set.regexp",
           begin: "(\\[)(\\^)?",
           beginCaptures: {
-            1: {
-              name: "punctuation.definition.character-class.regexp"
-            },
-            2: {
-              name: "keyword.operator.negation.regexp"
-            }
+            1: { name: "punctuation.definition.character-class.regexp" },
+            2: { name: "keyword.operator.negation.regexp" }
           },
           end: "(\\])",
-          endCaptures: {
-            1: {
-              name: "punctuation.definition.character-class.regexp"
-            }
-          },
+          endCaptures: { 1: { name: "punctuation.definition.character-class.regexp" } },
           patterns: [
             {
               name: "constant.other.character-class.range.regexp",
               match: "(?:.|(\\\\(?:[0-7]{3}|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}))|(\\\\c[A-Z])|(\\\\.))\\-(?:[^\\]\\\\]|(\\\\(?:[0-7]{3}|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}))|(\\\\c[A-Z])|(\\\\.))",
               captures: {
-                1: {
-                  name: "constant.character.numeric.regexp"
-                },
-                2: {
-                  name: "constant.character.control.regexp"
-                },
-                3: {
-                  name: "constant.character.escape.backslash.regexp"
-                },
-                4: {
-                  name: "constant.character.numeric.regexp"
-                },
-                5: {
-                  name: "constant.character.control.regexp"
-                },
-                6: {
-                  name: "constant.character.escape.backslash.regexp"
-                }
+                1: { name: "constant.character.numeric.regexp" },
+                2: { name: "constant.character.control.regexp" },
+                3: { name: "constant.character.escape.backslash.regexp" },
+                4: { name: "constant.character.numeric.regexp" },
+                5: { name: "constant.character.control.regexp" },
+                6: { name: "constant.character.escape.backslash.regexp" }
               }
             },
-            {
-              include: "#regex-character-class"
-            }
+            { include: "#regex-character-class" }
           ]
         },
-        {
-          include: "#regex-character-class"
-        }
+        { include: "#regex-character-class" }
       ]
     },
     "regex-character-class": {
