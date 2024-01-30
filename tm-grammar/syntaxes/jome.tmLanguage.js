@@ -824,7 +824,7 @@ let grammar = {
     "script-params": {
       patterns: [
         {
-          match: "(\\<)([A-Za-z]\\w*(?:-\\w+)*)",
+          match: `(\\<)(${REGEX_XML_NAME})`,
           captures: {
             1: { name: "punctuation.definition.tag.begin.jome" },
             2: { name: "entity.name.tag.jome" }
@@ -892,7 +892,7 @@ let grammar = {
       ]
     },
     "tag-end": {
-      match: "(\\<\\/)([a-zA-Z]\\w*(?:-\\w+)*)(\\>)",
+      match: `(\\<\\/)(${REGEX_XML_NAME})(\\>)`,
       captures: {
         1: { name: "punctuation.definition.tag.begin.jome" },
         2: { name: "entity.name.tag.jome" },
@@ -920,7 +920,7 @@ let grammar = {
       ]
     },
     tag: {
-      begin: "\\<([a-zA-Z]\\w*(?:-\\w+)*)(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
+      begin: `\\<(${REGEX_XML_NAME})(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>`,
       beginCaptures: { 0: { patterns: [{ include: "#script-params" }] } },
       end: "(\\<\\/)(\\1)(\\>)",
       endCaptures: { 0: { patterns: [{ include: "#tag-end" }] } },

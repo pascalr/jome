@@ -1258,7 +1258,7 @@
     "script-params": {
       "patterns": [
         {
-          "match": "(\\<)([A-Za-z]\\w*(?:-\\w+)*)",
+          "match": "(\\<)([_:A-Za-z][A-Za-z0-9\\-_\\:.]*)",
           "captures": {
             "1": {
               "name": "punctuation.definition.tag.begin.jome"
@@ -1358,7 +1358,7 @@
       ]
     },
     "tag-end": {
-      "match": "(\\<\\/)([a-zA-Z]\\w*(?:-\\w+)*)(\\>)",
+      "match": "(\\<\\/)([_:A-Za-z][A-Za-z0-9\\-_\\:.]*)(\\>)",
       "captures": {
         "1": {
           "name": "punctuation.definition.tag.begin.jome"
@@ -1416,7 +1416,7 @@
       ]
     },
     "tag": {
-      "begin": "\\<([a-zA-Z]\\w*(?:-\\w+)*)(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
+      "begin": "\\<([_:A-Za-z][A-Za-z0-9\\-_\\:.]*)(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>",
       "beginCaptures": {
         "0": {
           "patterns": [
