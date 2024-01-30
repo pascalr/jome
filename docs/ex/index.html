@@ -114,17 +114,20 @@ Show the code 75% of the space at the left, and 25% the simple counter button on
     </div>
     <div class='example-content'>
       <div>//<txt.js>
-    document.addEventListener("DOMContentLoaded", function () {
-      let el = document.getElementById("ex-vanilla-hello");
-      el.innerHTML = "Hello world! This is vanilla js!";
-<pre><code>  let count = 0;
-  let button = document.getElementById(&quot;ex-vanilla-counter&quot;);
-  button.addEventListener(&quot;click&quot;, function () {
-    count = count + 1;
-    button.textContent = `Clicked ${count} ${count === 1 ? &quot;time&quot; : &quot;times&quot;}`;
-  });
-});
-</code></pre>
+    // Button counter
+    def renderCounter
+      let count = 0;
+      let button = document.getElementById("ex-vanilla-counter");
+      def handleClick
+        count = count + 1
+        button.textContent = "Clicked {count} {count === 1 ? 'time' : 'times'}"
+      end
+      button.addEventListener "click", handleClick
+      return function
+        button.removeEventListener "click", handleClick
+      end
+    end
+    renderCounter()
   </div><div>Clicked 0 times</div><div>Clicked 0 times</div><div>Clicked 0 times</div><div>Clicked 0 times</div><div>Clicked 0 times</div>
     </div>
   </div>

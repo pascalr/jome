@@ -151,27 +151,6 @@ function validateFuncCall(node, hasDot) {
   node.data = {nameTok, args}
 }
 
-function validateHeredoc(node) {
-  if (!node.type.startsWith("meta.embedded.block")) {
-    throw new Error(`Internal error. An heredoc should always start with type meta.embedded.block. Was ${node.type}`)
-  }
-  ensureStartType(node, 'punctuation.definition.tag.begin.jome')
-  if (node.parts[1].type !== "entity.name.tag.jome") {
-    throw new Error(`Internal error. A tag have a name of type entity.name.tag.jome. Was ${node.parts[1].type}`)
-  }
-  let openingTagName = node.parts[1].raw
-  let closingTagName = node.parts[node.parts.length-2].raw
-  if (openingTagName !== closingTagName) {
-    throw new Error(`Internal error. Heredoc should always have a matching closing tage. Opening: ${openingTagName}. Closing: ${closingTagName}`)
-  }
-  let contentStartIdx = node.parts.findIndex(p => p.type === 'punctuation.definition.tag.end.jome')+1
-  // TODO: Parse attributes
-  let content = compileTokenRaw(node.parts.slice(contentStartIdx,node.parts.length-3))
-  node.data = {content, tagName: openingTagName}
-}
-
-// FIXME: Merge validateHeredoc and validateTag, they should be the same. Heredoc is the old version here
-
 function validateTag(node) { // A generic version of the heredoc. It is not yet clear how to call those things.
   if (node.type !== "meta.tag.jome") {
     throw new Error(`Internal error. A tag should always start with type meta.embedded.block. Was ${node.type}`)
@@ -482,11 +461,6 @@ const VALIDATORS = {
     node.data = {isFileArguments, argsToken: parts}
   },
 
-  "meta.embedded.block.shell": validateHeredoc,
-  "meta.embedded.block.html": validateHeredoc,
-  "meta.embedded.block.markdown": validateHeredoc,
-  "meta.embedded.block.css": validateHeredoc,
-  "meta.embedded.block.javascript": validateHeredoc,
   "meta.tag.jome": validateTag,
 
   "meta.forall.jome": (node) => {

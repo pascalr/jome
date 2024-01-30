@@ -24,7 +24,7 @@ function PATTERN_SCRIPT(name, sourceTagName, fixmeTmp) {
     end: `\\<\\/${name}\\>`,
     beginCaptures: { 0: { patterns: [{ include: "#script-params" }] } },
     endCaptures: { 0: { patterns: [{ include: "#tag-end" }] } },
-    name: `meta.embedded.block.${fixmeTmp}`,
+    name: `meta.tag.jome`,
     contentName: "raw",
     patterns: [{ include: sourceTagName }]
   }

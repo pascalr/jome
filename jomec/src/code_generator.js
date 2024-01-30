@@ -305,7 +305,7 @@ function prepareFormatting(node) {
   if (node.type === 'variable.other.jome') {
     return [[{code: node.raw}]]
   }
-  if (node.type.startsWith('meta.embedded.block') || node.type === "meta.tag.jome") {
+  if (node.type === "meta.tag.jome") {
     return prepareHeredoc(node)
   }
   let currentLine = []
@@ -611,16 +611,6 @@ const CODE_GENERATORS = {
     }
   },
 
-  // <sh></sh>
-  "meta.embedded.block.shell": compileHeredoc,
-  // <html></html>
-  "meta.embedded.block.html": compileHeredoc,
-  // <md></md>
-  "meta.embedded.block.markdown": compileHeredoc,
-  // <css></css>
-  "meta.embedded.block.css": compileHeredoc,
-  // <js></js>
-  "meta.embedded.block.javascript": compileHeredoc,
   // <anything></anything>
   "meta.tag.jome": compileHeredoc,
 

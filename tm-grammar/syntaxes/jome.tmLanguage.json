@@ -1471,7 +1471,7 @@
               ]
             }
           },
-          "name": "meta.embedded.block.jome",
+          "name": "meta.tag.jome",
           "contentName": "raw",
           "patterns": [
             {
@@ -1500,7 +1500,7 @@
               ]
             }
           },
-          "name": "meta.embedded.block.javascript",
+          "name": "meta.tag.jome",
           "contentName": "raw",
           "patterns": [
             {
@@ -1529,7 +1529,7 @@
               ]
             }
           },
-          "name": "meta.embedded.block.markdown",
+          "name": "meta.tag.jome",
           "contentName": "raw",
           "patterns": [
             {
@@ -1558,7 +1558,7 @@
               ]
             }
           },
-          "name": "meta.embedded.block.shell",
+          "name": "meta.tag.jome",
           "contentName": "raw",
           "patterns": [
             {
@@ -1587,7 +1587,7 @@
               ]
             }
           },
-          "name": "meta.embedded.block.css",
+          "name": "meta.tag.jome",
           "contentName": "raw",
           "patterns": [
             {
@@ -1616,7 +1616,7 @@
               ]
             }
           },
-          "name": "meta.embedded.block.html",
+          "name": "meta.tag.jome",
           "contentName": "raw",
           "patterns": [
             {
