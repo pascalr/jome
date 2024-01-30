@@ -959,7 +959,52 @@
     "strings": {
       "patterns": [
         {
+          "name": "string.quoted.single.jome",
+          "patterns": [
+            {
+              "include": "#escape-char"
+            }
+          ],
+          "begin": "'",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.jome"
+            }
+          },
+          "end": "'",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.jome"
+            }
+          }
+        },
+        {
+          "name": "string.quoted.backtick.jome",
+          "patterns": [
+            {
+              "include": "#escape-char"
+            }
+          ],
+          "begin": "`",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.jome"
+            }
+          },
+          "end": "`",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.jome"
+            }
+          }
+        },
+        {
           "name": "string.quoted.multi.jome",
+          "patterns": [
+            {
+              "include": "#escape-char"
+            }
+          ],
           "begin": "'''",
           "beginCaptures": {
             "0": {
@@ -971,28 +1016,54 @@
             "0": {
               "name": "punctuation.definition.string.end.jome"
             }
-          },
+          }
+        },
+        {
+          "name": "string.quoted.double.jome",
           "patterns": [
             {
               "include": "#escape-char"
+            },
+            {
+              "name": "meta.string-template-literal.jome",
+              "begin": "\\{",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.template-expression.begin.jome"
+                }
+              },
+              "end": "\\}",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.template-expression.end.jome"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "#expression"
+                }
+              ]
             }
-          ]
-        },
-        {
-          "name": "string.quoted.multi.jome",
-          "begin": "\"\"\"",
+          ],
+          "begin": "\"",
           "beginCaptures": {
             "0": {
               "name": "punctuation.definition.string.begin.jome"
             }
           },
-          "end": "\"\"\"",
+          "end": "\"",
           "endCaptures": {
             "0": {
               "name": "punctuation.definition.string.end.jome"
             }
-          },
+          }
+        },
+        {
+          "name": "string.quoted.multi.jome",
           "patterns": [
+            {
+              "include": "#escape-char"
+            },
             {
               "name": "meta.string-template-literal.jome",
               "begin": "\\{\\{",
@@ -1012,11 +1083,20 @@
                   "include": "#expression"
                 }
               ]
-            },
-            {
-              "include": "#escape-char"
             }
-          ]
+          ],
+          "begin": "\"\"\"",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.jome"
+            }
+          },
+          "end": "\"\"\"",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.jome"
+            }
+          }
         },
         {
           "comment": "Allow #~ for home too?",
@@ -1037,86 +1117,6 @@
               "name": "punctuation.definition.string.end.jome"
             }
           }
-        },
-        {
-          "name": "string.quoted.double.jome",
-          "begin": "\"",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.definition.string.begin.jome"
-            }
-          },
-          "end": "\"",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.definition.string.end.jome"
-            }
-          },
-          "patterns": [
-            {
-              "name": "meta.string-template-literal.jome",
-              "begin": "\\{",
-              "beginCaptures": {
-                "0": {
-                  "name": "punctuation.definition.template-expression.begin.jome"
-                }
-              },
-              "end": "\\}",
-              "endCaptures": {
-                "0": {
-                  "name": "punctuation.definition.template-expression.end.jome"
-                }
-              },
-              "patterns": [
-                {
-                  "include": "#expression"
-                }
-              ]
-            },
-            {
-              "include": "#escape-char"
-            }
-          ]
-        },
-        {
-          "name": "string.quoted.single.jome",
-          "begin": "'",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.definition.string.begin.jome"
-            }
-          },
-          "end": "'",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.definition.string.end.jome"
-            }
-          },
-          "patterns": [
-            {
-              "include": "#escape-char"
-            }
-          ]
-        },
-        {
-          "name": "string.quoted.backtick.jome",
-          "begin": "`",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.definition.string.begin.jome"
-            }
-          },
-          "end": "`",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.definition.string.end.jome"
-            }
-          },
-          "patterns": [
-            {
-              "include": "#escape-char"
-            }
-          ]
         }
       ]
     },

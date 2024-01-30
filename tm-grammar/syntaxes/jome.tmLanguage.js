@@ -32,6 +32,27 @@ function PATTERN_SCRIPT(name, sourceTagName) {
   }
 }
 
+function PATTERN_STRING(name, symbols, templateStartSymbols, templateEndSymbols) {
+  let patterns = [{ include: "#escape-char" }]
+  if (templateStartSymbols) {
+    patterns.push({
+      name: "meta.string-template-literal.jome",
+      begin: templateStartSymbols,
+      beginCaptures: { 0: { name: "punctuation.definition.template-expression.begin.jome" } },
+      end: templateEndSymbols,
+      endCaptures: { 0: { name: "punctuation.definition.template-expression.end.jome" } },
+      patterns: [{ include: "#expression" }]
+    })
+  }
+  return {
+    name, patterns,
+    begin: `${symbols}`,
+    beginCaptures: { 0: { name: "punctuation.definition.string.begin.jome" } },
+    end: `${symbols}`,
+    endCaptures: { 0: { name: "punctuation.definition.string.end.jome" } },
+  }
+}
+
 let grammar = {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   name: "Jome",
@@ -620,32 +641,11 @@ let grammar = {
     },
     strings: {
       patterns: [
-        {
-          name: "string.quoted.multi.jome",
-          begin: "'''",
-          beginCaptures: { 0: { name: "punctuation.definition.string.begin.jome" } },
-          end: "'''",
-          endCaptures: { 0: { name: "punctuation.definition.string.end.jome" } },
-          patterns: [{ include: "#escape-char" }]
-        },
-        {
-          name: "string.quoted.multi.jome",
-          begin: "\"\"\"",
-          beginCaptures: { 0: { name: "punctuation.definition.string.begin.jome" } },
-          end: "\"\"\"",
-          endCaptures: { 0: { name: "punctuation.definition.string.end.jome" } },
-          patterns: [
-            {
-              name: "meta.string-template-literal.jome",
-              begin: "\\{\\{",
-              beginCaptures: { 0: { name: "punctuation.definition.template-expression.begin.jome" } },
-              end: "\\}\\}",
-              endCaptures: { 0: { name: "punctuation.definition.template-expression.end.jome" } },
-              patterns: [{ include: "#expression" }]
-            },
-            { include: "#escape-char" }
-          ]
-        },
+        PATTERN_STRING("string.quoted.single.jome", "'"),
+        PATTERN_STRING("string.quoted.backtick.jome", "`"),
+        PATTERN_STRING("string.quoted.multi.jome", "'''"),
+        PATTERN_STRING("string.quoted.double.jome", "\"", "\\{", "\\}"),
+        PATTERN_STRING("string.quoted.multi.jome", "\"\"\"", "\\{\\{", "\\}\\}"),
         {
           comment: "Allow #~ for home too?",
           name: "string.other.path.jome",
@@ -658,40 +658,6 @@ let grammar = {
           end: "\\1",
           endCaptures: { 0: { name: "punctuation.definition.string.end.jome" } },
         },
-        {
-          name: "string.quoted.double.jome",
-          begin: "\"",
-          beginCaptures: { 0: { name: "punctuation.definition.string.begin.jome" } },
-          end: "\"",
-          endCaptures: { 0: { name: "punctuation.definition.string.end.jome" } },
-          patterns: [
-            {
-              name: "meta.string-template-literal.jome",
-              begin: "\\{",
-              beginCaptures: { 0: { name: "punctuation.definition.template-expression.begin.jome" } },
-              end: "\\}",
-              endCaptures: { 0: { name: "punctuation.definition.template-expression.end.jome" } },
-              patterns: [{ include: "#expression" }]
-            },
-            { include: "#escape-char" }
-          ]
-        },
-        {
-          name: "string.quoted.single.jome",
-          begin: "'",
-          beginCaptures: { 0: { name: "punctuation.definition.string.begin.jome" } },
-          end: "'",
-          endCaptures: { 0: { name: "punctuation.definition.string.end.jome" } },
-          patterns: [{ include: "#escape-char" }]
-        },
-        {
-          name: "string.quoted.backtick.jome",
-          begin: "`",
-          beginCaptures: { 0: { name: "punctuation.definition.string.begin.jome" } },
-          end: "`",
-          endCaptures: { 0: { name: "punctuation.definition.string.end.jome" } },
-          patterns: [{ include: "#escape-char" }]
-        }
       ]
     },
     "escape-char": {
