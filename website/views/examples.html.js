@@ -41,7 +41,7 @@ module.exports = () => {
     </button>
   };`;
   let counters = {
-    Vanilla: `//<txt.js>
+    Vanilla: `
     // Button counter
     def renderCounter
       let count = 0;

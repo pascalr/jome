@@ -103,7 +103,7 @@ let counter = <jsx-react>
 </jsx-react>
 
 let counters = {
-  Vanilla: <jome>//<txt.js>
+  Vanilla: <ex.jome>
     // Button counter
     def renderCounter
       let count = 0;
@@ -118,7 +118,7 @@ let counters = {
       end
     end
     renderCounter()
-  </jome>,//</txt.js>,
+  </ex.jome>,
   "Web components": "Clicked 0 times",
   "Vue.js": "Clicked 0 times",
   Angular: "Clicked 0 times",

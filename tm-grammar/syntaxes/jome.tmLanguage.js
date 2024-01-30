@@ -9,7 +9,6 @@ const REGEX_CLASS_NAME = "[A-Za-z_$]\\w*" // FIXME: Accents
 const REGEX_VARIABLE = "[A-Za-z_$]\\w*" // FIXME: Accents
 
 const REGEX_XML_NAME = "[_:A-Za-z][A-Za-z0-9\\-_\\:.]*"
-const REG_XML_NAME_2 = "[_:A-Za-z][A-Za-z0-9\\-_\\:.]*?"
 
 // // If the regex containing this regex has no group, then group number is 1.
 // // Otherwise, you have to add 1 for every group before this one.
@@ -22,8 +21,8 @@ function PATTERN_SCRIPT(name, sourceTagName) {
   // FIXME: Fix all this... Make it like #tag, not #script
   return {
     //begin: `\\<(${REG_XML_NAME_2}\\.${name})(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>`,
-    begin: `\\<${name}(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>`,
-    end: `\\<\\/${name}\\>`,
+    begin: `\\<(${REGEX_XML_NAME}?\\.${name}|${name})(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>`,
+    end: `\\<\\/\\1\\>`,
     beginCaptures: { 0: { patterns: [{ include: "#script-params" }] } },
     endCaptures: { 0: { patterns: [{ include: "#tag-end" }] } },
     name: `meta.tag.jome`,
