@@ -8,7 +8,8 @@ const REGEX_CLASS_NAME = "[A-Za-z_$]\\w*" // FIXME: Accents
 // I don't know if they are the same, but I think so.
 const REGEX_VARIABLE = "[A-Za-z_$]\\w*" // FIXME: Accents
 
-const REGEX_XML_NAME = "[_\\:A-Za-z][A-Za-z0-9\\-_\\:\\.]*"
+const REGEX_XML_NAME = "[_:A-Za-z][A-Za-z0-9\\-_\\:.]*"
+const REG_XML_NAME_2 = "[_:A-Za-z][A-Za-z0-9\\-_\\:.]*?"
 
 // // If the regex containing this regex has no group, then group number is 1.
 // // Otherwise, you have to add 1 for every group before this one.
@@ -17,9 +18,10 @@ const REGEX_XML_NAME = "[_\\:A-Za-z][A-Za-z0-9\\-_\\:\\.]*"
 // }
 const REGEX_REGULAR_STRING = "\"[^\"]*\"|'[^']*'" // FIXME: Allow backticks and escaped quotes
 
-function PATTERN_SCRIPT(name, sourceTagName, fixmeTmp) {
+function PATTERN_SCRIPT(name, sourceTagName) {
   // FIXME: Fix all this... Make it like #tag, not #script
   return {
+    //begin: `\\<(${REG_XML_NAME_2}\\.${name})(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>`,
     begin: `\\<${name}(\\s+|\\w+|\\w+\\s*=\"[^\"]*\")*\\>`,
     end: `\\<\\/${name}\\>`,
     beginCaptures: { 0: { patterns: [{ include: "#script-params" }] } },
@@ -824,27 +826,17 @@ let grammar = {
         {
           match: "(\\<)([A-Za-z]\\w*(?:-\\w+)*)",
           captures: {
-            1: {
-              name: "punctuation.definition.tag.begin.jome"
-            },
-            2: {
-              name: "entity.name.tag.jome"
-            }
+            1: { name: "punctuation.definition.tag.begin.jome" },
+            2: { name: "entity.name.tag.jome" }
           }
         },
-        {
-          match: "\\s+"
-        },
+        { match: "\\s+" },
         {
           name: "meta.script-param-assign.jome",
           match: "(\\w+)\\s*=\\s*(\"[^\"]*\")",
           captures: {
-            1: {
-              name: "entity.other.attribute-name.jome"
-            },
-            2: {
-              name: "string.quoted.double.jome"
-            }
+            1: { name: "entity.other.attribute-name.jome" },
+            2: { name: "string.quoted.double.jome" }
           }
         },
         {
@@ -871,50 +863,28 @@ let grammar = {
           name: "meta.forall.jome",
           begin: "\\b(forall)\\b\\s*(\\w+(?:-\\w+)*)?",
           beginCaptures: {
-            1: {
-              name: "keyword.control.jome"
-            },
-            2: {
-              name: "keyword.other.tag-name.jome"
-            }
+            1: { name: "keyword.control.jome" },
+            2: { name: "keyword.other.tag-name.jome" }
           },
           end: "\\b(end)\\b",
           endCaptures: {
-            0: {
-              name: "keyword.control.jome"
-            }
+            0: { name: "keyword.control.jome" }
           },
           patterns: [
             {
               name: "meta.forall-chain.jome",
               match: "\\b(chain)\\b\\s*((?:#?\\w+(?:,\\s*#?\\w+)*)?)\\s*",
               captures: {
-                1: {
-                  name: "keyword.control.jome"
-                },
-                2: {
-                  patterns: [
-                    {
-                      include: "#for-tag-func"
-                    }
-                  ]
-                }
+                1: { name: "keyword.control.jome" },
+                2: { patterns: [{ include: "#for-tag-func" }] }
               }
             },
             {
               name: "meta.forall-wrap.jome",
               match: "\\b(wrap)\\b\\s*((?:#?\\w+(?:,\\s*#?\\w+)*)?)\\s*",
               captures: {
-                1: {
-                  name: "keyword.control.jome"
-                },
-                2: {
-                  patterns: [
-                    {
-                      include: "#for-tag-func"
-                    }
-                  ]
-                }
+                1: { name: "keyword.control.jome" },
+                2: { patterns: [{ include: "#for-tag-func" }] }
               }
             }
           ]
@@ -964,12 +934,12 @@ let grammar = {
     },
     scripts: {
       patterns: [
-        PATTERN_SCRIPT("jome", "source.jome", "jome"),
-        PATTERN_SCRIPT("js", "source.js", "javascript"),
-        PATTERN_SCRIPT("md", "text.html.markdown", "markdown"),
-        PATTERN_SCRIPT("sh", "source.shell", "shell"),
-        PATTERN_SCRIPT("css", "source.css", "css"),
-        PATTERN_SCRIPT("html", "text.html.derivative", "html"),
+        PATTERN_SCRIPT("jome", "source.jome"),
+        PATTERN_SCRIPT("js", "source.js"),
+        PATTERN_SCRIPT("md", "text.html.markdown"),
+        PATTERN_SCRIPT("sh", "source.shell"),
+        PATTERN_SCRIPT("css", "source.css"),
+        PATTERN_SCRIPT("html", "text.html.derivative"),
       ]
     },
     "square-bracket": {
