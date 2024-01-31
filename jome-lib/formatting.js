@@ -11,6 +11,25 @@ function flat(lines) {
   })
 }
 
+// Start the indentation à 0. Remove the lowest indentation based on the first line that has content.
+function indent(lines) {
+  let indentLevel = null
+  return lines.map(line => {
+    let [firstPart, ...parts] = line
+    if (typeof firstPart !== 'string') {return line}
+    if (indentLevel) {
+      return [firstPart.replace(new RegExp(`^\\s{0,${indentLevel}}`), ''), ...parts]
+    } else if (/\S/.test(firstPart)) { // If it has non whitespace characters
+      let trimmed = firstPart.replace(new RegExp(`^\\s*`), '')
+      indentLevel = firstPart.length - trimmed.length
+      return [trimmed, ...parts]
+    } else {
+      return line
+    }
+  })
+}
+
+
 // Would that be usefull?
 // function rtrim(lines) {
 //   return lines.map(line => {
@@ -83,7 +102,7 @@ function stringToPureJs(lines) {
 }
 
 module.exports = {
-  strim, etrim, flat, trim, none, stringToPureJs, trimEnd, trimStart
+  strim, etrim, flat, trim, none, stringToPureJs, trimEnd, trimStart, indent
 }
 
 // function text(str) {

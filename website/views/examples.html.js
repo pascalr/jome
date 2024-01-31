@@ -1,4 +1,4 @@
-const { trim } = require("jome-lib/formatting");
+const { trim, indent } = require("jome-lib/formatting");
 const Webpage = require("../src/webpage.js");
 const mdToHtml = require("jome-lib/mdToHtml");
 module.exports = () => {
@@ -41,19 +41,19 @@ module.exports = () => {
   };`;
   let counters = {
     Vanilla: `// Button counter
-    def renderCounter
-      let count = 0;
-      let button = document.getElementById("ex-vanilla-counter");
-      def handleClick
-        count = count + 1
-        button.textContent = "Clicked {count} {count === 1 ? 'time' : 'times'}"
-      end
-      button.addEventListener "click", handleClick
-      return function
-        button.removeEventListener "click", handleClick
-      end
-    end
-    renderCounter()`,
+def renderCounter
+  let count = 0;
+  let button = document.getElementById("ex-vanilla-counter");
+  def handleClick
+    count = count + 1
+    button.textContent = "Clicked {count} {count === 1 ? 'time' : 'times'}"
+  end
+  button.addEventListener "click", handleClick
+  return function
+    button.removeEventListener "click", handleClick
+  end
+end
+renderCounter()`,
     "Web components": "Clicked 0 times",
     "Vue.js": "Clicked 0 times",
     Angular: "Clicked 0 times",

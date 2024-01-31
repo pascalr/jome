@@ -3,7 +3,7 @@
 
 import &Webpage from '../src/webpage.jomm'
 
-import {trim} from 'jome-lib/formatting'
+import {trim, indent} from 'jome-lib/formatting'
 
 // TODO: forall div chain asIs end
 // TODO: Have access to the beginning tag (with args!).
@@ -42,7 +42,7 @@ end
 forall jome-ex wrap printExample end
 //forall jome-ex chain #trim, #indent wrap printExample end
 
-forall ex.jome chain trim end
+forall ex.jome chain indent, trim end
 
 def tabbedContent(contentByTitle)
   // let tabs = <div>
