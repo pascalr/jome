@@ -1,3 +1,4 @@
+const { trim } = require("jome-lib/formatting");
 const Webpage = require("../src/webpage.js");
 const mdToHtml = require("jome-lib/mdToHtml");
 module.exports = () => {
@@ -17,9 +18,9 @@ module.exports = () => {
     let titles = Object.keys(contentByTitle)
       .map((title) => `<div>${title}</div>`)
       .join("");
-    let contents = Object.values(contentByTitle)
-      .map((content) => `<div>${content}</div>`)
-      .join("");
+    let contents = Object.values(contentByTitle).map(
+      (content) => `<div>${content}</div>`
+    )[0];
     return `<div class='tabbed-content'>
     <div class='onglets'>
       ${titles}

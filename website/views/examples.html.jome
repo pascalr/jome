@@ -3,6 +3,8 @@
 
 import &Webpage from '../src/webpage.jomm'
 
+import {trim} from 'jome-lib/formatting'
+
 // TODO: forall div chain asIs end
 // TODO: Have access to the beginning tag (with args!).
 // As is would be a formatting that includes the tag itself in the string. Would be default for all html tags.
@@ -37,7 +39,8 @@ def printExample(result)
   </html>
 end
 
-forall jome-ex wrap printExample end
+forall jome-ex chain trim wrap printExample end
+//forall jome-ex chain #trim, #indent wrap printExample end
 
 def tabbedContent(contentByTitle)
   // let tabs = <div>
@@ -48,7 +51,7 @@ def tabbedContent(contentByTitle)
   //   <%= contentByTitle.#values.map(content => <div><%= content %></div>) %>
   // </div>
   let titles = contentByTitle.#keys.map(title => "<div>{title}</div>").join('\n')
-  let contents = contentByTitle.#values.map(content => "<div>{content}</div>").join('\n')
+  let contents = contentByTitle.#values.map(content => "<div>{content}</div>")[0]
   return "<div class='tabbed-content'>
     <div class='onglets'>
       {titles}

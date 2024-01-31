@@ -122,6 +122,7 @@ module.exports = () => {
   .example-content {
     background-color: #dce0e8;
     border: 1px solid black;
+    margin-top: 0;
   }
 
     /* Add some basic CSS for the navbar */

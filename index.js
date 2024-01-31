@@ -1,4 +1,4 @@
-const { ltrim, ytrim } = require("jome-lib/formatting");
+const { trim, flat } = require("jome-lib/formatting");
 const build = require("./website/build.js");
 const server = require("./website/server.js");
 const execSh = require("jome-lib/execSh");

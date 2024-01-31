@@ -24,6 +24,17 @@ function _run(node, sync, args) {
   }
 }
 
+function handleTrim(trimFunction, args) {
+  if (args.length === 0) {
+    return `((str) => str.${trimFunction}())`
+  } else if (args.length === 1) {
+    return `${args[0]}.${trimFunction}()`
+  } else {
+    throw new Error(`#${trimFunction} expects only no or one argument`)
+  }
+}
+
+// TODO: Add validations (type, kind of arguments allowed, etc)
 const UTILS = {
   log: (node, args) => `console.log(${(args).join(', ')})`,
   keys: (node, args) => `Object.keys(${(args).join(', ')})`,
@@ -31,6 +42,12 @@ const UTILS = {
   entries: (node, args) => `Object.entries(${(args).join(', ')})`,
   PI: () => "Math.PI",
   argv: () => "process.argv",
+  // FIXME: Ensures has one and only one arg
+  trim: (node, args) => {handleTrim('trim', args)},
+  strim: (node, args) => {handleTrim('trimStart', args)},
+  trimStart: (node, args) => {handleTrim('trimStart', args)},
+  etrim: (node, args) => {handleTrim('trimEnd', args)},
+  trimEnd: (node, args) => {handleTrim('trimEnd', args)},
   // argv: (node) => {
   //   node.ctxFile.addImport('argv', null, 'jome-lib/argv')
   //   return `argv()`

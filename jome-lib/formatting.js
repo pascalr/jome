@@ -2,7 +2,8 @@ function text(str) {
 
 }
 
-function ltrim(lines) {
+// Remove all indentation on the left
+function flat(lines) {
   return lines.map(line => {
     let [firstPart, ...parts] = line
     if (typeof firstPart !== 'string') {return line}
@@ -10,15 +11,16 @@ function ltrim(lines) {
   })
 }
 
-function rtrim(lines) {
-  return lines.map(line => {
-    let modParts = line[line.length - 1].slice();
-    let lastPart = modParts[modParts.length - 1]
-    if (typeof lastPart !== 'string') {return line}
-    modParts[modParts.length - 1] = lastPart.trimEnd();
-    return modLines;
-  })
-}
+// Would that be usefull?
+// function rtrim(lines) {
+//   return lines.map(line => {
+//     let modParts = line[line.length - 1].slice();
+//     let lastPart = modParts[modParts.length - 1]
+//     if (typeof lastPart !== 'string') {return line}
+//     modParts[modParts.length - 1] = lastPart.trimEnd();
+//     return modLines;
+//   })
+// }
 
 function strim(lines) {
   // First filter empty lines
@@ -33,6 +35,7 @@ function strim(lines) {
   if (typeof firstPart !== 'string') {return otherLines}
   return [[firstPart.trimStart(), ...parts], ...otherLines]
 }
+let trimStart = strim;
 
 function etrim(lines) {
   // First filter empty lines
@@ -49,18 +52,19 @@ function etrim(lines) {
   modLines[modLines.length - 1] = modParts;
   return modLines;
 }
+let trimEnd = etrim;
 
-function xtrim(lines) {
-  return ltrim(rtrim(lines)) // OPTIMIZE: Combine the code of both here.
-}
+// function xtrim(lines) {
+//   return ltrim(rtrim(lines)) // OPTIMIZE: Combine the code of both here.
+// }
 
-function ytrim(lines) {
+function trim(lines) {
   return strim(etrim(lines)) // OPTIMIZE: Combine the code of both here.
 }
 
-function trim(lines) {
-  return xtrim(ytrim(lines)) // OPTIMIZE: Combine the code of both here.
-}
+// function trim(lines) {
+//   return xtrim(ytrim(lines)) // OPTIMIZE: Combine the code of both here.
+// }
 
 function none(input) { return input }
 
@@ -79,7 +83,7 @@ function stringToPureJs(lines) {
 }
 
 module.exports = {
-  strim, etrim, ltrim, rtrim, xtrim, ytrim, trim, none, stringToPureJs
+  strim, etrim, flat, trim, none, stringToPureJs, trimEnd, trimStart
 }
 
 // function text(str) {

@@ -1,11 +1,11 @@
 import build from './website/build.jome'
 import server from './website/server.jome'
 
-import {ltrim, ytrim} from 'jome-lib/formatting'
+import {trim, flat} from 'jome-lib/formatting'
 
 with cmd, args end
 
-forall text chain ltrim, ytrim end
+forall text chain trim, flat end
 
 global.ROOT = '/jome'
 

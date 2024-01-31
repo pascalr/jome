@@ -680,8 +680,10 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
       if (binding.type === 'named-import') {
         let required = require(binding.file)
         return required[chainFunc]
+      } else if (binding.type === 'default-import') {
+        return require(binding.file)
       } else {
-        throw new "sfh80h23f023hf0hw0irhf230"
+        throw new Error("sfh80h23f023hf0hw0irhf230")
       }
     })
     // TODO: get the source of the chain and wrap functions and add to the forall import list.
