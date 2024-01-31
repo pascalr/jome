@@ -1305,7 +1305,7 @@
       "patterns": [
         {
           "name": "meta.forall.jome",
-          "begin": "\\b(forall)\\b\\s*(\\w+(?:-\\w+)*)?",
+          "begin": "\\b(forall)\\b\\s*([_:A-Za-z][A-Za-z0-9\\-_\\:.]*)?",
           "beginCaptures": {
             "1": {
               "name": "keyword.control.jome"

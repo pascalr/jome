@@ -826,7 +826,7 @@ let grammar = {
       patterns: [
         {
           name: "meta.forall.jome",
-          begin: "\\b(forall)\\b\\s*(\\w+(?:-\\w+)*)?",
+          begin: `\\b(forall)\\b\\s*(${REGEX_XML_NAME})?`,
           beginCaptures: {
             1: { name: "keyword.control.jome" },
             2: { name: "keyword.other.tag-name.jome" }

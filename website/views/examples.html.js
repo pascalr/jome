@@ -40,8 +40,7 @@ module.exports = () => {
     </button>
   };`;
   let counters = {
-    Vanilla: `
-    // Button counter
+    Vanilla: `// Button counter
     def renderCounter
       let count = 0;
       let button = document.getElementById("ex-vanilla-counter");
@@ -54,8 +53,7 @@ module.exports = () => {
         button.removeEventListener "click", handleClick
       end
     end
-    renderCounter()
-  `,
+    renderCounter()`,
     "Web components": "Clicked 0 times",
     "Vue.js": "Clicked 0 times",
     Angular: "Clicked 0 times",
