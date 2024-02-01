@@ -1,8 +1,8 @@
 //<jome>#log "Hello, world!"</jome>
 //<jome-ex>#log "Hello, world!"</jome-ex>
 
+import hljs from 'highlightjs-jome'
 import &Webpage from '../src/webpage.jomm'
-
 import {trim, indent} from 'jome-lib/formatting'
 
 // TODO: forall div chain asIs end

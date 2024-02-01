@@ -1,8 +1,5 @@
 const MarkdownIt = require('markdown-it')
-const hljs = require('highlight.js')
-const jomeHljs = require('../hl-grammar/jome.js') // FIXME: mdToHtml should have this file in the same package...
-
-hljs.registerLanguage('jome', jomeHljs)
+const hljs = require('highlightjs-jome')
 
 let markdownIt = new MarkdownIt({
   html: true,
