@@ -109,7 +109,15 @@ let content = <md>
 
   ```jome
   with locale end
-  return <%s PARTIAL %>
+  return <html>
+    <div class="navbar">
+      <span class="navbrand" href="#">Jome</span>
+      <a href="\<%= locale %>/editor">Editor</a>
+      <a href="\<%= locale %>/">Home</a>
+      <a href="\<%= locale %>/utils">Utils</a>
+      <a href="https://github.com/pascalr/jome">GitHub</a>
+    </div>
+  </html>
   ```
 
   .jome file can be executed from the command line, but they can also be imported inside another .jome file.

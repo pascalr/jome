@@ -140,7 +140,7 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
   <h2 id="partials">Partials</h2> 
 <p>.jome files are very practical to write partials. For example, we can write an html navbar we can reuse using a <a href="#heredoc">heredoc</a>.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">locale</span> <span class="hljs-keyword">end</span>
-<span class="hljs-keyword">return</span> <span class="hljs-variable"><pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbar&quot;</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbrand&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span>&gt;</span>Jome<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/editor&quot;</span>&gt;</span>Editor<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
@@ -148,9 +148,7 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
     <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/utils&quot;</span>&gt;</span>Utils<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://github.com/pascalr/jome&quot;</span>&gt;</span>GitHub<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
-</code></pre>
-</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span>
 </code></pre>
 <p>.jome file can be executed from the command line, but they can also be imported inside another .jome file.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-variable">navbar</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./navbar.html.jome&#x27;</span>

@@ -105,7 +105,15 @@ module.exports = () => {
 
   \`\`\`jome
   with locale end
-  return fba5cdfa4bcb408f641c743519a0fe19
+  return <html>
+    <div class="navbar">
+      <span class="navbrand" href="#">Jome</span>
+      <a href="\<%= locale %>/editor">Editor</a>
+      <a href="\<%= locale %>/">Home</a>
+      <a href="\<%= locale %>/utils">Utils</a>
+      <a href="https://github.com/pascalr/jome">GitHub</a>
+    </div>
+  </html>
   \`\`\`
 
   .jome file can be executed from the command line, but they can also be imported inside another .jome file.
@@ -980,6 +988,6 @@ module.exports = () => {
 
   Librairies used:
   - express
-  - markdown-it`).replace("fba5cdfa4bcb408f641c743519a0fe19", PARTIAL);
+  - markdown-it`);
   return new Webpage("Jome", content).render();
 };

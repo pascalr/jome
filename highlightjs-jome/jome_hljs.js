@@ -82,6 +82,12 @@ const highlighter = function(hljs) {
     begin: '\\w+(?=:)'
   }
 
+  // const TEST = {
+  //   scope: "title class_",
+  //   begin: "<html>",
+  //   end: `<\\/html>`
+  // }
+
   // const SCRIPT_TAG_MD = {
   //   begin: '<md>', end: '<\\/md>'
   // }
@@ -93,6 +99,7 @@ const highlighter = function(hljs) {
       literal: 'false true null vrai faux nul oui non yes no'
     },
     contains: [
+      // TEST,
       {
         scope: 'string',
         begin: '"', end: '"'
@@ -127,7 +134,7 @@ const highlighter = function(hljs) {
       SCRIPT_TAG('md', 'md'),
       SCRIPT_TAG('sh', 'shell'),
       SCRIPT_TAG('css', 'css'),
-      SCRIPT_TAG('html', 'html'),
+      SCRIPT_TAG('html', 'xml'),
     ]
   }
 }
