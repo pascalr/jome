@@ -433,7 +433,7 @@ let grammar = {
         },
         {
           name: "meta.function-call.WIP.jome",
-          begin: "(\\.)(#\\w+\\b\\!?)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|along|chain|end|\\}|\\?|\\[|\\]))",
+          begin: "(\\.)(#\\w+\\b\\!?)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))",
           beginCaptures: {
             1: { name: "punctuation.dot.jome" },
             2: { name: "entity.name.function.utility.jome" }
@@ -443,7 +443,7 @@ let grammar = {
         },
         {
           name: "meta.function-call.WIP.jome",
-          begin: "(\\.)\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|along|chain|end|\\}|\\?|\\[|\\]))",
+          begin: "(\\.)\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))",
           beginCaptures: {
             1: { name: "punctuation.dot.jome" },
             2: { name: "entity.name.function.jome" }
@@ -467,14 +467,14 @@ let grammar = {
         },
         {
           name: "support.function-call.WIP.jome",
-          begin: "(#\\w+\\b\\!?)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|along|chain|end|\\}|\\?|\\[|\\]))",
+          begin: "(#\\w+\\b\\!?)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))",
           beginCaptures: { 1: { name: "entity.name.function.utility.jome" } },
           end: "\r\n|\n|$|chain",
           patterns: [{ include: "#expression" }]
         },
         {
           name: "support.function-call.WIP.jome",
-          begin: "\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|along|chain|end|\\}|\\?|\\[|\\]))",
+          begin: "\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))",
           beginCaptures: { 1: { name: "entity.name.function.jome" } },
           end: "\r\n|\n|$|chain",
           patterns: [{ include: "#expression" }]

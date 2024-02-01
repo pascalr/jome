@@ -112,20 +112,20 @@ Show the code 75% of the space at the left, and 25% the simple counter button on
     <div class='onglets'>
       <div>Vanilla</div><div>Web components</div><div>Vue.js</div><div>Angular</div><div>Svelte</div><div>React</div>
     </div>
-    <pre class='example-content'><code><div>// Button counter
-def renderCounter
-  let count = 0;
-  let button = document.getElementById("ex-vanilla-counter");
-  def handleClick
-    count = count + 1
-    button.textContent = "Clicked {count} {count === 1 ? 'time' : 'times'}"
-  end
-  button.addEventListener "click", handleClick
-  return function
-    button.removeEventListener "click", handleClick
-  end
-end
-renderCounter()</div></code></pre>
+    <pre class='example-content'><code><div><span class="hljs-comment">// Button counter</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">renderCounter</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">count</span> = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">button</span> = <span class="hljs-variable">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;ex-vanilla-counter&quot;</span>);
+  <span class="hljs-keyword">def</span> <span class="hljs-variable">handleClick</span>
+    <span class="hljs-variable">count</span> = <span class="hljs-variable">count</span> + <span class="hljs-number">1</span>
+    <span class="hljs-variable">button</span>.<span class="hljs-variable">textContent</span> = <span class="hljs-string">&quot;Clicked {count} {count === 1 ? &#x27;time&#x27; : &#x27;times&#x27;}&quot;</span>
+  <span class="hljs-keyword">end</span>
+  <span class="hljs-variable">button</span>.<span class="hljs-variable">addEventListener</span> <span class="hljs-string">&quot;click&quot;</span>, <span class="hljs-variable">handleClick</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-variable">function</span>
+    <span class="hljs-variable">button</span>.<span class="hljs-variable">removeEventListener</span> <span class="hljs-string">&quot;click&quot;</span>, <span class="hljs-variable">handleClick</span>
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-title function_">renderCounter</span>()</div></code></pre>
   </div>
 <p>A simple button that when you click on it it increments. &quot;Clicked 2 times&quot;</p>
   <h3>Vanilla js</h3>

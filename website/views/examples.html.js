@@ -15,6 +15,9 @@ module.exports = () => {
     </div>
   `;
   }
+  function highlight(code) {
+    return hljs.highlight(code, { language: "jome" }).value;
+  }
   function tabbedContent(contentByTitle) {
     let titles = Object.keys(contentByTitle)
       .map((title) => `<div>${title}</div>`)
@@ -41,7 +44,7 @@ module.exports = () => {
     </button>
   };`;
   let counters = {
-    Vanilla: `// Button counter
+    Vanilla: highlight(`// Button counter
 def renderCounter
   let count = 0;
   let button = document.getElementById("ex-vanilla-counter");
@@ -54,7 +57,7 @@ def renderCounter
     button.removeEventListener "click", handleClick
   end
 end
-renderCounter()`,
+renderCounter()`),
     "Web components": "Clicked 0 times",
     "Vue.js": "Clicked 0 times",
     Angular: "Clicked 0 times",

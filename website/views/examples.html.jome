@@ -39,10 +39,14 @@ def printExample(result)
   </html>
 end
 
+def highlight(code)
+  return hljs.highlight(code, { language: 'jome' }).value;
+end
+
 forall jome-ex wrap printExample end
 //forall jome-ex chain #trim, #indent wrap printExample end
 
-forall ex.jome chain indent, trim end
+forall ex.jome chain indent, trim wrap highlight end
 
 def tabbedContent(contentByTitle)
   // let tabs = <div>
