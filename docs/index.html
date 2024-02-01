@@ -111,14 +111,14 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 </code></pre>
   <h2 id="hello-world">Hello world</h2>
 <p>Create a file <code>hello.jome</code> with the following content:</p>
-<pre><code class="language-jome"><span class="hljs-title function_">#log</span> <span class="hljs-string">&quot;Hello world!&quot;</span> <span class="hljs-comment">// #log is a shortcut for console.log</span>
+<pre><code class="language-jome"><span class="hljs-built_in function_">#log</span> <span class="hljs-string">&quot;Hello world!&quot;</span> <span class="hljs-comment">// #log is a shortcut for console.log</span>
 </code></pre>
 <p>Run it with <code>jome hello.jome</code></p>
 <h3>File parameters</h3>
 <p>A .jome file is compiled into a function. You can pass arguments to it using the <code>with</code> keyword.</p>
 <p>Let's modify the file <code>hello.jome</code></p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">name</span> <span class="hljs-keyword">end</span>
-<span class="hljs-title function_">#log</span> <span class="hljs-string">&quot;Hello {name}!&quot;</span>
+<span class="hljs-built_in function_">#log</span> <span class="hljs-string">&quot;Hello {name}!&quot;</span>
 </code></pre>
 <p>The result is</p>
 <pre><code class="language-sh">jome hello.jome Paul
@@ -130,7 +130,7 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">cmd</span>, <span class="hljs-variable">message</span> <span class="hljs-keyword">end</span>
 
 <span class="hljs-keyword">if</span> <span class="hljs-variable">cmd</span> === <span class="hljs-string">&#x27;say&#x27;</span>
-  <span class="hljs-title function_">#log</span> <span class="hljs-variable">message</span>
+  <span class="hljs-built_in function_">#log</span> <span class="hljs-variable">message</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <p>The result is</p>
@@ -155,7 +155,7 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <p>.jome file can be executed from the command line, but they can also be imported inside another .jome file.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-variable">navbar</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./navbar.html.jome&#x27;</span>
 
-<span class="hljs-keyword">let</span> <span class="hljs-variable">frenchNavbar</span> = <span class="hljs-title function_">navbar</span>(<span class="hljs-string">&quot;fr&quot;</span>)
+<span class="hljs-keyword">let</span> <span class="hljs-variable">frenchNavbar</span> = <span class="hljs-title function_ invoke__">navbar</span>(<span class="hljs-string">&quot;fr&quot;</span>)
 </code></pre>
 <h3>Read more</h3>
 <p>For full details of options, see <a href="#pass_args_to_file">passing arguments to files</a></p>
@@ -173,7 +173,7 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 And you use the end keyword instead of curly braces.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span>
   <span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span>
-    <span class="hljs-title function_">#log</span> <span class="hljs-string">&#x27;Hello!&#x27;</span> <span class="hljs-comment">// #log is a util shorthand of console.log</span>
+    <span class="hljs-built_in function_">#log</span> <span class="hljs-string">&#x27;Hello!&#x27;</span> <span class="hljs-comment">// #log is a util shorthand of console.log</span>
   <span class="hljs-keyword">end</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
@@ -191,21 +191,21 @@ And you use the end keyword instead of curly braces.</p>
 <span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">save</span>
 </code></pre>
 <p>You can use <code>do ... end</code> to create functions. You pass arguments between vertical bars.</p>
-<pre><code class="language-jome">[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>].<span class="hljs-title function_">#each</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">i</span>|
-  <span class="hljs-title function_">#log</span> <span class="hljs-variable">i</span>
+<pre><code class="language-jome">[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>].<span class="hljs-built_in function_">#each</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">i</span>|
+  <span class="hljs-built_in function_">#log</span> <span class="hljs-variable">i</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <p>You can create an instance of a class without using the <code>new</code> keyword, simply call it as a function.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SomeClass</span> <span class="hljs-keyword">end</span>
 
-<span class="hljs-keyword">let</span> <span class="hljs-variable">someInstance</span> = <span class="hljs-title function_">SomeClass</span>()
-<span class="hljs-keyword">let</span> <span class="hljs-variable">otherInstance</span> = <span class="hljs-variable">new</span> <span class="hljs-title function_">SomeClass</span>() <span class="hljs-comment">// You can also still use the new keyword</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">someInstance</span> = <span class="hljs-title function_ invoke__">SomeClass</span>()
+<span class="hljs-keyword">let</span> <span class="hljs-variable">otherInstance</span> = <span class="hljs-variable">new</span> <span class="hljs-title function_ invoke__">SomeClass</span>() <span class="hljs-comment">// You can also still use the new keyword</span>
 </code></pre>
 <p>For this to work with imported classes, you add an ampersand before the identifier.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">import</span> &amp;<span class="hljs-title class_">SomeClass</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./some_lib.js&#x27;</span>
 
-<span class="hljs-keyword">let</span> <span class="hljs-variable">someInstance</span> = <span class="hljs-title function_">SomeClass</span>()
-<span class="hljs-keyword">let</span> <span class="hljs-variable">otherInstance</span> = <span class="hljs-variable">new</span> <span class="hljs-title function_">SomeClass</span>() <span class="hljs-comment">// You can also still use the new keyword</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">someInstance</span> = <span class="hljs-title function_ invoke__">SomeClass</span>()
+<span class="hljs-keyword">let</span> <span class="hljs-variable">otherInstance</span> = <span class="hljs-variable">new</span> <span class="hljs-title function_ invoke__">SomeClass</span>() <span class="hljs-comment">// You can also still use the new keyword</span>
 </code></pre>
 <p>The advantage of this will be more apparent in latter Jome versions.</p>
   <h3 id="keywords">Keywords</h3>
@@ -251,17 +251,17 @@ And you use the end keyword instead of curly braces.</p>
 <p>The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.</p>
 <p>For the complete list of utils: see the <a href="/jome/utils">utils page</a>.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// A constant</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-variable">#PI</span>/<span class="hljs-number">2</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">e</span> = <span class="hljs-title function_">#e</span> <span class="hljs-comment">// Euler&#x27;s number</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-built_in variable_">#PI</span>/<span class="hljs-number">2</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">e</span> = <span class="hljs-built_in function_">#e</span> <span class="hljs-comment">// Euler&#x27;s number</span>
 
 <span class="hljs-comment">// A function</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">angle</span> = <span class="hljs-title function_">#sin</span>(<span class="hljs-variable">x</span>)
-<span class="hljs-keyword">let</span> <span class="hljs-variable">logarithmic</span> = <span class="hljs-title function_">#log10</span>(<span class="hljs-number">2</span>)
-<span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;The angle is:&quot;</span>, <span class="hljs-variable">angle</span>) <span class="hljs-comment">// #log is a shorthand for console.log</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">angle</span> = <span class="hljs-built_in function_">#sin</span>(<span class="hljs-variable">x</span>)
+<span class="hljs-keyword">let</span> <span class="hljs-variable">logarithmic</span> = <span class="hljs-built_in function_">#log10</span>(<span class="hljs-number">2</span>)
+<span class="hljs-built_in function_">#log</span>(<span class="hljs-string">&quot;The angle is:&quot;</span>, <span class="hljs-variable">angle</span>) <span class="hljs-comment">// #log is a shorthand for console.log</span>
 </code></pre>
 <p>By addind a dot before the hashtag, you can call the function with the preceding token as an argument.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// A function acting upon a variable</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">keys</span> = <span class="hljs-variable">obj</span>.<span class="hljs-title function_">#keys</span> <span class="hljs-comment">// same as #keys(obj) or Object.keys(obj)</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">keys</span> = <span class="hljs-variable">obj</span>.<span class="hljs-built_in function_">#keys</span> <span class="hljs-comment">// same as #keys(obj) or Object.keys(obj)</span>
 </code></pre>
 <p>Utils include most things global in javascript and useful utils like in underscore.js.</p>
 <p>Math: #PI, #sin, #cos, #tan, ..., #rand?
@@ -269,7 +269,7 @@ console: #log, ...
 process: #argv, #env, #cwd...
 underscore.js: #map, #reduce, ...</p>
 <p>For functions that have a sync and async version, use the exclamation mark after to use the sync version.</p>
-<pre><code class="language-jome"><span class="hljs-title function_">#write!</span> <span class="hljs-string">&#x27;Some content&#x27;</span>, to: <span class="hljs-string">&#x27;./somefile.txt&#x27;</span>, overwrite: <span class="hljs-keyword">true</span>
+<pre><code class="language-jome"><span class="hljs-built_in function_">#write!</span> <span class="hljs-string">&#x27;Some content&#x27;</span>, to: <span class="hljs-string">&#x27;./somefile.txt&#x27;</span>, overwrite: <span class="hljs-keyword">true</span>
 </code></pre>
   <h2 id="strings">Strings</h2>
 <p>They are many kinds of quotes in Jome that should handle every use case. There is:</p>
@@ -297,11 +297,11 @@ a loop nightmare.</p>
 <pre><code class="language-jome"><span class="hljs-variable">forall</span> <span class="hljs-variable">js</span>
   <span class="hljs-variable">chain</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">lines</span>|
     <span class="hljs-comment">// First validate that every line contains only a string. Template literals are not allowed in a js tag.</span>
-    <span class="hljs-keyword">if</span> !<span class="hljs-variable">lines</span>.<span class="hljs-title function_">every</span>(<span class="hljs-variable">line</span> =&gt; <span class="hljs-variable">line</span>.<span class="hljs-variable">length</span> === <span class="hljs-number">1</span> &amp;&amp; <span class="hljs-variable">line</span>.<span class="hljs-keyword">type</span> === <span class="hljs-string">&#x27;string&#x27;</span>)
-      <span class="hljs-variable">throw</span> <span class="hljs-variable">new</span> <span class="hljs-title function_">Error</span>(<span class="hljs-string">&quot;Template literals are not allowed in a js tag.&quot;</span>)
+    <span class="hljs-keyword">if</span> !<span class="hljs-variable">lines</span>.<span class="hljs-title function_ invoke__">every</span>(<span class="hljs-variable">line</span> =&gt; <span class="hljs-variable">line</span>.<span class="hljs-variable">length</span> === <span class="hljs-number">1</span> &amp;&amp; <span class="hljs-variable">line</span>.<span class="hljs-keyword">type</span> === <span class="hljs-string">&#x27;string&#x27;</span>)
+      <span class="hljs-variable">throw</span> <span class="hljs-variable">new</span> <span class="hljs-title function_ invoke__">Error</span>(<span class="hljs-string">&quot;Template literals are not allowed in a js tag.&quot;</span>)
     <span class="hljs-keyword">end</span>
     <span class="hljs-comment">// Convert all the string into a single TemplateLiteral</span>
-    <span class="hljs-keyword">return</span> <span class="hljs-title function_">TemplateLiteral</span>(<span class="hljs-variable">lines</span>.<span class="hljs-title function_">map</span>(<span class="hljs-variable">l</span> =&gt; <span class="hljs-variable">l</span>[<span class="hljs-number">0</span>]).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">TemplateLiteral</span>(<span class="hljs-variable">lines</span>.<span class="hljs-title function_ invoke__">map</span>(<span class="hljs-variable">l</span> =&gt; <span class="hljs-variable">l</span>[<span class="hljs-number">0</span>]).<span class="hljs-title function_ invoke__">join</span>(<span class="hljs-string">&#x27;
 &#x27;</span>))
   <span class="hljs-keyword">end</span>
 <span class="hljs-keyword">end</span>
@@ -354,7 +354,7 @@ want a single page of your big application to use react, that use a react format
 <h2>Shorthand syntax for function calls</h2>
 <p>I want a short syntax for function calls like in ruby.</p>
 <p>I am thinking of using the same.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">names</span> = <span class="hljs-variable">people</span>.<span class="hljs-title function_">#each</span>(&amp;:<span class="hljs-variable">name</span>)
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">names</span> = <span class="hljs-variable">people</span>.<span class="hljs-built_in function_">#each</span>(&amp;:<span class="hljs-variable">name</span>)
 </code></pre>
 <p>Contrary to ruby, &amp;: does not have any other meaning like defining a block to a symbol. It's just a syntaxic sugar.</p>
   <h3 id="verbatim">Verbatim string literals</h3>
@@ -368,7 +368,7 @@ them I don't know if I want to do that. Or I want to offer multiple possibilitie
 <span class="language-shell">&lt;sh&gt;ls -A&lt;/sh&gt;</span>
 
 <span class="hljs-comment">// Ruby is a pretty nice language for scripts too </span>
-&lt;<span class="hljs-variable">rb</span>&gt;<span class="hljs-variable">puts</span> (<span class="hljs-number">1.</span><span class="hljs-number">.10</span>).<span class="hljs-title function_">select</span>(&amp;:<span class="hljs-variable">even</span>?).<span class="hljs-variable">sum</span>&lt;/<span class="hljs-variable">rb</span>&gt;
+&lt;<span class="hljs-variable">rb</span>&gt;<span class="hljs-variable">puts</span> (<span class="hljs-number">1.</span><span class="hljs-number">.10</span>).<span class="hljs-title function_ invoke__">select</span>(&amp;:<span class="hljs-variable">even</span>?).<span class="hljs-variable">sum</span>&lt;/<span class="hljs-variable">rb</span>&gt;
 </code></pre>
 <h3>Scripts for data</h3>
 <p>TODO:</p>
@@ -411,7 +411,7 @@ a function in another file and you are sure it will reference the proper file.</
 <span class="hljs-keyword">let</span> <span class="hljs-variable">path1</span> = #/<span class="hljs-variable">some</span>/<span class="hljs-variable">absolute</span>/<span class="hljs-variable">path</span>.<span class="hljs-variable">txt</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">path2</span> = #./<span class="hljs-variable">someFile</span>.<span class="hljs-variable">jome</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">path3</span> = #../<span class="hljs-variable">otherDir</span>/<span class="hljs-string">&quot;some file with spaces.txt&quot;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">path4</span> = <span class="hljs-variable">#cwd</span>/<span class="hljs-variable">someFile</span>.<span class="hljs-variable">txt</span> <span class="hljs-comment">// Allow paths after #cwd to get files inside current working directory.</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">path4</span> = <span class="hljs-built_in variable_">#cwd</span>/<span class="hljs-variable">someFile</span>.<span class="hljs-variable">txt</span> <span class="hljs-comment">// Allow paths after #cwd to get files inside current working directory.</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">path5</span> = #~/<span class="hljs-title class_">Downloads</span>/<span class="hljs-variable">someFile</span>.<span class="hljs-variable">txt</span> <span class="hljs-comment">// Maybe</span>
 </code></pre>
 <p>Relative paths are converted to absolute paths. It's the same as joining __dirname with the relative path.</p>
@@ -521,7 +521,7 @@ Les when sont simplement remplacé par &quot;if (expression du case)&quot;</p>
 The constructor is everything inside the class before the first def ... end.
 If you use @someArgument, then it will automatically set it for you.
 You pass arguments to the constructor after the class name or before with the <code>with</code> keyword.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">Person</span>(<span class="hljs-variable">favoriteColor</span>)
+<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_ invoke__">Person</span>(<span class="hljs-variable">favoriteColor</span>)
   <span class="hljs-variable">@firstName</span>: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;John&quot;</span>
   <span class="hljs-variable">@lastName</span>: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;Doe&quot;</span>
   <span class="hljs-variable">@age</span>: <span class="hljs-variable">number</span>
@@ -592,7 +592,7 @@ end
 </code></pre>
 <h3>Deconstructings</h3>
 <p>I want to be able to name deconstructed arguments in a method. Maybe with keyword as? aka? alias?</p>
-<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">example</span>(<span class="hljs-variable">props</span> <span class="hljs-variable">as</span> {<span class="hljs-variable">arg1</span>, <span class="hljs-variable">arg2</span>})
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">example</span>(<span class="hljs-variable">props</span> <span class="hljs-variable">as</span> {<span class="hljs-variable">arg1</span>, <span class="hljs-variable">arg2</span>})
 <span class="hljs-keyword">end</span>
 </code></pre>
 <h3>Inheritence</h3>
@@ -612,11 +612,11 @@ end
 <h3>Functions</h3>
 <pre><code class="language-jome"><span class="hljs-comment">// Utilise la syntaxe comme ruby</span>
 <span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span>
-  <span class="hljs-title function_">#log</span>(<span class="hljs-string">&#x27;Hello&#x27;</span>)
+  <span class="hljs-built_in function_">#log</span>(<span class="hljs-string">&#x27;Hello&#x27;</span>)
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-keyword">def</span> <span class="hljs-title function_">sayHelloTo</span>(<span class="hljs-variable">name</span>)
-  <span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;Hello! {name}&quot;</span>)
+<span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">sayHelloTo</span>(<span class="hljs-variable">name</span>)
+  <span class="hljs-built_in function_">#log</span>(<span class="hljs-string">&quot;Hello! {name}&quot;</span>)
 <span class="hljs-keyword">end</span>
 </code></pre>
 <p>The idea in Jome is that you don't have to make the distinction between a function and an arrow function. We'll see if this works.</p>
@@ -653,12 +653,12 @@ def debug = |msg along code as customCodeName along type as customTypeName along
 <p>TODO</p>
 <p>Je pense que la syntaxe que je veux est d'utiliser le type 'code'.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">debug</span> = |<span class="hljs-variable">msg</span> <span class="hljs-variable">along</span> <span class="hljs-keyword">code</span>| =&gt; (
-  <span class="hljs-title function_">#log</span>(<span class="hljs-keyword">code</span>+<span class="hljs-string">&#x27;:&#x27;</span>, <span class="hljs-variable">msg</span>)
+  <span class="hljs-built_in function_">#log</span>(<span class="hljs-keyword">code</span>+<span class="hljs-string">&#x27;:&#x27;</span>, <span class="hljs-variable">msg</span>)
 )
-<span class="hljs-title function_">debug</span>(<span class="hljs-variable">nomDeVariable</span>) <span class="hljs-comment">// =&gt; #log(&quot;nomDeVariable:&quot;, nomDeVariable)</span>
+<span class="hljs-title function_ invoke__">debug</span>(<span class="hljs-variable">nomDeVariable</span>) <span class="hljs-comment">// =&gt; #log(&quot;nomDeVariable:&quot;, nomDeVariable)</span>
 
 <span class="hljs-comment">// When calling in javascript, you need to supply both arguments</span>
-<span class="hljs-title function_">debug</span>(<span class="hljs-variable">nomDeVariable</span>, <span class="hljs-string">&quot;nomDeVariable&quot;</span>)
+<span class="hljs-title function_ invoke__">debug</span>(<span class="hljs-variable">nomDeVariable</span>, <span class="hljs-string">&quot;nomDeVariable&quot;</span>)
 </code></pre>
 <h2>aka or alias</h2>
 <p>I want to be able to give many possible names to a parameter.</p>
@@ -709,7 +709,7 @@ let r = <code>{x ? y}</code> // si x, alors <code>{y}</code>, sinon <code>null</
 let r = <code>{x if y}</code> // si x, alors <code>{y}</code>, sinon `` J'aimerais vraiment ça!!!!!!!!!!!!!!</p>
 <h2>Environment variables</h2>
 <p>Use #env for environment variables</p>
-<pre><code class="language-jome"><span class="hljs-variable">#env</span>.<span class="hljs-title class_">MY_ENV_VAR</span> = <span class="hljs-string">&#x27;foo&#x27;</span> <span class="hljs-comment">// =&gt; process.env.MY_ENV_VAR = &#x27;foo&#x27;</span>
+<pre><code class="language-jome"><span class="hljs-built_in variable_">#env</span>.<span class="hljs-title class_">MY_ENV_VAR</span> = <span class="hljs-string">&#x27;foo&#x27;</span> <span class="hljs-comment">// =&gt; process.env.MY_ENV_VAR = &#x27;foo&#x27;</span>
 </code></pre>
 <h2>Global variables</h2>
 <p>Global variables can be set like in javascript with the keyword global.</p>
@@ -724,7 +724,7 @@ should never use global variables. So it's OK like that.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a route and start it</span>
 <span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-variable">chain</span>
   <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
-    <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-variable">homePage</span>)
+    <span class="hljs-variable">res</span>.<span class="hljs-title function_ invoke__">send</span>(<span class="hljs-variable">homePage</span>)
   <span class="hljs-keyword">end</span>
   <span class="hljs-variable">start</span>
 <span class="hljs-keyword">end</span>

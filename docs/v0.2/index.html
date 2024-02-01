@@ -101,16 +101,16 @@
 </ul>
 <h2>Types</h2>
 <p>You can specify types for variables. It can be primitives like string, number, integer or float. It can also be class names or interfaces.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">greet</span>(name: <span class="hljs-variable">string</span>, greeting: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;Hello&quot;</span>) : <span class="hljs-variable">string</span>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">greet</span>(name: <span class="hljs-variable">string</span>, greeting: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;Hello&quot;</span>) : <span class="hljs-variable">string</span>
   <span class="hljs-keyword">return</span> <span class="hljs-string">`${greeting}, ${name}!`</span>
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-keyword">def</span> <span class="hljs-title function_">attack</span>(enemy: <span class="hljs-title class_">Player</span>)
+<span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">attack</span>(enemy: <span class="hljs-title class_">Player</span>)
   <span class="hljs-comment">/* ... */</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <p>You add a question mark after the type if the variable can be null.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">sayHello</span>(anybody: <span class="hljs-title class_">Person</span>?): <span class="hljs-variable">string</span>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">sayHello</span>(anybody: <span class="hljs-title class_">Person</span>?): <span class="hljs-variable">string</span>
   <span class="hljs-keyword">return</span> <span class="hljs-string">`${greeting}, ${anybody.name}!`</span> <span class="hljs-keyword">if</span> <span class="hljs-variable">anybody</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
@@ -194,7 +194,7 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
 {
   <span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span>
     .<span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
-      <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-variable">homePage</span>)
+      <span class="hljs-variable">res</span>.<span class="hljs-title function_ invoke__">send</span>(<span class="hljs-variable">homePage</span>)
     <span class="hljs-keyword">end</span>
     .<span class="hljs-variable">start</span>
 }
@@ -205,14 +205,14 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
   name: <span class="hljs-variable">string</span>
   prepare: <span class="hljs-variable">int</span>
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">Recipe</span>
-  <span class="hljs-keyword">def</span> <span class="hljs-title function_">prepare</span>(<span class="hljs-variable">str</span>)
+  <span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">prepare</span>(<span class="hljs-variable">str</span>)
   <span class="hljs-keyword">end</span>
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-keyword">class</span> <span class="hljs-title function_">Ing</span>(qty: <span class="hljs-variable">int</span> <span class="hljs-variable">along</span> <span class="hljs-variable">qtyFormat</span>, <span class="hljs-variable">@name</span>)
+<span class="hljs-keyword">class</span> <span class="hljs-title function_ invoke__">Ing</span>(qty: <span class="hljs-variable">int</span> <span class="hljs-variable">along</span> <span class="hljs-variable">qtyFormat</span>, <span class="hljs-variable">@name</span>)
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-keyword">class</span> <span class="hljs-title function_">Step</span>(<span class="hljs-variable">@instructions</span>)
+<span class="hljs-keyword">class</span> <span class="hljs-title function_ invoke__">Step</span>(<span class="hljs-variable">@instructions</span>)
 <span class="hljs-keyword">end</span>
 </code></pre>
 <pre><code class="language-jome"><span class="hljs-title class_">Recipe</span> #{
@@ -290,15 +290,15 @@ end
 }
 </code></pre>
 <pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span>
-  <span class="hljs-keyword">def</span> <span class="hljs-title function_">constructor</span>(props: <span class="hljs-title class_">Object</span>)
-    <span class="hljs-title function_">set</span>(<span class="hljs-variable">props</span>)
+  <span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">constructor</span>(props: <span class="hljs-title class_">Object</span>)
+    <span class="hljs-title function_ invoke__">set</span>(<span class="hljs-variable">props</span>)
     <span class="hljs-variable">this</span>.<span class="hljs-variable">props</span> = <span class="hljs-variable">props</span>
   <span class="hljs-keyword">end</span>
 
-  <span class="hljs-keyword">def</span> <span class="hljs-title function_">set</span>(attrs: <span class="hljs-title class_">Object</span>)
+  <span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">set</span>(attrs: <span class="hljs-title class_">Object</span>)
     <span class="hljs-comment">// Assign each entry of the object to &#x27;this&#x27;</span>
     <span class="hljs-keyword">for</span> (<span class="hljs-variable">const</span> <span class="hljs-variable">key</span> <span class="hljs-keyword">in</span> <span class="hljs-variable">props</span>)
-      <span class="hljs-keyword">if</span> (<span class="hljs-variable">props</span>.<span class="hljs-title function_">hasOwnProperty</span>(<span class="hljs-variable">key</span>)) {
+      <span class="hljs-keyword">if</span> (<span class="hljs-variable">props</span>.<span class="hljs-title function_ invoke__">hasOwnProperty</span>(<span class="hljs-variable">key</span>)) {
         <span class="hljs-variable">this</span>[<span class="hljs-variable">key</span>] = <span class="hljs-variable">props</span>[<span class="hljs-variable">key</span>];
       }
     <span class="hljs-keyword">end</span>
@@ -392,7 +392,7 @@ the confusion, you cannot declare an object with type. So you use interface for 
 <span class="hljs-comment">// Tuples</span>
 <span class="hljs-keyword">type</span> <span class="hljs-title class_">DimAndStr</span> = [<span class="hljs-title class_">Dim</span>, <span class="hljs-variable">string</span>]
 
-<span class="hljs-keyword">def</span> <span class="hljs-title function_">funcWithDimensions</span>(<span class="hljs-variable">dim</span> : <span class="hljs-title class_">Dim</span>)
+<span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">funcWithDimensions</span>(<span class="hljs-variable">dim</span> : <span class="hljs-title class_">Dim</span>)
   <span class="hljs-comment">// ...</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
@@ -407,9 +407,9 @@ the confusion, you cannot declare an object with type. So you use interface for 
 <span class="hljs-comment">// When you inherit from an interface, you can call super on the interface to initialize some values</span>
 
 <span class="hljs-comment">// Inheritence and properties</span>
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">Dagger</span> &lt; <span class="hljs-title function_">Weapon</span>(range: <span class="hljs-number">50</span>) <span class="hljs-keyword">end</span>
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">WeakDagger</span> &lt; <span class="hljs-title function_">Dagger</span>(damage: <span class="hljs-number">50</span>) <span class="hljs-keyword">end</span>
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">StrongDagger</span> &lt; <span class="hljs-title function_">Dagger</span>(damage: <span class="hljs-number">200</span>) <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Dagger</span> &lt; <span class="hljs-title function_ invoke__">Weapon</span>(range: <span class="hljs-number">50</span>) <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">WeakDagger</span> &lt; <span class="hljs-title function_ invoke__">Dagger</span>(damage: <span class="hljs-number">50</span>) <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">StrongDagger</span> &lt; <span class="hljs-title function_ invoke__">Dagger</span>(damage: <span class="hljs-number">200</span>) <span class="hljs-keyword">end</span>
 </code></pre>
 <h3>Intersection</h3>
 <p>You can use intersection to create a type that combines the properties of two interfaces together.</p>
@@ -441,7 +441,7 @@ the confusion, you cannot declare an object with type. So you use interface for 
 <h3>Class extends interface</h3>
 <p>A class can extend an interface.</p>
 <p>Interface default values will given given to the instance by default in the constructor.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_">SomeClass</span>(<span class="hljs-variable">props</span>) &lt; <span class="hljs-title function_">SomeInterface</span>(<span class="hljs-variable">props</span>)
+<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_ invoke__">SomeClass</span>(<span class="hljs-variable">props</span>) &lt; <span class="hljs-title function_ invoke__">SomeInterface</span>(<span class="hljs-variable">props</span>)
 <span class="hljs-keyword">end</span>
 </code></pre>
 <h3>Source for decisions</h3>
@@ -530,13 +530,13 @@ func(10, &quot;g&quot;)</p>
 <p>Signals are used for events. They are not very much implemented yet. TODO: Check how Godot handles events, check how js handles events.</p>
 <p>In Jome, signals start with a tilde.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Button</span> {
-  ~<span class="hljs-title function_">click</span>() {
-    <span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Button clicked!&#x27;</span>)
+  ~<span class="hljs-title function_ invoke__">click</span>() {
+    <span class="hljs-variable">console</span>.<span class="hljs-title function_ invoke__">log</span>(<span class="hljs-string">&#x27;Button clicked!&#x27;</span>)
   }
 }
 
 <span class="hljs-variable">btn</span> = « <span class="hljs-title class_">Button</span> »
-<span class="hljs-variable">btn</span>.<span class="hljs-title function_">click</span>()
+<span class="hljs-variable">btn</span>.<span class="hljs-title function_ invoke__">click</span>()
 </code></pre>
 <h3>Default signals</h3>
 <p>Default signals are created for very common things.</p>
@@ -581,13 +581,13 @@ Maybe:</li>
 <h2>TODO</h2>
 <p>Idée: #1, #2, ... fait référence aux arguments d'une fonction. Pas obliger de les déclarer. Ça peut être court comme syntaxe
 pour des filters par exemple.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">even</span> = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>].<span class="hljs-title function_">filter</span>(<span class="hljs-title function_">#1</span> <span class="hljs-variable">mod</span> <span class="hljs-number">2</span>)
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">even</span> = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>].<span class="hljs-title function_ invoke__">filter</span>(<span class="hljs-built_in function_">#1</span> <span class="hljs-variable">mod</span> <span class="hljs-number">2</span>)
 </code></pre>
 <p>TODO: Try an idea: -&gt; and =&gt; are optional</p>
 <pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">addXY</span> = |<span class="hljs-variable">x</span>, <span class="hljs-variable">y</span>| (<span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>)
-[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>].<span class="hljs-title function_">filter</span>(|<span class="hljs-variable">nb</span>| <span class="hljs-variable">nb</span> &gt; <span class="hljs-number">5</span>)
+[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>].<span class="hljs-title function_ invoke__">filter</span>(|<span class="hljs-variable">nb</span>| <span class="hljs-variable">nb</span> &gt; <span class="hljs-number">5</span>)
 <span class="hljs-comment">// Et pour quand il n&#x27;y a pas d&#x27;argument?</span>
-<span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span> = | | (<span class="hljs-title function_">#log</span>(<span class="hljs-string">&quot;Hello!&quot;</span>)) <span class="hljs-comment">// Noooooon ça c&#x27;est laid...</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span> = | | (<span class="hljs-built_in function_">#log</span>(<span class="hljs-string">&quot;Hello!&quot;</span>)) <span class="hljs-comment">// Noooooon ça c&#x27;est laid...</span>
 </code></pre>
 <p>get and set javascript keyword? Allow this in Jome? Or should use -&gt;?</p>
 <p>Je viens d'apprendre qu'il existe le keyword get en javascript qui permet de faire ça.

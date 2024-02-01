@@ -115,7 +115,7 @@ Show the code 75% of the space at the left, and 25% the simple counter button on
     <pre class='example-content'><code><div><span class="hljs-comment">// Button counter</span>
 <span class="hljs-keyword">def</span> <span class="hljs-variable">renderCounter</span>
   <span class="hljs-keyword">let</span> <span class="hljs-variable">count</span> = <span class="hljs-number">0</span>;
-  <span class="hljs-keyword">let</span> <span class="hljs-variable">button</span> = <span class="hljs-variable">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;ex-vanilla-counter&quot;</span>);
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">button</span> = <span class="hljs-variable">document</span>.<span class="hljs-title function_ invoke__">getElementById</span>(<span class="hljs-string">&quot;ex-vanilla-counter&quot;</span>);
   <span class="hljs-keyword">def</span> <span class="hljs-variable">handleClick</span>
     <span class="hljs-variable">count</span> = <span class="hljs-variable">count</span> + <span class="hljs-number">1</span>
     <span class="hljs-variable">button</span>.<span class="hljs-variable">textContent</span> = <span class="hljs-string">&quot;Clicked {count} {count === 1 ? &#x27;time&#x27; : &#x27;times&#x27;}&quot;</span>
@@ -125,7 +125,7 @@ Show the code 75% of the space at the left, and 25% the simple counter button on
     <span class="hljs-variable">button</span>.<span class="hljs-variable">removeEventListener</span> <span class="hljs-string">&quot;click&quot;</span>, <span class="hljs-variable">handleClick</span>
   <span class="hljs-keyword">end</span>
 <span class="hljs-keyword">end</span>
-<span class="hljs-title function_">renderCounter</span>()</div></code></pre>
+<span class="hljs-title function_ invoke__">renderCounter</span>()</div></code></pre>
   </div>
 <p>A simple button that when you click on it it increments. &quot;Clicked 2 times&quot;</p>
   <h3>Vanilla js</h3>
@@ -135,10 +135,10 @@ Show the code 75% of the space at the left, and 25% the simple counter button on
 
 <span class="hljs-variable">const</span> <span class="hljs-title class_">Counter</span> = () =&gt; {
   <span class="hljs-comment">// Define state variable &#x27;count&#x27; with initial value 0 and a function &#x27;setCount&#x27; to update it</span>
-  <span class="hljs-variable">const</span> [<span class="hljs-variable">count</span>, <span class="hljs-variable">setCount</span>] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+  <span class="hljs-variable">const</span> [<span class="hljs-variable">count</span>, <span class="hljs-variable">setCount</span>] = <span class="hljs-title function_ invoke__">useState</span>(<span class="hljs-number">0</span>);
 
   <span class="hljs-keyword">return</span> &lt;<span class="hljs-variable">react</span>&gt;
-    &lt;<span class="hljs-variable">button</span> <span class="hljs-variable">onClick</span>={<span class="hljs-title function_">setCount</span>(<span class="hljs-variable">count</span>+<span class="hljs-number">1</span>)}&gt;
+    &lt;<span class="hljs-variable">button</span> <span class="hljs-variable">onClick</span>={<span class="hljs-title function_ invoke__">setCount</span>(<span class="hljs-variable">count</span>+<span class="hljs-number">1</span>)}&gt;
       <span class="hljs-title class_">Clicked</span> {<span class="hljs-variable">count</span>} {<span class="hljs-variable">count</span> === <span class="hljs-number">1</span> ? <span class="hljs-string">&#x27;time&#x27;</span> : <span class="hljs-string">&#x27;times&#x27;</span>}
     &lt;/<span class="hljs-variable">button</span>&gt;
   &lt;/<span class="hljs-variable">react</span>&gt;
@@ -172,7 +172,7 @@ Show the code 75% of the space at the left, and 25% the simple counter button on
   <h3 id="html-button">Html button</h3>
 <pre><code class="language-jome"><span class="hljs-keyword">import</span> {<span class="hljs-title class_">Btn</span>, <span class="hljs-title class_">Txt</span>, <span class="hljs-variable">renderHTML</span>} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;html&quot;</span>
 
-<span class="hljs-title function_">renderHTML</span>(target: <span class="hljs-string">&#x27;#div-id&#x27;</span>, {
+<span class="hljs-title function_ invoke__">renderHTML</span>(target: <span class="hljs-string">&#x27;#div-id&#x27;</span>, {
   <span class="hljs-title class_">Btn</span> %count: <span class="hljs-number">0</span>, ~click: =&gt; (%<span class="hljs-variable">count</span> += <span class="hljs-number">1</span>)
     <span class="hljs-title class_">Txt</span> =&gt; <span class="hljs-string">&quot;Clicked {%count} {%count == 1 ? &#x27;time&#x27; : &#x27;times&#x27;}&quot;</span>
 })
@@ -225,7 +225,7 @@ jome.<span class="hljs-title function_">createObj</span>($.$.$btn, <span class="
 <p>TODO: Save metadata too.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">tables</span> = <span class="language-shell">&lt;sh&gt;sqlite3 &lt; % = ARGV[1] % &gt; &quot;.table&quot;&lt;/sh&gt;</span>
 <span class="language-shell">&lt;sh&gt;mkdir &lt; % = ARGV[2] % &gt;&lt;/sh&gt;</span>
-<span class="hljs-variable">tables</span><span class="hljs-title function_">#each</span>(<span class="hljs-variable">table</span> =&gt; (
+<span class="hljs-variable">tables</span><span class="hljs-built_in function_">#each</span>(<span class="hljs-variable">table</span> =&gt; (
   <span class="language-shell">&lt;sh&gt;sqlite3 -header -csv &lt; % = ARGV[1] % &gt; &quot;select * from &lt; % = table % &gt;;&quot; &gt; &lt; % = table % &gt;.csv&lt;/sh&gt;</span>
 ))
 </code></pre>

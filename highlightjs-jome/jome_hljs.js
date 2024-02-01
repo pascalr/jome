@@ -57,17 +57,17 @@ const highlighter = function(hljs) {
   }
 
   const UTIL_CONST = {
-    scope: "variable",
+    scope: "built_in.variable",
     begin: '#\\b(PI|env|cwd|argv)\\b'
   }
 
   const UTIL_FUNC = {
-    scope: "title function_",
+    scope: "built_in.function",
     begin: '#\\w+!?'
   }
 
   const FUNC_CALL = {
-    scope: "title function_",
+    scope: "title.function.invoke",
     begin: '\\w+(?=\\()'
   }
 
