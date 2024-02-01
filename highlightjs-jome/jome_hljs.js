@@ -1,6 +1,13 @@
 // Example of an example:
 // https://github.com/highlightjs/highlight.js/blob/main/src/languages/css.js
 
+function SCRIPT_TAG(id, name) {
+  return {
+    begin: `<${id}>`, end: `<\\/${id}>`,
+    subLanguage: name
+  }
+}
+
 const highlighter = function(hljs) {
 
   // Source: https://github.com/highlightjs/highlight.js/blob/main/src/languages/javascript.js
@@ -79,16 +86,6 @@ const highlighter = function(hljs) {
   //   begin: '<md>', end: '<\\/md>'
   // }
 
-  const SCRIPT_TAG_SH = {
-    begin: '<sh>', end: '<\\/sh>',
-    subLanguage: 'shell'
-  }
-
-  const SCRIPT_TAG_HTML = {
-    begin: '<html>', end: '<\\/html>',
-    subLanguage: 'html'
-  }
-
   return {
     case_insensitive: false, // language is case sensitive
     keywords: {
@@ -125,8 +122,12 @@ const highlighter = function(hljs) {
       OBJ_KEY,
       CLASS_NAME,
       VARIABLE,
-      SCRIPT_TAG_SH,
-      SCRIPT_TAG_HTML
+      SCRIPT_TAG('jome', 'jome'),
+      SCRIPT_TAG('js', 'js'),
+      SCRIPT_TAG('md', 'md'),
+      SCRIPT_TAG('sh', 'shell'),
+      SCRIPT_TAG('css', 'css'),
+      SCRIPT_TAG('html', 'html'),
     ]
   }
 }
