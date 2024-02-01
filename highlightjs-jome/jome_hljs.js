@@ -5,10 +5,17 @@
 // Example of an example:
 // https://github.com/highlightjs/highlight.js/blob/main/src/languages/css.js
 
-function SCRIPT_TAG(id, name) {
+function ScriptTag(id, name) {
   return {
     begin: `<${id}>`, end: `<\\/${id}>`,
     subLanguage: name
+  }
+}
+
+function String(begin, end) {
+  return {
+    scope: 'string',
+    begin, end
   }
 }
 
@@ -59,14 +66,24 @@ const highlighter = function(hljs) {
   //   begin: `<\\w+>`, end: `<\\/\\1>`,
   // }
 
+  const PATH = {
+    scope: "string",
+    begin: "(#\\.{0,2}/[^ \\(\\)\\,\n\"'`]*)|(#cwd/[^ \\(\\)\\,\n\"'`]*)|(#\\.{1,2})"
+  }
+
   const VARIABLE = {
     scope: "variable",
     begin: '@?\\w+'
   }
 
+  const LITERALS = {
+    scope: "literal",
+    begin: '\\b(false|true|null)\\b'
+  }
+
   const KEYWORD = {
     scope: "keyword",
-    begin: '\\b(init|attr|with|parent|exec|then|end|if|si|class|export|import|from|for|in|while|do|def|var|let|code|unit|false|true|null|return|module|interface|main|type|else|elif|elsif)\\b'
+    begin: '\\b(new|init|attr|with|parent|exec|then|end|if|si|class|export|import|from|for|in|while|do|def|var|let|code|unit|return|module|interface|main|type|else|elif|elsif)\\b'
   }
 
   const CLASS_NAME = {
@@ -105,24 +122,20 @@ const highlighter = function(hljs) {
 
   return {
     case_insensitive: false, // language is case sensitive
-    keywords: {
-      keyword: 'if si class classe export import from def var let code unit',
-      literal: 'false true null vrai faux nul oui non yes no'
-    },
+    // keywords: {
+    //   keyword: 'if si class classe export import from def var let code unit',
+    //   literal: 'false true null vrai faux nul oui non yes no'
+    // },
     contains: [
+      LITERALS,
       // TEST,
-      {
-        scope: 'string',
-        begin: '"', end: '"'
-      },
-      {
-        scope: 'string',
-        begin: "'", end: "'"
-      },
-      {
-        scope: 'string',
-        begin: "`", end: "`"
-      },
+      String('"""', '"""'),
+      String('"', '"'),
+      String("'''", "'''"),
+      String("'", "'"),
+      String('`', '`'),
+      String('@"', '"'),
+      PATH,
       {
         scope: "comment",
         variants: [
@@ -140,12 +153,12 @@ const highlighter = function(hljs) {
       OBJ_KEY,
       CLASS_NAME,
       VARIABLE,
-      SCRIPT_TAG('jome', 'jome'),
-      SCRIPT_TAG('js', 'js'),
-      SCRIPT_TAG('md', 'md'),
-      SCRIPT_TAG('sh', 'shell'),
-      SCRIPT_TAG('css', 'css'),
-      SCRIPT_TAG('html', 'xml'),
+      ScriptTag('jome', 'jome'),
+      ScriptTag('js', 'js'),
+      ScriptTag('md', 'md'),
+      ScriptTag('sh', 'shell'),
+      ScriptTag('css', 'css'),
+      ScriptTag('html', 'xml'),
       // TAG
     ]
   }

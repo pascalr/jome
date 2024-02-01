@@ -197,13 +197,13 @@ And you use the end keyword instead of curly braces.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SomeClass</span> <span class="hljs-keyword">end</span>
 
 <span class="hljs-keyword">let</span> <span class="hljs-variable">someInstance</span> = <span class="hljs-title function_ invoke__">SomeClass</span>()
-<span class="hljs-keyword">let</span> <span class="hljs-variable">otherInstance</span> = <span class="hljs-variable">new</span> <span class="hljs-title function_ invoke__">SomeClass</span>() <span class="hljs-comment">// You can also still use the new keyword</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">otherInstance</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">SomeClass</span>() <span class="hljs-comment">// You can also still use the new keyword</span>
 </code></pre>
 <p>For this to work with imported classes, you add an ampersand before the identifier.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">import</span> &amp;<span class="hljs-title class_">SomeClass</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./some_lib.js&#x27;</span>
 
 <span class="hljs-keyword">let</span> <span class="hljs-variable">someInstance</span> = <span class="hljs-title function_ invoke__">SomeClass</span>()
-<span class="hljs-keyword">let</span> <span class="hljs-variable">otherInstance</span> = <span class="hljs-variable">new</span> <span class="hljs-title function_ invoke__">SomeClass</span>() <span class="hljs-comment">// You can also still use the new keyword</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">otherInstance</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">SomeClass</span>() <span class="hljs-comment">// You can also still use the new keyword</span>
 </code></pre>
 <p>The advantage of this will be more apparent in latter Jome versions.</p>
   <h3 id="keywords">Keywords</h3>
@@ -244,7 +244,9 @@ And you use the end keyword instead of curly braces.</p>
 <span class="hljs-comment">// same as</span>
 <span class="hljs-variable">obj</span> = {content: <span class="hljs-variable">content</span>, value: <span class="hljs-variable">value</span>}
 </code></pre>
-<p>Also, this allows you to pass a variable as a named parameter to a function. Ex: <code>someFunc :someArg</code> =&gt; <code>someFunc({someArg})</code></p>
+<p>Also, this allows you to pass a variable as a named parameter to a function.</p>
+<pre><code class="language-jome"><span class="hljs-variable">someFunc</span> :<span class="hljs-variable">someArg</span> <span class="hljs-comment">// same as someFunc({someArg})</span>
+</code></pre>
   <h2 id="builtins">Built-Ins</h2>
 <p>The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.</p>
 <p>For the complete list of utils: see the <a href="/jome/utils">utils page</a>.</p>
@@ -267,7 +269,7 @@ console: #log, ...
 process: #argv, #env, #cwd...
 underscore.js: #map, #reduce, ...</p>
 <p>For functions that have a sync and async version, use the exclamation mark after to use the sync version.</p>
-<pre><code class="language-jome"><span class="hljs-built_in function_">#write!</span> <span class="hljs-string">&#x27;Some content&#x27;</span>, to: <span class="hljs-string">&#x27;./somefile.txt&#x27;</span>, overwrite: <span class="hljs-keyword">true</span>
+<pre><code class="language-jome"><span class="hljs-built_in function_">#write!</span> <span class="hljs-string">&#x27;Some content&#x27;</span>, to: <span class="hljs-string">&#x27;./somefile.txt&#x27;</span>, overwrite: <span class="hljs-literal">true</span>
 </code></pre>
   <h2 id="strings">Strings</h2>
 <p>They are many kinds of quotes in Jome that should handle every use case. There is:</p>
@@ -296,7 +298,7 @@ a loop nightmare.</p>
   <span class="hljs-variable">chain</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">lines</span>|
     <span class="hljs-comment">// First validate that every line contains only a string. Template literals are not allowed in a js tag.</span>
     <span class="hljs-keyword">if</span> !<span class="hljs-variable">lines</span>.<span class="hljs-title function_ invoke__">every</span>(<span class="hljs-variable">line</span> =&gt; <span class="hljs-variable">line</span>.<span class="hljs-variable">length</span> === <span class="hljs-number">1</span> &amp;&amp; <span class="hljs-variable">line</span>.<span class="hljs-keyword">type</span> === <span class="hljs-string">&#x27;string&#x27;</span>)
-      <span class="hljs-variable">throw</span> <span class="hljs-variable">new</span> <span class="hljs-title function_ invoke__">Error</span>(<span class="hljs-string">&quot;Template literals are not allowed in a js tag.&quot;</span>)
+      <span class="hljs-variable">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">Error</span>(<span class="hljs-string">&quot;Template literals are not allowed in a js tag.&quot;</span>)
     <span class="hljs-keyword">end</span>
     <span class="hljs-comment">// Convert all the string into a single TemplateLiteral</span>
     <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">TemplateLiteral</span>(<span class="hljs-variable">lines</span>.<span class="hljs-title function_ invoke__">map</span>(<span class="hljs-variable">l</span> =&gt; <span class="hljs-variable">l</span>[<span class="hljs-number">0</span>]).<span class="hljs-title function_ invoke__">join</span>(<span class="hljs-string">&#x27;
@@ -311,8 +313,8 @@ a loop nightmare.</p>
 any sense really...</p>
 <h2>Content tag percent syntax</h2>
 <p>You can define heredoc with xml tags, but you can also simply prepend a percent followed by the tag name.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">isTrue</span> = <span class="hljs-string">&lt;txt&gt;Hello&lt;/txt&gt; === &quot;Hello&quot;%txt
-</span></code></pre>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">isTrue</span> = &lt;<span class="hljs-variable">txt</span>&gt;<span class="hljs-title class_">Hello</span>&lt;/<span class="hljs-variable">txt</span>&gt; === <span class="hljs-string">&quot;Hello&quot;</span>%<span class="hljs-variable">txt</span>
+</code></pre>
 <p>The difference is that you won't get syntax highlighting for things like html, css, etc. But you will at least get syntax highlighting
 for template literals properly.</p>
 <p>TODO: You can use percent formating after variable name too:</p>
@@ -358,7 +360,7 @@ want a single page of your big application to use react, that use a react format
   <h3 id="verbatim">Verbatim string literals</h3>
 <p>Verbatim string literals are strings that do not interpolate. The idea is taken from C#. But in C# it also includes backslashes without escaping
 them I don't know if I want to do that. Or I want to offer multiple possibilities.</p>
-<pre><code class="language-jome"><span class="hljs-variable">str</span> = @<span class="hljs-string">&quot;This is a string that does ${not} interpolate&quot;</span>
+<pre><code class="language-jome"><span class="hljs-variable">str</span> = <span class="hljs-string">@&quot;This is a string that does ${not} interpolate&quot;</span>
 </code></pre>
   <h2 id="heredocs">Heredocs</h2>
 <p>In jome, the idea is that you could include most other programming languages directly using xml tags.</p>
@@ -366,8 +368,8 @@ them I don't know if I want to do that. Or I want to offer multiple possibilitie
 <span class="language-shell">&lt;sh&gt;ls -A&lt;/sh&gt;</span>
 
 <span class="hljs-comment">// Ruby is a pretty nice language for scripts too </span>
-<span class="hljs-string">&lt;rb&gt;puts (1..10).select(&amp;:even?).sum&lt;/rb&gt;
-</span></code></pre>
+&lt;<span class="hljs-variable">rb</span>&gt;<span class="hljs-variable">puts</span> (<span class="hljs-number">1.</span><span class="hljs-number">.10</span>).<span class="hljs-title function_ invoke__">select</span>(&amp;:<span class="hljs-variable">even</span>?).<span class="hljs-variable">sum</span>&lt;/<span class="hljs-variable">rb</span>&gt;
+</code></pre>
 <h3>Scripts for data</h3>
 <p>TODO:</p>
 <p>En jome, c'est <bin>01010101</bin> pour faire du binaire et <hex>FF00AA</hex> pour faire de l'hexadécimal.
@@ -383,7 +385,7 @@ console.log(exponentialNumber); // Outputs: 1230000</p>
 <p>You can add data inside the scripts using the &lt; % =    % &gt; syntax.</p>
 <p>Contrary to other template languages like ejs, you must finish the expression given inside the interpolation tag.</p>
 <p>If you want to do a condition for example, you use a nesting tag &lt; &gt; ... &lt; / &gt;</p>
-<pre><code class="language-jome">&lt; % = <span class="hljs-keyword">if</span> <span class="hljs-keyword">true</span> &lt; &gt;
+<pre><code class="language-jome">&lt; % = <span class="hljs-keyword">if</span> <span class="hljs-literal">true</span> &lt; &gt;
   &lt;<span class="hljs-variable">div</span> <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;
     &lt; % = <span class="hljs-variable">content</span> % &gt;
   &lt;/<span class="hljs-variable">div</span>&gt;
@@ -405,21 +407,21 @@ to the current working directory.</p>
 paths relative to the current working directory. They are compiled to become absolute, so you can pass it to
 a function in another file and you are sure it will reference the proper file.</p>
 <p>You can use # to define paths. They must start by '/', '.' or 'cwd/'. (Maybe '~' too)</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">path0</span> = #. <span class="hljs-comment">// same as __dirname</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">path1</span> = #/<span class="hljs-variable">some</span>/<span class="hljs-variable">absolute</span>/<span class="hljs-variable">path</span>.<span class="hljs-variable">txt</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">path2</span> = #./<span class="hljs-variable">someFile</span>.<span class="hljs-variable">jome</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">path3</span> = #../<span class="hljs-variable">otherDir</span>/<span class="hljs-string">&quot;some file with spaces.txt&quot;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">path4</span> = <span class="hljs-built_in variable_">#cwd</span>/<span class="hljs-variable">someFile</span>.<span class="hljs-variable">txt</span> <span class="hljs-comment">// Allow paths after #cwd to get files inside current working directory.</span>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">path0</span> = <span class="hljs-string">#.</span> <span class="hljs-comment">// same as __dirname</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">path1</span> = <span class="hljs-string">#/some/absolute/path.txt</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">path2</span> = <span class="hljs-string">#./someFile.jome</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">path3</span> = <span class="hljs-string">#../otherDir/</span><span class="hljs-string">&quot;some file with spaces.txt&quot;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">path4</span> = <span class="hljs-string">#cwd/someFile.txt</span> <span class="hljs-comment">// Allow paths after #cwd to get files inside current working directory.</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">path5</span> = #~/<span class="hljs-title class_">Downloads</span>/<span class="hljs-variable">someFile</span>.<span class="hljs-variable">txt</span> <span class="hljs-comment">// Maybe</span>
 </code></pre>
 <p>Relative paths are converted to absolute paths. It's the same as joining __dirname with the relative path.</p>
 <p>Spaces are not allowed, but you can escape them. Any other character is allowed?</p>
 <p>You can use quotes inside paths, just not at the beginning. You can use like like so:</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #./<span class="hljs-string">&#x27;some/file with spaces.txt&#x27;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #/<span class="hljs-string">&#x27;some/file with spaces.txt&#x27;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #./<span class="hljs-string">&quot;some/file with spaces.txt&quot;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #/<span class="hljs-string">&quot;some path/file with spaces.txt&quot;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #/<span class="hljs-variable">some</span>/<span class="hljs-variable">path</span>/<span class="hljs-variable">to</span>/<span class="hljs-variable">some</span>/<span class="hljs-string">&quot;file with spaces.txt&quot;</span>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = <span class="hljs-string">#./</span><span class="hljs-string">&#x27;some/file with spaces.txt&#x27;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = <span class="hljs-string">#/</span><span class="hljs-string">&#x27;some/file with spaces.txt&#x27;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = <span class="hljs-string">#./</span><span class="hljs-string">&quot;some/file with spaces.txt&quot;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = <span class="hljs-string">#/</span><span class="hljs-string">&quot;some path/file with spaces.txt&quot;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = <span class="hljs-string">#/some/path/to/some/</span><span class="hljs-string">&quot;file with spaces.txt&quot;</span>
 </code></pre>
 <p>If you want quotes inside your filename, than you need to escape them.</p>
 <p>No interpolation inside jome paths?</p>

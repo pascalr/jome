@@ -137,13 +137,13 @@ Show the code 75% of the space at the left, and 25% the simple counter button on
   <span class="hljs-comment">// Define state variable &#x27;count&#x27; with initial value 0 and a function &#x27;setCount&#x27; to update it</span>
   <span class="hljs-variable">const</span> [<span class="hljs-variable">count</span>, <span class="hljs-variable">setCount</span>] = <span class="hljs-title function_ invoke__">useState</span>(<span class="hljs-number">0</span>);
 
-  <span class="hljs-keyword">return</span> <span class="hljs-string">&lt;react&gt;
-    &lt;button onClick={setCount(count+1)}&gt;
-      Clicked {count} {count === 1 ? &#x27;time&#x27; : &#x27;times&#x27;}
-    &lt;/button&gt;
-  &lt;/react&gt;
+  <span class="hljs-keyword">return</span> &lt;<span class="hljs-variable">react</span>&gt;
+    &lt;<span class="hljs-variable">button</span> <span class="hljs-variable">onClick</span>={<span class="hljs-title function_ invoke__">setCount</span>(<span class="hljs-variable">count</span>+<span class="hljs-number">1</span>)}&gt;
+      <span class="hljs-title class_">Clicked</span> {<span class="hljs-variable">count</span>} {<span class="hljs-variable">count</span> === <span class="hljs-number">1</span> ? <span class="hljs-string">&#x27;time&#x27;</span> : <span class="hljs-string">&#x27;times&#x27;</span>}
+    &lt;/<span class="hljs-variable">button</span>&gt;
+  &lt;/<span class="hljs-variable">react</span>&gt;
 };
-</span></code></pre>
+</code></pre>
 <h2>Adder</h2>
 <p>Un autre truc simple comme le compteur. 2 input fields, tu additionnes les inputs et tu les affichent.</p>
 <p>Voici le code svelte.</p>

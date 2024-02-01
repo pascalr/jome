@@ -248,7 +248,11 @@ module.exports = () => {
   obj = {content: content, value: value}
   \`\`\`
 
-  Also, this allows you to pass a variable as a named parameter to a function. Ex: \`someFunc :someArg\` => \`someFunc({someArg})\`
+  Also, this allows you to pass a variable as a named parameter to a function.
+  
+  \`\`\`jome
+  someFunc :someArg // same as someFunc({someArg})
+  \`\`\`
 
   <h2 id="builtins">Built-Ins</h2>
 
