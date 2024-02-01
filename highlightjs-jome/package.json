@@ -1,0 +1,22 @@
+{
+  "name": "highlightjs-jome",
+  "version": "0.0.1",
+  "description": "Syntax highlighting with highlight.js for Jome",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pascalr/jome.git#main"
+  },
+  "keywords": [
+    "Jome",
+    "highlight.js",
+    "syntax",
+    "highlighting"
+  ],
+  "author": "Pascal Rainville",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pascalr/jome/issues"
+  },
+  "homepage": "https://github.com/pascalr/jome/tree/main/highlightjs-jome#readme"
+}
