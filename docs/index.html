@@ -311,8 +311,8 @@ a loop nightmare.</p>
 any sense really...</p>
 <h2>Content tag percent syntax</h2>
 <p>You can define heredoc with xml tags, but you can also simply prepend a percent followed by the tag name.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">isTrue</span> = &lt;<span class="hljs-variable">txt</span>&gt;<span class="hljs-title class_">Hello</span>&lt;/<span class="hljs-variable">txt</span>&gt; === <span class="hljs-string">&quot;Hello&quot;</span>%<span class="hljs-variable">txt</span>
-</code></pre>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">isTrue</span> = <span class="hljs-string">&lt;txt&gt;Hello&lt;/txt&gt; === &quot;Hello&quot;%txt
+</span></code></pre>
 <p>The difference is that you won't get syntax highlighting for things like html, css, etc. But you will at least get syntax highlighting
 for template literals properly.</p>
 <p>TODO: You can use percent formating after variable name too:</p>
@@ -366,8 +366,8 @@ them I don't know if I want to do that. Or I want to offer multiple possibilitie
 <span class="language-shell">&lt;sh&gt;ls -A&lt;/sh&gt;</span>
 
 <span class="hljs-comment">// Ruby is a pretty nice language for scripts too </span>
-&lt;<span class="hljs-variable">rb</span>&gt;<span class="hljs-variable">puts</span> (<span class="hljs-number">1.</span><span class="hljs-number">.10</span>).<span class="hljs-title function_ invoke__">select</span>(&amp;:<span class="hljs-variable">even</span>?).<span class="hljs-variable">sum</span>&lt;/<span class="hljs-variable">rb</span>&gt;
-</code></pre>
+<span class="hljs-string">&lt;rb&gt;puts (1..10).select(&amp;:even?).sum&lt;/rb&gt;
+</span></code></pre>
 <h3>Scripts for data</h3>
 <p>TODO:</p>
 <p>En jome, c'est <bin>01010101</bin> pour faire du binaire et <hex>FF00AA</hex> pour faire de l'hexadécimal.

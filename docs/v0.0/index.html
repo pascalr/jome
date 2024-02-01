@@ -484,14 +484,14 @@ function and passing args to the function.</p>
 <p>Jome files can be included into other jome files. This allows you to easily create partials and file improved with Jome.</p>
 <p>C'est utile pour générer des fichiers d'autres types aussi.</p>
 <p>data.json.jome</p>
-<pre><code class="language-jome"><span class="hljs-keyword">return</span> &lt;<span class="hljs-variable">json</span>&gt;
+<pre><code class="language-jome"><span class="hljs-keyword">return</span> <span class="hljs-string">&lt;json&gt;
   {
-    <span class="hljs-string">&quot;some&quot;</span>: <span class="hljs-string">&quot;data&quot;</span>,
-    <span class="hljs-string">&quot;title&quot;</span>: &lt;% <span class="hljs-variable">title</span> %&gt;,
-    <span class="hljs-string">&quot;math&quot;</span>: &lt;% <span class="hljs-number">1</span> + <span class="hljs-number">2</span> %&gt;
+    &quot;some&quot;: &quot;data&quot;,
+    &quot;title&quot;: &lt;% title %&gt;,
+    &quot;math&quot;: &lt;% 1 + 2 %&gt;
   }
-&lt;/<span class="hljs-variable">json</span>&gt;
-</code></pre>
+&lt;/json&gt;
+</span></code></pre>
 <p>some_file.jome</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> data: <span class="hljs-variable">string</span> = <span class="hljs-built_in function_">#run</span> <span class="hljs-string">&#x27;./data.json.jome&#x27;</span>, title: <span class="hljs-string">&#x27;Some title!&#x27;</span>
 </code></pre>
@@ -1056,8 +1056,8 @@ to declare them, in order to know what is available.</p>
 <span class="language-shell">&lt;sh&gt;ls -A&lt;/sh&gt;</span>
 
 <span class="hljs-comment">// Ruby is a pretty nice language for scripts too </span>
-&lt;<span class="hljs-variable">rb</span>&gt;<span class="hljs-variable">puts</span> (<span class="hljs-number">1.</span><span class="hljs-number">.10</span>).<span class="hljs-title function_ invoke__">select</span>(&amp;:<span class="hljs-variable">even</span>?).<span class="hljs-variable">sum</span>&lt;/<span class="hljs-variable">rb</span>&gt;
-</code></pre>
+<span class="hljs-string">&lt;rb&gt;puts (1..10).select(&amp;:even?).sum&lt;/rb&gt;
+</span></code></pre>
 <p>Supported list for now:</p>
 <ul>
 <li>sh</li>

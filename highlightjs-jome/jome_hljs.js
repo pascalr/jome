@@ -1,3 +1,7 @@
+// TODO: Inside an object, scope: "attr" for object keys
+
+
+
 // Example of an example:
 // https://github.com/highlightjs/highlight.js/blob/main/src/languages/css.js
 
@@ -46,6 +50,13 @@ const highlighter = function(hljs) {
   //   // @ident@ or $ident$ that might indicate this is not ruby at all
   //   scope: "variable",
   //   begin: '(\\$\\W)|((\\$|@@?)(\\w+))(?=[^@$?])' + `(?![A-Za-z])(?![@$?'])`
+  // }
+
+  // hljs does not seem to support \\1, it seems I have to use on:begin
+  // https://highlightjs.readthedocs.io/en/latest/mode-reference.html
+  // const TAG = {
+  //   scope: "string",
+  //   begin: `<\\w+>`, end: `<\\/\\1>`,
   // }
 
   const VARIABLE = {
@@ -135,6 +146,7 @@ const highlighter = function(hljs) {
       SCRIPT_TAG('sh', 'shell'),
       SCRIPT_TAG('css', 'css'),
       SCRIPT_TAG('html', 'xml'),
+      // TAG
     ]
   }
 }

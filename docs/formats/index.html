@@ -106,10 +106,10 @@ the air, inviting anyone who entered to linger and embrace the serenity.
 <h2>bin, hex, oct</h2>
 <p>You can't declare the same way a binary, hexadecimal or octodecimal number in Jome because it could be confusing with units.</p>
 <p>Instead you use tags.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">netmask</span> = &lt;<span class="hljs-variable">hex</span>&gt;<span class="hljs-title class_">FFFFFF00</span>&lt;/<span class="hljs-variable">hex</span>&gt; <span class="hljs-comment">// compiles to 0xFFFFFF00</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">flags</span> = &lt;<span class="hljs-variable">bin</span>&gt;<span class="hljs-number">01100101</span>&lt;/<span class="hljs-variable">bin</span>&gt; <span class="hljs-comment">// compiles to 0b01100101</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">octodecimalNb</span> = &lt;<span class="hljs-variable">oct</span>&gt;<span class="hljs-number">712</span>&lt;/<span class="hljs-variable">oct</span>&gt; <span class="hljs-comment">// compiles to 0o712</span>
-</code></pre>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">netmask</span> = <span class="hljs-string">&lt;hex&gt;FFFFFF00&lt;/hex&gt; // compiles to 0xFFFFFF00
+let flags = &lt;bin&gt;01100101&lt;/bin&gt; // compiles to 0b01100101
+let octodecimalNb = &lt;oct&gt;712&lt;/oct&gt; // compiles to 0o712
+</span></code></pre>
 <p>TODO: Rajouter du syntax highligh au hex pour changer de couleur à toute les 2 charactères? Afficher comme des
 string et à tous les 2 charactères mettre comme si escaped string pour que la couleur change un peu.</p>
 <h2>Html formats</h2>
