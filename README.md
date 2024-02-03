@@ -17,6 +17,12 @@ TODO: Test ruby heredoc. Test syntax highlighting as defined in ruby.tmLanguage.
 
 Development: npm link
 
+## lsp
+
+Language server protocol. Contains server and client.
+
+TODO: Merge lsp and tm-grammar into a single folder maybe? A single vscode extension?
+
 ## jomec
 
 A package that contains the compiler that converts .jome file to .js files.
