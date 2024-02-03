@@ -2,9 +2,5 @@
   "name": "jome-lib",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
-  "dependencies": {
-    "highlightjs-jome": "^0.0.1",
-    "markdown-it": "^14.0.0"
-  }
+  "main": "index.js"
 }

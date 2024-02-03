@@ -16,7 +16,7 @@ const DEFAULT_FORALLS = {
   },
   md: {
     wrap: ["mdToHtml"],
-    imports: {mdToHtml: {from: 'jome-lib/mdToHtml', default: true}}
+    imports: {mdToHtml: {from: '@jome/md-to-html', default: true}}
   },
   // It seams to be very common to have two things, the language of the content, and how you want to process it.
   // What should be the standard convention? js-txt? txt.js? ex.js?

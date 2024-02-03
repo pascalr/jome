@@ -1,7 +1,7 @@
 const { trim, indent } = require("jome-lib/formatting");
 const hljs = require("highlightjs-jome");
 const Webpage = require("../src/webpage.js");
-const mdToHtml = require("jome-lib/mdToHtml");
+const mdToHtml = require("@jome/md-to-html");
 module.exports = () => {
   function printExample(result) {
     return `

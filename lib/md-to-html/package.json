@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Converts markdown in HTML with Jome syntax highlighting support.",
   "main": "index.js",
+  "scripts": {},
   "keywords": [
     "Jome",
     "Mardown",

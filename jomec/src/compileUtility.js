@@ -83,7 +83,7 @@ const UTILS = {
     return `compile(${(args).join(', ')})`
   },
   mdToHtml: (node, args) => {
-    node.ctxFile.addImport('mdToHtml', null, 'jome-lib/mdToHtml')
+    node.ctxFile.addImport('mdToHtml', null, '@jome/md-to-html')
     return `mdToHtml(${(args).join(', ')})`
   },
   execSh: (node, args) => {

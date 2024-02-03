@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@jome/md-to-html": "^0.0.1",
     "express": "^4.18.2",
     "highlightjs-jome": "^0.0.2",
     "markdown-it": "^14.0.0"
