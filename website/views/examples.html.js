@@ -23,7 +23,7 @@ module.exports = () => {
       .map((title) => `<div>${title}</div>`)
       .join("");
     let contents = Object.values(contentByTitle).map(
-      (content) => `<div>${content}</div>`
+      (content) => `<div>${content}</div>`,
     )[0];
     return `<div class='tabbed-content'>
     <div class='onglets'>
@@ -223,7 +223,7 @@ renderCounter()`),
 
   <script src="${ROOT}/js/ex_vanilla.js"></script>`).replace(
     "83e12e01e1210c36810087d76fbcec01",
-    printExample('#log "Hello, world!"')
+    printExample('#log "Hello, world!"'),
   );
   return new Webpage("Jome examples", content).render();
 };

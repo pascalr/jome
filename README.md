@@ -16,7 +16,9 @@ A package that contains the compiler that converts .jome file to .js files.
 
 ## jome-lib
 
-Contains code for all the utils.
+Contains functions that are used by Jome built-ins. #log won't be in jome-lib for example, it will be directly inside jome
+
+But if a utils compiles into a function, this function will be inside jome-lib (or similar).
 
 TODO: Split the code into a lot of packages.
 

@@ -1,7 +1,7 @@
 const run_navbar_html = require("../views/partials/navbar.html.js");
 const run_sidebar_html = require("../views/partials/sidebar.html.js");
 let navbar = run_navbar_html();
-let sidebar = run_sidebar_html();  // The base template for most webpages on this website.;
+let sidebar = run_sidebar_html(); // The base template for most webpages on this website.;
 /**
  * @param {*} title The html title of the page
  * @param {*} content Content to be displayed inside the body

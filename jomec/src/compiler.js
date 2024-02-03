@@ -3,7 +3,8 @@ const { tokenize } = require('./tokenizer.js')
 const { genCode, genImports } = require("./code_generator.js")
 const { validateAllNodes } = require("./validator")
 const { ContextFile } = require("./context.js")
-const prettier = require("prettier")
+const prettier = require("@prettier/sync")
+//const prettier = require("prettier")
 
 const fs = require('fs');
 //const path = require('path');
@@ -117,8 +118,6 @@ class Compiler {
     const data = fs.readFileSync(absPath, 'utf8');
     let ctxFile = new ContextFile(absPath)
     let result = this.compileCode(data, this.options, ctxFile)
-  
-    
   
     // Write the result to the file synchronously
     fs.writeFileSync(destFile, result);

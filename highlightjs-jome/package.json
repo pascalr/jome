@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/pascalr/jome/issues"
   },
-  "homepage": "https://github.com/pascalr/jome/tree/main/highlightjs-jome#readme"
+  "homepage": "https://github.com/pascalr/jome/tree/main/highlightjs-jome#readme",
+  "dependencies": {
+    "highlight.js": "^11.9.0"
+  }
 }
