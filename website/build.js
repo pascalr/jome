@@ -1,6 +1,5 @@
-const compile = require("jome-lib/compile");
+const { compile, build } = require("@jome/core");
 const fs = require("fs");
-const build = require("jome-lib/build");
 module.exports = (f) => {
   let force = f;
   compile(path.join(__dirname, "js/ex_vanilla.jomm"), { force: force });

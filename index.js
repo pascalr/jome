@@ -1,7 +1,7 @@
-const { trim, flat } = require("jome-lib/formatting");
+const { trim, flat } = require("@jome/core");
 const build = require("./website/build.js");
 const server = require("./website/server.js");
-const execSh = require("jome-lib/execSh");
+const execSh = require("@jome/core/execSh");
 module.exports = (cmd, args) => {
   global.ROOT = "/jome";
   if (cmd === "test") {

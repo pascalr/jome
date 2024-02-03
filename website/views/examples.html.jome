@@ -3,7 +3,7 @@
 
 import hljs from 'highlightjs-jome'
 import &Webpage from '../src/webpage.jomm'
-import {trim, indent} from 'jome-lib/formatting'
+import {trim, indent} from '@jome/core'
 
 // TODO: forall div chain asIs end
 // TODO: Have access to the beginning tag (with args!).

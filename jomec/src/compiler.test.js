@@ -169,13 +169,13 @@ describe("Regexes", () => {
 
 describe("Heredocs", () => {
   test('<sh>ls</sh>', () => {
-    expect(compile(`<sh>ls</sh>`)).toMatch(/const execSh = require\("jome-lib\/execSh"\);\s*execSh\("ls"\);/);
+    expect(compile(`<sh>ls</sh>`)).toMatch(/const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/);
   })
 })
 
 describe("Heredoc percent syntax", () => {
   test('"ls"%sh', () => {
-    expect(compile(`"ls"%sh`)).toMatch(/const execSh = require\("jome-lib\/execSh"\);\s*execSh\("ls"\);/);
+    expect(compile(`"ls"%sh`)).toMatch(/const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/);
   })
 })
 

@@ -1,7 +1,7 @@
 import build from './website/build.jome'
 import server from './website/server.jome'
 
-import {trim, flat} from 'jome-lib/formatting'
+import {trim, flat} from '@jome/core'
 
 with cmd, args end
 

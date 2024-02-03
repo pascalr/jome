@@ -53,11 +53,11 @@ const UTILS = {
   //   return `argv()`
   // },
   write: (node, args) => {
-    node.ctxFile.addImport(null, ['write'], 'jome-lib/write')
+    node.ctxFile.addImport(null, ['write'], '@jome/core')
     return `write(${(args).join(', ')})`
   },
   "write!": (node, args) => {
-    node.ctxFile.addImport(null, ['writeSync'], 'jome-lib/write')
+    node.ctxFile.addImport(null, ['writeSync'], '@jome/core')
     return `writeSync(${(args).join(', ')})`
   },
   cp: (node, args) => {
@@ -74,12 +74,12 @@ const UTILS = {
   "load!": (node, args) => _run(node, true, args),
   // TODO: build!
   build: (node, args) => {
-    node.ctxFile.addImport('build', null, 'jome-lib/build')
+    node.ctxFile.addImport(null, ['build'], '@jome/core')
     return `build(${(args).join(', ')})`
   },
   // TODO: compile!
   compile: (node, args) => {
-    node.ctxFile.addImport('compile', null, 'jome-lib/compile')
+    node.ctxFile.addImport(null, ['compile'], '@jome/core')
     return `compile(${(args).join(', ')})`
   },
   mdToHtml: (node, args) => {
@@ -87,7 +87,7 @@ const UTILS = {
     return `mdToHtml(${(args).join(', ')})`
   },
   execSh: (node, args) => {
-    node.ctxFile.addImport('execSh', null, 'jome-lib/execSh')
+    node.ctxFile.addImport(null, ['execSh'], '@jome/core')
     return `execSh(${(args).join(', ')})`
   },
 }
