@@ -22,7 +22,7 @@ import {
 } from 'vscode-languageserver-textdocument';
 
 //import {validateCode} from 'jomec/src/compiler.js';
-const {validateCode} = require('jomec/src/compiler.js');
+const {validateCode} = require('jome.js/src/compiler.js');
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.

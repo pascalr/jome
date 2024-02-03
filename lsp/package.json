@@ -49,7 +49,7 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
-    "publish": "cp -R . ~/.vscode/extensions/jome-lsp",
+		"publish": "cp -R . ~/.vscode/extensions/jome-lsp",
 		"lint": "eslint ./client/src ./server/src --ext .ts,.tsx",
 		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
 		"test": "sh ./scripts/e2e.sh"
