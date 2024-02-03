@@ -1,11 +1,11 @@
 {
-  "name": "jomec",
+  "name": "jome",
   "version": "0.0.1",
-  "description": "",
+  "description": "jomec is the Jome compiler.",
   "main": "index.js",
   "bin": {
-    "jome": "./src/jome-cli.js",
-    "jomec": "./src/jomec-cli.js"
+    "jome": "src/jome-cli.js",
+    "jomec": "src/jomec-cli.js"
   },
   "scripts": {
     "test": "jest"
@@ -20,5 +20,11 @@
   },
   "devDependencies": {
     "jest": "29.7.0"
-  }
+  },
+  "keywords": [
+    "Jome",
+    "js"
+  ],
+  "author": "Pascal Rainville",
+  "license": "MIT"
 }

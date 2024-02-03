@@ -6,7 +6,7 @@
       "command": "npm",
       "args": ["run", "test"],
       "options": {
-        "cwd": "${workspaceFolder}/jomec"
+        "cwd": "${workspaceFolder}/jome"
       },
       "presentation": {
         "echo": true,

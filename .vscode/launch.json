@@ -31,7 +31,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "command": "jome jomec/test/generic.test.jome"
+      "command": "jome jome/test/generic.test.jome"
     },
     {
       "type": "node",
@@ -46,7 +46,7 @@
       "name": "Debug Jest Tests",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceFolder}/jomec",
+      "cwd": "${workspaceFolder}/jome",
       "runtimeArgs": [
         "--inspect-brk",
         "${workspaceFolder}/node_modules/jest/bin/jest.js",
