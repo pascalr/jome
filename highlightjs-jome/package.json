@@ -1,6 +1,6 @@
 {
   "name": "highlightjs-jome",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Syntax highlighting with highlight.js for Jome",
   "main": "index.js",
   "repository": {
