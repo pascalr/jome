@@ -1,6 +1,6 @@
 {
   "name": "@jome/core",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "The core functions used by the compiled javascript code of Jome files.",
   "main": "index.js",
   "scripts": {
