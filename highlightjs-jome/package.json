@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pascalr/jome.git#main"
+    "url": "git+https://github.com/pascalr/jome.git#main"
   },
   "keywords": [
     "Jome",

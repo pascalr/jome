@@ -295,7 +295,7 @@ is just a postfix that means compile a certain way</p>
 This is because what if there are strings inside the jome function of other things it could become
 a loop nightmare.</p>
 <pre><code class="language-jome"><span class="hljs-variable">forall</span> <span class="hljs-variable">js</span>
-  <span class="hljs-variable">chain</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">lines</span>|
+  <span class="hljs-keyword">chain</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">lines</span>|
     <span class="hljs-comment">// First validate that every line contains only a string. Template literals are not allowed in a js tag.</span>
     <span class="hljs-keyword">if</span> !<span class="hljs-variable">lines</span>.<span class="hljs-title function_ invoke__">every</span>(<span class="hljs-variable">line</span> =&gt; <span class="hljs-variable">line</span>.<span class="hljs-variable">length</span> === <span class="hljs-number">1</span> &amp;&amp; <span class="hljs-variable">line</span>.<span class="hljs-keyword">type</span> === <span class="hljs-string">&#x27;string&#x27;</span>)
       <span class="hljs-variable">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">Error</span>(<span class="hljs-string">&quot;Template literals are not allowed in a js tag.&quot;</span>)
@@ -722,7 +722,7 @@ should never use global variables. So it's OK like that.</p>
 <h3>Chaining methods</h3>
 <p>You can execute multiple methods on the same object using the <code>chain</code> keyword.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a route and start it</span>
-<span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-variable">chain</span>
+<span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-keyword">chain</span>
   <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
     <span class="hljs-variable">res</span>.<span class="hljs-title function_ invoke__">send</span>(<span class="hljs-variable">homePage</span>)
   <span class="hljs-keyword">end</span>

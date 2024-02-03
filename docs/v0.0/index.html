@@ -357,7 +357,7 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
 <p>You can create a chain block using chain ... end.</p>
 <p>Chain returns the value of the last command.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a get handler and start it</span>
-<span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-variable">chain</span>
+<span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-keyword">chain</span>
   <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
     <span class="hljs-variable">res</span>.<span class="hljs-title function_ invoke__">send</span>(<span class="hljs-variable">homePage</span>)
   <span class="hljs-keyword">end</span>
@@ -368,7 +368,7 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
 {
   <span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span>
     someProp: <span class="hljs-string">&#x27;someVal&#x27;</span>
-    <span class="hljs-variable">chain</span>
+    <span class="hljs-keyword">chain</span>
       <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
         <span class="hljs-variable">res</span>.<span class="hljs-title function_ invoke__">send</span>(<span class="hljs-variable">homePage</span>)
       <span class="hljs-keyword">end</span>
@@ -380,7 +380,7 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
 
 <span class="hljs-keyword">let</span> <span class="hljs-variable">port</span> = <span class="hljs-number">3000</span>
 
-<span class="hljs-variable">express</span> <span class="hljs-variable">chain</span>
+<span class="hljs-variable">express</span> <span class="hljs-keyword">chain</span>
   <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
     <span class="hljs-variable">res</span>.<span class="hljs-title function_ invoke__">send</span>(<span class="hljs-string">&#x27;Hello world!&#x27;</span>)
   <span class="hljs-keyword">end</span>
@@ -736,7 +736,7 @@ If you use @someArgument, then it will automatically set it for you.</p>
 
   <span class="hljs-variable">super</span> <span class="hljs-title class_">AbstractClass</span>
 
-  <span class="hljs-keyword">attr</span> <span class="hljs-variable">someAttr</span> = <span class="hljs-string">&quot;defaultValue&quot;</span>
+  <span class="hljs-variable">attr</span> <span class="hljs-variable">someAttr</span> = <span class="hljs-string">&quot;defaultValue&quot;</span>
 
   <span class="hljs-variable">children</span> {[
     <span class="hljs-title class_">DefaultChild</span> <span class="hljs-string">&quot;blah&quot;</span>
@@ -847,7 +847,7 @@ end
 <pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_ invoke__">SomeClass</span>(<span class="hljs-variable">options</span>)
   <span class="hljs-variable">@init</span>()
 
-  <span class="hljs-keyword">def</span> <span class="hljs-keyword">init</span>
+  <span class="hljs-keyword">def</span> <span class="hljs-variable">init</span>
     
   <span class="hljs-keyword">end</span>
 <span class="hljs-keyword">end</span>
@@ -1027,7 +1027,7 @@ Trouver une manière de gérer cela.</p>
 <p>Class having state:</p>
 <pre><code class="language-jome"><span class="hljs-comment">// No question mark having state</span>
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">App</span> |%<span class="hljs-variable">theme</span>| {
-  <span class="hljs-keyword">init</span>: () =&gt; {
+  init: () =&gt; {
     %<span class="hljs-variable">theme</span> = {
       textColor: <span class="hljs-string">&quot;red&quot;</span>
     }
@@ -1563,19 +1563,19 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
     .<span class="hljs-variable">execFunc</span>
     .<span class="hljs-variable">execFunc2</span>
 
-  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span> <span class="hljs-keyword">exec</span>
+  <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span> <span class="hljs-variable">exec</span>
     <span class="hljs-variable">execFunc</span>
     <span class="hljs-variable">execFunc2</span>
 
   <span class="hljs-title class_">Obj</span> prop: <span class="hljs-string">&#x27;val&#x27;</span>
-    <span class="hljs-keyword">exec</span>
+    <span class="hljs-variable">exec</span>
       <span class="hljs-variable">execFunc</span>
       <span class="hljs-variable">execFunc2</span>
 ]}
 </code></pre>
 <pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a get handler and start it</span>
 {
-  <span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-keyword">exec</span>
+  <span class="hljs-title class_">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-variable">exec</span>
     <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span>, |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>| =&gt; (
       <span class="hljs-variable">res</span>.<span class="hljs-title function_ invoke__">send</span>(<span class="hljs-variable">homePage</span>)
     )

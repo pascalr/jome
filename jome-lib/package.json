@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "highlight.js": "^11.9.0",
+    "highlightjs-jome": "^0.0.1",
     "markdown-it": "^14.0.0"
   }
 }
