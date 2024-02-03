@@ -1,7 +1,5 @@
 // TODO: Inside an object, scope: "attr" for object keys
 
-
-
 // Example of an example:
 // https://github.com/highlightjs/highlight.js/blob/main/src/languages/css.js
 

@@ -58,6 +58,15 @@ function compileNodes(nodes) {
   //return nodes.map(node => genCode(node)).join(';')+';'
 }
 
+function validateCode(code) {
+  let compiler = new Compiler()
+  let ctxFile = new ContextFile()
+  ctxFile.compiler = compiler
+  let tokens = tokenize(code).children
+  let topNodes = parse(tokens, null, ctxFile.lexEnv)
+  return validateAllNodes(topNodes)
+}
+
 function compileCode(code, options) {
   return new Compiler(options).compileCode(code)
 }
@@ -171,5 +180,6 @@ function compileAndSaveFile(absPath, options) {
 module.exports = {
   compileCode,
   compileNodes,
-  compileAndSaveFile
+  compileAndSaveFile,
+  validateCode
 }

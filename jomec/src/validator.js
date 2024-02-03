@@ -1,13 +1,16 @@
 const {OPERAND_TYPES, filterSpaces, filterStrings, compileTokenRaw} = require("./parser.js")
 
 // TODO: Make sure no infinite loop
-function validateAllNodes(nodes) {
+function validateAllNodes(nodes, throwError = true) {
+  let errors = []
   nodes.forEach(node => {
     let validator = VALIDATORS[node.type]
     if (validator) {
       let err = validator(node)
       if (err || node.errors.length) {
-        throw new Error(err || node.errors[0])
+        if (throwError) {throw new Error(err || node.errors[0])}
+        if (err) {errors.push(err)}
+        if (node.errors.length) {errors = [...errors, node.errors]}
       }
     }
     if (node.operands?.length) {
@@ -17,6 +20,7 @@ function validateAllNodes(nodes) {
       validateAllNodes(node.parts)
     }
   });
+  return errors
 }
 
 function ensureLhsOperand(node) {
