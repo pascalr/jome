@@ -1,6 +1,6 @@
 {
   "name": "jome.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Jome programming language compiler and CLI.",
   "main": "index.js",
   "bin": {
