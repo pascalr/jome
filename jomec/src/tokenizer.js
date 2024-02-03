@@ -1,9 +1,11 @@
 // import FirstMate from 'first-mate'
 const FirstMate = require('first-mate')
+const path = require('path')
 
 const registry = new FirstMate.GrammarRegistry()
 //registry.loadGrammarSync('./grammar/syntaxes/JavaScript.tmLanguage.json')
-const grammar = registry.loadGrammarSync('./tm-grammar/syntaxes/jome.tmLanguage.json')
+let grammarFilePath = path.join(__dirname, '../../tm-grammar/syntaxes/jome.tmLanguage.json')
+const grammar = registry.loadGrammarSync(grammarFilePath)
 
 const POST_PROCESSES = new Set([
   "keyword.control.inline-conditional.jome",

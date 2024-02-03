@@ -4,9 +4,9 @@
     {
       "label": "Jest runner",
       "command": "npm",
-      "args": ["run", "jest"],
+      "args": ["run", "test"],
       "options": {
-        "cwd": "${workspaceFolder}/"
+        "cwd": "${workspaceFolder}/jomec"
       },
       "presentation": {
         "echo": true,
