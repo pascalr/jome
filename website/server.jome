@@ -6,7 +6,7 @@ with {port = 3000} end
 
 express() chain
 
-  use '/jome', express.static('docs')
+  use '/jome', express.static('../docs')
 
   get "/", (req, res) => res.redirect('/jome')
 
