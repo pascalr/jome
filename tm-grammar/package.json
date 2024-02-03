@@ -9,7 +9,8 @@
   "scripts": {
     "compile": "node syntaxes/jome.tmLanguage.js",
     "install": "cp -R . ~/.vscode/extensions/jome-grammar",
-    "build": "npm run compile & npm run install",
+    "copy": "cp syntaxes/jome.tmLanguage.json ../jome/data/",
+    "build": "npm run compile && npm run copy && npm run install",
     "install-windows": "xcopy /E . C:\\Users\\Loville\\.vscode\\extensions\\jome-grammar"
   },
   "categories": [

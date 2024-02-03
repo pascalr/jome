@@ -4,7 +4,7 @@ const path = require('path')
 
 const registry = new FirstMate.GrammarRegistry()
 //registry.loadGrammarSync('./grammar/syntaxes/JavaScript.tmLanguage.json')
-let grammarFilePath = path.join(__dirname, '../../tm-grammar/syntaxes/jome.tmLanguage.json')
+let grammarFilePath = path.join(__dirname, '../data/jome.tmLanguage.json')
 const grammar = registry.loadGrammarSync(grammarFilePath)
 
 const POST_PROCESSES = new Set([
