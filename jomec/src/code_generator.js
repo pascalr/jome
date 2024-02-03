@@ -1,4 +1,4 @@
-const { compileUtility } = require("jome-lib/compileUtility")
+const { compileUtility } = require("./compileUtility")
 const {compileTokenRaw} = require("./parser.js")
 const {filterCommas, filterNewlines, filterSpaces} = require("./validator.js")
 const Argument = require("./argument")
