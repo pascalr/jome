@@ -1,5 +1,12 @@
 # Jome-lib
 
+This is a work in progress. This is the easy way right now. I call functions in a custom lib.
+
+I would like to optimize and avoid using these functions. For example, instead of using write.js, I would like
+the compiler to use fs.write directly.
+
+But it's overkill for now, so let's do it this way.
+
 Contains all the code snippets to be used by Jome utilities.
 
 This library will probably grow to be quite big.
