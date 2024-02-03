@@ -1,5 +1,16 @@
 const {OPERAND_TYPES, filterSpaces, filterStrings, compileTokenRaw} = require("./parser.js")
 
+class CodeError {
+  constructor() {
+    this.lineNb = null
+    this.startIdx = null
+    this.endIdx = null
+    this.message = null
+    this.suggestions = []
+    this.uid = null // A four or five digits number? See Language Server Diagnostic source
+  }
+}
+
 // TODO: Make sure no infinite loop
 function validateAllNodes(nodes, throwError = true) {
   let errors = []
