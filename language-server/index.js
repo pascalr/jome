@@ -15,6 +15,8 @@ const { validateCode } = require('jome.js/src/compiler.js');
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
 const connection = createConnection(ProposedFeatures.all);
+// WTF is this???
+// const connection = (0, createConnection)(ProposedFeatures.all);
 
 // Create a simple text document manager.
 const documents = new TextDocuments(TextDocument);
@@ -182,6 +184,9 @@ connection.onCompletion((_textDocumentPosition) => {
 // Make the text document manager listen on the connection
 // for open, change and close text document events
 documents.listen(connection);
+
+console.log('Listening...')
 // Listen on the connection
 connection.listen();
 //# sourceMappingURL=server.js.map
+console.log('Done')
