@@ -9,3 +9,4 @@
 # This must be the last line of the .gitignore file. Because there is a bug that
 # prettier does not work on files that are inside .gitignore, so I remove it temporarly.
 *.built.js
+language-server/*.tgz
