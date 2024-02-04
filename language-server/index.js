@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+let test1212 = 10
+
 const {
   createConnection,
 	TextDocuments,
