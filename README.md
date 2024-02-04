@@ -2,17 +2,19 @@
 
 This is the master folder containing all the main parts of the Jome programming language.
 
-## lsp
-
-A language server protocol (LSP) implementation. This is to provide smart coding functionality to IDEs. Contains the server and the client.
-
-TODO: Merge lsp and tm-grammar into a single folder maybe? A single vscode extension?
-
 ## jome
 
 A package that contains the compiler that converts .jome file to .js files.
 
 Also contains the jome CLI and the jomec CLI.
+
+## language server
+
+A language server implementing the language server protocol (LSP). This is to provide smart coding functionality to IDEs.
+
+## vscode-jome
+
+The VS Code extension for Jome language support. Handles syntax highlighting and a client to talk to the language server.
 
 ## lib
 
@@ -23,10 +25,6 @@ But if a utils compiles into a function, this function will be inside jome-lib (
 ## website
 
 The source code for the website that contains the documentation, examples and an online editor.
-
-## tm-grammar
-
-The text mate grammar files and visual studio code extension.
 
 ## highlightjs-jome
 
