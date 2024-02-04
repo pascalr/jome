@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-let test1212 = 10
-
 const {
   createConnection,
 	TextDocuments,
@@ -119,40 +117,41 @@ async function validateTextDocument(textDocument) {
     const settings = await getDocumentSettings(textDocument.uri);
     const text = textDocument.getText();
     const diagnostics = [];
-    // let errors = [] //validateCode(text)
-    // for (let i = 0; i < errors.length && i < settings.maxNumberOfProblems; i++) {
-    //   let err = errors[i]
-    //   let startIdx = err.startIdx || 10
-    //   let endIdx = err.endIdx || 20
-    //   const diagnostic: Diagnostic = {
-    // 		severity: DiagnosticSeverity.Error,
-    // 		range: {
-    // 			start: textDocument.positionAt(startIdx),
-    // 			end: textDocument.positionAt(endIdx)
-    // 		},
-    // 		message: err.message || err,
-    // 		source: 'jome(1234)'
-    // 	};
-    // 	// if (hasDiagnosticRelatedInformationCapability) {
-    // 	// 	diagnostic.relatedInformation = [
-    // 	// 		{
-    // 	// 			location: {
-    // 	// 				uri: textDocument.uri,
-    // 	// 				range: Object.assign({}, diagnostic.range)
-    // 	// 			},
-    // 	// 			message: 'Spelling matters'
-    // 	// 		},
-    // 	// 		{
-    // 	// 			location: {
-    // 	// 				uri: textDocument.uri,
-    // 	// 				range: Object.assign({}, diagnostic.range)
-    // 	// 			},
-    // 	// 			message: 'Particularly for names'
-    // 	// 		}
-    // 	// 	];
-    // 	// }
-    // 	diagnostics.push(diagnostic);
-    // }
+    let errors = [] //validateCode(text)
+    debugger
+    for (let i = 0; i < errors.length && i < settings.maxNumberOfProblems; i++) {
+      let err = errors[i]
+      let startIdx = err.startIdx || 10
+      let endIdx = err.endIdx || 20
+      const diagnostic = {
+    		severity: DiagnosticSeverity.Error,
+    		range: {
+    			start: textDocument.positionAt(startIdx),
+    			end: textDocument.positionAt(endIdx)
+    		},
+    		message: err.message || err,
+    		source: 'jome(1234)'
+    	};
+    	// if (hasDiagnosticRelatedInformationCapability) {
+    	// 	diagnostic.relatedInformation = [
+    	// 		{
+    	// 			location: {
+    	// 				uri: textDocument.uri,
+    	// 				range: Object.assign({}, diagnostic.range)
+    	// 			},
+    	// 			message: 'Spelling matters'
+    	// 		},
+    	// 		{
+    	// 			location: {
+    	// 				uri: textDocument.uri,
+    	// 				range: Object.assign({}, diagnostic.range)
+    	// 			},
+    	// 			message: 'Particularly for names'
+    	// 		}
+    	// 	];
+    	// }
+    	diagnostics.push(diagnostic);
+    }
     // Send the computed diagnostics to VSCode.
     connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }
