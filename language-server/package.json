@@ -1,0 +1,16 @@
+{
+  "name": "jome-language-server",
+  "version": "0.0.1",
+  "description": "A language server for the Jome programming language.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Jome",
+    "Language",
+    "Server"
+  ],
+  "author": "Pascal Rainville",
+  "license": "MIT"
+}
