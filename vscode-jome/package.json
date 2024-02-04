@@ -6,6 +6,9 @@
   "engines": {
     "vscode": "^1.81.0"
   },
+  "author": "Pascal Rainville",
+  "license": "MIT",
+  "publisher": "Pascal Rainville",
   "scripts": {
     "compile": "node syntaxes/jome.tmLanguage.js",
     "install": "cp -R . ~/.vscode/extensions/vscode-jome",
@@ -17,23 +20,60 @@
     "Programming Languages"
   ],
   "contributes": {
-    "languages": [{
-      "id": "jome",
-      "aliases": ["Jome", "jome"],
-      "extensions": [".jome", ".jomm"],
-      "configuration": "./language-configuration.json"
-    }],
-    "grammars": [{
-      "language": "jome",
-      "scopeName": "source.jome",
-      "path": "./syntaxes/jome.tmLanguage.json",
-      "embeddedLanguages": {
-        "meta.embedded.block.markdown": "text.html.markdown",
-        "meta.embedded.block.html": "text.html.derivative",
-        "meta.embedded.block.css": "css",
-        "meta.embedded.block.javascript": "javascript",
-        "meta.embedded.block.shell": "shell"
+    "languages": [
+      {
+        "id": "jome",
+        "aliases": [
+          "Jome",
+          "jome"
+        ],
+        "extensions": [
+          ".jome",
+          ".jomm"
+        ],
+        "configuration": "./language-configuration.json"
       }
-    }]
+    ],
+    "grammars": [
+      {
+        "language": "jome",
+        "scopeName": "source.jome",
+        "path": "./syntaxes/jome.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.markdown": "text.html.markdown",
+          "meta.embedded.block.html": "text.html.derivative",
+          "meta.embedded.block.css": "css",
+          "meta.embedded.block.javascript": "javascript",
+          "meta.embedded.block.shell": "shell"
+        }
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Example configuration",
+      "properties": {
+        "languageServerExample.maxNumberOfProblems": {
+          "scope": "resource",
+          "type": "number",
+          "default": 100,
+          "description": "Controls the maximum number of problems produced by the server."
+        },
+        "languageServerExample.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server."
+        }
+      }
+    }
+  },
+  "main": "./index",
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
   }
 }
