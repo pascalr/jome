@@ -16,19 +16,27 @@ import {
 let client: LanguageClient;
 
 export function activate(context: ExtensionContext) {
-	// The server is implemented in node
-	const serverModule = context.asAbsolutePath(
-		path.join('server', 'out', 'server.js')
-	);
+	// // The server is implemented in node
+	// const serverModule = context.asAbsolutePath(
+	// 	path.join('server', 'out', 'server.js')
+	// );
 
-	// If the extension is launched in debug mode then the debug server options are used
+	// // If the extension is launched in debug mode then the debug server options are used
+	// // Otherwise the run options are used
+	// const serverOptions: ServerOptions = {
+	// 	run: { module: serverModule, transport: TransportKind.ipc },
+	// 	debug: {
+	// 		module: serverModule,
+	// 		transport: TransportKind.ipc,
+	// 	}
+	// };
+
+  // If the extension is launched in debug mode then the debug server options are used
 	// Otherwise the run options are used
 	const serverOptions: ServerOptions = {
-		run: { module: serverModule, transport: TransportKind.ipc },
-		debug: {
-			module: serverModule,
-			transport: TransportKind.ipc,
-		}
+    command: "jome-language-server",
+    args: ["--stdio"]
+    //args: ["--node-ipc"]
 	};
 
 	// Options to control the language client
