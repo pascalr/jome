@@ -107,23 +107,23 @@ function filterCommas(list) { // 'commas'?
 function validateOperatorUnary(node) {
   // return validateoperands(2, OPERAND_TYPES)(node)
   if (node.operands.length !== 1) {
-    return "A unary operator must have a single operand"
+    return createError(node, "A unary operator must have a single operand")
   }
   if (!OPERAND_TYPES.includes(node.operands[0].type)) {
-    return `Invalid operand type for operator ${node.type}. Was: ${node.operands[0].type}`
+    return createError(node, `Invalid operand type for operator ${node.type}. Was: ${node.operands[0].type}`)
   }
 }
 
 function validateOperator(node) {
   // return validateoperands(2, OPERAND_TYPES)(node)
   if (node.operands.length !== 2) {
-    return "A binary operator must have a two operands"
+    return createError(node, "A binary operator must have a two operands")
   }
 
   for (let i = 0; i < node.operands.length; i++) {
     let child = node.operands[i]
     if (!OPERAND_TYPES.includes(child.type)) {
-      return `Invalid operand type for operator ${node.type}. Was: ${child.type}`
+      return createError(node, `Invalid operand type for operator ${node.type}. Was: ${child.type}`)
     }
   }
 }
@@ -144,14 +144,14 @@ function validateString(node, char) {
 
 function validateFuncCall(node, hasDot) {
   if (hasDot && node.parts[0].type !== "punctuation.dot.jome") {
-    return "Internal error. Expected dot before function call in this circonstance."
+    throw new Error("Internal error. Expected dot before function call in this circonstance.")
   }
   if (hasDot && node.operands.length !== 1) {
-    return "Internal error. A function call with a dot should have a left operand."
+    throw new Error("Internal error. A function call with a dot should have a left operand.")
   }
   let nameTok = node.parts[hasDot ? 1 : 0]
   if (nameTok.type !== 'entity.name.function.jome' && nameTok.type !== "entity.name.function.utility.jome") {
-    return "Internal error. Function calls should always start with a name."
+    throw new Error("Internal error. Function calls should always start with a name.")
   }
   let parts = node.parts.slice(hasDot ? 2 : 1)
   let args = [];
@@ -209,13 +209,13 @@ const VALIDATORS = {
   // obj->callFunc
   "meta.caller.jome": (node) => {
     if (node.operands.length !== 1) {
-      return "Missing operand before getter"
+      return createError(node, "Missing operand before arrow getter")
     }
   },
   // obj.property
   "meta.getter.jome": (node) => {
     if (node.operands.length !== 1) {
-      return "Missing operand before getter"
+      return createError(node, "Missing operand before getter")
     }
   },
   // let foo
@@ -236,23 +236,23 @@ const VALIDATORS = {
     }
     // Arguments, if present, should always be right after the function name
     if (node.parts.slice(2,-1).find(c => c.type === 'meta.args.jome')) {
-      return "Syntax error. Arguments should always be at the beginning of the function block."
+      return createError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
     }
   },
   // def someFunc end
   'meta.def.jome': (node) => {
     if (node.parts[0].raw !== 'def') {
-      return "Internal error. meta.def.jome should always start with keyword def"
+      throw new Error("Internal error. meta.def.jome should always start with keyword def")
     }
     if (node.parts[1].type !== 'entity.name.function.jome') {
-      return "Syntax error. Missing function name after keyword def."
+      return createError(node, "Syntax error. Missing function name after keyword def.")
     }
     if (node.parts[node.parts.length-1].raw !== 'end') {
-      return "Internal error. meta.def.jome should always end with keyword end"
+      throw new Error("Internal error. meta.def.jome should always end with keyword end")
     }
     // Arguments, if present, should always be right after the function name
     if (node.parts.slice(3,-1).find(c => c.type === 'meta.args.jome')) {
-      return "Syntax error. Arguments should always be at the beginning of the function block."
+      return createError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
     }
   },
   // js uses more specifically:
@@ -264,7 +264,7 @@ const VALIDATORS = {
   //'keyword.operator.nullish-coalescing.jome'
   'keyword.operator.colon.jome': (node) => {
     if (node.operands.length !== 2) {
-      return "A colon operator must have a two operands"
+      return createError(node, "A colon operator must have a two operands")
     }
     // A colon can we used for the else of a ternary, but also for creating en entry
     // if (node.operands[0].type !== 'keyword.operator.existential.jome') {
@@ -272,7 +272,7 @@ const VALIDATORS = {
     // }
     let child = node.operands[1]
     if (!OPERAND_TYPES.includes(child.type)) {
-      return `Invalid operand type for operator ${node.type}. Was: ${child.type}`
+      return createError(node, `Invalid operand type for operator ${node.type}. Was: ${child.type}`)
     }
     // node.data = {
     //   isTernary: node.operands[0].type === 'keyword.operator.existential.jome'
@@ -287,11 +287,11 @@ const VALIDATORS = {
       // With args
       let t = node.operands[0].type
       if (!(t === 'meta.group.jome' || t === 'variable.other.jome')) {
-        return "Syntax error. Arrow function expects arguments at it's left side."
+        return createError(node, "Syntax error. Arrow function expects arguments at it's left side.")
       }
       // TODO: Validate right side
     } else {
-      return "Syntax error. Arrow function expects one or two operands."
+      return createError(node, "Syntax error. Arrow function expects one or two operands.")
     }
   },
   // !
@@ -303,7 +303,7 @@ const VALIDATORS = {
   // statement if cond
   'keyword.control.inline-conditional.jome': (node) => {
     if (node.operands.length !== 2) {
-      return "An inline condition must have a two operands"
+      return createError(node, "An inline condition must have a two operands")
     // } else if (!OPERAND_TYPES.includes(node.operands[1].type)) {
     //   return `Invalid value for assignement ${node.type}. Was: ${node.type}`
     }
@@ -313,16 +313,16 @@ const VALIDATORS = {
   // called square-bracket because it can be an array or an operator
   "meta.square-bracket.jome": (node) => {
     if (node.parts[0].type !== 'punctuation.definition.square-bracket.begin.jome') {
-      return "Internal error. meta.square-bracket.jome should always start with punctuation.definition.square-bracket.begin.jome"
+      throw new Error("Internal error. meta.square-bracket.jome should always start with punctuation.definition.square-bracket.begin.jome")
     }
     if (node.parts[node.parts.length-1].type !== 'punctuation.definition.square-bracket.end.jome') {
-      return "Internal error. meta.square-bracket.jome should always end with punctuation.definition.square-bracket.end.jome"
+      throw new Error("Internal error. meta.square-bracket.jome should always end with punctuation.definition.square-bracket.end.jome")
     }
     let isOperator = node.operands.length
     let items = node.parts.slice(1,-1)
     if (isOperator) {
       if (items.length !== 1) {
-        return "Syntax error. Square bracket operator expects one and only one expression."
+        createError(node, "Syntax error. Square bracket operator expects one and only one expression.")
       }
       node.data = {isOperator, operand: node.operands[0], expression: items[0]}
     } else {
@@ -334,7 +334,7 @@ const VALIDATORS = {
   // =
   'keyword.operator.assignment.jome': (node) => {
     if (node.operands.length !== 2) {
-      return "An assignment must have a two operands"
+      return createError(node, "An assignment must have a two operands")
     // } else if (!['keyword.control.declaration.jome'].includes(node.operands[0].type)) {
     //   return `Invalid left hand side for assignement ${node.type}. Was: ${node.type}`
     // } else if (!OPERAND_TYPES.includes(node.operands[1].type)) {
@@ -373,7 +373,7 @@ const VALIDATORS = {
         sections.push(currentSection)
       } else if (p.type === 'keyword.control.conditional.else.jome') {
         if (currentSection.keyword === 'else') {
-          throw new Error("A condition block can only have a single else statement.")
+          return createError(node, "A condition block can only have a single else statement.")
         }
         currentSection = {keyword: 'else', statements: []}
         sections.push(currentSection)
@@ -450,7 +450,7 @@ const VALIDATORS = {
     ensureEndRaw(node, '}')
     ensureEndType(node, 'punctuation.definition.template-expression.end.jome')
     if (node.parts.length !== 3) {
-      return "Error a template literal should only contain a single expression inside template."
+      return createError(node, "Error a template literal should only contain a single expression inside template.")
     }
     let code = node.parts[1]
     node.data = {code}
