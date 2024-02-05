@@ -5,8 +5,8 @@ function createError(node, message) {
   // this.uid = null // A four or five digits number? See Language Server Diagnostic source
   return {
     lineNb: node.token.lineNb,
-    startIndex: node.token.index,
-    endIndex: node.token.index + node.raw.length,
+    startIndex: node.token.chStartIdx,
+    endIndex: node.token.chStartIdx + node.raw.length,
     message
   }
 }

@@ -5,8 +5,6 @@ import {trim, flat} from '@jome/core'
 
 with cmd, args end
 
-let
-
 forall text chain trim, flat end
 
 global.ROOT = '/jome'

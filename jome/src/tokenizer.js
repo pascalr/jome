@@ -25,6 +25,7 @@ class ScopeNode {
     this.parent = null
     this.lineNb = lineNb
     this.index = 0 // index of parent's children
+    this.chStartIdx = null // The start index of the character in the document
   }
   addChild(child) {
     if (typeof child !== 'string') {
@@ -80,6 +81,7 @@ function decodeTokensAsTree(lines) {
   let scopes = []
   let root = new ScopeNode("ROOT");
   let currentNode = root;
+  let chStartIdx = 0
   lines.forEach((lineTags, lineNbIdx) => {
     let {line, tags} = lineTags
     let offset = 0;
@@ -87,6 +89,8 @@ function decodeTokensAsTree(lines) {
       let tag = tags[i];
       if (tag >= 0) {
         let str = line.substring(offset, offset + tag)
+        chStartIdx += str.length
+        if (!currentNode.chStartIdx) {currentNode.chStartIdx = chStartIdx}
         if (!str.length || scopes[scopes.length-1] === 'ignore' || str === '\r') {
           // Ignore whitespaces (except indent)
         } else {
