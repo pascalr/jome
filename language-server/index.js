@@ -123,13 +123,13 @@ async function validateTextDocument(textDocument) {
   console.log('Errors found: ', errors)
   for (let i = 0; i < errors.length && i < settings.maxNumberOfProblems; i++) {
     let err = errors[i]
-    let startIdx = err.startIdx || 10
-    let endIdx = err.endIdx || 20
+    let startIndex = err.startIndex || 10 // random number temporary for testing
+    let endIndex = err.endIndex || 20 // random number temporary for testing
     const diagnostic = {
       severity: DiagnosticSeverity.Error,
       range: {
-        start: textDocument.positionAt(startIdx),
-        end: textDocument.positionAt(endIdx)
+        start: textDocument.positionAt(startIndex),
+        end: textDocument.positionAt(endIndex)
       },
       message: err.message || err,
       source: 'jome(1234)'
