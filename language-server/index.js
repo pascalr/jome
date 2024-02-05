@@ -7,6 +7,7 @@ const {
 	DidChangeConfigurationNotification,
 	CompletionItemKind,
 	TextDocumentSyncKind,
+  DiagnosticSeverity,
 } = require("vscode-languageserver/node");
 
 const {TextDocument} = require("vscode-languageserver-textdocument");
