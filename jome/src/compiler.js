@@ -51,7 +51,7 @@ function printTree(node, depth = 0) {
 
 // That a list of ASTNode and return js code
 function compileNodes(nodes) {
-  validateAllNodes(nodes, false)
+  validateAllNodes(nodes)
   return nodes.map(node => {
     let compiled = genCode(node)
     return compiled
@@ -65,7 +65,7 @@ function validateCode(code) {
   ctxFile.compiler = compiler
   let tokens = tokenize(code).children
   let topNodes = parse(tokens, null, ctxFile.lexEnv)
-  return validateAllNodes(topNodes)
+  return validateAllNodes(topNodes, false)
 }
 
 function compileCode(code, options) {
