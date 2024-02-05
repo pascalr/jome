@@ -49,7 +49,7 @@
       "cwd": "${workspaceFolder}/jome",
       "runtimeArgs": [
         "--inspect-brk",
-        "${workspaceFolder}/node_modules/jest/bin/jest.js",
+        "${workspaceFolder}/jome/node_modules/jest/bin/jest.js",
         "--runInBand"
       ],
       "console": "integratedTerminal",

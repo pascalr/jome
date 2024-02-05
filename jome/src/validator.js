@@ -1,13 +1,13 @@
 const {OPERAND_TYPES, filterSpaces, filterStrings, compileTokenRaw} = require("./parser.js")
 
-class CodeError {
-  constructor() {
-    this.lineNb = null
-    this.startIdx = null
-    this.endIdx = null
-    this.message = null
-    this.suggestions = []
-    this.uid = null // A four or five digits number? See Language Server Diagnostic source
+function createError(node, message) {
+  // this.suggestions = []
+  // this.uid = null // A four or five digits number? See Language Server Diagnostic source
+  return {
+    lineNb: node.token.lineNb,
+    startIndex: node.token.index,
+    endIndex: node.token.index + node.raw.length,
+    message
   }
 }
 
@@ -19,7 +19,7 @@ function validateAllNodes(nodes, throwError = true) {
     if (validator) {
       let err = validator(node)
       if (err || node.errors.length) {
-        if (throwError) {throw new Error(err || node.errors[0])}
+        if (throwError) {throw new Error(err?.message || err || node.errors[0])}
         if (err) {errors.push(err)}
         if (node.errors.length) {errors = [...errors, node.errors]}
       }
@@ -223,7 +223,7 @@ const VALIDATORS = {
   'meta.declaration.jome': (node) => {
     let keyword = node.parts[0].raw
     if (node.parts.length !== 2) {
-      return "Missing variable name after keyword "+keyword
+      return createError(node, "Missing variable name after keyword "+keyword)
     }
   },
   // do |args| /* ... */ end

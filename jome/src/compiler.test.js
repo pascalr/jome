@@ -54,6 +54,13 @@ javascript because it is more stable. It is a little weird to compile tests in i
 let o = {default: 'Hello', rest: 'there'};
 let {default: foo, ...all} = o;
 
+describe("Errors", () => {
+  // import defaultExport from "module-name";
+  test('let', () => {
+    expect(compile(`let"`)).toMatch(/fixme/);
+  })
+})
+
 describe("Imports", () => {
   // import defaultExport from "module-name";
   test('Default import', () => {
