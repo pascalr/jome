@@ -119,6 +119,7 @@ function decodeTokensAsTree(lines) {
     if (lineNbIdx+1 !== lines.length) {
       currentNode.addChild(new ScopeNode("newline", lineNbIdx+1, chStartIdx))
     }
+    chStartIdx += 1
   });
   return root.children[0];
 }

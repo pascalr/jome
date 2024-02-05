@@ -1,5 +1,6 @@
 const {workspace} = require("vscode");
 const {LanguageClient} = require("vscode-languageclient/node");
+const path = require("path");
 
 let client;
 
@@ -27,8 +28,8 @@ function activate(context) {
     // };
 
     const serverOptions = {
-      command: "npx",
-      args: ["jome-language-server", "--stdio"]
+      command: "node",
+      args: [path.join(__dirname, "..", "language-server", "index.js"), "--stdio"]
       //args: ["--node-ipc"]
     };
 
