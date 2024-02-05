@@ -57,7 +57,8 @@ let {default: foo, ...all} = o;
 describe("Errors", () => {
   // import defaultExport from "module-name";
   test('let', () => {
-    expect(compile(`let"`)).toMatch(/fixme/);
+    expect(compile(`let x = 10;
+let`)).toMatch(/fixme/);
   })
 })
 

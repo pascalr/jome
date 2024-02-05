@@ -20,10 +20,16 @@ function activate(context) {
     
     // If the extension is launched in debug mode then the debug server options are used
     // Otherwise the run options are used
+    // const serverOptions = {
+    //   command: "jome-language-server",
+    //   args: ["--stdio"]
+    //   //args: ["--node-ipc"]
+    // };
+
     const serverOptions = {
-        command: "jome-language-server",
-        args: ["--stdio"]
-        //args: ["--node-ipc"]
+      command: "npx",
+      args: ["jome-language-server", "--stdio"]
+      //args: ["--node-ipc"]
     };
 
     // Options to control the language client

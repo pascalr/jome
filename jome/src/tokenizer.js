@@ -19,13 +19,13 @@ function _ignoreNode(node) {
 }
 
 class ScopeNode {
-  constructor(type, lineNb) {
+  constructor(type, lineNb, chStartIdx) {
     this.type = type
     this.children = []
     this.parent = null
     this.lineNb = lineNb
     this.index = 0 // index of parent's children
-    this.chStartIdx = null // The start index of the character in the document
+    this.chStartIdx = chStartIdx // The start index of the character in the document
   }
   addChild(child) {
     if (typeof child !== 'string') {
@@ -78,6 +78,7 @@ class ScopeNode {
 
 // Return a ScopeNode
 function decodeTokensAsTree(lines) {
+  console.log('Latest version')
   let scopes = []
   let root = new ScopeNode("ROOT");
   let currentNode = root;
@@ -90,7 +91,6 @@ function decodeTokensAsTree(lines) {
       if (tag >= 0) {
         let str = line.substring(offset, offset + tag)
         chStartIdx += str.length
-        if (!currentNode.chStartIdx) {currentNode.chStartIdx = chStartIdx}
         if (!str.length || scopes[scopes.length-1] === 'ignore' || str === '\r') {
           // Ignore whitespaces (except indent)
         } else {
@@ -101,7 +101,7 @@ function decodeTokensAsTree(lines) {
         let scope = registry.scopeForId(tag)
         scopes.push(scope);
         if (scope !== "ignore") {
-          let node = new ScopeNode(scope, lineNbIdx+1)
+          let node = new ScopeNode(scope, lineNbIdx+1, chStartIdx)
           currentNode.addChild(node)
           currentNode = node
         }
@@ -117,7 +117,7 @@ function decodeTokensAsTree(lines) {
       }
     }
     if (lineNbIdx+1 !== lines.length) {
-      currentNode.addChild(new ScopeNode("newline", lineNbIdx+1))
+      currentNode.addChild(new ScopeNode("newline", lineNbIdx+1, chStartIdx))
     }
   });
   return root.children[0];
