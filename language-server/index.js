@@ -37,6 +37,7 @@ connection.onInitialize((params) => {
   hasDiagnosticRelatedInformationCapability = !!(capabilities.textDocument &&
       capabilities.textDocument.publishDiagnostics &&
       capabilities.textDocument.publishDiagnostics.relatedInformation);
+      
   const result = {
       capabilities: {
           textDocumentSync: TextDocumentSyncKind.Incremental,
@@ -58,13 +59,13 @@ connection.onInitialize((params) => {
 
 connection.onInitialized(() => {
   if (hasConfigurationCapability) {
-      // Register for all configuration changes.
-      connection.client.register(DidChangeConfigurationNotification.type, undefined);
+    // Register for all configuration changes.
+    connection.client.register(DidChangeConfigurationNotification.type, undefined);
   }
   if (hasWorkspaceFolderCapability) {
-      connection.workspace.onDidChangeWorkspaceFolders(_event => {
-          connection.console.log('Workspace folder change event received.');
-      });
+    connection.workspace.onDidChangeWorkspaceFolders(_event => {
+      connection.console.log('Workspace folder change event received.');
+    });
   }
 });
 
@@ -110,7 +111,27 @@ documents.onDidClose(e => {
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {
-    validateTextDocument(change.document);
+  validateTextDocument(change.document);
+});
+
+connection.onDidOpenTextDocument((params) => {
+  // A text document was opened in VS Code.
+  // params.uri uniquely identifies the document. For documents stored on disk, this is a file URI.
+  // params.text the initial full content of the document.
+  validateTextDocument(params.text)
+});
+
+connection.onDidChangeTextDocument((params) => {
+  // The content of a text document has change in VS Code.
+  // params.uri uniquely identifies the document.
+  // params.contentChanges describe the content changes to the document.
+  console.log('content changes', params.contentChanges)
+  validateTextDocument(params.contentChanges)
+});
+
+connection.onDidCloseTextDocument((params) => {
+  // A text document was closed in VS Code.
+  // params.uri uniquely identifies the document.
 });
 
 async function validateTextDocument(textDocument) {
