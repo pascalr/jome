@@ -8,6 +8,18 @@ def compile(code)
   return compileCode(code, {writeScript: false})
 end
 
+// TODO: foo?.attr
+// meta.getter.optional.jome or simply still meta.getter.jome
+// punctuation.accessor.optional.jome
+
+// FIXMEEE Nested string does not work, it escapeds the nested string...
+// let tabs = "<div>
+//     {contentByTitle.#keys.map(title => "<div>{title}</div>")}
+//   </div>";
+
+
+
+
 describe "Paths" do
   it 'Dirname shortcuts' do
     assert.match(compile(`#.`), /__dirname/);
@@ -31,12 +43,15 @@ describe "Paths" do
     assert.match(compile(`#../some_file.ext`), /path.join\(__dirname, "..\/some_file\.ext"\)/);
   end
   // I am not yet sure if I want to support this. It would be nice, but maybe #~ could be used for something else? Like signals?
-  // it 'Path in the home directory' do
-  //   assert.match(compile(`#~`), /require\('os'\); os.homedir\(\)/);
-  //   assert.match(compile(`#~/`), /require\('os'\); os.homedir\(\)/);
-  //   assert.match(compile(`#~/some_file.ext`), /require\('os'\); path.join\(os.homedir\(\), 'some_file.ext'\)/);
-  // end
+  it.skip 'Path in the home directory' do
+    assert.match(compile(`#~`), /require\('os'\); os.homedir\(\)/);
+    assert.match(compile(`#~/`), /require\('os'\); os.homedir\(\)/);
+    assert.match(compile(`#~/some_file.ext`), /require\('os'\); path.join\(os.homedir\(\), 'some_file.ext'\)/);
+  end
 end
+
+
+
 
 describe "Imports" do
   // import defaultExport from "module-name";
@@ -81,28 +96,6 @@ end
 
 
 
-// FIXMEEE Nested string does not work, it escapeds the nested string...
-// let tabs = "<div>
-//     {contentByTitle.#keys.map(title => "<div>{title}</div>")}
-//   </div>";
-
-// class Counter(@count = 0)
-//   def add(amount)
-//     @count += amount
-//   end
-// end
-// Counter() exec
-//   add 1
-//   add 2
-// end
-
-describe "Errors" do
-  // import defaultExport from "module-name";
-  it 'let' do
-    assert.match(compile(`let x = 10;
-let`), /fixme/);
-  end
-end
 
 describe "Strings" do
   // Single quote strings should be compiled as is
@@ -142,6 +135,7 @@ describe "Strings" do
   // TODO: Test @"Verbatim string" Test all 4 possibilities! (@'', @"", @''', @""")
 end
 
+// Regexes should work, the textmate grammar was copy pasted from the javascript one.
 describe "Regexes" do
   it '/test1212/' do
     assert.match(compile(`/test1212/`), "/test1212/");
@@ -152,17 +146,18 @@ describe "Heredocs" do
   it '<sh>ls</sh>' do
     assert.match(compile(`<sh>ls</sh>`), /const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/);
   end
-end
-
-describe "Heredoc percent syntax" do
-  it '"ls"%sh' do
-    assert.match(compile(`"ls"%sh`), /const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/);
+  describe "Heredoc percent syntax" do
+    it '"ls"%sh' do
+      assert.match(compile(`"ls"%sh`), /const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/);
+    end
   end
 end
 
-describe "Documentation comments" do
-  it '# documentation comment' do
-    assert.match(compile(`# documentation comment`), /\/\/ documentation comment/);
+describe "Comments" do
+  describe "Documentation comments" do
+    it 'Documentation comments should be compiled into js comments' do
+      assert.match(compile(`# documentation comment`), /\/\/ documentation comment/);
+    end
   end
 end
 
@@ -244,11 +239,7 @@ describe "Test built-ins" do
   end
 end
 
-// ```jome
-//   
-//   ```
-
-describe "Test functions creation" do
+describe "Creating functions" do
   /*
   The keyword def generates an arrow function. The keyword fn generates a function.
   You can also use the let keyword instead of def

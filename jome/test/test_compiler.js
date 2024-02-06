@@ -34,6 +34,15 @@ module.exports = () => {
         /path.join\(__dirname, "..\/some_file\.ext"\)/,
       );
     });
+
+    it.skip("Path in the home directory", function () {
+      assert.match(compile("#~"), /require\('os'\); os.homedir\(\)/);
+      assert.match(compile("#~/"), /require\('os'\); os.homedir\(\)/);
+      assert.match(
+        compile("#~/some_file.ext"),
+        /require\('os'\); path.join\(os.homedir\(\), 'some_file.ext'\)/,
+      );
+    });
   });
   describe("Imports", function () {
     it("Default import", function () {
@@ -90,15 +99,6 @@ module.exports = () => {
       assert.match(
         compile('import name, * as all from "module-name"'),
         /const (\w+) = require\("module-name"\);\s*const { ?default: name, ...all ?} = \1;/,
-      );
-    });
-  });
-  describe("Errors", function () {
-    it("let", function () {
-      assert.match(
-        compile(`let x = 10;
-let`),
-        /fixme/,
       );
     });
   });
@@ -160,21 +160,23 @@ let`),
         /const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/,
       );
     });
-  });
-  describe("Heredoc percent syntax", function () {
-    it('"ls"%sh', function () {
-      assert.match(
-        compile('"ls"%sh'),
-        /const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/,
-      );
+    describe("Heredoc percent syntax", function () {
+      it('"ls"%sh', function () {
+        assert.match(
+          compile('"ls"%sh'),
+          /const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/,
+        );
+      });
     });
   });
-  describe("Documentation comments", function () {
-    it("# documentation comment", function () {
-      assert.match(
-        compile("# documentation comment"),
-        /\/\/ documentation comment/,
-      );
+  describe("Comments", function () {
+    describe("Documentation comments", function () {
+      it("Documentation comments should be compiled into js comments", function () {
+        assert.match(
+          compile("# documentation comment"),
+          /\/\/ documentation comment/,
+        );
+      });
     });
   });
   describe("No group", function () {
@@ -260,7 +262,7 @@ end
       assert.match(compile("{x:1}.#log"), /console.log\(\{ ?x\: ?1 ?\}\);?/);
     });
   });
-  describe("Test functions creation", function () {
+  describe("Creating functions", function () {
     it("def keyword", function () {
       assert.match(
         compile('def sayHello #log("hello") end'),
