@@ -171,12 +171,14 @@ describe "Documentation comments" do
   end
 end
 
-it 'Pass named parameters to functions' do
-  assert.match(compile(`add x: 1, y: 2`), /add\(\{ x: 1, y: 2 \}\)/);
-end
+describe 'No group' do
+  it 'Pass named parameters to functions' do
+    assert.match(compile(`add x: 1, y: 2`), /add\(\{ x: 1, y: 2 \}\)/);
+  end
 
-it 'let shouldAddSemiToDec = 1' do
-  assert.match(compile(`let shouldAddSemiToDec = foo()[0]`, {prettier: false}), /;\s*$/);
+  it 'let shouldAddSemiToDec = 1' do
+    assert.match(compile(`let shouldAddSemiToDec = foo()[0]`, {prettier: false}), /;\s*$/);
+  end
 end
 
 // test.only('WIP2' do
@@ -189,12 +191,14 @@ end
 // `)).toBe("WIP");
 // end
 
-it 'Test each do end' do
-  assert.match(compile(`
-[1,2,3,4,5].each do |i|
-  console.log i
-end
-`), /\s*\[1, 2, 3, 4, 5\]\.each\(function \(i\) \{\s*console\.log\(i\);?\s*\}\)\s*/);
+describe 'No group' do
+  it 'Test each do end' do
+    assert.match(compile(`
+  [1,2,3,4,5].each do |i|
+    console.log i
+  end
+  `), /\s*\[1, 2, 3, 4, 5\]\.each\(function \(i\) \{\s*console\.log\(i\);?\s*\}\)\s*/);
+  end
 end
 
 describe "Test arrow call" do
@@ -347,9 +351,11 @@ describe "Test attribute setter" do
   end
 end
 
-it 'let x = 1' do
-  // FIXME: Do I want var or I want let? I used var because it is what CoffeeScript is using by default.
-  assert.match(compile('let x = 1'), /(var|let)\s+x\s*=\s*1/);
+describe 'No group' do
+  it 'let x = 1' do
+    // FIXME: Do I want var or I want let? I used var because it is what CoffeeScript is using by default.
+    assert.match(compile('let x = 1'), /(var|let)\s+x\s*=\s*1/);
+  end
 end
 
 describe "Test values" do
@@ -387,17 +393,19 @@ describe "Test arrays" do
   end
 end
 
-it '!true' do
-  assert.match(compile('!true'), /!true/);
-end
-it '!true === false' do
-  assert.match(compile('!true === false'), /!true === false/);
-end
-it '!true === !false' do
-  assert.match(compile('!true === !false'), /!true === !false/);
-end
-it '!true === !!false' do
-  assert.match(compile('!true === !!false'), /!true === !!false/);
+describe 'No group' do
+  it '!true' do
+    assert.match(compile('!true'), /!true/);
+  end
+  it '!true === false' do
+    assert.match(compile('!true === false'), /!true === false/);
+  end
+  it '!true === !false' do
+    assert.match(compile('!true === !false'), /!true === !false/);
+  end
+  it '!true === !!false' do
+    assert.match(compile('!true === !!false'), /!true === !!false/);
+  end
 end
 
 describe 'Test "ternary"' do

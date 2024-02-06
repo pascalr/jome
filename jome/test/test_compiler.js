@@ -177,24 +177,29 @@ let`),
       );
     });
   });
-  it("Pass named parameters to functions", function () {
-    assert.match(compile("add x: 1, y: 2"), /add\(\{ x: 1, y: 2 \}\)/);
+  describe("No group", function () {
+    it("Pass named parameters to functions", function () {
+      assert.match(compile("add x: 1, y: 2"), /add\(\{ x: 1, y: 2 \}\)/);
+    });
+
+    it("let shouldAddSemiToDec = 1", function () {
+      assert.match(
+        compile("let shouldAddSemiToDec = foo()[0]", { prettier: false }),
+        /;\s*$/,
+      );
+    });
   });
-  it("let shouldAddSemiToDec = 1", function () {
-    assert.match(
-      compile("let shouldAddSemiToDec = foo()[0]", { prettier: false }),
-      /;\s*$/,
-    );
-  });
-  it("Test each do end", function () {
-    assert.match(
-      compile(`
-[1,2,3,4,5].each do |i|
-  console.log i
-end
-`),
-      /\s*\[1, 2, 3, 4, 5\]\.each\(function \(i\) \{\s*console\.log\(i\);?\s*\}\)\s*/,
-    );
+  describe("No group", function () {
+    it("Test each do end", function () {
+      assert.match(
+        compile(`
+  [1,2,3,4,5].each do |i|
+    console.log i
+  end
+  `),
+        /\s*\[1, 2, 3, 4, 5\]\.each\(function \(i\) \{\s*console\.log\(i\);?\s*\}\)\s*/,
+      );
+    });
   });
   describe("Test arrow call", function () {
     it("obj->call", function () {
@@ -370,8 +375,10 @@ end
       assert.match(compile("let o; o.x = 10"), /let o;\s*?o\.x ?= ?10;?/);
     });
   });
-  it("let x = 1", function () {
-    assert.match(compile("let x = 1"), /(var|let)\s+x\s*=\s*1/);
+  describe("No group", function () {
+    it("let x = 1", function () {
+      assert.match(compile("let x = 1"), /(var|let)\s+x\s*=\s*1/);
+    });
   });
   describe("Test values", function () {
     it("integer", function () {
@@ -405,17 +412,19 @@ end
       assert.match(compile("[1,2,3]"), /\[1, ?2, ?3\]/);
     });
   });
-  it("!true", function () {
-    assert.match(compile("!true"), /!true/);
-  });
-  it("!true === false", function () {
-    assert.match(compile("!true === false"), /!true === false/);
-  });
-  it("!true === !false", function () {
-    assert.match(compile("!true === !false"), /!true === !false/);
-  });
-  it("!true === !!false", function () {
-    assert.match(compile("!true === !!false"), /!true === !!false/);
+  describe("No group", function () {
+    it("!true", function () {
+      assert.match(compile("!true"), /!true/);
+    });
+    it("!true === false", function () {
+      assert.match(compile("!true === false"), /!true === false/);
+    });
+    it("!true === !false", function () {
+      assert.match(compile("!true === !false"), /!true === !false/);
+    });
+    it("!true === !!false", function () {
+      assert.match(compile("!true === !!false"), /!true === !!false/);
+    });
   });
   describe('Test "ternary"', function () {
     it("true ? 1", function () {
