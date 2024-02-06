@@ -8,8 +8,7 @@
     "jomec": "src/jomec-cli.js"
   },
   "scripts": {
-    "test": "jest",
-    "test-minispec": "jome ./test/test_all.jome"
+    "test": "jome ./test/test_all.jome"
   },
   "dependencies": {
     "@jome/core": "^0.0.3",
@@ -26,7 +25,6 @@
   "author": "Pascal Rainville",
   "license": "MIT",
   "devDependencies": {
-    "jest": "^29.7.0",
     "minispec": "^1.1.4"
   }
 }
