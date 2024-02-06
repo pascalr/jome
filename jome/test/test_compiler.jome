@@ -114,7 +114,7 @@ describe "Strings" do
   it 'Single quote strings' do
     // Note: Prettier replaces the string with double quotes
     assert.match(compile(`'hello Éric'`), /"hello Éric"/);
-    assert.match(compile("let code = 'if (cond) {return 0;}'"), /let code = "if \(cond\) {return 0;}"/);
+    assert.match(compile(`let code = 'if (cond) {return 0;}'`), /let code = "if \(cond\) {return 0;}"/);
     // Single quotes are allowed to be multiline in Jome
     assert.match(compile(`'multi
     line'`), /`multi\s+line`/);
@@ -333,8 +333,8 @@ end
 end
 
 describe "Test attribute accessor" do
-  it '({x:5end.x' do
-    assert.match(compile('({x:5end.x'), /\(\{ ?x\: ?5 ?\}\)\.x/);
+  it '({x:5}).x' do
+    assert.match(compile('({x:5}).x'), /\(\{ ?x\: ?5 ?\}\)\.x/);
   end
   it 'let o; o.x' do
     assert.match(compile('let o; o.x'), /let o;\s*?o\.x;?/);
@@ -350,7 +350,7 @@ end
 it 'let x = 1' do
   // FIXME: Do I want var or I want let? I used var because it is what CoffeeScript is using by default.
   assert.match(compile('let x = 1'), /(var|let)\s+x\s*=\s*1/);
-end;
+end
 
 describe "Test values" do
   it 'integer' do
