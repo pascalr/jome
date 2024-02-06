@@ -1,7 +1,6 @@
 import assert from 'assert/strict'
 
-import MiniSpec from 'minispec'
-import { describe, it } from 'minispec'
+import { describe, it, context } from 'minispec'
 
 import {compileCode} from '../src/compiler.js'
 
@@ -77,5 +76,3 @@ describe "Imports" do
   // import "module-name"; TODO: Not written yet in the parser
 end
 // TODO: Test imports when compiling for ESM.
-
-MiniSpec.execute()

@@ -1,5 +1,4 @@
-const j_uid_1 = require("minispec");
-const { default: MiniSpec, describe, it } = j_uid_1;
+const { describe, it, context } = require("minispec");
 const { compileCode } = require("../src/compiler.js");
 const assert = require("assert/strict");
 module.exports = () => {
@@ -94,5 +93,4 @@ module.exports = () => {
       );
     });
   });
-  MiniSpec.execute();
 };

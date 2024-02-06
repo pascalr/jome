@@ -1,0 +1,13 @@
+import assert from 'assert/strict'
+
+import MiniSpec from 'minispec'
+import { describe, it } from 'minispec'
+
+import {validateCode} from '../src/compiler.js'
+
+describe "Validator" do
+  it 'should return an error keyword let without nothing' do
+    assert.match(compile(`#.`), /__dirname/);
+    assert.match(compile(`#./`), /__dirname/);
+  end
+end

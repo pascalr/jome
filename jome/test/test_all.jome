@@ -1,0 +1,10 @@
+import test_compiler from './test_compiler.jome'
+import test_validator from './test_validator.jome'
+
+import MiniSpecPkg from 'minispec'
+let MiniSpec = MiniSpecPkg.default
+
+test_compiler()
+test_validator()
+
+MiniSpec.execute()

@@ -63,7 +63,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "command": "npx jome test/test_compiler.jome"
+      "command": "npx jome test/test_all.jome"
     },
     {
       "name": "Launch Extension",

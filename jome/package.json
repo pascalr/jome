@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "jest",
-    "test-minispec": "jome ./test/test_compiler.jome"
+    "test-minispec": "jome ./test/test_all.jome"
   },
   "dependencies": {
     "@jome/core": "^0.0.3",
