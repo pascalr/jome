@@ -2,7 +2,31 @@ const Webpage = require("../src/webpage.js");
 const mdToHtml = require("@jome/md-to-html");
 module.exports = () => {
   let content = mdToHtml(`
-  ## Utils
+  # Utils
+
+  ## Testing suite
+
+  I want to include a default basic testing suite.
+
+  I am thinking of using #mustBe, #mustMatch, ...
+
+  Peut-être aussi #describe et #test, j'aimerais bien.
+
+  \`\`\`jome
+  #describe "group test" do
+    #test "some test" do
+      let x = 10
+      x.#mustBe 10
+      "foobarbaz".#mustMatch /bar/
+    end
+  end
+  \`\`\`
+
+  J'aime énormément le output de minispec.
+
+  J'aime juste moins que ce soit async par défaut. Et que tu aies à faire MiniSpec.execute()
+
+  ## ...
 
   Je veux que this fasse toujours référence à un this normal comme dans un autre language.
   Utiliser #evt pour avoir accès au this dans un évènement. Cacher cette merde de javascript au user.

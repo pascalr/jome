@@ -88,7 +88,22 @@
   </div>
             <div class="scrollable" style="width: 100%;">
               <div class="main">
-                <h2>Utils</h2>
+                <h1>Utils</h1>
+<h2>Testing suite</h2>
+<p>I want to include a default basic testing suite.</p>
+<p>I am thinking of using #mustBe, #mustMatch, ...</p>
+<p>Peut-être aussi #describe et #test, j'aimerais bien.</p>
+<pre><code class="language-jome"><span class="hljs-built_in function_">#describe</span> <span class="hljs-string">&quot;group test&quot;</span> <span class="hljs-keyword">do</span>
+  <span class="hljs-built_in function_">#test</span> <span class="hljs-string">&quot;some test&quot;</span> <span class="hljs-keyword">do</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-number">10</span>
+    <span class="hljs-variable">x</span>.<span class="hljs-built_in function_">#mustBe</span> <span class="hljs-number">10</span>
+    <span class="hljs-string">&quot;foobarbaz&quot;</span>.<span class="hljs-built_in function_">#mustMatch</span> /<span class="hljs-variable">bar</span>/
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p>J'aime énormément le output de minispec.</p>
+<p>J'aime juste moins que ce soit async par défaut. Et que tu aies à faire MiniSpec.execute()</p>
+<h2>...</h2>
 <p>Je veux que this fasse toujours référence à un this normal comme dans un autre language.
 Utiliser #evt pour avoir accès au this dans un évènement. Cacher cette merde de javascript au user.</p>
 <p>TODO: #uuid, avec un enum obligatoire, par example #uuid(FAST), ou #uuid(SECURE)
