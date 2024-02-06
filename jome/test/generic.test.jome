@@ -1,7 +1,0 @@
-import {compile} from '../src/compiler.js'
-
-describe "Tests written in jome" do
-  test '1 + 1' do
-    expect(compile("1 + 1")).toMatch(/1 \+ 1/)
-  end
-end
