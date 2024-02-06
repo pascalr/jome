@@ -36,5 +36,63 @@ module.exports = () => {
       );
     });
   });
+  describe("Imports", function () {
+    it("Default import", function () {
+      assert.match(
+        compile('import name from "module-name"'),
+        /const name = require\("module-name"\)/,
+      );
+    });
+
+    it("Star import", function () {
+      assert.match(
+        compile('import * as name from "module-name"'),
+        /const (\w+) = require\("module-name"\);\s*const { ?default: \w+, ...name ?} = \1;/,
+      );
+    });
+
+    it("Deconstructed import", function () {
+      assert.match(
+        compile('import { name } from "module-name"'),
+        /const { ?name ?} = require\("module-name"\)/,
+      );
+      assert.match(
+        compile('import { name, name2 } from "module-name"'),
+        /const { ?name, name2 ?} = require\("module-name"\)/,
+      );
+    });
+
+    it("Alias deconstructed import", function () {
+      assert.match(
+        compile('import { name as otherName } from "module-name"'),
+        /const {name as otherName} = require\("module-name"\)/,
+      );
+      assert.match(
+        compile('import { normal, name as otherName } from "module-name"'),
+        /const {normal, name as otherName} = require\("module-name"\)/,
+      );
+    });
+
+    it("Alias deconstructed import", function () {
+      assert.match(
+        compile('import { name as otherName } from "module-name"'),
+        /const {name as otherName} = require\("module-name"\)/,
+      );
+    });
+
+    it("Default import and deconstructed", function () {
+      assert.match(
+        compile('import name, { foo } from "module-name"'),
+        /const (\w+) = require\("module-name"\);\s*const { ?default: name, foo ?} = \1;/,
+      );
+    });
+
+    it("Default import and star import", function () {
+      assert.match(
+        compile('import name, * as all from "module-name"'),
+        /const (\w+) = require\("module-name"\);\s*const { ?default: name, ...all ?} = \1;/,
+      );
+    });
+  });
   MiniSpec.execute();
 };
