@@ -56,12 +56,22 @@
       "internalConsoleOptions": "neverOpen",
     },
     {
+      "type": "node-terminal",
+      "request": "launch",
+      "name": "Run Minispec Tests",
+      "cwd": "${workspaceFolder}/jome",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "command": "npx jome minispec/test_compiler.jome"
+    },
+    {
       "name": "Launch Extension",
       "type": "extensionHost",
       "request": "launch",
       "args": [
           "--extensionDevelopmentPath=${workspaceFolder/vscode-jome}"
       ]
-  }
+    }
   ]
 }

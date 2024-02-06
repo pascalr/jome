@@ -1,5 +1,8 @@
 const {OPERAND_TYPES, filterSpaces, filterStrings, compileTokenRaw} = require("./parser.js")
 
+// TODO: Rename this to analyzer and give this file the responsability too of building the lexical environment.
+// Because I need the lexical environment for the language server too without generating code.
+
 function createError(node, message) {
   // this.suggestions = []
   // this.uid = null // A four or five digits number? See Language Server Diagnostic source
@@ -443,6 +446,7 @@ const VALIDATORS = {
   "string.quoted.double.jome": (node) => validateString(node, '"'),
   "string.quoted.single.jome": (node) => validateString(node, "'"),
   "string.quoted.multi.jome": (node) => validateString(node, "'''"),
+  "string.quoted.backtick.jome": (node) => validateString(node, '`'),
 
   "meta.string-template-literal.jome": (node) => {
     ensureStartRaw(node, '{')

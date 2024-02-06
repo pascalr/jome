@@ -78,7 +78,6 @@ class ScopeNode {
 
 // Return a ScopeNode
 function decodeTokensAsTree(lines) {
-  console.log('Latest version')
   let scopes = []
   let root = new ScopeNode("ROOT");
   let currentNode = root;

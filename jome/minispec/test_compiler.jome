@@ -1,0 +1,40 @@
+import assert from 'assert/strict'
+
+import MiniSpec from 'minispec'
+import { describe, it } from 'minispec'
+
+import {compileCode} from '../src/compiler.js'
+
+def compile(code)
+  return compileCode(code, {writeScript: false})
+end
+
+describe "Paths" do
+  it 'Dirname shortcuts' do
+    assert.match(compile(`#.`), /__dirname/);
+    assert.match(compile(`#./`), /__dirname/);
+  end
+  it 'Absolute paths' do
+    assert.match(compile(`#/`), /"\/"/);
+    assert.match(compile(`#/some/path.ext`), /"\/some\/path\.ext"/);
+  end
+  it 'Path relative to current file' do
+    assert.match(compile(`#./some_file.ext`), /path.join\(__dirname, "some_file\.ext"\)/);
+  end
+  it 'Path relative to the current working directory' do
+    assert.match(compile(`#cwd/some_file.ext`), /path.resolve\("\.\/some_file\.ext"\)/);
+  end
+  it 'Path in the current file parent folder' do
+    assert.match(compile(`#..`), /path.join\(__dirname, ".."\)/);
+    assert.match(compile(`#../`), /path.join\(__dirname, "..\/"\)/);
+    assert.match(compile(`#../some_file.ext`), /path.join\(__dirname, "..\/some_file\.ext"\)/);
+  end
+  // I am not yet sure if I want to support this. It would be nice, but maybe #~ could be used for something else? Like signals?
+  // test('Path in the home directory', () => {
+  //   assert.match(compile(`#~`), /require\('os'\); os.homedir\(\)/);
+  //   assert.match(compile(`#~/`), /require\('os'\); os.homedir\(\)/);
+  //   assert.match(compile(`#~/some_file.ext`), /require\('os'\); path.join\(os.homedir\(\), 'some_file.ext'\)/);
+  // })
+end
+
+MiniSpec.execute()
