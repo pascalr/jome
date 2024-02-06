@@ -1,0 +1,67 @@
+import assert from 'assert/strict'
+
+import { describe, it, context } from 'minispec'
+
+describe "Parse operation" do
+
+  it '1 + 2' do
+    let list = parse(tokenize("1+2").children)
+    assert.match(list?.length).toBe(1)
+    let ast = list[0]
+    assert.match(ast?.raw).toBe('+')
+    assert.match(ast?.operands?.[0]?.raw).toBe('1')
+    assert.match(ast?.operands?.[1]?.raw).toBe('2')
+
+    let out = compileNodes(list)
+    assert.match(out, /1\s*\+\s*2/)
+  end
+
+  it '2 + 3 * 4 + 5 == 19' do
+    let list = parse(tokenize("2 + 3 * 4 + 5 == 19").children)
+    assert.match(list?.length).toBe(1)
+    let ast = list[0]
+    assert.match(ast?.raw).toBe('==')
+    assert.match(ast?.operands?.[0]?.raw).toBe('+')
+    assert.match(ast?.operands?.[0]?.operands?.[0]?.raw).toBe('+')
+    assert.match(ast?.operands?.[0]?.operands?.[0]?.operands?.[0]?.raw).toBe('2')
+    assert.match(ast?.operands?.[0]?.operands?.[0]?.operands?.[1]?.raw).toBe('*')
+    assert.match(ast?.operands?.[0]?.operands?.[0]?.operands?.[1]?.operands?.[0]?.raw).toBe('3')
+    assert.match(ast?.operands?.[0]?.operands?.[0]?.operands?.[1]?.operands?.[1]?.raw).toBe('4')
+    assert.match(ast?.operands?.[0]?.operands?.[1]?.raw).toBe('5')
+    assert.match(ast?.operands?.[1]?.raw).toBe('19')
+  end
+end
+
+describe "Parse let assignment" do
+
+  it 'let x' do
+    let list = parse(tokenize("let x").children)
+    assert.match(list?.length).toBe(1)
+    let ast = list[0]
+    assert.match(ast?.raw).toBe('let x')
+  end
+
+  it 'let x;' do
+    let list = parse(tokenize("let x;").children)
+    assert.match(list?.length).toBe(2)
+    let ast = list[0]
+    assert.match(ast?.raw).toBe('let x')
+  end
+
+  it 'let x; let y' do
+    let list = parse(tokenize("let x; let y").children)
+    assert.match(list?.length).toBe(3)
+    assert.match(list[0]?.raw).toBe('let x')
+    assert.match(list[2]?.raw).toBe('let y')
+  end
+
+  it '[1][0]' do
+    let list = parse(tokenize("[1][0]").children)
+    assert.match(list?.length).toBe(1)
+    let ast = list[0]
+    assert.match(ast?.parts?.length).toBe(3) // [, 1, ]
+    assert.match(ast?.operands?.length).toBe(1)
+    assert.match(ast?.operands?.[0]?.parts?.length).toBe(3) // [, 0, ]
+  end
+
+end

@@ -4,6 +4,11 @@ import { describe, it, context } from 'minispec'
 
 import {compileCode} from '../src/compiler.js'
 
+// //const {compile} = require('./compiler.js')
+// const {parse} = require('./parser.js')
+// const {compileNodes, compileCode} = require('./compiler.js')
+// const {tokenize} = require('./tokenizer.js')
+
 def compile(code)
   return compileCode(code, {writeScript: false})
 end
@@ -12,6 +17,8 @@ describe "Paths" do
   it 'Dirname shortcuts' do
     assert.match(compile(`#.`), /__dirname/);
     assert.match(compile(`#./`), /__dirname/);
+    // compile(`#.`).#assertMatch(/__dirname/);
+    // compile(`#./`).#assertMatch(/__dirname/);
   end
   it 'Absolute paths' do
     assert.match(compile(`#/`), /"\/"/);
@@ -76,3 +83,329 @@ describe "Imports" do
   // import "module-name"; TODO: Not written yet in the parser
 end
 // TODO: Test imports when compiling for ESM.
+
+
+
+// FIXMEEE Nested string does not work, it escapeds the nested string...
+// let tabs = "<div>
+//     {contentByTitle.#keys.map(title => "<div>{title}</div>")}
+//   </div>";
+
+// class Counter(@count = 0)
+//   def add(amount)
+//     @count += amount
+//   end
+// end
+// Counter() exec
+//   add 1
+//   add 2
+// end
+
+describe "Errors" do
+  // import defaultExport from "module-name";
+  it 'let' do
+    assert.match(compile(`let x = 10;
+let`), /fixme/);
+  end
+end
+
+describe "Strings" do
+  // Single quote strings should be compiled as is
+  it 'Single quote strings' do
+    // Note: Prettier replaces the string with double quotes
+    assert.match(compile(`'hello Éric'`), /"hello Éric"/);
+    assert.match(compile("let code = 'if (cond) {return 0;}'"), /let code = "if \(cond\) {return 0;}"/);
+    // Single quotes are allowed to be multiline in Jome
+    assert.match(compile(`'multi
+    line'`), /`multi\s+line`/);
+    // Test escapes double quotes inside
+    assert.match(compile(`'"hello"'`), /"\\"hello\\""/);
+    // Test escapes backticks inside
+    assert.match(compile(`'multi \`line\`
+    with backticks'`), /`multi \\`line\\`\s+with backticks`/);
+  end
+  it 'Regular double quote strings' do
+    assert.match(compile('"hello"'), /"hello"/);
+    assert.match(compile(`"Hello Éric!"`), /"Hello Éric!"/);
+    // Double quotes are allowed to be multiline in Jome
+    assert.match(compile(`"multi
+    line"`), /`multi\s+line`/);
+    assert.match(compile(`"Hello O'Connor"`), /"Hello O'Connor"/);
+    // Test escapes backticks inside
+    assert.match(compile(`"multi \`line\`
+    with backticks"`), /`multi \\`line\\`\s+with backticks`/);
+  end
+  it 'Double quote strings template literal' do
+    assert.match(compile(`"1 + 1 = {1+1}"`), /`1 \+ 1 = \$\{1 ?\+ ?1\}`/);
+  end
+  it 'Triple single quote strings' do
+    // Note: Prettier replaces the string with double quotes
+    assert.match(compile(`'''Hello O'Connor'''`), /"Hello O'Connor"/);
+  end
+  // TODO: Test """ Triple double quote strings """
+  // TODO: Test """ Triple double quote strings template literals {{ foo }} """
+  // TODO: Test @"Verbatim string" Test all 4 possibilities! (@'', @"", @''', @""")
+end
+
+describe "Regexes" do
+  it '/test1212/' do
+    assert.match(compile(`/test1212/`), "/test1212/");
+  end
+end
+
+describe "Heredocs" do
+  it '<sh>ls</sh>' do
+    assert.match(compile(`<sh>ls</sh>`), /const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/);
+  end
+end
+
+describe "Heredoc percent syntax" do
+  it '"ls"%sh' do
+    assert.match(compile(`"ls"%sh`), /const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/);
+  end
+end
+
+describe "Documentation comments" do
+  it '# documentation comment' do
+    assert.match(compile(`# documentation comment`), /\/\/ documentation comment/);
+  end
+end
+
+it 'Pass named parameters to functions' do
+  assert.match(compile(`add x: 1, y: 2`), /add\(\{ x: 1, y: 2 \}\)/);
+end
+
+it 'let shouldAddSemiToDec = 1' do
+  assert.match(compile(`let shouldAddSemiToDec = foo()[0]`, {prettier: false}), /;\s*$/);
+end
+
+// test.only('WIP2' do
+//   assert.match(compile(`
+// `)).toBe("WIP2");
+// end
+
+// it 'WIP' do
+//   assert.match(compile(`
+// `)).toBe("WIP");
+// end
+
+it 'Test each do end' do
+  assert.match(compile(`
+[1,2,3,4,5].each do |i|
+  console.log i
+end
+`), /\s*\[1, 2, 3, 4, 5\]\.each\(function \(i\) \{\s*console\.log\(i\);?\s*\}\)\s*/);
+end
+
+describe "Test arrow call" do
+  it 'obj->call' do
+    assert.match(compile(`obj->call`), /obj.call\(\)/);
+  end
+end
+
+describe "Test function call" do
+  it 'Function call with parens' do
+    assert.match(compile(`
+let add = (x,y) => x + y
+add(10, 5)
+`), /\s*let add = \(x, ?y\) => \(?x \+ y\)?;?\s*add\(10, ?5\);?/);
+  end
+  it 'Function call without parens' do
+    assert.match(compile(`
+let add = (x,y) => x + y
+add 10, 5
+`), /\s*let add = \(x, ?y\) => \(?x \+ y\)?;?\s*add\(10, ?5\);?/);
+  end
+end
+
+describe "Test class" do
+  it 'Class with one method' do
+    assert.match(compile(`
+class Person
+  def sayHello
+    #log("Hello!")
+  end
+end
+`), /\s*class Person\s*\{\s+sayHello = \(\) => \{\s*console.log\("Hello!"\);?\s*\};?\s*\}/);
+  end
+end
+
+describe "Test built-ins" do
+  it '#log' do
+    assert.match(compile('#log'), /console.log/);
+  end
+  it '#log hello world' do
+    assert.match(compile('#log("Hello world!")'), /console.log\("Hello world!"\)/);
+  end
+  it '#log hello world without parens' do
+    assert.match(compile('#log "Hello world!"'), /console.log\("Hello world!"\)/);
+  end
+  it '{x:1}.#log' do
+    assert.match(compile('{x:1}.#log'), /console.log\(\{ ?x\: ?1 ?\}\);?/);
+  end
+end
+
+// ```jome
+//   
+//   ```
+
+describe "Test functions creation" do
+  /*
+  The keyword def generates an arrow function. The keyword fn generates a function.
+  You can also use the let keyword instead of def
+  Functions can also be declared inline.
+  */
+  // def sayHello
+  // end
+  // let sayHello = function
+  // end
+  // let sayHello = function(name)
+  // end
+  // def sayHello(name)
+  // end
+  // let sayHello = (name) => `Hello {name}`
+  // let giveMe5 = () => 5
+  // and/or
+  // let giveMe5 = => 5
+  // *** KEYWORD def ***
+  it 'def keyword' do
+    assert.match(compile('def sayHello #log("hello") end'), /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
+  end
+  it 'def keyword with args' do
+    assert.match(compile('def sayHello(name) #log("hello", name) end'), /function sayHello\(name\) {\s*console.log\("hello", ?name\);?\s*}/);
+  end
+  // *** KEYWORD let ***
+  it 'let keyword with function end' do
+    assert.match(compile('let sayHello = function #log("hello") end'), /let sayHello = function \(\) {\s*console.log\("hello"\);?\s*}/);
+  end
+  it 'let keyword with function end with args' do
+    assert.match(compile('let sayHello = function(name) #log("hello", name) end'), /let sayHello = function \(name\) {\s*console.log\("hello", ?name\);?\s*}/);
+  end
+  it 'let keyword with arrow function' do
+    assert.match(compile('let giveMe5 = () => 5'), /let giveMe5 = \(\) => \(?5\)?/);
+  end
+  it 'let keyword with arrow function with args' do
+    assert.match(compile('let echo = (x) => x'), /let echo = \(x\) => \(?x\)?/);
+  end
+  // *** inline ***
+  it 'inline with function end' do
+    assert.match(compile('let f = function #log("hello") end'), /let f = function \(\) {\s*console.log\("hello"\);?\s*}/);
+  end
+  it 'inline with function end with args' do
+    assert.match(compile('let f = function(x, name) #log("hello", name) end'), /let f = function \(x,\s*name\) {\s*console.log\("hello", ?name\);?\s*}/);
+  end
+  it 'inline with arrow function' do
+    assert.match(compile('() => 5'), /\(\) => \(?5\)?/);
+  end
+  it 'inline with arrow function with args no paren' do
+    assert.match(compile('x => x'), /\(?x\)? => \(?x\)?/);
+  end
+  it 'inline with arrow function with args' do
+    assert.match(compile('(x) => x'), /\(x\) => \(?x\)?/);
+  end
+  // *** KEYWORD do ***
+  it 'let keyword with do end' do
+    assert.match(compile('let sayHello = do #log("hello") end'), /let sayHello = function \(\) {\s*console.log\("hello"\);?\s*}/);
+  end
+  it 'let keyword with do end with args' do
+    assert.match(compile('let sayHello = do |name| #log("hello", name) end'), /let sayHello = function \(name\) {\s*console.log\("hello", ?name\);?\s*}/);
+  end
+end
+
+describe "Test if statements" do
+  it 'if statements blocks' do
+    assert.match(compile('if true #log("hello") end'), /\s*if \(true\) \{\s*console.log\("hello"\);?\s*\}/);
+  end
+  // An if modifier executes everything to it's left only if the condition is true
+  it 'if modifier' do
+    assert.match(compile('let x; x = "10" if true'), /let x;\s*if \(?true\)? \{\s*x = "10";?\s*\}/);
+  end
+  it 'if statements blocks' do
+    assert.match(compile(`if true
+  x = 1
+elsif false
+  x = 2
+else
+  x = 3
+end
+`), /\s*if \(true\) \{\s*x = 1;\s*\} else if \(false\) \{\s*x = 2;\s*\} else \{\s*x = 3;\s*\}/);
+  end
+end
+
+describe "Test attribute accessor" do
+  it '({x:5end.x' do
+    assert.match(compile('({x:5end.x'), /\(\{ ?x\: ?5 ?\}\)\.x/);
+  end
+  it 'let o; o.x' do
+    assert.match(compile('let o; o.x'), /let o;\s*?o\.x;?/);
+  end
+end
+
+describe "Test attribute setter" do
+  it 'let o; o.x = 10' do
+    assert.match(compile('let o; o.x = 10'), /let o;\s*?o\.x ?= ?10;?/);
+  end
+end
+
+it 'let x = 1' do
+  // FIXME: Do I want var or I want let? I used var because it is what CoffeeScript is using by default.
+  assert.match(compile('let x = 1'), /(var|let)\s+x\s*=\s*1/);
+end;
+
+describe "Test values" do
+  it 'integer' do
+    assert.match(compile('10'), /10/);
+    assert.match(compile('1234'), /1234/);
+  end
+  it 'float' do
+    assert.match(compile('1.0'), /1.0/);
+    assert.match(compile('12.34'), /12.34/);
+  end
+end
+
+describe "Test objects" do
+  it '({end' do
+    assert.match(compile('({end'), /\(\{\}\)/);
+  end
+  it '{x: 1}' do
+    assert.match(compile('{x: 1}'), /\{\s*x\: ?1;?\s*\}/);
+  end
+  it '{x: 1, y: 2}' do
+    assert.match(compile('{x: 1, y: 2}'), /\{\s*x\: ?1, y: 2\s*\}/);
+  end
+  it '{"x": 1}' do
+    assert.match(compile('{"x": 1}'), /\{\s*x\: ?1;?\s*\}/);
+  end
+end
+
+describe "Test arrays" do
+  it '[]' do
+    assert.match(compile('[]'), /\[\]/);
+  end
+  it '[1,2,3]' do
+    assert.match(compile('[1,2,3]'), /\[1, ?2, ?3\]/);
+  end
+end
+
+it '!true' do
+  assert.match(compile('!true'), /!true/);
+end
+it '!true === false' do
+  assert.match(compile('!true === false'), /!true === false/);
+end
+it '!true === !false' do
+  assert.match(compile('!true === !false'), /!true === !false/);
+end
+it '!true === !!false' do
+  assert.match(compile('!true === !!false'), /!true === !!false/);
+end
+
+describe 'Test "ternary"' do
+  it 'true ? 1' do
+    assert.match(compile('true ? 1'), /true \? 1 : null/);
+  end
+  // C'est quand même plus beau cond ? val1 : val2
+  it 'false ? 1 : 0' do
+    assert.match(compile('false ? 1 : 0'), /false \? 1 : 0/);
+  end
+end
