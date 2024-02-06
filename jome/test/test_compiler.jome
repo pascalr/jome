@@ -4,11 +4,6 @@ import { describe, it, context } from 'minispec'
 
 import {compileCode} from '../src/compiler.js'
 
-// //const {compile} = require('./compiler.js')
-// const {parse} = require('./parser.js')
-// const {compileNodes, compileCode} = require('./compiler.js')
-// const {tokenize} = require('./tokenizer.js')
-
 def compile(code)
   return compileCode(code, {writeScript: false})
 end
