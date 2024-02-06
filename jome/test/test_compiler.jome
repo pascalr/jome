@@ -135,12 +135,18 @@ describe "Strings" do
   // TODO: Test @"Verbatim string" Test all 4 possibilities! (@'', @"", @''', @""")
 end
 
+
+
+
 // Regexes should work, the textmate grammar was copy pasted from the javascript one.
 describe "Regexes" do
   it '/test1212/' do
     assert.match(compile(`/test1212/`), "/test1212/");
   end
 end
+
+
+
 
 describe "Heredocs" do
   it '<sh>ls</sh>' do
@@ -153,6 +159,9 @@ describe "Heredocs" do
   end
 end
 
+
+
+
 describe "Comments" do
   describe "Documentation comments" do
     it 'Documentation comments should be compiled into js comments' do
@@ -161,41 +170,18 @@ describe "Comments" do
   end
 end
 
-describe 'No group' do
-  it 'Pass named parameters to functions' do
-    assert.match(compile(`add x: 1, y: 2`), /add\(\{ x: 1, y: 2 \}\)/);
-  end
 
-  it 'let shouldAddSemiToDec = 1' do
-    assert.match(compile(`let shouldAddSemiToDec = foo()[0]`, {prettier: false}), /;\s*$/);
-  end
-end
 
-// test.only('WIP2' do
-//   assert.match(compile(`
-// `)).toBe("WIP2");
-// end
 
-// it 'WIP' do
-//   assert.match(compile(`
-// `)).toBe("WIP");
-// end
-
-describe 'No group' do
-  it 'Test each do end' do
-    assert.match(compile(`
-  [1,2,3,4,5].each do |i|
-    console.log i
-  end
-  `), /\s*\[1, 2, 3, 4, 5\]\.each\(function \(i\) \{\s*console\.log\(i\);?\s*\}\)\s*/);
-  end
-end
 
 describe "Test arrow call" do
   it 'obj->call' do
     assert.match(compile(`obj->call`), /obj.call\(\)/);
   end
 end
+
+
+
 
 describe "Test function call" do
   it 'Function call with parens' do
@@ -212,6 +198,9 @@ add 10, 5
   end
 end
 
+
+
+
 describe "Test class" do
   it 'Class with one method' do
     assert.match(compile(`
@@ -223,6 +212,9 @@ end
 `), /\s*class Person\s*\{\s+sayHello = \(\) => \{\s*console.log\("Hello!"\);?\s*\};?\s*\}/);
   end
 end
+
+
+
 
 describe "Test built-ins" do
   it '#log' do
@@ -238,6 +230,10 @@ describe "Test built-ins" do
     assert.match(compile('{x:1}.#log'), /console.log\(\{ ?x\: ?1 ?\}\);?/);
   end
 end
+
+
+
+
 
 describe "Creating functions" do
   /*
@@ -302,6 +298,9 @@ describe "Creating functions" do
   end
 end
 
+
+
+
 describe "Test if statements" do
   it 'if statements blocks' do
     assert.match(compile('if true #log("hello") end'), /\s*if \(true\) \{\s*console.log\("hello"\);?\s*\}/);
@@ -322,6 +321,9 @@ end
   end
 end
 
+
+
+
 describe "Test attribute accessor" do
   it '({x:5}).x' do
     assert.match(compile('({x:5}).x'), /\(\{ ?x\: ?5 ?\}\)\.x/);
@@ -329,7 +331,20 @@ describe "Test attribute accessor" do
   it 'let o; o.x' do
     assert.match(compile('let o; o.x'), /let o;\s*?o\.x;?/);
   end
+
+  describe "Optional attribute accessor" do
+    it 'let o; o?.x' do
+      assert.match(compile('let o; o?.x'), /let o;\s*?o\?\.x;?/);
+    end
+    it 'let o; o?.x?.y' do
+      assert.match(compile('let o; o?.x?.y'), /let o;\s*?o\?\.x\?\.y;?/);
+    end
+  end
 end
+
+
+
+
 
 describe "Test attribute setter" do
   it 'let o; o.x = 10' do
@@ -337,14 +352,11 @@ describe "Test attribute setter" do
   end
 end
 
-describe 'No group' do
-  it 'let x = 1' do
-    // FIXME: Do I want var or I want let? I used var because it is what CoffeeScript is using by default.
-    assert.match(compile('let x = 1'), /(var|let)\s+x\s*=\s*1/);
-  end
-end
 
-describe "Test values" do
+
+
+
+describe "Values" do
   it 'integer' do
     assert.match(compile('10'), /10/);
     assert.match(compile('1234'), /1234/);
@@ -353,7 +365,37 @@ describe "Test values" do
     assert.match(compile('1.0'), /1.0/);
     assert.match(compile('12.34'), /12.34/);
   end
+  
+  describe "Language constant values" do
+    it 'true' do
+      assert.match(compile('true'), /true/);
+    end
+    it 'false' do
+      assert.match(compile('false'), /false/);
+    end
+    it 'null' do
+      assert.match(compile('null'), /null/);
+    end
+    it 'undefined' do
+      assert.match(compile('undefined'), /undefined/);
+    end
+  end
+
+  describe "Arrays" do
+    it '[]' do
+      assert.match(compile('[]'), /\[\]/);
+    end
+    it '[1,2,3]' do
+      assert.match(compile('[1,2,3]'), /\[1, ?2, ?3\]/);
+    end
+  end
 end
+
+
+
+
+
+
 
 describe "Test objects" do
   it '({end' do
@@ -370,16 +412,44 @@ describe "Test objects" do
   end
 end
 
-describe "Test arrays" do
-  it '[]' do
-    assert.match(compile('[]'), /\[\]/);
+
+
+
+
+
+describe 'No group' do
+  it 'Test each do end' do
+    assert.match(compile(`
+  [1,2,3,4,5].each do |i|
+    console.log i
   end
-  it '[1,2,3]' do
-    assert.match(compile('[1,2,3]'), /\[1, ?2, ?3\]/);
+  `), /\s*\[1, 2, 3, 4, 5\]\.each\(function \(i\) \{\s*console\.log\(i\);?\s*\}\)\s*/);
+  end
+  it 'Pass named parameters to functions' do
+    assert.match(compile(`add x: 1, y: 2`), /add\(\{ x: 1, y: 2 \}\)/);
+  end
+
+  it 'let shouldAddSemiToDec = 1' do
+    assert.match(compile(`let shouldAddSemiToDec = foo()[0]`, {prettier: false}), /;\s*$/);
   end
 end
 
-describe 'No group' do
+
+
+
+
+describe 'Assignment' do
+  it 'let x = 1' do
+    // FIXME: Do I want var or I want let? I used var because it is what CoffeeScript is using by default.
+    assert.match(compile('let x = 1'), /(var|let)\s+x\s*=\s*1/);
+  end
+end
+
+
+
+
+
+describe 'Operations' do
   it '!true' do
     assert.match(compile('!true'), /!true/);
   end
@@ -393,6 +463,10 @@ describe 'No group' do
     assert.match(compile('!true === !!false'), /!true === !!false/);
   end
 end
+
+
+
+
 
 describe 'Test "ternary"' do
   it 'true ? 1' do

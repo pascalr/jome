@@ -179,30 +179,6 @@ module.exports = () => {
       });
     });
   });
-  describe("No group", function () {
-    it("Pass named parameters to functions", function () {
-      assert.match(compile("add x: 1, y: 2"), /add\(\{ x: 1, y: 2 \}\)/);
-    });
-
-    it("let shouldAddSemiToDec = 1", function () {
-      assert.match(
-        compile("let shouldAddSemiToDec = foo()[0]", { prettier: false }),
-        /;\s*$/,
-      );
-    });
-  });
-  describe("No group", function () {
-    it("Test each do end", function () {
-      assert.match(
-        compile(`
-  [1,2,3,4,5].each do |i|
-    console.log i
-  end
-  `),
-        /\s*\[1, 2, 3, 4, 5\]\.each\(function \(i\) \{\s*console\.log\(i\);?\s*\}\)\s*/,
-      );
-    });
-  });
   describe("Test arrow call", function () {
     it("obj->call", function () {
       assert.match(compile("obj->call"), /obj.call\(\)/);
@@ -371,18 +347,22 @@ end
     it("let o; o.x", function () {
       assert.match(compile("let o; o.x"), /let o;\s*?o\.x;?/);
     });
+
+    describe("Optional attribute accessor", function () {
+      it("let o; o?.x", function () {
+        assert.match(compile("let o; o?.x"), /let o;\s*?o\?\.x;?/);
+      });
+      it("let o; o?.x?.y", function () {
+        assert.match(compile("let o; o?.x?.y"), /let o;\s*?o\?\.x\?\.y;?/);
+      });
+    });
   });
   describe("Test attribute setter", function () {
     it("let o; o.x = 10", function () {
       assert.match(compile("let o; o.x = 10"), /let o;\s*?o\.x ?= ?10;?/);
     });
   });
-  describe("No group", function () {
-    it("let x = 1", function () {
-      assert.match(compile("let x = 1"), /(var|let)\s+x\s*=\s*1/);
-    });
-  });
-  describe("Test values", function () {
+  describe("Values", function () {
     it("integer", function () {
       assert.match(compile("10"), /10/);
       assert.match(compile("1234"), /1234/);
@@ -390,6 +370,30 @@ end
     it("float", function () {
       assert.match(compile("1.0"), /1.0/);
       assert.match(compile("12.34"), /12.34/);
+    });
+
+    describe("Language constant values", function () {
+      it("true", function () {
+        assert.match(compile("true"), /true/);
+      });
+      it("false", function () {
+        assert.match(compile("false"), /false/);
+      });
+      it("null", function () {
+        assert.match(compile("null"), /null/);
+      });
+      it("undefined", function () {
+        assert.match(compile("undefined"), /undefined/);
+      });
+    });
+
+    describe("Arrays", function () {
+      it("[]", function () {
+        assert.match(compile("[]"), /\[\]/);
+      });
+      it("[1,2,3]", function () {
+        assert.match(compile("[1,2,3]"), /\[1, ?2, ?3\]/);
+      });
     });
   });
   describe("Test objects", function () {
@@ -406,15 +410,34 @@ end
       assert.match(compile('{"x": 1}'), /\{\s*x\: ?1;?\s*\}/);
     });
   });
-  describe("Test arrays", function () {
-    it("[]", function () {
-      assert.match(compile("[]"), /\[\]/);
+  describe("No group", function () {
+    it("Test each do end", function () {
+      assert.match(
+        compile(`
+  [1,2,3,4,5].each do |i|
+    console.log i
+  end
+  `),
+        /\s*\[1, 2, 3, 4, 5\]\.each\(function \(i\) \{\s*console\.log\(i\);?\s*\}\)\s*/,
+      );
     });
-    it("[1,2,3]", function () {
-      assert.match(compile("[1,2,3]"), /\[1, ?2, ?3\]/);
+    it("Pass named parameters to functions", function () {
+      assert.match(compile("add x: 1, y: 2"), /add\(\{ x: 1, y: 2 \}\)/);
+    });
+
+    it("let shouldAddSemiToDec = 1", function () {
+      assert.match(
+        compile("let shouldAddSemiToDec = foo()[0]", { prettier: false }),
+        /;\s*$/,
+      );
     });
   });
-  describe("No group", function () {
+  describe("Assignment", function () {
+    it("let x = 1", function () {
+      assert.match(compile("let x = 1"), /(var|let)\s+x\s*=\s*1/);
+    });
+  });
+  describe("Operations", function () {
     it("!true", function () {
       assert.match(compile("!true"), /!true/);
     });
