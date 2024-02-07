@@ -18,6 +18,7 @@ class ContextFile {
     this.currentArguments = null // The arguments defined just before classes and functions
     this.compiler = null // A reference to the compiler
     this.foralls = DEFAULT_FORALLS
+    this.errors = [] // A list of errors found when analyzing
   }
 
   addForall(name, chainFuncs, wrapFuncs) {

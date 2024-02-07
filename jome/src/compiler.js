@@ -1,7 +1,7 @@
 const { parse } = require("./parser")
 const { tokenize } = require('./tokenizer.js')
 const { genCode, genImports } = require("./code_generator.js")
-const { validateAllNodes } = require("./validator")
+const { analyzeNodes } = require("./analyzer")
 const { ContextFile } = require("./context.js")
 const prettier = require("@prettier/sync")
 //const prettier = require("prettier")
@@ -51,7 +51,7 @@ function printTree(node, depth = 0) {
 
 // That a list of ASTNode and return js code
 function compileNodes(nodes) {
-  validateAllNodes(nodes)
+  analyzeNodes(nodes)
   return nodes.map(node => {
     let compiled = genCode(node)
     return compiled
@@ -65,7 +65,7 @@ function validateCode(code) {
   ctxFile.compiler = compiler
   let tokens = tokenize(code).children
   let topNodes = parse(tokens, null, ctxFile.lexEnv)
-  return validateAllNodes(topNodes, false)
+  return analyzeNodes(topNodes, false)
 }
 
 function compileCode(code, options) {
