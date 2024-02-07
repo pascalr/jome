@@ -328,6 +328,23 @@ let content = <md>
   end
   ```
 
+  I want to do the same for function types too. They replace the keyword def.
+
+  ```jome
+  int sum(int x, int y)
+    // ...
+  end
+
+  class SomeClass
+    int someMethod(int x, int y)
+      // ...
+    end
+    void doSomething
+      // ...
+    end
+  end
+  ```
+
   <h2 id="strings">Strings</h2>
 
   They are many kinds of quotes in Jome that should handle every use case. There is:

@@ -397,6 +397,12 @@ describe "Types" do
       it 'int assignment' do
         assert.match(compile('int x = 0'), /let x = 0/);
       end
+      it 'float' do
+        assert.match(compile('float x'), /let x/);
+      end
+      it 'float assignment' do
+        assert.match(compile('float x = 1.0'), /let x = 1\.0/);
+      end
       it 'string' do
         assert.match(compile('string x'), /let x/);
       end
@@ -436,15 +442,19 @@ end
 // void
 
 /*
-How to do functions return type?
-I want the return type to be after in the case. It's more logical. (input) => (output), output is after, not before
-def getCount() : int
+I want to do the same for function types too. They replace the keyword def.
+
+int sum(int x, int y)
   // ...
 end
-with
-  returns int # Returns the count
-def getCount
-  // ...
+
+class SomeClass
+  int someMethod(int x, int y)
+    // ...
+  end
+  void doSomething
+    // ...
+  end
 end
 */
 

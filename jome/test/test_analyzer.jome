@@ -5,7 +5,7 @@ import { describe, it } from 'minispec'
 
 import {validateCode} from '../src/compiler.js'
 
-describe "Validator" do
+describe "Incomplete statements" do
   it 'should return an error keyword let with nothing else' do
     let errors = validateCode(`let`)
     assert.equal(errors.length, 1)
@@ -13,5 +13,17 @@ describe "Validator" do
   it 'should return an error keyword import with nothing else' do
     let errors = validateCode(`import`)
     assert.equal(errors.length, 1)
+  end
+end
+
+describe "Declaration should add to the lexical environment" do
+  it 'let should add to the lexical environment' do
+    validateCode(`let x`)
+  end
+  it 'import should add to the lexical environment' do
+    validateCode(`import x from 'file'`)
+  end
+  it 'def should add to the lexical environment' do
+    validateCode(`def add(x, y) return x + y end`)
   end
 end
