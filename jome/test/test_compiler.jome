@@ -54,39 +54,32 @@ end
 
 
 describe "Imports" do
-  // import defaultExport from "module-name";
   it 'Default import' do
     assert.match(compile(`import name from "module-name"`), /const name = require\("module-name"\)/);
   end
-  // import * as name from "module-name";
   it 'Star import' do
     assert.match(compile(`import * as name from "module-name"`), /const (\w+) = require\("module-name"\);\s*const { ?default: \w+, ...name ?} = \1;/);
   end
-  // import { export1 } from "module-name";
-  // import { export1, export2 } from "module-name";
   it 'Deconstructed import' do
     assert.match(compile(`import { name } from "module-name"`), /const { ?name ?} = require\("module-name"\)/);
     assert.match(compile(`import { name, name2 } from "module-name"`), /const { ?name, name2 ?} = require\("module-name"\)/);
   end
-  // import { export1 as alias1 } from "module-name";
-  // import { export1, export2 as alias2, /* … */ } from "module-name";
   it 'Alias deconstructed import' do
     assert.match(compile(`import { name as otherName } from "module-name"`), /const {name as otherName} = require\("module-name"\)/);
     assert.match(compile(`import { normal, name as otherName } from "module-name"`), /const {normal, name as otherName} = require\("module-name"\)/);
   end
-  // import { default as alias } from "module-name";
   it 'Alias deconstructed import' do
     assert.match(compile(`import { name as otherName } from "module-name"`), /const {name as otherName} = require\("module-name"\)/);
   end
+
   // import { "string name" as alias } from "module-name";
   // FIXME: Is this valid or not? I saw online yes but it does not seem to work in vscode...
   // it 'Import name inside string' do
   // end
-  // import defaultExport, { export1, /* … */ } from "module-name";
+
   it 'Default import and deconstructed' do
     assert.match(compile(`import name, { foo } from "module-name"`), /const (\w+) = require\("module-name"\);\s*const { ?default: name, foo ?} = \1;/);
   end
-  // import defaultExport, * as name from "module-name";
   it 'Default import and star import' do
     assert.match(compile(`import name, * as all from "module-name"`), /const (\w+) = require\("module-name"\);\s*const { ?default: name, ...all ?} = \1;/);
   end

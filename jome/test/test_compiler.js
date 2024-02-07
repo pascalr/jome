@@ -51,14 +51,12 @@ module.exports = () => {
         /const name = require\("module-name"\)/,
       );
     });
-
     it("Star import", function () {
       assert.match(
         compile('import * as name from "module-name"'),
         /const (\w+) = require\("module-name"\);\s*const { ?default: \w+, ...name ?} = \1;/,
       );
     });
-
     it("Deconstructed import", function () {
       assert.match(
         compile('import { name } from "module-name"'),
@@ -69,7 +67,6 @@ module.exports = () => {
         /const { ?name, name2 ?} = require\("module-name"\)/,
       );
     });
-
     it("Alias deconstructed import", function () {
       assert.match(
         compile('import { name as otherName } from "module-name"'),
@@ -80,7 +77,6 @@ module.exports = () => {
         /const {normal, name as otherName} = require\("module-name"\)/,
       );
     });
-
     it("Alias deconstructed import", function () {
       assert.match(
         compile('import { name as otherName } from "module-name"'),
@@ -94,7 +90,6 @@ module.exports = () => {
         /const (\w+) = require\("module-name"\);\s*const { ?default: name, foo ?} = \1;/,
       );
     });
-
     it("Default import and star import", function () {
       assert.match(
         compile('import name, * as all from "module-name"'),
