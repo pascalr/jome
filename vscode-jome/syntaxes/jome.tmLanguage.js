@@ -538,7 +538,7 @@ let grammar = {
           }
         },
         {
-          name: "meta.getter.bracket.optional.jome",
+          name: "meta.getter.jome",
           begin: "(\\?\\.)(\\[)",
           beginCaptures: {
             1: { name: "punctuation.accessor.optional.jome" },

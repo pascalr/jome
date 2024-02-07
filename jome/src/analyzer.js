@@ -217,6 +217,7 @@ const ANALYZERS = {
   },
   // obj.property
   "meta.getter.jome": (node) => {
+    // TODO: If the getter is an optional bracket getter (obj?.[0]), than validate what is inside the bracket too
     if (node.operands.length !== 1) {
       return pushError(node, "Missing operand before getter")
     }

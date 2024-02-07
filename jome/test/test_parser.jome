@@ -2,13 +2,14 @@ import assert from 'assert/strict'
 
 import { describe, it, context } from 'minispec'
 
-import {compileNodes} from '../src/compiler.js'
 import {parse} from '../src/parser.js'
 import {tokenize} from '../src/tokenizer.js'
 
-// TODO: Test the compounding of everything
-// o.x.y => 1 node
-// o?.x?.y => 1 node
+// Actually I don't really care about these tests. I don't want them. Only compile and end result.
+// I don't care about the way they are implemented. Just the end result.
+// TODO: Test inside test_compiler for each thing that can be chained that it works.
+
+// I do care for priority of operations though, I think
 
 describe "Parse operation" do
 
@@ -19,9 +20,6 @@ describe "Parse operation" do
     assert.equal(ast?.raw, '+')
     assert.equal(ast?.operands?.[0]?.raw, '1')
     assert.equal(ast?.operands?.[1]?.raw, '2')
-
-    let out = compileNodes(list)
-    assert.equal(out, /1\s*\+\s*2/)
   end
 
 //   it '2 + 3 * 4 + 5 == 19' do

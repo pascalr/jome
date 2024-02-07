@@ -1,5 +1,4 @@
 const { describe, it, context } = require("minispec");
-const { compileNodes } = require("../src/compiler.js");
 const { parse } = require("../src/parser.js");
 const { tokenize } = require("../src/tokenizer.js");
 const assert = require("assert/strict");
@@ -10,9 +9,8 @@ module.exports = () => {
       assert.equal(list?.length, 1);
       let ast = list[0];
       assert.equal(ast?.raw, "+");
-
-      let out = compileNodes(list);
-      assert.equal(out, /1\s*\+\s*2/);
+      assert.equal(ast?.operands?.[0]?.raw, "1");
+      assert.equal(ast?.operands?.[1]?.raw, "2");
     });
   });
 };
