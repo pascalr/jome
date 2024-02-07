@@ -12,6 +12,34 @@ class FileImports {
     this.namespaceImport = null
     this.namedImports = new Set()
     this.aliasesByName = {} // {originalName: ["aliasName1", "aliasName2"]}
+    // All the identifiers that design a class. They start with an ampersand &SomeClass
+    this.classIdentifiers = new Set()
+  }
+
+  // Extract the name and sets identifier to be a class identifier if it is the case
+  extractName(name) {
+    if (name.startsWith("&")) {
+      let n = name.slice(1)
+      this.classIdentifiers.add(n)
+      return n
+    }
+    return name
+  }
+
+  addNamedImport(name) {
+    this.namedImports.add(this.extractName(name))
+  }
+
+  addAliasImport() {
+
+  }
+
+  addDefaultImport(name) {
+    this.defaultImportNames.push(this.extractName(name))
+  }
+
+  setNamespaceImport(name) {
+    this.namespaceImport = name
   }
 }
 
