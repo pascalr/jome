@@ -16,6 +16,13 @@ class FileImports {
     this.classIdentifiers = new Set()
   }
 
+  mergeWith(fileImports) {
+    this.defaultImportNames = [...this.defaultImportNames, fileImports.defaultImportNames]
+    this.namespaceImport = this.namespaceImport || fileImports.namespaceImport
+    this.namedImports = new Set([...this.namedImports, ...fileImports.namedImports])
+    return this
+  }
+
   // Extract the name and sets identifier to be a class identifier if it is the case
   extractName(name) {
     if (name.startsWith("&")) {
@@ -60,10 +67,21 @@ class ContextFile {
     this.compiler = null // A reference to the compiler
     this.foralls = DEFAULT_FORALLS
     this.errors = [] // A list of errors found when analyzing
+    this.fileImportsByFile = {}
   }
 
   addForall(name, chainFuncs, wrapFuncs) {
     this.foralls[name] = {chain: chainFuncs, wrap: wrapFuncs}
+  }
+
+  addFileImports(fileImports) {
+    let previous = this.fileImportsByFile[fileImports.filename]
+    if (previous) {
+      this.fileImportsByFile[fileImports.filename] = previous.mergeWith(fileImports)
+    } else {
+      this.fileImportsByFile[fileImports.filename] = fileImports
+    }
+    this.classIdentifiers = new Set([...this.classIdentifiers, ...fileImports.classIdentifiers])
   }
 
   addImport(defaultImport, namedImports, file, namespaceImport) {

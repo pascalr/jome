@@ -16,20 +16,24 @@ function genCode(node) {
 
 function genImports(ctxFile, compilerOptions) {
   let result = ""
-  let files = new Set([
-    ...Object.keys(ctxFile.namedImportsByFile),
-    ...Object.keys(ctxFile.defaultImportsByFile),
-    ...Object.keys(ctxFile.namespaceImportsByFile)
-  ])
+  let files = Object.keys(ctxFile.fileImportsByFile)
+  // let files = new Set([
+  //   ...Object.keys(ctxFile.namedImportsByFile),
+  //   ...Object.keys(ctxFile.defaultImportsByFile),
+  //   ...Object.keys(ctxFile.namespaceImportsByFile)
+  // ])
   files.forEach(file => {
     let jsfile = file
     if (file.endsWith('.jomm') || file.endsWith('.jome')) {
       ctxFile.addDependency(file)
       jsfile = file.slice(0,-5)+'.js' // remove .jome and replace extension with js
     }
-    let def = ctxFile.defaultImportsByFile[file]
-    let named = ctxFile.namedImportsByFile[file]
-    let namespace = ctxFile.namespaceImportsByFile[file]
+    let fileImports = ctxFile.fileImportsByFile[file]
+    let def = fileImports.defaultImportNames[0]
+    // TODO: Support multiple default import names
+    // Just declare a variable right under with the different default import name
+    let named = fileImports.namedImports
+    let namespace = fileImports.namespaceImport
     if (compilerOptions.useCommonJS) {
       if (namespace) {
         let uid = ctxFile.uid()
@@ -556,7 +560,7 @@ const CODE_GENERATORS = {
   // handles all lines starting with keyword import
   "meta.statement.import.jome": (node) => {
     let {file, defaultImport, namedImports, namespaceImport, fileImports} = node.data
-    node.ctxFile.addImport(defaultImport, namedImports, file, namespaceImport)
+    node.ctxFile.addFileImports(fileImports)
   },
 
   // #.
