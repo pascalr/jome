@@ -512,4 +512,5 @@ end
       assert.match(compile("false ? 1 : 0"), /false \? 1 : 0/);
     });
   });
+  describe("async", function () {});
 };

@@ -562,3 +562,11 @@ describe 'Test "ternary"' do
     assert.match(compile('false ? 1 : 0'), /false \? 1 : 0/);
   end
 end
+
+
+
+
+
+describe 'async' do
+  // TODO: async, await
+end
