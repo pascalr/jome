@@ -6,8 +6,12 @@ import { describe, it } from 'minispec'
 import {validateCode} from '../src/compiler.js'
 
 describe "Validator" do
-  it 'should return an error keyword let without nothing' do
-    assert.match(compile(`#.`), /__dirname/);
-    assert.match(compile(`#./`), /__dirname/);
+  it 'should return an error keyword let with nothing else' do
+    let errors = validateCode(`let`)
+    assert.equal(errors.length, 1)
+  end
+  it 'should return an error keyword import with nothing else' do
+    let errors = validateCode(`import`)
+    assert.equal(errors.length, 1)
   end
 end

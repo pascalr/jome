@@ -4,9 +4,13 @@ const { validateCode } = require("../src/compiler.js");
 const assert = require("assert/strict");
 module.exports = () => {
   describe("Validator", function () {
-    it("should return an error keyword let without nothing", function () {
-      assert.match(compile("#."), /__dirname/);
-      assert.match(compile("#./"), /__dirname/);
+    it("should return an error keyword let with nothing else", function () {
+      let errors = validateCode("let");
+      assert.equal(errors.length, 1);
+    });
+    it("should return an error keyword import with nothing else", function () {
+      let errors = validateCode("import");
+      assert.equal(errors.length, 1);
     });
   });
 };
