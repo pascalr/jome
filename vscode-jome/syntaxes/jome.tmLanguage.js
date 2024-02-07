@@ -536,7 +536,18 @@ let grammar = {
             1: { name: "punctuation.dot.jome" },
             2: { name: "variable.other.property.jome" }
           }
-        }
+        },
+        {
+          name: "meta.getter.bracket.optional.jome",
+          begin: "(\\?\\.)(\\[)",
+          beginCaptures: {
+            1: { name: "punctuation.accessor.optional.jome" },
+            2: { name: "punctuation.definition.square-bracket.begin.jome" },
+          },
+          end: "\\]",
+          endCaptures: {0: {name: "punctuation.definition.square-bracket.end.jome"}},
+          patterns: [{include: "#expression"}]
+        },
       ]
     },
     "inline-utility": {

@@ -1,12 +1,12 @@
 import test_compiler from './test_compiler.jome'
 import test_analyzer from './test_analyzer.jome'
-// import test_parser from './test_parser.jome'
+import test_parser from './test_parser.jome'
 
 import MiniSpecPkg from 'minispec'
 let MiniSpec = MiniSpecPkg.default
 
 // FIXME: Add ?. operator to jome
-// test_parser()
+test_parser()
 test_compiler()
 test_analyzer()
 

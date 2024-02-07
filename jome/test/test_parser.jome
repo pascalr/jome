@@ -24,52 +24,52 @@ describe "Parse operation" do
     assert.equal(out, /1\s*\+\s*2/)
   end
 
-  it '2 + 3 * 4 + 5 == 19' do
-    let list = parse(tokenize("2 + 3 * 4 + 5 == 19").children)
-    assert.equal(list?.length, 1)
-    let ast = list[0]
-    assert.equal(ast?.raw, '==')
-    assert.equal(ast?.operands?.[0]?.raw, '+')
-    assert.equal(ast?.operands?.[0]?.operands?.[0]?.raw, '+')
-    assert.equal(ast?.operands?.[0]?.operands?.[0]?.operands?.[0]?.raw, '2')
-    assert.equal(ast?.operands?.[0]?.operands?.[0]?.operands?.[1]?.raw, '*')
-    assert.equal(ast?.operands?.[0]?.operands?.[0]?.operands?.[1]?.operands?.[0]?.raw, '3')
-    assert.equal(ast?.operands?.[0]?.operands?.[0]?.operands?.[1]?.operands?.[1]?.raw, '4')
-    assert.equal(ast?.operands?.[0]?.operands?.[1]?.raw, '5')
-    assert.equal(ast?.operands?.[1]?.raw, '19')
-  end
-end
+//   it '2 + 3 * 4 + 5 == 19' do
+//     let list = parse(tokenize("2 + 3 * 4 + 5 == 19").children)
+//     assert.equal(list?.length, 1)
+//     let ast = list[0]
+//     assert.equal(ast?.raw, '==')
+//     assert.equal(ast?.operands?.[0]?.raw, '+')
+//     assert.equal(ast?.operands?.[0]?.operands?.[0]?.raw, '+')
+//     assert.equal(ast?.operands?.[0]?.operands?.[0]?.operands?.[0]?.raw, '2')
+//     assert.equal(ast?.operands?.[0]?.operands?.[0]?.operands?.[1]?.raw, '*')
+//     assert.equal(ast?.operands?.[0]?.operands?.[0]?.operands?.[1]?.operands?.[0]?.raw, '3')
+//     assert.equal(ast?.operands?.[0]?.operands?.[0]?.operands?.[1]?.operands?.[1]?.raw, '4')
+//     assert.equal(ast?.operands?.[0]?.operands?.[1]?.raw, '5')
+//     assert.equal(ast?.operands?.[1]?.raw, '19')
+//   end
+// end
 
-describe "Parse let assignment" do
+// describe "Parse let assignment" do
 
-  it 'let x' do
-    let list = parse(tokenize("let x").children)
-    assert.equal(list?.length, 1)
-    let ast = list[0]
-    assert.equal(ast?.raw, 'let x')
-  end
+//   it 'let x' do
+//     let list = parse(tokenize("let x").children)
+//     assert.equal(list?.length, 1)
+//     let ast = list[0]
+//     assert.equal(ast?.raw, 'let x')
+//   end
 
-  it 'let x;' do
-    let list = parse(tokenize("let x;").children)
-    assert.equal(list?.length, 2)
-    let ast = list[0]
-    assert.equal(ast?.raw, 'let x')
-  end
+//   it 'let x;' do
+//     let list = parse(tokenize("let x;").children)
+//     assert.equal(list?.length, 2)
+//     let ast = list[0]
+//     assert.equal(ast?.raw, 'let x')
+//   end
 
-  it 'let x; let y' do
-    let list = parse(tokenize("let x; let y").children)
-    assert.equal(list?.length, 3)
-    assert.equal(list[0]?.raw, 'let x')
-    assert.equal(list[2]?.raw, 'let y')
-  end
+//   it 'let x; let y' do
+//     let list = parse(tokenize("let x; let y").children)
+//     assert.equal(list?.length, 3)
+//     assert.equal(list[0]?.raw, 'let x')
+//     assert.equal(list[2]?.raw, 'let y')
+//   end
 
-  it '[1][0]' do
-    let list = parse(tokenize("[1][0]").children)
-    assert.equal(list?.length, 1)
-    let ast = list[0]
-    assert.equal(ast?.parts?.length, 3) // [, 1, ]
-    assert.equal(ast?.operands?.length, 1)
-    assert.equal(ast?.operands?.[0]?.parts?.length, 3) // [, 0, ]
-  end
+//   it '[1][0]' do
+//     let list = parse(tokenize("[1][0]").children)
+//     assert.equal(list?.length, 1)
+//     let ast = list[0]
+//     assert.equal(ast?.parts?.length, 3) // [, 1, ]
+//     assert.equal(ast?.operands?.length, 1)
+//     assert.equal(ast?.operands?.[0]?.parts?.length, 3) // [, 0, ]
+//   end
 
 end
