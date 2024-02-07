@@ -26,6 +26,9 @@ module.exports = () => {
 
   J'aime juste moins que ce soit async par défaut. Et que tu aies à faire MiniSpec.execute()
 
+  Ouin tu n'as pas vraiment le choix. Comme ça si tu fais only ou focus, tu ne dois pas afficher les autres tests.
+  Il faudra donc une fonction #testResults ou #printTestResults ou #logTestResults
+
   ## ...
 
   Je veux que this fasse toujours référence à un this normal comme dans un autre language.

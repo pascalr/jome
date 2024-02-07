@@ -564,7 +564,7 @@ const CODE_GENERATORS = {
   // import defaultExport, * as name from "module-name";
   // // import "module-name"; TODO: Not written yet in the parser
   "meta.statement.import.jome": (node) => {
-    let {file, defaultImport, namedImports, namespaceImport} = node.data
+    let {file, defaultImport, namedImports, namespaceImport, fileImports} = node.data
     if (defaultImport) {
       node.lexEnv.addBinding(defaultImport, {type: 'default-import', file})
     }

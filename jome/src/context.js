@@ -2,6 +2,19 @@ const path = require('path')
 
 const {DEFAULT_FORALLS} = require('./forall.js')
 
+class FileImports {
+  constructor() {
+    this.filename = null
+    // A default import can be given a name, and an implicit import (by using builtin or custom tag or whatever)
+    // can give other names to the default import. List all the names used here.
+    this.defaultImportNames = []
+    // Namespace import can only be specified explicitely, so only keep one value for it.
+    this.namespaceImport = null
+    this.namedImports = new Set()
+    this.aliasesByName = {} // {originalName: ["aliasName1", "aliasName2"]}
+  }
+}
+
 // The scope of the file. So it handles imports especially.
 class ContextFile {
   constructor(absPath) {
@@ -126,5 +139,6 @@ class LexicalEnvironment {
 
 module.exports = {
   LexicalEnvironment,
-  ContextFile
+  ContextFile,
+  FileImports
 }

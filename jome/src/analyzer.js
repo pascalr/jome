@@ -1,5 +1,7 @@
 const {OPERAND_TYPES, filterSpaces, filterStrings, compileTokenRaw} = require("./parser.js")
 
+const {FileImports} = require("./context.js")
+
 // TODO: Rename this to analyzer and give this file the responsability too of building the lexical environment.
 // Because I need the lexical environment for the language server too without generating code.
 
@@ -404,6 +406,7 @@ const ANALYZERS = {
     ensureStartRaw(node, 'import')
     ensureStartType(node, 'keyword.control.jome')
 
+    let fileImports = new FileImports()
     let file;
     let defaultImport = ''
     let namedImports = []
@@ -414,6 +417,7 @@ const ANALYZERS = {
         filterCommas(filterSpaces(item.parts)).forEach(namedImport => {
           if (namedImport.type === 'variable.other.named-import.jome') {
             namedImports.push(namedImport.raw)
+            fileImports.namedImports.add(namedImport.raw)
           } else if (namedImport.type === 'meta.import-alias.jome') {
             throw new Error("TODO 98hr92gh9du23")
             // namedImports.push(namedImport.raw)
@@ -427,10 +431,13 @@ const ANALYZERS = {
       } else if (item.type === 'meta.import-file.jome') {
         let cs = filterSpaces(item.parts)
         file = cs[cs.length-1].raw.slice(1,-1)
+        fileImports.filename = cs[cs.length-1].raw.slice(1,-1)
       } else if (item.type === 'variable.other.default-import.jome') {
         defaultImport = item.raw
+        fileImports.defaultImportNames.push(item.raw)
       } else if (item.type === 'meta.namespace-import.jome') {
         namespaceImport = item.parts[2].raw
+        fileImports.namespaceImport = item.parts[2].raw
       } else {
         throw new Error("Error 234j90s7adfg1")
       }
@@ -443,7 +450,7 @@ const ANALYZERS = {
     //   relPath = relPath.slice(0, relPath.length-4)+"built.js"
     //   // relPath = relPath.slice(0, relPath.length-4)+(ctx.useESM ? 'built.js' : 'built.cjs')
     // }
-    node.data = {file, defaultImport, namedImports, namespaceImport}
+    node.data = {file, defaultImport, namedImports, namespaceImport, fileImports}
   },
 
   "string.quoted.double.jome": (node) => validateString(node, '"'),
