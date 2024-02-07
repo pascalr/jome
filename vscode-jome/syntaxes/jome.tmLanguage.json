@@ -206,10 +206,16 @@
           "include": "#arrow"
         },
         {
+          "include": "#function_call"
+        },
+        {
           "include": "#caller"
         },
         {
           "include": "#state-var"
+        },
+        {
+          "include": "#getter"
         },
         {
           "include": "#operators"
@@ -227,9 +233,6 @@
           "include": "#inline-utility"
         },
         {
-          "include": "#function_call"
-        },
-        {
           "include": "#utilities"
         },
         {
@@ -237,9 +240,6 @@
         },
         {
           "include": "#variable"
-        },
-        {
-          "include": "#getter"
         },
         {
           "include": "#block-array"
@@ -814,16 +814,32 @@
       }
     },
     "getter": {
-      "name": "meta.getter.jome",
-      "match": "(\\.)(\\w+)",
-      "captures": {
-        "1": {
-          "name": "punctuation.dot.jome"
+      "patterns": [
+        {
+          "name": "meta.getter.jome",
+          "match": "(\\?\\.)(\\w+)",
+          "captures": {
+            "1": {
+              "name": "punctuation.accessor.optional.jome"
+            },
+            "2": {
+              "name": "variable.other.property.jome"
+            }
+          }
         },
-        "2": {
-          "name": "variable.other.property.jome"
+        {
+          "name": "meta.getter.jome",
+          "match": "(\\.)(\\w+)",
+          "captures": {
+            "1": {
+              "name": "punctuation.dot.jome"
+            },
+            "2": {
+              "name": "variable.other.property.jome"
+            }
+          }
         }
-      }
+      ]
     },
     "inline-utility": {
       "name": "entity.name.function.utility-inline.jome",

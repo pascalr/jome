@@ -117,15 +117,16 @@ function validateOperatorUnary(node) {
 }
 
 function validateOperator(node) {
+  let op = node.raw
   // return validateoperands(2, OPERAND_TYPES)(node)
   if (node.operands.length !== 2) {
-    return pushError(node, "A binary operator must have a two operands")
+    return pushError(node, `Binary operator ${op} must have two operands`)
   }
 
   for (let i = 0; i < node.operands.length; i++) {
     let child = node.operands[i]
     if (!OPERAND_TYPES.includes(child.type)) {
-      return pushError(node, `Invalid operand type for operator ${node.type}. Was: ${child.type}`)
+      return pushError(node, `Invalid operand type for operator ${op}. Was: ${child.type}`)
     }
   }
 }

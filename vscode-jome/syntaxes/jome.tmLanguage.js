@@ -168,19 +168,19 @@ let grammar = {
         { include: "#scripts" },
         { include: "#tag" },
         { include: "#arrow" },
+        { include: "#function_call" },
         { include: "#caller" }, // ->something
         { include: "#state-var" },
+        { include: "#getter" }, // .something, ?.something
         { include: "#operators" },
         // { include: "#parameter" },
         { include: "#attribute" },
         { include: "#square-bracket" },
         { include: "#constants" },
         { include: "#inline-utility" },
-        { include: "#function_call" },
         { include: "#utilities" },
         { include: "#support-items" },
         { include: "#variable" },
-        { include: "#getter" }, // .something
         { include: "#block-array" },
         { include: "#block"},
         { include: "#semicolon" }, // ;
@@ -520,12 +520,24 @@ let grammar = {
       }
     },
     getter: {
-      name: "meta.getter.jome",
-      match: "(\\.)(\\w+)",
-      captures: {
-        1: { name: "punctuation.dot.jome" },
-        2: { name: "variable.other.property.jome" }
-      }
+      patterns: [
+        {
+          name: "meta.getter.jome",
+          match: "(\\?\\.)(\\w+)",
+          captures: {
+            1: { name: "punctuation.accessor.optional.jome" },
+            2: { name: "variable.other.property.jome" }
+          }
+        },
+        {
+          name: "meta.getter.jome",
+          match: "(\\.)(\\w+)",
+          captures: {
+            1: { name: "punctuation.dot.jome" },
+            2: { name: "variable.other.property.jome" }
+          }
+        }
+      ]
     },
     "inline-utility": {
       name: "entity.name.function.utility-inline.jome",

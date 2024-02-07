@@ -6,6 +6,10 @@ import {compileNodes} from '../src/compiler.js'
 import {parse} from '../src/parser.js'
 import {tokenize} from '../src/tokenizer.js'
 
+// TODO: Test the compounding of everything
+// o.x.y => 1 node
+// o?.x?.y => 1 node
+
 describe "Parse operation" do
 
   it '1 + 2' do

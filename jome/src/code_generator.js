@@ -1,6 +1,6 @@
 const { compileUtility } = require("./compileUtility")
 const {compileTokenRaw} = require("./parser.js")
-const {filterCommas, filterNewlines, filterSpaces} = require("./validator.js")
+const {filterCommas, filterNewlines, filterSpaces} = require("./analyzer.js")
 const Argument = require("./argument")
 const crypto = require('crypto');
 
