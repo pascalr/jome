@@ -552,17 +552,8 @@ const CODE_GENERATORS = {
   //'keyword.operator.assignment.jome': (node) => (compileOperator(node)+";"),
   // let
   'keyword.control.declaration.jome': (node) => `let ${node.operands[0].raw}`,
-  // import defaultExport from "module-name";
-  // import * as name from "module-name";
-  // import { export1 } from "module-name";
-  // import { export1 as alias1 } from "module-name";
-  // import { default as alias } from "module-name";
-  // import { export1, export2 } from "module-name";
-  // import { export1, export2 as alias2, /* … */ } from "module-name";
-  // import { "string name" as alias } from "module-name";
-  // import defaultExport, { export1, /* … */ } from "module-name";
-  // import defaultExport, * as name from "module-name";
-  // // import "module-name"; TODO: Not written yet in the parser
+
+  // handles all lines starting with keyword import
   "meta.statement.import.jome": (node) => {
     let {file, defaultImport, namedImports, namespaceImport, fileImports} = node.data
     if (defaultImport) {
