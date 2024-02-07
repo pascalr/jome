@@ -556,15 +556,6 @@ const CODE_GENERATORS = {
   // handles all lines starting with keyword import
   "meta.statement.import.jome": (node) => {
     let {file, defaultImport, namedImports, namespaceImport, fileImports} = node.data
-    if (defaultImport) {
-      node.lexEnv.addBinding(defaultImport, {type: 'default-import', file})
-    }
-    if (namespaceImport) {
-      node.lexEnv.addBinding(namespaceImport, {type: 'namespace-import', file})
-    }
-    namedImports.forEach(namedImport => {
-      node.lexEnv.addBinding(namedImport, {type: 'named-import', file})
-    })
     node.ctxFile.addImport(defaultImport, namedImports, file, namespaceImport)
   },
 

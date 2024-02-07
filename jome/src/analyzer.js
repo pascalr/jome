@@ -434,6 +434,17 @@ const ANALYZERS = {
       }
     })
 
+    if (fileImports.defaultImportNames.length) {
+      // TODO: Make sure there is only one default import name. Should be impossible to be otherwise
+      node.lexEnv.addBinding(fileImports.defaultImportNames[0], {type: 'default-import', file: fileImports.filename})
+    }
+    if (fileImports.namespaceImport) {
+      node.lexEnv.addBinding(fileImports.namespaceImport, {type: 'namespace-import', file: fileImports.filename})
+    }
+    fileImports.namedImports.forEach(namedImport => {
+      node.lexEnv.addBinding(namedImport, {type: 'named-import', file: fileImports.filename})
+    })
+
     // let relPath = getRelativePath(file, ctx)
     // let ext = path.extname(relPath)
     // if (ext === '.jome') {
