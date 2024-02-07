@@ -331,9 +331,6 @@ describe "Test attribute accessor" do
       assert.match(compile('let o; o?.x?.y'), /let o;\s*?o\?\.x\?\.y;?/);
     end
   end
-  // TODO: foo?.attr
-  // meta.getter.optional.jome or simply still meta.getter.jome
-  // punctuation.accessor.optional.jome
 end
 
 

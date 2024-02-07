@@ -6,9 +6,11 @@ module.exports = () => {
   describe("Incomplete statements", function () {
     it("should return an error keyword let with nothing else", function () {
       let ctxFile = analyzeCode("let");
+      assert.equal(ctxFile.errors.length, 1);
     });
     it("should return an error keyword import with nothing else", function () {
       let ctxFile = analyzeCode("import");
+      assert.equal(ctxFile.errors.length, 1);
     });
   });
   describe("Declaration should add to the lexical environment", function () {

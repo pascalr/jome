@@ -41,6 +41,7 @@ const OPERAND_TYPES = [
   "meta.embedded.block.html",
   "keyword.other.string-format.jome",
   "entity.name.function.utility-inline.jome",
+  "meta.getter.jome",
 ]
 
 function compileTokenRaw(token) {

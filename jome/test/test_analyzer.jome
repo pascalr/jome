@@ -8,11 +8,11 @@ import {analyzeCode} from '../src/compiler.js'
 describe "Incomplete statements" do
   it 'should return an error keyword let with nothing else' do
     let ctxFile = analyzeCode(`let`)
-    // assert.equal(ctxFile.errors.length, 1)
+    assert.equal(ctxFile.errors.length, 1)
   end
   it 'should return an error keyword import with nothing else' do
     let ctxFile = analyzeCode(`import`)
-    // assert.equal(ctxFile.errors.length, 1)
+    assert.equal(ctxFile.errors.length, 1)
   end
 end
 
