@@ -83,44 +83,7 @@ class ContextFile {
     }
     this.classIdentifiers = new Set([...this.classIdentifiers, ...fileImports.classIdentifiers])
   }
-
-  addImport(defaultImport, namedImports, file, namespaceImport) {
-    if (defaultImport) {
-      if (this.defaultImportsByFile[file] && this.defaultImportsByFile[file] !== defaultImport) {
-        throw new Error("Two default imports on the same file not supported for now.")
-      }
-      if (defaultImport[0] === '&') {
-        let name = defaultImport.slice(1)
-        this.classIdentifiers.add(name)
-        this.defaultImportsByFile[file] = name
-      } else {
-        this.defaultImportsByFile[file] = defaultImport
-      }
-    }
-    if (namespaceImport) {
-      if (this.namespaceImportsByFile[file] === namespaceImport) {
-        // Nothing to do
-      } else if (this.namespaceImportsByFile[file]) {
-        throw new Error("TODO: Multiple namespace imports with different names for the same file not yet supported.")
-      }
-      this.namespaceImportsByFile[file] = namespaceImport
-    }
-    if (namedImports && namedImports.length) {
-      if (!this.namedImportsByFile[file]) {
-        this.namedImportsByFile[file] = new Set()
-      }
-      namedImports.forEach(imp => {
-        if (imp[0] === '&') {
-          let name = imp.slice(1)
-          this.classIdentifiers.add(name)
-          this.namedImportsByFile[file].add(name)
-        } else {
-          this.namedImportsByFile[file].add(imp)
-        }
-      })
-    }
-  }
-
+  
   addDependency(filename) {
     this.dependencies.push(filename)
   }

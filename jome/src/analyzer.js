@@ -398,16 +398,11 @@ const ANALYZERS = {
     ensureStartType(node, 'keyword.control.jome')
 
     let fileImports = new FileImports()
-    let file;
-    let defaultImport = ''
-    let namedImports = []
-    let namespaceImport = null // * as namespace_name
     let list = filterStrings(node.parts.slice(1)) // remove import keyword
     list.forEach(item => {
       if (item.type === 'meta.named-imports.jome') {
         filterCommas(filterSpaces(item.parts)).forEach(namedImport => {
           if (namedImport.type === 'variable.other.named-import.jome') {
-            namedImports.push(namedImport.raw)
             fileImports.addNamedImport(namedImport.raw)
           } else if (namedImport.type === 'meta.import-alias.jome') {
             throw new Error("TODO 98hr92gh9du23")
@@ -421,13 +416,10 @@ const ANALYZERS = {
         //   }
       } else if (item.type === 'meta.import-file.jome') {
         let cs = filterSpaces(item.parts)
-        file = cs[cs.length-1].raw.slice(1,-1)
         fileImports.filename = cs[cs.length-1].raw.slice(1,-1)
       } else if (item.type === 'variable.other.default-import.jome') {
-        defaultImport = item.raw
         fileImports.addDefaultImport(item.raw)
       } else if (item.type === 'meta.namespace-import.jome') {
-        namespaceImport = item.parts[2].raw
         fileImports.setNamespaceImport(item.parts[2].raw)
       } else {
         throw new Error("Error 234j90s7adfg1")
@@ -452,7 +444,7 @@ const ANALYZERS = {
     //   relPath = relPath.slice(0, relPath.length-4)+"built.js"
     //   // relPath = relPath.slice(0, relPath.length-4)+(ctx.useESM ? 'built.js' : 'built.cjs')
     // }
-    node.data = {file, defaultImport, namedImports, namespaceImport, fileImports}
+    node.data = {fileImports}
   },
 
   "string.quoted.double.jome": (node) => validateString(node, '"'),

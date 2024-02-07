@@ -559,7 +559,7 @@ const CODE_GENERATORS = {
 
   // handles all lines starting with keyword import
   "meta.statement.import.jome": (node) => {
-    let {file, defaultImport, namedImports, namespaceImport, fileImports} = node.data
+    let {fileImports} = node.data
     node.ctxFile.addFileImports(fileImports)
   },
 
