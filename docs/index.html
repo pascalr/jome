@@ -271,6 +271,29 @@ underscore.js: #map, #reduce, ...</p>
 <p>For functions that have a sync and async version, use the exclamation mark after to use the sync version.</p>
 <pre><code class="language-jome"><span class="hljs-built_in function_">#write!</span> <span class="hljs-string">&#x27;Some content&#x27;</span>, to: <span class="hljs-string">&#x27;./somefile.txt&#x27;</span>, overwrite: <span class="hljs-literal">true</span>
 </code></pre>
+<h2>Types</h2>
+<p>In version 0.1, I don't want to yet handle errors for types.</p>
+<p>But I'd like to be able to create variables with a type. It just won't be checked yet.</p>
+<p>The types are specified before the variable name like in C++ or Java, not after like in typescript.</p>
+<p>You don't use the keyword <code>let</code> when you create a variable with a type.</p>
+<pre><code class="language-jome"><span class="hljs-variable">int</span> <span class="hljs-variable">i</span> = <span class="hljs-number">0</span>
+<span class="hljs-variable">string</span> <span class="hljs-variable">str</span> = <span class="hljs-string">&quot;some string&quot;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">any</span> = <span class="hljs-string">&quot;some string&quot;</span>
+<span class="hljs-title class_">SomeClass</span> <span class="hljs-variable">obj</span> = <span class="hljs-title function_ invoke__">SomeClass</span>(<span class="hljs-string">&quot;param&quot;</span>)
+</code></pre>
+<p>You assigning an object constructor to a variable, it's simpler to use the keyword let. The type will be inferred automatically.</p>
+<p>Inside function arguments, it's the same thing. The type comes before the variable name.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">someFunction</span>(<span class="hljs-variable">int</span> <span class="hljs-variable">count</span>, <span class="hljs-variable">string</span> <span class="hljs-variable">message</span>)
+  <span class="hljs-comment">// ...</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">with</span>
+  <span class="hljs-variable">int</span> <span class="hljs-variable">count</span> <span class="hljs-comment"># the count</span>
+  <span class="hljs-variable">string</span> <span class="hljs-variable">message</span> <span class="hljs-comment"># a message</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">someFunction</span>
+  <span class="hljs-comment">// ...</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
   <h2 id="strings">Strings</h2>
 <p>They are many kinds of quotes in Jome that should handle every use case. There is:</p>
 <ul>

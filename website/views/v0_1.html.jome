@@ -294,6 +294,40 @@ let content = <md>
   #write! 'Some content', to: './somefile.txt', overwrite: true
   ```
 
+  ## Types
+
+  In version 0.1, I don't want to yet handle errors for types.
+
+  But I'd like to be able to create variables with a type. It just won't be checked yet.
+
+  The types are specified before the variable name like in C++ or Java, not after like in typescript.
+
+  You don't use the keyword `let` when you create a variable with a type.
+
+  ```jome
+  int i = 0
+  string str = "some string"
+  let any = "some string"
+  SomeClass obj = SomeClass("param")
+  ```
+
+  You assigning an object constructor to a variable, it's simpler to use the keyword let. The type will be inferred automatically.
+
+  Inside function arguments, it's the same thing. The type comes before the variable name.
+
+  ```jome
+  def someFunction(int count, string message)
+    // ...
+  end
+
+  with
+    int count # the count
+    string message # a message
+  def someFunction
+    // ...
+  end
+  ```
+
   <h2 id="strings">Strings</h2>
 
   They are many kinds of quotes in Jome that should handle every use case. There is:

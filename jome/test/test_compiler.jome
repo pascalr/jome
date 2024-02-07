@@ -365,7 +365,7 @@ describe "Values" do
     assert.match(compile('1.0'), /1.0/);
     assert.match(compile('12.34'), /12.34/);
   end
-  
+
   describe "Language constant values" do
     it 'true' do
       assert.match(compile('true'), /true/);
@@ -392,6 +392,68 @@ describe "Values" do
 end
 
 
+
+
+
+describe "Types" do
+  describe "Variable declaration" do
+    describe "Default types" do
+      it 'int' do
+        assert.match(compile('int x'), /let x/);
+      end
+      it 'int assignment' do
+        assert.match(compile('int x = 0'), /let x = 0/);
+      end
+      it 'string' do
+        assert.match(compile('string x'), /let x/);
+      end
+      it 'string assignment' do
+        assert.match(compile('string x = "hello"'), /let x = "hello"/);
+      end
+      it 'bool' do
+        assert.match(compile('bool x'), /let x/);
+      end
+      it 'bool assignment' do
+        assert.match(compile('bool x = true'), /let x = true/);
+      end
+      it 'array[]' do
+        assert.match(compile('int[] x'), /let x/);
+      end
+      it 'array[] assignment' do
+        assert.match(compile('int[] x = [1,2,3]'), /let x = \[1,2,3\]/);
+      end
+      // TODO: SomeClass
+      // TODO: Array<int>
+      // TODO: SomeClass<int> are templates allowed???
+    end
+  end
+end
+// Support these?
+// let decimal: number = 6;
+// let hex: number = 0xf00d;
+// let binary: number = 0b1010;
+// let octal: number = 0o744;
+// let big: bigint = 100n;
+
+// FIXME: tuple
+// [string, number] x = ["ten", 10]
+// maybe keyword primitive type tuple?
+// tuple<string, number> x = ["ten", 10]
+
+// void
+
+/*
+How to do functions return type?
+I want the return type to be after in the case. It's more logical. (input) => (output), output is after, not before
+def getCount() : int
+  // ...
+end
+with
+  returns int # Returns the count
+def getCount
+  // ...
+end
+*/
 
 
 

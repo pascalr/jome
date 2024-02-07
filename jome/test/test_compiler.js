@@ -396,6 +396,36 @@ end
       });
     });
   });
+  describe("Types", function () {
+    describe("Variable declaration", function () {
+      describe("Default types", function () {
+        it("int", function () {
+          assert.match(compile("int x"), /let x/);
+        });
+        it("int assignment", function () {
+          assert.match(compile("int x = 0"), /let x = 0/);
+        });
+        it("string", function () {
+          assert.match(compile("string x"), /let x/);
+        });
+        it("string assignment", function () {
+          assert.match(compile('string x = "hello"'), /let x = "hello"/);
+        });
+        it("bool", function () {
+          assert.match(compile("bool x"), /let x/);
+        });
+        it("bool assignment", function () {
+          assert.match(compile("bool x = true"), /let x = true/);
+        });
+        it("array[]", function () {
+          assert.match(compile("int[] x"), /let x/);
+        });
+        it("array[] assignment", function () {
+          assert.match(compile("int[] x = [1,2,3]"), /let x = \[1,2,3\]/);
+        });
+      });
+    });
+  });
   describe("Test objects", function () {
     it("({end", function () {
       assert.match(compile("({end"), /\(\{\}\)/);

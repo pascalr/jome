@@ -27,38 +27,7 @@
     {
       "type": "node-terminal",
       "request": "launch",
-      "name": "Jest tests written in Jome",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "command": "jome jome/test/generic.test.jome"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Run Jest tests",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "preLaunchTask": "Jest runner"
-    },
-    {
-      "name": "Debug Jest Tests",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}/jome",
-      "runtimeArgs": [
-        "--inspect-brk",
-        "${workspaceFolder}/jome/node_modules/jest/bin/jest.js",
-        "--runInBand"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-    },
-    {
-      "type": "node-terminal",
-      "request": "launch",
-      "name": "Run Minispec Tests",
+      "name": "Run Tests",
       "cwd": "${workspaceFolder}/jome",
       "skipFiles": [
         "<node_internals>/**"
