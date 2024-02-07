@@ -13,7 +13,7 @@ const {
 const {TextDocument} = require("vscode-languageserver-textdocument");
 
 // //import {validateCode} from 'jomec/src/compiler.js';
-const { validateCode } = require('jome.js/src/compiler.js');
+const { analyzeCode } = require('jome.js/src/compiler.js');
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -141,7 +141,7 @@ async function validateTextDocument(textDocument) {
   const text = textDocument.getText();
   const diagnostics = [];
   try {
-    let errors = validateCode(text)
+    let errors = analyzeCode(text)
     console.log('Errors found: ', errors)
     for (let i = 0; i < errors.length && i < settings.maxNumberOfProblems; i++) {
       let err = errors[i]

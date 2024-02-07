@@ -227,6 +227,8 @@ const ANALYZERS = {
     if (node.parts.length !== 2) {
       return pushError(node, "Missing variable name after keyword "+keyword)
     }
+    let name = node.parts[1].raw
+    node.lexEnv.addBinding(name, {type: 'declaration', keyword})
   },
   // do |args| /* ... */ end
   'meta.do-end.jome': (node) => {

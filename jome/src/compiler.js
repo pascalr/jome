@@ -59,13 +59,14 @@ function compileNodes(nodes) {
   //return nodes.map(node => genCode(node)).join(';')+';'
 }
 
-function validateCode(code) {
+function analyzeCode(code) {
   let compiler = new Compiler()
   let ctxFile = new ContextFile()
   ctxFile.compiler = compiler
   let tokens = tokenize(code).children
   let topNodes = parse(tokens, null, ctxFile.lexEnv)
-  return analyzeNodes(topNodes, false)
+  analyzeNodes(topNodes, false)
+  return ctxFile
 }
 
 function compileCode(code, options) {
@@ -180,5 +181,5 @@ module.exports = {
   compileCode,
   compileNodes,
   compileAndSaveFile,
-  validateCode
+  analyzeCode
 }
