@@ -512,17 +512,39 @@ end
 
 
 describe 'Operations' do
-  it '!true' do
-    assert.match(compile('!true'), /!true/);
+  describe 'Inversion (! operator)' do
+    it '!true' do
+      assert.match(compile('!true'), /!true/);
+    end
+    it '!true === false' do
+      assert.match(compile('!true === false'), /!true === false/);
+    end
+    it '!true === !false' do
+      assert.match(compile('!true === !false'), /!true === !false/);
+    end
+    it '!true === !!false' do
+      assert.match(compile('!true === !!false'), /!true === !!false/);
+    end
   end
-  it '!true === false' do
-    assert.match(compile('!true === false'), /!true === false/);
+  describe 'Mathematic operations' do
+    it 'addition' do
+      assert.match(compile('1 + 2'), /1 \+ 2/);
+      assert.match(compile('1 + 2 + 3'), /1 \+ 2 \+ 3/);
+    end
+    it 'multiplication' do
+      assert.match(compile('1 * 2'), /1 \* 2/);
+      assert.match(compile('1 * 2 * 3'), /1 \* 2 \* 3/);
+    end
+    it 'division' do
+      assert.match(compile('8 / 2'), /8 \/ 2/);
+      assert.match(compile('8 / 4 / 2'), /8 \/ 4 \/ 2/);
+    end
+    it 'substraction' do
+      assert.match(compile('8 - 2'), /8 \- 2/);
+      assert.match(compile('8 - 2 - 3'), /8 \- 2 \- 3/);
+    end
   end
-  it '!true === !false' do
-    assert.match(compile('!true === !false'), /!true === !false/);
-  end
-  it '!true === !!false' do
-    assert.match(compile('!true === !!false'), /!true === !!false/);
+  describe 'Priority of operations' do
   end
 end
 

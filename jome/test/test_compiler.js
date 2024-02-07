@@ -468,18 +468,39 @@ end
     });
   });
   describe("Operations", function () {
-    it("!true", function () {
-      assert.match(compile("!true"), /!true/);
+    describe("Inversion (! operator)", function () {
+      it("!true", function () {
+        assert.match(compile("!true"), /!true/);
+      });
+      it("!true === false", function () {
+        assert.match(compile("!true === false"), /!true === false/);
+      });
+      it("!true === !false", function () {
+        assert.match(compile("!true === !false"), /!true === !false/);
+      });
+      it("!true === !!false", function () {
+        assert.match(compile("!true === !!false"), /!true === !!false/);
+      });
     });
-    it("!true === false", function () {
-      assert.match(compile("!true === false"), /!true === false/);
+    describe("Mathematic operations", function () {
+      it("addition", function () {
+        assert.match(compile("1 + 2"), /1 \+ 2/);
+        assert.match(compile("1 + 2 + 3"), /1 \+ 2 \+ 3/);
+      });
+      it("multiplication", function () {
+        assert.match(compile("1 * 2"), /1 \* 2/);
+        assert.match(compile("1 * 2 * 3"), /1 \* 2 \* 3/);
+      });
+      it("division", function () {
+        assert.match(compile("8 / 2"), /8 \/ 2/);
+        assert.match(compile("8 / 4 / 2"), /8 \/ 4 \/ 2/);
+      });
+      it("substraction", function () {
+        assert.match(compile("8 - 2"), /8 \- 2/);
+        assert.match(compile("8 - 2 - 3"), /8 \- 2 \- 3/);
+      });
     });
-    it("!true === !false", function () {
-      assert.match(compile("!true === !false"), /!true === !false/);
-    });
-    it("!true === !!false", function () {
-      assert.match(compile("!true === !!false"), /!true === !!false/);
-    });
+    describe("Priority of operations", function () {});
   });
   describe('Test "ternary"', function () {
     it("true ? 1", function () {
