@@ -400,6 +400,12 @@ end
         it("int assignment", function () {
           assert.match(compile("int x = 0"), /let x = 0/);
         });
+        it("float", function () {
+          assert.match(compile("float x"), /let x/);
+        });
+        it("float assignment", function () {
+          assert.match(compile("float x = 1.0"), /let x = 1\.0/);
+        });
         it("string", function () {
           assert.match(compile("string x"), /let x/);
         });

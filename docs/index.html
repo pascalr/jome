@@ -294,6 +294,20 @@ underscore.js: #map, #reduce, ...</p>
   <span class="hljs-comment">// ...</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
+<p>I want to do the same for function types too. They replace the keyword def.</p>
+<pre><code class="language-jome"><span class="hljs-variable">int</span> <span class="hljs-title function_ invoke__">sum</span>(<span class="hljs-variable">int</span> <span class="hljs-variable">x</span>, <span class="hljs-variable">int</span> <span class="hljs-variable">y</span>)
+  <span class="hljs-comment">// ...</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">SomeClass</span>
+  <span class="hljs-variable">int</span> <span class="hljs-title function_ invoke__">someMethod</span>(<span class="hljs-variable">int</span> <span class="hljs-variable">x</span>, <span class="hljs-variable">int</span> <span class="hljs-variable">y</span>)
+    <span class="hljs-comment">// ...</span>
+  <span class="hljs-keyword">end</span>
+  <span class="hljs-variable">void</span> <span class="hljs-variable">doSomething</span>
+    <span class="hljs-comment">// ...</span>
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
   <h2 id="strings">Strings</h2>
 <p>They are many kinds of quotes in Jome that should handle every use case. There is:</p>
 <ul>
