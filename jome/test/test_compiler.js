@@ -145,7 +145,7 @@ module.exports = () => {
   });
   describe("Regexes", function () {
     it("/test1212/", function () {
-      assert.match(compile("/test1212/"), "/test1212/");
+      assert.match(compile("/test1212/"), /\/test1212\//);
     });
   });
   describe("Heredocs", function () {

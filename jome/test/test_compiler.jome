@@ -132,7 +132,7 @@ end
 // Regexes should work, the textmate grammar was copy pasted from the javascript one.
 describe "Regexes" do
   it '/test1212/' do
-    assert.match(compile(`/test1212/`), "/test1212/");
+    assert.match(compile(`/test1212/`), /\/test1212\//);
   end
 end
 
