@@ -43,8 +43,8 @@ let content = <md>
   <h2 id="install">Installation</h2>
 
   ```sh
-  # FIXME: NPM PACKAGE IS NOT YET CREATED!
-  npm install jome -g
+  # FIXME: Should the package be installed globally or not? Globally does not lock in package.json?
+  npm install jome.js -g
   ```
 
   <h2 id="usage">Usage</h2>

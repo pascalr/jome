@@ -36,7 +36,7 @@ function genImports(ctxFile, compilerOptions) {
     if (Object.keys(fileImports.aliasesByName).length) {
       let join = compilerOptions.useCommonJS ? ': ' : ' as '
       named = [...named].map(n => {
-        let alias = [...fileImports.aliasesByName[n]][0]
+        let alias = [...(fileImports.aliasesByName[n]||[])][0]
         // TODO: Support multiple aliases
         return alias ? `${n}${join}${alias}` : n
       })
