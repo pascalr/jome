@@ -134,17 +134,12 @@ function validateOperator(node) {
 }
 
 function validateString(node, char) {
-  let last = node.parts[node.parts.length-1]
-  let format;
-  if (last.type === 'keyword.other.string-format.jome') {
-    format = last.raw
-  }
   ensureStartRaw(node, char)
   ensureStartType(node, 'punctuation.definition.string.begin.jome')
-  // ensureEndRaw(node, char)
-  // ensureEndType(node, 'punctuation.definition.string.end.jome')
-  let parts = node.parts.slice(1, format ? -2 : -1)
-  node.data = {parts, format}
+  ensureEndRaw(node, char)
+  ensureEndType(node, 'punctuation.definition.string.end.jome')
+  let parts = node.parts.slice(1, -1)
+  node.data = {parts}
 }
 
 function validateFuncCall(node, hasDot) {
