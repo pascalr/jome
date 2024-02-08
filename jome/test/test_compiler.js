@@ -114,7 +114,7 @@ module.exports = () => {
       assert.match(compile("'\"hello\"'"), /"\\"hello\\""/);
 
       assert.match(
-        compile(`'multi \\\`line\\\`
+        compile(`'multi \`line\`
     with backticks'`),
         /`multi \\`line\\`\s+with backticks`/,
       );
@@ -131,7 +131,7 @@ module.exports = () => {
       assert.match(compile('"Hello O\'Connor"'), /"Hello O'Connor"/);
 
       assert.match(
-        compile(`"multi \\\`line\\\`
+        compile(`"multi \`line\`
     with backticks"`),
         /`multi \\`line\\`\s+with backticks`/,
       );

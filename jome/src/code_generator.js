@@ -70,7 +70,8 @@ function escapeTemplateLiteral(inputString) {
 }
 
 function escapeBackticks(inputString) {
-  return inputString.replace(/`/g, '\u005c`').replace(/\\\\`/g, '\\\\\\`')
+  // If there is no or an even number of backslashes in front of the backtick, add one so it escapes the backtick.
+  return inputString.replace(/(\\\\)*\\`/g, '$1\u005c`')
 }
 
 function escapeDoubleQuotes(inputString) {
@@ -377,9 +378,6 @@ function printFormatting(lines, ctxFile) {
 }
 
 function applyFormat(format, operand) {
-  if (operand.raw.includes("multi")) {
-    let debug = true
-  }
   let forall = operand.ctxFile.foralls[format]
   let lines = prepareFormatting(operand)
   if (forall?.chain?.length) {
