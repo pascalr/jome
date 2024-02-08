@@ -1,0 +1,178 @@
+
+      <!DOCTYPE html>
+      <HTML lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Jome formats</title>
+          <link rel="stylesheet" type="text/css" href="/jome/stylesheet.css">
+          <link rel="stylesheet" type="text/css" href="/jome/highlight.js.min.css">
+          <link rel="apple-touch-icon" sizes="180x180" href="/jome/apple-touch-icon.png">
+          <link rel="icon" type="image/png" sizes="32x32" href="/jome/favicon-32x32.png">
+          <link rel="icon" type="image/png" sizes="16x16" href="/jome/favicon-16x16.png">
+          <link rel="manifest" href="/jome/site.webmanifest">
+        </head>
+        <body>
+          <div class="d-flex flex-column" style="min-height: 100vh;">
+          
+  <div class="navbar">
+    <span class="navbrand" href="#">Jome</span>
+    <a href="/jome/editor">Editor</a>
+    <a href="/jome/">Home</a>
+    <a href="/jome/#lang-ref">Language Reference</a>
+    <a href="/jome/ex">Examples</a>
+    <a href="/jome/lib">Librairies</a>
+    <a href="/jome/formats">Formats</a>
+    <a href="/jome/utils">Utils</a>
+    <a href="https://github.com/pascalr/jome">GitHub</a>
+  </div>
+          <div style="flex-grow: 1; height: calc(100vh - 50px);">
+            <div class="d-flex" style="height: 100%;">
+            
+  <div id="left-nav" class="scrollable">
+    <ul class="nav-list">
+      <li><a href="/jome/">Home</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/jome/#overview">Overview</a></li>
+        <li><a href="/jome/#install">Install</a></li>
+        <li><a href="/jome/#usage">Usage</a></li>
+        <li><a href="/jome/#hello-world">Hello world</a></li>
+        <li><a href="/jome/#index-jome">index.jome</a></li>
+        <li><a href="/jome/#partials">Partials</a></li>
+      </ul>
+      <li><a href="/jome/#lang-ref">Language Reference</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/jome/#syntax">Syntax</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="/jome/#keywords">Keywords</a></li>
+          <li><a href="/jome/#comments">Comments</a></li>
+        </ul>
+        <li><a href="/jome/#builtins">Built-Ins</a></li>
+        <li><a href="/jome/#strings">Strings</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="/jome/#formatting">Formatting</a></li>
+          <li><a href="/jome/#heredocs">Heredocs</a></li>
+          <li><a href="/jome/#paths">Paths</a></li>
+        </ul>
+        <li><a href="/jome/#conditions">Conditions</a></li>
+        <li><a href="/jome/#loops">Loops</a></li>
+        <li><a href="/jome/#switch-case">Switch/Case</a></li>
+        <li><a href="/jome/#with">With keyword</a></li>
+        <li><a href="/jome/#classes">Classes</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="/jome/#formatting">Instance properties (@)</a></li>
+        </ul>
+        <li><a href="/jome/#exports">Modules and exports</a></li>
+        <li><a href="/jome/#along">Along keyword</a></li>
+        <li><a href="/jome/#threads">Threads</a></li>
+        <li><a href="/jome/#private">Private</a></li>
+        <li><a href="/jome/#env">Environment variables</a></li>
+        <li><a href="/jome/#global">Global variables</a></li>
+        <li><a href="/jome/#chain">Chain</a></li>
+        <li><a href="/jome/#contributing">Contributing</a></li>
+        <li><a href="/jome/#ack">Acknowledgements</a></li>
+      </ul>
+      <li><a href="/jome/lib">Librairies</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/jome/lib/html">Html</a></li>
+        <li><a href="/jome/lib/html-layout">Html Layout</a></li>
+        <li><a href="/jome/lib/express-server">Express Server</a></li>
+      </ul>
+      <li><a href="/jome/ex">Examples</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/jome/ex#hello-world">Hello world</a></li>
+        <li><a href="/jome/ex#snake">Snake</a></li>
+        <li><a href="/jome/ex">Script</a></li>
+      </ul>
+    </ul>
+  </div>
+            <div class="scrollable" style="width: 100%;">
+              <div class="main">
+                <h1>Formats</h1>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">str</span> = <span class="hljs-string">&quot;
+  In the heart of the enchanted forest, a hidden cottage stood, surrounded by ancient trees. 
+The air was filled with the sweet melody of birdsong, creating a tranquil atmosphere.
+
+    As the morning sun filtered through the leaves, a gentle breeze whispered 
+    secrets to the dancing leaves below. Nature&#x27;s symphony played, orchestrating 
+    a harmonious blend of sounds that resonated with the soul.
+
+Inside the cottage, a crackling fireplace provided warmth, casting a soft glow 
+on the worn wooden furniture. The aroma of freshly brewed tea wafted through 
+the air, inviting anyone who entered to linger and embrace the serenity.
+&quot;</span>
+</code></pre>
+<p>TODO: Faire un example que tu cliques sur chacun des boutons pour voir la différence de chaque format. Comme ça: https://developer.mozilla.org/en-US/docs/Web/CSS/cursor</p>
+<h2>bin, hex, oct</h2>
+<p>You can't declare the same way a binary, hexadecimal or octodecimal number in Jome because it could be confusing with units.</p>
+<p>Instead you use tags.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">netmask</span> = &lt;<span class="hljs-variable">hex</span>&gt;<span class="hljs-title class_">FFFFFF00</span>&lt;/<span class="hljs-variable">hex</span>&gt; <span class="hljs-comment">// compiles to 0xFFFFFF00</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">flags</span> = &lt;<span class="hljs-variable">bin</span>&gt;<span class="hljs-number">01100101</span>&lt;/<span class="hljs-variable">bin</span>&gt; <span class="hljs-comment">// compiles to 0b01100101</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">octodecimalNb</span> = &lt;<span class="hljs-variable">oct</span>&gt;<span class="hljs-number">712</span>&lt;/<span class="hljs-variable">oct</span>&gt; <span class="hljs-comment">// compiles to 0o712</span>
+</code></pre>
+<p>TODO: Rajouter du syntax highligh au hex pour changer de couleur à toute les 2 charactères? Afficher comme des
+string et à tous les 2 charactères mettre comme si escaped string pour que la couleur change un peu.</p>
+<h2>Html formats</h2>
+<p>div, p, input, ... They should all be default tags. By default, they would be printed as is. The tag would be incorporated into the string.</p>
+<h2>sh</h2>
+<p>By default, sh is used for executing shell commands. It is wrapped with <code>#execSh</code>.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">files</span> = <span class="language-shell">&lt;sh&gt;ls .&lt;/sh&gt;</span>
+</code></pre>
+<p>Only Linux is supported for now.</p>
+<h2>Scripting languages</h2>
+<p>You can insert code from scripting languages such as ruby, python, lua, ...</p>
+<p>By default the code is executed? How does it work to get the return value from the code?</p>
+<p>Scripting languages list:</p>
+<ul>
+<li>rb or ruby</li>
+<li>py or python</li>
+<li>lua</li>
+</ul>
+<h2>latex</h2>
+<p>TODO: Support LaTeX, but I don't know what to do with this?</p>
+<h2>Music tabs</h2>
+<p>TODO: Rewrite my guitar website with Jome and use tabs!!!</p>
+<p>Tabs for guitar, ukulele, any number of cords?</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">tab</span> = &lt;<span class="hljs-variable">guitar</span>-<span class="hljs-variable">tab</span>&gt;
+
+&lt;/<span class="hljs-variable">guitar</span>-<span class="hljs-variable">tab</span>&gt;
+</code></pre>
+<p>TODO</p>
+<h2>Music chords</h2>
+<p>TODO</p>
+<h2>Music score</h2>
+<p>TODO</p>
+<h2>Lyrics</h2>
+<p>TODO</p>
+<h2>C, C++</h2>
+<p>How don't know how that would work, but it would be nice? Would it?</p>
+<h2>jsx</h2>
+<p>create react elements easily!</p>
+<h2>js</h2>
+<h2>sql</h2>
+<h2>css</h2>
+<h2>html</h2>
+<h2>html.js</h2>
+<p>html.js =&gt; convert html into js element creation! document.createElement('div')</p>
+<h2>svg</h2>
+<h2>something for diagrams</h2>
+<h2>something for characters</h2>
+<h2>something for drawings</h2>
+<h2>Chess position</h2>
+<h2>maps</h2>
+<p><map>An address</map> and it would show a map with this address.</p>
+<h2>TODO</h2>
+<p>MAYBE list:</p>
+<ul>
+<li>col: For color, need a way to let the editor know that we want to be picking a color.</li>
+</ul>
+<p>TODO: Supporter la syntaxe 123e4 par contre
+let exponentialNumber = 123e4;
+console.log(exponentialNumber); // Outputs: 1230000</p>
+
+              </div>
+            </div>
+          </div>
+        </body>
+      </HTML>
+    
