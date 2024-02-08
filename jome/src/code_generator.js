@@ -70,8 +70,10 @@ function escapeTemplateLiteral(inputString) {
 }
 
 function escapeBackticks(inputString) {
-  // If there is no or an even number of backslashes in front of the backtick, add one so it escapes the backtick.
-  return inputString.replace(/(\\\\)*\\`/g, '$1\u005c`')
+  return inputString.replace(/\\*`/g, (s => {
+    // If there is no or an even number of backslashes in front of the backtick, add one so it escapes the backtick.
+    return /$(\\\\)+/.test(s) ? '\u005c'+s : s
+  }))
 }
 
 function escapeDoubleQuotes(inputString) {
