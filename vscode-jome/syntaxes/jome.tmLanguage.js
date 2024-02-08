@@ -663,11 +663,11 @@ let grammar = {
     },
     strings: {
       patterns: [
+        PATTERN_STRING("string.quoted.multi.jome", "'''"),
         PATTERN_STRING("string.quoted.single.jome", "'"),
         PATTERN_STRING("string.quoted.backtick.jome", "`"),
-        PATTERN_STRING("string.quoted.multi.jome", "'''"),
-        PATTERN_STRING("string.quoted.double.jome", "\"", "\\{", "\\}"),
         PATTERN_STRING("string.quoted.multi.jome", "\"\"\"", "\\{\\{", "\\}\\}"),
+        PATTERN_STRING("string.quoted.double.jome", "\"", "\\{", "\\}"),
         {
           comment: "Allow #~ for home too?",
           name: "string.other.path.jome",
