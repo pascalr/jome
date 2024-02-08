@@ -33,6 +33,14 @@ function genImports(ctxFile, compilerOptions) {
     // TODO: Support multiple default import names
     // Just declare a variable right under with the different default import name
     let named = fileImports.namedImports
+    if (Object.keys(fileImports.aliasesByName).length) {
+      let join = compilerOptions.useCommonJS ? ': ' : ' as '
+      named = [...named].map(n => {
+        let alias = [...fileImports.aliasesByName[n]][0]
+        // TODO: Support multiple aliases
+        return alias ? `${n}${join}${alias}` : n
+      })
+    }
     let namespace = fileImports.namespaceImport
     if (compilerOptions.useCommonJS) {
       if (namespace) {

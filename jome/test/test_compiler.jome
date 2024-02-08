@@ -63,11 +63,11 @@ describe "Imports" do
     assert.match(compile(`import { name, name2 } from "module-name"`), /const { ?name, name2 ?} = require\("module-name"\)/);
   end
   it 'Alias deconstructed import' do
-    assert.match(compile(`import { name as otherName } from "module-name"`), /const {name as otherName} = require\("module-name"\)/);
-    assert.match(compile(`import { normal, name as otherName } from "module-name"`), /const {normal, name as otherName} = require\("module-name"\)/);
+    assert.match(compile(`import { name as otherName } from "module-name"`), /const { name: otherName } = require\("module-name"\)/);
+    assert.match(compile(`import { normal, name as otherName } from "module-name"`), /const { normal, name: otherName } = require\("module-name"\)/);
   end
-  it 'Alias deconstructed import' do
-    assert.match(compile(`import { name as otherName } from "module-name"`), /const {name as otherName} = require\("module-name"\)/);
+  it 'Alias deconstructed import with default' do
+    assert.match(compile(`import def, { name as otherName } from "module-name"`), /const (\w+) = require\("module-name"\);\s*const { ?default: def, name: otherName ?} = \1;/);
   end
 
   // import { "string name" as alias } from "module-name";

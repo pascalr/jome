@@ -37,8 +37,11 @@ class FileImports {
     this.namedImports.add(this.extractName(name))
   }
 
-  addAliasImport() {
-
+  addAliasImport(originalName, aliasName) {
+    this.namedImports.add(originalName)
+    let list = this.aliasesByName[originalName] || new Set()
+    list.add(aliasName)
+    this.aliasesByName[originalName] = list
   }
 
   addDefaultImport(name) {
@@ -83,7 +86,7 @@ class ContextFile {
     }
     this.classIdentifiers = new Set([...this.classIdentifiers, ...fileImports.classIdentifiers])
   }
-  
+
   addDependency(filename) {
     this.dependencies.push(filename)
   }

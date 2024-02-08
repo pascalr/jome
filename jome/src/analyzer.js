@@ -405,8 +405,7 @@ const ANALYZERS = {
           if (namedImport.type === 'variable.other.named-import.jome') {
             fileImports.addNamedImport(namedImport.raw)
           } else if (namedImport.type === 'meta.import-alias.jome') {
-            throw new Error("TODO 98hr92gh9du23")
-            // namedImports.push(namedImport.raw)
+            fileImports.addAliasImport(namedImport.parts[0].raw, namedImport.parts[2].raw)
           } else {
             throw new Error("sfj9234hr9h239rhrf923h3r")
           }

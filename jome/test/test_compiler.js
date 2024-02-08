@@ -70,17 +70,17 @@ module.exports = () => {
     it("Alias deconstructed import", function () {
       assert.match(
         compile('import { name as otherName } from "module-name"'),
-        /const {name as otherName} = require\("module-name"\)/,
+        /const { name: otherName } = require\("module-name"\)/,
       );
       assert.match(
         compile('import { normal, name as otherName } from "module-name"'),
-        /const {normal, name as otherName} = require\("module-name"\)/,
+        /const { normal, name: otherName } = require\("module-name"\)/,
       );
     });
-    it("Alias deconstructed import", function () {
+    it("Alias deconstructed import with default", function () {
       assert.match(
-        compile('import { name as otherName } from "module-name"'),
-        /const {name as otherName} = require\("module-name"\)/,
+        compile('import def, { name as otherName } from "module-name"'),
+        /const (\w+) = require\("module-name"\);\s*const { ?default: def, name: otherName ?} = \1;/,
       );
     });
 
