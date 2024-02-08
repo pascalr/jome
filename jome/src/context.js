@@ -17,9 +17,18 @@ class FileImports {
   }
 
   mergeWith(fileImports) {
-    this.defaultImportNames = [...this.defaultImportNames, fileImports.defaultImportNames]
+    this.filename = this.filename || fileImports.filename
+    this.defaultImportNames = [...this.defaultImportNames, ...fileImports.defaultImportNames]
     this.namespaceImport = this.namespaceImport || fileImports.namespaceImport
     this.namedImports = new Set([...this.namedImports, ...fileImports.namedImports])
+    Object.keys(fileImports.aliasesByName).forEach(alias => {
+      if (this.aliasesByName[alias]) {
+        this.aliasesByName[alias] = new Set([...this.aliasesByName[alias], ...fileImports.aliasesByName[alias]])
+      } else {
+        this.aliasesByName[alias] = fileImports.aliasesByName[alias]
+      }
+    })
+    this.classIdentifiers = new Set([...this.classIdentifiers, ...fileImports.classIdentifiers])
     return this
   }
 
@@ -77,13 +86,16 @@ class ContextFile {
     this.foralls[name] = {chain: chainFuncs, wrap: wrapFuncs}
   }
 
-  addFileImports(fileImports) {
-    let previous = this.fileImportsByFile[fileImports.filename]
-    if (previous) {
-      this.fileImportsByFile[fileImports.filename] = previous.mergeWith(fileImports)
-    } else {
-      this.fileImportsByFile[fileImports.filename] = fileImports
+  getFileImports(filename) {
+    if (!this.fileImportsByFile[filename]) {
+      this.fileImportsByFile[filename] = new FileImports()
     }
+    return this.fileImportsByFile[filename]
+  }
+
+  addFileImports(fileImports) {
+    let previous = this.getFileImports(fileImports.filename)
+    this.fileImportsByFile[fileImports.filename] = previous.mergeWith(fileImports)
     this.classIdentifiers = new Set([...this.classIdentifiers, ...fileImports.classIdentifiers])
   }
 
