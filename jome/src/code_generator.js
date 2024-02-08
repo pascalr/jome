@@ -32,10 +32,10 @@ function genImports(ctxFile, compilerOptions) {
     let def = fileImports.defaultImportNames[0]
     // TODO: Support multiple default import names
     // Just declare a variable right under with the different default import name
-    let named = fileImports.namedImports
+    let named = [...fileImports.namedImports]
     if (Object.keys(fileImports.aliasesByName).length) {
       let join = compilerOptions.useCommonJS ? ': ' : ' as '
-      named = [...named].map(n => {
+      named = named.map(n => {
         let alias = [...(fileImports.aliasesByName[n]||[])][0]
         // TODO: Support multiple aliases
         return alias ? `${n}${join}${alias}` : n
@@ -46,7 +46,7 @@ function genImports(ctxFile, compilerOptions) {
       if (namespace) {
         let uid = ctxFile.uid()
         result += `const ${uid} = require("${jsfile}");\nconst {default: ${def || ctxFile.uid()}, ...${namespace}} = ${uid};\n`
-      } else if (def && named && named.size) {
+      } else if (def && named && named.length) {
         let uid = ctxFile.uid()
         result += `const ${uid} = require("${jsfile}");\nconst {default: ${def}, ${[...named].join(', ')}} = ${uid};\n`
       } else if (def) {
