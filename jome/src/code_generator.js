@@ -72,7 +72,7 @@ function escapeTemplateLiteral(inputString) {
 function escapeBackticks(inputString) {
   return inputString.replace(/\\*`/g, (s => {
     // If there is no or an even number of backslashes in front of the backtick, add one so it escapes the backtick.
-    return /$(\\\\)+/.test(s) ? '\u005c'+s : s
+    return (s === '`' || /^(\\\\)+/.test(s)) ? '\u005c'+s : s
   }))
 }
 
