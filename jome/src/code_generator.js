@@ -321,17 +321,25 @@ function prepareFormatting(node) {
     return prepareHeredoc(node)
   }
   let currentLine = []
+  let currentStr = "" // Used merge raw with escape characters
   let lines = []
   node.data.parts.forEach(part => {
     if (part.type === 'raw') {
-      currentLine.push(part.raw)
+      currentStr += part.raw
     } else if (part.type === 'meta.string-template-literal.jome') {
+      if (currentStr.length) {currentLine.push(currentStr); currentStr = ""}
       currentLine.push({tokens: part.data.code})
     } else if (part.type === 'newline') {
+      if (currentStr.length) {currentLine.push(currentStr); currentStr = ""}
       lines.push(currentLine)
       currentLine = []
+    } else if (part.type === 'constant.character.escape.jome') {
+      currentStr += part.raw
+    } else {
+      throw new Error("r90whr7903hg09rua089rg239")
     }
   })
+  if (currentStr.length) {currentLine.push(currentStr); currentStr = ""}
   lines.push(currentLine)
   return lines
 }
@@ -369,6 +377,9 @@ function printFormatting(lines, ctxFile) {
 }
 
 function applyFormat(format, operand) {
+  if (operand.raw.includes("multi")) {
+    let debug = true
+  }
   let forall = operand.ctxFile.foralls[format]
   let lines = prepareFormatting(operand)
   if (forall?.chain?.length) {
