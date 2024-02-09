@@ -321,6 +321,7 @@ module.exports = () => {
   string str = "some string"
   let any = "some string"
   SomeClass obj = SomeClass("param")
+  SomeClass obj("param") // allow this?
   \`\`\`
 
   You assigning an object constructor to a variable, it's simpler to use the keyword let. The type will be inferred automatically.
@@ -340,20 +341,64 @@ module.exports = () => {
   end
   \`\`\`
 
-  I want to do the same for function types too. They replace the keyword def.
+  I want to do the same for function types too. They replace the keyword def. This syntax uses curly braces instead of end keyword.
+  A def with no args does not require parentheses, but this syntax does.
 
   \`\`\`jome
-  int sum(int x, int y)
+  int sum(int x, int y) {
     // ...
-  end
+  }
+  int add(int x, int y) {return x + y}
 
   class SomeClass
-    int someMethod(int x, int y)
+    int someMethod(int x, int y) {
       // ...
-    end
-    void doSomething
+    }
+    void doSomething() {
       // ...
-    end
+    }
+  end
+  \`\`\`
+
+  How does it work for instance variables initialization? Works well
+
+  \`\`\`jome
+  class SomeClass
+
+    int @count = 0
+    string @message = "Hello world!"
+
+  end
+  \`\`\`
+
+  TODO: Type of function signature for callbacks and al
+
+  \`\`\`jome
+  def doSomething((void => int) callback)
+  \`\`\`
+
+  You cannot use curly braces with the \`with\` keyword. You use def.
+  The return type is given after the \`return\` keyword.
+
+  \`\`\`jome
+  with
+    int x # Number 1
+    int y # Number 2
+    return int
+  def add
+
+  end
+  \`\`\`
+
+  TODO: tuple, templates
+
+  \`\`\`
+  string[] names = ["John", "Mary"]
+  Array<string> names = ["John", "Mary"]
+  SomeContainer<string> container()
+
+  class SomeContainer<T>
+    T[] @list;
   end
   \`\`\`
 

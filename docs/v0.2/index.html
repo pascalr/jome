@@ -101,7 +101,7 @@
 </ul>
 <h2>Types</h2>
 <p>You can specify types for variables. It can be primitives like string, number, integer or float. It can also be class names or interfaces.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">greet</span>(name: <span class="hljs-variable">string</span>, greeting: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;Hello&quot;</span>) : <span class="hljs-variable">string</span>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">greet</span>(name: <span class="hljs-type">string</span>, greeting: <span class="hljs-type">string</span> = <span class="hljs-string">&quot;Hello&quot;</span>) : <span class="hljs-type">string</span>
   <span class="hljs-keyword">return</span> <span class="hljs-string">`${greeting}, ${name}!`</span>
 <span class="hljs-keyword">end</span>
 
@@ -110,13 +110,13 @@
 <span class="hljs-keyword">end</span>
 </code></pre>
 <p>You add a question mark after the type if the variable can be null.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">sayHello</span>(anybody: <span class="hljs-title class_">Person</span>?): <span class="hljs-variable">string</span>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">sayHello</span>(anybody: <span class="hljs-title class_">Person</span>?): <span class="hljs-type">string</span>
   <span class="hljs-keyword">return</span> <span class="hljs-string">`${greeting}, ${anybody.name}!`</span> <span class="hljs-keyword">if</span> <span class="hljs-variable">anybody</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <p>In a node block, you can specify the types of keys like so:</p>
 <pre><code class="language-jome">{
-  [key: <span class="hljs-variable">string</span>]: <span class="hljs-variable">nb</span>; <span class="hljs-comment">// Here nb is a string</span>
+  [key: <span class="hljs-type">string</span>]: <span class="hljs-variable">nb</span>; <span class="hljs-comment">// Here nb is a string</span>
 };
 </code></pre>
 <p>But what about the types of children? (string)
@@ -202,14 +202,14 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
 <h3>Construction block</h3>
 <p>You can apply a block onto an instance using #{ }.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span>
-  name: <span class="hljs-variable">string</span>
-  prepare: <span class="hljs-variable">int</span>
+  name: <span class="hljs-type">string</span>
+  prepare: <span class="hljs-type">int</span>
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">Recipe</span>
   <span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">prepare</span>(<span class="hljs-variable">str</span>)
   <span class="hljs-keyword">end</span>
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-keyword">class</span> <span class="hljs-title function_ invoke__">Ing</span>(qty: <span class="hljs-variable">int</span> <span class="hljs-variable">along</span> <span class="hljs-variable">qtyFormat</span>, <span class="hljs-variable">@name</span>)
+<span class="hljs-keyword">class</span> <span class="hljs-title function_ invoke__">Ing</span>(qty: <span class="hljs-type">int</span> <span class="hljs-variable">along</span> <span class="hljs-variable">qtyFormat</span>, <span class="hljs-variable">@name</span>)
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-keyword">class</span> <span class="hljs-title function_ invoke__">Step</span>(<span class="hljs-variable">@instructions</span>)
@@ -387,10 +387,10 @@ the confusion, you cannot declare an object with type. So you use interface for 
 <span class="hljs-keyword">type</span> <span class="hljs-title class_">Dim</span> = <span class="hljs-title class_">Dimensions</span>
 
 <span class="hljs-comment">// Unions</span>
-<span class="hljs-keyword">type</span> <span class="hljs-title class_">DimOrStr</span> = <span class="hljs-title class_">Dim</span> | <span class="hljs-variable">string</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">DimOrStr</span> = <span class="hljs-title class_">Dim</span> | <span class="hljs-type">string</span>
 
 <span class="hljs-comment">// Tuples</span>
-<span class="hljs-keyword">type</span> <span class="hljs-title class_">DimAndStr</span> = [<span class="hljs-title class_">Dim</span>, <span class="hljs-variable">string</span>]
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">DimAndStr</span> = [<span class="hljs-title class_">Dim</span>, <span class="hljs-type">string</span>]
 
 <span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">funcWithDimensions</span>(<span class="hljs-variable">dim</span> : <span class="hljs-title class_">Dim</span>)
   <span class="hljs-comment">// ...</span>
@@ -415,19 +415,19 @@ the confusion, you cannot declare an object with type. So you use interface for 
 <p>You can use intersection to create a type that combines the properties of two interfaces together.</p>
 <h3>Function types</h3>
 <p>You can give a single function signature to a type. You can give function signatures to variables in interfaces.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">type</span> <span class="hljs-variable">log</span> = (val: <span class="hljs-variable">string</span>) =&gt; <span class="hljs-variable">void</span>;
+<pre><code class="language-jome"><span class="hljs-keyword">type</span> <span class="hljs-variable">log</span> = (val: <span class="hljs-type">string</span>) =&gt; <span class="hljs-variable">void</span>;
 
 <span class="hljs-keyword">interface</span> <span class="hljs-title class_">WithLog</span>
-  log: (val: <span class="hljs-variable">string</span>) =&gt; <span class="hljs-variable">void</span>;
+  log: (val: <span class="hljs-type">string</span>) =&gt; <span class="hljs-variable">void</span>;
 <span class="hljs-keyword">end</span>
 </code></pre>
 <p>For function overloading, you can use unions.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">type</span> <span class="hljs-variable">log</span> = (val: <span class="hljs-variable">string</span>) =&gt; <span class="hljs-variable">void</span> | (val: <span class="hljs-variable">number</span>) =&gt; <span class="hljs-variable">void</span>;
+<pre><code class="language-jome"><span class="hljs-keyword">type</span> <span class="hljs-variable">log</span> = (val: <span class="hljs-type">string</span>) =&gt; <span class="hljs-variable">void</span> | (val: <span class="hljs-variable">number</span>) =&gt; <span class="hljs-variable">void</span>;
 </code></pre>
 <h3>Default values</h3>
 <p>Contrary to Typescript, you can add default values in an interface.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Options</span>
-  method: <span class="hljs-variable">string</span> = <span class="hljs-string">&#x27;get&#x27;</span>
+  method: <span class="hljs-type">string</span> = <span class="hljs-string">&#x27;get&#x27;</span>
   ttl: <span class="hljs-variable">number</span> = <span class="hljs-variable">30s</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
@@ -435,7 +435,7 @@ the confusion, you cannot declare an object with type. So you use interface for 
 <p>By default, you cannot redeclare an interface and it adds to the previous one.</p>
 <p>You have to use another syntax to do this. Maybe interface &lt;</p>
 <pre><code class="language-jome"><span class="hljs-keyword">interface</span> &lt; <span class="hljs-title class_">Options</span>
-  arg: <span class="hljs-variable">string</span> = <span class="hljs-string">&#x27;one more option&#x27;</span>
+  arg: <span class="hljs-type">string</span> = <span class="hljs-string">&#x27;one more option&#x27;</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <h3>Class extends interface</h3>

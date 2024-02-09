@@ -3,7 +3,7 @@
     "@jome/core": "^0.0.4",
     "@jome/md-to-html": "^0.0.1",
     "express": "^4.18.2",
-    "highlightjs-jome": "^0.0.2",
+    "highlightjs-jome": "^0.0.3",
     "jome.js": "^0.0.2",
     "markdown-it": "^14.0.0"
   }

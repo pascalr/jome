@@ -10,5 +10,8 @@
     "HTML"
   ],
   "author": "Pascal Rainville",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "highlightjs-jome": "^0.0.3"
+  }
 }

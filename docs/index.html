@@ -241,7 +241,7 @@ And you use the end keyword instead of curly braces.</p>
 <span class="hljs-comment"># Second line of same documentation comment.</span>
 <span class="hljs-comment"># @returns Some value</span>
 <span class="hljs-keyword">with</span>
-  str: <span class="hljs-variable">string</span> <span class="hljs-comment"># Documentation comment that describes what this argument is</span>
+  str: <span class="hljs-type">string</span> <span class="hljs-comment"># Documentation comment that describes what this argument is</span>
   nb: <span class="hljs-variable">number</span> <span class="hljs-comment"># A multiline description</span>
   <span class="hljs-comment"># of the arg nb goes below not above</span>
 <span class="hljs-keyword">def</span> <span class="hljs-variable">someFunc</span>
@@ -287,37 +287,70 @@ underscore.js: #map, #reduce, ...</p>
 <p>But I'd like to be able to create variables with a type. It just won't be checked yet.</p>
 <p>The types are specified before the variable name like in C++ or Java, not after like in typescript.</p>
 <p>You don't use the keyword <code>let</code> when you create a variable with a type.</p>
-<pre><code class="language-jome"><span class="hljs-variable">int</span> <span class="hljs-variable">i</span> = <span class="hljs-number">0</span>
-<span class="hljs-variable">string</span> <span class="hljs-variable">str</span> = <span class="hljs-string">&quot;some string&quot;</span>
+<pre><code class="language-jome"><span class="hljs-type">int</span> <span class="hljs-variable">i</span> = <span class="hljs-number">0</span>
+<span class="hljs-type">string</span> <span class="hljs-variable">str</span> = <span class="hljs-string">&quot;some string&quot;</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">any</span> = <span class="hljs-string">&quot;some string&quot;</span>
 <span class="hljs-title class_">SomeClass</span> <span class="hljs-variable">obj</span> = <span class="hljs-title function_ invoke__">SomeClass</span>(<span class="hljs-string">&quot;param&quot;</span>)
+<span class="hljs-title class_">SomeClass</span> <span class="hljs-title function_ invoke__">obj</span>(<span class="hljs-string">&quot;param&quot;</span>) <span class="hljs-comment">// allow this?</span>
 </code></pre>
 <p>You assigning an object constructor to a variable, it's simpler to use the keyword let. The type will be inferred automatically.</p>
 <p>Inside function arguments, it's the same thing. The type comes before the variable name.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">someFunction</span>(<span class="hljs-variable">int</span> <span class="hljs-variable">count</span>, <span class="hljs-variable">string</span> <span class="hljs-variable">message</span>)
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">someFunction</span>(<span class="hljs-type">int</span> <span class="hljs-variable">count</span>, <span class="hljs-type">string</span> <span class="hljs-variable">message</span>)
   <span class="hljs-comment">// ...</span>
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-keyword">with</span>
-  <span class="hljs-variable">int</span> <span class="hljs-variable">count</span> <span class="hljs-comment"># the count</span>
-  <span class="hljs-variable">string</span> <span class="hljs-variable">message</span> <span class="hljs-comment"># a message</span>
+  <span class="hljs-type">int</span> <span class="hljs-variable">count</span> <span class="hljs-comment"># the count</span>
+  <span class="hljs-type">string</span> <span class="hljs-variable">message</span> <span class="hljs-comment"># a message</span>
 <span class="hljs-keyword">def</span> <span class="hljs-variable">someFunction</span>
   <span class="hljs-comment">// ...</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
-<p>I want to do the same for function types too. They replace the keyword def.</p>
-<pre><code class="language-jome"><span class="hljs-variable">int</span> <span class="hljs-title function_ invoke__">sum</span>(<span class="hljs-variable">int</span> <span class="hljs-variable">x</span>, <span class="hljs-variable">int</span> <span class="hljs-variable">y</span>)
+<p>I want to do the same for function types too. They replace the keyword def. This syntax uses curly braces instead of end keyword.
+A def with no args does not require parentheses, but this syntax does.</p>
+<pre><code class="language-jome"><span class="hljs-type">int</span> <span class="hljs-title function_ invoke__">sum</span>(<span class="hljs-type">int</span> <span class="hljs-variable">x</span>, <span class="hljs-type">int</span> <span class="hljs-variable">y</span>) {
   <span class="hljs-comment">// ...</span>
-<span class="hljs-keyword">end</span>
+}
+<span class="hljs-type">int</span> <span class="hljs-title function_ invoke__">add</span>(<span class="hljs-type">int</span> <span class="hljs-variable">x</span>, <span class="hljs-type">int</span> <span class="hljs-variable">y</span>) {<span class="hljs-keyword">return</span> <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>}
 
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">SomeClass</span>
-  <span class="hljs-variable">int</span> <span class="hljs-title function_ invoke__">someMethod</span>(<span class="hljs-variable">int</span> <span class="hljs-variable">x</span>, <span class="hljs-variable">int</span> <span class="hljs-variable">y</span>)
+  <span class="hljs-type">int</span> <span class="hljs-title function_ invoke__">someMethod</span>(<span class="hljs-type">int</span> <span class="hljs-variable">x</span>, <span class="hljs-type">int</span> <span class="hljs-variable">y</span>) {
     <span class="hljs-comment">// ...</span>
-  <span class="hljs-keyword">end</span>
-  <span class="hljs-variable">void</span> <span class="hljs-variable">doSomething</span>
+  }
+  <span class="hljs-variable">void</span> <span class="hljs-title function_ invoke__">doSomething</span>() {
     <span class="hljs-comment">// ...</span>
-  <span class="hljs-keyword">end</span>
+  }
 <span class="hljs-keyword">end</span>
+</code></pre>
+<p>How does it work for instance variables initialization? Works well</p>
+<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SomeClass</span>
+
+  <span class="hljs-type">int</span> <span class="hljs-variable">@count</span> = <span class="hljs-number">0</span>
+  <span class="hljs-type">string</span> <span class="hljs-variable">@message</span> = <span class="hljs-string">&quot;Hello world!&quot;</span>
+
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p>TODO: Type of function signature for callbacks and al</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">doSomething</span>((<span class="hljs-variable">void</span> =&gt; <span class="hljs-type">int</span>) <span class="hljs-variable">callback</span>)
+</code></pre>
+<p>You cannot use curly braces with the <code>with</code> keyword. You use def.
+The return type is given after the <code>return</code> keyword.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">with</span>
+  <span class="hljs-type">int</span> <span class="hljs-variable">x</span> <span class="hljs-comment"># Number 1</span>
+  <span class="hljs-type">int</span> <span class="hljs-variable">y</span> <span class="hljs-comment"># Number 2</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-type">int</span>
+<span class="hljs-keyword">def</span> <span class="hljs-variable">add</span>
+
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p>TODO: tuple, templates</p>
+<pre><code>string[] names = [&quot;John&quot;, &quot;Mary&quot;]
+Array&lt;string&gt; names = [&quot;John&quot;, &quot;Mary&quot;]
+SomeContainer&lt;string&gt; container()
+
+class SomeContainer&lt;T&gt;
+  T[] @list;
+end
 </code></pre>
   <h2 id="strings">Strings</h2>
 <p>They are many kinds of quotes in Jome that should handle every use case. There is:</p>
@@ -570,8 +603,8 @@ The constructor is everything inside the class before the first def ... end.
 If you use @someArgument, then it will automatically set it for you.
 You pass arguments to the constructor after the class name or before with the <code>with</code> keyword.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title function_ invoke__">Person</span>(<span class="hljs-variable">favoriteColor</span>)
-  <span class="hljs-variable">@firstName</span>: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;John&quot;</span>
-  <span class="hljs-variable">@lastName</span>: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;Doe&quot;</span>
+  <span class="hljs-variable">@firstName</span>: <span class="hljs-type">string</span> = <span class="hljs-string">&quot;John&quot;</span>
+  <span class="hljs-variable">@lastName</span>: <span class="hljs-type">string</span> = <span class="hljs-string">&quot;Doe&quot;</span>
   <span class="hljs-variable">@age</span>: <span class="hljs-variable">number</span>
   <span class="hljs-variable">@favoriteColor</span> = <span class="hljs-variable">favoriteColor</span> || <span class="hljs-string">&#x27;brown&#x27;</span>
 <span class="hljs-keyword">end</span>
@@ -579,14 +612,14 @@ You pass arguments to the constructor after the class name or before with the <c
 <span class="hljs-keyword">with</span>
   <span class="hljs-variable">@favoriteColor</span> = <span class="hljs-string">&#x27;brown&#x27;</span>
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span>
-  <span class="hljs-variable">@firstName</span>: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;John&quot;</span>
-  <span class="hljs-variable">@lastName</span>: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;Doe&quot;</span>
+  <span class="hljs-variable">@firstName</span>: <span class="hljs-type">string</span> = <span class="hljs-string">&quot;John&quot;</span>
+  <span class="hljs-variable">@lastName</span>: <span class="hljs-type">string</span> = <span class="hljs-string">&quot;Doe&quot;</span>
   <span class="hljs-variable">@age</span>: <span class="hljs-variable">number</span>
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span>
-  <span class="hljs-variable">@username</span>: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;Bigdaddy007&quot;</span> <span class="hljs-comment">// same as doing @username = &quot;Bigdaddy007&quot; inside the constructor</span>
-  <span class="hljs-variable">@username</span>?: <span class="hljs-variable">string</span> = <span class="hljs-string">&quot;Bigdaddy007&quot;</span> <span class="hljs-comment">// same as doing @username = #params.username || &quot;Bigdaddy007&quot; inside the constructor</span>
+  <span class="hljs-variable">@username</span>: <span class="hljs-type">string</span> = <span class="hljs-string">&quot;Bigdaddy007&quot;</span> <span class="hljs-comment">// same as doing @username = &quot;Bigdaddy007&quot; inside the constructor</span>
+  <span class="hljs-variable">@username</span>?: <span class="hljs-type">string</span> = <span class="hljs-string">&quot;Bigdaddy007&quot;</span> <span class="hljs-comment">// same as doing @username = #params.username || &quot;Bigdaddy007&quot; inside the constructor</span>
   <span class="hljs-variable">@usersame</span> <span class="hljs-comment">// does nothing</span>
   <span class="hljs-variable">@username</span> <span class="hljs-comment">// same as doing @username = null inside the constructor</span>
   
@@ -676,7 +709,7 @@ end
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-keyword">with</span>
-  x: <span class="hljs-variable">float</span> <span class="hljs-comment"># The base value</span>
+  x: <span class="hljs-type">float</span> <span class="hljs-comment"># The base value</span>
   y: <span class="hljs-variable">integer</span> <span class="hljs-comment"># The factor</span>
 <span class="hljs-keyword">def</span> <span class="hljs-variable">multiply</span>
 <span class="hljs-keyword">end</span>
