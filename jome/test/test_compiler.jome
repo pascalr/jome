@@ -461,8 +461,8 @@ end
 
 
 describe "Test objects" do
-  it '({end' do
-    assert.match(compile('({end'), /\(\{\}\)/);
+  it '({})' do
+    assert.match(compile('({})'), /\(\{\}\)/);
   end
   it '{x: 1}' do
     assert.match(compile('{x: 1}'), /\{\s*x\: ?1;?\s*\}/);

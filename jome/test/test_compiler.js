@@ -428,8 +428,8 @@ end
     });
   });
   describe("Test objects", function () {
-    it("({end", function () {
-      assert.match(compile("({end"), /\(\{\}\)/);
+    it("({})", function () {
+      assert.match(compile("({})"), /\(\{\}\)/);
     });
     it("{x: 1}", function () {
       assert.match(compile("{x: 1}"), /\{\s*x\: ?1;?\s*\}/);
