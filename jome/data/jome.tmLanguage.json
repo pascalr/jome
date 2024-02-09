@@ -398,16 +398,44 @@
       ]
     },
     "declaration": {
-      "name": "meta.declaration.jome",
-      "match": "\\b(let|var)\\b\\s*([A-Za-z_$]\\w*)?",
-      "captures": {
-        "1": {
-          "name": "keyword.control.declaration.jome"
+      "patterns": [
+        {
+          "name": "meta.declaration.typed.jome",
+          "match": "(\\b(?:int|string|bool|float)\\b)\\s+([A-Za-z_$]\\w*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.primitive.jome"
+            },
+            "2": {
+              "name": "variable.other.jome"
+            }
+          }
         },
-        "2": {
-          "name": "variable.other.jome"
+        {
+          "name": "meta.declaration.typed.jome",
+          "match": "([A-Za-z_$]\\w*(?:\\<\\w+\\>))\\s+([A-Za-z_$]\\w*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.jome"
+            },
+            "2": {
+              "name": "variable.other.jome"
+            }
+          }
+        },
+        {
+          "name": "meta.declaration.jome",
+          "match": "\\b(let|var)\\b\\s*([A-Za-z_$]\\w*)?",
+          "captures": {
+            "1": {
+              "name": "keyword.control.declaration.jome"
+            },
+            "2": {
+              "name": "variable.other.jome"
+            }
+          }
         }
-      }
+      ]
     },
     "def": {
       "name": "meta.def.jome",

@@ -10,6 +10,10 @@ const REGEX_VARIABLE = "[A-Za-z_$]\\w*" // FIXME: Accents
 
 const REGEX_XML_NAME = "[_:A-Za-z][A-Za-z0-9\\-_\\:.]*"
 
+const REGEX_PRIMITIVE_TYPE = "\\b(?:int|string|bool|float)\\b" // FIXME: Accents
+
+const REGEX_TYPE = "[A-Za-z_$]\\w*(?:\\<\\w+\\>)" // FIXME: Accents
+
 // // If the regex containing this regex has no group, then group number is 1.
 // // Otherwise, you have to add 1 for every group before this one.
 // function REGEX_INLINE_STRING(groupNumber=1) {
@@ -282,12 +286,32 @@ let grammar = {
       ]
     },
     declaration: {
-      name: "meta.declaration.jome",
-      match: `\\b(let|var)\\b\\s*(${REGEX_VARIABLE})?`,
-      captures: {
-        1: { name: "keyword.control.declaration.jome" },
-        2: { name: "variable.other.jome" }
-      }
+      patterns: [
+        {
+          name: "meta.declaration.typed.jome",
+          match: `(${REGEX_PRIMITIVE_TYPE})\\s+(${REGEX_VARIABLE})`,
+          captures: {
+            1: { name: "storage.type.primitive.jome" },
+            2: { name: "variable.other.jome" }
+          }
+        },
+        {
+          name: "meta.declaration.typed.jome",
+          match: `(${REGEX_TYPE})\\s+(${REGEX_VARIABLE})`,
+          captures: {
+            1: { name: "storage.type.jome" },
+            2: { name: "variable.other.jome" }
+          }
+        },
+        {
+          name: "meta.declaration.jome",
+          match: `\\b(let|var)\\b\\s*(${REGEX_VARIABLE})?`,
+          captures: {
+            1: { name: "keyword.control.declaration.jome" },
+            2: { name: "variable.other.jome" }
+          }
+        }
+      ]
     },
     def: {
       name: "meta.def.jome",

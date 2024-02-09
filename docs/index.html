@@ -89,13 +89,14 @@
             <div class="scrollable" style="width: 100%;">
               <div class="main">
                 <h1>Jome v0.1</h1>
-<p>TODO: Check for grammar and vocabulary mistakes! aspell?</p>
-<p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, syntax similar to ruby and it
+<p>TODO: Check for grammar and vocabulary mistakes! aspell?
+TODO: config.jome &gt; md &gt; spellcheck: true, I want to see mistakes within vscode.</p>
+<p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
 has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>
 <p>Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.</p>
 <p>You can read from top to bottom to learn the language, or you can jump to any section if you are only curious.</p>
   <h2 id="overview">Overview</h2>
-<p>TODO</p>
+<p>TODO: A tiktok like overview of the programming language? Or sliding carrousel of nice features to show?</p>
 <h2>Disclaimer</h2>
 <p>The language is very, very young and still contains a log of bugs. I don't recommend using yet for any real project.</p>
 <p>I don't have a list of bugs yet, because there are too many.</p>
@@ -157,23 +158,32 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 </code></pre>
 <h3>Read more</h3>
 <p>For full details of options, see <a href="#pass_args_to_file">passing arguments to files</a></p>
+<p>TODO: args are passed space separated instead of comma separated
+--args with dashes near each other are grouped together</p>
   <h2 id="lang-ref">Language Reference</h2>
 <p>This documentation assumes the reader is familiar with javascript.</p>
 <p>Jome is similar to JavaScript, but there are a few distinctions that you must be aware of.</p>
 <ul>
 <li>Execution is different: You execute .jome files using the jome CLI.</li>
-<li>The <a href="#syntax">syntax</a> is a bit different: It is more similar to the ruby programming language.</li>
+<li>The <a href="#syntax">syntax</a> is more permissive. You can have a syntax like javascript or something similar to the ruby programming language.</li>
 <li>There are a lot of <a href="#utils">builtin functions and constants</a>. They start with an hashtag (ex: #log is the same as console.log)</li>
 <li>There are <a href="#heredocs">heredocs</a> to include code from other languages (html, css, ...) written as xml tags.</li>
 </ul>
   <h2 id="syntax">Syntax</h2>
-<p>The syntax is similar to the ruby programming language. You use the keyword def instead of function.
-And you use the end keyword instead of curly braces.</p>
+<p>The syntax is permissive. For statement blocks, you can use either curly braces as a delimiter or use the <code>end</code> keyword.
+You can also use a combination of both. One thing which can be nice is to alternate between the two at every nesting level.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span>
+  <span class="hljs-title function_ invoke__">sayHello</span>() {
+    <span class="hljs-built_in function_">#log</span> <span class="hljs-string">&#x27;Hello!&#x27;</span> <span class="hljs-comment">// #log is a util shorthand of console.log</span>
+  }
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p>This is the same as:</p>
+<pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> {
   <span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span>
     <span class="hljs-built_in function_">#log</span> <span class="hljs-string">&#x27;Hello!&#x27;</span> <span class="hljs-comment">// #log is a util shorthand of console.log</span>
   <span class="hljs-keyword">end</span>
-<span class="hljs-keyword">end</span>
+}
 </code></pre>
 <p>Parentheses are optional for function calls.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">add</span> = (<span class="hljs-variable">x</span>,<span class="hljs-variable">y</span>) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
@@ -183,34 +193,26 @@ And you use the end keyword instead of curly braces.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">add</span> = ({<span class="hljs-variable">x</span>, <span class="hljs-variable">y</span>}) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
 <span class="hljs-variable">add</span> x: <span class="hljs-number">10</span>, y: <span class="hljs-number">5</span>
 </code></pre>
-<p>To call a method on a object without parameters, you can use an arrow.</p>
-<p>Let's wait for this one. Maybe -&gt; could be used for something else with children or something.</p>
-<p>Because this is not really necessary with the get and set keywords in javascript.</p>
-<pre><code class="language-jome"><span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">density</span> <span class="hljs-comment">// same as obj.density()</span>
-<span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">density</span> = <span class="hljs-number">1.05</span> <span class="hljs-comment">// def density=(val) // <span class="hljs-doctag">TODO:</span> WIP</span>
-<span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">save</span>
-</code></pre>
-<p>The call a function with it's operand on the left, you can use <code>:.</code>. For built-ins, you can use <code>.#</code></p>
-<p>In Elixir they use |&gt;, but it's less nice because you need spaces around otherwise it's ugly. :. is more concise.</p>
-<pre><code class="language-jome">obj:.keys:.<span class="hljs-title function_ invoke__">filter</span>(<span class="hljs-variable">k</span> =&gt; <span class="hljs-variable">k</span>[<span class="hljs-number">0</span>] === <span class="hljs-string">&#x27;p&#x27;</span>):.<span class="hljs-variable">each</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">k</span>|
+<h3>piping</h3>
+<p>You can write the input to a function call to the left by using the operators <code>:.</code>, <code>|&gt;</code> or <code>.#</code></p>
+<p><code>.#</code> refer to built-in functions which are always available. The other two will use local functions or global ones
+defined in the file <code>config.jome</code>.</p>
+<p>The difference between <code>:.</code> and <code>|&gt;</code> is the precedence. <code>:.</code> has the highest precedence same as <code>.</code></p>
+<pre><code class="language-jome"><span class="hljs-variable">obj</span>.<span class="hljs-built_in function_">#keys</span>.<span class="hljs-built_in function_">#filter</span>(<span class="hljs-variable">k</span> =&gt; <span class="hljs-variable">k</span>[<span class="hljs-number">0</span>] === <span class="hljs-string">&#x27;p&#x27;</span>).<span class="hljs-built_in function_">#each</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">k</span>|
   <span class="hljs-comment">// ...</span>
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-string">&quot;john&quot;</span>:.upcase:.<span class="hljs-variable">reverse</span>
+<span class="hljs-string">&quot;john&quot;</span>:.upcase:.<span class="hljs-variable">reverse</span> <span class="hljs-comment">// upcase and reverse here are local or global functions</span>
 
-<span class="hljs-comment">// Huuuhnn, Jome encourages to be more functional this way. Use and reuse global functions. Quite nice.</span>
+[<span class="hljs-string">&quot;1&quot;</span>,<span class="hljs-string">&quot;2&quot;</span>,<span class="hljs-string">&quot;3&quot;</span>]:.<span class="hljs-variable">reverse</span>.<span class="hljs-title function_ invoke__">join</span>(<span class="hljs-string">&quot; &quot;</span>) |&gt; <span class="hljs-variable">console</span>.<span class="hljs-variable">log</span>
 
-<span class="hljs-variable">obj</span>.<span class="hljs-built_in function_">#keys</span>.<span class="hljs-built_in function_">#filter</span>(<span class="hljs-variable">k</span> =&gt; <span class="hljs-variable">k</span>[<span class="hljs-number">0</span>] === <span class="hljs-string">&#x27;p&#x27;</span>).<span class="hljs-built_in function_">#each</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">k</span>|
-  <span class="hljs-comment">// ...</span>
-<span class="hljs-keyword">end</span>
+<span class="hljs-string">&quot;john&quot;</span> |&gt; <span class="hljs-title class_">String</span>.<span class="hljs-variable">upcase</span> |&gt; <span class="hljs-title class_">String</span>.<span class="hljs-variable">reverse</span>
 </code></pre>
+<p>Piping allows to write in a functional way more easily.</p>
 <p>It's up to the user to choose between using .# or :.. By default in Jome it is using .# because it does not collide names.</p>
 <p>A good rule of thumb would be to use .# for utils you don't use often and use :. for utils you use often and that you
 don't mind the name being global.</p>
-<p>Or just use .# everywhere. Up to you.</p>
-<p>TODO: Also support the pipe operator <code>|&gt;</code>. It does the same thing as :., but with a lower precedence.</p>
-<pre><code class="language-jome"><span class="hljs-string">&quot;john&quot;</span> |&gt; <span class="hljs-title class_">String</span>.<span class="hljs-variable">upcase</span> |&gt; <span class="hljs-title class_">String</span>.<span class="hljs-variable">reverse</span>
-</code></pre>
+<h2>Functions</h2>
 <p>You can use <code>do ... end</code> to create functions. You pass arguments between vertical bars.</p>
 <pre><code class="language-jome">[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>].<span class="hljs-built_in function_">#each</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">i</span>|
   <span class="hljs-built_in function_">#log</span> <span class="hljs-variable">i</span>

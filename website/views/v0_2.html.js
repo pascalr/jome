@@ -15,6 +15,20 @@ module.exports = () => {
   - And much more
   - A tutorial to learn the language step by step?
 
+  ## Slim arrow accessor
+
+  To call a method on a object without parameters, you can use an arrow.
+
+  Let's wait for this one. Maybe -> could be used for something else with children or something.
+
+  Because this is not really necessary with the get and set keywords in javascript.
+
+  \`\`\`jome
+  obj->density // same as obj.density()
+  obj->density = 1.05 // def density=(val) // TODO: WIP
+  obj->save
+  \`\`\`
+
   ## Types
 
   You can specify types for variables. It can be primitives like string, number, integer or float. It can also be class names or interfaces.
