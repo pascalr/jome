@@ -1,3 +1,7 @@
+import {write, writeSync, build, compile, execSh} from '@jome/core'
+import mdToHtml from '@jome/md-to-html'
+import fs from 'fs'
+
 /*
 Dans config.jome, définir tout ce qui est réutiliser par tous les fichiers .jome du dossier.
 
@@ -61,5 +65,36 @@ return {
     "fr*": {
       spellcheck: "fr"
     }
+  },
+  utils: {
+    "#log": console.log,
+    "#keys": Object.keys,
+    "#values": Object.values,
+    "#entries": Object.entries,
+    "#PI": Math.PI,
+    "#argv": process.argv,
+    "#write": write,
+    "#writeSync": writeSync,
+    "#build": build,
+    "#compile": compile,
+    "#cp": fs.copyFile,
+    "#cp!": fs.copyFileSync,
+    "#mdToHtml": fs.copyFileSync,
+    "#execSh": execSh,
   }
 }
+
+//   // FIXME: Ensures has one and only one arg
+//   trim: (node, args) => {handleTrim('trim', args)},
+//   strim: (node, args) => {handleTrim('trimStart', args)},
+//   trimStart: (node, args) => {handleTrim('trimStart', args)},
+//   etrim: (node, args) => {handleTrim('trimEnd', args)},
+//   trimEnd: (node, args) => {handleTrim('trimEnd', args)},
+//   // argv: (node) => {
+//   //   node.ctxFile.addImport('argv', null, 'jome-lib/argv')
+//   //   return `argv()`
+//   // },
+//   run: (node, args) => _run(node, false, args),
+//   "run!": (node, args) => _run(node, true, args),
+//   load: (node, args) => _run(node, false, args),
+//   "load!": (node, args) => _run(node, true, args),
