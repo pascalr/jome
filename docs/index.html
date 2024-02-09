@@ -184,9 +184,20 @@ And you use the end keyword instead of curly braces.</p>
 <span class="hljs-variable">add</span> x: <span class="hljs-number">10</span>, y: <span class="hljs-number">5</span>
 </code></pre>
 <p>To call a method on a object without parameters, you can use an arrow.</p>
+<p>Let's wait for this one. Maybe -&gt; could be used for something else with children or something.</p>
+<p>Because this is not really necessary with the get and set keywords in javascript.</p>
 <pre><code class="language-jome"><span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">density</span> <span class="hljs-comment">// same as obj.density()</span>
 <span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">density</span> = <span class="hljs-number">1.05</span> <span class="hljs-comment">// def density=(val) // <span class="hljs-doctag">TODO:</span> WIP</span>
 <span class="hljs-variable">obj</span>-&gt;<span class="hljs-variable">save</span>
+</code></pre>
+<p>The call a function with it's operand on the left, you can use <code>:.</code>. For built-ins, you can use <code>.#</code></p>
+<pre><code class="language-jome">obj:.keys:.<span class="hljs-title function_ invoke__">filter</span>(<span class="hljs-variable">k</span> =&gt; <span class="hljs-variable">k</span>[<span class="hljs-number">0</span>] === <span class="hljs-string">&#x27;p&#x27;</span>):.<span class="hljs-variable">each</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">k</span>|
+  <span class="hljs-comment">// ...</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-variable">obj</span>.<span class="hljs-built_in function_">#keys</span>.<span class="hljs-built_in function_">#filter</span>(<span class="hljs-variable">k</span> =&gt; <span class="hljs-variable">k</span>[<span class="hljs-number">0</span>] === <span class="hljs-string">&#x27;p&#x27;</span>).<span class="hljs-built_in function_">#each</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">k</span>|
+  <span class="hljs-comment">// ...</span>
+<span class="hljs-keyword">end</span>
 </code></pre>
 <p>You can use <code>do ... end</code> to create functions. You pass arguments between vertical bars.</p>
 <pre><code class="language-jome">[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>].<span class="hljs-built_in function_">#each</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">i</span>|

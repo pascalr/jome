@@ -167,10 +167,26 @@ module.exports = () => {
 
   To call a method on a object without parameters, you can use an arrow.
 
+  Let's wait for this one. Maybe -> could be used for something else with children or something.
+
+  Because this is not really necessary with the get and set keywords in javascript.
+
   \`\`\`jome
   obj->density // same as obj.density()
   obj->density = 1.05 // def density=(val) // TODO: WIP
   obj->save
+  \`\`\`
+
+  The call a function with it's operand on the left, you can use \`:.\`. For built-ins, you can use \`.#\`
+
+  \`\`\`jome
+  obj:.keys:.filter(k => k[0] === 'p'):.each do |k|
+    // ...
+  end
+
+  obj.#keys.#filter(k => k[0] === 'p').#each do |k|
+    // ...
+  end
   \`\`\`
 
   You can use \`do ... end\` to create functions. You pass arguments between vertical bars.

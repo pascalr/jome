@@ -79,6 +79,11 @@ const highlighter = function(hljs) {
     begin: '\\b(false|true|null)\\b'
   }
 
+  const TYPES = {
+    scope: "type",
+    begin: '\\b(int|string|float|bool)\\b'
+  }
+
   const KEYWORD = {
     scope: "keyword",
     begin: '\\b(new|chain|with|then|end|if|class|export|import|from|for|in|while|do|def|var|let|code|unit|return|module|interface|main|type|else|elif|elsif)\\b'
@@ -143,6 +148,7 @@ const highlighter = function(hljs) {
           hljs.COMMENT('# ', '$',)
         ]
       },
+      TYPES,
       NUMBER,
       KEYWORD,
       FUNC_CALL,
