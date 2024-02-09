@@ -22,8 +22,9 @@ let content = <md>
   # Jome v0.1
 
   TODO: Check for grammar and vocabulary mistakes! aspell?
+  TODO: config.jome > md > spellcheck: true, I want to see mistakes within vscode.
 
-  Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, syntax similar to ruby and it
+  Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
   has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.
 
   Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.
@@ -32,7 +33,7 @@ let content = <md>
 
   <h2 id="overview">Overview</h2>
 
-  TODO
+  TODO: A tiktok like overview of the programming language? Or sliding carrousel of nice features to show?
   
   ## Disclaimer
 
@@ -132,27 +133,40 @@ let content = <md>
 
   For full details of options, see [passing arguments to files](#pass_args_to_file)
 
+  TODO: args are passed space separated instead of comma separated
+  --args with dashes near each other are grouped together
+
   <h2 id="lang-ref">Language Reference</h2>
 
   This documentation assumes the reader is familiar with javascript.
 
   Jome is similar to JavaScript, but there are a few distinctions that you must be aware of.
   - Execution is different: You execute .jome files using the jome CLI.
-  - The [syntax](#syntax) is a bit different: It is more similar to the ruby programming language.
+  - The [syntax](#syntax) is more permissive. You can have a syntax like javascript or something similar to the ruby programming language.
   - There are a lot of [builtin functions and constants](#utils). They start with an hashtag (ex: #log is the same as console.log)
   - There are [heredocs](#heredocs) to include code from other languages (html, css, ...) written as xml tags.
 
   <h2 id="syntax">Syntax</h2>
 
-  The syntax is similar to the ruby programming language. You use the keyword def instead of function.
-  And you use the end keyword instead of curly braces.
+  The syntax is permissive. For statement blocks, you can use either curly braces as a delimiter or use the `end` keyword.
+  You can also use a combination of both. One thing which can be nice is to alternate between the two at every nesting level.
 
   ```jome
   class Person
+    sayHello() {
+      #log 'Hello!' // #log is a util shorthand of console.log
+    }
+  end
+  ```
+
+  This is the same as:
+
+  ```jome
+  class Person {
     def sayHello
       #log 'Hello!' // #log is a util shorthand of console.log
     end
-  end
+  }
   ```
 
   Parentheses are optional for function calls.
@@ -169,49 +183,35 @@ let content = <md>
   add x: 10, y: 5
   ```
 
-  To call a method on a object without parameters, you can use an arrow.
+  ### piping
 
-  Let's wait for this one. Maybe -> could be used for something else with children or something.
+  You can write the input to a function call to the left by using the operators `:.`, `|>` or `.#`
 
-  Because this is not really necessary with the get and set keywords in javascript.
+  `.#` refer to built-in functions which are always available. The other two will use local functions or global ones
+  defined in the file `config.jome`.
 
-  ```jome
-  obj->density // same as obj.density()
-  obj->density = 1.05 // def density=(val) // TODO: WIP
-  obj->save
-  ```
-
-  The call a function with it's operand on the left, you can use `:.`. For built-ins, you can use `.#`
-
-  In Elixir they use |>, but it's less nice because you need spaces around otherwise it's ugly. :. is more concise.
+  The difference between `:.` and `|>` is the precedence. `:.` has the highest precedence same as `.`
 
   ```jome
-  obj:.keys:.filter(k => k[0] === 'p'):.each do |k|
-    // ...
-  end
-
-  "john":.upcase:.reverse
-
-  // Huuuhnn, Jome encourages to be more functional this way. Use and reuse global functions. Quite nice.
-
   obj.#keys.#filter(k => k[0] === 'p').#each do |k|
     // ...
   end
+
+  "john":.upcase:.reverse // upcase and reverse here are local or global functions
+
+  ["1","2","3"]:.reverse.join(" ") |> console.log
+
+  "john" |> String.upcase |> String.reverse
   ```
+
+  Piping allows to write in a functional way more easily.
 
   It's up to the user to choose between using .# or :.. By default in Jome it is using .# because it does not collide names.
 
   A good rule of thumb would be to use .# for utils you don't use often and use :. for utils you use often and that you
   don't mind the name being global.
 
-  Or just use .# everywhere. Up to you.
-
-  TODO: Also support the pipe operator `|>`. It does the same thing as :., but with a lower precedence.
-
-  ```jome
-  "john" |> String.upcase |> String.reverse
-  ```
-
+  ## Functions
 
   You can use `do ... end` to create functions. You pass arguments between vertical bars.
 
