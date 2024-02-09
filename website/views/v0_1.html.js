@@ -179,15 +179,35 @@ module.exports = () => {
 
   The call a function with it's operand on the left, you can use \`:.\`. For built-ins, you can use \`.#\`
 
+  In Elixir they use |>, but it's less nice because you need spaces around otherwise it's ugly. :. is more concise.
+
   \`\`\`jome
   obj:.keys:.filter(k => k[0] === 'p'):.each do |k|
     // ...
   end
 
+  "john":.upcase:.reverse
+
+  // Huuuhnn, Jome encourages to be more functional this way. Use and reuse global functions. Quite nice.
+
   obj.#keys.#filter(k => k[0] === 'p').#each do |k|
     // ...
   end
   \`\`\`
+
+  It's up to the user to choose between using .# or :.. By default in Jome it is using .# because it does not collide names.
+
+  A good rule of thumb would be to use .# for utils you don't use often and use :. for utils you use often and that you
+  don't mind the name being global.
+
+  Or just use .# everywhere. Up to you.
+
+  TODO: Also support the pipe operator \`|>\`. It does the same thing as :., but with a lower precedence.
+
+  \`\`\`jome
+  "john" |> String.upcase |> String.reverse
+  \`\`\`
+
 
   You can use \`do ... end\` to create functions. You pass arguments between vertical bars.
 
@@ -360,6 +380,30 @@ module.exports = () => {
   end
   \`\`\`
 
+  If I am to allow this syntax, then might as well allow no type in front
+
+  \`\`\`jome
+  class SomeClass
+    doSomething() {
+      // ...
+    }
+  end
+  \`\`\`
+
+  \`\`\`jome
+  class SomeClass {
+    def doSomething
+      // ...
+    end
+  }
+  \`\`\`
+
+  \`\`\`jome
+  def soSomething : int
+
+  end
+  \`\`\`
+
   How does it work for instance variables initialization? Works well
 
   \`\`\`jome
@@ -390,9 +434,32 @@ module.exports = () => {
   end
   \`\`\`
 
+  Or maybe the return type is given using a fat arrow?
+
+  \`\`\`jome
+  with
+    int x # Number 1
+    int y # Number 2
+    => int # The sum of number 1 and 2
+  def add
+
+  end
+  \`\`\`
+
+  Or maybe the return type is given using a colon?
+
+  \`\`\`jome
+  with
+    int x # Number 1
+    int y # Number 2
+  def add : int # The sum of number 1 and 2
+
+  end
+  \`\`\`
+
   TODO: tuple, templates
 
-  \`\`\`
+  \`\`\`jome
   string[] names = ["John", "Mary"]
   Array<string> names = ["John", "Mary"]
   SomeContainer<string> container()
@@ -401,6 +468,15 @@ module.exports = () => {
     T[] @list;
   end
   \`\`\`
+
+  I want Jome by default to be very permissive. You can then add rules to restrain for being more standard or more secure.
+
+  So if you are working on a personal project, you can use whatever style you prefer.
+
+  If you are working on a shared project or in a company, you should use a linter so the code is more standard.
+
+  I like to have both curly braces and end keyword. Personally, I think I prefer a mixture of both. At each indentation,
+  change. This way it is easier to know where you are.
 
   <h2 id="strings">Strings</h2>
 
@@ -509,18 +585,9 @@ module.exports = () => {
 
   This would be usefull for formatting strings.
 
-  "some string"%someTransformFunction
+  "some string":.someTransformFunction
 
-  It could be nice for other this too.
-
-  "actual" . equals "expected"
-  "actual" % equals "expected"
-  "actual" >> equals "expected"
-  "actual".(equals) "expected"
-  "actual"() equals "expected"
-  "actual".|equals "expected"
-  
-  Je pense que je préfère \`.|\` pour l'instant. J'aime que ce soit un peu similaire à \`.#\`
+  :.
 
   ## Shorthand syntax for function calls
 
@@ -533,6 +600,16 @@ module.exports = () => {
   \`\`\`
 
   Contrary to ruby, &: does not have any other meaning like defining a block to a symbol. It's just a syntaxic sugar.
+
+  Or
+
+  \`:.\` could work for this too? When it has no operand, then it returns a functions that calls it on the object.
+  I don't know... I don't like it too much because it's very different. :. get a function by this name, here it is
+  an object property...
+
+  \`\`\`jome
+  let names = people.#each(:.name)
+  \`\`\`
 
   <h3 id="verbatim">Verbatim string literals</h3>
 
