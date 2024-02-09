@@ -321,7 +321,7 @@ end
         /let x;\s*if \(?true\)? \{\s*x = "10";?\s*\}/,
       );
     });
-    it("if statements blocks", function () {
+    it("if statements blocks with elsif and else", function () {
       assert.match(
         compile(`if true
   x = 1

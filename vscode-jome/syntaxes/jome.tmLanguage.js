@@ -168,6 +168,7 @@ let grammar = {
         { include: "#scripts" },
         { include: "#tag" },
         { include: "#arrow" },
+        { include: "#constants" },
         { include: "#function_call" },
         { include: "#caller" }, // ->something
         { include: "#state-var" },
@@ -176,7 +177,6 @@ let grammar = {
         // { include: "#parameter" },
         { include: "#attribute" },
         { include: "#square-bracket" },
-        { include: "#constants" },
         { include: "#inline-utility" },
         { include: "#utilities" },
         { include: "#support-items" },

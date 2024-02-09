@@ -300,7 +300,7 @@ describe "Test if statements" do
   it 'if modifier' do
     assert.match(compile('let x; x = "10" if true'), /let x;\s*if \(?true\)? \{\s*x = "10";?\s*\}/);
   end
-  it 'if statements blocks' do
+  it 'if statements blocks with elsif and else' do
     assert.match(compile(`if true
   x = 1
 elsif false

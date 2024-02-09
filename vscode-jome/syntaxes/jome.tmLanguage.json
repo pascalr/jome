@@ -206,6 +206,9 @@
           "include": "#arrow"
         },
         {
+          "include": "#constants"
+        },
+        {
           "include": "#function_call"
         },
         {
@@ -225,9 +228,6 @@
         },
         {
           "include": "#square-bracket"
-        },
-        {
-          "include": "#constants"
         },
         {
           "include": "#inline-utility"
