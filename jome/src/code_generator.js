@@ -400,9 +400,9 @@ function applyFormat(format, operand) {
   Object.keys(forall?.imports||{}).forEach(impName => {
     let imp = forall.imports[impName]
     if (imp.default) {
-      operand.ctxFile.addImport(impName, [], imp.from)
+      operand.ctxFile.getFileImports(imp.from).addDefaultImport(impName)
     } else {
-      operand.ctxFile.addImport(null, [impName], imp.from)
+      operand.ctxFile.getFileImports(imp.from).addNamedImport(impName)
     }
   })
   return result
