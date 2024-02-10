@@ -45,16 +45,22 @@ module.exports = () => {
     });
   });
   describe("Imports", function () {
+    it("Default import Jome file", function () {
+      assert.match(
+        compile('import execute from "execute.jome"'),
+        /const execute = require\("execute.js"\)/,
+      );
+    });
     it("Default import", function () {
       assert.match(
         compile('import name from "module-name"'),
-        /const name = require\("module-name"\)/,
+        /const (\w+) = require\("module-name"\);\s*const { ?default: name ?} = \1;/,
       );
     });
     it("Star import", function () {
       assert.match(
         compile('import * as name from "module-name"'),
-        /const (\w+) = require\("module-name"\);\s*const { ?default: \w+, ...name ?} = \1;/,
+        /const name = require\("module-name"\)/,
       );
     });
     it("Deconstructed import", function () {
@@ -93,7 +99,7 @@ module.exports = () => {
     it("Default import and star import", function () {
       assert.match(
         compile('import name, * as all from "module-name"'),
-        /const (\w+) = require\("module-name"\);\s*const { ?default: name, ...all ?} = \1;/,
+        /const all = require\("module-name"\);\s*const { ?default: name?} = all;/,
       );
     });
   });
