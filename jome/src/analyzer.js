@@ -397,13 +397,12 @@ const ANALYZERS = {
 
     let bindings = []
     let filename;
-    let fileImports = new FileImports()
     let list = filterStrings(node.parts.slice(1)) // remove import keyword
     list.forEach(item => {
       if (item.type === 'meta.named-imports.jome') {
         filterCommas(filterSpaces(item.parts)).forEach(namedImport => {
           if (namedImport.type === 'variable.other.named-import.jome') {
-            fileImports.addNamedImport(namedImport.raw)
+            bindings.push({name: namedImport.raw, type: 'named-import'})
           } else if (namedImport.type === 'meta.import-alias.jome') {
             let original = namedImport.parts[0].raw
             let name = namedImport.parts[2].raw
@@ -418,34 +417,23 @@ const ANALYZERS = {
         //   }
       } else if (item.type === 'meta.import-file.jome') {
         let cs = filterSpaces(item.parts)
-        fileImports.filename = cs[cs.length-1].raw.slice(1,-1)
-        filename = fileImports.filename
+        filename = cs[cs.length-1].raw.slice(1,-1)
       } else if (item.type === 'variable.other.default-import.jome') {
-        fileImports.addDefaultImport(item.raw)
+        bindings.push({name: item.raw, type: 'default-import'})
       } else if (item.type === 'meta.namespace-import.jome') {
-        fileImports.setNamespaceImport(item.parts[2].raw)
+        bindings.push({name: item.parts[2].raw, type: 'namespace-import'})
       } else {
         throw new Error("Error 234j90s7adfg1")
       }
     })
+
+    if (!filename) {
+      return pushError(node, "Missing filename in import statement.")
+    }
+
     bindings.forEach(binding => {
       node.lexEnv.addBinding(binding.name, {...binding, file: filename})
     })
-
-    if (fileImports.defaultImportNames.length) {
-      // TODO: Make sure there is only one default import name. Should be impossible to be otherwise
-      node.lexEnv.addBinding(fileImports.defaultImportNames[0], {type: 'default-import', file: fileImports.filename})
-    }
-    if (fileImports.namespaceImport) {
-      node.lexEnv.addBinding(fileImports.namespaceImport, {type: 'namespace-import', file: fileImports.filename})
-    }
-    fileImports.namedImports.forEach(namedImport => {
-      node.lexEnv.addBinding(namedImport, {type: 'named-import', file: fileImports.filename})
-    })
-
-    if (!fileImports.filename) {
-      return pushError(node, "Missing filename in import statement.")
-    }
 
     // let relPath = getRelativePath(file, ctx)
     // let ext = path.extname(relPath)
@@ -454,7 +442,6 @@ const ANALYZERS = {
     //   relPath = relPath.slice(0, relPath.length-4)+"built.js"
     //   // relPath = relPath.slice(0, relPath.length-4)+(ctx.useESM ? 'built.js' : 'built.cjs')
     // }
-    node.data = {fileImports}
   },
 
   "string.quoted.double.jome": (node) => validateString(node, '"'),
