@@ -81,9 +81,11 @@ const DEFAULT_COMPILER_OPTIONS = {
 }
 
 class Compiler {
-  constructor(options={}) {
+  // Config is the result of config.jome
+  constructor(options={}, config) {
     this.options = {...DEFAULT_COMPILER_OPTIONS, ...options}
     this.filesCompiled = new Set()
+    this.config = config
   }
 
   compileFile(absPath) {
@@ -172,8 +174,8 @@ class Compiler {
   }
 }
 
-function compileAndSaveFile(absPath, options) {
-  let compiler = new Compiler(options)
+function compileAndSaveFile(absPath, options, config) {
+  let compiler = new Compiler(options, config)
   return compiler.compileFile(absPath)
 }
 
