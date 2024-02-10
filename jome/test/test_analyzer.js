@@ -1,6 +1,6 @@
 const assert = require("assert/strict");
-const { describe, it } = require("minispec");
 const { analyzeCode } = require("../src/compiler.js");
+const { describe, it } = require("minispec");
 module.exports = () => {
   describe("Incomplete statements", function () {
     it("should return an error keyword let with nothing else", function () {

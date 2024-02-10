@@ -6,12 +6,6 @@ module.exports = () => {
 
   ## Testing suite
 
-  I want to include a default basic testing suite.
-
-  I am thinking of using #mustBe, #mustMatch, ...
-
-  Peut-être aussi #describe et #test, j'aimerais bien.
-
   \`\`\`jome
   #describe "group test" do
     #test "some test" do
@@ -22,12 +16,13 @@ module.exports = () => {
   end
   \`\`\`
 
-  J'aime énormément le output de minispec.
-
-  J'aime juste moins que ce soit async par défaut. Et que tu aies à faire MiniSpec.execute()
-
-  Ouin tu n'as pas vraiment le choix. Comme ça si tu fais only ou focus, tu ne dois pas afficher les autres tests.
-  Il faudra donc une fonction #testResults ou #printTestResults ou #logTestResults
+  Oui, à #mustBe, #mustMatch, ...
+  Non à #describe, #test
+  Ne pas fournir une librairie de test par défault.
+  Rajouter minispec prend seulement quelques lignes dans config.jome de toute façon...
+  Ça serait une trop grosse opinion...
+  En plus c'est laid, tu ne veux pas avoir à faire #describe, #test, #it tout le temps...
+  Tant qu'à faire des shortcuts, choisis directement quelle librairie tu veux.
 
   ## ...
 

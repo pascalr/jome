@@ -90,9 +90,6 @@
               <div class="main">
                 <h1>Utils</h1>
 <h2>Testing suite</h2>
-<p>I want to include a default basic testing suite.</p>
-<p>I am thinking of using #mustBe, #mustMatch, ...</p>
-<p>Peut-être aussi #describe et #test, j'aimerais bien.</p>
 <pre><code class="language-jome"><span class="hljs-built_in function_">#describe</span> <span class="hljs-string">&quot;group test&quot;</span> <span class="hljs-keyword">do</span>
   <span class="hljs-built_in function_">#test</span> <span class="hljs-string">&quot;some test&quot;</span> <span class="hljs-keyword">do</span>
     <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-number">10</span>
@@ -101,10 +98,13 @@
   <span class="hljs-keyword">end</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
-<p>J'aime énormément le output de minispec.</p>
-<p>J'aime juste moins que ce soit async par défaut. Et que tu aies à faire MiniSpec.execute()</p>
-<p>Ouin tu n'as pas vraiment le choix. Comme ça si tu fais only ou focus, tu ne dois pas afficher les autres tests.
-Il faudra donc une fonction #testResults ou #printTestResults ou #logTestResults</p>
+<p>Oui, à #mustBe, #mustMatch, ...
+Non à #describe, #test
+Ne pas fournir une librairie de test par défault.
+Rajouter minispec prend seulement quelques lignes dans config.jome de toute façon...
+Ça serait une trop grosse opinion...
+En plus c'est laid, tu ne veux pas avoir à faire #describe, #test, #it tout le temps...
+Tant qu'à faire des shortcuts, choisis directement quelle librairie tu veux.</p>
 <h2>...</h2>
 <p>Je veux que this fasse toujours référence à un this normal comme dans un autre language.
 Utiliser #evt pour avoir accès au this dans un évènement. Cacher cette merde de javascript au user.</p>

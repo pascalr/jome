@@ -1,6 +1,6 @@
 const assert = require("assert/strict");
-const { describe, it, context } = require("minispec");
 const { compileCode } = require("../src/compiler.js");
+const { describe, it } = require("minispec");
 module.exports = () => {
   function compile(code) {
     return compileCode(code, { writeScript: false });

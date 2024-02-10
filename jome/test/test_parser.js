@@ -1,7 +1,7 @@
 const assert = require("assert/strict");
-const { describe, it, context } = require("minispec");
 const { parse } = require("../src/parser.js");
 const { tokenize } = require("../src/tokenizer.js");
+const { describe, it } = require("minispec");
 module.exports = () => {
   describe("Parse operation", function () {
     it("1 + 2", function () {

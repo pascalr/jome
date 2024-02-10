@@ -19,6 +19,7 @@ function parseConfig(absPath) {
     if (!binding) {
       throw new Error("Internal Error parsing config.jome, missing binding for "+util)
     }
+    //ctxFile.addFileImportDependency(util, binding.type, binding.file)
     conf.lexEnv.addBinding(util, binding)
   })
   return conf

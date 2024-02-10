@@ -14,6 +14,8 @@ function genCode(node) {
   return generator(node)
 }
 
+// Check env or above
+// Imports should only be inside the highest level or above (Jome config lexical environment)
 function extractImportBindingsByFile(lexEnv, acc={}) {
   Object.values(lexEnv.bindings).forEach(binding => {
     let t = binding.type
@@ -21,11 +23,25 @@ function extractImportBindingsByFile(lexEnv, acc={}) {
       acc[binding.file] = [...(acc[binding.file]||[]), binding]
     }
   })
-  lexEnv.nestedEnvs.forEach(nested => {
-    acc = extractImportBindingsByFile(nested, acc)
-  })
+  if (lexEnv.outer) {
+    acc = extractImportBindingsByFile(lexEnv.outer, acc)
+  }
   return acc
 }
+
+// Check env and nested
+// function extractImportBindingsByFile(lexEnv, acc={}) {
+//   Object.values(lexEnv.bindings).forEach(binding => {
+//     let t = binding.type
+//     if (t === 'default-import' || t === 'namespace-import' || t === 'named-import' || t === 'alias-import') {
+//       acc[binding.file] = [...(acc[binding.file]||[]), binding]
+//     }
+//   })
+//   lexEnv.nestedEnvs.forEach(nested => {
+//     acc = extractImportBindingsByFile(nested, acc)
+//   })
+//   return acc
+// }
 
 function genImportsFromBindings(ctxFile, compilerOptions) {
 

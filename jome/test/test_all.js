@@ -1,9 +1,9 @@
 const test_compiler = require("./test_compiler.js");
 const test_analyzer = require("./test_analyzer.js");
 const test_parser = require("./test_parser.js");
-const MiniSpecPkg = require("minispec");
+const j_uid_1 = require("minispec");
+const { default: MiniSpec, describe, it } = j_uid_1;
 module.exports = () => {
-  let MiniSpec = MiniSpecPkg.default;
   test_parser();
   test_compiler();
   test_analyzer();

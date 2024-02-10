@@ -1,7 +1,5 @@
 import assert from 'assert/strict'
 
-import { describe, it, context } from 'minispec'
-
 import {compileCode} from '../src/compiler.js'
 
 def compile(code)
