@@ -422,11 +422,6 @@ function applyFormat(format, operand) {
   Object.keys(forall?.imports||{}).forEach(impName => {
     let imp = forall.imports[impName]
     operand.ctxFile.addFileImportDependency(impName, imp.default ? 'default-import' : 'named-import', imp.from)
-    if (imp.default) {
-      operand.ctxFile.getFileImports(imp.from).addDefaultImport(impName)
-    } else {
-      operand.ctxFile.getFileImports(imp.from).addNamedImport(impName)
-    }
   })
   return result
 }

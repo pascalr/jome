@@ -2,69 +2,6 @@ const path = require('path')
 
 const {DEFAULT_FORALLS} = require('./forall.js')
 
-class FileImports {
-  constructor() {
-    this.filename = null
-    // A default import can be given a name, and an implicit import (by using builtin or custom tag or whatever)
-    // can give other names to the default import. List all the names used here.
-    this.defaultImportNames = []
-    // Namespace import can only be specified explicitely, so only keep one value for it.
-    this.namespaceImport = null
-    this.namedImports = new Set()
-    this.aliasesByName = {} // {originalName: ["aliasName1", "aliasName2"]}
-    // All the identifiers that design a class. They start with an ampersand &SomeClass
-    this.classIdentifiers = new Set()
-    // When a util has a dependency to an import, add it here
-    // The dependency will be renamed if the name is already used in any lexical environment
-    this.importDependenciesByFile = {} // [{type: 'named-import', name: 'foobar'}]
-  }
-
-  mergeWith(fileImports) {
-    this.filename = this.filename || fileImports.filename
-    this.defaultImportNames = [...this.defaultImportNames, ...fileImports.defaultImportNames]
-    this.namespaceImport = this.namespaceImport || fileImports.namespaceImport
-    this.namedImports = new Set([...this.namedImports, ...fileImports.namedImports])
-    Object.keys(fileImports.aliasesByName).forEach(alias => {
-      if (this.aliasesByName[alias]) {
-        this.aliasesByName[alias] = new Set([...this.aliasesByName[alias], ...fileImports.aliasesByName[alias]])
-      } else {
-        this.aliasesByName[alias] = fileImports.aliasesByName[alias]
-      }
-    })
-    this.classIdentifiers = new Set([...this.classIdentifiers, ...fileImports.classIdentifiers])
-    return this
-  }
-
-  // Extract the name and sets identifier to be a class identifier if it is the case
-  extractName(name) {
-    if (name.startsWith("&")) {
-      let n = name.slice(1)
-      this.classIdentifiers.add(n)
-      return n
-    }
-    return name
-  }
-
-  addNamedImport(name) {
-    this.namedImports.add(this.extractName(name))
-  }
-
-  addAliasImport(originalName, aliasName) {
-    this.namedImports.add(originalName)
-    let list = this.aliasesByName[originalName] || new Set()
-    list.add(aliasName)
-    this.aliasesByName[originalName] = list
-  }
-
-  addDefaultImport(name) {
-    this.defaultImportNames.push(this.extractName(name))
-  }
-
-  setNamespaceImport(name) {
-    this.namespaceImport = name
-  }
-}
-
 // The scope of the file. So it handles imports especially.
 class ContextFile {
   constructor(absPath, outerEnvironment) {
@@ -82,7 +19,6 @@ class ContextFile {
     this.compiler = null // A reference to the compiler
     this.foralls = DEFAULT_FORALLS
     this.errors = [] // A list of errors found when analyzing
-    this.fileImportsByFile = {}
     this.fileImportDependenciesByFile = {}
   }
 
@@ -92,19 +28,6 @@ class ContextFile {
 
   addForall(name, chainFuncs, wrapFuncs) {
     this.foralls[name] = {chain: chainFuncs, wrap: wrapFuncs}
-  }
-
-  getFileImports(filename) {
-    if (!this.fileImportsByFile[filename]) {
-      this.fileImportsByFile[filename] = new FileImports()
-    }
-    return this.fileImportsByFile[filename]
-  }
-
-  addFileImports(fileImports) {
-    let previous = this.getFileImports(fileImports.filename)
-    this.fileImportsByFile[fileImports.filename] = previous.mergeWith(fileImports)
-    this.classIdentifiers = new Set([...this.classIdentifiers, ...fileImports.classIdentifiers])
   }
 
   addDependency(filename) {
@@ -185,5 +108,4 @@ class LexicalEnvironment {
 module.exports = {
   LexicalEnvironment,
   ContextFile,
-  FileImports
 }
