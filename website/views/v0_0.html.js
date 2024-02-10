@@ -1906,7 +1906,7 @@ module.exports = () => {
   Goodies / Syntaxic sugar:
   - [Arrow getter](#arrow-getter) - Allows to save keystrokes and is easier to type. ex: obj->keys => Object.keys(obj)
   - Optional let - Not sure about that one...
-  - [Verbatim string literals](#verbatim) - @\\\`This is a string that does \${not} interpolate\\\`
+  - [Verbatim string literals](#verbatim) - @\`This is a string that does \${not} interpolate\`
   - [Units](#units) - You can add units to numbers. ex: "density = 105g / 98mL"
   - [Hyphen](#hyphens) - You can use hyphens in variable names like left-panel. The minus operator should always be surrounded by spaces.
 

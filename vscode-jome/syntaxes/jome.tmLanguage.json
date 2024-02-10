@@ -51,7 +51,7 @@
             },
             {
               "name": "meta.namespace-import.jome",
-              "match": "(\\*) (as) ([A-Za-z_$]\\w*)",
+              "match": "(\\*) (as) (&?[A-Za-z_$]\\w*)",
               "captures": {
                 "1": {
                   "name": "constant.language.import-export-all.jome"
@@ -60,7 +60,12 @@
                   "name": "keyword.control.jome"
                 },
                 "3": {
-                  "name": "variable.other.namespace-import.jome"
+                  "name": "variable.other.namespace-import.jome",
+                  "patterns": [
+                    {
+                      "include": "#import-identifier"
+                    }
+                  ]
                 }
               }
             },
@@ -427,7 +432,7 @@
     },
     "def": {
       "name": "meta.def.jome",
-      "begin": "\\s*\\b(def)\\s*([A-Za-z_$]\\w*)?\\b\\s*",
+      "begin": "\\b(def)\\s*([A-Za-z_$]\\w*)?\\b\\s*",
       "beginCaptures": {
         "1": {
           "name": "keyword.control.jome"

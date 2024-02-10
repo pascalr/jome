@@ -638,6 +638,7 @@ const CODE_GENERATORS = {
     if (p[0] === '/') {
       return `"${p}"`
     }
+    node.ctxFile.addFileImportDependency('path', 'namespace-import', 'path')
     if (p.startsWith('cwd/')) {
       return `path.resolve("./${p.slice(4)}")`
     }

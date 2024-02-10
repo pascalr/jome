@@ -1,3 +1,4 @@
+const path = require("path");
 const { compile, build } = require("@jome/core");
 const fs = require("fs");
 module.exports = (f) => {

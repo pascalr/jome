@@ -95,11 +95,14 @@ let grammar = {
             { match: "\\s+" },
             {
               name: "meta.namespace-import.jome",
-              match: `(\\*) (as) (${REGEX_VARIABLE})`,
+              match: `(\\*) (as) (&?${REGEX_VARIABLE})`,
               captures: {
                 1: { name: "constant.language.import-export-all.jome" },
                 2: { name: "keyword.control.jome" },
-                3: { name: "variable.other.namespace-import.jome" }
+                3: {
+                  name: "variable.other.namespace-import.jome",
+                  patterns: [{ include: "#import-identifier" }]
+                }
               }
             },
             {

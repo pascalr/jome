@@ -395,6 +395,13 @@ const ANALYZERS = {
     ensureStartRaw(node, 'import')
     ensureStartType(node, 'keyword.control.jome')
 
+    let getName = (name) => {
+      if (name[0] === "&") {
+        node.ctxFile.classIdentifiers.add(name.slice(1))
+      }
+      return (name[0] === "&") ? name.slice(1) : name
+    }
+
     let bindings = []
     let filename;
     let list = filterStrings(node.parts.slice(1)) // remove import keyword
@@ -402,12 +409,12 @@ const ANALYZERS = {
       if (item.type === 'meta.named-imports.jome') {
         filterCommas(filterSpaces(item.parts)).forEach(namedImport => {
           if (namedImport.type === 'variable.other.named-import.jome') {
-            bindings.push({name: namedImport.raw, type: 'named-import'})
+            bindings.push({name: getName(namedImport.raw), type: 'named-import'})
           } else if (namedImport.type === 'meta.import-alias.jome') {
             let original = namedImport.parts[0].raw
             let name = namedImport.parts[2].raw
             //fileImports.addAliasImport(namedImport.parts[0].raw, namedImport.parts[2].raw)
-            bindings.push({name, type: 'alias-import', original})
+            bindings.push({name: getName(name), type: 'alias-import', original})
           } else {
             throw new Error("sfj9234hr9h239rhrf923h3r")
           }
@@ -419,9 +426,9 @@ const ANALYZERS = {
         let cs = filterSpaces(item.parts)
         filename = cs[cs.length-1].raw.slice(1,-1)
       } else if (item.type === 'variable.other.default-import.jome') {
-        bindings.push({name: item.raw, type: 'default-import'})
+        bindings.push({name: getName(item.raw), type: 'default-import'})
       } else if (item.type === 'meta.namespace-import.jome') {
-        bindings.push({name: item.parts[2].raw, type: 'namespace-import'})
+        bindings.push({name: getName(item.parts[2].raw), type: 'namespace-import'})
       } else {
         throw new Error("Error 234j90s7adfg1")
       }

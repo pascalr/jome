@@ -1,4 +1,4 @@
-import &Webpage from '../src/webpage.jomm'
+import * as &Webpage from '../src/webpage.jomm'
 
 // I don't understand how highlight.js is supposed to detected nested languages...
 // So let's do it separately for now.

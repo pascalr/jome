@@ -11,7 +11,8 @@ function _run(node, sync, args) {
       throw new Error('Cannot run file without .jome extension. Was: '+filepath);
     }
     let jsFile = filepath.slice(0,-5)+'.js' // remove .jome and replace extension with js
-    node.ctxFile.addImport(name, null, jsFile)
+    node.ctxFile.addFileImportDependency(name, 'namespace-import', jsFile)
+    // node.ctxFile.addImport(name, null, jsFile)
     let str = `${name}(${args.slice(1).join(', ')})`
     return sync ? `await ${str}` : `${str}`
     // TODO: Pass the rest of the args too into the function call
@@ -53,19 +54,23 @@ const UTILS = {
   //   return `argv()`
   // },
   write: (node, args) => {
-    node.ctxFile.addImport(null, ['write'], '@jome/core')
+    node.ctxFile.addFileImportDependency('write', 'named-import', '@jome/core')
+    // node.ctxFile.addImport(null, ['write'], '@jome/core')
     return `write(${(args).join(', ')})`
   },
   "write!": (node, args) => {
-    node.ctxFile.addImport(null, ['writeSync'], '@jome/core')
+    node.ctxFile.addFileImportDependency('writeSync', 'named-import', '@jome/core')
+    // node.ctxFile.addImport(null, ['writeSync'], '@jome/core')
     return `writeSync(${(args).join(', ')})`
   },
   cp: (node, args) => {
-    node.ctxFile.addImport('fs', null, 'fs')
+    node.ctxFile.addFileImportDependency('fs', 'namespace-import', 'fs')
+    // node.ctxFile.addImport('fs', null, 'fs')
     return `fs.copyFile(${(args).join(', ')})`
   },
   "cp!": (node, args) => {
-    node.ctxFile.addImport('fs', null, 'fs')
+    node.ctxFile.addFileImportDependency('fs', 'namespace-import', 'fs')
+    // node.ctxFile.addImport('fs', null, 'fs')
     return `fs.copyFileSync(${(args).join(', ')})`
   },
   run: (node, args) => _run(node, false, args),
@@ -74,20 +79,24 @@ const UTILS = {
   "load!": (node, args) => _run(node, true, args),
   // TODO: build!
   build: (node, args) => {
-    node.ctxFile.addImport(null, ['build'], '@jome/core')
+    node.ctxFile.addFileImportDependency('build', 'named-import', '@jome/core')
+    // node.ctxFile.addImport(null, ['build'], '@jome/core')
     return `build(${(args).join(', ')})`
   },
   // TODO: compile!
   compile: (node, args) => {
-    node.ctxFile.addImport(null, ['compile'], '@jome/core')
+    node.ctxFile.addFileImportDependency('compile', 'named-import', '@jome/core')
+    // node.ctxFile.addImport(null, ['compile'], '@jome/core')
     return `compile(${(args).join(', ')})`
   },
   mdToHtml: (node, args) => {
-    node.ctxFile.addImport('mdToHtml', null, '@jome/md-to-html')
+    node.ctxFile.addFileImportDependency('mdToHtml', 'namespace-import', '@jome/md-to-html')
+    // node.ctxFile.addImport('mdToHtml', null, '@jome/md-to-html')
     return `mdToHtml(${(args).join(', ')})`
   },
   execSh: (node, args) => {
-    node.ctxFile.addImport(null, ['execSh'], '@jome/core')
+    node.ctxFile.addFileImportDependency('execSh', 'named-import', '@jome/core')
+    // node.ctxFile.addImport(null, ['execSh'], '@jome/core')
     return `execSh(${(args).join(', ')})`
   },
 }

@@ -49,6 +49,8 @@ end
 
 
 
+// TODO: Test import with ampersand to mean class import
+
 describe "Imports" do
   it 'Default import Jome file' do
     assert.match(compile(`import execute from "execute.jome"`), /const execute = require\("execute.js"\)/);

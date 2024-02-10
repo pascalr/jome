@@ -1,100 +1,100 @@
-import {write, writeSync, build, compile, execSh} from '@jome/core'
-import mdToHtml from '@jome/md-to-html'
-import fs from 'fs'
+// import {write, writeSync, build, compile, execSh} from '@jome/core'
+// import mdToHtml from '@jome/md-to-html'
+// import fs from 'fs'
 
-/*
-Dans config.jome, définir tout ce qui est réutiliser par tous les fichiers .jome du dossier.
+// /*
+// Dans config.jome, définir tout ce qui est réutiliser par tous les fichiers .jome du dossier.
 
-Mettre le format pour les strings multiligne de base
-
-
-
-Mettre l'interpreteur de base pour les scripts utilisé
-
-Permettre d'importer des fonctions aussi pour pouvoir les utiliser avec le use et spécifier c'est de quel fonction il s'agit.
-*/
-
-// $URL = '/jome'
-
-/*
-This is where you would define units too
-*/
-
-/*
-Pour ou contre séparer config.jome avec index.jome?
-
-Pour séparer:
-config.jome retourne un objet javascript, avec des paramètres, index.jome retournerait une valeur à stdout ou autre comme un autre executable?
-use dans config.jome aurait un usage global spécial, dans index.jome ça serait local comme ailleurs
-quand tu arrives dans un nouveau projet, tu regardes index.jome pour voir si qu'il y a, tu t'en fou au début des configs
-
-Pour mettre ensemble:
-ça ferais 1 fichier au lieu de 2 fichiers
-quand tu fais jome, ça regarde le config.jome le plus près, quand tu compiles un fichier, ça regarde config.jome le plus près?
-c'est quoi le fichier maitre? C'est index.jome. config.jome doit être dans le même dossier que index.jome pour être utilisé
-*/
-
-// TODO: Allow two types of transform formating, before interpolation or after.
-// Let's say for markdown, you could insert markdown content into the string, or you could insert html content.
-// It would be nice if you can format the
-// %>func means apply the function to the whole string
-// %<func means apply the function to ??? Wait this does not make any sense
-// What I need is a different syntax for the interpolation <%= someVar %> // means insert it in the string, than transform it all
-// I need something like <%& someVar %> // means take everything before this and transform it, add it to this, and add it to everything after and transform it.
-// This would be the equivalent of doing this for md: </md>+someVar+<md>
+// Mettre le format pour les strings multiligne de base
 
 
 
-// TODO: Remove forall, simply config here
+// Mettre l'interpreteur de base pour les scripts utilisé
 
-// Chain are functions here
-// Wrap are strings. They will be functions in the files using the tag.
-// TODO: Spellcheck
-return {
-  compiler: {
-    semicolons: true
-  },
-  tags: {
-    "jome-ex": {
-      wrap: "printExample"
-    }
-    "ex.jome": {
-      chain: [indent, trim]
-      wrap: "highlight"
-    }
-    "fr*": {
-      spellcheck: "fr"
-    }
-  },
-  utils: {
-    "#log": console.log,
-    "#keys": Object.keys,
-    "#values": Object.values,
-    "#entries": Object.entries,
-    "#PI": Math.PI,
-    "#argv": process.argv,
-    "#write": write,
-    "#writeSync": writeSync,
-    "#build": build,
-    "#compile": compile,
-    "#cp": fs.copyFile,
-    "#cp!": fs.copyFileSync,
-    "#mdToHtml": fs.copyFileSync,
-    "#execSh": execSh,
-  }
-}
+// Permettre d'importer des fonctions aussi pour pouvoir les utiliser avec le use et spécifier c'est de quel fonction il s'agit.
+// */
 
-//   // FIXME: Ensures has one and only one arg
-//   trim: (node, args) => {handleTrim('trim', args)},
-//   strim: (node, args) => {handleTrim('trimStart', args)},
-//   trimStart: (node, args) => {handleTrim('trimStart', args)},
-//   etrim: (node, args) => {handleTrim('trimEnd', args)},
-//   trimEnd: (node, args) => {handleTrim('trimEnd', args)},
-//   // argv: (node) => {
-//   //   node.ctxFile.addImport('argv', null, 'jome-lib/argv')
-//   //   return `argv()`
-//   // },
-//   run: (node, args) => _run(node, false, args),
-//   "run!": (node, args) => _run(node, true, args),
-//   load: (node, args) => _run(node, false, args),
-//   "load!": (node, args) => _run(node, true, args),
+// // $URL = '/jome'
+
+// /*
+// This is where you would define units too
+// */
+
+// /*
+// Pour ou contre séparer config.jome avec index.jome?
+
+// Pour séparer:
+// config.jome retourne un objet javascript, avec des paramètres, index.jome retournerait une valeur à stdout ou autre comme un autre executable?
+// use dans config.jome aurait un usage global spécial, dans index.jome ça serait local comme ailleurs
+// quand tu arrives dans un nouveau projet, tu regardes index.jome pour voir si qu'il y a, tu t'en fou au début des configs
+
+// Pour mettre ensemble:
+// ça ferais 1 fichier au lieu de 2 fichiers
+// quand tu fais jome, ça regarde le config.jome le plus près, quand tu compiles un fichier, ça regarde config.jome le plus près?
+// c'est quoi le fichier maitre? C'est index.jome. config.jome doit être dans le même dossier que index.jome pour être utilisé
+// */
+
+// // TODO: Allow two types of transform formating, before interpolation or after.
+// // Let's say for markdown, you could insert markdown content into the string, or you could insert html content.
+// // It would be nice if you can format the
+// // %>func means apply the function to the whole string
+// // %<func means apply the function to ??? Wait this does not make any sense
+// // What I need is a different syntax for the interpolation <%= someVar %> // means insert it in the string, than transform it all
+// // I need something like <%& someVar %> // means take everything before this and transform it, add it to this, and add it to everything after and transform it.
+// // This would be the equivalent of doing this for md: </md>+someVar+<md>
+
+
+
+// // TODO: Remove forall, simply config here
+
+// // Chain are functions here
+// // Wrap are strings. They will be functions in the files using the tag.
+// // TODO: Spellcheck
+// return {
+//   compiler: {
+//     semicolons: true
+//   },
+//   tags: {
+//     "jome-ex": {
+//       wrap: "printExample"
+//     }
+//     "ex.jome": {
+//       chain: [indent, trim]
+//       wrap: "highlight"
+//     }
+//     "fr*": {
+//       spellcheck: "fr"
+//     }
+//   },
+//   utils: {
+//     "#log": console.log,
+//     "#keys": Object.keys,
+//     "#values": Object.values,
+//     "#entries": Object.entries,
+//     "#PI": Math.PI,
+//     "#argv": process.argv,
+//     "#write": write,
+//     "#writeSync": writeSync,
+//     "#build": build,
+//     "#compile": compile,
+//     "#cp": fs.copyFile,
+//     "#cp!": fs.copyFileSync,
+//     "#mdToHtml": fs.copyFileSync,
+//     "#execSh": execSh,
+//   }
+// }
+
+// //   // FIXME: Ensures has one and only one arg
+// //   trim: (node, args) => {handleTrim('trim', args)},
+// //   strim: (node, args) => {handleTrim('trimStart', args)},
+// //   trimStart: (node, args) => {handleTrim('trimStart', args)},
+// //   etrim: (node, args) => {handleTrim('trimEnd', args)},
+// //   trimEnd: (node, args) => {handleTrim('trimEnd', args)},
+// //   // argv: (node) => {
+// //   //   node.ctxFile.addImport('argv', null, 'jome-lib/argv')
+// //   //   return `argv()`
+// //   // },
+// //   run: (node, args) => _run(node, false, args),
+// //   "run!": (node, args) => _run(node, true, args),
+// //   load: (node, args) => _run(node, false, args),
+// //   "load!": (node, args) => _run(node, true, args),

@@ -1,6 +1,7 @@
-const { trim, indent } = require("@jome/core");
-const hljs = require("highlightjs-jome");
+const j_uid_1 = require("highlightjs-jome");
+const hljs = j_uid_1.default;
 const Webpage = require("../src/webpage.js");
+const { trim, indent } = require("@jome/core");
 const mdToHtml = require("@jome/md-to-html");
 module.exports = () => {
   function printExample(result) {
@@ -21,7 +22,7 @@ module.exports = () => {
   function tabbedContent(contentByTitle) {
     let titles = Object.keys(contentByTitle)
       .map((title) => `<div>${title}</div>`)
-      .join("");
+      .join("\n");
     let contents = Object.values(contentByTitle).map(
       (content) => `<div>${content}</div>`,
     )[0];

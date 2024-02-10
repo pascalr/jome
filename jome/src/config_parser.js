@@ -14,7 +14,7 @@ function parseConfig(absPath) {
   let lexEnv = ctxFile.lexEnv
   let configReturn = eval(result)()
   let conf = new JomeConfig()
-  Object.keys(configReturn.utils||{}).forEach(util => {
+  Object.keys(configReturn?.utils||{}).forEach(util => {
     let binding = lexEnv.bindings[util]
     if (!binding) {
       throw new Error("Internal Error parsing config.jome, missing binding for "+util)

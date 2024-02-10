@@ -1,6 +1,6 @@
-const { trim, flat } = require("@jome/core");
 const build = require("./build.js");
 const server = require("./server.js");
+const { trim, flat } = require("@jome/core");
 const execSh = require("@jome/core/execSh");
 module.exports = (cmd, args) => {
   global.ROOT = "/jome";
