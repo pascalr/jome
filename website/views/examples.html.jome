@@ -2,7 +2,7 @@
 //<jome-ex>#log "Hello, world!"</jome-ex>
 
 import hljs from 'highlightjs-jome'
-import * as &Webpage from '../src/webpage.jomm'
+import &Webpage : '../src/webpage.jomm'
 import {trim, indent} from '@jome/core'
 
 // TODO: forall div chain asIs end

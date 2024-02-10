@@ -1,5 +1,5 @@
-import build from './build.jome'
-import server from './server.jome'
+import build : './build.jome'
+import server : './server.jome'
 
 import {trim, flat} from '@jome/core'
 

@@ -1,4 +1,4 @@
-import * as &Webpage from '../src/webpage.jomm'
+import &Webpage : '../src/webpage.jomm'
 
 let content = <md>
   # Formats
