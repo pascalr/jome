@@ -1,6 +1,6 @@
 const { parse } = require("./parser")
 const { tokenize } = require('./tokenizer.js')
-const { genCode, genImports } = require("./code_generator.js")
+const { genCode, genImports, genImportsFromBindings } = require("./code_generator.js")
 const { analyzeNodes } = require("./analyzer")
 const { ContextFile } = require("./context.js")
 const prettier = require("@prettier/sync")
@@ -93,7 +93,7 @@ class Compiler {
 
     if (this.filesCompiled.has(absPath)) {
       console.log('Skipping compiling file', absPath, 'because it is already compiled.')
-      return; // Skip files already compiled
+      return {}; // Skip files already compiled
     }
     if (!fs.existsSync(absPath)) {
       throw new Error("Can't compile and save missing file " + absPath)
@@ -173,6 +173,7 @@ class Compiler {
         body = `export default ((${args}) => {${body}})`
       }
     }
+    //let head = genImportsFromBindings(ctxFile, opts)
     let head = genImports(ctxFile, opts)
     let generated = head + body
     if (opts.prettier) {

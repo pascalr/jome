@@ -14,6 +14,66 @@ function genCode(node) {
   return generator(node)
 }
 
+function extractImportBindingsByFile(lexEnv, acc={}) {
+  Object.values(lexEnv.bindings).forEach(binding => {
+    if (binding.type === 'default-import' || binding.type === 'namespace-import' || binding.type === 'named-import') {
+      acc[binding.file] = [...(acc[binding.file]||[]), binding]
+    }
+  })
+  lexEnv.nestedEnvs.forEach(nested => {
+    acc = extractImportBindingsByFile(nested, acc)
+  })
+  return acc
+}
+
+function genImportsFromBindings(ctxFile, compilerOptions) {
+  let bindingsByFile = extractImportBindingsByFile(ctxFile.lexEnv)
+  let files = Object.keys(bindingsByFile)
+  let result = ""
+  files.forEach(file => {
+    let jsfile = file
+    if (file.endsWith('.jomm') || file.endsWith('.jome')) {
+      ctxFile.addDependency(file)
+      jsfile = file.slice(0,-5)+'.js' // remove .jome and replace extension with js
+    }
+    let bindings = bindingsByFile[file]
+    let def = bindings.filter(b => b.type === 'default-import')[0]
+    // TODO: Support multiple default import names
+    // Just declare a variable right under with the different default import name
+    let named = bindings.filter(b => b.type === 'named-import')
+    // TODO: aliases
+    // if (Object.keys(fileImports.aliasesByName).length) {
+    //   let join = compilerOptions.useCommonJS ? ': ' : ' as '
+    //   named = named.map(n => {
+    //     let alias = [...(fileImports.aliasesByName[n]||[])][0]
+    //     // TODO: Support multiple aliases
+    //     return alias ? `${n}${join}${alias}` : n
+    //   })
+    // }
+    let namespace = bindings.filter(b => b.type === 'namespace-import')[0]
+    if (compilerOptions.useCommonJS) {
+      if (namespace) {
+        let uid = ctxFile.uid()
+        result += `const ${uid} = require("${jsfile}");\nconst {default: ${def || ctxFile.uid()}, ...${namespace}} = ${uid};\n`
+      } else if (def && named && named.length) {
+        let uid = ctxFile.uid()
+        result += `const ${uid} = require("${jsfile}");\nconst {default: ${def}, ${[...named].join(', ')}} = ${uid};\n`
+      } else if (def) {
+        result += `const ${def} = require("${jsfile}");\n`
+      } else {
+        result += `const {${[...named].join(', ')}} = require("${jsfile}");\n`
+      }
+    } else {
+      if (def) {
+        result += `import ${def} from "${jsfile}";\n`
+      } else {
+        result += `import {${[...named].join(', ')}} from "${jsfile}";\n`
+      }
+    }
+  })
+  return result
+}
+
 function genImports(ctxFile, compilerOptions) {
   let result = ""
   let files = Object.keys(ctxFile.fileImportsByFile)
@@ -700,6 +760,7 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
 }
 
 module.exports = {
+  genImportsFromBindings,
   genImports,
   genCode
 }

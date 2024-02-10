@@ -121,7 +121,9 @@ class LexicalEnvironment {
   constructor(outerEnvironment = null) {
     this.bindings = {};
     this.bindingsUsed = new Set()
+    this.nestedEnvs = []
     this.outer = outerEnvironment;
+    if (this.outer) {this.outer.nestedEnvs.push(this)}
   }
 
   useBinding(name) {
@@ -140,7 +142,7 @@ class LexicalEnvironment {
 
   // Method to add variable bindings to the environment
   addBinding(name, value) {
-    this.bindings[name] = value;
+    this.bindings[name] = {...value, name};
   }
 
   // Check if the variable is already declared.
