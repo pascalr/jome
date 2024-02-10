@@ -1002,6 +1002,28 @@ module.exports = () => {
 
   FIXMEEEEEEEEEEEEeee: Remove everything I created about the main keyword. Let's use export default instead.
 
+  I want to be more explicit.
+
+  import foo from 'bar'
+
+  Does it mean import the default, or it means import all of it? Logically it's the default only.
+
+  But let's say I export using cjs. I export only a function of a class. I don't want to have to do
+  import * as foo from 'bar'
+
+  Alternatives?
+
+  import as foo from 'bar'
+  const foo = require('bar')
+  require foo from 'bar'
+  import 'bar' in foo
+  import 'bar' as foo
+
+  I like:
+  \`\`\`jome
+  import 'bar' as foo
+  \`\`\`
+
   ### Functions
 
   \`\`\`jome

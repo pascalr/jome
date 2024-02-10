@@ -763,6 +763,20 @@ end
 </code></pre>
 <p>Use <code>export default</code> works too.</p>
 <p>FIXMEEEEEEEEEEEEeee: Remove everything I created about the main keyword. Let's use export default instead.</p>
+<p>I want to be more explicit.</p>
+<p>import foo from 'bar'</p>
+<p>Does it mean import the default, or it means import all of it? Logically it's the default only.</p>
+<p>But let's say I export using cjs. I export only a function of a class. I don't want to have to do
+import * as foo from 'bar'</p>
+<p>Alternatives?</p>
+<p>import as foo from 'bar'
+const foo = require('bar')
+require foo from 'bar'
+import 'bar' in foo
+import 'bar' as foo</p>
+<p>I like:</p>
+<pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;bar&#x27;</span> <span class="hljs-variable">as</span> <span class="hljs-variable">foo</span>
+</code></pre>
 <h3>Functions</h3>
 <pre><code class="language-jome"><span class="hljs-comment">// Utilise la syntaxe comme ruby</span>
 <span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span>
