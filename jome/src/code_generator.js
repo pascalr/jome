@@ -159,7 +159,7 @@ function compileMethod(node) {
 
 // A def outside a class
 function compileDefFunction(node) {
-  let name = node.parts[1].raw
+  let {name} = node.data
   let cs = node.parts.slice(2,-1) // Remove keywords def, end, and function name
   let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
   if (args) {

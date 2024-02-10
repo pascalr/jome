@@ -14,7 +14,7 @@ const REGEX_PRIMITIVE_TYPE = "\\b(?:int|string|bool|float)\\b(?:\\[\\])*" // FIX
 
 const REGEX_TYPE = "[A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*" // FIXME: Accents
 
-// [^\S\n]* => means a whitespace character except newline
+const LOOKBEHIND_DECLARATION = "(?<=\n|^|;)\\s*"
 const LOOKAHEAD_DECLARATION = "\\s*(?=\n|$|;|=)"
 
 // // If the regex containing this regex has no group, then group number is 1.
@@ -292,7 +292,7 @@ let grammar = {
       patterns: [
         {
           name: "meta.declaration.typed.jome",
-          match: `(${REGEX_PRIMITIVE_TYPE})\\s+(${REGEX_VARIABLE})${LOOKAHEAD_DECLARATION}`,
+          match: `${LOOKBEHIND_DECLARATION}(${REGEX_PRIMITIVE_TYPE})\\s+(${REGEX_VARIABLE})${LOOKAHEAD_DECLARATION}`,
           captures: {
             1: { name: "storage.type.primitive.jome" },
             2: { name: "variable.other.jome" }
@@ -300,7 +300,7 @@ let grammar = {
         },
         {
           name: "meta.declaration.jome",
-          match: `\\b(let|var)\\b\\s*(${REGEX_VARIABLE})?${LOOKAHEAD_DECLARATION}`,
+          match: `${LOOKBEHIND_DECLARATION}\\b(let|var)\\b\\s*(${REGEX_VARIABLE})?${LOOKAHEAD_DECLARATION}`,
           captures: {
             1: { name: "keyword.control.declaration.jome" },
             2: { name: "variable.other.jome" }
@@ -308,7 +308,7 @@ let grammar = {
         },
         {
           name: "meta.declaration.typed.jome",
-          match: `(${REGEX_TYPE})\\s+(${REGEX_VARIABLE})${LOOKAHEAD_DECLARATION}`,
+          match: `${LOOKBEHIND_DECLARATION}(${REGEX_TYPE})\\s+(${REGEX_VARIABLE})${LOOKAHEAD_DECLARATION}`,
           captures: {
             1: { name: "storage.type.jome" },
             2: { name: "variable.other.jome" }
@@ -318,7 +318,7 @@ let grammar = {
     },
     def: {
       name: "meta.def.jome",
-      begin: `\\b(def)\\s*(${REGEX_VARIABLE})?\\b\\s*`,
+      begin: `\\s*\\b(def)\\s*(${REGEX_VARIABLE})?\\b\\s*`,
       beginCaptures: {
         1: { name: "keyword.control.jome" },
         2: { name: "entity.name.function.jome" }

@@ -53,7 +53,7 @@ module.exports = () => {
       let list = parse(tokenize("let x; let y").children);
       assert.equal(list?.length, 3);
       assert.equal(list[0]?.raw, "let x");
-      assert.equal(list[2]?.raw, "let y");
+      assert.match(list[2]?.raw, /let y/);
     });
 
     it("[1][0]", function () {

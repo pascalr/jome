@@ -401,7 +401,7 @@
       "patterns": [
         {
           "name": "meta.declaration.typed.jome",
-          "match": "(\\b(?:int|string|bool|float)\\b(?:\\[\\])*)\\s+([A-Za-z_$]\\w*)\\s*(?=\n|$|;|=)",
+          "match": "(?<=\n|^|;)\\s*(\\b(?:int|string|bool|float)\\b(?:\\[\\])*)\\s+([A-Za-z_$]\\w*)\\s*(?=\n|$|;|=)",
           "captures": {
             "1": {
               "name": "storage.type.primitive.jome"
@@ -413,7 +413,7 @@
         },
         {
           "name": "meta.declaration.jome",
-          "match": "\\b(let|var)\\b\\s*([A-Za-z_$]\\w*)?\\s*(?=\n|$|;|=)",
+          "match": "(?<=\n|^|;)\\s*\\b(let|var)\\b\\s*([A-Za-z_$]\\w*)?\\s*(?=\n|$|;|=)",
           "captures": {
             "1": {
               "name": "keyword.control.declaration.jome"
@@ -425,7 +425,7 @@
         },
         {
           "name": "meta.declaration.typed.jome",
-          "match": "([A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*)\\s+([A-Za-z_$]\\w*)\\s*(?=\n|$|;|=)",
+          "match": "(?<=\n|^|;)\\s*([A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*)\\s+([A-Za-z_$]\\w*)\\s*(?=\n|$|;|=)",
           "captures": {
             "1": {
               "name": "storage.type.jome"
@@ -439,7 +439,7 @@
     },
     "def": {
       "name": "meta.def.jome",
-      "begin": "\\b(def)\\s*([A-Za-z_$]\\w*)?\\b\\s*",
+      "begin": "\\s*\\b(def)\\s*([A-Za-z_$]\\w*)?\\b\\s*",
       "beginCaptures": {
         "1": {
           "name": "keyword.control.jome"

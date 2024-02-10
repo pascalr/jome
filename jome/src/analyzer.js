@@ -222,7 +222,7 @@ const ANALYZERS = {
   // let foo
   // var bar
   'meta.declaration.jome': (node) => {
-    let keyword = node.parts[0].raw
+    let keyword = node.parts[0].raw.trimLeft()
     if (node.parts.length !== 2) {
       return pushError(node, "Missing variable name after keyword "+keyword)
     }
@@ -235,7 +235,7 @@ const ANALYZERS = {
       return "Internal error. meta.do-end.jome should always start with keyword do"
     }
     if (node.parts[node.parts.length-1].raw !== 'end') {
-      return "Internal error. meta.def.jome should always end with keyword end"
+      return "Internal error. meta.do-end.jome should always end with keyword end"
     }
     // Arguments, if present, should always be right after the function name
     if (node.parts.slice(2,-1).find(c => c.type === 'meta.args.jome')) {
@@ -257,6 +257,9 @@ const ANALYZERS = {
     if (node.parts.slice(3,-1).find(c => c.type === 'meta.args.jome')) {
       return pushError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
     }
+    let name = node.parts[1].raw
+    node.lexEnv.addBinding(name, {type: 'def'})
+    node.data = {name}
   },
   // js uses more specifically:
   // keyword.operator.arithmetic.jome

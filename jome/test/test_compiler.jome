@@ -192,6 +192,7 @@ end
 
 
 
+
 describe "Test class" do
   it 'Class with one method' do
     assert.match(compile(`
