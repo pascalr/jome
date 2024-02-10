@@ -30,3 +30,5 @@ describe "Declaration should add to the lexical environment" do
     // assert.true(ctxFile.lexEnv.hasBinding("add"))
   end
 end
+
+def add(x, y) return x + y end

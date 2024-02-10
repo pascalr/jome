@@ -224,7 +224,9 @@ const PRECEDENCES = {
   'keyword.operator.assignment.jome': 250,
   // Assigment and dictionary key have the same precedence. (They should never be used together)
   'meta.dictionary-key.jome': 250,
-  // Assignment is higher than inline conditional: x = 10 if true
+  // Assignment is higher than return: return x = 10
+  'keyword.control.return.jome': 225,
+  // Return is higher than inline conditional: return 10 if true
   'keyword.control.inline-conditional.jome': 200,
 }
 
