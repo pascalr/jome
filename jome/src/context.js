@@ -83,6 +83,11 @@ class ContextFile {
     this.foralls = DEFAULT_FORALLS
     this.errors = [] // A list of errors found when analyzing
     this.fileImportsByFile = {}
+    this.fileImportDependenciesByFile = {}
+  }
+
+  addFileImportDependency(name, type, file) {
+    this.fileImportDependenciesByFile[file] = [...(this.fileImportDependenciesByFile[file]||[]), {name, type}]
   }
 
   addForall(name, chainFuncs, wrapFuncs) {

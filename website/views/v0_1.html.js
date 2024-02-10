@@ -288,9 +288,13 @@ module.exports = () => {
   # Second line of same documentation comment.
   # @returns Some value
   with
-    str: string # Documentation comment that describes what this argument is
-    nb: number # A multiline description
-    # of the arg nb goes below not above
+    string str # Documentation comment that describes what this argument is
+    number nb # A multiline description
+    # can continue under
+
+    # A multiline description
+    # of the arg total
+    float total
   def someFunc
     /* TODO: implement this function */
   end

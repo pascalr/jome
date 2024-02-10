@@ -28,6 +28,21 @@ function extractImportBindingsByFile(lexEnv, acc={}) {
 }
 
 function genImportsFromBindings(ctxFile, compilerOptions) {
+
+  // First add the bindings for all the file imports dependencies
+  // TODO: Check if the name is already used and rename the import of required
+  // FIXME: How does it work for code already generated???
+  // This will have to be done in the analyze step so it can be done properly in the compile step!
+  Object.keys(ctxFile.fileImportDependenciesByFile).forEach(file => {
+    let imports = ctxFile.fileImportDependenciesByFile[file]
+    ;(imports||[]).forEach(imp => {
+      ctxFile.lexEnv.addBinding(imp.name, {...imp, file})
+    })
+  })
+
+
+
+
   let bindingsByFile = extractImportBindingsByFile(ctxFile.lexEnv)
   let files = Object.keys(bindingsByFile)
   let result = ""
@@ -457,6 +472,7 @@ function applyFormat(format, operand) {
   })
   Object.keys(forall?.imports||{}).forEach(impName => {
     let imp = forall.imports[impName]
+    operand.ctxFile.addFileImportDependency(impName, imp.default ? 'default-import' : 'named-import', imp.from)
     if (imp.default) {
       operand.ctxFile.getFileImports(imp.from).addDefaultImport(impName)
     } else {
