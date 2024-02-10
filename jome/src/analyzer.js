@@ -431,6 +431,10 @@ const ANALYZERS = {
       node.lexEnv.addBinding(namedImport, {type: 'named-import', file: fileImports.filename})
     })
 
+    if (!fileImports.filename) {
+      return pushError(node, "Missing filename in import statement.")
+    }
+
     // let relPath = getRelativePath(file, ctx)
     // let ext = path.extname(relPath)
     // if (ext === '.jome') {
