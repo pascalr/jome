@@ -1,7 +1,7 @@
 import { describe, it } from 'minispec'
 
 return {
-  globals: {
+  utils: {
     "describe": describe,
     "it": it,
   }
