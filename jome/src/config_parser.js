@@ -10,7 +10,8 @@ class JomeConfig {
 
 function parseConfig(absPath) {
   let {result, ctxFile} = compileFileGetCtx(absPath)
-  return {}
+  let conf = new JomeConfig()
+  return conf
 }
 
 module.exports = {
