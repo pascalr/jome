@@ -73,7 +73,7 @@ class ContextFile {
     this.defaultImportsByFile = {}
     this.namespaceImportsByFile = {}
     this.classIdentifiers = new Set() // The list of identifiers that refer to a class name
-    this.dependencies = [] // Files that need to be compiled too for this file to run
+    this.dependencies = new Set() // Files that need to be compiled too for this file to run
     this.fileArguments = [] // A list of Argument
     this.currentArguments = null // The arguments defined just before classes and functions
     this.compiler = null // A reference to the compiler
@@ -100,12 +100,12 @@ class ContextFile {
   }
 
   addDependency(filename) {
-    this.dependencies.push(filename)
+    this.dependencies.add(filename)
   }
 
   // Returns abs paths
   getDependencies() {
-    return this.dependencies.map(dep => {
+    return [...this.dependencies].map(dep => {
       return path.resolve(this.absPath, '..', dep)
     })
   }

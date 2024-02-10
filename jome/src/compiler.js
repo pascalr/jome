@@ -129,6 +129,8 @@ class Compiler {
     // Read the contents of the file synchronously
     const data = fs.readFileSync(absPath, 'utf8');
     let {result, ctxFile} = this.compileFile(absPath)
+
+    if (!result) {return;} // Already compiled
   
     // Write the result to the file synchronously
     fs.writeFileSync(destFile, result);
@@ -173,8 +175,8 @@ class Compiler {
         body = `export default ((${args}) => {${body}})`
       }
     }
-    //let head = genImportsFromBindings(ctxFile, opts)
-    let head = genImports(ctxFile, opts)
+    let head = genImportsFromBindings(ctxFile, opts)
+    head = genImports(ctxFile, opts)
     let generated = head + body
     if (opts.prettier) {
       generated = prettier.format(generated, {parser: "babel"})
