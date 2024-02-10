@@ -182,6 +182,11 @@ class Compiler {
   }
 }
 
+function compileFileGetCtx(absPath) {
+  let compiler = new Compiler()
+  return compiler.compileFile(absPath)
+}
+
 function compileAndSaveFile(absPath, options, config) {
   let compiler = new Compiler(options, config)
   return compiler.buildFile(absPath)
@@ -191,5 +196,6 @@ module.exports = {
   compileCode,
   compileNodes,
   compileAndSaveFile,
-  analyzeCode
+  analyzeCode,
+  compileFileGetCtx
 }

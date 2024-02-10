@@ -39,6 +39,7 @@
 
 const path = require('path');
 const {compileAndSaveFile} = require('./compiler');
+const {parseConfig} = require('./config_parser')
 const { spawnSync } = require('child_process');
 const minimist = require('minimist')
 
@@ -47,7 +48,7 @@ const args = minimist(process.argv.slice(2)); // Exclude the first two arguments
 // Let's parse the config.jome file first
 // TODO: Don't just check inside the current folder for config.jome. Go up the tree until you find one.
 // So if you are inside a nested folder, you can still find config.jome
-let config = compileAndExecute(path.resolve('config.jome'))
+let config = parseConfig(path.resolve('config.jome'))
 
 let wholeArgs = args._
 let fileToRun = 'index.jome' // by default
