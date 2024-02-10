@@ -91,11 +91,6 @@ class LexicalEnvironment {
     return (this.getBindingEnv(name)?.bindings || this.bindings)[name]
     // throw new ReferenceError(`${name} is not defined.`);
   }
-
-  getBindingOwner(name) {
-    return (this.getBindingEnv(name)?.bindings || this.bindings)
-    // throw new ReferenceError(`${name} is not defined.`);
-  }
 }
 
 module.exports = {
