@@ -99,7 +99,7 @@ module.exports = () => {
     it("Default import and star import", function () {
       assert.match(
         compile('import name, * as all from "module-name"'),
-        /const all = require\("module-name"\);\s*const { ?default: name?} = all;/,
+        /const (\w+) = require\("module-name"\);\s*const { ?default: name, ...all ?} = \1;/,
       );
     });
   });
