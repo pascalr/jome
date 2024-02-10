@@ -221,6 +221,10 @@ module.exports = () => {
 
   You can also choose how to handle strings and tags.
 
+  Jome imports inside config.jome should be jome files inside a /utils folder or similar. It should be separated from
+  the rest of the code, because it is different in the way that it does not have access to config.jome globals because
+  it is being compiled.
+
   Parameters allowed:
 
   - main: The main file to be executed. index.jome by default.

@@ -99,11 +99,20 @@ class Compiler {
       throw new Error("Can't compile and save missing file " + absPath)
     }
 
-    const destFile = absPath.slice(0,-5)+'.js' // remove .jome and replace extension with js
-
     if (!(absPath.endsWith('.jome')||absPath.endsWith('.jomm'))) {
       throw new Error('Cannot compile file without .jome or .jomm extension. ' + absPath);
     }
+  
+    // Read the contents of the file synchronously
+    const data = fs.readFileSync(absPath, 'utf8');
+    let ctxFile = new ContextFile(absPath)
+    let result = this.compileCode(data, this.options, ctxFile)
+    return {result, ctxFile}
+  }
+
+  buildFile(absPath) {
+    const destFile = absPath.slice(0,-5)+'.js' // remove .jome and replace extension with js
+
     // FIXME: This does not work because it does not check for dependencies.
     // If I want to do this, I must keep a dependency tree somewhere.
     // Or do I?
@@ -119,8 +128,7 @@ class Compiler {
   
     // Read the contents of the file synchronously
     const data = fs.readFileSync(absPath, 'utf8');
-    let ctxFile = new ContextFile(absPath)
-    let result = this.compileCode(data, this.options, ctxFile)
+    let {result, ctxFile} = this.compileFile(absPath)
   
     // Write the result to the file synchronously
     fs.writeFileSync(destFile, result);
@@ -128,7 +136,7 @@ class Compiler {
 
     this.filesCompiled.add(absPath)
     ctxFile.getDependencies().forEach(dep => {
-      this.compileFile(dep)
+      this.buildFile(dep)
     })
   
     return destFile
@@ -176,7 +184,7 @@ class Compiler {
 
 function compileAndSaveFile(absPath, options, config) {
   let compiler = new Compiler(options, config)
-  return compiler.compileFile(absPath)
+  return compiler.buildFile(absPath)
 }
 
 module.exports = {

@@ -219,6 +219,9 @@ don't mind the name being global.</p>
 <p>You can add rules to restrict this.</p>
 <p>You can choose what are the global variables and functions available in this file (sin, cos, PI, or map, filter, ...)</p>
 <p>You can also choose how to handle strings and tags.</p>
+<p>Jome imports inside config.jome should be jome files inside a /utils folder or similar. It should be separated from
+the rest of the code, because it is different in the way that it does not have access to config.jome globals because
+it is being compiled.</p>
 <p>Parameters allowed:</p>
 <ul>
 <li>main: The main file to be executed. index.jome by default.</li>
