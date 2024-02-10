@@ -37,10 +37,10 @@ function genImportsFromBindings(ctxFile, compilerOptions) {
       jsfile = file.slice(0,-5)+'.js' // remove .jome and replace extension with js
     }
     let bindings = bindingsByFile[file]
-    let def = bindings.filter(b => b.type === 'default-import')[0]
+    let def = bindings.filter(b => b.type === 'default-import')[0]?.name
     // TODO: Support multiple default import names
     // Just declare a variable right under with the different default import name
-    let named = bindings.filter(b => b.type === 'named-import')
+    let named = bindings.filter(b => b.type === 'named-import').map(b => b.name)
     // TODO: aliases
     // if (Object.keys(fileImports.aliasesByName).length) {
     //   let join = compilerOptions.useCommonJS ? ': ' : ' as '
@@ -50,7 +50,7 @@ function genImportsFromBindings(ctxFile, compilerOptions) {
     //     return alias ? `${n}${join}${alias}` : n
     //   })
     // }
-    let namespace = bindings.filter(b => b.type === 'namespace-import')[0]
+    let namespace = bindings.filter(b => b.type === 'namespace-import')[0]?.name
     if (compilerOptions.useCommonJS) {
       if (namespace) {
         let uid = ctxFile.uid()
