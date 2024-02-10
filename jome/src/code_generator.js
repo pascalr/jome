@@ -696,7 +696,7 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
     let {tagName, chainFunctions, wrapFunctions} = node.data
     // Get the actual referenced function
     let chainFuncs = (chainFunctions||[]).map(chainFunc => {
-      let binding = node.lexEnv.getBindingValue(chainFunc)
+      let binding = node.lexEnv.getBinding(chainFunc)
       if (!binding) {
         throw new Error("Missing forall chain function "+chainFunc)
       }

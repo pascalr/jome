@@ -68,20 +68,13 @@ class LexicalEnvironment {
   }
 
   hasBinding(name) {
-    return this.getBindingValue(name) !== undefined
+    return this.getBinding(name) !== undefined
   }
 
   // Method to add variable bindings to the environment
   addBinding(name, value) {
+    // TODO: Throw exception if the binding already exists in this lexical environment
     this.bindings[name] = {...value, name};
-  }
-
-  // Check if the variable is already declared.
-  // If so, then modify it's value
-  // Otherwise, add variable binding to the environment 
-  setBindingValue(name, value) {
-    let owner = this.getBindingEnv(name)?.bindings || this.bindings
-    owner[name] = value;
   }
 
   getBindingEnv(name) {
@@ -94,7 +87,7 @@ class LexicalEnvironment {
   }
 
   // Method to get the value of a variable from the environment
-  getBindingValue(name) {
+  getBinding(name) {
     return (this.getBindingEnv(name)?.bindings || this.bindings)[name]
     // throw new ReferenceError(`${name} is not defined.`);
   }
