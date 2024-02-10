@@ -1022,6 +1022,21 @@ module.exports = () => {
   I like:
   \`\`\`jome
   import 'bar' as foo
+  import 'index.jome' as foo
+  \`\`\`
+
+  I don't know. Maybe I actually prefer simply require like before...
+  \`\`\`jome
+  const execute = require('execute.jome')
+  const &Webpage = require('webpage.jome')
+  \`\`\`
+
+  I think I got it! Using a colon, this means import like using require.
+
+  \`\`\`jome
+  import &Webpage : './webpage.jomm'
+  import build : 'build.jome'
+  import {trim, flat} : '@jome/core'
   \`\`\`
 
   ### Functions

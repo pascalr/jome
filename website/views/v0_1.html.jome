@@ -1035,6 +1035,14 @@ let content = <md>
   const &Webpage = require('webpage.jome')
   ```
 
+  I think I got it! Using a colon, this means import like using require.
+
+  ```jome
+  import &Webpage : './webpage.jomm'
+  import build : 'build.jome'
+  import {trim, flat} : '@jome/core'
+  ```
+
   ### Functions
 
   ```jome

@@ -776,6 +776,16 @@ import 'bar' in foo
 import 'bar' as foo</p>
 <p>I like:</p>
 <pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;bar&#x27;</span> <span class="hljs-variable">as</span> <span class="hljs-variable">foo</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;index.jome&#x27;</span> <span class="hljs-variable">as</span> <span class="hljs-variable">foo</span>
+</code></pre>
+<p>I don't know. Maybe I actually prefer simply require like before...</p>
+<pre><code class="language-jome"><span class="hljs-variable">const</span> <span class="hljs-variable">execute</span> = <span class="hljs-title function_ invoke__">require</span>(<span class="hljs-string">&#x27;execute.jome&#x27;</span>)
+<span class="hljs-variable">const</span> &amp;<span class="hljs-title class_">Webpage</span> = <span class="hljs-title function_ invoke__">require</span>(<span class="hljs-string">&#x27;webpage.jome&#x27;</span>)
+</code></pre>
+<p>I think I got it! Using a colon, this means import like using require.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">import</span> &amp;<span class="hljs-title class_">Webpage</span> : <span class="hljs-string">&#x27;./webpage.jomm&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-variable">build</span> : <span class="hljs-string">&#x27;build.jome&#x27;</span>
+<span class="hljs-keyword">import</span> {<span class="hljs-variable">trim</span>, <span class="hljs-variable">flat</span>} : <span class="hljs-string">&#x27;@jome/core&#x27;</span>
 </code></pre>
 <h3>Functions</h3>
 <pre><code class="language-jome"><span class="hljs-comment">// Utilise la syntaxe comme ruby</span>
