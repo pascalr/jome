@@ -14,8 +14,8 @@ const REGEX_PRIMITIVE_TYPE = "\\b(?:int|string|bool|float)\\b(?:\\[\\])*" // FIX
 
 const REGEX_TYPE = "[A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*" // FIXME: Accents
 
-const LOOKBEHIND_DECLARATION = "(?<=\n|^|;)\\s*"
-const LOOKAHEAD_DECLARATION = "\\s*(?=\n|$|;|=)"
+// const LOOKBEHIND_DECLARATION = "(?<=\n|^|;)\\s*"
+// const LOOKAHEAD_DECLARATION = "\\s*(?=\n|$|;|=)"
 
 // // If the regex containing this regex has no group, then group number is 1.
 // // Otherwise, you have to add 1 for every group before this one.
@@ -292,7 +292,7 @@ let grammar = {
       patterns: [
         {
           name: "meta.declaration.typed.jome",
-          match: `${LOOKBEHIND_DECLARATION}(${REGEX_PRIMITIVE_TYPE})\\s+(${REGEX_VARIABLE})${LOOKAHEAD_DECLARATION}`,
+          match: `(${REGEX_PRIMITIVE_TYPE})\\s+(${REGEX_VARIABLE})`,
           captures: {
             1: { name: "storage.type.primitive.jome" },
             2: { name: "variable.other.jome" }
@@ -300,17 +300,9 @@ let grammar = {
         },
         {
           name: "meta.declaration.jome",
-          match: `${LOOKBEHIND_DECLARATION}\\b(let|var)\\b\\s*(${REGEX_VARIABLE})?${LOOKAHEAD_DECLARATION}`,
+          match: `\\b(let|var)\\b\\s*(${REGEX_VARIABLE})?`,
           captures: {
             1: { name: "keyword.control.declaration.jome" },
-            2: { name: "variable.other.jome" }
-          }
-        },
-        {
-          name: "meta.declaration.typed.jome",
-          match: `${LOOKBEHIND_DECLARATION}(${REGEX_TYPE})\\s+(${REGEX_VARIABLE})${LOOKAHEAD_DECLARATION}`,
-          captures: {
-            1: { name: "storage.type.jome" },
             2: { name: "variable.other.jome" }
           }
         },
@@ -318,7 +310,7 @@ let grammar = {
     },
     def: {
       name: "meta.def.jome",
-      begin: `\\s*\\b(def)\\s*(${REGEX_VARIABLE})?\\b\\s*`,
+      begin: `\\b(def)\\s*(${REGEX_VARIABLE})?\\b\\s*`,
       beginCaptures: {
         1: { name: "keyword.control.jome" },
         2: { name: "entity.name.function.jome" }

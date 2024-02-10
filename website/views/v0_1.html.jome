@@ -185,6 +185,35 @@ let content = <md>
 
   I'd like to have a option to use indentation like python too.
 
+  FIXMEEEEEEEEEEEEEEEE
+
+  How to differentiate between declararing a variable and calling a function without parens?
+
+  SomeClass someName
+  // vs
+  someFunc someArg
+
+  SomeClass someName(10)
+  // vs
+  someFunc someArg(10)
+
+  Well for primitive it can work, because they are reserved words.
+
+  How about using keyword new?
+
+  int x, y;
+  new SomeClass someName(10)
+
+  Ugly...
+
+  How about simply not allowing that? Yeahhhh that's it
+
+  let someName = SomeClass(10)
+
+  When the type is ambiguous, you can cast it like so:
+
+  let someName = (Array\<SomeClass>) \[SomeClass(10)]
+
   ### piping
 
   You can write the input to a function call to the left by using the operators `:.`, `|>` or `.#`

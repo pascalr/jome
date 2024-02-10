@@ -1,6 +1,5 @@
 const assert = require("assert/strict");
-const j_uid_1 = require("minispec");
-const { default: MiniSpec, describe, it } = j_uid_1;
+const { describe, it } = require("minispec");
 const { analyzeCode } = require("../src/compiler.js");
 module.exports = () => {
   describe("Incomplete statements", function () {
