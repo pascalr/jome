@@ -179,6 +179,8 @@ module.exports = () => {
   add x: 10, y: 5
   \`\`\`
 
+  I'd like to have a option to use indentation like python too.
+
   ### piping
 
   You can write the input to a function call to the left by using the operators \`:.\`, \`|>\` or \`.#\`
@@ -206,6 +208,23 @@ module.exports = () => {
 
   A good rule of thumb would be to use .# for utils you don't use often and use :. for utils you use often and that you
   don't mind the name being global.
+
+  ## config.jome
+
+  You can use config.jome to pretty much define your own programming language.
+
+  By default, the syntax is permissive. You can write code similar to js, ruby, c++ or python.
+
+  You can add rules to restrict this.
+
+  You can choose what are the global variables and functions available in this file (sin, cos, PI, or map, filter, ...)
+
+  You can also choose how to handle strings and tags.
+
+  Parameters allowed:
+
+  - main: The main file to be executed. index.jome by default.
+  - globals: A list of global variables or functions available everywhere.
 
   ## Functions
 
@@ -334,17 +353,21 @@ module.exports = () => {
 
   The types are specified before the variable name like in C++ or Java, not after like in typescript.
 
-  You don't use the keyword \`let\` when you create a variable with a type.
+  You can declare primitive types directly, but you still use the keyword \`let\` for class instances. (You can't do it like c++ because it would be confused with function calls)
 
   \`\`\`jome
   int i = 0
   string str = "some string"
   let any = "some string"
-  SomeClass obj = SomeClass("param")
-  SomeClass obj("param") // allow this?
+  let obj = SomeClass("param")
   \`\`\`
 
-  You assigning an object constructor to a variable, it's simpler to use the keyword let. The type will be inferred automatically.
+  When the type is ambiguous, or you prefer to be explicit, you can cast it like so:
+
+  \`\`\`jome
+  let name = (Name) getName(10)
+  let someName = (Array\<SomeClass>) \[SomeClass(10)]
+  \`\`\`
 
   Inside function arguments, it's the same thing. The type comes before the variable name.
 

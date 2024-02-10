@@ -193,6 +193,7 @@ You can also use a combination of both. One thing which can be nice is to altern
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">add</span> = ({<span class="hljs-variable">x</span>, <span class="hljs-variable">y</span>}) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
 <span class="hljs-variable">add</span> x: <span class="hljs-number">10</span>, y: <span class="hljs-number">5</span>
 </code></pre>
+<p>I'd like to have a option to use indentation like python too.</p>
 <h3>piping</h3>
 <p>You can write the input to a function call to the left by using the operators <code>:.</code>, <code>|&gt;</code> or <code>.#</code></p>
 <p><code>.#</code> refer to built-in functions which are always available. The other two will use local functions or global ones
@@ -212,6 +213,17 @@ defined in the file <code>config.jome</code>.</p>
 <p>It's up to the user to choose between using .# or :.. By default in Jome it is using .# because it does not collide names.</p>
 <p>A good rule of thumb would be to use .# for utils you don't use often and use :. for utils you use often and that you
 don't mind the name being global.</p>
+<h2>config.jome</h2>
+<p>You can use config.jome to pretty much define your own programming language.</p>
+<p>By default, the syntax is permissive. You can write code similar to js, ruby, c++ or python.</p>
+<p>You can add rules to restrict this.</p>
+<p>You can choose what are the global variables and functions available in this file (sin, cos, PI, or map, filter, ...)</p>
+<p>You can also choose how to handle strings and tags.</p>
+<p>Parameters allowed:</p>
+<ul>
+<li>main: The main file to be executed. index.jome by default.</li>
+<li>globals: A list of global variables or functions available everywhere.</li>
+</ul>
 <h2>Functions</h2>
 <p>You can use <code>do ... end</code> to create functions. You pass arguments between vertical bars.</p>
 <pre><code class="language-jome">[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>].<span class="hljs-built_in function_">#each</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">i</span>|
@@ -300,14 +312,16 @@ underscore.js: #map, #reduce, ...</p>
 <p>In version 0.1, I don't want to yet handle errors for types.</p>
 <p>But I'd like to be able to create variables with a type. It just won't be checked yet.</p>
 <p>The types are specified before the variable name like in C++ or Java, not after like in typescript.</p>
-<p>You don't use the keyword <code>let</code> when you create a variable with a type.</p>
+<p>You can declare primitive types directly, but you still use the keyword <code>let</code> for class instances. (You can't do it like c++ because it would be confused with function calls)</p>
 <pre><code class="language-jome"><span class="hljs-type">int</span> <span class="hljs-variable">i</span> = <span class="hljs-number">0</span>
 <span class="hljs-type">string</span> <span class="hljs-variable">str</span> = <span class="hljs-string">&quot;some string&quot;</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">any</span> = <span class="hljs-string">&quot;some string&quot;</span>
-<span class="hljs-title class_">SomeClass</span> <span class="hljs-variable">obj</span> = <span class="hljs-title function_ invoke__">SomeClass</span>(<span class="hljs-string">&quot;param&quot;</span>)
-<span class="hljs-title class_">SomeClass</span> <span class="hljs-title function_ invoke__">obj</span>(<span class="hljs-string">&quot;param&quot;</span>) <span class="hljs-comment">// allow this?</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">obj</span> = <span class="hljs-title function_ invoke__">SomeClass</span>(<span class="hljs-string">&quot;param&quot;</span>)
 </code></pre>
-<p>You assigning an object constructor to a variable, it's simpler to use the keyword let. The type will be inferred automatically.</p>
+<p>When the type is ambiguous, or you prefer to be explicit, you can cast it like so:</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">name</span> = (<span class="hljs-title class_">Name</span>) <span class="hljs-title function_ invoke__">getName</span>(<span class="hljs-number">10</span>)
+<span class="hljs-keyword">let</span> <span class="hljs-variable">someName</span> = (<span class="hljs-title class_">Array</span>&lt;<span class="hljs-title class_">SomeClass</span>&gt;) [<span class="hljs-title function_ invoke__">SomeClass</span>(<span class="hljs-number">10</span>)]
+</code></pre>
 <p>Inside function arguments, it's the same thing. The type comes before the variable name.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_ invoke__">someFunction</span>(<span class="hljs-type">int</span> <span class="hljs-variable">count</span>, <span class="hljs-type">string</span> <span class="hljs-variable">message</span>)
   <span class="hljs-comment">// ...</span>

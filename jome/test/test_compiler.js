@@ -437,7 +437,7 @@ end
     it("{x: 1, y: 2}", function () {
       assert.match(compile("{x: 1, y: 2}"), /\{\s*x\: ?1, y: 2\s*\}/);
     });
-    it('{"x": 1}', function () {
+    it("key is quoted string", function () {
       assert.match(compile('{"x": 1}'), /\{\s*x\: ?1;?\s*\}/);
     });
   });

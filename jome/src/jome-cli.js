@@ -44,6 +44,8 @@ const minimist = require('minimist')
 
 const args = minimist(process.argv.slice(2)); // Exclude the first two arguments (node executable and script file)
 
+// Let's parse the config.jome file first
+
 let wholeArgs = args._
 let fileToRun = 'index.jome' // by default
 let executableArgs = wholeArgs
@@ -63,7 +65,7 @@ compileAndExecute(absPath, executableArgs)
 
 function compileAndExecute(absPath, args) {
   let buildFileName = compileAndSaveFile(absPath)
-  execute(buildFileName, args)
+  return require(buildFileName)(...args)
 }
 
 // FIXME
@@ -74,10 +76,10 @@ function compileAndExecute(absPath, args) {
 //   input: scriptCode,
 //   encoding: 'utf-8',
 // });
-function execute(absPath, args) {
-  let code = `require('${absPath}')(${args.map(a => JSON.stringify(a)).join(', ')})`
-  spawnSync('node', ['-e', code], { encoding: 'utf-8', stdio: 'inherit' });
-}
+// function execute(absPath, args) {
+  // let code = `require('${absPath}')(${args.map(a => JSON.stringify(a)).join(', ')})`
+  // spawnSync('node', ['-e', code], { encoding: 'utf-8', stdio: 'inherit' });
+// }
 
 // TODO: use:
 //
