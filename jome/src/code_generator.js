@@ -81,9 +81,11 @@ function genImportsFromBindings(ctxFile, compilerOptions) {
     })
     let namespace = bindings.filter(b => b.type === 'namespace-import')[0]?.name
     if (compilerOptions.useCommonJS) {
-      if (namespace) {
+      if (namespace && def) {
         let uid = ctxFile.uid()
         result += `const ${uid} = require("${jsfile}");\nconst {default: ${def || ctxFile.uid()}, ...${namespace}} = ${uid};\n`
+      } else if (namespace) {
+        result += `const ${namespace} = require("${jsfile}");\n`
       } else if (def && named && named.length) {
         let uid = ctxFile.uid()
         result += `const ${uid} = require("${jsfile}");\nconst {default: ${def}, ${[...named].join(', ')}} = ${uid};\n`
