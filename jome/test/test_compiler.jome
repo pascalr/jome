@@ -88,6 +88,17 @@ describe "Imports" do
     assert.match(compile(`import name, * as all from "module-name"`), /const (\w+) = require\("module-name"\);\s*const { ?default: name, ...all ?} = \1;/);
   end
   // import "module-name"; TODO: Not written yet in the parser
+
+
+
+  describe "Common JS imports" do
+    it 'Import all' do
+      assert.match(compile(`import name : "module-name"`), /const name = require\("module-name"\);/);
+    end
+    it 'Import deconstructed' do
+      assert.match(compile(`import { foo, bar } : "module-name"`), /const { ?foo, ?bar ?} = require\("module-name"\);/);
+    end
+  end
 end
 // TODO: Test imports when compiling for ESM.
 

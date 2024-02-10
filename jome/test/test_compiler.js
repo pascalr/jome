@@ -102,6 +102,21 @@ module.exports = () => {
         /const (\w+) = require\("module-name"\);\s*const { ?default: name, ...all ?} = \1;/,
       );
     });
+
+    describe("Common JS imports", function () {
+      it("Import all", function () {
+        assert.match(
+          compile('import name : "module-name"'),
+          /const name = require\("module-name"\);/,
+        );
+      });
+      it("Import deconstructed", function () {
+        assert.match(
+          compile('import { foo, bar } : "module-name"'),
+          /const { ?foo, ?bar ?} = require\("module-name"\);/,
+        );
+      });
+    });
   });
   describe("Strings", function () {
     it("Single quote strings", function () {

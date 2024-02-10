@@ -107,7 +107,7 @@ let grammar = {
             },
             {
               name: "meta.import-file.jome",
-              match: `(from) (${REGEX_REGULAR_STRING})`,
+              match: `(from|\\:) (${REGEX_REGULAR_STRING})`,
               captures: {
                 1: { name: "keyword.control.jome" },
                 2: { name: "string.quoted.jome" }

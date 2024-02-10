@@ -403,8 +403,16 @@ const ANALYZERS = {
     }
 
     let bindings = []
-    let filename;
     let list = filterStrings(node.parts.slice(1)) // remove import keyword
+    let importFile = list.find(o => o.type === 'meta.import-file.jome')
+    if (!importFile) {
+      return pushError(node, "Missing filename in import statement.")
+    }
+    let cs = filterSpaces(importFile.parts)
+    let filename = cs[cs.length-1].raw.slice(1,-1)
+    if (!filename) {
+      return pushError(node, "Missing filename in import statement.")
+    }
     list.forEach(item => {
       if (item.type === 'meta.named-imports.jome') {
         filterCommas(filterSpaces(item.parts)).forEach(namedImport => {
@@ -423,8 +431,7 @@ const ANALYZERS = {
         //     throw new Error("TODO: import {foo as bar} syntax")
         //   }
       } else if (item.type === 'meta.import-file.jome') {
-        let cs = filterSpaces(item.parts)
-        filename = cs[cs.length-1].raw.slice(1,-1)
+        // already handled
       } else if (item.type === 'variable.other.default-import.jome') {
         bindings.push({name: getName(item.raw), type: 'default-import'})
       } else if (item.type === 'meta.namespace-import.jome') {
@@ -433,10 +440,6 @@ const ANALYZERS = {
         throw new Error("Error 234j90s7adfg1")
       }
     })
-
-    if (!filename) {
-      return pushError(node, "Missing filename in import statement.")
-    }
 
     bindings.forEach(binding => {
       node.lexEnv.addBinding(binding.name, {...binding, file: filename})
