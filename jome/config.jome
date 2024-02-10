@@ -1,0 +1,8 @@
+import { describe, it } from 'minispec'
+
+return {
+  globals: {
+    "describe": describe,
+    "it": it,
+  }
+}
