@@ -10,9 +10,9 @@ const REGEX_VARIABLE = "[A-Za-z_$]\\w*" // FIXME: Accents
 
 const REGEX_XML_NAME = "[_:A-Za-z][A-Za-z0-9\\-_\\:.]*"
 
-const REGEX_PRIMITIVE_TYPE = "\\b(?:int|string|bool|float)\\b" // FIXME: Accents
+const REGEX_PRIMITIVE_TYPE = "\\b(?:int|string|bool|float)\\b(?:\\[\\])*" // FIXME: Accents
 
-const REGEX_TYPE = "[A-Za-z_$]\\w*(?:\\<\\w+\\>)" // FIXME: Accents
+const REGEX_TYPE = "[A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*" // FIXME: Accents
 
 // // If the regex containing this regex has no group, then group number is 1.
 // // Otherwise, you have to add 1 for every group before this one.
@@ -163,7 +163,6 @@ let grammar = {
         { include: "#type_def" },
         { include: "#regex" },
         { include: "#keywords" },
-        { include: "#declaration" },
         { include: "#with-args" },
         { include: "#vbars-args" },
         { include: "#def" },
@@ -173,6 +172,7 @@ let grammar = {
         { include: "#tag" },
         { include: "#arrow" },
         { include: "#constants" },
+        { include: "#declaration" },
         { include: "#function_call" },
         { include: "#caller" }, // ->something
         { include: "#state-var" },

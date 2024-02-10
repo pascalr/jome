@@ -417,7 +417,7 @@ describe "Types" do
         assert.match(compile('int[] x'), /let x/);
       end
       it 'array[] assignment' do
-        assert.match(compile('int[] x = [1,2,3]'), /let x = \[1,2,3\]/);
+        assert.match(compile('int[] x = [1,2,3]'), /let x = \[1, ?2, ?3\]/);
       end
       // TODO: SomeClass
       // TODO: Array<int>

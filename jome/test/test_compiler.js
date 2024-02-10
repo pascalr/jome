@@ -422,7 +422,7 @@ end
           assert.match(compile("int[] x"), /let x/);
         });
         it("array[] assignment", function () {
-          assert.match(compile("int[] x = [1,2,3]"), /let x = \[1,2,3\]/);
+          assert.match(compile("int[] x = [1,2,3]"), /let x = \[1, ?2, ?3\]/);
         });
       });
     });
