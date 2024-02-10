@@ -12,11 +12,11 @@
 const DEFAULT_FORALLS = {
   sh: {
     wrap: ["execSh"],
-    imports: {execSh: {from: '@jome/core/execSh', default: true}}
+    imports: {execSh: {from: '@jome/core/execSh', namespace: true}}
   },
   md: {
     wrap: ["mdToHtml"],
-    imports: {mdToHtml: {from: '@jome/md-to-html', default: true}}
+    imports: {mdToHtml: {from: '@jome/md-to-html', namespace: true}}
   },
   // It seams to be very common to have two things, the language of the content, and how you want to process it.
   // What should be the standard convention? js-txt? txt.js? ex.js?
