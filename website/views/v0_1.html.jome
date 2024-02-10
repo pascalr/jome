@@ -225,6 +225,11 @@ let content = <md>
 
   You can also choose how to handle strings and tags.
 
+  Parameters allowed:
+
+  - main: The main file to be executed. index.jome by default.
+  - globals: A list of global variables or functions available everywhere.
+
   ## Functions
 
   You can use `do ... end` to create functions. You pass arguments between vertical bars.
