@@ -14,6 +14,9 @@ class FileImports {
     this.aliasesByName = {} // {originalName: ["aliasName1", "aliasName2"]}
     // All the identifiers that design a class. They start with an ampersand &SomeClass
     this.classIdentifiers = new Set()
+    // When a util has a dependency to an import, add it here
+    // The dependency will be renamed if the name is already used in any lexical environment
+    this.importDependenciesByFile = {} // [{type: 'named-import', name: 'foobar'}]
   }
 
   mergeWith(fileImports) {
