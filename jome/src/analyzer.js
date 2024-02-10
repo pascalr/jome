@@ -395,6 +395,8 @@ const ANALYZERS = {
     ensureStartRaw(node, 'import')
     ensureStartType(node, 'keyword.control.jome')
 
+    let bindings = []
+    let filename;
     let fileImports = new FileImports()
     let list = filterStrings(node.parts.slice(1)) // remove import keyword
     list.forEach(item => {
@@ -403,7 +405,10 @@ const ANALYZERS = {
           if (namedImport.type === 'variable.other.named-import.jome') {
             fileImports.addNamedImport(namedImport.raw)
           } else if (namedImport.type === 'meta.import-alias.jome') {
-            fileImports.addAliasImport(namedImport.parts[0].raw, namedImport.parts[2].raw)
+            let original = namedImport.parts[0].raw
+            let name = namedImport.parts[2].raw
+            //fileImports.addAliasImport(namedImport.parts[0].raw, namedImport.parts[2].raw)
+            bindings.push({name, type: 'alias-import', original})
           } else {
             throw new Error("sfj9234hr9h239rhrf923h3r")
           }
@@ -414,6 +419,7 @@ const ANALYZERS = {
       } else if (item.type === 'meta.import-file.jome') {
         let cs = filterSpaces(item.parts)
         fileImports.filename = cs[cs.length-1].raw.slice(1,-1)
+        filename = fileImports.filename
       } else if (item.type === 'variable.other.default-import.jome') {
         fileImports.addDefaultImport(item.raw)
       } else if (item.type === 'meta.namespace-import.jome') {
@@ -421,6 +427,9 @@ const ANALYZERS = {
       } else {
         throw new Error("Error 234j90s7adfg1")
       }
+    })
+    bindings.forEach(binding => {
+      node.lexEnv.addBinding(binding.name, {...binding, file: filename})
     })
 
     if (fileImports.defaultImportNames.length) {

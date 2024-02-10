@@ -176,7 +176,7 @@ class Compiler {
       }
     }
     let head = genImportsFromBindings(ctxFile, opts)
-    head = genImports(ctxFile, opts)
+    //head = genImports(ctxFile, opts)
     let generated = head + body
     if (opts.prettier) {
       generated = prettier.format(generated, {parser: "babel"})

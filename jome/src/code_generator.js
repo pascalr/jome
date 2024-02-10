@@ -16,7 +16,8 @@ function genCode(node) {
 
 function extractImportBindingsByFile(lexEnv, acc={}) {
   Object.values(lexEnv.bindings).forEach(binding => {
-    if (binding.type === 'default-import' || binding.type === 'namespace-import' || binding.type === 'named-import') {
+    let t = binding.type
+    if (t === 'default-import' || t === 'namespace-import' || t === 'named-import' || t === 'alias-import') {
       acc[binding.file] = [...(acc[binding.file]||[]), binding]
     }
   })
@@ -41,15 +42,12 @@ function genImportsFromBindings(ctxFile, compilerOptions) {
     // TODO: Support multiple default import names
     // Just declare a variable right under with the different default import name
     let named = bindings.filter(b => b.type === 'named-import').map(b => b.name)
-    // TODO: aliases
-    // if (Object.keys(fileImports.aliasesByName).length) {
-    //   let join = compilerOptions.useCommonJS ? ': ' : ' as '
-    //   named = named.map(n => {
-    //     let alias = [...(fileImports.aliasesByName[n]||[])][0]
-    //     // TODO: Support multiple aliases
-    //     return alias ? `${n}${join}${alias}` : n
-    //   })
-    // }
+    let aliases = bindings.filter(b => b.type === 'alias-import')
+    aliases.forEach(alias => {
+      let join = compilerOptions.useCommonJS ? ': ' : ' as '
+      // TODO: Support multiple aliases
+      named.push(`${alias.original}${join}${alias.name}`)
+    })
     let namespace = bindings.filter(b => b.type === 'namespace-import')[0]?.name
     if (compilerOptions.useCommonJS) {
       if (namespace) {
