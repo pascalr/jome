@@ -15,7 +15,7 @@ const REGEX_PRIMITIVE_TYPE = "\\b(?:int|string|bool|float)\\b(?:\\[\\])*" // FIX
 const REGEX_TYPE = "[A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*" // FIXME: Accents
 
 // [^\S\n]* => means a whitespace character except newline
-const LOOKAHEAD_DECLARATION = "(?=[^\S\n]*(?:\n|$|;|\\=))"
+const LOOKAHEAD_DECLARATION = "\\s*(?=\n|$|;|=)"
 
 // // If the regex containing this regex has no group, then group number is 1.
 // // Otherwise, you have to add 1 for every group before this one.

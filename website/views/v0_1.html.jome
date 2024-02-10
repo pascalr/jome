@@ -183,6 +183,8 @@ let content = <md>
   add x: 10, y: 5
   ```
 
+  I'd like to have a option to use indentation like python too.
+
   ### piping
 
   You can write the input to a function call to the left by using the operators `:.`, `|>` or `.#`
@@ -210,6 +212,18 @@ let content = <md>
 
   A good rule of thumb would be to use .# for utils you don't use often and use :. for utils you use often and that you
   don't mind the name being global.
+
+  ## config.jome
+
+  You can use config.jome to pretty much define your own programming language.
+
+  By default, the syntax is permissive. You can write code similar to js, ruby, c++ or python.
+
+  You can add rules to restrict this.
+
+  You can choose what are the global variables and functions available in this file (sin, cos, PI, or map, filter, ...)
+
+  You can also choose how to handle strings and tags.
 
   ## Functions
 
