@@ -413,6 +413,7 @@ const ANALYZERS = {
     if (!filename) {
       return pushError(node, "Missing filename in import statement.")
     }
+    let useCjsStyle = importFile.parts[0].raw === ':'
     list.forEach(item => {
       if (item.type === 'meta.named-imports.jome') {
         filterCommas(filterSpaces(item.parts)).forEach(namedImport => {
@@ -433,7 +434,11 @@ const ANALYZERS = {
       } else if (item.type === 'meta.import-file.jome') {
         // already handled
       } else if (item.type === 'variable.other.default-import.jome') {
-        bindings.push({name: getName(item.raw), type: 'default-import'})
+        if (useCjsStyle) {
+          bindings.push({name: getName(item.raw), type: 'cjs-import'})
+        } else {
+          bindings.push({name: getName(item.raw), type: 'default-import'})
+        }
       } else if (item.type === 'meta.namespace-import.jome') {
         bindings.push({name: getName(item.parts[2].raw), type: 'namespace-import'})
       } else {

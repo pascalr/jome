@@ -19,7 +19,7 @@ function genCode(node) {
 function extractImportBindingsByFile(lexEnv, acc={}) {
   Object.values(lexEnv.bindings).forEach(binding => {
     let t = binding.type
-    if (t === 'default-import' || t === 'namespace-import' || t === 'named-import' || t === 'alias-import') {
+    if (t === 'default-import' || t === 'namespace-import' || t === 'named-import' || t === 'alias-import' || t === 'cjs-import') {
       acc[binding.file] = [...(acc[binding.file]||[]), binding]
     }
   })
@@ -69,6 +69,7 @@ function genImportsFromBindings(ctxFile, compilerOptions) {
       jsfile = file.slice(0,-5)+'.js' // remove .jome and replace extension with js
     }
     let bindings = bindingsByFile[file]
+    let cjs = bindings.filter(b => b.type === 'cjs-import')[0]?.name
     let def = bindings.filter(b => b.type === 'default-import')[0]?.name
     // TODO: Support multiple default import names
     // Just declare a variable right under with the different default import name
@@ -81,7 +82,9 @@ function genImportsFromBindings(ctxFile, compilerOptions) {
     })
     let namespace = bindings.filter(b => b.type === 'namespace-import')[0]?.name
     if (compilerOptions.useCommonJS) {
-      if (namespace && def) {
+      if (cjs) {
+        result += `const ${cjs} = require("${jsfile}");\n`
+      } else if (namespace && def) {
         let uid = ctxFile.uid()
         result += `const ${uid} = require("${jsfile}");\nconst {default: ${def || ctxFile.uid()}, ...${namespace}} = ${uid};\n`
       } else if (namespace) {
