@@ -87,57 +87,6 @@ function genImportsFromBindings(ctxFile, compilerOptions) {
   return result
 }
 
-function genImports(ctxFile, compilerOptions) {
-  let result = ""
-  let files = Object.keys(ctxFile.fileImportsByFile)
-  // let files = new Set([
-  //   ...Object.keys(ctxFile.namedImportsByFile),
-  //   ...Object.keys(ctxFile.defaultImportsByFile),
-  //   ...Object.keys(ctxFile.namespaceImportsByFile)
-  // ])
-  files.forEach(file => {
-    let jsfile = file
-    if (file.endsWith('.jomm') || file.endsWith('.jome')) {
-      ctxFile.addDependency(file)
-      jsfile = file.slice(0,-5)+'.js' // remove .jome and replace extension with js
-    }
-    let fileImports = ctxFile.fileImportsByFile[file]
-    let def = fileImports.defaultImportNames[0]
-    // TODO: Support multiple default import names
-    // Just declare a variable right under with the different default import name
-    let named = [...fileImports.namedImports]
-    if (Object.keys(fileImports.aliasesByName).length) {
-      let join = compilerOptions.useCommonJS ? ': ' : ' as '
-      named = named.map(n => {
-        let alias = [...(fileImports.aliasesByName[n]||[])][0]
-        // TODO: Support multiple aliases
-        return alias ? `${n}${join}${alias}` : n
-      })
-    }
-    let namespace = fileImports.namespaceImport
-    if (compilerOptions.useCommonJS) {
-      if (namespace) {
-        let uid = ctxFile.uid()
-        result += `const ${uid} = require("${jsfile}");\nconst {default: ${def || ctxFile.uid()}, ...${namespace}} = ${uid};\n`
-      } else if (def && named && named.length) {
-        let uid = ctxFile.uid()
-        result += `const ${uid} = require("${jsfile}");\nconst {default: ${def}, ${[...named].join(', ')}} = ${uid};\n`
-      } else if (def) {
-        result += `const ${def} = require("${jsfile}");\n`
-      } else {
-        result += `const {${[...named].join(', ')}} = require("${jsfile}");\n`
-      }
-    } else {
-      if (def) {
-        result += `import ${def} from "${jsfile}";\n`
-      } else {
-        result += `import {${[...named].join(', ')}} from "${jsfile}";\n`
-      }
-    }
-  })
-  return result
-}
-
 function escapeTemplateLiteral(inputString) {
   return inputString.replace(/\$\{/g, '\u005c\$\{')
 }
@@ -652,10 +601,8 @@ const CODE_GENERATORS = {
   'meta.declaration.typed.jome': (node) => `let ${node.data.name}`,
 
   // handles all lines starting with keyword import
-  "meta.statement.import.jome": (node) => {
+  "meta.statement.import.jome": () => {
     // Nothing to do, already handled by analyzer
-    // let {fileImports} = node.data
-    // node.ctxFile.addFileImports(fileImports)
   },
 
   // #.
@@ -776,6 +723,5 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
 
 module.exports = {
   genImportsFromBindings,
-  genImports,
   genCode
 }
