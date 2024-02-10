@@ -120,7 +120,18 @@ class ContextFile {
 class LexicalEnvironment {
   constructor(outerEnvironment = null) {
     this.bindings = {};
+    this.bindingsUsed = new Set()
     this.outer = outerEnvironment;
+  }
+
+  useBinding(name) {
+    let env = this.getBindingEnv(name)
+    env.bindingsUsed.add(name)
+  }
+
+  isBindingUsed(name) {
+    let env = this.getBindingEnv(name)
+    return env.bindingsUsed.has(name)
   }
 
   hasBinding(name) {
