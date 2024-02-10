@@ -9,9 +9,6 @@ class ContextFile {
     this.absPath = absPath
     this.lexEnv = new LexicalEnvironment(outerEnvironment)
     this.lexEnv.ctxFile = this
-    this.namedImportsByFile = {}
-    this.defaultImportsByFile = {}
-    this.namespaceImportsByFile = {}
     this.classIdentifiers = new Set() // The list of identifiers that refer to a class name
     this.dependencies = new Set() // Files that need to be compiled too for this file to run
     this.fileArguments = [] // A list of Argument
