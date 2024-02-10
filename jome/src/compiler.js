@@ -105,7 +105,7 @@ class Compiler {
   
     // Read the contents of the file synchronously
     const data = fs.readFileSync(absPath, 'utf8');
-    let ctxFile = new ContextFile(absPath)
+    let ctxFile = new ContextFile(absPath, this.config?.lexEnv)
     let result = this.compileCode(data, this.options, ctxFile)
     return {result, ctxFile}
   }
@@ -145,7 +145,7 @@ class Compiler {
   compileCode(code, options={}, ctxFile) {
     let opts = {...this.options, ...options}
     let tokens = tokenize(code).children
-    ctxFile = ctxFile || new ContextFile()
+    ctxFile = ctxFile || new ContextFile(null, this.config?.lexEnv)
     ctxFile.compiler = this
     ctxFile.compilerOptions = this.options // TODO: Get the options through the compiler, not compilerOptions
     let topNodes = parse(tokens, null, ctxFile.lexEnv)

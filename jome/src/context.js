@@ -64,10 +64,10 @@ class FileImports {
 
 // The scope of the file. So it handles imports especially.
 class ContextFile {
-  constructor(absPath) {
+  constructor(absPath, outerEnvironment) {
     this.uidNb = 0
     this.absPath = absPath
-    this.lexEnv = new LexicalEnvironment()
+    this.lexEnv = new LexicalEnvironment(outerEnvironment)
     this.lexEnv.ctxFile = this
     this.namedImportsByFile = {}
     this.defaultImportsByFile = {}
