@@ -575,6 +575,7 @@ const CODE_GENERATORS = {
   //'keyword.operator.assignment.jome': (node) => (compileOperator(node)+";"),
   // let
   'keyword.control.declaration.jome': (node) => `let ${node.operands[0].raw}`,
+  'meta.declaration.typed.jome': (node) => `let ${node.data.name}`,
 
   // handles all lines starting with keyword import
   "meta.statement.import.jome": (node) => {

@@ -480,6 +480,13 @@ const ANALYZERS = {
 
   "meta.tag.jome": validateTag,
 
+  "meta.declaration.typed.jome": (node) => {
+    let type = node.parts[0].raw
+    let name = node.parts[1].raw
+    // TODO: Add to lexical environment
+    node.data = {type, name}
+  },
+
   "meta.forall.jome": (node) => {
     ensureStartRaw(node, 'forall')
     ensureStartType(node, 'keyword.control.jome')
