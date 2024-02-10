@@ -54,7 +54,7 @@ module.exports = () => {
     it("Default import", function () {
       assert.match(
         compile('import name from "module-name"'),
-        /const (\w+) = require\("module-name"\);\s*const { ?default: name ?} = \1;/,
+        /const (\w+) = require\("module-name"\);\s*const name = \1.default;/,
       );
     });
     it("Star import", function () {

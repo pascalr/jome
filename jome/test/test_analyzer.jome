@@ -1,4 +1,4 @@
-import assert from 'assert/strict'
+import * as assert from 'assert/strict'
 
 import {analyzeCode} from '../src/compiler.js'
 

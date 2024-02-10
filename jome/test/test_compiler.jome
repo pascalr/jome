@@ -1,4 +1,4 @@
-import assert from 'assert/strict'
+import * as assert from 'assert/strict'
 
 import {compileCode} from '../src/compiler.js'
 
@@ -54,7 +54,7 @@ describe "Imports" do
     assert.match(compile(`import execute from "execute.jome"`), /const execute = require\("execute.js"\)/);
   end
   it 'Default import' do
-    assert.match(compile(`import name from "module-name"`), /const (\w+) = require\("module-name"\);\s*const { ?default: name ?} = \1;/);
+    assert.match(compile(`import name from "module-name"`), /const (\w+) = require\("module-name"\);\s*const name = \1.default;/);
     //assert.match(compile(`import name from "module-name"`), /const name = require\("module-name"\)/);
   end
   it 'Star import' do

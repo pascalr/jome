@@ -89,8 +89,11 @@ function genImportsFromBindings(ctxFile, compilerOptions) {
       } else if (def && named && named.length) {
         let uid = ctxFile.uid()
         result += `const ${uid} = require("${jsfile}");\nconst {default: ${def}, ${[...named].join(', ')}} = ${uid};\n`
-      } else if (def) {
+      } else if (def && file.endsWith('.jome')) {
         result += `const ${def} = require("${jsfile}");\n`
+      } else if (def) {
+        let uid = ctxFile.uid()
+        result += `const ${uid} = require("${jsfile}");\nconst ${def} = ${uid}.default;\n`
       } else {
         result += `const {${[...named].join(', ')}} = require("${jsfile}");\n`
       }
