@@ -956,7 +956,7 @@ module.exports = () => {
 
   Idée: Quand une classe inhérite d'un interface, mettre les valeurs par défaut dans le prototype.
 
-  ### Inline methods
+  ### Inline methods - TODO WIP
 
   Pouvoir définir une méthode sur une seule ligne avec def < funcName > =
 
@@ -970,7 +970,7 @@ module.exports = () => {
   end
   \`\`\`
 
-  ### Deconstructings
+  ### Deconstructings - TODO WIP
 
   I want to be able to name deconstructed arguments in a method. Maybe with keyword as? aka? alias?
 
@@ -983,7 +983,7 @@ module.exports = () => {
 
   WIP
 
-  ## Modules and exports
+  ## Modules and exports - TODO WIP
 
   You can write modules by writing files with the .jomm extension.
 
@@ -1039,7 +1039,7 @@ module.exports = () => {
   import {trim, flat} : '@jome/core'
   \`\`\`
 
-  ### Functions
+  ### Functions - TODO WIP
 
   \`\`\`jome
   // Utilise la syntaxe comme ruby
@@ -1056,26 +1056,37 @@ module.exports = () => {
 
   ### With keyword
 
-  Usefull to define interfaces of classes and functions.
+  The \`with\` keyword is used to list function arguments.
+  
+  It can be standalone in a .jome file which means they are arguments that can be given to the file function.
+  
+  \`\`\`jome
+  with src, dest end
+  #cp src, dest
+  \`\`\`
+  
+  It can be used along the \`def\` keyword to specify the function arguments.
+  This allows easy documentation of the code without having to repeat yourself in the comments.
+
+  \`\`\`jome
+  with
+    string name # The name
+    int count # The count
+  def doSomething : int
+    // ....
+  end
+  \`\`\`
+  
+  It can also be used to specify the arguments the constructor of a class takes.
 
   \`\`\`jome
   with
     name: String # Full name of the personnellement
   class Person
   end
-
-  with
-    x: float # The base value
-    y: integer # The factor
-  def multiply
-  end
   \`\`\`
-
-  This allows easy documentation of the code without having to repeat yourself in the comments.
-
-  It would be nice if there was a short way to start a single line documentation comment.
   
-  ## along keyword
+  ## along keyword - TODO WIP
 
   When you want to also have the unit or the code for a variable, you can use the along keyword.
 
@@ -1094,7 +1105,7 @@ module.exports = () => {
 
   def printType = |unused along type|
 
-  ## Capture de code
+  ## Capture de code - TODO WIP
 
   TODO
 
@@ -1110,7 +1121,7 @@ module.exports = () => {
   debug(nomDeVariable, "nomDeVariable")
   \`\`\`
 
-  ## aka or alias
+  ## aka or alias - TODO WIP
 
   I want to be able to give many possible names to a parameter.
 
@@ -1134,7 +1145,7 @@ module.exports = () => {
 
   It will automatically be compiled to the code above.
 
-  ## Threads
+  ## Threads - TODO WIP
 
   Exactly the same as JavaScript? await, async, ...
 
@@ -1145,7 +1156,7 @@ module.exports = () => {
   let someFunc = async () => {x: 1, y: 2}
   \`\`\`
 
-  ## Private
+  ## Private - TODO WIP
 
   For private fields inside classes, you can use a private block.
   You can also use the private before a method.
@@ -1164,7 +1175,7 @@ module.exports = () => {
 
   It compiles in javascript using a # before the names of fields.
 
-  ### Ternary
+  ### Ternary - TODO WIP
 
   Idée: pas de ternary operator comme d'habitude, parce que je veux pouvoir faire (x ? y) seulement
   sans le :. Le : est très utilisé je trouve. Je n'ai pas tant envie de l'utiliser comme opérateur simple.
@@ -1188,20 +1199,16 @@ module.exports = () => {
 
   ## Global variables
 
-  Global variables can be set like in javascript with the keyword global.
+  Global variables can be set like in javascript with the \`globalThis\` global property. You can also use the #global util.
   
   \`\`\`jome
-  global.MY_GLOBAL_VARIABLE = "some value"
+  globalThis.MY_GLOBAL_VARIABLE = "some value"
+  #global.MY_OTHER_GLOBAL_VARIABLE = "some value"
   \`\`\`
 
-  TODO: Global variables should always be set inside config.jome.
+  You can also use the configuration file config.jome to define global variables or functions. See [config.jome](#config-jome).
 
-  This ensures that any way the files are executed with Jome, it will always have access to the global variable.
-
-  What about when compiling and exporting only javascript code? Well, exporting js code is usually to make a library. And I library
-  should never use global variables. So it's OK like that.
-
-  ### Chaining methods
+  ## Chaining methods
 
   You can execute multiple methods on the same object using the \`chain\` keyword.
 
@@ -1217,11 +1224,9 @@ module.exports = () => {
 
   Chain returns the value of the last command.
 
-  ## TODO
+  ## Bugs
 
-  x += 1 // -=, *=, /=
-  x++, -- // Do I allow this? No like in ruby? It's only nice inside the for(let i = 0; i < l; i++). Otherwise it can be confusing.
-  ++x, -- // Do I allow this? No like in ruby?
+  TODO: Link to BUGS.md
 
   ## Contributing
 
@@ -1236,8 +1241,6 @@ module.exports = () => {
 
   ## Acknowledgements
 
-  TODO: Explain why
-
   - CoffeeScript: I was kinda lost at some point. I did not have a clear direction for my language. Until I thought, hey, coffeescript did something similar! So it gave me a lot of guidance.
   - underscore.js: A great library full of goodies.
   - vscode: Escpecially thank you for creating custom grammar. It is really nice to create a grammar and see live the tokenization.
@@ -1245,10 +1248,8 @@ module.exports = () => {
 
   Thank you to everyone who contributed to any open-sourced library. Escpecially under a license like MIT license. You are awesome!
 
-  TODO: Link to the librairies website
-
   Librairies used:
-  - express
-  - markdown-it`);
+  - [express](https://expressjs.com/)
+  - [markdown-it](https://github.com/markdown-it/markdown-it)`);
   return new Webpage("Jome", content).render();
 };

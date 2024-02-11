@@ -2,7 +2,6 @@ import &Webpage : '../src/webpage.jomm'
 
 // I don't understand how highlight.js is supposed to detected nested languages...
 // So let's do it separately for now.
-
 let PARTIAL = <md>
   ```xml
   <html>
@@ -15,7 +14,7 @@ let PARTIAL = <md>
     </div>
   </html>
   ```
-</md>//.slice(18, (-16)) // Lazy way to remove the pre code... Ugly...
+</md>
 
 let content = <md>
 
@@ -357,11 +356,17 @@ let content = <md>
   #write! 'Some content', to: './somefile.txt', overwrite: true
   ```
 
+  ## Assignment - TODO WIP
+
+  let x = 10 // yes
+  int x = 10 // yes, string, float, ... works too
+  x := 10 // maybe, same as let
+  x ::= 10 // maybe, same as const?
+  var x = 10 // probably
+  const x = 10 // probably
+  Foo foo = Foo("arg") // no, use instead: let foo = Foo("arg")
+
   ## Types
-
-  In version 0.1, I don't want to yet handle errors for types.
-
-  But I'd like to be able to create variables with a type. It just won't be checked yet.
 
   The types are specified before the variable name like in C++ or Java, not after like in typescript.
 
