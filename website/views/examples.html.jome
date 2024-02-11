@@ -24,27 +24,9 @@ By spliting into different files, it's more easy because you simply write differ
 But how do I write components? In different files too...
 */
 
-//def printExample(result along source along code)  
-def printExample(result)  
-  // TODO: Add syntax highlighting without using md
-  return <html>
-    <div class='example'>
-      <div class='onglets'>
-        <div class='active'>Code</div>
-        <div>Compiled</div>
-        <div>Output</div>
-      </div>
-      <div class='example-content'><%= result %></div>
-    </div>
-  </html>
-end
-
 def highlight(code)
   return hljs.highlight(code, { language: 'jome' }).value;
 end
-
-forall jome-ex wrap printExample end
-//forall jome-ex chain #trim, #indent wrap printExample end
 
 forall ex.jome chain indent, trim wrap highlight end
 
@@ -143,7 +125,7 @@ let content = <md>
 
   <h2 id="hello-world">Hello world</h3>
 
-  <%s <jome-ex>#log "Hello, world!"</jome-ex> %>
+  TODO
 
   <h3>Vanilla js</h3>
 

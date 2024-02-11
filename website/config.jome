@@ -1,36 +1,20 @@
 // import {write, writeSync, build, compile, execSh} from '@jome/core'
-import mdToHtml from '@jome/md-to-html'
+import mdToHtml : '@jome/md-to-html'
+import hljs : 'highlightjs-jome'
+import {trim, indent} : '@jome/core'
 // import fs from 'fs'
 
-// /*
-// Dans config.jome, définir tout ce qui est réutiliser par tous les fichiers .jome du dossier.
-
-// Mettre le format pour les strings multiligne de base
-
-
-
-// Mettre l'interpreteur de base pour les scripts utilisé
-
-// Permettre d'importer des fonctions aussi pour pouvoir les utiliser avec le use et spécifier c'est de quel fonction il s'agit.
-// */
-
-// // $URL = '/jome'
-
-// /*
-// This is where you would define units too
-// */
-
-// // TODO: Allow two types of transform formating, before interpolation or after.
-// // Let's say for markdown, you could insert markdown content into the string, or you could insert html content.
-// // It would be nice if you can format the
-// // %>func means apply the function to the whole string
-// // %<func means apply the function to ??? Wait this does not make any sense
-// // What I need is a different syntax for the interpolation <%= someVar %> // means insert it in the string, than transform it all
-// // I need something like <%& someVar %> // means take everything before this and transform it, add it to this, and add it to everything after and transform it.
-// // This would be the equivalent of doing this for md: </md>+someVar+<md>
+def highlight(code)
+  return hljs.highlight(code, { language: 'jome' }).value;
+end
 
 return {
   main: "index.jome"
+  formats: {
+    "jome-ex": {wrap: printExample}
+    "ex.jome": {chain: [indent, trim], wrap: highlight}
+  },
+  units: [{include: "#SI"}]
 }
 
 // // TODO: Remove forall, simply config here
