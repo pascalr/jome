@@ -236,7 +236,7 @@ end
   });
   function testCompile(code, expectedResult) {
     return function () {
-      assert.match(compile("#keys({})"), /Object.keys\(\{\}\)/);
+      assert.match(compile(code), expectedResult);
     };
   }
   describe("Test built-ins", function () {
@@ -244,18 +244,11 @@ end
     it("#values", testCompile("#values({})", /Object.values\(\{\}\)/));
     it("#entries", testCompile("#entries({})", /Object.entries\(\{\}\)/));
     it("#argv", testCompile("#argv", /process.argv/));
-    it("#PI", function () {
-      assert.match(compile("#PI"), /Math.PI/);
-    });
-    it("#global", function () {
-      assert.match(compile("#global"), /globalThis/);
-    });
-    it("#env", function () {
-      assert.match(compile("#env"), /process.env/);
-    });
-    it("#log", function () {
-      assert.match(compile("#log"), /console.log/);
-    });
+    it("#PI", testCompile("#PI", /Math.PI/));
+    it("#global", testCompile("#global", /globalThis/));
+    it("#env", testCompile("#env", /process.env/));
+    it("#log", testCompile("#log", /console.log/));
+
     it("#log hello world", function () {
       assert.match(
         compile('#log("Hello world!")'),

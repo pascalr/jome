@@ -226,8 +226,9 @@ end
 
 
 def testCompile(code, expectedResult)
+  // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE it code do is not being parsed properly...
   return do
-    assert.match(compile('#keys({})'), /Object.keys\(\{\}\)/);
+    assert.match(compile(code), expectedResult);
   end
 end
 
@@ -236,18 +237,11 @@ describe "Test built-ins" do
   it '#values', testCompile('#values({})', /Object.values\(\{\}\)/)
   it '#entries', testCompile('#entries({})', /Object.entries\(\{\}\)/)
   it '#argv', testCompile('#argv', /process.argv/)
-  it '#PI' do
-    assert.match(compile('#PI'), /Math.PI/);
-  end
-  it '#global' do
-    assert.match(compile('#global'), /globalThis/);
-  end
-  it '#env' do
-    assert.match(compile('#env'), /process.env/);
-  end
-  it '#log' do
-    assert.match(compile('#log'), /console.log/);
-  end
+  it '#PI', testCompile('#PI', /Math.PI/)
+  it '#global', testCompile('#global', /globalThis/)
+  it '#env', testCompile('#env', /process.env/)
+  it '#log', testCompile('#log', /console.log/)
+
   it '#log hello world' do
     assert.match(compile('#log("Hello world!")'), /console.log\("Hello world!"\)/);
   end
