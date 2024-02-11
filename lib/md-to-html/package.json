@@ -1,6 +1,6 @@
 {
   "name": "@jome/md-to-html",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Converts markdown in HTML with Jome syntax highlighting support.",
   "main": "index.js",
   "scripts": {},
@@ -12,6 +12,7 @@
   "author": "Pascal Rainville",
   "license": "MIT",
   "dependencies": {
-    "highlightjs-jome": "^0.0.3"
+    "highlightjs-jome": "^0.0.3",
+    "markdown-it": "^14.0.0"
   }
 }
