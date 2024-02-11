@@ -1060,26 +1060,37 @@ let content = <md>
 
   ### With keyword
 
-  Usefull to define interfaces of classes and functions.
+  The `with` keyword is used to list function arguments.
+  
+  It can be standalone in a .jome file which means they are arguments that can be given to the file function.
+  
+  ```jome
+  with src, dest end
+  #cp src, dest
+  ```
+  
+  It can be used along the `def` keyword to specify the function arguments.
+  This allows easy documentation of the code without having to repeat yourself in the comments.
+
+  ```jome
+  with
+    string name # The name
+    int count # The count
+  def doSomething : int
+    // ....
+  end
+  ```
+  
+  It can also be used to specify the arguments the constructor of a class takes.
 
   ```jome
   with
     name: String # Full name of the personnellement
   class Person
   end
-
-  with
-    x: float # The base value
-    y: integer # The factor
-  def multiply
-  end
   ```
-
-  This allows easy documentation of the code without having to repeat yourself in the comments.
-
-  It would be nice if there was a short way to start a single line documentation comment.
   
-  ## along keyword
+  ## along keyword - TODO WIP
 
   When you want to also have the unit or the code for a variable, you can use the along keyword.
 
@@ -1098,7 +1109,7 @@ let content = <md>
 
   def printType = |unused along type|
 
-  ## Capture de code
+  ## Capture de code - TODO WIP
 
   TODO
 
@@ -1114,7 +1125,7 @@ let content = <md>
   debug(nomDeVariable, "nomDeVariable")
   ```
 
-  ## aka or alias
+  ## aka or alias - TODO WIP
 
   I want to be able to give many possible names to a parameter.
 
@@ -1138,7 +1149,7 @@ let content = <md>
 
   It will automatically be compiled to the code above.
 
-  ## Threads
+  ## Threads - TODO WIP
 
   Exactly the same as JavaScript? await, async, ...
 
