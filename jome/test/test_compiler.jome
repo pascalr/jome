@@ -225,21 +225,17 @@ end
 
 
 
-
-
-describe "Test built-ins" do
-  it '#keys' do
+def testCompile(code, expectedResult)
+  return do
     assert.match(compile('#keys({})'), /Object.keys\(\{\}\)/);
   end
-  it '#values' do
-    assert.match(compile('#values({})'), /Object.values\(\{\}\)/);
-  end
-  it '#entries' do
-    assert.match(compile('#entries({})'), /Object.entries\(\{\}\)/);
-  end
-  it '#argv' do
-    assert.match(compile('#argv'), /process.argv/);
-  end
+end
+
+describe "Test built-ins" do
+  it '#keys', testCompile('#keys({})', /Object.keys\(\{\}\)/)
+  it '#values', testCompile('#values({})', /Object.values\(\{\}\)/)
+  it '#entries', testCompile('#entries({})', /Object.entries\(\{\}\)/)
+  it '#argv', testCompile('#argv', /process.argv/)
   it '#PI' do
     assert.match(compile('#PI'), /Math.PI/);
   end

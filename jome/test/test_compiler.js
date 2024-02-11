@@ -234,19 +234,16 @@ end
       );
     });
   });
-  describe("Test built-ins", function () {
-    it("#keys", function () {
+  function testCompile(code, expectedResult) {
+    return function () {
       assert.match(compile("#keys({})"), /Object.keys\(\{\}\)/);
-    });
-    it("#values", function () {
-      assert.match(compile("#values({})"), /Object.values\(\{\}\)/);
-    });
-    it("#entries", function () {
-      assert.match(compile("#entries({})"), /Object.entries\(\{\}\)/);
-    });
-    it("#argv", function () {
-      assert.match(compile("#argv"), /process.argv/);
-    });
+    };
+  }
+  describe("Test built-ins", function () {
+    it("#keys", testCompile("#keys({})", /Object.keys\(\{\}\)/));
+    it("#values", testCompile("#values({})", /Object.values\(\{\}\)/));
+    it("#entries", testCompile("#entries({})", /Object.entries\(\{\}\)/));
+    it("#argv", testCompile("#argv", /process.argv/));
     it("#PI", function () {
       assert.match(compile("#PI"), /Math.PI/);
     });
