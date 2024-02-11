@@ -6,6 +6,12 @@ def compile(code)
   return compileCode(code, {writeScript: false})
 end
 
+def testCompile(code, expectedResult)
+  // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE it code do is not being parsed properly...
+  return do
+    assert.match(compile(code), expectedResult);
+  end
+end
 
 
 // FIXMEEE Nested string does not work, it escapeds the nested string...
@@ -225,12 +231,7 @@ end
 
 
 
-def testCompile(code, expectedResult)
-  // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE it code do is not being parsed properly...
-  return do
-    assert.match(compile(code), expectedResult);
-  end
-end
+
 
 describe "Test built-ins" do
   it '#keys', testCompile('#keys({})', /Object.keys\(\{\}\)/)
@@ -317,6 +318,94 @@ describe "Creating functions" do
   end
   it 'let keyword with do end with args' do
     assert.match(compile('let sayHello = do |name| #log("hello", name) end'), /let sayHello = function \(name\) {\s*console.log\("hello", ?name\);?\s*}/);
+  end
+
+  describe "With curly braces" do
+    // TODO: (curly braces are always right before a closing parenthesis)
+    // let f = () => {return 10}
+    // let f = function () {return 10}
+    // let f = fn () {return 10}
+    // let f = fn () {return 10}
+    // class Foo bar() {return 10} end
+    // class Foo void bar() {return 10} end       MAYBE
+    // class Foo bar() : void {return 10} end     MAYBE
+    // class Foo bar() -> void {return 10} end    MAYBE
+
+    /*
+    class Foo
+      bar()
+      // Is bar a function call or a new function?
+      bar() {
+
+      }
+    end
+    */
+
+    /*
+    Ouin simplement supporter cela. Fuck sayHello() {]
+    def sayHello {
+      #log "Hello!"
+    }
+    Nooon ne pas supporter cette syntaxe. Avec def c'est toujours end.
+
+    // Ce n'est pas le plus beau, mais c'est pratique et explicit ainsi.
+    // C'est mieux en avant que loin après les nombreux paramères
+    // Ouin work in progress....
+    def void sayHello { }
+    def sayHello hello end
+    // THIS DOES NOT WORK... This syntax would require parentheses...
+
+    // With fn it can work because fn requires parentheses contrary to def
+    fn void sayHello() {
+
+    }
+
+    c'est un peu bizarre d'utiliser fn dans une classe par contre je trouve
+
+    class Foo
+
+      @foo = 10 // allowed
+      
+      // Maybe only assignments are allowed inside a class?
+      // The rest must be inside constructor
+      def constructor // No params here if they are specified before the class Foo
+      end
+
+      // I want to be able to do:
+
+      void doSomething() {
+
+      }
+
+      // I don't want to do inside a class:
+
+      fn void doSomething() {
+
+      }
+
+
+      # It is said that this function does something
+      # @attr arg1 The number arg1
+      # @attr arg2 The number arg2
+      # @returns The result of doSomething
+      void doSomething(int arg1, int arg2) {
+        // ...
+      }
+
+    end
+
+    Outside a class, then use (like javascript)
+
+    fn void doSomething() {
+
+    }
+
+    Outside a class the keyword fn is required to defined a new function, like in javascript.
+    */
+
+    it 'inline with arrow function with args' do
+      testCompile('(x) => x', /\(x\) => \(?x\)?/);
+    end
   end
 end
 
