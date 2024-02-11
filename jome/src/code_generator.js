@@ -3,6 +3,8 @@ const {compileTokenRaw} = require("./parser.js")
 const {filterCommas, filterNewlines, filterSpaces} = require("./analyzer.js")
 const Argument = require("./argument")
 const crypto = require('crypto');
+const path = require('path')
+const fs = require('fs')
 
 const GLOBAL_PREFIX = 'g_'
 
@@ -43,6 +45,18 @@ function extractImportBindingsByFile(lexEnv, acc={}) {
 //   return acc
 // }
 
+let GLOBAL_LIBS = ["assert", "buffer", "child_process", "cluster", "crypto", "dgram", "dns", "domain", "events",
+"fs", "http", "https", "net", "os", "path", "punycode", "querystring", "readline", "stream", "string_decoder",
+"timers", "tls", "tty", "url", "util", "v8", "vm", "zlib"]
+
+function getLibMainFile(cwd, libName) {
+  if (GLOBAL_LIBS.includes(libName)) {return libName}
+  const packageJsonPath = path.resolve(cwd, `./node_modules/${libName}/package.json`);
+  const packageJsonStr = fs.readFileSync(packageJsonPath, 'utf-8');
+  const packageJson = JSON.parse(packageJsonStr);
+  return path.resolve(cwd, `./node_modules/${libName}/`, packageJson.main);;
+}
+
 function genImportsFromBindings(ctxFile, compilerOptions) {
 
   // First add the bindings for all the file imports dependencies
@@ -67,6 +81,8 @@ function genImportsFromBindings(ctxFile, compilerOptions) {
     if (file.endsWith('.jomm') || file.endsWith('.jome')) {
       ctxFile.addDependency(file)
       jsfile = file.slice(0,-5)+'.js' // remove .jome and replace extension with js
+    } else if (compilerOptions.useAbsImportPaths && !path.extname(file) && compilerOptions.cwd) {
+      jsfile = getLibMainFile(compilerOptions.cwd, file)
     }
     let bindings = bindingsByFile[file]
     let cjs = bindings.filter(b => b.type === 'cjs-import')[0]?.name

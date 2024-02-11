@@ -4,18 +4,6 @@ const Webpage = require("../src/webpage.js");
 const { trim, indent } = require("@jome/core");
 const mdToHtml = require("@jome/md-to-html");
 module.exports = () => {
-  function printExample(result) {
-    return `
-    <div class='example'>
-      <div class='onglets'>
-        <div class='active'>Code</div>
-        <div>Compiled</div>
-        <div>Output</div>
-      </div>
-      <div class='example-content'>${result}</div>
-    </div>
-  `;
-  }
   function highlight(code) {
     return hljs.highlight(code, { language: "jome" }).value;
   }
@@ -75,7 +63,7 @@ renderCounter()`),
 
   <h2 id="hello-world">Hello world</h3>
 
-  83e12e01e1210c36810087d76fbcec01
+  TODO
 
   <h3>Vanilla js</h3>
 
@@ -222,9 +210,6 @@ renderCounter()`),
   ))
   \`\`\`
 
-  <script src="${ROOT}/js/ex_vanilla.js"></script>`).replace(
-    "83e12e01e1210c36810087d76fbcec01",
-    printExample('#log "Hello, world!"'),
-  );
+  <script src="${ROOT}/js/ex_vanilla.js"></script>`);
   return new Webpage("Jome examples", content).render();
 };
