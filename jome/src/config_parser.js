@@ -2,19 +2,25 @@
 
 const {compileFileGetCtx} = require('./compiler')
 const {LexicalEnvironment} = require('./context')
+const path = require('path')
 
 class JomeConfig {
-  constructor() {
+  constructor(data) {
     this.lexEnv = new LexicalEnvironment()
+    this.data = data||{}
+    this.main = this.data.main || 'index.jome'
   }
 }
 
 function parseConfig(absPath) {
   let {result, ctxFile} = compileFileGetCtx(absPath)
+  if (!result) {return new JomeConfig()}
+  let dir = path.dirname(absPath)
+  let context = `let __dirname = "${dir}"\n`
+  let data = eval(context+result)()
+  let conf = new JomeConfig(data)
   let lexEnv = ctxFile.lexEnv
-  let configReturn = eval(result)()
-  let conf = new JomeConfig()
-  Object.keys(configReturn?.utils||{}).forEach(util => {
+  Object.keys(data?.utils||{}).forEach(util => {
     let binding = lexEnv.bindings[util]
     if (!binding) {
       throw new Error("Internal Error parsing config.jome, missing binding for "+util)

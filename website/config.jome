@@ -1,5 +1,5 @@
 // import {write, writeSync, build, compile, execSh} from '@jome/core'
-// import mdToHtml from '@jome/md-to-html'
+import mdToHtml from '@jome/md-to-html'
 // import fs from 'fs'
 
 // /*
@@ -20,20 +20,6 @@
 // This is where you would define units too
 // */
 
-// /*
-// Pour ou contre séparer config.jome avec index.jome?
-
-// Pour séparer:
-// config.jome retourne un objet javascript, avec des paramètres, index.jome retournerait une valeur à stdout ou autre comme un autre executable?
-// use dans config.jome aurait un usage global spécial, dans index.jome ça serait local comme ailleurs
-// quand tu arrives dans un nouveau projet, tu regardes index.jome pour voir si qu'il y a, tu t'en fou au début des configs
-
-// Pour mettre ensemble:
-// ça ferais 1 fichier au lieu de 2 fichiers
-// quand tu fais jome, ça regarde le config.jome le plus près, quand tu compiles un fichier, ça regarde config.jome le plus près?
-// c'est quoi le fichier maitre? C'est index.jome. config.jome doit être dans le même dossier que index.jome pour être utilisé
-// */
-
 // // TODO: Allow two types of transform formating, before interpolation or after.
 // // Let's say for markdown, you could insert markdown content into the string, or you could insert html content.
 // // It would be nice if you can format the
@@ -43,7 +29,9 @@
 // // I need something like <%& someVar %> // means take everything before this and transform it, add it to this, and add it to everything after and transform it.
 // // This would be the equivalent of doing this for md: </md>+someVar+<md>
 
-
+return {
+  main: "index.jome"
+}
 
 // // TODO: Remove forall, simply config here
 

@@ -51,7 +51,7 @@ const args = minimist(process.argv.slice(2)); // Exclude the first two arguments
 let config = parseConfig(path.resolve('config.jome'))
 
 let wholeArgs = args._
-let fileToRun = 'index.jome' // by default
+let fileToRun = config.main
 let executableArgs = wholeArgs
 
 let {_, ...dashedArgs} = args
