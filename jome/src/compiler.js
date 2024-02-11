@@ -78,6 +78,8 @@ const DEFAULT_COMPILER_OPTIONS = {
   prettier: true, // Whether to format the code using the prettier library
   writeScript: true, // Whether to wrap the code inside a function to be exported
   inline: false, // Inside a script template literal the code is compiled inline for example
+  useAbsImportPaths: true, // Whether to use require("/absolute/path/node_modules/foo/index.js") instead of require("foo")
+  cwd: null // The current working directory. Used for useAbsImportPaths
 }
 
 class Compiler {
@@ -184,8 +186,8 @@ class Compiler {
   }
 }
 
-function compileFileGetCtx(absPath) {
-  let compiler = new Compiler()
+function compileFileGetCtx(absPath, options) {
+  let compiler = new Compiler(options)
   return compiler.compileFile(absPath)
 }
 

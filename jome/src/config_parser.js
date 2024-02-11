@@ -12,12 +12,19 @@ class JomeConfig {
   }
 }
 
+// function execute(code, cwd) {
+//   spawnSync('node', ['-e', code], { cwd, encoding: 'utf-8', stdio: 'inherit' });
+// }
+
 function parseConfig(absPath) {
-  let {result, ctxFile} = compileFileGetCtx(absPath)
-  if (!result) {return new JomeConfig()}
   let dir = path.dirname(absPath)
+  let {result, ctxFile} = compileFileGetCtx(absPath, {useAbsImportPaths: true, cwd: dir})
+  if (!result) {return new JomeConfig()}
   let context = `let __dirname = "${dir}"\n`
-  let data = eval(context+result)()
+  let code = context+result
+  // let data = execute(code, dir)
+  let data = eval(code)()
+  //let data = new Function(code)()()
   let conf = new JomeConfig(data)
   let lexEnv = ctxFile.lexEnv
   Object.keys(data?.utils||{}).forEach(util => {
