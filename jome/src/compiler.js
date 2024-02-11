@@ -4,6 +4,7 @@ const { genCode, genImports, genImportsFromBindings } = require("./code_generato
 const { analyzeNodes } = require("./analyzer")
 const { ContextFile } = require("./context.js")
 const prettier = require("@prettier/sync")
+const JomeConfig = require('./jome_config.js')
 //const prettier = require("prettier")
 
 const fs = require('fs');
@@ -87,7 +88,7 @@ class Compiler {
   constructor(options={}, config) {
     this.options = {...DEFAULT_COMPILER_OPTIONS, ...options}
     this.filesCompiled = new Set()
-    this.config = config
+    this.config = config || new JomeConfig()
   }
 
   compileFile(absPath) {

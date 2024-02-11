@@ -3,14 +3,7 @@
 const {compileFileGetCtx} = require('./compiler')
 const {LexicalEnvironment} = require('./context')
 const path = require('path')
-
-class JomeConfig {
-  constructor(data) {
-    this.lexEnv = new LexicalEnvironment()
-    this.data = data||{}
-    this.main = this.data.main || 'index.jome'
-  }
-}
+const JomeConfig = require('./jome_config.js')
 
 // function execute(code, cwd) {
 //   spawnSync('node', ['-e', code], { cwd, encoding: 'utf-8', stdio: 'inherit' });
@@ -39,5 +32,6 @@ function parseConfig(absPath) {
 }
 
 module.exports = {
-  parseConfig
+  parseConfig,
+  JomeConfig
 }

@@ -442,6 +442,7 @@ function printFormatting(lines, ctxFile) {
 }
 
 function applyFormat(format, operand) {
+  let configFormat = operand.ctxFile.compiler.config.formats[format]
   let forall = operand.ctxFile.foralls[format]
   let lines = prepareFormatting(operand)
   if (forall?.chain?.length) {
