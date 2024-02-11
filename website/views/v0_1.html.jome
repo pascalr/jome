@@ -960,7 +960,7 @@ let content = <md>
 
   Idée: Quand une classe inhérite d'un interface, mettre les valeurs par défaut dans le prototype.
 
-  ### Inline methods
+  ### Inline methods - TODO WIP
 
   Pouvoir définir une méthode sur une seule ligne avec def < funcName > =
 
@@ -974,7 +974,7 @@ let content = <md>
   end
   ```
 
-  ### Deconstructings
+  ### Deconstructings - TODO WIP
 
   I want to be able to name deconstructed arguments in a method. Maybe with keyword as? aka? alias?
 
@@ -987,7 +987,7 @@ let content = <md>
 
   WIP
 
-  ## Modules and exports
+  ## Modules and exports - TODO WIP
 
   You can write modules by writing files with the .jomm extension.
 
@@ -1043,7 +1043,7 @@ let content = <md>
   import {trim, flat} : '@jome/core'
   ```
 
-  ### Functions
+  ### Functions - TODO WIP
 
   ```jome
   // Utilise la syntaxe comme ruby
