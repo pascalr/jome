@@ -1149,7 +1149,7 @@ let content = <md>
   let someFunc = async () => {x: 1, y: 2}
   ```
 
-  ## Private
+  ## Private - TODO WIP
 
   For private fields inside classes, you can use a private block.
   You can also use the private before a method.
@@ -1168,7 +1168,7 @@ let content = <md>
 
   It compiles in javascript using a # before the names of fields.
 
-  ### Ternary
+  ### Ternary - TODO WIP
 
   Idée: pas de ternary operator comme d'habitude, parce que je veux pouvoir faire (x ? y) seulement
   sans le :. Le : est très utilisé je trouve. Je n'ai pas tant envie de l'utiliser comme opérateur simple.
@@ -1192,20 +1192,16 @@ let content = <md>
 
   ## Global variables
 
-  Global variables can be set like in javascript with the keyword global.
+  Global variables can be set like in javascript with the `globalThis` global property. You can also use the #global util.
   
   ```jome
-  global.MY_GLOBAL_VARIABLE = "some value"
+  globalThis.MY_GLOBAL_VARIABLE = "some value"
+  #global.MY_OTHER_GLOBAL_VARIABLE = "some value"
   ```
 
-  TODO: Global variables should always be set inside config.jome.
+  You can also use the configuration file config.jome to define global variables or functions. See [config.jome](#config-jome).
 
-  This ensures that any way the files are executed with Jome, it will always have access to the global variable.
-
-  What about when compiling and exporting only javascript code? Well, exporting js code is usually to make a library. And I library
-  should never use global variables. So it's OK like that.
-
-  ### Chaining methods
+  ## Chaining methods
 
   You can execute multiple methods on the same object using the `chain` keyword.
 
@@ -1221,11 +1217,9 @@ let content = <md>
 
   Chain returns the value of the last command.
 
-  ## TODO
+  ## Bugs
 
-  x += 1 // -=, *=, /=
-  x++, -- // Do I allow this? No like in ruby? It's only nice inside the for(let i = 0; i < l; i++). Otherwise it can be confusing.
-  ++x, -- // Do I allow this? No like in ruby?
+  TODO: Link to BUGS.md
 
   ## Contributing
 
@@ -1240,8 +1234,6 @@ let content = <md>
 
   ## Acknowledgements
 
-  TODO: Explain why
-
   - CoffeeScript: I was kinda lost at some point. I did not have a clear direction for my language. Until I thought, hey, coffeescript did something similar! So it gave me a lot of guidance.
   - underscore.js: A great library full of goodies.
   - vscode: Escpecially thank you for creating custom grammar. It is really nice to create a grammar and see live the tokenization.
@@ -1249,11 +1241,9 @@ let content = <md>
 
   Thank you to everyone who contributed to any open-sourced library. Escpecially under a license like MIT license. You are awesome!
 
-  TODO: Link to the librairies website
-
   Librairies used:
-  - express
-  - markdown-it
+  - [express](https://expressjs.com/)
+  - [markdown-it](https://github.com/markdown-it/markdown-it)
 </md>
 
 return Webpage('Jome', content).render()

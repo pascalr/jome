@@ -42,6 +42,8 @@ const UTILS = {
   values: (node, args) => `Object.values(${(args).join(', ')})`,
   entries: (node, args) => `Object.entries(${(args).join(', ')})`,
   PI: () => "Math.PI",
+  env: () => "process.env",
+  global: () => `globalThis`,
   argv: () => "process.argv",
   // FIXME: Ensures has one and only one arg
   trim: (node, args) => {handleTrim('trim', args)},

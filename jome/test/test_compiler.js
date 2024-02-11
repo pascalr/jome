@@ -235,6 +235,27 @@ end
     });
   });
   describe("Test built-ins", function () {
+    it("#keys", function () {
+      assert.match(compile("#keys({})"), /Object.keys\(\{\}\)/);
+    });
+    it("#values", function () {
+      assert.match(compile("#values({})"), /Object.values\(\{\}\)/);
+    });
+    it("#entries", function () {
+      assert.match(compile("#entries({})"), /Object.entries\(\{\}\)/);
+    });
+    it("#argv", function () {
+      assert.match(compile("#argv"), /process.argv/);
+    });
+    it("#PI", function () {
+      assert.match(compile("#PI"), /Math.PI/);
+    });
+    it("#global", function () {
+      assert.match(compile("#global"), /globalThis/);
+    });
+    it("#env", function () {
+      assert.match(compile("#env"), /process.env/);
+    });
     it("#log", function () {
       assert.match(compile("#log"), /console.log/);
     });
