@@ -28,6 +28,10 @@ function parseConfig(absPath) {
     //ctxFile.addFileImportDependency(util, binding.type, binding.file)
     conf.lexEnv.addBinding(util, binding)
   })
+  Object.keys(data.formats||{}).forEach(format => {
+    // TODO: Validate format
+    conf.formats[format] = data.formats[format]
+  })
   return conf
 }
 
