@@ -368,6 +368,11 @@ let content = <md>
 
   ## Types
 
+  TODO: Supporter les 2 syntaxes, c'est pas ben ben plus compliqué et ça laisse le choix à l'utilisateur.
+
+  def sum(x: int, y: int) -> int
+  def sum(int x, int y) -> int
+
   The types are specified before the variable name like in C++ or Java, not after like in typescript.
 
   You can declare primitive types directly, but you still use the keyword `let` for class instances. (You can't do it like c++ because it would be confused with function calls)
