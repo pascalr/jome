@@ -12,112 +12,109 @@ module.exports = () => {
   }
   describe("Paths", function () {
     it("Dirname shortcuts", function () {
-      assert.match(compile("#."), /__dirname/);
-      assert.match(compile("#./"), /__dirname/);
+      testCompile("#.", /__dirname/);
+      testCompile("#./", /__dirname/);
     });
     it("Absolute paths", function () {
-      assert.match(compile("#/"), /"\/"/);
-      assert.match(compile("#/some/path.ext"), /"\/some\/path\.ext"/);
+      testCompile("#/", /"\/"/);
+      testCompile("#/some/path.ext", /"\/some\/path\.ext"/);
     });
     it("Path relative to current file", function () {
-      assert.match(
-        compile("#./some_file.ext"),
+      testCompile(
+        "#./some_file.ext",
         /path.join\(__dirname, "some_file\.ext"\)/,
       );
     });
     it("Path relative to the current working directory", function () {
-      assert.match(
-        compile("#cwd/some_file.ext"),
-        /path.resolve\("\.\/some_file\.ext"\)/,
-      );
+      testCompile("#cwd/some_file.ext", /path.resolve\("\.\/some_file\.ext"\)/);
     });
     it("Path in the current file parent folder", function () {
-      assert.match(compile("#.."), /path.join\(__dirname, ".."\)/);
-      assert.match(compile("#../"), /path.join\(__dirname, "..\/"\)/);
-      assert.match(
-        compile("#../some_file.ext"),
+      testCompile("#..", /path.join\(__dirname, ".."\)/);
+      testCompile("#../", /path.join\(__dirname, "..\/"\)/);
+      testCompile(
+        "#../some_file.ext",
         /path.join\(__dirname, "..\/some_file\.ext"\)/,
       );
     });
 
     it.skip("Path in the home directory", function () {
-      assert.match(compile("#~"), /require\('os'\); os.homedir\(\)/);
-      assert.match(compile("#~/"), /require\('os'\); os.homedir\(\)/);
-      assert.match(
-        compile("#~/some_file.ext"),
+      testCompile("#~", /require\('os'\); os.homedir\(\)/);
+      testCompile("#~/", /require\('os'\); os.homedir\(\)/);
+      testCompile(
+        "#~/some_file.ext",
         /require\('os'\); path.join\(os.homedir\(\), 'some_file.ext'\)/,
       );
     });
   });
   describe("Imports", function () {
     it("Default import Jome file", function () {
-      assert.match(
-        compile('import execute from "execute.jome"'),
+      testCompile(
+        'import execute from "execute.jome"',
         /const execute = require\("execute.js"\)/,
       );
     });
     it("Default import", function () {
-      assert.match(
-        compile('import name from "module-name"'),
+      testCompile(
+        'import name from "module-name"',
         /const (\w+) = require\("module-name"\);\s*const name = \1.default;/,
       );
     });
     it("Star import", function () {
-      assert.match(
-        compile('import * as name from "module-name"'),
+      testCompile(
+        'import * as name from "module-name"',
         /const name = require\("module-name"\)/,
       );
     });
     it("Deconstructed import", function () {
-      assert.match(
-        compile('import { name } from "module-name"'),
+      testCompile(
+        'import { name } from "module-name"',
         /const { ?name ?} = require\("module-name"\)/,
       );
-      assert.match(
-        compile('import { name, name2 } from "module-name"'),
+      testCompile(
+        'import { name, name2 } from "module-name"',
         /const { ?name, name2 ?} = require\("module-name"\)/,
       );
     });
     it("Alias deconstructed import", function () {
-      assert.match(
-        compile('import { name as otherName } from "module-name"'),
+      testCompile(
+        'import { name as otherName } from "module-name"',
         /const { name: otherName } = require\("module-name"\)/,
       );
-      assert.match(
-        compile('import { normal, name as otherName } from "module-name"'),
+      testCompile(
+        'import { normal, name as otherName } from "module-name"',
         /const { normal, name: otherName } = require\("module-name"\)/,
       );
     });
     it("Alias deconstructed import with default", function () {
-      assert.match(
-        compile('import def, { name as otherName } from "module-name"'),
+      testCompile(
+        'import def, { name as otherName } from "module-name"',
         /const (\w+) = require\("module-name"\);\s*const { ?default: def, name: otherName ?} = \1;/,
       );
     });
 
     it("Default import and deconstructed", function () {
-      assert.match(
-        compile('import name, { foo } from "module-name"'),
+      testCompile(
+        'import name, { foo } from "module-name"',
         /const (\w+) = require\("module-name"\);\s*const { ?default: name, foo ?} = \1;/,
       );
     });
     it("Default import and star import", function () {
-      assert.match(
-        compile('import name, * as all from "module-name"'),
+      testCompile(
+        'import name, * as all from "module-name"',
         /const (\w+) = require\("module-name"\);\s*const { ?default: name, ...all ?} = \1;/,
       );
     });
 
     describe("Common JS imports", function () {
       it("Import all", function () {
-        assert.match(
-          compile('import name : "module-name"'),
+        testCompile(
+          'import name : "module-name"',
           /const name = require\("module-name"\);/,
         );
       });
       it("Import deconstructed", function () {
-        assert.match(
-          compile('import { foo, bar } : "module-name"'),
+        testCompile(
+          'import { foo, bar } : "module-name"',
           /const { ?foo, ?bar ?} = require\("module-name"\);/,
         );
       });
@@ -125,48 +122,48 @@ module.exports = () => {
   });
   describe("Strings", function () {
     it("Single quote strings", function () {
-      assert.match(compile("'hello Éric'"), /"hello Éric"/);
-      assert.match(
-        compile("let code = 'if (cond) {return 0;}'"),
+      testCompile("'hello Éric'", /"hello Éric"/);
+      testCompile(
+        "let code = 'if (cond) {return 0;}'",
         /let code = "if \(cond\) {return 0;}"/,
       );
 
-      assert.match(
-        compile(`'multi
-    line'`),
+      testCompile(
+        `'multi
+    line'`,
         /`multi\s+line`/,
       );
 
-      assert.match(compile("'\"hello\"'"), /"\\"hello\\""/);
+      testCompile("'\"hello\"'", /"\\"hello\\""/);
 
-      assert.match(
-        compile(`'multi \`line\`
-    with backticks'`),
+      testCompile(
+        `'multi \`line\`
+    with backticks'`,
         /`multi \\`line\\`\s+with backticks`/,
       );
     });
     it("Regular double quote strings", function () {
-      assert.match(compile('"hello"'), /"hello"/);
-      assert.match(compile('"Hello Éric!"'), /"Hello Éric!"/);
+      testCompile('"hello"', /"hello"/);
+      testCompile('"Hello Éric!"', /"Hello Éric!"/);
 
-      assert.match(
-        compile(`"multi
-    line"`),
+      testCompile(
+        `"multi
+    line"`,
         /`multi\s+line`/,
       );
-      assert.match(compile('"Hello O\'Connor"'), /"Hello O'Connor"/);
+      testCompile('"Hello O\'Connor"', /"Hello O'Connor"/);
 
-      assert.match(
-        compile(`"multi \`line\`
-    with backticks"`),
+      testCompile(
+        `"multi \`line\`
+    with backticks"`,
         /`multi \\`line\\`\s+with backticks`/,
       );
     });
     it("Double quote strings template literal", function () {
-      assert.match(compile('"1 + 1 = {1+1}"'), /`1 \+ 1 = \$\{1 ?\+ ?1\}`/);
+      testCompile('"1 + 1 = {1+1}"', /`1 \+ 1 = \$\{1 ?\+ ?1\}`/);
     });
     it("Triple single quote strings", function () {
-      assert.match(compile("'''Hello O'Connor'''"), /"Hello O'Connor"/);
+      testCompile("'''Hello O'Connor'''", /"Hello O'Connor"/);
     });
   });
   describe("Regexes", function () {
@@ -174,15 +171,15 @@ module.exports = () => {
   });
   describe("Heredocs", function () {
     it("<sh>ls</sh>", function () {
-      assert.match(
-        compile("<sh>ls</sh>"),
+      testCompile(
+        "<sh>ls</sh>",
         /const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/,
       );
     });
     describe("Heredoc percent syntax", function () {
       it('"ls"%sh', function () {
-        assert.match(
-          compile('"ls"%sh'),
+        testCompile(
+          '"ls"%sh',
           /const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/,
         );
       });
@@ -191,48 +188,45 @@ module.exports = () => {
   describe("Comments", function () {
     describe("Documentation comments", function () {
       it("Documentation comments should be compiled into js comments", function () {
-        assert.match(
-          compile("# documentation comment"),
-          /\/\/ documentation comment/,
-        );
+        testCompile("# documentation comment", /\/\/ documentation comment/);
       });
     });
   });
   describe("Test arrow call", function () {
     it("obj->call", function () {
-      assert.match(compile("obj->call"), /obj.call\(\)/);
+      testCompile("obj->call", /obj.call\(\)/);
     });
   });
   describe("Test function call", function () {
     it("Function call with parens", function () {
-      assert.match(
-        compile(`
+      testCompile(
+        `
 let add = (x,y) => x + y
 add(10, 5)
-`),
+`,
         /\s*let add = \(x, ?y\) => \(?x \+ y\)?;?\s*add\(10, ?5\);?/,
       );
     });
     it("Function call without parens", function () {
-      assert.match(
-        compile(`
+      testCompile(
+        `
 let add = (x,y) => x + y
 add 10, 5
-`),
+`,
         /\s*let add = \(x, ?y\) => \(?x \+ y\)?;?\s*add\(10, ?5\);?/,
       );
     });
   });
   describe("Test class", function () {
     it("Class with one method", function () {
-      assert.match(
-        compile(`
+      testCompile(
+        `
 class Person
   def sayHello
     #log("Hello!")
   end
 end
-`),
+`,
         /\s*class Person\s*\{\s+sayHello = \(\) => \{\s*console.log\("Hello!"\);?\s*\};?\s*\}/,
       );
     });
@@ -248,91 +242,79 @@ end
     it("#log", testCompile("#log", /console.log/));
 
     it("#log hello world", function () {
-      assert.match(
-        compile('#log("Hello world!")'),
-        /console.log\("Hello world!"\)/,
-      );
+      testCompile('#log("Hello world!")', /console.log\("Hello world!"\)/);
     });
     it("#log hello world without parens", function () {
-      assert.match(
-        compile('#log "Hello world!"'),
-        /console.log\("Hello world!"\)/,
-      );
+      testCompile('#log "Hello world!"', /console.log\("Hello world!"\)/);
     });
     it("{x:1}.#log", function () {
-      assert.match(compile("{x:1}.#log"), /console.log\(\{ ?x\: ?1 ?\}\);?/);
+      testCompile("{x:1}.#log", /console.log\(\{ ?x\: ?1 ?\}\);?/);
     });
   });
   describe("Creating functions", function () {
     it("def keyword", function () {
-      assert.match(
-        compile('def sayHello #log("hello") end'),
+      testCompile(
+        'def sayHello #log("hello") end',
         /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
       );
     });
     it("def keyword with args", function () {
-      assert.match(
-        compile('def sayHello(name) #log("hello", name) end'),
+      testCompile(
+        'def sayHello(name) #log("hello", name) end',
         /function sayHello\(name\) {\s*console.log\("hello", ?name\);?\s*}/,
       );
     });
 
     it("let keyword with function end", function () {
-      assert.match(
-        compile('let sayHello = function #log("hello") end'),
+      testCompile(
+        'let sayHello = function #log("hello") end',
         /let sayHello = function \(\) {\s*console.log\("hello"\);?\s*}/,
       );
     });
     it("let keyword with function end with args", function () {
-      assert.match(
-        compile('let sayHello = function(name) #log("hello", name) end'),
+      testCompile(
+        'let sayHello = function(name) #log("hello", name) end',
         /let sayHello = function \(name\) {\s*console.log\("hello", ?name\);?\s*}/,
       );
     });
     it("let keyword with arrow function", function () {
-      assert.match(
-        compile("let giveMe5 = () => 5"),
-        /let giveMe5 = \(\) => \(?5\)?/,
-      );
+      testCompile("let giveMe5 = () => 5", /let giveMe5 = \(\) => \(?5\)?/);
     });
     it("let keyword with arrow function with args", function () {
-      assert.match(
-        compile("let echo = (x) => x"),
-        /let echo = \(x\) => \(?x\)?/,
-      );
+      testCompile("let echo = (x) => x", /let echo = \(x\) => \(?x\)?/);
     });
 
     it("inline with function end", function () {
-      assert.match(
-        compile('let f = function #log("hello") end'),
+      testCompile(
+        'let f = function #log("hello") end',
         /let f = function \(\) {\s*console.log\("hello"\);?\s*}/,
       );
     });
     it("inline with function end with args", function () {
-      assert.match(
-        compile('let f = function(x, name) #log("hello", name) end'),
+      testCompile(
+        'let f = function(x, name) #log("hello", name) end',
         /let f = function \(x,\s*name\) {\s*console.log\("hello", ?name\);?\s*}/,
       );
     });
     it("inline with arrow function", function () {
-      assert.match(compile("() => 5"), /\(\) => \(?5\)?/);
+      testCompile("() => 5", /\(\) => \(?5\)?/);
     });
     it("inline with arrow function with args no paren", function () {
-      assert.match(compile("x => x"), /\(?x\)? => \(?x\)?/);
+      testCompile("x => x", /\(?x\)? => \(?x\)?/);
     });
     it("inline with arrow function with args", function () {
-      assert.match(compile("(x) => x"), /\(x\) => \(?x\)?/);
+      testCompile("(x) => x", /\(x\) => \(?x\)?/);
     });
 
     it("let keyword with do end", function () {
-      assert.match(
-        compile('let sayHello = do #log("hello") end'),
+      testCompile(
+        'let sayHello = do #log("hello") end',
         /let sayHello = function \(\) {\s*console.log\("hello"\);?\s*}/,
       );
     });
     it("let keyword with do end with args", function () {
-      assert.match(
-        compile('let sayHello = do |name| #log("hello", name) end'),
+      testCompile(
+        'let sayHello = do |name| #log("hello", name) end',
         /let sayHello = function \(name\) {\s*console.log\("hello", ?name\);?\s*}/,
       );
     });
@@ -345,52 +327,52 @@ end
   });
   describe("Test if statements", function () {
     it("if statements blocks", function () {
-      assert.match(
-        compile('if true #log("hello") end'),
+      testCompile(
+        'if true #log("hello") end',
         /\s*if \(true\) \{\s*console.log\("hello"\);?\s*\}/,
       );
     });
 
     it("if modifier", function () {
-      assert.match(
-        compile('let x; x = "10" if true'),
+      testCompile(
+        'let x; x = "10" if true',
         /let x;\s*if \(?true\)? \{\s*x = "10";?\s*\}/,
       );
     });
     it("if statements blocks with elsif and else", function () {
-      assert.match(
-        compile(`if true
+      testCompile(
+        `if true
   x = 1
 elsif false
   x = 2
 else
   x = 3
 end
-`),
+`,
         /\s*if \(true\) \{\s*x = 1;\s*\} else if \(false\) \{\s*x = 2;\s*\} else \{\s*x = 3;\s*\}/,
       );
     });
   });
   describe("Test attribute accessor", function () {
     it("({x:5}).x", function () {
-      assert.match(compile("({x:5}).x"), /\(\{ ?x\: ?5 ?\}\)\.x/);
+      testCompile("({x:5}).x", /\(\{ ?x\: ?5 ?\}\)\.x/);
     });
     it("let o; o.x", function () {
-      assert.match(compile("let o; o.x"), /let o;\s*?o\.x;?/);
+      testCompile("let o; o.x", /let o;\s*?o\.x;?/);
     });
 
     describe("Optional attribute accessor", function () {
       it("let o; o?.x", function () {
-        assert.match(compile("let o; o?.x"), /let o;\s*?o\?\.x;?/);
+        testCompile("let o; o?.x", /let o;\s*?o\?\.x;?/);
       });
       it("let o; o?.x?.y", function () {
-        assert.match(compile("let o; o?.x?.y"), /let o;\s*?o\?\.x\?\.y;?/);
+        testCompile("let o; o?.x?.y", /let o;\s*?o\?\.x\?\.y;?/);
       });
     });
   });
   describe("Test attribute setter", function () {
     it("let o; o.x = 10", function () {
-      assert.match(compile("let o; o.x = 10"), /let o;\s*?o\.x ?= ?10;?/);
+      testCompile("let o; o.x = 10", /let o;\s*?o\.x ?= ?10;?/);
     });
   });
   describe("Values", function () {
@@ -445,17 +427,17 @@ end
   });
   describe("No group", function () {
     it("Test each do end", function () {
-      assert.match(
-        compile(`
+      testCompile(
+        `
   [1,2,3,4,5].each do |i|
     console.log i
   end
-  `),
+  `,
         /\s*\[1, 2, 3, 4, 5\]\.each\(function \(i\) \{\s*console\.log\(i\);?\s*\}\)\s*/,
       );
     });
     it("Pass named parameters to functions", function () {
-      assert.match(compile("add x: 1, y: 2"), /add\(\{ x: 1, y: 2 \}\)/);
+      testCompile("add x: 1, y: 2", /add\(\{ x: 1, y: 2 \}\)/);
     });
 
     it("let shouldAddSemiToDec = 1", function () {
@@ -467,7 +449,7 @@ end
   });
   describe("Assignment", function () {
     it("let x = 1", function () {
-      assert.match(compile("let x = 1"), /(var|let)\s+x\s*=\s*1/);
+      testCompile("let x = 1", /(var|let)\s+x\s*=\s*1/);
     });
   });
   describe("Operations", function () {
@@ -485,20 +467,20 @@ end
     });
     describe("Mathematic operations", function () {
       it("addition", function () {
-        assert.match(compile("1 + 2"), /1 \+ 2/);
-        assert.match(compile("1 + 2 + 3"), /1 \+ 2 \+ 3/);
+        testCompile("1 + 2", /1 \+ 2/);
+        testCompile("1 + 2 + 3", /1 \+ 2 \+ 3/);
       });
       it("multiplication", function () {
-        assert.match(compile("1 * 2"), /1 \* 2/);
-        assert.match(compile("1 * 2 * 3"), /1 \* 2 \* 3/);
+        testCompile("1 * 2", /1 \* 2/);
+        testCompile("1 * 2 * 3", /1 \* 2 \* 3/);
       });
       it("division", function () {
-        assert.match(compile("8 / 2"), /8 \/ 2/);
-        assert.match(compile("8 / 4 / 2"), /8 \/ 4 \/ 2/);
+        testCompile("8 / 2", /8 \/ 2/);
+        testCompile("8 / 4 / 2", /8 \/ 4 \/ 2/);
       });
       it("substraction", function () {
-        assert.match(compile("8 - 2"), /8 \- 2/);
-        assert.match(compile("8 - 2 - 3"), /8 \- 2 \- 3/);
+        testCompile("8 - 2", /8 \- 2/);
+        testCompile("8 - 2 - 3", /8 \- 2 \- 3/);
       });
     });
     describe("Priority of operations", function () {});
