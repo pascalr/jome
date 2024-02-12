@@ -5,6 +5,11 @@ module.exports = () => {
   function compile(code) {
     return compileCode(code, { writeScript: false });
   }
+  function testCompile(code, expectedResult) {
+    return function () {
+      assert.match(compile(code), expectedResult);
+    };
+  }
   describe("Paths", function () {
     it("Dirname shortcuts", function () {
       assert.match(compile("#."), /__dirname/);
@@ -234,11 +239,6 @@ end
       );
     });
   });
-  function testCompile(code, expectedResult) {
-    return function () {
-      assert.match(compile(code), expectedResult);
-    };
-  }
   describe("Test built-ins", function () {
     it("#keys", testCompile("#keys({})", /Object.keys\(\{\}\)/));
     it("#values", testCompile("#values({})", /Object.values\(\{\}\)/));
@@ -338,6 +338,12 @@ end
         /let sayHello = function \(name\) {\s*console.log\("hello", ?name\);?\s*}/,
       );
     });
+
+    describe("With curly braces", function () {
+      it("inline with arrow function with args", function () {
+        testCompile("(x) => x", /\(x\) => \(?x\)?/);
+      });
+    });
   });
   describe("Test if statements", function () {
     it("if statements blocks", function () {
@@ -425,37 +431,23 @@ end
   });
   describe("Types", function () {
     describe("Variable declaration", function () {
-      describe("Default types", function () {
-        it("int", function () {
-          assert.match(compile("int x"), /let x/);
-        });
-        it("int assignment", function () {
-          assert.match(compile("int x = 0"), /let x = 0/);
-        });
-        it("float", function () {
-          assert.match(compile("float x"), /let x/);
-        });
-        it("float assignment", function () {
-          assert.match(compile("float x = 1.0"), /let x = 1\.0/);
-        });
-        it("string", function () {
-          assert.match(compile("string x"), /let x/);
-        });
-        it("string assignment", function () {
-          assert.match(compile('string x = "hello"'), /let x = "hello"/);
-        });
-        it("bool", function () {
-          assert.match(compile("bool x"), /let x/);
-        });
-        it("bool assignment", function () {
-          assert.match(compile("bool x = true"), /let x = true/);
-        });
-        it("array[]", function () {
-          assert.match(compile("int[] x"), /let x/);
-        });
-        it("array[] assignment", function () {
-          assert.match(compile("int[] x = [1,2,3]"), /let x = \[1, ?2, ?3\]/);
-        });
+      describe("Default types with type before", function () {
+        it("int", testCompile("int x", /let x/));
+        it("int assignment", testCompile("int x = 0", /let x = 0/));
+        it("float", testCompile("float x", /let x/));
+        it("float assignment", testCompile("float x = 1.0", /let x = 1\.0/));
+        it("string", testCompile("string x", /let x/));
+        it(
+          "string assignment",
+          testCompile('string x = "hello"', /let x = "hello"/),
+        );
+        it("bool", testCompile("bool x", /let x/));
+        it("bool assignment", testCompile("bool x = true", /let x = true/));
+        it("int[]", testCompile("int[] x", /let x/));
+        it(
+          "int[] assignment",
+          testCompile("int[] x = [1,2,3]", /let x = \[1, ?2, ?3\]/),
+        );
       });
     });
   });

@@ -353,11 +353,22 @@ module.exports = () => {
   #write! 'Some content', to: './somefile.txt', overwrite: true
   \`\`\`
 
+  ## Assignment - TODO WIP
+
+  let x = 10 // yes
+  int x = 10 // yes, string, float, ... works too
+  x := 10 // maybe, same as let
+  x ::= 10 // maybe, same as const?
+  var x = 10 // probably
+  const x = 10 // probably
+  Foo foo = Foo("arg") // no, use instead: let foo = Foo("arg")
+
   ## Types
 
-  In version 0.1, I don't want to yet handle errors for types.
+  TODO: Supporter les 2 syntaxes, c'est pas ben ben plus compliqué et ça laisse le choix à l'utilisateur.
 
-  But I'd like to be able to create variables with a type. It just won't be checked yet.
+  def sum(x: int, y: int) -> int
+  def sum(int x, int y) -> int
 
   The types are specified before the variable name like in C++ or Java, not after like in typescript.
 

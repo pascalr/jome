@@ -515,37 +515,17 @@ end
 
 describe "Types" do
   describe "Variable declaration" do
-    describe "Default types" do
-      it 'int' do
-        assert.match(compile('int x'), /let x/);
-      end
-      it 'int assignment' do
-        assert.match(compile('int x = 0'), /let x = 0/);
-      end
-      it 'float' do
-        assert.match(compile('float x'), /let x/);
-      end
-      it 'float assignment' do
-        assert.match(compile('float x = 1.0'), /let x = 1\.0/);
-      end
-      it 'string' do
-        assert.match(compile('string x'), /let x/);
-      end
-      it 'string assignment' do
-        assert.match(compile('string x = "hello"'), /let x = "hello"/);
-      end
-      it 'bool' do
-        assert.match(compile('bool x'), /let x/);
-      end
-      it 'bool assignment' do
-        assert.match(compile('bool x = true'), /let x = true/);
-      end
-      it 'array[]' do
-        assert.match(compile('int[] x'), /let x/);
-      end
-      it 'array[] assignment' do
-        assert.match(compile('int[] x = [1,2,3]'), /let x = \[1, ?2, ?3\]/);
-      end
+    describe "Default types with type before" do
+      it 'int', testCompile('int x', /let x/)
+      it 'int assignment', testCompile('int x = 0', /let x = 0/)
+      it 'float', testCompile('float x', /let x/)
+      it 'float assignment', testCompile('float x = 1.0', /let x = 1\.0/)
+      it 'string', testCompile('string x', /let x/)
+      it 'string assignment', testCompile('string x = "hello"', /let x = "hello"/)
+      it 'bool', testCompile('bool x', /let x/)
+      it 'bool assignment', testCompile('bool x = true', /let x = true/)
+      it 'int[]', testCompile('int[] x', /let x/)
+      it 'int[] assignment', testCompile('int[] x = [1,2,3]', /let x = \[1, ?2, ?3\]/)
       // TODO: SomeClass
       // TODO: Array<int>
       // TODO: SomeClass<int> are templates allowed???

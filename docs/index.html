@@ -315,9 +315,18 @@ underscore.js: #map, #reduce, ...</p>
 <p>For functions that have a sync and async version, use the exclamation mark after to use the sync version.</p>
 <pre><code class="language-jome"><span class="hljs-built_in function_">#write!</span> <span class="hljs-string">&#x27;Some content&#x27;</span>, to: <span class="hljs-string">&#x27;./somefile.txt&#x27;</span>, overwrite: <span class="hljs-literal">true</span>
 </code></pre>
+<h2>Assignment - TODO WIP</h2>
+<p>let x = 10 // yes
+int x = 10 // yes, string, float, ... works too
+x := 10 // maybe, same as let
+x ::= 10 // maybe, same as const?
+var x = 10 // probably
+const x = 10 // probably
+Foo foo = Foo(&quot;arg&quot;) // no, use instead: let foo = Foo(&quot;arg&quot;)</p>
 <h2>Types</h2>
-<p>In version 0.1, I don't want to yet handle errors for types.</p>
-<p>But I'd like to be able to create variables with a type. It just won't be checked yet.</p>
+<p>TODO: Supporter les 2 syntaxes, c'est pas ben ben plus compliqué et ça laisse le choix à l'utilisateur.</p>
+<p>def sum(x: int, y: int) -&gt; int
+def sum(int x, int y) -&gt; int</p>
 <p>The types are specified before the variable name like in C++ or Java, not after like in typescript.</p>
 <p>You can declare primitive types directly, but you still use the keyword <code>let</code> for class instances. (You can't do it like c++ because it would be confused with function calls)</p>
 <pre><code class="language-jome"><span class="hljs-type">int</span> <span class="hljs-variable">i</span> = <span class="hljs-number">0</span>
