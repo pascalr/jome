@@ -397,36 +397,24 @@ end
   });
   describe("Values", function () {
     it("integer", function () {
-      assert.match(compile("10"), /10/);
-      assert.match(compile("1234"), /1234/);
+      testCompile("10", /10/);
+      testCompile("1234", /1234/);
     });
     it("float", function () {
-      assert.match(compile("1.0"), /1.0/);
-      assert.match(compile("12.34"), /12.34/);
+      testCompile("1.0", /1.0/);
+      testCompile("12.34", /12.34/);
     });
 
     describe("Language constant values", function () {
-      it("true", function () {
-        assert.match(compile("true"), /true/);
-      });
-      it("false", function () {
-        assert.match(compile("false"), /false/);
-      });
-      it("null", function () {
-        assert.match(compile("null"), /null/);
-      });
-      it("undefined", function () {
-        assert.match(compile("undefined"), /undefined/);
-      });
+      it("true", testCompile("true", /true/));
+      it("false", testCompile("false", /false/));
+      it("null", testCompile("null", /null/));
+      it("undefined", testCompile("undefined", /undefined/));
     });
 
     describe("Arrays", function () {
-      it("[]", function () {
-        assert.match(compile("[]"), /\[\]/);
-      });
-      it("[1,2,3]", function () {
-        assert.match(compile("[1,2,3]"), /\[1, ?2, ?3\]/);
-      });
+      it("[]", testCompile("[]", /\[\]/));
+      it("[1,2,3]", testCompile("[1,2,3]", /\[1, ?2, ?3\]/));
     });
   });
   describe("Types", function () {

@@ -476,36 +476,24 @@ end
 
 describe "Values" do
   it 'integer' do
-    assert.match(compile('10'), /10/);
-    assert.match(compile('1234'), /1234/);
+    testCompile('10', /10/)
+    testCompile('1234', /1234/)
   end
   it 'float' do
-    assert.match(compile('1.0'), /1.0/);
-    assert.match(compile('12.34'), /12.34/);
+    testCompile('1.0', /1.0/)
+    testCompile('12.34', /12.34/)
   end
 
   describe "Language constant values" do
-    it 'true' do
-      assert.match(compile('true'), /true/);
-    end
-    it 'false' do
-      assert.match(compile('false'), /false/);
-    end
-    it 'null' do
-      assert.match(compile('null'), /null/);
-    end
-    it 'undefined' do
-      assert.match(compile('undefined'), /undefined/);
-    end
+    it 'true', testCompile('true', /true/)
+    it 'false', testCompile('false', /false/)
+    it 'null', testCompile('null', /null/)
+    it 'undefined', testCompile('undefined', /undefined/)
   end
 
   describe "Arrays" do
-    it '[]' do
-      assert.match(compile('[]'), /\[\]/);
-    end
-    it '[1,2,3]' do
-      assert.match(compile('[1,2,3]'), /\[1, ?2, ?3\]/);
-    end
+    it '[]', testCompile('[]', /\[\]/)
+    it '[1,2,3]', testCompile('[1,2,3]', /\[1, ?2, ?3\]/)
   end
 end
 
