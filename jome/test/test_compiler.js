@@ -170,9 +170,7 @@ module.exports = () => {
     });
   });
   describe("Regexes", function () {
-    it("/test1212/", function () {
-      assert.match(compile("/test1212/"), /\/test1212\//);
-    });
+    it("/test1212/", testCompile("/test1212/", /\/test1212\//));
   });
   describe("Heredocs", function () {
     it("<sh>ls</sh>", function () {
@@ -440,18 +438,10 @@ end
     });
   });
   describe("Test objects", function () {
-    it("({})", function () {
-      assert.match(compile("({})"), /\(\{\}\)/);
-    });
-    it("{x: 1}", function () {
-      assert.match(compile("{x: 1}"), /\{\s*x\: ?1;?\s*\}/);
-    });
-    it("{x: 1, y: 2}", function () {
-      assert.match(compile("{x: 1, y: 2}"), /\{\s*x\: ?1, y: 2\s*\}/);
-    });
-    it("key is quoted string", function () {
-      assert.match(compile('{"x": 1}'), /\{\s*x\: ?1;?\s*\}/);
-    });
+    it("({})", testCompile("({})", /\(\{\}\)/));
+    it("{x: 1}", testCompile("{x: 1}", /\{\s*x\: ?1;?\s*\}/));
+    it("{x: 1, y: 2}", testCompile("{x: 1, y: 2}", /\{\s*x\: ?1, y: 2\s*\}/));
+    it("key is quoted string", testCompile('{"x": 1}', /\{\s*x\: ?1;?\s*\}/));
   });
   describe("No group", function () {
     it("Test each do end", function () {
@@ -482,18 +472,16 @@ end
   });
   describe("Operations", function () {
     describe("Inversion (! operator)", function () {
-      it("!true", function () {
-        assert.match(compile("!true"), /!true/);
-      });
-      it("!true === false", function () {
-        assert.match(compile("!true === false"), /!true === false/);
-      });
-      it("!true === !false", function () {
-        assert.match(compile("!true === !false"), /!true === !false/);
-      });
-      it("!true === !!false", function () {
-        assert.match(compile("!true === !!false"), /!true === !!false/);
-      });
+      it("!true", testCompile("!true", /!true/));
+      it("!true === false", testCompile("!true === false", /!true === false/));
+      it(
+        "!true === !false",
+        testCompile("!true === !false", /!true === !false/),
+      );
+      it(
+        "!true === !!false",
+        testCompile("!true === !!false", /!true === !!false/),
+      );
     });
     describe("Mathematic operations", function () {
       it("addition", function () {
@@ -516,13 +504,9 @@ end
     describe("Priority of operations", function () {});
   });
   describe('Test "ternary"', function () {
-    it("true ? 1", function () {
-      assert.match(compile("true ? 1"), /true \? 1 : null/);
-    });
+    it("true ? 1", testCompile("true ? 1", /true \? 1 : null/));
 
-    it("false ? 1 : 0", function () {
-      assert.match(compile("false ? 1 : 0"), /false \? 1 : 0/);
-    });
+    it("false ? 1 : 0", testCompile("false ? 1 : 0", /false \? 1 : 0/));
   });
   describe("async", function () {});
 };

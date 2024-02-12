@@ -154,9 +154,7 @@ end
 
 // Regexes should work, the textmate grammar was copy pasted from the javascript one.
 describe "Regexes" do
-  it '/test1212/' do
-    assert.match(compile(`/test1212/`), /\/test1212\//);
-  end
+  it '/test1212/', testCompile(`/test1212/`, /\/test1212\//)
 end
 
 
@@ -556,18 +554,10 @@ end
 
 
 describe "Test objects" do
-  it '({})' do
-    assert.match(compile('({})'), /\(\{\}\)/);
-  end
-  it '{x: 1}' do
-    assert.match(compile('{x: 1}'), /\{\s*x\: ?1;?\s*\}/);
-  end
-  it '{x: 1, y: 2}' do
-    assert.match(compile('{x: 1, y: 2}'), /\{\s*x\: ?1, y: 2\s*\}/);
-  end
-  it 'key is quoted string' do
-    assert.match(compile('{"x": 1}'), /\{\s*x\: ?1;?\s*\}/);
-  end
+  it '({})', testCompile('({})', /\(\{\}\)/)
+  it '{x: 1}', testCompile('{x: 1}', /\{\s*x\: ?1;?\s*\}/)
+  it '{x: 1, y: 2}', testCompile('{x: 1, y: 2}', /\{\s*x\: ?1, y: 2\s*\}/)
+  it 'key is quoted string', testCompile('{"x": 1}', /\{\s*x\: ?1;?\s*\}/)
 end
 
 
@@ -609,18 +599,10 @@ end
 
 describe 'Operations' do
   describe 'Inversion (! operator)' do
-    it '!true' do
-      assert.match(compile('!true'), /!true/);
-    end
-    it '!true === false' do
-      assert.match(compile('!true === false'), /!true === false/);
-    end
-    it '!true === !false' do
-      assert.match(compile('!true === !false'), /!true === !false/);
-    end
-    it '!true === !!false' do
-      assert.match(compile('!true === !!false'), /!true === !!false/);
-    end
+    it '!true', testCompile('!true', /!true/)
+    it '!true === false', testCompile('!true === false', /!true === false/)
+    it '!true === !false', testCompile('!true === !false', /!true === !false/)
+    it '!true === !!false', testCompile('!true === !!false', /!true === !!false/)
   end
   describe 'Mathematic operations' do
     it 'addition' do
@@ -649,13 +631,9 @@ end
 
 
 describe 'Test "ternary"' do
-  it 'true ? 1' do
-    assert.match(compile('true ? 1'), /true \? 1 : null/);
-  end
+  it 'true ? 1', testCompile('true ? 1', /true \? 1 : null/)
   // C'est quand même plus beau cond ? val1 : val2
-  it 'false ? 1 : 0' do
-    assert.match(compile('false ? 1 : 0'), /false \? 1 : 0/);
-  end
+  it 'false ? 1 : 0', testCompile('false ? 1 : 0', /false \? 1 : 0/)
 end
 
 
