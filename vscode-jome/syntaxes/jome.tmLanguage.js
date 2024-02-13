@@ -460,7 +460,7 @@ let grammar = {
           begin: "(\\.)(#\\w+\\!?)\\(",
           beginCaptures: {
             1: { name: "punctuation.dot.jome" },
-            2: { name: "entity.name.function.utility.jome" }
+            2: { name: "support.function.builtin.jome" }
           },
           end: "\\)",
           patterns: [{ include: "#expression" }]
@@ -470,7 +470,7 @@ let grammar = {
           begin: "(\\.)(#\\w+\\b\\!?)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))",
           beginCaptures: {
             1: { name: "punctuation.dot.jome" },
-            2: { name: "entity.name.function.utility.jome" }
+            2: { name: "support.function.builtin.jome" }
           },
           end: "\r\n|\n|$|chain",
           patterns: [{ include: "#expression" }]
@@ -495,14 +495,14 @@ let grammar = {
         {
           name: "support.function-call.jome",
           begin: "(#\\w+\\!?)\\(",
-          beginCaptures: { 1: { name: "entity.name.function.utility.jome" } },
+          beginCaptures: { 1: { name: "support.function.builtin.jome" } },
           end: "\\)",
           patterns: [{ include: "#expression" }]
         },
         {
           name: "support.function-call.WIP.jome",
           begin: "(#\\w+\\b\\!?)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))",
-          beginCaptures: { 1: { name: "entity.name.function.utility.jome" } },
+          beginCaptures: { 1: { name: "support.function.builtin.jome" } },
           end: "\r\n|\n|$|chain",
           patterns: [{ include: "#expression" }]
         },
@@ -596,7 +596,7 @@ let grammar = {
           notWorkingMatch: "#\\b\\w+\\b(?!\\(|#)"
         },
         {
-          name: "entity.name.function.utility.jome",
+          name: "support.function.builtin.jome",
           match: "#\\w+\\!?"
         }
       ]

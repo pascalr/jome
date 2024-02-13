@@ -154,7 +154,7 @@ function validateFuncCall(node, hasDot) {
     throw new Error("Internal error. A function call with a dot should have a left operand.")
   }
   let nameTok = node.parts[hasDot ? 1 : 0]
-  if (nameTok.type !== 'entity.name.function.jome' && nameTok.type !== "entity.name.function.utility.jome") {
+  if (nameTok.type !== 'entity.name.function.jome' && nameTok.type !== "support.function.builtin.jome") {
     throw new Error("Internal error. Function calls should always start with a name.")
   }
   let parts = node.parts.slice(hasDot ? 2 : 1)

@@ -325,7 +325,7 @@ function compInlineUtility(node) {
 function compileFuncCall(node) {
   let tok = node.data.nameTok
   let isInlineUtil = tok.type === 'entity.name.function.utility-inline.jome' // .#
-  if (tok.type === 'entity.name.function.utility.jome' || isInlineUtil) {
+  if (tok.type === 'support.function.builtin.jome' || isInlineUtil) {
     let name = tok.raw.slice(isInlineUtil ? 2 : 1)
     let args = [...node.operands, ...mergeNamedParameters(node.data.args)].map(c => genCode(c));
     return compileUtility(name, node, args)
@@ -553,7 +553,7 @@ const CODE_GENERATORS = {
     }).join(' ');
   },
   "entity.name.function.utility-inline.jome": (node) => compInlineUtility(node), // "Hello".#log  
-  'entity.name.function.utility.jome': (node) => compUtility(node), // #log
+  'support.function.builtin.jome': (node) => compUtility(node), // #log
   "variable.other.constant.utility.jome": (node) => compUtility(node), // #PI
   "support.function-call.WIP.jome": compileFuncCall, // someFunc "some arg"
   "support.function-call.jome": compileFuncCall, // someFunc("some arg")

@@ -690,7 +690,7 @@
               "name": "punctuation.dot.jome"
             },
             "2": {
-              "name": "entity.name.function.utility.jome"
+              "name": "support.function.builtin.jome"
             }
           },
           "end": "\\)",
@@ -708,7 +708,7 @@
               "name": "punctuation.dot.jome"
             },
             "2": {
-              "name": "entity.name.function.utility.jome"
+              "name": "support.function.builtin.jome"
             }
           },
           "end": "\r\n|\n|$|chain",
@@ -756,7 +756,7 @@
           "begin": "(#\\w+\\!?)\\(",
           "beginCaptures": {
             "1": {
-              "name": "entity.name.function.utility.jome"
+              "name": "support.function.builtin.jome"
             }
           },
           "end": "\\)",
@@ -771,7 +771,7 @@
           "begin": "(#\\w+\\b\\!?)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))",
           "beginCaptures": {
             "1": {
-              "name": "entity.name.function.utility.jome"
+              "name": "support.function.builtin.jome"
             }
           },
           "end": "\r\n|\n|$|chain",
@@ -921,7 +921,7 @@
           "notWorkingMatch": "#\\b\\w+\\b(?!\\(|#)"
         },
         {
-          "name": "entity.name.function.utility.jome",
+          "name": "support.function.builtin.jome",
           "match": "#\\w+\\!?"
         }
       ]
