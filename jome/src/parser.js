@@ -42,7 +42,8 @@ const OPERAND_TYPES = [
   "keyword.other.string-format.jome",
   "entity.name.function.utility-inline.jome",
   "meta.getter.jome",
-  "meta.getter.bracket.optional.jome"
+  "meta.getter.bracket.optional.jome",
+  "constant.language.boolean.jome"
 ]
 
 function compileTokenRaw(token) {

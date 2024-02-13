@@ -535,6 +535,7 @@ const CODE_GENERATORS = {
   'entity.name.function.jome': compileRaw,
   'constant.numeric.integer.jome': compileRaw,
   'constant.numeric.float.jome': compileRaw,
+  'constant.language.boolean.jome': compileRaw,
   "string.regexp.js": compileRaw,
   // let foo
   // var bar

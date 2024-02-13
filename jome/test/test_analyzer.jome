@@ -53,9 +53,26 @@ describe "The bindings should have the good variableType when specified" do
     let binding = analyzeCodeGetBinding(`let x : int`, 'x')
     assert.equal(binding.variableType, 'int')
   end
+end
+
+describe "The bindings should have the good variableType implicitely detected when possible" do
   it 'let x = 43' do
     let binding = analyzeCodeGetBinding(`let x = 43`, 'x')
     assert.equal(binding.variableType, 'int')
   end
+  it 'let x = true' do
+    let binding = analyzeCodeGetBinding(`let x = true`, 'x')
+    assert.equal(binding.variableType, 'bool')
+  end
+  it 'let x = 2.0' do
+    let binding = analyzeCodeGetBinding(`let x = 2.0`, 'x')
+    assert.equal(binding.variableType, 'float')
+  end
+  it 'let x = "hello"' do
+    let binding = analyzeCodeGetBinding(`let x = "hello"`, 'x')
+    assert.equal(binding.variableType, 'string')
+  end
 end
+
+
 

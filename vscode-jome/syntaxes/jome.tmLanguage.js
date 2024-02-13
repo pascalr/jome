@@ -1008,7 +1008,15 @@ let grammar = {
         },
         {
           name: "constant.language.jome",
-          match: "\\b(true|false|null|undefined)\\b"
+          match: "\\b(null|undefined)\\b"
+        },
+        {
+          name: "constant.language.boolean.jome",
+          match: "\\b(true)\\b"
+        },
+        {
+          name: "constant.language.boolean.jome",
+          match: "\\b(false)\\b"
         },
         {
           name: "variable.language.jome",

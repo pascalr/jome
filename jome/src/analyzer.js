@@ -22,6 +22,10 @@ function pushError(node, message) {
 // TODO: Make sure no infinite loop
 function analyzeNodes(nodes, throwError = true) {
   nodes.forEach(node => {
+    // Analyze the operands first
+    if (node.operands?.length) {
+      analyzeNodes(node.operands)
+    }
     let analyzer = ANALYZERS[node.type]
     if (analyzer) {
       let err = analyzer(node)
@@ -30,9 +34,6 @@ function analyzeNodes(nodes, throwError = true) {
           throw new Error(err?.message || err || node.errors[0])
         }
       }
-    }
-    if (node.operands?.length) {
-      analyzeNodes(node.operands)
     }
     if (node.parts?.length) {
       analyzeNodes(node.parts)
@@ -361,6 +362,20 @@ const ANALYZERS = {
     //   return `Invalid left hand side for assignement ${node.type}. Was: ${node.type}`
     // } else if (!OPERAND_TYPES.includes(node.operands[1].type)) {
     //   return `Invalid value for assignement ${node.type}. Was: ${node.type}`
+    }
+    
+    if (node.operands[0].type === 'meta.declaration.jome') {
+      // Try to determine the type implicitely
+      let binding = node.lexEnv.getBinding(node.operands[0].parts[1].raw)
+      if (node.operands[1].type === 'constant.numeric.integer.jome') {
+        binding.variableType = 'int'
+      } else if (node.operands[1].type === 'constant.numeric.float.jome') {
+        binding.variableType = 'float'
+      } else if (node.operands[1].type.startsWith("string")) {
+        binding.variableType = 'string'
+      } else if (node.operands[1].type === 'constant.language.boolean.jome') {
+        binding.variableType = 'bool'
+      }
     }
   },
   // chain

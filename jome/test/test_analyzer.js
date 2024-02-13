@@ -36,9 +36,23 @@ module.exports = () => {
       let binding = analyzeCodeGetBinding("let x : int", "x");
       assert.equal(binding.variableType, "int");
     });
+  });
+  describe("The bindings should have the good variableType implicitely detected when possible", function () {
     it("let x = 43", function () {
       let binding = analyzeCodeGetBinding("let x = 43", "x");
       assert.equal(binding.variableType, "int");
+    });
+    it("let x = true", function () {
+      let binding = analyzeCodeGetBinding("let x = true", "x");
+      assert.equal(binding.variableType, "bool");
+    });
+    it("let x = 2.0", function () {
+      let binding = analyzeCodeGetBinding("let x = 2.0", "x");
+      assert.equal(binding.variableType, "float");
+    });
+    it('let x = "hello"', function () {
+      let binding = analyzeCodeGetBinding('let x = "hello"', "x");
+      assert.equal(binding.variableType, "string");
     });
   });
 };
