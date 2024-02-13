@@ -405,7 +405,7 @@
     "declaration": {
       "patterns": [
         {
-          "name": "meta.declaration.typed.jome",
+          "name": "meta.declaration.jome",
           "match": "(\\b(?:int|string|bool|float)\\b(?:\\[\\])*)\\s+([A-Za-z_$]\\w*)",
           "captures": {
             "1": {

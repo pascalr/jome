@@ -539,7 +539,7 @@ const CODE_GENERATORS = {
   // let foo
   // var bar
   'meta.declaration.jome': (node) => {
-    return `${node.parts[0].raw} ${node.parts[1].raw}`
+    return `${node.data.keyword} ${node.data.name}`
   },
   // do |args| /* ... */ end
   'meta.do-end.jome': compileStandaloneFunction,
@@ -642,7 +642,6 @@ const CODE_GENERATORS = {
   //'keyword.operator.assignment.jome': (node) => (compileOperator(node)+";"),
   // let
   'keyword.control.declaration.jome': (node) => `let ${node.operands[0].raw}`,
-  'meta.declaration.typed.jome': (node) => `let ${node.data.name}`,
 
   // handles all lines starting with keyword import
   "meta.statement.import.jome": () => {

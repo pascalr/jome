@@ -294,7 +294,7 @@ let grammar = {
     declaration: {
       patterns: [
         {
-          name: "meta.declaration.typed.jome",
+          name: "meta.declaration.jome",
           match: `(${REGEX_PRIMITIVE_TYPE})\\s+(${REGEX_VARIABLE})`,
           captures: {
             1: { name: "storage.type.primitive.jome" },

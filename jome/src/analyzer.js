@@ -225,7 +225,10 @@ const ANALYZERS = {
   // let foo
   // var bar
   'meta.declaration.jome': (node) => {
-    let keyword = node.parts[0].raw.trimLeft()
+    let keyword = 'let'
+    if (node.parts[0].type === 'keyword.control.declaration.jome') {
+      keyword = node.parts[0].raw.trimLeft()
+    }
     if (node.parts.length < 2) {
       return pushError(node, "Missing variable name after keyword "+keyword)
     }
@@ -233,8 +236,11 @@ const ANALYZERS = {
     let variableType
     if (node.parts.length === 4) {
       variableType = node.parts[3].raw
+    } else if (node.parts[0].type === 'storage.type.primitive.jome') {
+      variableType = node.parts[0].raw
     }
     node.lexEnv.addBinding(name, {type: 'declaration', keyword, variableType})
+    node.data = {keyword, name, variableType}
   },
   // do |args| /* ... */ end
   'meta.do-end.jome': (node) => {
@@ -507,13 +513,6 @@ const ANALYZERS = {
   },
 
   "meta.tag.jome": validateTag,
-
-  "meta.declaration.typed.jome": (node) => {
-    let type = node.parts[0].raw
-    let name = node.parts[1].raw
-    // TODO: Add to lexical environment
-    node.data = {type, name}
-  },
 
   "meta.forall.jome": (node) => {
     ensureStartRaw(node, 'forall')
