@@ -418,13 +418,37 @@
         },
         {
           "name": "meta.declaration.jome",
-          "match": "\\b(let|var)\\b\\s*([A-Za-z_$]\\w*)?",
+          "match": "\\b(let|var)\\b\\s*([A-Za-z_$]\\w*)?(?:\\s*(\\:)\\s*(\\b(?:int|string|bool|float)\\b(?:\\[\\])*))",
           "captures": {
             "1": {
               "name": "keyword.control.declaration.jome"
             },
             "2": {
               "name": "variable.other.jome"
+            },
+            "3": {
+              "name": "punctuation.colon.jome"
+            },
+            "4": {
+              "name": "storage.type.jome"
+            }
+          }
+        },
+        {
+          "name": "meta.declaration.jome",
+          "match": "\\b(let|var)\\b\\s*([A-Za-z_$]\\w*)?(?:\\s*(\\:)\\s*([A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*))?",
+          "captures": {
+            "1": {
+              "name": "keyword.control.declaration.jome"
+            },
+            "2": {
+              "name": "variable.other.jome"
+            },
+            "3": {
+              "name": "punctuation.colon.jome"
+            },
+            "4": {
+              "name": "entity.name.type.jome"
             }
           }
         }

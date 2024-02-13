@@ -303,10 +303,22 @@ let grammar = {
         },
         {
           name: "meta.declaration.jome",
-          match: `\\b(let|var)\\b\\s*(${REGEX_VARIABLE})?`,
+          match: `\\b(let|var)\\b\\s*(${REGEX_VARIABLE})?(?:\\s*(\\:)\\s*(${REGEX_PRIMITIVE_TYPE}))`,
           captures: {
             1: { name: "keyword.control.declaration.jome" },
-            2: { name: "variable.other.jome" }
+            2: { name: "variable.other.jome" },
+            3: { name: "punctuation.colon.jome" },
+            4: { name: "storage.type.jome" }
+          }
+        },
+        {
+          name: "meta.declaration.jome",
+          match: `\\b(let|var)\\b\\s*(${REGEX_VARIABLE})?(?:\\s*(\\:)\\s*(${REGEX_TYPE}))?`,
+          captures: {
+            1: { name: "keyword.control.declaration.jome" },
+            2: { name: "variable.other.jome" },
+            3: { name: "punctuation.colon.jome" },
+            4: { name: "entity.name.type.jome" }
           }
         },
       ]

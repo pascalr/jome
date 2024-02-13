@@ -14,6 +14,7 @@ function pushError(node, message) {
     endIndex: node.token.chStartIdx + node.raw.length,
     message
   }
+  //throw new Error(message)
   node.ctxFile.errors.push(error)
   return error
 }
@@ -25,7 +26,9 @@ function analyzeNodes(nodes, throwError = true) {
     if (analyzer) {
       let err = analyzer(node)
       if (err || node.errors.length) {
-        if (throwError) {throw new Error(err?.message || err || node.errors[0])}
+        if (throwError) {
+          throw new Error(err?.message || err || node.errors[0])
+        }
       }
     }
     if (node.operands?.length) {
@@ -223,11 +226,15 @@ const ANALYZERS = {
   // var bar
   'meta.declaration.jome': (node) => {
     let keyword = node.parts[0].raw.trimLeft()
-    if (node.parts.length !== 2) {
+    if (node.parts.length < 2) {
       return pushError(node, "Missing variable name after keyword "+keyword)
     }
     let name = node.parts[1].raw
-    node.lexEnv.addBinding(name, {type: 'declaration', keyword})
+    let variableType
+    if (node.parts.length === 4) {
+      variableType = node.parts[3].raw
+    }
+    node.lexEnv.addBinding(name, {type: 'declaration', keyword, variableType})
   },
   // do |args| /* ... */ end
   'meta.do-end.jome': (node) => {
