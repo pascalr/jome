@@ -216,6 +216,15 @@ add 10, 5
         /\s*let add = \(x, ?y\) => \(?x \+ y\)?;?\s*add\(10, ?5\);?/,
       );
     });
+    it("Function call without parens with entry", function () {
+      testCompile(
+        `
+let idle = (options) => 10
+idle delay: 20
+`,
+        /\s*let idle = \(options\) => \(10\)?;?\s*idle\(\{delay: ?20\}\);?/,
+      );
+    });
   });
   describe("Test class", function () {
     it("Class with one method", function () {
@@ -415,6 +424,30 @@ end
         it(
           "int[] assignment",
           testCompile("int[] x = [1,2,3]", /let x = \[1, ?2, ?3\]/),
+        );
+      });
+      describe("Default types with type after", function () {
+        it("int", testCompile("let x : int", /let x/));
+        it("int assignment", testCompile("let x : int = 0", /let x = 0/));
+        it("float", testCompile("let x : float", /let x/));
+        it(
+          "float assignment",
+          testCompile("let x : float = 1.0", /let x = 1\.0/),
+        );
+        it("string", testCompile("let x : string", /let x/));
+        it(
+          "string assignment",
+          testCompile('let x : string = "hello"', /let x = "hello"/),
+        );
+        it("bool", testCompile("let x : bool", /let x/));
+        it(
+          "bool assignment",
+          testCompile("let x : bool = true", /let x = true/),
+        );
+        it("int[]", testCompile("let x : int[]", /let x/));
+        it(
+          "int[] assignment",
+          testCompile("let x : int[] = [1,2,3]", /let x = \[1, ?2, ?3\]/),
         );
       });
     });

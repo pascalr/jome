@@ -275,7 +275,7 @@ const ANALYZERS = {
     // A colon can we used for the else of a ternary, but also for creating an entry for a function call
 
     let t = node.operands[0].type
-    if (t !== 'keyword.operator.existential.jome' && !t.startsWith("string")) {
+    if (t !== 'keyword.operator.existential.jome' && !t.startsWith("string") && t !== 'variable.other.jome') {
       return pushError(node, `Invalid use of colon. Wrong left operand: `+t)
     }
 
