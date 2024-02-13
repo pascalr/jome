@@ -9,6 +9,9 @@ const fs = require('fs')
 const GLOBAL_PREFIX = 'g_'
 
 function genCode(node) {
+  if (!node) {
+    throw new Error("Error invalid node was inexistant")
+  }
   let generator = CODE_GENERATORS[node.type]
   if (!generator) {
     throw new Error("Can't compile node of type "+node.type)

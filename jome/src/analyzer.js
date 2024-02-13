@@ -272,10 +272,13 @@ const ANALYZERS = {
     if (node.operands.length !== 2) {
       return pushError(node, "A colon operator must have a two operands")
     }
-    // A colon can we used for the else of a ternary, but also for creating en entry
-    // if (node.operands[0].type !== 'keyword.operator.existential.jome') {
-    //   return `Expecting ? before : in ternary expression.`
-    // }
+    // A colon can we used for the else of a ternary, but also for creating an entry for a function call
+
+    let t = node.operands[0].type
+    if (t !== 'keyword.operator.existential.jome' && !t.startsWith("string")) {
+      return pushError(node, `Invalid use of colon. Wrong left operand: `+t)
+    }
+
     let child = node.operands[1]
     if (!OPERAND_TYPES.includes(child.type)) {
       return pushError(node, `Invalid operand type for operator ${node.type}. Was: ${child.type}`)
