@@ -6,8 +6,15 @@ def compile(code)
   return compileCode(code, {writeScript: false})
 end
 
+// FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE it code do is not being parsed properly...
+
 def testCompile(code, expectedResult)
-  // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE it code do is not being parsed properly...
+  return do // TODO: Change this to fn () ... end when this will work
+    assert.match(compile(code), expectedResult);
+  end
+end
+
+def assertCompile(code, expectedResult)
   assert.match(compile(code), expectedResult);
 end
 
@@ -22,31 +29,31 @@ end
 
 describe "Paths" do
   it 'Dirname shortcuts' do
-    testCompile(`#.`, /__dirname/);
-    testCompile(`#./`, /__dirname/);
+    assertCompile(`#.`, /__dirname/);
+    assertCompile(`#./`, /__dirname/);
     // compile(`#.`).#assertMatch(/__dirname/);
     // compile(`#./`).#assertMatch(/__dirname/);
   end
   it 'Absolute paths' do
-    testCompile(`#/`, /"\/"/);
-    testCompile(`#/some/path.ext`, /"\/some\/path\.ext"/);
+    assertCompile(`#/`, /"\/"/);
+    assertCompile(`#/some/path.ext`, /"\/some\/path\.ext"/);
   end
   it 'Path relative to current file' do
-    testCompile(`#./some_file.ext`, /path.join\(__dirname, "some_file\.ext"\)/);
+    assertCompile(`#./some_file.ext`, /path.join\(__dirname, "some_file\.ext"\)/);
   end
   it 'Path relative to the current working directory' do
-    testCompile(`#cwd/some_file.ext`, /path.resolve\("\.\/some_file\.ext"\)/);
+    assertCompile(`#cwd/some_file.ext`, /path.resolve\("\.\/some_file\.ext"\)/);
   end
   it 'Path in the current file parent folder' do
-    testCompile(`#..`, /path.join\(__dirname, ".."\)/);
-    testCompile(`#../`, /path.join\(__dirname, "..\/"\)/);
-    testCompile(`#../some_file.ext`, /path.join\(__dirname, "..\/some_file\.ext"\)/);
+    assertCompile(`#..`, /path.join\(__dirname, ".."\)/);
+    assertCompile(`#../`, /path.join\(__dirname, "..\/"\)/);
+    assertCompile(`#../some_file.ext`, /path.join\(__dirname, "..\/some_file\.ext"\)/);
   end
   // I am not yet sure if I want to support this. It would be nice, but maybe #~ could be used for something else? Like signals?
   it.skip 'Path in the home directory' do
-    testCompile(`#~`, /require\('os'\); os.homedir\(\)/);
-    testCompile(`#~/`, /require\('os'\); os.homedir\(\)/);
-    testCompile(`#~/some_file.ext`, /require\('os'\); path.join\(os.homedir\(\), 'some_file.ext'\)/);
+    assertCompile(`#~`, /require\('os'\); os.homedir\(\)/);
+    assertCompile(`#~/`, /require\('os'\); os.homedir\(\)/);
+    assertCompile(`#~/some_file.ext`, /require\('os'\); path.join\(os.homedir\(\), 'some_file.ext'\)/);
   end
 end
 
@@ -57,26 +64,26 @@ end
 
 describe "Imports" do
   it 'Default import Jome file' do
-    testCompile(`import execute from "execute.jome"`, /const execute = require\("execute.js"\)/);
+    assertCompile(`import execute from "execute.jome"`, /const execute = require\("execute.js"\)/);
   end
   it 'Default import' do
-    testCompile(`import name from "module-name"`, /const (\w+) = require\("module-name"\);\s*const name = \1.default;/);
-    //testCompile(`import name from "module-name"`, /const name = require\("module-name"\)/);
+    assertCompile(`import name from "module-name"`, /const (\w+) = require\("module-name"\);\s*const name = \1.default;/);
+    //assertCompile(`import name from "module-name"`, /const name = require\("module-name"\)/);
   end
   it 'Star import' do
-    testCompile(`import * as name from "module-name"`, /const name = require\("module-name"\)/);
-    //testCompile(`import * as name from "module-name"`, /const (\w+) = require\("module-name"\);\s*const { ?default: \w+, ...name ?} = \1;/);
+    assertCompile(`import * as name from "module-name"`, /const name = require\("module-name"\)/);
+    //assertCompile(`import * as name from "module-name"`, /const (\w+) = require\("module-name"\);\s*const { ?default: \w+, ...name ?} = \1;/);
   end
   it 'Deconstructed import' do
-    testCompile(`import { name } from "module-name"`, /const { ?name ?} = require\("module-name"\)/);
-    testCompile(`import { name, name2 } from "module-name"`, /const { ?name, name2 ?} = require\("module-name"\)/);
+    assertCompile(`import { name } from "module-name"`, /const { ?name ?} = require\("module-name"\)/);
+    assertCompile(`import { name, name2 } from "module-name"`, /const { ?name, name2 ?} = require\("module-name"\)/);
   end
   it 'Alias deconstructed import' do
-    testCompile(`import { name as otherName } from "module-name"`, /const { name: otherName } = require\("module-name"\)/);
-    testCompile(`import { normal, name as otherName } from "module-name"`, /const { normal, name: otherName } = require\("module-name"\)/);
+    assertCompile(`import { name as otherName } from "module-name"`, /const { name: otherName } = require\("module-name"\)/);
+    assertCompile(`import { normal, name as otherName } from "module-name"`, /const { normal, name: otherName } = require\("module-name"\)/);
   end
   it 'Alias deconstructed import with default' do
-    testCompile(`import def, { name as otherName } from "module-name"`, /const (\w+) = require\("module-name"\);\s*const { ?default: def, name: otherName ?} = \1;/);
+    assertCompile(`import def, { name as otherName } from "module-name"`, /const (\w+) = require\("module-name"\);\s*const { ?default: def, name: otherName ?} = \1;/);
   end
 
   // import { "string name" as alias } from "module-name";
@@ -85,11 +92,11 @@ describe "Imports" do
   // end
 
   it 'Default import and deconstructed' do
-    testCompile(`import name, { foo } from "module-name"`, /const (\w+) = require\("module-name"\);\s*const { ?default: name, foo ?} = \1;/);
+    assertCompile(`import name, { foo } from "module-name"`, /const (\w+) = require\("module-name"\);\s*const { ?default: name, foo ?} = \1;/);
   end
   it 'Default import and star import' do
-    // testCompile(`import name, * as all from "module-name"`, /const all = require\("module-name"\);\s*const { ?default: name?} = all;/);
-    testCompile(`import name, * as all from "module-name"`, /const (\w+) = require\("module-name"\);\s*const { ?default: name, ...all ?} = \1;/);
+    // assertCompile(`import name, * as all from "module-name"`, /const all = require\("module-name"\);\s*const { ?default: name?} = all;/);
+    assertCompile(`import name, * as all from "module-name"`, /const (\w+) = require\("module-name"\);\s*const { ?default: name, ...all ?} = \1;/);
   end
   // import "module-name"; TODO: Not written yet in the parser
 
@@ -97,10 +104,10 @@ describe "Imports" do
 
   describe "Common JS imports" do
     it 'Import all' do
-      testCompile(`import name : "module-name"`, /const name = require\("module-name"\);/);
+      assertCompile(`import name : "module-name"`, /const name = require\("module-name"\);/);
     end
     it 'Import deconstructed' do
-      testCompile(`import { foo, bar } : "module-name"`, /const { ?foo, ?bar ?} = require\("module-name"\);/);
+      assertCompile(`import { foo, bar } : "module-name"`, /const { ?foo, ?bar ?} = require\("module-name"\);/);
     end
   end
 end
@@ -113,34 +120,34 @@ describe "Strings" do
   // Single quote strings should be compiled as is
   it 'Single quote strings' do
     // Note: Prettier replaces the string with double quotes
-    testCompile(`'hello Éric'`, /"hello Éric"/);
-    testCompile(`let code = 'if (cond) {return 0;}'`, /let code = "if \(cond\) {return 0;}"/);
+    assertCompile(`'hello Éric'`, /"hello Éric"/);
+    assertCompile(`let code = 'if (cond) {return 0;}'`, /let code = "if \(cond\) {return 0;}"/);
     // Single quotes are allowed to be multiline in Jome
-    testCompile(`'multi
+    assertCompile(`'multi
     line'`, /`multi\s+line`/);
     // Test escapes double quotes inside
-    testCompile(`'"hello"'`, /"\\"hello\\""/);
+    assertCompile(`'"hello"'`, /"\\"hello\\""/);
     // Test escapes backticks inside
-    testCompile(`'multi \`line\`
+    assertCompile(`'multi \`line\`
     with backticks'`, /`multi \\`line\\`\s+with backticks`/);
   end
   it 'Regular double quote strings' do
-    testCompile('"hello"', /"hello"/);
-    testCompile(`"Hello Éric!"`, /"Hello Éric!"/);
+    assertCompile('"hello"', /"hello"/);
+    assertCompile(`"Hello Éric!"`, /"Hello Éric!"/);
     // Double quotes are allowed to be multiline in Jome
-    testCompile(`"multi
+    assertCompile(`"multi
     line"`, /`multi\s+line`/);
-    testCompile(`"Hello O'Connor"`, /"Hello O'Connor"/);
+    assertCompile(`"Hello O'Connor"`, /"Hello O'Connor"/);
     // Test escapes backticks inside
-    testCompile(`"multi \`line\`
+    assertCompile(`"multi \`line\`
     with backticks"`, /`multi \\`line\\`\s+with backticks`/);
   end
   it 'Double quote strings template literal' do
-    testCompile(`"1 + 1 = {1+1}"`, /`1 \+ 1 = \$\{1 ?\+ ?1\}`/);
+    assertCompile(`"1 + 1 = {1+1}"`, /`1 \+ 1 = \$\{1 ?\+ ?1\}`/);
   end
   it 'Triple single quote strings' do
     // Note: Prettier replaces the string with double quotes
-    testCompile(`'''Hello O'Connor'''`, /"Hello O'Connor"/);
+    assertCompile(`'''Hello O'Connor'''`, /"Hello O'Connor"/);
   end
   // TODO: Test """ Triple double quote strings """
   // TODO: Test """ Triple double quote strings template literals {{ foo }} """
@@ -160,11 +167,11 @@ end
 
 describe "Heredocs" do
   it '<sh>ls</sh>' do
-    testCompile(`<sh>ls</sh>`, /const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/);
+    assertCompile(`<sh>ls</sh>`, /const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/);
   end
   describe "Heredoc percent syntax" do
     it '"ls"%sh' do
-      testCompile(`"ls"%sh`, /const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/);
+      assertCompile(`"ls"%sh`, /const execSh = require\("@jome\/core\/execSh"\);\s*execSh\("ls"\);/);
     end
   end
 end
@@ -175,7 +182,7 @@ end
 describe "Comments" do
   describe "Documentation comments" do
     it 'Documentation comments should be compiled into js comments' do
-      testCompile(`# documentation comment`, /\/\/ documentation comment/);
+      assertCompile(`# documentation comment`, /\/\/ documentation comment/);
     end
   end
 end
@@ -186,7 +193,7 @@ end
 
 describe "Test arrow call" do
   it 'obj->call' do
-    testCompile(`obj->call`, /obj.call\(\)/);
+    assertCompile(`obj->call`, /obj.call\(\)/);
   end
 end
 
@@ -195,25 +202,25 @@ end
 
 describe "Test function call" do
   it 'Function call with parens' do
-    testCompile(`
+    assertCompile(`
 let add = (x,y) => x + y
 add(10, 5)
 `, /\s*let add = \(x, ?y\) => \(?x \+ y\)?;?\s*add\(10, ?5\);?/);
   end
   it 'Function call without parens' do
-    testCompile(`
+    assertCompile(`
 let add = (x,y) => x + y
 add 10, 5
 `, /\s*let add = \(x, ?y\) => \(?x \+ y\)?;?\s*add\(10, ?5\);?/);
   end
   it 'Function call without parens with entry' do
-    testCompile(`
+    assertCompile(`
 let idle = (options) => 10
 idle delay: 20
 `, /\s*let idle = \(options\) => \(10\)?;?\s*idle\(\{delay: ?20\}\);?/);
   end
   it 'Function call with shorthand key entry' do
-    testCompile(`
+    assertCompile(`
 let delay = 20
 let idle = (options) => 10
 idle :delay
@@ -221,7 +228,7 @@ idle :delay
 //`, /\s*let delay = 20; let idle = \(options\) => \(10\)?;?\s*idle\(\{delay\}\);?/);
   end
   it 'Function call with shorthand boolean entry' do
-    testCompile(`
+    assertCompile(`
 let idle = (options) => 10
 idle :force!
 `, /WTF!!!!!!!!!!!!!!!!!!!!!!!!!!/);
@@ -236,7 +243,7 @@ end
 
 describe "Test class" do
   it 'Class with one method' do
-    testCompile(`
+    assertCompile(`
 class Person
   def sayHello
     #log("Hello!")
@@ -262,13 +269,13 @@ describe "Test built-ins" do
   it '#log', testCompile('#log', /console.log/)
 
   it '#log hello world' do
-    testCompile('#log("Hello world!")', /console.log\("Hello world!"\)/);
+    assertCompile('#log("Hello world!")', /console.log\("Hello world!"\)/);
   end
   it '#log hello world without parens' do
-    testCompile('#log "Hello world!"', /console.log\("Hello world!"\)/);
+    assertCompile('#log "Hello world!"', /console.log\("Hello world!"\)/);
   end
   it '{x:1}.#log' do
-    testCompile('{x:1}.#log', /console.log\(\{ ?x\: ?1 ?\}\);?/);
+    assertCompile('{x:1}.#log', /console.log\(\{ ?x\: ?1 ?\}\);?/);
   end
 end
 
@@ -296,46 +303,46 @@ describe "Creating functions" do
   // let giveMe5 = => 5
   // *** KEYWORD def ***
   it 'def keyword' do
-    testCompile('def sayHello #log("hello") end', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
+    assertCompile('def sayHello #log("hello") end', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
   end
   it 'def keyword with args' do
-    testCompile('def sayHello(name) #log("hello", name) end', /function sayHello\(name\) {\s*console.log\("hello", ?name\);?\s*}/);
+    assertCompile('def sayHello(name) #log("hello", name) end', /function sayHello\(name\) {\s*console.log\("hello", ?name\);?\s*}/);
   end
   // *** KEYWORD let ***
   it 'let keyword with function end' do
-    testCompile('let sayHello = function #log("hello") end', /let sayHello = function \(\) {\s*console.log\("hello"\);?\s*}/);
+    assertCompile('let sayHello = function #log("hello") end', /let sayHello = function \(\) {\s*console.log\("hello"\);?\s*}/);
   end
   it 'let keyword with function end with args' do
-    testCompile('let sayHello = function(name) #log("hello", name) end', /let sayHello = function \(name\) {\s*console.log\("hello", ?name\);?\s*}/);
+    assertCompile('let sayHello = function(name) #log("hello", name) end', /let sayHello = function \(name\) {\s*console.log\("hello", ?name\);?\s*}/);
   end
   it 'let keyword with arrow function' do
-    testCompile('let giveMe5 = () => 5', /let giveMe5 = \(\) => \(?5\)?/);
+    assertCompile('let giveMe5 = () => 5', /let giveMe5 = \(\) => \(?5\)?/);
   end
   it 'let keyword with arrow function with args' do
-    testCompile('let echo = (x) => x', /let echo = \(x\) => \(?x\)?/);
+    assertCompile('let echo = (x) => x', /let echo = \(x\) => \(?x\)?/);
   end
   // *** inline ***
   it 'inline with function end' do
-    testCompile('let f = function #log("hello") end', /let f = function \(\) {\s*console.log\("hello"\);?\s*}/);
+    assertCompile('let f = function #log("hello") end', /let f = function \(\) {\s*console.log\("hello"\);?\s*}/);
   end
   it 'inline with function end with args' do
-    testCompile('let f = function(x, name) #log("hello", name) end', /let f = function \(x,\s*name\) {\s*console.log\("hello", ?name\);?\s*}/);
+    assertCompile('let f = function(x, name) #log("hello", name) end', /let f = function \(x,\s*name\) {\s*console.log\("hello", ?name\);?\s*}/);
   end
   it 'inline with arrow function' do
-    testCompile('() => 5', /\(\) => \(?5\)?/);
+    assertCompile('() => 5', /\(\) => \(?5\)?/);
   end
   it 'inline with arrow function with args no paren' do
-    testCompile('x => x', /\(?x\)? => \(?x\)?/);
+    assertCompile('x => x', /\(?x\)? => \(?x\)?/);
   end
   it 'inline with arrow function with args' do
-    testCompile('(x) => x', /\(x\) => \(?x\)?/);
+    assertCompile('(x) => x', /\(x\) => \(?x\)?/);
   end
   // *** KEYWORD do ***
   it 'let keyword with do end' do
-    testCompile('let sayHello = do #log("hello") end', /let sayHello = function \(\) {\s*console.log\("hello"\);?\s*}/);
+    assertCompile('let sayHello = do #log("hello") end', /let sayHello = function \(\) {\s*console.log\("hello"\);?\s*}/);
   end
   it 'let keyword with do end with args' do
-    testCompile('let sayHello = do |name| #log("hello", name) end', /let sayHello = function \(name\) {\s*console.log\("hello", ?name\);?\s*}/);
+    assertCompile('let sayHello = do |name| #log("hello", name) end', /let sayHello = function \(name\) {\s*console.log\("hello", ?name\);?\s*}/);
   end
 
   describe "With curly braces" do
@@ -429,7 +436,7 @@ describe "Creating functions" do
     */
 
     it 'inline with arrow function with args' do
-      testCompile('(x) => x', /\(x\) => \(?x\)?/);
+      assertCompile('(x) => x', /\(x\) => \(?x\)?/);
     end
   end
 end
@@ -439,14 +446,14 @@ end
 
 describe "Test if statements" do
   it 'if statements blocks' do
-    testCompile('if true #log("hello") end', /\s*if \(true\) \{\s*console.log\("hello"\);?\s*\}/);
+    assertCompile('if true #log("hello") end', /\s*if \(true\) \{\s*console.log\("hello"\);?\s*\}/);
   end
   // An if modifier executes everything to it's left only if the condition is true
   it 'if modifier' do
-    testCompile('let x; x = "10" if true', /let x;\s*if \(?true\)? \{\s*x = "10";?\s*\}/);
+    assertCompile('let x; x = "10" if true', /let x;\s*if \(?true\)? \{\s*x = "10";?\s*\}/);
   end
   it 'if statements blocks with elsif and else' do
-    testCompile(`if true
+    assertCompile(`if true
   x = 1
 elsif false
   x = 2
@@ -462,18 +469,18 @@ end
 
 describe "Test attribute accessor" do
   it '({x:5}).x' do
-    testCompile('({x:5}).x', /\(\{ ?x\: ?5 ?\}\)\.x/);
+    assertCompile('({x:5}).x', /\(\{ ?x\: ?5 ?\}\)\.x/);
   end
   it 'let o; o.x' do
-    testCompile('let o; o.x', /let o;\s*?o\.x;?/);
+    assertCompile('let o; o.x', /let o;\s*?o\.x;?/);
   end
 
   describe "Optional attribute accessor" do
     it 'let o; o?.x' do
-      testCompile('let o; o?.x', /let o;\s*?o\?\.x;?/);
+      assertCompile('let o; o?.x', /let o;\s*?o\?\.x;?/);
     end
     it 'let o; o?.x?.y' do
-      testCompile('let o; o?.x?.y', /let o;\s*?o\?\.x\?\.y;?/);
+      assertCompile('let o; o?.x?.y', /let o;\s*?o\?\.x\?\.y;?/);
     end
   end
 end
@@ -484,7 +491,7 @@ end
 
 describe "Test attribute setter" do
   it 'let o; o.x = 10' do
-    testCompile('let o; o.x = 10', /let o;\s*?o\.x ?= ?10;?/);
+    assertCompile('let o; o.x = 10', /let o;\s*?o\.x ?= ?10;?/);
   end
 end
 
@@ -494,12 +501,12 @@ end
 
 describe "Values" do
   it 'integer' do
-    testCompile('10', /10/)
-    testCompile('1234', /1234/)
+    assertCompile('10', /10/)
+    assertCompile('1234', /1234/)
   end
   it 'float' do
-    testCompile('1.0', /1.0/)
-    testCompile('12.34', /12.34/)
+    assertCompile('1.0', /1.0/)
+    assertCompile('12.34', /12.34/)
   end
 
   describe "Language constant values" do
@@ -602,14 +609,14 @@ end
 
 describe 'No group' do
   it 'Test each do end' do
-    testCompile(`
+    assertCompile(`
   [1,2,3,4,5].each do |i|
     console.log i
   end
   `, /\s*\[1, 2, 3, 4, 5\]\.each\(function \(i\) \{\s*console\.log\(i\);?\s*\}\)\s*/);
   end
   it 'Pass named parameters to functions' do
-    testCompile(`add x: 1, y: 2`, /add\(\{ x: 1, y: 2 \}\)/);
+    assertCompile(`add x: 1, y: 2`, /add\(\{ x: 1, y: 2 \}\)/);
   end
 
   it 'let shouldAddSemiToDec = 1' do
@@ -624,7 +631,7 @@ end
 describe 'Assignment' do
   it 'let x = 1' do
     // FIXME: Do I want var or I want let? I used var because it is what CoffeeScript is using by default.
-    testCompile('let x = 1', /(var|let)\s+x\s*=\s*1/);
+    assertCompile('let x = 1', /(var|let)\s+x\s*=\s*1/);
   end
 end
 
@@ -641,20 +648,20 @@ describe 'Operations' do
   end
   describe 'Mathematic operations' do
     it 'addition' do
-      testCompile('1 + 2', /1 \+ 2/);
-      testCompile('1 + 2 + 3', /1 \+ 2 \+ 3/);
+      assertCompile('1 + 2', /1 \+ 2/);
+      assertCompile('1 + 2 + 3', /1 \+ 2 \+ 3/);
     end
     it 'multiplication' do
-      testCompile('1 * 2', /1 \* 2/);
-      testCompile('1 * 2 * 3', /1 \* 2 \* 3/);
+      assertCompile('1 * 2', /1 \* 2/);
+      assertCompile('1 * 2 * 3', /1 \* 2 \* 3/);
     end
     it 'division' do
-      testCompile('8 / 2', /8 \/ 2/);
-      testCompile('8 / 4 / 2', /8 \/ 4 \/ 2/);
+      assertCompile('8 / 2', /8 \/ 2/);
+      assertCompile('8 / 4 / 2', /8 \/ 4 \/ 2/);
     end
     it 'substraction' do
-      testCompile('8 - 2', /8 \- 2/);
-      testCompile('8 - 2 - 3', /8 \- 2 \- 3/);
+      assertCompile('8 - 2', /8 \- 2/);
+      assertCompile('8 - 2 - 3', /8 \- 2 \- 3/);
     end
   end
   describe 'Priority of operations' do
