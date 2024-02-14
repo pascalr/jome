@@ -240,7 +240,6 @@ end
 
 
 
-
 describe "Test class" do
   it 'Class with one method with end' do
     assertCompile(`

@@ -419,15 +419,31 @@ let grammar = {
       ]
     },
     class: {
-      name: "meta.class.jome",
-      begin: `\\b(class)\\b\\s*(${REGEX_CLASS_NAME})?`,
-      beginCaptures: {
-        1: { name: "keyword.control.jome" },
-        2: { name: "entity.name.type.class.jome" }
-      },
-      end: "\\b(end)\\b",
-      endCaptures: { 0: { name: "keyword.control.jome" } },
-      patterns: [{ include: "#expression" }]
+      patterns: [
+        {
+          name: "meta.class.jome",
+          begin: `\\b(class)\\b\\s*(${REGEX_CLASS_NAME})?\\s*(\\{)`,
+          beginCaptures: {
+            1: { name: "keyword.control.jome" },
+            2: { name: "entity.name.type.class.jome" },
+            3: { name: "punctuation.definition.block.begin.jome" }
+          },
+          end: "\\}",
+          endCaptures: { 0: { name: "punctuation.definition.block.end.jome" } },
+          patterns: [{ include: "#expression" }]
+        },
+        {
+          name: "meta.class.jome",
+          begin: `\\b(class)\\b\\s*(${REGEX_CLASS_NAME})?`,
+          beginCaptures: {
+            1: { name: "keyword.control.jome" },
+            2: { name: "entity.name.type.class.jome" }
+          },
+          end: "\\b(end)\\b",
+          endCaptures: { 0: { name: "keyword.control.jome" } },
+          patterns: [{ include: "#expression" }]
+        }
+      ]
     },
     interface: {
       name: "meta.interface.jome",
