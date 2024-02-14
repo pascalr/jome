@@ -252,7 +252,7 @@ idle :force!
     });
   });
   describe("Test class", function () {
-    it("Class with one method", function () {
+    it("Class with one method with end", function () {
       assertCompile(
         `
 class Person
@@ -260,6 +260,18 @@ class Person
     #log("Hello!")
   end
 end
+`,
+        /\s*class Person\s*\{\s+sayHello = \(\) => \{\s*console.log\("Hello!"\);?\s*\};?\s*\}/,
+      );
+    });
+    it("Class with one method with curly braces", function () {
+      assertCompile(
+        `
+class Person {
+  def sayHello
+    #log("Hello!")
+  end
+}
 `,
         /\s*class Person\s*\{\s+sayHello = \(\) => \{\s*console.log\("Hello!"\);?\s*\};?\s*\}/,
       );

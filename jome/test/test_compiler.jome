@@ -242,13 +242,22 @@ end
 
 
 describe "Test class" do
-  it 'Class with one method' do
+  it 'Class with one method with end' do
     assertCompile(`
 class Person
   def sayHello
     #log("Hello!")
   end
 end
+`, /\s*class Person\s*\{\s+sayHello = \(\) => \{\s*console.log\("Hello!"\);?\s*\};?\s*\}/);
+  end
+  it 'Class with one method with curly braces' do
+    assertCompile(`
+class Person {
+  def sayHello
+    #log("Hello!")
+  end
+}
 `, /\s*class Person\s*\{\s+sayHello = \(\) => \{\s*console.log\("Hello!"\);?\s*\};?\s*\}/);
   end
 end
