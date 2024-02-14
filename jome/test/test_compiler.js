@@ -6,9 +6,7 @@ module.exports = () => {
     return compileCode(code, { writeScript: false });
   }
   function testCompile(code, expectedResult) {
-    return function () {
-      assert.match(compile(code), expectedResult);
-    };
+    assert.match(compile(code), expectedResult);
   }
   describe("Paths", function () {
     it("Dirname shortcuts", function () {
@@ -223,6 +221,25 @@ let idle = (options) => 10
 idle delay: 20
 `,
         /\s*let idle = \(options\) => \(10\)?;?\s*idle\(\{delay: ?20\}\);?/,
+      );
+    });
+    it("Function call with shorthand key entry", function () {
+      testCompile(
+        `
+let delay = 20
+let idle = (options) => 10
+idle :delay
+`,
+        /WTF!!!!!!!!!!!!!!!!!!!!!!!!!!/,
+      );
+    });
+    it("Function call with shorthand boolean entry", function () {
+      testCompile(
+        `
+let idle = (options) => 10
+idle :force!
+`,
+        /WTF!!!!!!!!!!!!!!!!!!!!!!!!!!/,
       );
     });
   });

@@ -8,7 +8,6 @@ module.exports = () => {
         <li><a href="${ROOT}/#install">Install</a></li>
         <li><a href="${ROOT}/#usage">Usage</a></li>
         <li><a href="${ROOT}/#hello-world">Hello world</a></li>
-        <li><a href="${ROOT}/#index-jome">index.jome</a></li>
         <li><a href="${ROOT}/#partials">Partials</a></li>
       </ul>
       <li><a href="${ROOT}/#lang-ref">Language Reference</a></li>

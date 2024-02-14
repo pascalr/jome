@@ -8,9 +8,7 @@ end
 
 def testCompile(code, expectedResult)
   // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE it code do is not being parsed properly...
-  return do
-    assert.match(compile(code), expectedResult);
-  end
+  assert.match(compile(code), expectedResult);
 end
 
 
@@ -213,6 +211,21 @@ add 10, 5
 let idle = (options) => 10
 idle delay: 20
 `, /\s*let idle = \(options\) => \(10\)?;?\s*idle\(\{delay: ?20\}\);?/);
+  end
+  it 'Function call with shorthand key entry' do
+    testCompile(`
+let delay = 20
+let idle = (options) => 10
+idle :delay
+`, /WTF!!!!!!!!!!!!!!!!!!!!!!!!!!/);
+//`, /\s*let delay = 20; let idle = \(options\) => \(10\)?;?\s*idle\(\{delay\}\);?/);
+  end
+  it 'Function call with shorthand boolean entry' do
+    testCompile(`
+let idle = (options) => 10
+idle :force!
+`, /WTF!!!!!!!!!!!!!!!!!!!!!!!!!!/);
+//`, /\s*let idle = \(options\) => \(10\)?;?\s*idle\(\{force: true\}\);?/);
   end
 end
 

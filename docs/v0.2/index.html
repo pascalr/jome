@@ -136,6 +136,22 @@ MyNode
 someFuncCallReturnsString : string // Nooooooo, because it clashes with parameters...
 }</p>
 <p>You can create custom types. See interfaces and types. (TODO: link)</p>
+  <h2 id="blocks">Blocks V2</h2>
+<pre><code class="language-jome"><span class="hljs-comment">// nodes</span>
+<span class="hljs-variable">node</span> = <span class="hljs-title class_">Obj</span> #{
+  someProp: <span class="hljs-string">&#x27;obj&#x27;</span>
+  <span class="hljs-string">&#x27;String child&#x27;</span>
+  <span class="hljs-type">int</span> prop: <span class="hljs-number">10</span>
+}
+</code></pre>
+<p>Note: A value is only on a single line. Use parentheses if you need multiple lines.</p>
+<pre><code class="language-jome">{
+  x: <span class="hljs-number">1</span> +
+     <span class="hljs-number">2</span> <span class="hljs-comment">// WRONG!</span>
+  y: (<span class="hljs-number">1</span> +
+     <span class="hljs-number">2</span>) <span class="hljs-comment">// OK</span>
+}
+</code></pre>
   <h2 id="blocks">Blocks</h2>
 <p>Blocks are delimited by curly braces and are used for a lot more than creating objects. You also use then to instantiate
 objects, execute functions and to create <a href="#nodes">nodes</a></p>
@@ -166,12 +182,6 @@ objects, execute functions and to create <a href="#nodes">nodes</a></p>
   y: (<span class="hljs-number">1</span> +
      <span class="hljs-number">2</span>) <span class="hljs-comment">// OK</span>
 }
-</code></pre>
-<h3>Shorthand key syntax</h3>
-<p>The short key syntax is different that in javascript, because it could be confusing with children. In Jome, it starts with a colon</p>
-<pre><code class="language-jome"><span class="hljs-variable">obj</span> = {:<span class="hljs-variable">content</span>, :<span class="hljs-variable">value</span>}
-<span class="hljs-comment">// same as</span>
-<span class="hljs-variable">obj</span> = {content: <span class="hljs-variable">content</span>, value: <span class="hljs-variable">value</span>}
 </code></pre>
 <h3>Work in progress V2</h3>
 <p>identifier // if identifier is a class, then new identifier(), otherwise identifier()

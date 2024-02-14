@@ -70,6 +70,27 @@ module.exports = () => {
 
   You can create custom types. See interfaces and types. (TODO: link)
 
+  <h2 id="blocks">Blocks V2</h2>
+
+  \`\`\`jome
+  // nodes
+  node = Obj #{
+    someProp: 'obj'
+    'String child'
+    int prop: 10
+  }
+  \`\`\`
+
+  Note: A value is only on a single line. Use parentheses if you need multiple lines.
+  \`\`\`jome
+  {
+    x: 1 +
+       2 // WRONG!
+    y: (1 +
+       2) // OK
+  }
+  \`\`\`
+
   <h2 id="blocks">Blocks</h2>
 
   Blocks are delimited by curly braces and are used for a lot more than creating objects. You also use then to instantiate
@@ -105,15 +126,6 @@ module.exports = () => {
     y: (1 +
        2) // OK
   }
-  \`\`\`
-
-  ### Shorthand key syntax
-
-  The short key syntax is different that in javascript, because it could be confusing with children. In Jome, it starts with a colon
-  \`\`\`jome
-  obj = {:content, :value}
-  // same as
-  obj = {content: content, value: value}
   \`\`\`
 
   ### Work in progress V2

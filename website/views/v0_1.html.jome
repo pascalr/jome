@@ -20,9 +20,6 @@ let content = <md>
 
   # Jome v0.1
 
-  TODO: Check for grammar and vocabulary mistakes! aspell?
-  TODO: config.jome > md > spellcheck: true, I want to see mistakes within vscode.
-
   Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
   has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.
 
@@ -43,7 +40,6 @@ let content = <md>
   <h2 id="install">Installation</h2>
 
   ```sh
-  # FIXME: Should the package be installed globally or not? Globally does not lock in package.json?
   npm install jome.js -g
   ```
 
@@ -51,7 +47,7 @@ let content = <md>
 
   ```sh
   # Usage
-  jome # executes index.jome in current or ancestor directory
+  jome # executes index.jome or the file specified by the entry main in config.jome
   jome file.jome # execute the given file
   jome server start # pass the arguments "server" and "start" to index.jome executable
   ```
@@ -83,9 +79,9 @@ let content = <md>
   # => Hello Paul!
   ```
 
-  <h2 id="index-jome">index.jome</h2>
+  <h3 id="index-jome">index.jome</h3>
 
-  The Jome CLI command checks if the first argument is a .jome source file and executes it if so. Otherwise, it will execute index.jome.
+  The Jome CLI command checks if the first argument is a .jome source file and executes it if so. Otherwise, it will execute index.jome or the file specified by the entry main in config.jome
 
   Let's write inside the file `index.jome`
 
@@ -128,13 +124,6 @@ let content = <md>
   let frenchNavbar = navbar("fr")
   ```
 
-  ### Read more
-
-  For full details of options, see [passing arguments to files](#pass_args_to_file)
-
-  TODO: args are passed space separated instead of comma separated
-  --args with dashes near each other are grouped together
-
   <h2 id="lang-ref">Language Reference</h2>
 
   This documentation assumes the reader is familiar with javascript.
@@ -145,10 +134,15 @@ let content = <md>
   - There are a lot of [builtin functions and constants](#utils). They start with an hashtag (ex: #log is the same as console.log)
   - There are [heredocs](#heredocs) to include code from other languages (html, css, ...) written as xml tags.
 
-  <h2 id="syntax">Syntax</h2>
+  <h2 id="syntax">Syntax - WIP</h2>
 
-  The syntax is permissive. For statement blocks, you can use either curly braces as a delimiter or use the `end` keyword.
-  You can also use a combination of both. One thing which can be nice is to alternate between the two at every nesting level.
+  The idea is to support a lot of syntaxes so you can choose the one you prefer. Ideally, the editor would show you the
+  code as you like it and save it in the format used by the organisation.
+
+  Currently, the only supported syntax is using the `end` keyword. Later, a colon at the end of a line with indentation would
+  be supported. Curly braces would be supported too.
+
+  One thing which can be nice is to alternate between two syntax at every nesting level so it's easier to know where you are.
 
   ```jome
   class Person
@@ -158,7 +152,7 @@ let content = <md>
   end
   ```
 
-  This is the same as:
+  Would be the same as:
 
   ```jome
   class Person {
@@ -167,6 +161,8 @@ let content = <md>
     end
   }
   ```
+
+  ### Function calls
 
   Parentheses are optional for function calls.
 
@@ -182,9 +178,20 @@ let content = <md>
   add x: 10, y: 5
   ```
 
-  I'd like to have a option to use indentation like python too.
+  You can use a colon prefix to insert an entry in the object with the name of the variable as the key.
 
-  ### piping
+  ```jome
+  let name = "Luc"
+  sayHello :name // same as sayHello({name: name}) or sayHello({name})
+  ```
+
+  You can use a colon prefix with an exclamation mark at the end to make a boolean entry equal true.
+
+  ```jome
+  #write "Some text", to: "./someFile.txt", :force! // same as force: true
+  ```
+
+  ### Piping
 
   You can write the input to a function call to the left by using the operators `:.`, `|>` or `.#`
 
@@ -216,10 +223,6 @@ let content = <md>
 
   You can use config.jome to pretty much define your own programming language.
 
-  By default, the syntax is permissive. You can write code similar to js, ruby, c++ or python.
-
-  You can add rules to restrict this.
-
   You can choose what are the global variables and functions available in this file (sin, cos, PI, or map, filter, ...)
 
   You can also choose how to handle strings and tags.
@@ -232,6 +235,8 @@ let content = <md>
 
   - main: The main file to be executed. index.jome by default.
   - globals: A list of global variables or functions available everywhere.
+  - formats: Define how to handle strings and tags
+  - units: WIP
 
   ## Functions
 
@@ -306,6 +311,10 @@ let content = <md>
   By default, regular comments are discarded when compiled and documentation comments are kept.
 
   ### Shorthand key syntax
+
+  WIP: I want to support like in js too. But also :variable too.
+
+  I've want {} to be a regulvar js object after all. Use #{} or {[]} for nodes.
 
   The short key syntax is different that in javascript, because it could be confusing with children (a feature coming in v0.2). In Jome, it starts with a colon
   ```jome
@@ -1265,6 +1274,16 @@ let content = <md>
   Librairies used:
   - [express](https://expressjs.com/)
   - [markdown-it](https://github.com/markdown-it/markdown-it)
+
+  ## TODO
+
+  TODO: Check for grammar and vocabulary mistakes! aspell?
+  TODO: config.jome > md > spellcheck: true, I want to see mistakes within vscode.
+
+  TODO: args are passed space separated instead of comma separated
+  --args with dashes near each other are grouped together
+
+  TODO: Error handly. Try catch...
 </md>
 
 return Webpage('Jome', content).render()

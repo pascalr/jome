@@ -37,7 +37,6 @@
         <li><a href="/jome/#install">Install</a></li>
         <li><a href="/jome/#usage">Usage</a></li>
         <li><a href="/jome/#hello-world">Hello world</a></li>
-        <li><a href="/jome/#index-jome">index.jome</a></li>
         <li><a href="/jome/#partials">Partials</a></li>
       </ul>
       <li><a href="/jome/#lang-ref">Language Reference</a></li>
@@ -89,8 +88,6 @@
             <div class="scrollable" style="width: 100%;">
               <div class="main">
                 <h1>Jome v0.1</h1>
-<p>TODO: Check for grammar and vocabulary mistakes! aspell?
-TODO: config.jome &gt; md &gt; spellcheck: true, I want to see mistakes within vscode.</p>
 <p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
 has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>
 <p>Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.</p>
@@ -101,12 +98,11 @@ has some original features. One day, it will have a node structure like in Godot
 <p>The language is very, very young and still contains a log of bugs. I don't recommend using yet for any real project.</p>
 <p>I don't have a list of bugs yet, because there are too many.</p>
   <h2 id="install">Installation</h2>
-<pre><code class="language-sh"><span class="hljs-comment"># <span class="hljs-doctag">FIXME:</span> Should the package be installed globally or not? Globally does not lock in package.json?</span>
-npm install jome.js -g
+<pre><code class="language-sh">npm install jome.js -g
 </code></pre>
   <h2 id="usage">Usage</h2>
 <pre><code class="language-sh"><span class="hljs-comment"># Usage</span>
-jome <span class="hljs-comment"># executes index.jome in current or ancestor directory</span>
+jome <span class="hljs-comment"># executes index.jome or the file specified by the entry main in config.jome</span>
 jome file.jome <span class="hljs-comment"># execute the given file</span>
 jome server start <span class="hljs-comment"># pass the arguments &quot;server&quot; and &quot;start&quot; to index.jome executable</span>
 </code></pre>
@@ -125,8 +121,8 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <pre><code class="language-sh">jome hello.jome Paul
 <span class="hljs-comment"># =&gt; Hello Paul!</span>
 </code></pre>
-  <h2 id="index-jome">index.jome</h2>
-<p>The Jome CLI command checks if the first argument is a .jome source file and executes it if so. Otherwise, it will execute index.jome.</p>
+  <h3 id="index-jome">index.jome</h3>
+<p>The Jome CLI command checks if the first argument is a .jome source file and executes it if so. Otherwise, it will execute index.jome or the file specified by the entry main in config.jome</p>
 <p>Let's write inside the file <code>index.jome</code></p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">cmd</span>, <span class="hljs-variable">message</span> <span class="hljs-keyword">end</span>
 
@@ -156,10 +152,6 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 
 <span class="hljs-keyword">let</span> <span class="hljs-variable">frenchNavbar</span> = <span class="hljs-title function_ invoke__">navbar</span>(<span class="hljs-string">&quot;fr&quot;</span>)
 </code></pre>
-<h3>Read more</h3>
-<p>For full details of options, see <a href="#pass_args_to_file">passing arguments to files</a></p>
-<p>TODO: args are passed space separated instead of comma separated
---args with dashes near each other are grouped together</p>
   <h2 id="lang-ref">Language Reference</h2>
 <p>This documentation assumes the reader is familiar with javascript.</p>
 <p>Jome is similar to JavaScript, but there are a few distinctions that you must be aware of.</p>
@@ -169,22 +161,26 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <li>There are a lot of <a href="#utils">builtin functions and constants</a>. They start with an hashtag (ex: #log is the same as console.log)</li>
 <li>There are <a href="#heredocs">heredocs</a> to include code from other languages (html, css, ...) written as xml tags.</li>
 </ul>
-  <h2 id="syntax">Syntax</h2>
-<p>The syntax is permissive. For statement blocks, you can use either curly braces as a delimiter or use the <code>end</code> keyword.
-You can also use a combination of both. One thing which can be nice is to alternate between the two at every nesting level.</p>
+  <h2 id="syntax">Syntax - WIP</h2>
+<p>The idea is to support a lot of syntaxes so you can choose the one you prefer. Ideally, the editor would show you the
+code as you like it and save it in the format used by the organisation.</p>
+<p>Currently, the only supported syntax is using the <code>end</code> keyword. Later, a colon at the end of a line with indentation would
+be supported. Curly braces would be supported too.</p>
+<p>One thing which can be nice is to alternate between two syntax at every nesting level so it's easier to know where you are.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span>
   <span class="hljs-title function_ invoke__">sayHello</span>() {
     <span class="hljs-built_in function_">#log</span> <span class="hljs-string">&#x27;Hello!&#x27;</span> <span class="hljs-comment">// #log is a util shorthand of console.log</span>
   }
 <span class="hljs-keyword">end</span>
 </code></pre>
-<p>This is the same as:</p>
+<p>Would be the same as:</p>
 <pre><code class="language-jome"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> {
   <span class="hljs-keyword">def</span> <span class="hljs-variable">sayHello</span>
     <span class="hljs-built_in function_">#log</span> <span class="hljs-string">&#x27;Hello!&#x27;</span> <span class="hljs-comment">// #log is a util shorthand of console.log</span>
   <span class="hljs-keyword">end</span>
 }
 </code></pre>
+<h3>Function calls</h3>
 <p>Parentheses are optional for function calls.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">add</span> = (<span class="hljs-variable">x</span>,<span class="hljs-variable">y</span>) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
 <span class="hljs-variable">add</span> <span class="hljs-number">10</span>, <span class="hljs-number">5</span>
@@ -193,8 +189,14 @@ You can also use a combination of both. One thing which can be nice is to altern
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">add</span> = ({<span class="hljs-variable">x</span>, <span class="hljs-variable">y</span>}) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
 <span class="hljs-variable">add</span> x: <span class="hljs-number">10</span>, y: <span class="hljs-number">5</span>
 </code></pre>
-<p>I'd like to have a option to use indentation like python too.</p>
-<h3>piping</h3>
+<p>You can use a colon prefix to insert an entry in the object with the name of the variable as the key.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">name</span> = <span class="hljs-string">&quot;Luc&quot;</span>
+<span class="hljs-variable">sayHello</span> :<span class="hljs-variable">name</span> <span class="hljs-comment">// same as sayHello({name: name}) or sayHello({name})</span>
+</code></pre>
+<p>You can use a colon prefix with an exclamation mark at the end to make a boolean entry equal true.</p>
+<pre><code class="language-jome"><span class="hljs-built_in function_">#write</span> <span class="hljs-string">&quot;Some text&quot;</span>, to: <span class="hljs-string">&quot;./someFile.txt&quot;</span>, :<span class="hljs-variable">force</span>! <span class="hljs-comment">// same as force: true</span>
+</code></pre>
+<h3>Piping</h3>
 <p>You can write the input to a function call to the left by using the operators <code>:.</code>, <code>|&gt;</code> or <code>.#</code></p>
 <p><code>.#</code> refer to built-in functions which are always available. The other two will use local functions or global ones
 defined in the file <code>config.jome</code>.</p>
@@ -215,8 +217,6 @@ defined in the file <code>config.jome</code>.</p>
 don't mind the name being global.</p>
 <h2>config.jome</h2>
 <p>You can use config.jome to pretty much define your own programming language.</p>
-<p>By default, the syntax is permissive. You can write code similar to js, ruby, c++ or python.</p>
-<p>You can add rules to restrict this.</p>
 <p>You can choose what are the global variables and functions available in this file (sin, cos, PI, or map, filter, ...)</p>
 <p>You can also choose how to handle strings and tags.</p>
 <p>Jome imports inside config.jome should be jome files inside a /utils folder or similar. It should be separated from
@@ -226,6 +226,8 @@ it is being compiled.</p>
 <ul>
 <li>main: The main file to be executed. index.jome by default.</li>
 <li>globals: A list of global variables or functions available everywhere.</li>
+<li>formats: Define how to handle strings and tags</li>
+<li>units: WIP</li>
 </ul>
 <h2>Functions</h2>
 <p>You can use <code>do ... end</code> to create functions. You pass arguments between vertical bars.</p>
@@ -283,6 +285,8 @@ it is being compiled.</p>
 </code></pre>
 <p>By default, regular comments are discarded when compiled and documentation comments are kept.</p>
 <h3>Shorthand key syntax</h3>
+<p>WIP: I want to support like in js too. But also :variable too.</p>
+<p>I've want {} to be a regulvar js object after all. Use #{} or {[]} for nodes.</p>
 <p>The short key syntax is different that in javascript, because it could be confusing with children (a feature coming in v0.2). In Jome, it starts with a colon</p>
 <pre><code class="language-jome"><span class="hljs-variable">obj</span> = {:<span class="hljs-variable">content</span>, :<span class="hljs-variable">value</span>}
 <span class="hljs-comment">// same as</span>
@@ -942,6 +946,11 @@ let r = <code>{x if y}</code> // si x, alors <code>{y}</code>, sinon `` J'aimera
 <li><a href="https://expressjs.com/">express</a></li>
 <li><a href="https://github.com/markdown-it/markdown-it">markdown-it</a></li>
 </ul>
+<h2>TODO</h2>
+<p>TODO: Check for grammar and vocabulary mistakes! aspell?
+TODO: config.jome &gt; md &gt; spellcheck: true, I want to see mistakes within vscode.</p>
+<p>TODO: args are passed space separated instead of comma separated
+--args with dashes near each other are grouped together</p>
 
               </div>
             </div>
