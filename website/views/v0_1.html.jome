@@ -191,6 +191,15 @@ let content = <md>
   #write "Some text", to: "./someFile.txt", :force! // same as force: true
   ```
 
+  You can use `do` ... `end` syntax at the end of a function call to pass a function as a parameter.
+  The syntax is similar to ruby. You pass arguments between vertical bars.
+
+  ```jome
+  [1,2,3,4,5].#each do |i|
+    #log i
+  end
+  ```
+
   ### Piping
 
   You can write the input to a function call to the left by using the operators `:.`, `|>` or `.#`
