@@ -548,5 +548,78 @@ end
 
     it("false ? 1 : 0", testCompile("false ? 1 : 0", /false \? 1 : 0/));
   });
-  describe("async", function () {});
+  describe("Error handling", function () {
+    it("try catch end", function () {
+      assertCompile(
+        `
+      try
+        throw new Error("Some error")
+      catch (e)
+      end
+    `,
+        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*catch\s*\(e\)\s*{\s*}}\s*/,
+      );
+    });
+    it("try finally end", function () {
+      assertCompile(
+        `
+      try
+        throw new Error("Some error")
+      finally
+      end
+    `,
+        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*finally\s*{\s*}\s*/,
+      );
+    });
+    it("try catch finally end", function () {
+      assertCompile(
+        `
+      try
+        throw new Error("Some error")
+      catch (e)
+      finally
+      end
+    `,
+        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*catch\s*\(e\)\s*{\s*}}\s*finally\s*\(e\)\s*{\s*}\s*/,
+      );
+    });
+    it("try catch curly braces", function () {
+      assertCompile(
+        `
+      try {
+        throw new Error("Some error")
+      } catch (e) {
+      }
+    `,
+        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*catch\s*\(e\)\s*}\s*/,
+      );
+    });
+    it("try finally curly braces", function () {
+      assertCompile(
+        `
+      try {
+        throw new Error("Some error")
+      } finally {
+      }
+    `,
+        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*finally\s*{\s*}\s*/,
+      );
+    });
+    it("try catch finally curly braces", function () {
+      assertCompile(
+        `
+      try {
+        throw new Error("Some error")
+      } catch (e) {
+      } finally {
+      }
+    `,
+        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*catch\s*\(e\)\s*{\s*}}\s*finally\s*\(e\)\s*{\s*}\s*/,
+      );
+    });
+  });
+  describe("Parallelization", function () {
+    it.skip("async", function () {});
+    it.skip("await", function () {});
+  });
 };
