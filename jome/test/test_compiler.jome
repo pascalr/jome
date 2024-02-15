@@ -259,7 +259,33 @@ class Person {
 }
 `, /\s*class Person\s*\{\s+sayHello = \(\) => \{\s*console.log\("Hello!"\);?\s*\};?\s*\}/);
   end
+  // For class I can't really use punctuation... Because I need to know that inside a class so I parse differently
 end
+
+// But I'd like to have punctuation available for def, if, for
+// Maybe only allow inline or the next line right after I would be fine with that
+/*
+if true: doSomething
+if true:
+  doSomething
+else:
+  doSomethingElse
+
+def doSomething: log('doing something')
+
+def doSomething:
+  log('doing something')
+
+I am fine if the colon is only used for shorthand syntax for a single value right after
+Parsing with indentation does not fit with the rest of the code...
+*/
+
+/*
+TODO: Detect if curly braces are an object or a block based on context.
+If after an operator or return, then it is an object
+If inside a function call, then it is an object
+Otherwise it's a block
+*/
 
 
 
