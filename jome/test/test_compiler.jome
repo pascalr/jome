@@ -278,6 +278,30 @@ def doSomething:
 
 I am fine if the colon is only used for shorthand syntax for a single value right after
 Parsing with indentation does not fit with the rest of the code...
+
+Ouin, mais comment gérer:
+def doSomething(int str = "foo: bar ()"): log('doing something')
+def doSomething(int str = "foo: bar ()") -> void: log('doing something')
+
+I want this to work: It should be considered a single thing:
+def soSomething:
+  for xs in xss:
+    for x in xs:
+      if x:
+        10
+
+if x: 10 else: 20
+// same as
+10 if x else 20
+// allow els?
+10 if x els 20
+
+I know!
+" : " => colon operator
+": " => colon separator
+begin: "def"
+end: "end|: "
+I think ": " is already captured inside object keys for example or object types for example. But I have to test this.
 */
 
 /*
