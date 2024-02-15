@@ -188,6 +188,15 @@ module.exports = () => {
   #write "Some text", to: "./someFile.txt", :force! // same as force: true
   \`\`\`
 
+  You can use \`do\` ... \`end\` syntax at the end of a function call to pass a function as a parameter.
+  The syntax is similar to ruby. You pass arguments between vertical bars.
+
+  \`\`\`jome
+  [1,2,3,4,5].#each do |i|
+    #log i
+  end
+  \`\`\`
+
   ### Piping
 
   You can write the input to a function call to the left by using the operators \`:.\`, \`|>\` or \`.#\`
@@ -1278,6 +1287,8 @@ module.exports = () => {
   TODO: config.jome > md > spellcheck: true, I want to see mistakes within vscode.
 
   TODO: args are passed space separated instead of comma separated
-  --args with dashes near each other are grouped together`);
+  --args with dashes near each other are grouped together
+
+  TODO: Error handly. Try catch...`);
   return new Webpage("Jome", content).render();
 };

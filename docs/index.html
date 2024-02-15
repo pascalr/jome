@@ -196,6 +196,12 @@ be supported. Curly braces would be supported too.</p>
 <p>You can use a colon prefix with an exclamation mark at the end to make a boolean entry equal true.</p>
 <pre><code class="language-jome"><span class="hljs-built_in function_">#write</span> <span class="hljs-string">&quot;Some text&quot;</span>, to: <span class="hljs-string">&quot;./someFile.txt&quot;</span>, :<span class="hljs-variable">force</span>! <span class="hljs-comment">// same as force: true</span>
 </code></pre>
+<p>You can use <code>do</code> ... <code>end</code> syntax at the end of a function call to pass a function as a parameter.
+The syntax is similar to ruby. You pass arguments between vertical bars.</p>
+<pre><code class="language-jome">[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>].<span class="hljs-built_in function_">#each</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">i</span>|
+  <span class="hljs-built_in function_">#log</span> <span class="hljs-variable">i</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
 <h3>Piping</h3>
 <p>You can write the input to a function call to the left by using the operators <code>:.</code>, <code>|&gt;</code> or <code>.#</code></p>
 <p><code>.#</code> refer to built-in functions which are always available. The other two will use local functions or global ones
@@ -951,6 +957,7 @@ let r = <code>{x if y}</code> // si x, alors <code>{y}</code>, sinon `` J'aimera
 TODO: config.jome &gt; md &gt; spellcheck: true, I want to see mistakes within vscode.</p>
 <p>TODO: args are passed space separated instead of comma separated
 --args with dashes near each other are grouped together</p>
+<p>TODO: Error handly. Try catch...</p>
 
               </div>
             </div>
