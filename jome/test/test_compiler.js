@@ -277,6 +277,28 @@ class Person {
       );
     });
   });
+  describe("Colon section begin", function () {
+    it("def inline", function () {
+      assertCompile(
+        'def sayHello: #log("hello")',
+        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
+      );
+      assertCompile(
+        'def sayHello(): #log("hello")',
+        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
+      );
+    });
+    it("def two line", function () {
+      assertCompile(
+        'def sayHello:\n  #log("hello")',
+        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
+      );
+      assertCompile(
+        'def sayHello():\n  #log("hello")',
+        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
+      );
+    });
+  });
   describe("Test built-ins", function () {
     it("#keys", testCompile("#keys({})", /Object.keys\(\{\}\)/));
     it("#values", testCompile("#values({})", /Object.values\(\{\}\)/));

@@ -330,8 +330,11 @@ let grammar = {
         1: { name: "keyword.control.jome" },
         2: { name: "entity.name.function.jome" }
       },
-      end: "\\b(end)\\b",
-      endCaptures: { 0: { name: "keyword.control.jome" } },
+      end: "(\\bend\\b)|((?<!\\s)\\:\\s)",
+      endCaptures: {
+        1: { name: "keyword.control.jome" },
+        2: { name: "punctuation.section.function.begin.jome" }
+      },
       patterns: [
         { include: "#paren-args" },
         { include: "#expression" }

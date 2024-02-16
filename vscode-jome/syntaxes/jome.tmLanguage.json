@@ -465,10 +465,13 @@
           "name": "entity.name.function.jome"
         }
       },
-      "end": "\\b(end)\\b",
+      "end": "(\\bend\\b)|((?<!\\s)\\:\\s)",
       "endCaptures": {
-        "0": {
+        "1": {
           "name": "keyword.control.jome"
+        },
+        "2": {
+          "name": "punctuation.section.function.begin.jome"
         }
       },
       "patterns": [

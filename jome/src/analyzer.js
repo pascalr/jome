@@ -264,16 +264,29 @@ const ANALYZERS = {
     if (node.parts[1].type !== 'entity.name.function.jome') {
       return pushError(node, "Syntax error. Missing function name after keyword def.")
     }
-    if (node.parts[node.parts.length-1].raw !== 'end') {
-      throw new Error("Internal error. meta.def.jome should always end with keyword end")
-    }
     // Arguments, if present, should always be right after the function name
     if (node.parts.slice(3,-1).find(c => c.type === 'meta.args.jome')) {
       return pushError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
     }
+
     let name = node.parts[1].raw
     node.lexEnv.addBinding(name, {type: 'def'})
-    node.data = {name}
+    let args = node.parts[2].type === 'meta.args.jome' ? node.parts[2] : null
+
+    if (node.parts[node.parts.length-1].raw === 'punctuation.section.function.begin.jome') {
+      // TODO: Capture the expression on the right when the last part is punctuation.section.function.begin.jome
+      let expressions = [node.operands[0]]
+      node.data = {name, expressions, args}
+      return
+    }
+
+    if (node.parts[node.parts.length-1].raw !== 'end') {
+      throw new Error("Internal error. meta.def.jome should always end with keyword end")
+    }
+
+    let expressions = node.parts.slice((args ? 3 : 2),-1) // Remove keywords def, end, and function name
+
+    node.data = {name, expressions, args}
   },
   // js uses more specifically:
   // keyword.operator.arithmetic.jome

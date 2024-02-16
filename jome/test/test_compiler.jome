@@ -262,6 +262,22 @@ class Person {
   // For class I can't really use punctuation... Because I need to know that inside a class so I parse differently
 end
 
+
+
+
+
+
+describe "Colon section begin" do
+  it 'def inline' do
+    assertCompile('def sayHello: #log("hello")', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
+    assertCompile('def sayHello(): #log("hello")', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
+  end
+  it 'def two line' do
+    assertCompile('def sayHello:\n  #log("hello")', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
+    assertCompile('def sayHello():\n  #log("hello")', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
+  end
+end
+
 // But I'd like to have punctuation available for def, if, for
 // Maybe only allow inline or the next line right after I would be fine with that
 /*
