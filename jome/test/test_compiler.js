@@ -228,7 +228,7 @@ add 10, 5
 let idle = (options) => 10
 idle delay: 20
 `,
-        /\s*let idle = \(options\) => \(10\)?;?\s*idle\(\{delay: ?20\}\);?/,
+        /\s*let idle = \(options\) => \(?10\)?;?\s*idle\(\{ ?delay: ?20 ?\}\);?/,
       );
     });
     it("Function call with shorthand key entry", function () {
