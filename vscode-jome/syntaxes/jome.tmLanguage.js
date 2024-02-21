@@ -14,6 +14,8 @@ const REGEX_PRIMITIVE_TYPE = "\\b(?:int|string|bool|float)\\b(?:\\[\\])*" // FIX
 
 const REGEX_TYPE = "[A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*" // FIXME: Accents
 
+const LOOKAHEAD_FUNC_CALL_WIP = "(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))"
+
 // const LOOKBEHIND_DECLARATION = "(?<=\n|^|;)\\s*"
 // const LOOKAHEAD_DECLARATION = "\\s*(?=\n|$|;|=)"
 
@@ -486,7 +488,7 @@ let grammar = {
         },
         {
           name: "meta.function-call.WIP.jome",
-          begin: "(\\.)(#\\w+\\b\\!?)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))",
+          begin: `(\\.)(#\\w+\\b\\!?)${LOOKAHEAD_FUNC_CALL_WIP}`,
           beginCaptures: {
             1: { name: "punctuation.dot.jome" },
             2: { name: "support.function.builtin.jome" }
@@ -496,7 +498,7 @@ let grammar = {
         },
         {
           name: "meta.function-call.WIP.jome",
-          begin: "(\\.)\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))",
+          begin: `(\\.)\\b(\\w+)\\b${LOOKAHEAD_FUNC_CALL_WIP}`,
           beginCaptures: {
             1: { name: "punctuation.dot.jome" },
             2: { name: "entity.name.function.jome" }
@@ -520,14 +522,14 @@ let grammar = {
         },
         {
           name: "support.function-call.WIP.jome",
-          begin: "(#\\w+\\b\\!?)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))",
+          begin: `(#\\w+\\b\\!?)${LOOKAHEAD_FUNC_CALL_WIP}`,
           beginCaptures: { 1: { name: "support.function.builtin.jome" } },
           end: "\r\n|\n|$|chain",
           patterns: [{ include: "#expression" }]
         },
         {
           name: "support.function-call.WIP.jome",
-          begin: "\\b(\\w+)\\b(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))",
+          begin: `\\b(\\w+)\\b${LOOKAHEAD_FUNC_CALL_WIP}`,
           beginCaptures: { 1: { name: "entity.name.function.jome" } },
           end: "\r\n|\n|$|chain",
           patterns: [{ include: "#expression" }]
