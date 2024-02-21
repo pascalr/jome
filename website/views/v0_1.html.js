@@ -22,7 +22,15 @@ module.exports = () => {
 
   Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.
 
-  You can read from top to bottom to learn the language, or you can jump to any section if you are only curious.
+  **Flexible typing** - You can use static typing for robustness and usability or omit them for development speed and simplicity.
+
+  **Flexible syntax** - You can use curly braces, block statements with end keyword or inline with colon at the end.
+
+  **Customizable builtins** - Jome comes with a lot of builtins which you can map to keywords you want. You can also define your own.
+
+  **Reactivity** - TODO
+
+  **Node structure like Godot** - TODO
 
   <h2 id="overview">Overview</h2>
 
