@@ -163,7 +163,7 @@ let grammar = {
         { include: "#if_block" },
         { include: "#interface" },
         { include: "#class" },
-        { include: "#symbol" },
+        { include: "#symbols" },
         { include: "#format" },
         { include: "#function" },
         { include: "#do_end" },
@@ -250,9 +250,17 @@ let grammar = {
     },
     comma: { match: ",", name: "punctuation.separator.delimiter.jome" },
     semicolon: { match: ";", name: "punctuation.terminator.statement.jome" },
-    symbol: {
-      match: `:(${REGEX_VARIABLE})`,
-      name: "variable.symbol.jome"
+    symbols: {
+      patterns: [
+        {
+          match: `:${REGEX_VARIABLE}\\!`,
+          name: "variable.symbol.true.jome"
+        },
+        {
+          match: `:(${REGEX_VARIABLE})`,
+          name: "variable.symbol.jome"
+        },
+      ]
     },
     arrow: {
       name: "keyword.arrow.jome",

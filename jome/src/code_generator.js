@@ -295,6 +295,9 @@ function mergeNamedParameters(args) {
   args.forEach(arg => {
     if (arg.type === 'keyword.operator.colon.jome') {
       obj[arg.operands[0].raw] = toPrimitive(genCode(arg.operands[1]))
+    } else if (arg.type === 'variable.symbol.true.jome') {
+      let name = arg.raw.slice(1, -1)
+      obj[name] = 'true'
     } else if (arg.type === 'variable.symbol.jome') {
       let name = arg.raw.slice(1)
       obj[name] = name
