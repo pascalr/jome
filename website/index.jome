@@ -17,11 +17,11 @@ global.ROOT = '/jome'
 if (cmd === 'test')
   <sh>jome test.jome</sh>
 elsif (cmd === 'dev')
-  build(force: true);
-  server(port: 3000)
+  build :force!
+  server port: 3000
 elsif (cmd === 's' || cmd === 'server')
-  build();
-  server(port: 3000)
+  build()
+  server port: 3000
 else
   #log "
     Jome App v0.0.0.0.1

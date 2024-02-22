@@ -550,7 +550,7 @@ const CODE_GENERATORS = {
   // if ... end
   'meta.if-block.jome': (node) => {
     return node.data.sections.map(sect => {
-      return `${sect.keyword} ${sect.cond ? `(${genCode(sect.cond)})` : ''} {${sect.statements.map(c => genCode(c)).join('')}}`
+      return `${sect.keyword} ${sect.cond ? `(${genCode(sect.cond)})` : ''} {${sect.statements.map(c => genCode(c)).join(';')}}`
     }).join(' ');
   },
   "entity.name.function.utility-inline.jome": (node) => compInlineUtility(node), // "Hello".#log  
