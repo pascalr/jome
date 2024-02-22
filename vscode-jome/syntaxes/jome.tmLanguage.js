@@ -14,6 +14,7 @@ const REGEX_PRIMITIVE_TYPE = "\\b(?:int|string|bool|float)\\b(?:\\[\\])*" // FIX
 
 const REGEX_TYPE = "[A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*" // FIXME: Accents
 
+const LOOKBEHIND_FUNC_CALL_WIP = "(?<=\n|^|;)\\s*"
 const LOOKAHEAD_FUNC_CALL_WIP = "(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))"
 
 // const LOOKBEHIND_DECLARATION = "(?<=\n|^|;)\\s*"

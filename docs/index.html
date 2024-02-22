@@ -97,7 +97,26 @@ has some original features. One day, it will have a node structure like in Godot
 <p><strong>Reactivity</strong> - TODO</p>
 <p><strong>Node structure like Godot</strong> - TODO</p>
   <h2 id="overview">Overview</h2>
-<p>TODO: A tiktok like overview of the programming language? Or sliding carrousel of nice features to show?</p>
+<pre><code class="language-jome"><span class="hljs-comment">// .jome files are functions</span>
+<span class="hljs-comment">// you can give parameters using a with block</span>
+<span class="hljs-comment">// you can set default values, here it&#x27;s english</span>
+<span class="hljs-keyword">with</span> <span class="hljs-variable">locale</span> = <span class="hljs-string">&#x27;en&#x27;</span> <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbar&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbrand&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span>&gt;</span>Jome<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/editor&quot;</span>&gt;</span>Editor<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/&quot;</span>&gt;</span>Home<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/utils&quot;</span>&gt;</span>Utils<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://github.com/pascalr/jome&quot;</span>&gt;</span>GitHub<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span>
+
+<span class="hljs-comment">// You can then import it from another file or run this file directly to get html</span>
+<span class="language-shell">&lt;sh&gt;jome ./navbar.html.jome fr &gt; ./navbar.html&lt;/sh&gt;</span>
+<span class="hljs-comment">// or</span>
+<span class="hljs-keyword">import</span> <span class="hljs-variable">navbar</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./navbar.html.jome&#x27;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">frenchNavbar</span> = <span class="hljs-title function_ invoke__">navbar</span>(<span class="hljs-string">&quot;fr&quot;</span>)
+</code></pre>
 <h2>Disclaimer</h2>
 <p>The language is very, very young and still contains a log of bugs. I don't recommend using yet for any real project.</p>
 <p>I don't have a list of bugs yet, because there are too many.</p>
@@ -137,24 +156,6 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <p>The result is</p>
 <pre><code class="language-sh">jome say <span class="hljs-string">&quot;Hello Anna!&quot;</span>
 <span class="hljs-comment"># =&gt; Hello Anna!</span>
-</code></pre>
-  <h2 id="partials">Partials</h2> 
-<p>.jome files are very practical to write partials. For example, we can write an html navbar we can reuse using a <a href="#heredoc">heredoc</a>.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">locale</span> <span class="hljs-keyword">end</span>
-<span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbar&quot;</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbrand&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span>&gt;</span>Jome<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/editor&quot;</span>&gt;</span>Editor<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/&quot;</span>&gt;</span>Home<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/utils&quot;</span>&gt;</span>Utils<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://github.com/pascalr/jome&quot;</span>&gt;</span>GitHub<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span>
-</code></pre>
-<p>.jome file can be executed from the command line, but they can also be imported inside another .jome file.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-variable">navbar</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./navbar.html.jome&#x27;</span>
-
-<span class="hljs-keyword">let</span> <span class="hljs-variable">frenchNavbar</span> = <span class="hljs-title function_ invoke__">navbar</span>(<span class="hljs-string">&quot;fr&quot;</span>)
 </code></pre>
   <h2 id="lang-ref">Language Reference</h2>
 <p>This documentation assumes the reader is familiar with javascript.</p>

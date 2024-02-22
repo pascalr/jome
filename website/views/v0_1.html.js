@@ -34,7 +34,27 @@ module.exports = () => {
 
   <h2 id="overview">Overview</h2>
 
-  TODO: A tiktok like overview of the programming language? Or sliding carrousel of nice features to show?
+  \`\`\`jome
+  // .jome files are functions
+  // you can give parameters using a with block
+  // you can set default values, here it's english
+  with locale = 'en' end
+  return <html>
+    <div class="navbar">
+      <span class="navbrand" href="#">Jome</span>
+      <a href="\<%= locale %>/editor">Editor</a>
+      <a href="\<%= locale %>/">Home</a>
+      <a href="\<%= locale %>/utils">Utils</a>
+      <a href="https://github.com/pascalr/jome">GitHub</a>
+    </div>
+  </html>
+
+  // You can then import it from another file or run this file directly to get html
+  <sh>jome ./navbar.html.jome fr > ./navbar.html</sh>
+  // or
+  import navbar from './navbar.html.jome'
+  let frenchNavbar = navbar("fr")
+  \`\`\`
   
   ## Disclaimer
 
@@ -102,31 +122,6 @@ module.exports = () => {
   \`\`\`sh
   jome say "Hello Anna!"
   # => Hello Anna!
-  \`\`\`
-
-  <h2 id="partials">Partials</h2> 
-
-  .jome files are very practical to write partials. For example, we can write an html navbar we can reuse using a [heredoc](#heredoc).
-
-  \`\`\`jome
-  with locale end
-  return <html>
-    <div class="navbar">
-      <span class="navbrand" href="#">Jome</span>
-      <a href="\<%= locale %>/editor">Editor</a>
-      <a href="\<%= locale %>/">Home</a>
-      <a href="\<%= locale %>/utils">Utils</a>
-      <a href="https://github.com/pascalr/jome">GitHub</a>
-    </div>
-  </html>
-  \`\`\`
-
-  .jome file can be executed from the command line, but they can also be imported inside another .jome file.
-
-  \`\`\`jome
-  import navbar from './navbar.html.jome'
-
-  let frenchNavbar = navbar("fr")
   \`\`\`
 
   <h2 id="lang-ref">Language Reference</h2>
