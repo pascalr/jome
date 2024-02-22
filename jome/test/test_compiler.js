@@ -238,7 +238,7 @@ let delay = 20
 let idle = (options) => 10
 idle :delay
 `,
-        /WTF!!!!!!!!!!!!!!!!!!!!!!!!!!/,
+        /\s*let delay = 20;\s*let idle = \(options\) => \(?10\)?;?\s*idle\(\{ ?delay(\: delay ?)?\}\);?/,
       );
     });
     it("Function call with shorthand boolean entry", function () {
@@ -247,7 +247,7 @@ idle :delay
 let idle = (options) => 10
 idle :force!
 `,
-        /WTF!!!!!!!!!!!!!!!!!!!!!!!!!!/,
+        /\s*let idle = \(options\) => \(?10\)?;?\s*idle\(\{ ?force\: true ?\}\);?/,
       );
     });
   });

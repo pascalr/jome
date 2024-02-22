@@ -7,6 +7,7 @@ const REGEX_CLASS_NAME = "[A-Za-z_$]\\w*" // FIXME: Accents
 // FIXME: REGEX_CLASS_NAME and REGEX_VARIABLE should be the same otherwise the patterns must be modified
 // I don't know if they are the same, but I think so.
 const REGEX_VARIABLE = "[A-Za-z_$]\\w*" // FIXME: Accents
+const REGEX_PROPERTY = `\\.${REGEX_VARIABLE}` // .property
 
 const REGEX_XML_NAME = "[_:A-Za-z][A-Za-z0-9\\-_\\:.]*"
 
@@ -14,8 +15,7 @@ const REGEX_PRIMITIVE_TYPE = "\\b(?:int|string|bool|float)\\b(?:\\[\\])*" // FIX
 
 const REGEX_TYPE = "[A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*" // FIXME: Accents
 
-const LOOKBEHIND_FUNC_CALL_WIP = "(?<=\n|^|;)\\s*"
-const LOOKAHEAD_FUNC_CALL_WIP = "(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.\\:]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))"
+const LOOKAHEAD_FUNC_CALL_WIP = "(?!\\:)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))"
 
 // const LOOKBEHIND_DECLARATION = "(?<=\n|^|;)\\s*"
 // const LOOKAHEAD_DECLARATION = "\\s*(?=\n|$|;|=)"
