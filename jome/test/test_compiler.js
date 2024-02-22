@@ -400,6 +400,16 @@ class Person {
         /\s*if \(true\) \{\s*console.log\("hello"\);?\s*\}/,
       );
     });
+    it("if statements blocks, operation condition", function () {
+      assertCompile(
+        `
+      if x === 1
+        #log("hello")
+      end
+    `,
+        /\s*if \(x === 1\) \{\s*console.log\("hello"\);?\s*\}/,
+      );
+    });
 
     it("if modifier", function () {
       assertCompile(
