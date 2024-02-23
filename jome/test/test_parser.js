@@ -42,13 +42,21 @@ module.exports = () => {
       assert.equal(part.value, expected.value);
     }
     if (expected.parts) {
-      assert.equal(part.parts.length, expected.parts.length);
+      assert.equal(
+        part.parts.length,
+        expected.parts.length,
+        msg + ".parts.length",
+      );
       expected.parts.forEach(function (e, i) {
         validatePart(part.parts[i], e, msg + `.parts[${i}]`);
       });
     }
     if (expected.operands) {
-      assert.equal(part.operands.length, expected.operands.length);
+      assert.equal(
+        part.operands.length,
+        expected.operands.length,
+        msg + ".operands.length",
+      );
       expected.operands.forEach(function (e, i) {
         validatePart(part.operands[i], e, msg + `.operands[${i}]`);
       });
@@ -56,7 +64,7 @@ module.exports = () => {
   }
   function testParse(code, expected) {
     let list = parse(tokenize(code).children);
-    assert.equal(list.length, expected.length);
+    assert.equal(list.length, expected.length, "Number of expressions");
     expected.forEach(function (e, i) {
       validatePart(list[i], e, `Expression[${i}]`);
     });
@@ -75,10 +83,16 @@ module.exports = () => {
     });
 
     it("let x;", function () {
-      let list = parse(tokenize("let x;").children);
-      assert.equal(list?.length, 2);
-      let ast = list[0];
-      assert.equal(ast?.raw, "let x");
+      testParse("let x;", [
+        {
+          type: "meta.declaration.jome",
+          parts: [
+            { type: "keyword.control.declaration.jome" },
+            { type: "variable.other.jome" },
+          ],
+        },
+        { type: "punctuation.terminator.statement.jome" },
+      ]);
     });
 
     it("let x; let y", function () {

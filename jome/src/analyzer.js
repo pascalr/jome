@@ -355,7 +355,7 @@ const ANALYZERS = {
       throw new Error("Internal error. meta.square-bracket.jome should always end with punctuation.definition.square-bracket.end.jome")
     }
     let isOperator = node.operands.length
-    let items = node.parts.slice(1,-1)
+    let items = filterNewlines(node.parts.slice(1,-1))
     if (isOperator) {
       if (items.length !== 1) {
         pushError(node, "Syntax error. Square bracket operator expects one and only one expression.")
@@ -363,7 +363,7 @@ const ANALYZERS = {
       node.data = {isOperator, operand: node.operands[0], expression: items[0]}
     } else {
       ensureListSeparatedByCommas(node, items)
-      let elems = node.parts.slice(1,-1).filter((e, i) => i % 2 === 0)
+      let elems = items.filter((e, i) => i % 2 === 0)
       node.data = {elems}
     }
   },

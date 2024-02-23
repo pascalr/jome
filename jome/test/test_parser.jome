@@ -44,13 +44,13 @@ def validatePart(part, expected, msg)
     assert.equal(part.value, expected.value)
   end
   if (expected.parts)
-    assert.equal(part.parts.length, expected.parts.length)
+    assert.equal(part.parts.length, expected.parts.length, msg+".parts.length")
     expected.parts.forEach do |e, i|
       validatePart(part.parts[i], e, msg+".parts[{i}]")
     end
   end
   if (expected.operands)
-    assert.equal(part.operands.length, expected.operands.length)
+    assert.equal(part.operands.length, expected.operands.length, msg+".operands.length")
     expected.operands.forEach do |e, i|
       validatePart(part.operands[i], e, msg+".operands[{i}]")
     end
@@ -59,7 +59,7 @@ end
 
 def testParse(code, expected)
   let list = parse(tokenize(code).children)
-  assert.equal(list.length, expected.length)
+  assert.equal(list.length, expected.length, "Number of expressions")
   expected.forEach do |e, i|
     validatePart(list[i], e, "Expression[{i}]")
   end
@@ -75,10 +75,13 @@ describe "Parse let assignment" do
   end
 
   it 'let x;' do
-    let list = parse(tokenize("let x;").children)
-    assert.equal(list?.length, 2)
-    let ast = list[0]
-    assert.equal(ast?.raw, 'let x')
+    testParse('let x;', [
+      {
+        type: 'meta.declaration.jome',
+        parts: [{type: 'keyword.control.declaration.jome'}, {type: 'variable.other.jome'}]
+      },
+      {type: 'punctuation.terminator.statement.jome'}
+    ])
   end
 
   it 'let x; let y' do
