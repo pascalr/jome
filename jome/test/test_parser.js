@@ -34,12 +34,44 @@ module.exports = () => {
       assert.equal(ast?.operands?.[1]?.raw, "19");
     });
   });
+  function validatePart(part, expected, msg) {
+    if (expected.type) {
+      assert.equal(part.type, expected.type, msg);
+    }
+    if (expected.value) {
+      assert.equal(part.value, expected.value);
+    }
+    if (expected.parts) {
+      assert.equal(part.parts.length, expected.parts.length);
+      expected.parts.forEach(function (e, i) {
+        validatePart(part.parts[i], e, msg + `.parts[${i}]`);
+      });
+    }
+    if (expected.operands) {
+      assert.equal(part.operands.length, expected.operands.length);
+      expected.operands.forEach(function (e, i) {
+        validatePart(part.operands[i], e, msg + `.operands[${i}]`);
+      });
+    }
+  }
+  function testParse(code, expected) {
+    let list = parse(tokenize(code).children);
+    assert.equal(list.length, expected.length);
+    expected.forEach(function (e, i) {
+      validatePart(list[i], e, `Expression[${i}]`);
+    });
+  }
   describe("Parse let assignment", function () {
     it("let x", function () {
-      let list = parse(tokenize("let x").children);
-      assert.equal(list?.length, 1);
-      let ast = list[0];
-      assert.equal(ast?.raw, "let x");
+      testParse("let x", [
+        {
+          type: "meta.declaration.jome",
+          parts: [
+            { type: "keyword.control.declaration.jome" },
+            { type: "variable.other.jome" },
+          ],
+        },
+      ]);
     });
 
     it("let x;", function () {
