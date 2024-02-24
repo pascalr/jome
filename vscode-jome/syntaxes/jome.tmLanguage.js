@@ -241,6 +241,10 @@ let grammar = {
           match: "\\b(throw)\\b"
         },
         {
+          name: "keyword.operator.new.jome",
+          match: "\\b(new)\\b"
+        },
+        {
           name: "keyword.control.trycatch.jome",
           match: "\\b(try|catch|finally)\\b"
         },

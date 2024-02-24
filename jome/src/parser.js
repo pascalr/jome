@@ -225,7 +225,9 @@ const PRECEDENCES = {
   'keyword.operator.assignment.jome': 250,
   // Assigment and dictionary key have the same precedence. (They should never be used together)
   'meta.dictionary-key.jome': 250,
-  // Assignment is higher than return: return x = 10
+  // Assignment is higher than new: x = new Foo()
+  'keyword.operator.new.jome': 235,
+  // New is higher than return: return new Foo()
   'keyword.control.return.jome': 225,
   // Throw is the same as return
   'keyword.control.throw.jome': 225,
@@ -294,6 +296,10 @@ const TOKENS = {
   },
   // throw
   "keyword.control.throw.jome": {
+    captureRight: true
+  },
+  // new
+  "keyword.operator.new.jome": {
     captureRight: true
   },
   // main

@@ -685,6 +685,9 @@ const CODE_GENERATORS = {
   "keyword.control.throw.jome": (node) => {
     return 'throw '+genCode(node.operands[0])+';'
   },
+  "keyword.operator.new.jome": (node) => {
+    return 'new '+genCode(node.operands[0])+';'
+  },
 
   // <anything></anything>
   "meta.tag.jome": compileHeredoc,
