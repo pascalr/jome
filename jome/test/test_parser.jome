@@ -44,7 +44,11 @@ def validatePart(part, expected, msg)
     assert.equal(part.value, expected.value)
   end
   if (expected.parts)
-    assert.equal(part.parts.length, expected.parts.length, msg+".parts.length")
+    if (part.parts.length !== expected.parts.length)
+      let a = JSON.stringify(part.parts.map(p => p.type))
+      let e = JSON.stringify(expected.parts.map(p => p.type))
+      assert.equal(a, e, msg+".parts")
+    end
     expected.parts.forEach do |e, i|
       validatePart(part.parts[i], e, msg+".parts[{i}]")
     end
@@ -101,8 +105,6 @@ describe "Parse let assignment" do
   end
 
 end
-
-
 
 describe "Parse conditions" do
 

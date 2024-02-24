@@ -42,11 +42,11 @@ module.exports = () => {
       assert.equal(part.value, expected.value);
     }
     if (expected.parts) {
-      assert.equal(
-        part.parts.length,
-        expected.parts.length,
-        msg + ".parts.length",
-      );
+      if (part.parts.length !== expected.parts.length) {
+        let a = JSON.stringify(part.parts.map((p) => p.type));
+        let e = JSON.stringify(expected.parts.map((p) => p.type));
+        assert.equal(a, e, msg + ".parts");
+      }
       expected.parts.forEach(function (e, i) {
         validatePart(part.parts[i], e, msg + `.parts[${i}]`);
       });
