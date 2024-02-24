@@ -578,6 +578,25 @@ const ANALYZERS = {
     let tryParts = []
     let catchParts = []
     let finallyParts = []
+    let catchKeywordFound = false
+    let finallyKeywordFound = false
+    filterNewlines(node.parts.slice(1,-1)).forEach(part => {
+      // TODO: Assert that a single catch keyword and a single finally keyword found
+      if (part.type === 'keyword.control.trycatch.jome') {
+        if (part.raw === 'catch') {
+          catchKeywordFound = true
+        } else if (part.type === 'keyword.control.trycatch.jome' && part.raw === 'finally') {
+          finallyKeywordFound = true
+        }
+      } else if (finallyKeywordFound) {
+        finallyParts.push(part)
+      } else if (catchKeywordFound) {
+        catchParts.push(part)
+      } else {
+        tryParts.push(part)
+      }
+    })
+    // TODO: Assert that catch of finally is found
     node.data = {tryParts, catchParts, finallyParts}
   },
 

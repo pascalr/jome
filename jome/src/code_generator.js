@@ -747,6 +747,18 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
     return applyFormat(node.raw.slice(1), node.operands[0])
   },
 
+  "meta.trycatch.jome": (node) => {
+    let {tryParts, catchParts, finallyParts} = node.data
+    let result = `try {\n ${tryParts.map(p => genCode(p)).join('')}\n}`
+    if (catchParts.length) {
+      result += ` catch {\n ${catchParts.map(p => genCode(p)).join('')}\n}`
+    }
+    if (finallyParts.length) {
+      result += ` finally {\n ${finallyParts.map(p => genCode(p)).join('')}\n}`
+    }
+    return result
+  },
+
   "meta.forall.jome": (node) => {
     let {tagName, chainFunctions, wrapFunctions} = node.data
     // Get the actual referenced function

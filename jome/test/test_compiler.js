@@ -628,21 +628,23 @@ end
       try
         throw new Error("Some error")
       finally
+        done = true
       end
     `,
-        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*finally\s*{\s*}\s*/,
+        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*finally\s*{\s*done = true\s*}\s*/,
       );
     });
-    it("try catch finally end", function () {
+    it.focus("try catch finally end", function () {
       assertCompile(
         `
       try
         throw new Error("Some error")
       catch (e)
       finally
+        done = true
       end
     `,
-        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*catch\s*\(e\)\s*{\s*}}\s*finally\s*\(e\)\s*{\s*}\s*/,
+        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*catch\s*\(e\)\s*{\s*}}\s*finally\s*{\s*done = true\s*}\s*/,
       );
     });
     it("try catch curly braces", function () {
@@ -662,9 +664,10 @@ end
       try {
         throw new Error("Some error")
       } finally {
+        done = true
       }
     `,
-        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*finally\s*{\s*}\s*/,
+        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*finally\s*{\s*done = true\s*}\s*/,
       );
     });
     it("try catch finally curly braces", function () {
@@ -674,9 +677,10 @@ end
         throw new Error("Some error")
       } catch (e) {
       } finally {
+        done = true
       }
     `,
-        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*catch\s*\(e\)\s*{\s*}}\s*finally\s*\(e\)\s*{\s*}\s*/,
+        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*catch\s*\(e\)\s*{\s*}}\s*finally\s*{\s*done = true\s*}\s*/,
       );
     });
   });
