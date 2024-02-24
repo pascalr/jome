@@ -132,6 +132,21 @@ function mergeChainables(nodes) {
   return merged
 }
 
+// merge those that are capture right only, not operators that capture left and right
+// only capture those that have the highest precedence (like !)
+function mergeCaptureRightHighPrecedence(nodes) {
+  let merged = []
+  for (let i = 0; i < nodes.length; i++) {
+    let n = nodes[i]
+    if (n.captureRight && !n.captureLeft && nodes[i+1] && (n.precedence > nodes[i+1].precedence && (!nodes[i+2]?.captureLeft || n.precedence > nodes[i+2].precedence))) {
+      n.operands.push(nodes[i+1])
+      i += 1
+    }
+    merged.push(n)
+  }
+  return merged
+}
+
 // Create an abstract syntax tree (AST) from tokens. Returns a list of ASTNode.
 function parse(tokens, parent, lexEnv) {
 
@@ -141,17 +156,19 @@ function parse(tokens, parent, lexEnv) {
   let topNodes = []
 
   // As a first pass, merge all the chainable nodes together. They have highest precedence.
-  let nodes = mergeChainables(allNodes)
+  let firstPass = mergeChainables(allNodes)
+
+  let nodes = mergeCaptureRightHighPrecedence(firstPass)
 
   // lhs === left hand side
   // rhs === right hand side
   const parseSingleExpression = (lhs, minPrecedence) => {
-    if (lhs.captureRight) {
-      if (lhs.precedence > nodes[0].precedence && (!nodes[1]?.captureLeft || lhs.precedence > nodes[1].precedence)) {
-        lhs.operands.push(nodes.shift())
-      } else {
+    if (lhs.captureRight && lhs.operands.length <= 0) {
+      // if (lhs.precedence > nodes[0].precedence && (!nodes[1]?.captureLeft || lhs.precedence > nodes[1].precedence)) {
+      //   lhs.operands.push(nodes.shift())
+      // } else {
         lhs.operands.push(parseSingleExpression(nodes.shift(), lhs.precedence)) // FIXME: No idea if lhs.precedence is correct, pure guess
-      }
+      // }
     } else if (lhs.captureSection && lhs.parts[lhs.parts.length-1].type === "punctuation.section.function.begin.jome") {
       let next = nodes.shift()
       while (next && next.type === 'newline') {
