@@ -758,6 +758,17 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
     }
     return result
   },
+  "meta.try.jome": (node) => {
+    return `try {\n ${node.parts.slice(1).map(p => genCode(p)).join('')}\n}`
+  },
+  "meta.catch.jome": (node) => {
+    let e = (node.parts[1].type === 'variable.other.exception.jome') ? node.parts[1].raw : null
+    let elems = node.parts.slice(e ? 2 : 1)
+    return `catch${e ? ` (${e})` : ''} {\n ${elems.map(p => genCode(p)).join('')}\n}`
+  },
+  "meta.finally.jome": (node) => {
+    return `finally {\n ${node.parts.slice(1).map(p => genCode(p)).join('')}\n}`
+  },
 
   "meta.forall.jome": (node) => {
     let {tagName, chainFunctions, wrapFunctions} = node.data

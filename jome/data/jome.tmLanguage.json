@@ -611,13 +611,13 @@
         },
         {
           "name": "meta.catch.jome",
-          "begin": "\\b(catch)\\b\\s*(\\(\\s*[A-Za-z_$]\\w*\\)\\s*)?\\s*\\{",
+          "begin": "\\b(catch)\\b\\s*(?:\\(\\s*([A-Za-z_$]\\w*)\\)\\s*)?\\s*\\{",
           "beginCaptures": {
             "1": {
               "name": "keyword.control.trycatch.jome"
             },
             "2": {
-              "name": "variable.other.readwrite.jome"
+              "name": "variable.other.exception.jome"
             }
           },
           "end": "\\}",

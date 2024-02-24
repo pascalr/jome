@@ -414,10 +414,10 @@ let grammar = {
         },
         {
           name: "meta.catch.jome",
-          begin: `\\b(catch)\\b\\s*(\\(\\s*${REGEX_VARIABLE}\\)\\s*)?\\s*\\{`,
+          begin: `\\b(catch)\\b\\s*(?:\\(\\s*(${REGEX_VARIABLE})\\)\\s*)?\\s*\\{`,
           beginCaptures: {
             1: { name: "keyword.control.trycatch.jome" },
-            2: { name: "variable.other.readwrite.jome" }
+            2: { name: "variable.other.exception.jome" }
           },
           end: "\\}",
           patterns: [{ include: "#expression" }]
