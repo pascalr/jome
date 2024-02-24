@@ -95,6 +95,38 @@ function ensureListSeparatedByCommas(node, items) {
   }
 }
 
+// Allow commas or newlines as separator
+function parseList(items) {
+  let modified = []
+  let itemBefore = false
+  let commaBefore = true
+  items.forEach(item => {
+    if (item.type === 'punctuation.separator.delimiter.jome') {
+      if (commaBefore) {
+        modified.push(item)
+      }
+      itemBefore = false
+      commaBefore = true
+    } else if (item.type === 'newline') {
+      itemBefore = false
+    } else if (itemBefore) {
+      throw new Error("Syntax error. Expecting commas or newlines between every element inside a list")
+    } else {
+      modified.push(item)
+      itemBefore = true
+      commaBefore = false
+    }
+  })
+  return modified
+}
+
+function ensureListSeparatedByCommasOrNewlines(node, items) {
+  // All the even index operands should be punctuation.separator.delimiter.jome
+  if (items.some((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
+    throw new Error("Syntax error. Expecting commas between every element inside a list")
+  }
+}
+
 function filterNewlines(list) {
   return list.filter(el => el.type !== 'newline')
 }
@@ -355,15 +387,14 @@ const ANALYZERS = {
       throw new Error("Internal error. meta.square-bracket.jome should always end with punctuation.definition.square-bracket.end.jome")
     }
     let isOperator = node.operands.length
-    let items = filterNewlines(node.parts.slice(1,-1))
     if (isOperator) {
+      let items = filterNewlines(node.parts.slice(1,-1))
       if (items.length !== 1) {
         pushError(node, "Syntax error. Square bracket operator expects one and only one expression.")
       }
       node.data = {isOperator, operand: node.operands[0], expression: items[0]}
     } else {
-      ensureListSeparatedByCommas(node, items)
-      let elems = items.filter((e, i) => i % 2 === 0)
+      let elems = parseList(node.parts.slice(1,-1))
       node.data = {elems}
     }
   },

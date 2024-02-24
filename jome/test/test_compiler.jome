@@ -10,12 +10,12 @@ end
 
 def testCompile(code, expectedResult)
   return do // TODO: Change this to fn () ... end when this will work
-    assert.match(compile(code), expectedResult);
+    assert.match(compile(code), expectedResult, "*** Compile mismatch ***");
   end
 end
 
 def assertCompile(code, expectedResult)
-  assert.match(compile(code), expectedResult);
+  assert.match(compile(code), expectedResult, "*** Compile mismatch ***");
 end
 
 
@@ -598,6 +598,10 @@ describe "Values" do
   describe "Arrays" do
     it '[]', testCompile('[]', /\[\]/)
     it '[1,2,3]', testCompile('[1,2,3]', /\[1, ?2, ?3\]/)
+    it '[,,]', testCompile('[,,]', /\[, ?, ?\]/)
+    it '[,\n\n,]', testCompile('[,\n\n,]', /\[, ?, ?\]/)
+    it '[\n\n]', testCompile('[\n\n]', /\[\]/)
+    it 'Newlines can be used instead of commas', testCompile('[1\n2\n3]', /\[1, ?2, ?3\]/)
   end
 end
 
@@ -678,6 +682,7 @@ describe "Test objects" do
   it '({})', testCompile('({})', /\(\{\}\)/)
   it '{x: 1}', testCompile('{x: 1}', /\{\s*x\: ?1;?\s*\}/)
   it '{x: 1, y: 2}', testCompile('{x: 1, y: 2}', /\{\s*x\: ?1, y: 2\s*\}/)
+  it 'Newlines can be used instead of commas', testCompile('{x: 1\ny: 2}', /\{\s*x\: ?1, y: 2\s*\}/)
   it 'key is quoted string', testCompile('{"x": 1}', /\{\s*x\: ?1;?\s*\}/)
 end
 

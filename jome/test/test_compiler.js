@@ -7,11 +7,11 @@ module.exports = () => {
   }
   function testCompile(code, expectedResult) {
     return function () {
-      assert.match(compile(code), expectedResult);
+      assert.match(compile(code), expectedResult, "*** Compile mismatch ***");
     };
   }
   function assertCompile(code, expectedResult) {
-    assert.match(compile(code), expectedResult);
+    assert.match(compile(code), expectedResult, "*** Compile mismatch ***");
   }
   describe("Paths", function () {
     it("Dirname shortcuts", function () {
@@ -473,6 +473,13 @@ end
     describe("Arrays", function () {
       it("[]", testCompile("[]", /\[\]/));
       it("[1,2,3]", testCompile("[1,2,3]", /\[1, ?2, ?3\]/));
+      it("[,,]", testCompile("[,,]", /\[, ?, ?\]/));
+      it("[,\n\n,]", testCompile("[,\n\n,]", /\[, ?, ?\]/));
+      it("[\n\n]", testCompile("[\n\n]", /\[\]/));
+      it(
+        "Newlines can be used instead of commas",
+        testCompile("[1\n2\n3]", /\[1, ?2, ?3\]/),
+      );
     });
   });
   describe("Types", function () {
@@ -525,6 +532,10 @@ end
     it("({})", testCompile("({})", /\(\{\}\)/));
     it("{x: 1}", testCompile("{x: 1}", /\{\s*x\: ?1;?\s*\}/));
     it("{x: 1, y: 2}", testCompile("{x: 1, y: 2}", /\{\s*x\: ?1, y: 2\s*\}/));
+    it(
+      "Newlines can be used instead of commas",
+      testCompile("{x: 1\ny: 2}", /\{\s*x\: ?1, y: 2\s*\}/),
+    );
     it("key is quoted string", testCompile('{"x": 1}', /\{\s*x\: ?1;?\s*\}/));
   });
   describe("No group", function () {
