@@ -36,6 +36,17 @@ let content = <md>
   let data = #./some_data.txt as csv
   let data = "some, data" as csv
   let data = #./some_data.csv as csv
+
+  let str = #./some_data.cvs as is // as is simply return a string
+
+  let data = #(./some_data.cvs) // check extension to import
+  let data = #(./some_data.cvs as is) // no formatting, directly a string
+
+  let img = #(./some_image.png)
+  // Ah! Inside config.jome, for formats, allow them to handle file input like this
+  // Here it could be compiled for example to:
+  const PNG = require('png-js');
+  let img = new PNG('some_image.png');
   ```
 
   TODO: Deprecate the syntax "Hello,world"%csv
