@@ -226,7 +226,7 @@ function compileMethod(node) {
 function compileDefFunction(node) {
   let {name, args, expressions} = node.data
   if (args) {
-    return `function ${name}${compileArgs(args)} {${expressions.slice(1).map(c => genCode(c)).join('')}}`
+    return `function ${name}${compileArgs(args)} {${expressions.map(c => genCode(c)).join('')}}`
   } else {
     return `function ${name}() {${expressions.map(c => genCode(c)).join('')}}`
   }
