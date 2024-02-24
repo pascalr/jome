@@ -167,6 +167,7 @@ let grammar = {
         { include: "#format" },
         { include: "#function" },
         { include: "#do_end" },
+        { include: "#trycatch" },
         { include: "#for-tag" },
         { include: "#chain-bloc" },
         { include: "#type_def" },
@@ -200,16 +201,16 @@ let grammar = {
         { include: "#comma" }, // ,
       ]
     },
+    // TODO: Add all available in js here
     "support-items": {
       patterns: [
         {
           name: "support.variable.jome",
-          // TODO: Add all available in js here
           match: "\\b(console|window|global|document|__dirname|__filename|JSON)\\b"
         },
         {
           name: "support.class.jome",
-          match: "\\b(Array|JSON)\\b"
+          match: "\\b(Array|Error)\\b"
         }
       ]
     },
@@ -234,6 +235,14 @@ let grammar = {
         {
           name: "keyword.control.return.jome",
           match: "\\b(return)\\b"
+        },
+        {
+          name: "keyword.control.throw.jome",
+          match: "\\b(throw)\\b"
+        },
+        {
+          name: "keyword.control.trycatch.jome",
+          match: "\\b(try|catch|finally)\\b"
         },
         {
           name: "keyword.control.jome",
@@ -386,6 +395,14 @@ let grammar = {
       name: "meta.if-block.jome",
       begin: "(?:^|\\G)\\s*\\b(if)\\b",
       beginCaptures: { 1: { name: "keyword.control.conditional.jome" } },
+      end: "\\b(end)\\b",
+      endCaptures: { 0: { name: "keyword.control.jome" } },
+      patterns: [{ include: "#expression" }]
+    },
+    trycatch: {
+      name: "meta.trycatch.jome",
+      begin: "\\b(try)\\b",
+      beginCaptures: { 1: { name: "keyword.control.trycatch.jome" } },
       end: "\\b(end)\\b",
       endCaptures: { 0: { name: "keyword.control.jome" } },
       patterns: [{ include: "#expression" }]

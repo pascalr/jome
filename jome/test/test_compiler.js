@@ -165,6 +165,7 @@ module.exports = () => {
         /`multi \\`line\\`\s+with backticks`/,
       );
     });
+    it.skip("Regular double quote strings with escaping", function () {});
     it("Double quote strings template literal", function () {
       assertCompile('"1 + 1 = {1+1}"', /`1 \+ 1 = \$\{1 ?\+ ?1\}`/);
     });
@@ -604,6 +605,12 @@ end
     it("false ? 1 : 0", testCompile("false ? 1 : 0", /false \? 1 : 0/));
   });
   describe("Error handling", function () {
+    it("throw string", function () {
+      assertCompile('throw "error"', /throw "error"/);
+    });
+    it("throw new error", function () {
+      assertCompile('throw new Error("error")', /throw new Error\("error"\)/);
+    });
     it("try catch end", function () {
       assertCompile(
         `

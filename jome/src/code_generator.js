@@ -680,9 +680,10 @@ const CODE_GENERATORS = {
   },
 
   "keyword.control.return.jome": (node) => {
-    if (node.raw === 'return') {
-      return 'return '+genCode(node.operands[0])+';'
-    }
+    return 'return '+genCode(node.operands[0])+';'
+  },
+  "keyword.control.throw.jome": (node) => {
+    return 'throw '+genCode(node.operands[0])+';'
   },
 
   // <anything></anything>

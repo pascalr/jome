@@ -18,6 +18,11 @@ let PARTIAL = <md>
 
 let content = <md>
 
+  Idea: It would be pretty if syntax highlighting for strings would be different. I would like '' to be of a different
+  color than "" and ``.
+
+  '' would be more for titles, for fixed strings, than for data
+
   # Jome v0.1
 
   Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it

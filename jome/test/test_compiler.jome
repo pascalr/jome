@@ -142,6 +142,12 @@ describe "Strings" do
     assertCompile(`"multi \`line\`
     with backticks"`, /`multi \\`line\\`\s+with backticks`/);
   end
+  it.skip 'Regular double quote strings with escaping' do
+    // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    // EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    // EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    // assertCompile('"\"hello\""', /"\\"hello\\""/);
+  end
   it 'Double quote strings template literal' do
     assertCompile(`"1 + 1 = {1+1}"`, /`1 \+ 1 = \$\{1 ?\+ ?1\}`/);
   end
@@ -768,6 +774,12 @@ end
 
 
 describe 'Error handling' do
+  it 'throw string' do
+    assertCompile(`throw "error"`, /throw "error"/);
+  end
+  it 'throw new error' do
+    assertCompile(`throw new Error("error")`, /throw new Error\("error"\)/);
+  end
   it 'try catch end' do
     assertCompile(`
       try

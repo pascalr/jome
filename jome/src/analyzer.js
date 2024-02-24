@@ -570,6 +570,17 @@ const ANALYZERS = {
     node.data = {isFileArguments, argsToken: parts}
   },
 
+  "meta.trycatch.jome": (node) => {
+    ensureStartRaw(node, 'try')
+    ensureStartType(node, 'keyword.control.trycatch.jome')
+    ensureEndRaw(node, 'end')
+    ensureEndType(node, 'keyword.control.jome')
+    let tryParts = []
+    let catchParts = []
+    let finallyParts = []
+    node.data = {tryParts, catchParts, finallyParts}
+  },
+
   "meta.tag.jome": validateTag,
 
   "meta.forall.jome": (node) => {

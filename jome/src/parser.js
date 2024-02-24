@@ -227,7 +227,9 @@ const PRECEDENCES = {
   'meta.dictionary-key.jome': 250,
   // Assignment is higher than return: return x = 10
   'keyword.control.return.jome': 225,
-  // Return is higher than inline conditional: return 10 if true
+  // Throw is the same as return
+  'keyword.control.throw.jome': 225,
+  // Throw is higher than inline conditional: throw 'error' if true
   'keyword.control.inline-conditional.jome': 200,
 }
 
@@ -288,6 +290,10 @@ const TOKENS = {
   },
   // return
   "keyword.control.return.jome": {
+    captureRight: true
+  },
+  // throw
+  "keyword.control.throw.jome": {
     captureRight: true
   },
   // main
