@@ -613,7 +613,7 @@ const CODE_GENERATORS = {
     if (isOperator) {
       return `${genCode(operand)}[${genCode(expression)}]`
     } else {
-      return `[${elems.map(c => genCode(c)).join(', ')}]`
+      return `[${elems.map(c => genCode(c)).join('')}]`
     }
   },
   // exec

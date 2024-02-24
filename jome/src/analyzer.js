@@ -99,22 +99,21 @@ function ensureListSeparatedByCommas(node, items) {
 function parseList(items) {
   let modified = []
   let itemBefore = false
-  let commaBefore = true
   items.forEach(item => {
     if (item.type === 'punctuation.separator.delimiter.jome') {
-      if (commaBefore) {
-        modified.push(item)
-      }
+      modified.push(item)
       itemBefore = false
-      commaBefore = true
     } else if (item.type === 'newline') {
-      itemBefore = false
+      if (itemBefore) {
+        // Insert a comma
+        modified.push({...item, type: 'punctuation.separator.delimiter.jome', raw: ','})
+        itemBefore = false
+      }
     } else if (itemBefore) {
       throw new Error("Syntax error. Expecting commas or newlines between every element inside a list")
     } else {
       modified.push(item)
       itemBefore = true
-      commaBefore = false
     }
   })
   return modified
