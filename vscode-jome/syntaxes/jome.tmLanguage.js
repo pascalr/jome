@@ -249,6 +249,14 @@ let grammar = {
           match: "\\b(try|catch|finally)\\b"
         },
         {
+          name: "keyword.control.flow.jome",
+          match: "\\b(await)\\b"
+        },
+        {
+          name: "storage.modifier.async.jome",
+          match: "\\b(async)\\b"
+        },
+        {
           name: "keyword.control.jome",
           match: "\\b(yield|while|for|return|include|from|import|ret|retn|export|await|async|default|interface)\\b"
         },

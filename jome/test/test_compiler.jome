@@ -857,8 +857,10 @@ end
 
 
 describe 'Parallelization' do
-  it.skip 'async' do
+  it 'async' do
+    assertCompile('async def sayHello: #log("hello")', /async function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
   end
-  it.skip 'await' do
+  it 'await' do
+    assertCompile('await foo()', /await foo\(\)/);
   end
 end

@@ -517,6 +517,14 @@ const CODE_GENERATORS = {
   "meta.getter.jome": (node) => {
     return `${genCode(node.operands[0])}${node.raw}`
   },
+  // async
+  "keyword.control.flow.jome": (node) => {
+    return `await ${genCode(node.operands[0])}`
+  },
+  "storage.modifier.async.jome": (node) => {
+    return `async ${genCode(node.operands[0])}`
+  },
+  // await
   'meta.group.jome': (node) => {
     // If a function call
     if (node.operands) {

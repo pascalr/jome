@@ -334,7 +334,15 @@ const TOKENS = {
   // def
   "meta.def.jome": {
     captureSection: true
-  }
+  },
+  // async
+  "storage.modifier.async.jome": {
+    captureRight: true
+  },
+  // await
+  "keyword.control.flow.jome": {
+    captureRight: true
+  },
 }
 
 module.exports = {

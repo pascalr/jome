@@ -713,7 +713,14 @@ end
     });
   });
   describe("Parallelization", function () {
-    it.skip("async", function () {});
-    it.skip("await", function () {});
+    it("async", function () {
+      assertCompile(
+        'async def sayHello: #log("hello")',
+        /async function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
+      );
+    });
+    it("await", function () {
+      assertCompile("await foo()", /await foo\(\)/);
+    });
   });
 };

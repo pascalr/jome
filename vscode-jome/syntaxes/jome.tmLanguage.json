@@ -310,6 +310,14 @@
           "match": "\\b(try|catch|finally)\\b"
         },
         {
+          "name": "keyword.control.flow.jome",
+          "match": "\\b(await)\\b"
+        },
+        {
+          "name": "storage.modifier.async.jome",
+          "match": "\\b(async)\\b"
+        },
+        {
           "name": "keyword.control.jome",
           "match": "\\b(yield|while|for|return|include|from|import|ret|retn|export|await|async|default|interface)\\b"
         },
@@ -603,21 +611,6 @@
             }
           },
           "end": "\\}(?!\\s*catch)(?!\\s*finally)",
-          "patterns": [
-            {
-              "include": "#expression"
-            }
-          ]
-        },
-        {
-          "name": "meta.try.jome",
-          "begin": "\\b(try)\\b\\s*\\{",
-          "beginCaptures": {
-            "1": {
-              "name": "keyword.control.trycatch.jome"
-            }
-          },
-          "end": "\\}",
           "patterns": [
             {
               "include": "#expression"
