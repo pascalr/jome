@@ -144,9 +144,9 @@ function parse(tokens, parent, lexEnv) {
 
   // lhs === left hand side
   // rhs === right hand side
-  const parseExpression1 = (lhs, minPrecedence) => {
+  const parseSingleExpression = (lhs, minPrecedence) => {
     if (lhs.captureRight) {
-      lhs.operands.push(nodes.shift())
+      lhs.operands.push(parseSingleExpression(nodes.shift(), lhs.precedence)) // FIXME: No idea if lhs.precedence is correct, pure guess
     }
     let lookahead = nodes[0]
     while (
@@ -166,7 +166,7 @@ function parse(tokens, parent, lexEnv) {
           (lookahead.precedence === op.precedence &&
             lookahead.rightAssociative)) // right associative is not used yet
       ) {
-        rhs = parseExpression1(rhs, op.precedence + (lookahead.precedence > op.precedence ? 1 : 0));
+        rhs = parseSingleExpression(rhs, op.precedence + (lookahead.precedence > op.precedence ? 1 : 0));
         lookahead = nodes[0];
       }
       op.operands = [lhs, rhs];
@@ -176,7 +176,7 @@ function parse(tokens, parent, lexEnv) {
   };
 
   while (nodes.length) {
-    topNodes.push(parseExpression1(nodes.shift(), 0))
+    topNodes.push(parseSingleExpression(nodes.shift(), 0))
   }
 
   return topNodes
