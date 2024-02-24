@@ -204,7 +204,8 @@ let grammar = {
       patterns: [
         {
           name: "support.variable.jome",
-          match: "\\b(console|window|global|document|__dirname|__filename)\\b"
+          // TODO: Add all available in js here
+          match: "\\b(console|window|global|document|__dirname|__filename|JSON)\\b"
         },
         {
           name: "support.class.jome",
@@ -668,7 +669,7 @@ let grammar = {
           }
         },
         {
-          match: "!=|<=|>=|===|==|<|>",
+          match: "!==|!=|<=|>=|===|==|<|>",
           name: "keyword.operator.comparison.jome"
         },
         {

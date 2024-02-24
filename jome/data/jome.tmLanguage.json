@@ -264,7 +264,7 @@
       "patterns": [
         {
           "name": "support.variable.jome",
-          "match": "\\b(console|window|global|document|__dirname|__filename)\\b"
+          "match": "\\b(console|window|global|document|__dirname|__filename|JSON)\\b"
         },
         {
           "name": "support.class.jome",
@@ -1012,7 +1012,7 @@
           }
         },
         {
-          "match": "!=|<=|>=|===|==|<|>",
+          "match": "!==|!=|<=|>=|===|==|<|>",
           "name": "keyword.operator.comparison.jome"
         },
         {
