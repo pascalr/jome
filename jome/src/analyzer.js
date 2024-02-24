@@ -578,12 +578,20 @@ const ANALYZERS = {
     let tryParts = []
     let catchParts = []
     let finallyParts = []
+    let exceptionVar = null
     let catchKeywordFound = false
     let finallyKeywordFound = false
-    filterNewlines(node.parts.slice(1,-1)).forEach(part => {
+    let parts = filterNewlines(node.parts.slice(1,-1))
+    for (let i = 0; i < parts.length; i++) {
+      let part = parts[i]
       // TODO: Assert that a single catch keyword and a single finally keyword found
       if (part.type === 'keyword.control.trycatch.jome') {
         if (part.raw === 'catch') {
+          let next = parts[i+1]
+          if (next.type === 'meta.group.jome' && next.parts[1].type === 'variable.other.jome') {
+            exceptionVar = next.parts[1].raw
+            i += 1
+          }
           catchKeywordFound = true
         } else if (part.type === 'keyword.control.trycatch.jome' && part.raw === 'finally') {
           finallyKeywordFound = true
@@ -595,9 +603,9 @@ const ANALYZERS = {
       } else {
         tryParts.push(part)
       }
-    })
+    }
     // TODO: Assert that catch of finally is found
-    node.data = {tryParts, catchParts, finallyParts}
+    node.data = {tryParts, catchParts, finallyParts, exceptionVar}
   },
 
   "meta.tag.jome": validateTag,

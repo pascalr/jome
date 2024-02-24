@@ -619,7 +619,7 @@ end
       catch (e)
       end
     `,
-        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*catch\s*\(e\)\s*{\s*}}\s*/,
+        /\s*try\s*\{\s*throw new Error\("Some error"\);?\s*\}\s*catch\s*\(e\)\s*{\s*}\s*/,
       );
     });
     it("try finally end", function () {
@@ -631,10 +631,10 @@ end
         done = true
       end
     `,
-        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*finally\s*{\s*done = true\s*}\s*/,
+        /\s*try\s*\{\s*throw new Error\("Some error"\);?\s*\}\s*finally\s*{\s*done = true;?\s*}\s*/,
       );
     });
-    it.focus("try catch finally end", function () {
+    it("try catch finally end", function () {
       assertCompile(
         `
       try
@@ -644,7 +644,7 @@ end
         done = true
       end
     `,
-        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*catch\s*\(e\)\s*{\s*}}\s*finally\s*{\s*done = true\s*}\s*/,
+        /\s*try\s*\{\s*throw new Error\("Some error"\);?\s*\}\s*catch\s*\(e\)\s*{\s*}\s*finally\s*{\s*done = true;?\s*}\s*/,
       );
     });
     it("try catch curly braces", function () {

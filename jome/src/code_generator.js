@@ -748,10 +748,10 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
   },
 
   "meta.trycatch.jome": (node) => {
-    let {tryParts, catchParts, finallyParts} = node.data
+    let {tryParts, catchParts, finallyParts, exceptionVar} = node.data
     let result = `try {\n ${tryParts.map(p => genCode(p)).join('')}\n}`
-    if (catchParts.length) {
-      result += ` catch {\n ${catchParts.map(p => genCode(p)).join('')}\n}`
+    if (catchParts.length || exceptionVar) {
+      result += ` catch${exceptionVar ? ` (${exceptionVar})` : ''} {\n ${catchParts.map(p => genCode(p)).join('')}\n}`
     }
     if (finallyParts.length) {
       result += ` finally {\n ${finallyParts.map(p => genCode(p)).join('')}\n}`
