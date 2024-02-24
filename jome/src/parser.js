@@ -146,11 +146,7 @@ function parse(tokens, parent, lexEnv) {
   // rhs === right hand side
   const parseExpression1 = (lhs, minPrecedence) => {
     if (lhs.captureRight) {
-      if (typeof lhs.captureRight === "number" && Number.isInteger(lhs.captureRight)) {
-        lhs.operands = nodes.splice(0, lhs.captureRight)
-      } else {
-        lhs.operands.push(nodes.shift())
-      }
+      lhs.operands.push(nodes.shift())
     }
     let lookahead = nodes[0]
     while (

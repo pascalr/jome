@@ -112,6 +112,17 @@ the air, inviting anyone who entered to linger and embrace the serenity.
 <span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-string">#./some_data.txt</span> <span class="hljs-variable">as</span> <span class="hljs-variable">csv</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-string">&quot;some, data&quot;</span> <span class="hljs-variable">as</span> <span class="hljs-variable">csv</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-string">#./some_data.csv</span> <span class="hljs-variable">as</span> <span class="hljs-variable">csv</span>
+
+<span class="hljs-keyword">let</span> <span class="hljs-variable">str</span> = <span class="hljs-string">#./some_data.cvs</span> <span class="hljs-variable">as</span> <span class="hljs-variable">is</span> <span class="hljs-comment">// as is simply return a string</span>
+
+<span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = #(./<span class="hljs-variable">some_data</span>.<span class="hljs-variable">cvs</span>) <span class="hljs-comment">// check extension to import</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = #(./<span class="hljs-variable">some_data</span>.<span class="hljs-variable">cvs</span> <span class="hljs-variable">as</span> <span class="hljs-variable">is</span>) <span class="hljs-comment">// no formatting, directly a string</span>
+
+<span class="hljs-keyword">let</span> <span class="hljs-variable">img</span> = #(./<span class="hljs-variable">some_image</span>.<span class="hljs-variable">png</span>)
+<span class="hljs-comment">// Ah! Inside config.jome, for formats, allow them to handle file input like this</span>
+<span class="hljs-comment">// Here it could be compiled for example to:</span>
+<span class="hljs-variable">const</span> <span class="hljs-title class_">PNG</span> = <span class="hljs-title function_ invoke__">require</span>(<span class="hljs-string">&#x27;png-js&#x27;</span>);
+<span class="hljs-keyword">let</span> <span class="hljs-variable">img</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">PNG</span>(<span class="hljs-string">&#x27;some_image.png&#x27;</span>);
 </code></pre>
 <p>TODO: Deprecate the syntax &quot;Hello,world&quot;%csv
 Use the keyword as or something similar instead.

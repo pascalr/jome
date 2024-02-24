@@ -15,6 +15,10 @@ module.exports = () => {
   \`\`\``);
   let content = mdToHtml(`
 
+  TODO: Allow to specify syntax highlighting color theme inside config.jome.
+  Use semantic coloring to customize colors using the language server.
+  For example, I would like string.quoted.single to be of a different color than string.quoted.double.
+
   # Jome v0.1
 
   Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
