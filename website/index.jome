@@ -17,6 +17,8 @@ global.ROOT = '/jome'
 if (cmd === 'test')
   <sh>jome test.jome</sh>
 elsif (cmd === 'dev')
+  //#(./build.jome, :force!)
+  //#(./server.jome, port: 3000)
   build :force!
   server port: 3000
 elsif (cmd === 's' || cmd === 'server')
