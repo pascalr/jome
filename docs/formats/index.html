@@ -102,6 +102,31 @@ the air, inviting anyone who entered to linger and embrace the serenity.
 &quot;</span>
 </code></pre>
 <p>TODO: Faire un example que tu cliques sur chacun des boutons pour voir la différence de chaque format. Comme ça: https://developer.mozilla.org/en-US/docs/Web/CSS/cursor</p>
+<h2>Format variables</h2>
+<p>Formatting is done at compile time and not at runtime for safety reason (otherwise there could be code injetcion).</p>
+<p>So it is limited what you can do.</p>
+<p>But I'd like that it works if the variable is a string.</p>
+<p>You can use it to read and process files at compile time too.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">str</span> = <span class="hljs-string">&quot;some, data&quot;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-variable">str</span> <span class="hljs-variable">as</span> <span class="hljs-variable">csv</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-string">#./some_data.txt</span> <span class="hljs-variable">as</span> <span class="hljs-variable">csv</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-string">&quot;some, data&quot;</span> <span class="hljs-variable">as</span> <span class="hljs-variable">csv</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-string">#./some_data.csv</span> <span class="hljs-variable">as</span> <span class="hljs-variable">csv</span>
+</code></pre>
+<p>TODO: Deprecate the syntax &quot;Hello,world&quot;%csv
+Use the keyword as or something similar instead.
+I want typecasting to be done using parentheses, not lt and gt and not the keyword as.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">foo</span> -&gt; <span class="hljs-variable">any</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-number">10</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">nb</span> = (<span class="hljs-type">int</span>) <span class="hljs-title function_ invoke__">foo</span>()
+<span class="hljs-comment">// Based on the context I will know if int is a type or something else</span>
+</code></pre>
+<h2>csv, json, yaml</h2>
+<p>These formats are not so usefull inline, but this also means you can easily read them from a file and convert them.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-built_in function_">#read</span>(<span class="hljs-string">#./some_file.csv</span>)%<span class="hljs-variable">csv</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-built_in function_">#read</span> <span class="hljs-string">#./some_file.csv</span> |&gt; %<span class="hljs-variable">csv</span>
+</code></pre>
 <h2>bin, hex, oct</h2>
 <p>You can't declare the same way a binary, hexadecimal or octodecimal number in Jome because it could be confusing with units.</p>
 <p>Instead you use tags.</p>

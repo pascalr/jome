@@ -473,7 +473,7 @@ end
     describe("Arrays", function () {
       it("[]", testCompile("[]", /\[\]/));
       it("[1,2,3]", testCompile("[1,2,3]", /\[1, ?2, ?3\]/));
-      it("[,,]", testCompile("[,,]", /\[, ?, ?\]/));
+      it.focus("[,,]", testCompile("[,,]", /\[, ?, ?\]/));
       it("[,\n\n,]", testCompile("[,\n\n,]", /\[, ?, ?\]/));
       it("[\n\n]", testCompile("[\n\n]", /\[\]/));
       it(

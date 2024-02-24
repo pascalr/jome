@@ -21,6 +21,44 @@ module.exports = () => {
 
   TODO: Faire un example que tu cliques sur chacun des boutons pour voir la différence de chaque format. Comme ça: https://developer.mozilla.org/en-US/docs/Web/CSS/cursor
 
+  ## Format variables
+
+  Formatting is done at compile time and not at runtime for safety reason (otherwise there could be code injetcion).
+
+  So it is limited what you can do.
+
+  But I'd like that it works if the variable is a string.
+
+  You can use it to read and process files at compile time too.
+
+  \`\`\`jome
+  let str = "some, data"
+  let data = str as csv
+  let data = #./some_data.txt as csv
+  let data = "some, data" as csv
+  let data = #./some_data.csv as csv
+  \`\`\`
+
+  TODO: Deprecate the syntax "Hello,world"%csv
+  Use the keyword as or something similar instead.
+  I want typecasting to be done using parentheses, not lt and gt and not the keyword as.
+
+  \`\`\`jome
+  def foo -> any
+    return 10
+  end
+  let nb = (int) foo()
+  // Based on the context I will know if int is a type or something else
+  \`\`\`
+
+  ## csv, json, yaml
+
+  These formats are not so usefull inline, but this also means you can easily read them from a file and convert them.
+
+  \`\`\`jome
+  let data = #read(#./some_file.csv)%csv
+  let data = #read #./some_file.csv |> %csv
+  \`\`\`
 
   ## bin, hex, oct
 
