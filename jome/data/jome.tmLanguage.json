@@ -593,22 +593,74 @@
       ]
     },
     "trycatch": {
-      "name": "meta.trycatch.jome",
-      "begin": "\\b(try)\\b",
-      "beginCaptures": {
-        "1": {
-          "name": "keyword.control.trycatch.jome"
-        }
-      },
-      "end": "\\b(end)\\b",
-      "endCaptures": {
-        "0": {
-          "name": "keyword.control.jome"
-        }
-      },
       "patterns": [
         {
-          "include": "#expression"
+          "name": "meta.try.jome",
+          "begin": "\\b(try)\\b\\s*\\{",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.trycatch.jome"
+            }
+          },
+          "end": "\\}",
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        },
+        {
+          "name": "meta.catch.jome",
+          "begin": "\\b(catch)\\b\\s*(\\(\\s*[A-Za-z_$]\\w*\\)\\s*)?\\s*\\{",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.trycatch.jome"
+            },
+            "2": {
+              "name": "variable.other.readwrite.jome"
+            }
+          },
+          "end": "\\}",
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        },
+        {
+          "name": "meta.finally.jome",
+          "begin": "\\b(finally)\\b\\s*\\{",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.trycatch.jome"
+            }
+          },
+          "end": "\\}",
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        },
+        {
+          "name": "meta.trycatch.jome",
+          "begin": "\\b(try)\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.trycatch.jome"
+            }
+          },
+          "end": "\\b(end)\\b",
+          "endCaptures": {
+            "0": {
+              "name": "keyword.control.jome"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
         }
       ]
     },
