@@ -406,10 +406,10 @@ let grammar = {
     trycatch: {
       patterns: [
         {
-          name: "meta.try.jome",
+          name: "meta.try-block.jome",
           begin: "\\b(try)\\b\\s*\\{",
           beginCaptures: { 1: { name: "keyword.control.trycatch.jome" } },
-          end: "\\}",
+          end: "\\}(?!\\s*catch)(?!\\s*finally)",
           patterns: [{ include: "#expression" }]
         },
         {

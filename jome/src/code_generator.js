@@ -758,6 +758,13 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
     }
     return result
   },
+  "meta.try-block.jome": (node) => {
+    let idx = node.parts.findIndex(p => p.type === 'meta.catch.jome' || p.type === 'meta.finally.jome')
+    let tryParts = node.parts.slice(1, idx)
+    // TODO: Make sure that after idx there is only meta.catch.jome or meta.finally.jome
+    let afterParts = filterNewlines(node.parts.slice(idx, -1))
+    return `try {\n ${tryParts.map(p => genCode(p)).join('')}\n}${afterParts.map(p => genCode(p)).join('')}`
+  },
   "meta.try.jome": (node) => {
     return `try {\n ${node.parts.slice(1).map(p => genCode(p)).join('')}\n}`
   },

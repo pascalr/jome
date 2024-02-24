@@ -655,7 +655,7 @@ end
       } catch (e) {
       }
     `,
-        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*catch\s*\(e\)\s*}\s*/,
+        /\s*try\s*\{\s*throw new Error\("Some error"\);?\s*\}\s*catch\s*\(e\)\s*{\s*}\s*/,
       );
     });
     it("try finally curly braces", function () {
@@ -667,7 +667,7 @@ end
         done = true
       }
     `,
-        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*finally\s*{\s*done = true\s*}\s*/,
+        /\s*try\s*\{\s*throw new Error\("Some error"\);?\s*\}\s*finally\s*{\s*done = true;?\s*}\s*/,
       );
     });
     it("try catch finally curly braces", function () {
@@ -680,7 +680,7 @@ end
         done = true
       }
     `,
-        /\s*try\s*\{\s*throw new Error\("Some error"\)\s*\}\s*catch\s*\(e\)\s*{\s*}}\s*finally\s*{\s*done = true\s*}\s*/,
+        /\s*try\s*\{\s*throw new Error\("Some error"\);?\s*\}\s*catch\s*\(e\)\s*{\s*}\s*finally\s*{\s*done = true;?\s*}\s*/,
       );
     });
   });

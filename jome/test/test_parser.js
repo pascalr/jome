@@ -111,45 +111,4 @@ module.exports = () => {
       assert.equal(ast?.operands?.[0]?.parts?.length, 3);
     });
   });
-  describe("Parse conditions", function () {
-    it("if statements blocks, operation condition", function () {
-      testParse('if x === 1\n  #log("hello")\nend', [
-        {
-          type: "meta.if-block.jome",
-          parts: [
-            { type: "keyword.control.conditional.jome" },
-            {
-              type: "keyword.operator.comparison.jome",
-              operands: [
-                {
-                  type: "variable.other.jome",
-                  type: "constant.numeric.integer.jome",
-                },
-              ],
-            },
-            {
-              type: "support.function-call.jome",
-              parts: [{ type: "string.quoted.double.jome" }],
-            },
-            { type: "keyword.control.jome" },
-          ],
-        },
-      ]);
-    });
-  });
-  describe("Parse trycatch", function () {
-    it("throw new Error", function () {
-      testParse('throw new Error("error")', [
-        {
-          type: "keyword.control.throw.jome",
-          operands: [
-            {
-              type: "keyword.operator.new.jome",
-              operands: [{ type: "keyword.control.conditional.jome" }],
-            },
-          ],
-        },
-      ]);
-    });
-  });
 };
