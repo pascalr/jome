@@ -36,6 +36,14 @@ describe "Parse operation" do
   end
 end
 
+def assertSameLength(actual, expected, msg)
+  if (actual.length !== expected.length)
+    let a = JSON.stringify(actual.map(p => p.type))
+    let e = JSON.stringify(expected.map(p => p.type))
+    assert.equal(a, e, msg)
+  end
+end
+
 def validatePart(part, expected, msg)
   if (expected.type)
     assert.equal(part.type, expected.type, msg)
@@ -44,11 +52,7 @@ def validatePart(part, expected, msg)
     assert.equal(part.value, expected.value)
   end
   if (expected.parts)
-    if (part.parts.length !== expected.parts.length)
-      let a = JSON.stringify(part.parts.map(p => p.type))
-      let e = JSON.stringify(expected.parts.map(p => p.type))
-      assert.equal(a, e, msg+".parts")
-    end
+    assertSameLength(part.parts, expected.parts, msg+".parts")
     expected.parts.forEach do |e, i|
       validatePart(part.parts[i], e, msg+".parts[{i}]")
     end
@@ -63,7 +67,7 @@ end
 
 def testParse(code, expected)
   let list = parse(tokenize(code).children)
-  assert.equal(list.length, expected.length, "Number of expressions")
+  assertSameLength(list, expected, "Number of expressions")
   expected.forEach do |e, i|
     validatePart(list[i], e, "Expression[{i}]")
   end
@@ -104,6 +108,27 @@ describe "Parse let assignment" do
     assert.equal(ast?.operands?.[0]?.parts?.length, 3) // [, 0, ]
   end
 
+end
+
+
+describe "Other" do
+  it '!true === !false' do
+    testParse('!true === !false', [
+      {
+        type: 'keyword.operator.comparison.jome',
+        operands: [
+          {
+            type: 'keyword.operator.logical.unary.jome',
+            operands: ['constant.language.boolean.jome']
+          },
+          {
+            type: 'keyword.operator.logical.unary.jome',
+            operands: ['constant.language.boolean.jome']
+          }
+        ]
+      },
+    ])
+  end
 end
 
 // describe "Parse conditions" do

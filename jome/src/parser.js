@@ -147,7 +147,11 @@ function parse(tokens, parent, lexEnv) {
   // rhs === right hand side
   const parseSingleExpression = (lhs, minPrecedence) => {
     if (lhs.captureRight) {
-      lhs.operands.push(parseSingleExpression(nodes.shift(), lhs.precedence)) // FIXME: No idea if lhs.precedence is correct, pure guess
+      if (lhs.precedence > nodes[0].precedence && (!nodes[1]?.captureLeft || lhs.precedence > nodes[1].precedence)) {
+        lhs.operands.push(nodes.shift())
+      } else {
+        lhs.operands.push(parseSingleExpression(nodes.shift(), lhs.precedence)) // FIXME: No idea if lhs.precedence is correct, pure guess
+      }
     } else if (lhs.captureSection && lhs.parts[lhs.parts.length-1].type === "punctuation.section.function.begin.jome") {
       let next = nodes.shift()
       while (next && next.type === 'newline') {
@@ -204,7 +208,8 @@ const CHAINABLE_TYPES = [
 ]
 
 const PRECEDENCES = {
-  // square brackets are higher than arithmetic operators: x[0] + 10 < y - 20
+  'keyword.operator.logical.unary.jome': 2000,
+  // not operators are higher than arithmetic operators: !0 + !1
   'keyword.operator.jome': (token => {
     let op = token.text()
     if (op === '+' || op === '-') {

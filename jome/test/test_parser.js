@@ -34,6 +34,13 @@ module.exports = () => {
       assert.equal(ast?.operands?.[1]?.raw, "19");
     });
   });
+  function assertSameLength(actual, expected, msg) {
+    if (actual.length !== expected.length) {
+      let a = JSON.stringify(actual.map((p) => p.type));
+      let e = JSON.stringify(expected.map((p) => p.type));
+      assert.equal(a, e, msg);
+    }
+  }
   function validatePart(part, expected, msg) {
     if (expected.type) {
       assert.equal(part.type, expected.type, msg);
@@ -42,11 +49,7 @@ module.exports = () => {
       assert.equal(part.value, expected.value);
     }
     if (expected.parts) {
-      if (part.parts.length !== expected.parts.length) {
-        let a = JSON.stringify(part.parts.map((p) => p.type));
-        let e = JSON.stringify(expected.parts.map((p) => p.type));
-        assert.equal(a, e, msg + ".parts");
-      }
+      assertSameLength(part.parts, expected.parts, msg + ".parts");
       expected.parts.forEach(function (e, i) {
         validatePart(part.parts[i], e, msg + `.parts[${i}]`);
       });
@@ -64,7 +67,7 @@ module.exports = () => {
   }
   function testParse(code, expected) {
     let list = parse(tokenize(code).children);
-    assert.equal(list.length, expected.length, "Number of expressions");
+    assertSameLength(list, expected, "Number of expressions");
     expected.forEach(function (e, i) {
       validatePart(list[i], e, `Expression[${i}]`);
     });
@@ -109,6 +112,25 @@ module.exports = () => {
       assert.equal(ast?.parts?.length, 3);
       assert.equal(ast?.operands?.length, 1);
       assert.equal(ast?.operands?.[0]?.parts?.length, 3);
+    });
+  });
+  describe("Other", function () {
+    it("!true === !false", function () {
+      testParse("!true === !false", [
+        {
+          type: "keyword.operator.comparison.jome",
+          operands: [
+            {
+              type: "keyword.operator.logical.unary.jome",
+              operands: ["constant.language.boolean.jome"],
+            },
+            {
+              type: "keyword.operator.logical.unary.jome",
+              operands: ["constant.language.boolean.jome"],
+            },
+          ],
+        },
+      ]);
     });
   });
 };
