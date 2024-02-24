@@ -284,6 +284,8 @@ class Person {
         'def sayHello: #log("hello")',
         /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
       );
+    });
+    it("def inline with parens", function () {
       assertCompile(
         'def sayHello(): #log("hello")',
         /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
@@ -294,9 +296,35 @@ class Person {
         'def sayHello:\n  #log("hello")',
         /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
       );
+    });
+    it("def two line with parens", function () {
       assertCompile(
         'def sayHello():\n  #log("hello")',
         /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
+      );
+    });
+    it("def inline stuff after", function () {
+      assertCompile(
+        'def sayHello: #log("hello"); x = 1',
+        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/,
+      );
+    });
+    it("def inline stuff with parens after", function () {
+      assertCompile(
+        'def sayHello(): #log("hello"); x = 1',
+        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/,
+      );
+    });
+    it("def two line stuff after", function () {
+      assertCompile(
+        'def sayHello:\n  #log("hello"); x = 1',
+        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/,
+      );
+    });
+    it("def two line with parens stuff after", function () {
+      assertCompile(
+        'def sayHello():\n  #log("hello"); x = 1',
+        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/,
       );
     });
   });

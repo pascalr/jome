@@ -88,6 +88,7 @@ class ASTNode {
     if (data) {
       this.captureLeft = data.captureLeft
       this.captureRight = data.captureRight
+      this.captureSection = data.captureSection
     }
   }
 
@@ -147,6 +148,12 @@ function parse(tokens, parent, lexEnv) {
   const parseSingleExpression = (lhs, minPrecedence) => {
     if (lhs.captureRight) {
       lhs.operands.push(parseSingleExpression(nodes.shift(), lhs.precedence)) // FIXME: No idea if lhs.precedence is correct, pure guess
+    } else if (lhs.captureSection && lhs.parts[lhs.parts.length-1].type === "punctuation.section.function.begin.jome") {
+      let next = nodes.shift()
+      while (next && next.type === 'newline') {
+        next = nodes.shift()
+      }
+      lhs.operands.push(parseSingleExpression(next, lhs.precedence)) // FIXME: No idea if lhs.precedence is correct, pure guess
     }
     let lookahead = nodes[0]
     while (
@@ -302,6 +309,10 @@ const TOKENS = {
   "keyword.control.main.jome": {
     captureRight: true
   },
+  // def
+  "meta.def.jome": {
+    captureSection: true
+  }
 }
 
 module.exports = {
