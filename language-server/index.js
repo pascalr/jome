@@ -141,7 +141,8 @@ async function validateTextDocument(textDocument) {
   const text = textDocument.getText();
   const diagnostics = [];
   try {
-    let errors = analyzeCode(text)
+    let ctxFile = analyzeCode(text)
+    let errors = ctxFile.errors
     console.log('Errors found: ', errors)
     for (let i = 0; i < errors.length && i < settings.maxNumberOfProblems; i++) {
       let err = errors[i]
