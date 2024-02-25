@@ -1035,15 +1035,7 @@ let grammar = {
       patterns: [
         {
           name: "meta.string-template-literal.jome",
-          begin: "<%=",
-          beginCaptures: { 0: { name: "punctuation.definition.tag-literal.begin.jome" } },
-          end: "%>",
-          endCaptures: { 0: { name: "punctuation.definition.tag-literal.end.jome" } },
-          patterns: [{ include: "#expression" }]
-        },
-        {
-          name: "meta.string-template-literal.jome",
-          begin: "<%s",
+          begin: "<%=|<%s|<%-|<%",
           beginCaptures: { 0: { name: "punctuation.definition.tag-literal.begin.jome" } },
           end: "%>",
           endCaptures: { 0: { name: "punctuation.definition.tag-literal.end.jome" } },
