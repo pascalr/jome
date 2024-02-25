@@ -723,4 +723,19 @@ end
       assertCompile("await foo()", /await foo\(\)/);
     });
   });
+  describe("chain", function () {
+    it("chain function", function () {
+      assertCompile(
+        "obj chain\n  method1 1\n  method2 2\nend",
+        /\(\(\) => {\s*let __chain = obj;\s*__chain.method1\(1\);\s*return __chain.method2\(2\);\s*}\)\(\);/,
+      );
+    });
+
+    it("chain assignment", function () {
+      assertCompile(
+        "obj chain\n  prop1 = 1\n  prop2 = 2\nend",
+        /\(\(\) => {\s*let __chain = obj;\s*__chain.prop1 = 1;\s*__chain.prop2 = 2;\s*}\)\(\);/,
+      );
+    });
+  });
 };

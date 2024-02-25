@@ -15,6 +15,9 @@ module.exports = () => {
   \`\`\``);
   let content = mdToHtml(`
 
+  TODO: For the website, do more like Civet. Put v0_1.html.jome should be in a tab called Reference.
+  Inside the home page, only put the best of Jome. The goal is to dazzle.
+
   TODO: Allow to specify syntax highlighting color theme inside config.jome.
   Use semantic coloring to customize colors using the language server.
   For example, I would like string.quoted.single to be of a different color than string.quoted.double.
@@ -786,7 +789,12 @@ module.exports = () => {
 
   If you want quotes inside your filename, than you need to escape them.
 
-  No interpolation inside jome paths?
+  TODO: Interpolation inside path
+
+  \`\`\`
+  let filename = 'foo.txt'
+  let filepath = #./some/dir/{filename}
+  \`\`\`
 
   Paths always use the /, but maybe they are converted when compiling for Windows?
 

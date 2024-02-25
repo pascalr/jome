@@ -864,3 +864,26 @@ describe 'Parallelization' do
     assertCompile('await foo()', /await foo\(\)/);
   end
 end
+
+
+
+
+
+
+
+// The output of chain is bad right now, but it's a prototype as long as it works it's OK. To be improved.
+describe 'chain' do
+  it 'chain function' do
+    assertCompile(
+      "obj chain\n  method1 1\n  method2 2\nend",
+      /\(\(\) => {\s*let __chain = obj;\s*__chain.method1\(1\);\s*return __chain.method2\(2\);\s*}\)\(\);/
+    );
+  end
+
+  it 'chain assignment' do
+    assertCompile(
+      "obj chain\n  prop1 = 1\n  prop2 = 2\nend",
+      /\(\(\) => {\s*let __chain = obj;\s*__chain.prop1 = 1;\s*__chain.prop2 = 2;\s*}\)\(\);/
+    );
+  end
+end

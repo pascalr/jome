@@ -630,21 +630,27 @@ const CODE_GENERATORS = {
   // end
   "meta.chain.jome": (node) => {
 
-    let calls = node.data.calls
-    if (calls.length < 1) {
+    let items = node.data.items
+    if (items.length < 1) {
       return genCode(node.operands[0])
     }
-    if (calls.length === 1) {
-      return genCode(node.operands[0])+'.'+genCode(calls[0])
+    if (items.length === 1) {
+      return genCode(node.operands[0])+'.'+genCode(items[0])
     }
     
-    let lastCall = calls[calls.length-1]
-    let otherCalls = calls.slice(0, -1)
+    let lastItem = items[items.length-1]
+    let otherCalls = items
+    if (lastItem.type === 'keyword.operator.assignment.jome') {
+      lastItem = null
+    } else {
+      otherCalls = items.slice(0, -1)
+    }
+    
 
     return `(() => {
   let __chain = ${genCode(node.operands[0])}
-  ${otherCalls.map(call => '__chain.'+genCode(call))}
-  return __chain.${genCode(lastCall)}
+  ${otherCalls.map(call => '__chain.'+genCode(call)).join('\n')}
+  ${lastItem ? `return __chain.${genCode(lastItem)}` : ''}
 })()`
   },
   // =

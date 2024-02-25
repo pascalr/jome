@@ -428,8 +428,8 @@ const ANALYZERS = {
     ensureEndType(node, 'keyword.control.jome')
     ensureLhsOperand(node)
     let parts = filterNewlines(node.parts.slice(1,-1)) // remove chain, end keyword, and remove newlines
-    ensureAllTypeIn(node, parts, ['support.function-call.WIP.jome', 'support.function-call.jome'])
-    node.data = {calls: parts}
+    ensureAllTypeIn(node, parts, ['support.function-call.WIP.jome', 'support.function-call.jome', 'keyword.operator.assignment.jome'])
+    node.data = {items: parts}
   },
   // if ... end
   "meta.if-block.jome": (node) => {

@@ -87,7 +87,9 @@
   </div>
             <div class="scrollable" style="width: 100%;">
               <div class="main">
-                <p>TODO: Allow to specify syntax highlighting color theme inside config.jome.
+                <p>TODO: For the website, do more like Civet. Put v0_1.html.jome should be in a tab called Reference.
+Inside the home page, only put the best of Jome. The goal is to dazzle.</p>
+<p>TODO: Allow to specify syntax highlighting color theme inside config.jome.
 Use semantic coloring to customize colors using the language server.
 For example, I would like string.quoted.single to be of a different color than string.quoted.double.</p>
 <p>TODO: Allow types/structs that you can create like so:
@@ -609,7 +611,10 @@ a function in another file and you are sure it will reference the proper file.</
 <span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = <span class="hljs-string">#/some/path/to/some/</span><span class="hljs-string">&quot;file with spaces.txt&quot;</span>
 </code></pre>
 <p>If you want quotes inside your filename, than you need to escape them.</p>
-<p>No interpolation inside jome paths?</p>
+<p>TODO: Interpolation inside path</p>
+<pre><code>let filename = 'foo.txt'
+let filepath = #./some/dir/{filename}
+</code></pre>
 <p>Paths always use the /, but maybe they are converted when compiling for Windows?</p>
 <h3>Instance properties (@)</h3>
 <p>One of the objective of Jome is to remove the weird thing that is this.</p>

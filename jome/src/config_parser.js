@@ -3,6 +3,7 @@
 const {compileFileGetCtx} = require('./compiler')
 const {LexicalEnvironment} = require('./context')
 const path = require('path')
+const fs = require('fs')
 const JomeConfig = require('./jome_config.js')
 
 // function execute(code, cwd) {
@@ -10,6 +11,9 @@ const JomeConfig = require('./jome_config.js')
 // }
 
 function parseConfig(absPath) {
+
+  if (!fs.existsSync(absPath)) {return new JomeConfig()}
+
   let dir = path.dirname(absPath)
   let {result, ctxFile} = compileFileGetCtx(absPath, {useAbsImportPaths: true, cwd: dir})
   if (!result) {return new JomeConfig()}
