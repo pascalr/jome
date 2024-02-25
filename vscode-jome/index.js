@@ -1,4 +1,4 @@
-const {workspace} = require("vscode");
+const {workspace, commands, window} = require("vscode");
 const {LanguageClient} = require("vscode-languageclient/node");
 const path = require("path");
 
@@ -56,6 +56,14 @@ function deactivate() {
     }
     return client.stop();
 }
+
+// For the debugger. See package.json
+commands.registerCommand('extension.vscode-jome.getProgramName', config => {
+  return window.showInputBox({
+    placeHolder: 'Please enter the name of a jome file in the workspace folder',
+    value: 'index.jome'
+  });
+});
 
 module.exports = {
   activate, deactivate

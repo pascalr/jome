@@ -41,6 +41,13 @@
       "args": [
           "--extensionDevelopmentPath=${workspaceFolder/vscode-jome}"
       ]
+    },
+    {
+      "type": "jome",
+      "request": "launch",
+      "name": "Ask for file name",
+      "program": "${workspaceFolder}/${command:AskForProgramName}",
+      "stopOnEntry": true
     }
   ]
 }
