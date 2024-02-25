@@ -1048,7 +1048,9 @@ let grammar = {
         PATTERN_SCRIPT("md", "text.html.markdown"),
         PATTERN_SCRIPT("sh", "source.shell"),
         PATTERN_SCRIPT("css", "source.css"),
+        // Allow html and HTML, this way I can easily add an html tag inside html because it is case sensitive.
         PATTERN_SCRIPT("html", "text.html.derivative"),
+        PATTERN_SCRIPT("HTML", "text.html.derivative"),
       ]
     },
     "square-bracket": {

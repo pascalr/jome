@@ -1081,6 +1081,7 @@ module.exports = () => {
   \`\`\`
 
   I think I got it! Using a colon, this means import like using require.
+  I don't like the colon. Use the keyword of instead.
 
   \`\`\`jome
   import &Webpage : './webpage.jomm'
