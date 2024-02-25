@@ -279,53 +279,76 @@ class Person {
     });
   });
   describe("Colon section begin", function () {
-    it("def inline", function () {
-      assertCompile(
-        'def sayHello: #log("hello")',
-        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
-      );
+    describe("def", function () {
+      it("def inline", function () {
+        assertCompile(
+          'def sayHello: #log("hello")',
+          /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
+        );
+      });
+      it("def inline with parens", function () {
+        assertCompile(
+          'def sayHello(): #log("hello")',
+          /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
+        );
+      });
+      it("def two line", function () {
+        assertCompile(
+          'def sayHello:\n  #log("hello")',
+          /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
+        );
+      });
+      it("def two line with parens", function () {
+        assertCompile(
+          'def sayHello():\n  #log("hello")',
+          /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
+        );
+      });
+      it("def inline stuff after", function () {
+        assertCompile(
+          'def sayHello: #log("hello"); x = 1',
+          /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/,
+        );
+      });
+      it("def inline stuff with parens after", function () {
+        assertCompile(
+          'def sayHello(): #log("hello"); x = 1',
+          /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/,
+        );
+      });
+      it("def two line stuff after", function () {
+        assertCompile(
+          'def sayHello:\n  #log("hello"); x = 1',
+          /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/,
+        );
+      });
+      it("def two line with parens stuff after", function () {
+        assertCompile(
+          'def sayHello():\n  #log("hello"); x = 1',
+          /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/,
+        );
+      });
     });
-    it("def inline with parens", function () {
-      assertCompile(
-        'def sayHello(): #log("hello")',
-        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
-      );
-    });
-    it("def two line", function () {
-      assertCompile(
-        'def sayHello:\n  #log("hello")',
-        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
-      );
-    });
-    it("def two line with parens", function () {
-      assertCompile(
-        'def sayHello():\n  #log("hello")',
-        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/,
-      );
-    });
-    it("def inline stuff after", function () {
-      assertCompile(
-        'def sayHello: #log("hello"); x = 1',
-        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/,
-      );
-    });
-    it("def inline stuff with parens after", function () {
-      assertCompile(
-        'def sayHello(): #log("hello"); x = 1',
-        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/,
-      );
-    });
-    it("def two line stuff after", function () {
-      assertCompile(
-        'def sayHello:\n  #log("hello"); x = 1',
-        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/,
-      );
-    });
-    it("def two line with parens stuff after", function () {
-      assertCompile(
-        'def sayHello():\n  #log("hello"); x = 1',
-        /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/,
-      );
+
+    describe("if", function () {
+      it("if statement colon", function () {
+        assertCompile(
+          'if true: #log("hello")',
+          /\s*if \(true\) \{\s*console.log\("hello"\);?\s*\}/,
+        );
+      });
+      it("if, elif statement colon", function () {
+        assertCompile(
+          "if true: x = 10; elif true: x = 20",
+          /\s*if \(true\) \{\s*x = 10;?\s*\} else if \(true\) {\s*x = 20;?\s*}/,
+        );
+      });
+      it("if, else statement colon", function () {
+        assertCompile(
+          "if true: x = 10; else: x = 20",
+          /\s*if \(true\) \{\s*x = 10;?\s*\} else {\s*x = 20;?\s*}/,
+        );
+      });
     });
   });
   describe("Test built-ins", function () {

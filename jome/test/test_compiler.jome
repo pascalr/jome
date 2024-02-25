@@ -272,29 +272,43 @@ end
 
 
 describe "Colon section begin" do
-  it 'def inline' do
-    assertCompile('def sayHello: #log("hello")', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
+  describe "def" do
+    it 'def inline' do
+      assertCompile('def sayHello: #log("hello")', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
+    end
+    it 'def inline with parens' do
+      assertCompile('def sayHello(): #log("hello")', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
+    end
+    it 'def two line' do
+      assertCompile('def sayHello:\n  #log("hello")', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
+    end
+    it 'def two line with parens' do
+      assertCompile('def sayHello():\n  #log("hello")', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
+    end
+    it 'def inline stuff after' do
+      assertCompile('def sayHello: #log("hello"); x = 1', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/);
+    end
+    it 'def inline stuff with parens after' do
+      assertCompile('def sayHello(): #log("hello"); x = 1', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/);
+    end
+    it 'def two line stuff after' do
+      assertCompile('def sayHello:\n  #log("hello"); x = 1', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/);
+    end
+    it 'def two line with parens stuff after' do
+      assertCompile('def sayHello():\n  #log("hello"); x = 1', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/);
+    end
   end
-  it 'def inline with parens' do
-    assertCompile('def sayHello(): #log("hello")', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
-  end
-  it 'def two line' do
-    assertCompile('def sayHello:\n  #log("hello")', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
-  end
-  it 'def two line with parens' do
-    assertCompile('def sayHello():\n  #log("hello")', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}/);
-  end
-  it 'def inline stuff after' do
-    assertCompile('def sayHello: #log("hello"); x = 1', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/);
-  end
-  it 'def inline stuff with parens after' do
-    assertCompile('def sayHello(): #log("hello"); x = 1', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/);
-  end
-  it 'def two line stuff after' do
-    assertCompile('def sayHello:\n  #log("hello"); x = 1', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/);
-  end
-  it 'def two line with parens stuff after' do
-    assertCompile('def sayHello():\n  #log("hello"); x = 1', /function sayHello\(\) {\s*console.log\("hello"\);?\s*}\s*x = 1;?/);
+
+  describe "if" do
+    it 'if statement colon' do
+      assertCompile('if true: #log("hello")', /\s*if \(true\) \{\s*console.log\("hello"\);?\s*\}/);
+    end
+    it 'if, elif statement colon' do
+      assertCompile('if true: x = 10; elif true: x = 20', /\s*if \(true\) \{\s*x = 10;?\s*\} else if \(true\) {\s*x = 20;?\s*}/);
+    end
+    it 'if, else statement colon' do
+      assertCompile('if true: x = 10; else: x = 20', /\s*if \(true\) \{\s*x = 10;?\s*\} else {\s*x = 20;?\s*}/);
+    end
   end
 end
 
