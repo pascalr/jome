@@ -64,10 +64,15 @@ if (wholeArgs[0]?.endsWith('.jome')) {
   executableArgs = executableArgs.slice(1)
 }
 
+// The default is an empty object, this way you can always try to extract options
+if (executableArgs.length <= 0) {
+  executableArgs.push({})
+}
+
 let absPath = path.resolve(fileToRun)
 compileAndExecute(absPath, executableArgs, config)
 
-function compileAndExecute(absPath, args=[], config) {
+function compileAndExecute(absPath, args=[{}], config) {
   let buildFileName = compileAndSaveFile(absPath, {}, config)
   return require(buildFileName)(...args)
 }
