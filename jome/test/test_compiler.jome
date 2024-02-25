@@ -900,8 +900,14 @@ describe 'Require file handlers' do
   it 'js file' do
     assertCompile("#('./file.js')", /require\(".\/file.js"\)/)
   end
+  it 'js file with arg' do
+    assertCompile("#('./file.js', 10)", /require\(".\/file.js"\)\(10\)/)
+  end
   it 'jome file' do
     assertCompile("#('./file.jome')", /TODO/)
+  end
+  it 'jome file with' do
+    assertCompile("#('./file.jome', 20)", /TODO\(20\)/)
   end
 end
 

@@ -742,8 +742,14 @@ end
     it("js file", function () {
       assertCompile("#('./file.js')", /require\(".\/file.js"\)/);
     });
+    it("js file with arg", function () {
+      assertCompile("#('./file.js', 10)", /require\(".\/file.js"\)\(10\)/);
+    });
     it("jome file", function () {
       assertCompile("#('./file.jome')", /TODO/);
+    });
+    it("jome file with", function () {
+      assertCompile("#('./file.jome', 20)", /TODO\(20\)/);
     });
   });
   describe("Include file handlers", function () {

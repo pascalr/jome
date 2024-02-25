@@ -791,6 +791,19 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
     return `finally {\n ${node.parts.slice(1).map(p => genCode(p)).join('')}\n}`
   },
 
+  "meta.require.jome": (node) => {
+    let parts = node.parts.slice(2,-1) // Remove #, (, )
+    let file = parts[0].raw
+    let args = parts.slice(1).filter(p => p.type !== 'punctuation.separator.delimiter.jome')
+    return args ? `require(${file})(${args.map(a => genCode(a)).join(',')})` : `require(${file})`
+  },
+
+  "meta.include.jome": (node) => {
+    let parts = node.parts.slice(2,-1) // Remove #, (, )
+    let file = parts[0].raw
+    return 'TODO'
+  },
+
   "meta.forall.jome": (node) => {
     let {tagName, chainFunctions, wrapFunctions} = node.data
     // Get the actual referenced function
