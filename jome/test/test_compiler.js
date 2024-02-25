@@ -590,9 +590,9 @@ end
     });
   });
   describe("Assignment", function () {
-    it("let x = 1", function () {
-      assertCompile("let x = 1", /(var|let)\s+x\s*=\s*1/);
-    });
+    it("let x = 1", testCompile("let x = 1", /(var|let)\s+x\s*=\s*1/));
+    it("var x = 1", testCompile("var x = 1", /var\s+x\s*=\s*1/));
+    it("const x = 1", testCompile("const x = 1", /const\s+x\s*=\s*1/));
   });
   describe("Operations", function () {
     describe("Inversion (! operator)", function () {

@@ -336,7 +336,7 @@ let grammar = {
         },
         {
           name: "meta.declaration.jome",
-          match: `\\b(let|var)\\b\\s*(${REGEX_VARIABLE})?(?:\\s*(\\:)\\s*(${REGEX_PRIMITIVE_TYPE}))`,
+          match: `\\b(let|var|const)\\b\\s*(${REGEX_VARIABLE})?(?:\\s*(\\:)\\s*(${REGEX_PRIMITIVE_TYPE}))`,
           captures: {
             1: { name: "keyword.control.declaration.jome" },
             2: { name: "variable.other.jome" },
@@ -346,7 +346,7 @@ let grammar = {
         },
         {
           name: "meta.declaration.jome",
-          match: `\\b(let|var)\\b\\s*(${REGEX_VARIABLE})?(?:\\s*(\\:)\\s*(${REGEX_TYPE}))?`,
+          match: `\\b(let|var|const)\\b\\s*(${REGEX_VARIABLE})?(?:\\s*(\\:)\\s*(${REGEX_TYPE}))?`,
           captures: {
             1: { name: "keyword.control.declaration.jome" },
             2: { name: "variable.other.jome" },

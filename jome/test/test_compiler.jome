@@ -735,10 +735,10 @@ end
 
 
 describe 'Assignment' do
-  it 'let x = 1' do
-    // FIXME: Do I want var or I want let? I used var because it is what CoffeeScript is using by default.
-    assertCompile('let x = 1', /(var|let)\s+x\s*=\s*1/);
-  end
+  // FIXME: Do I want var or I want let? I used var because it is what CoffeeScript is using by default.
+  it 'let x = 1', testCompile('let x = 1', /(var|let)\s+x\s*=\s*1/)
+  it 'var x = 1', testCompile('var x = 1', /var\s+x\s*=\s*1/)
+  it 'const x = 1', testCompile('const x = 1', /const\s+x\s*=\s*1/)
 end
 
 
