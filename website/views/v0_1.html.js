@@ -19,6 +19,11 @@ module.exports = () => {
   Use semantic coloring to customize colors using the language server.
   For example, I would like string.quoted.single to be of a different color than string.quoted.double.
 
+  TODO: Allow types/structs that you can create like so:
+  Params params = {
+    someParam: 'val'
+  }
+
   # Jome v0.1
 
   Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
