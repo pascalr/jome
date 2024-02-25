@@ -746,10 +746,10 @@ end
       assertCompile("#('./file.js', 10)", /require\(".\/file.js"\)\(10\)/);
     });
     it("jome file", function () {
-      assertCompile("#('./file.jome')", /TODO/);
+      assertCompile("#('./file.jome')", /require\(".\/file.js"\)/);
     });
     it("jome file with", function () {
-      assertCompile("#('./file.jome', 20)", /TODO\(20\)/);
+      assertCompile("#('./file.jome', 20)", /require\(".\/file.js"\)\(20\)/);
     });
   });
   describe("Include file handlers", function () {

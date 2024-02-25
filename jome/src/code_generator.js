@@ -793,9 +793,13 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
 
   "meta.require.jome": (node) => {
     let parts = node.parts.slice(2,-1) // Remove #, (, )
-    let file = parts[0].raw
+    let file = parts[0].raw.slice(1,-1) // Remove quotes
+    if (file.endsWith('.jome')) {
+      node.ctxFile.addDependency(file)
+      file = file.slice(0, -5)+'.js'
+    }
     let args = parts.slice(1).filter(p => p.type !== 'punctuation.separator.delimiter.jome')
-    return args ? `require(${file})(${args.map(a => genCode(a)).join(',')})` : `require(${file})`
+    return args ? `require("${file}")(${args.map(a => genCode(a)).join(',')})` : `require(${file})`
   },
 
   "meta.include.jome": (node) => {
