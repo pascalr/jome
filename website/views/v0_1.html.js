@@ -798,6 +798,21 @@ module.exports = () => {
 
   Paths always use the /, but maybe they are converted when compiling for Windows?
 
+  <h3 id="file_handlers">File handlers</h3>
+
+  Work in progress
+
+  You can process file using the syntax: \`#(./some_file.txt)\`
+
+  The default file handlers are:
+  - *.js: require(%)
+  - *.jome: #run(%) ? is it run ?
+
+  \`\`\`
+  let data = #(./some_data.json)
+  let lib = #(./some_lib.js) // same as require('./some_lib.js')
+  \`\`\`
+
   ### Instance properties (@)
 
   One of the objective of Jome is to remove the weird thing that is this.

@@ -616,6 +616,17 @@ a function in another file and you are sure it will reference the proper file.</
 let filepath = #./some/dir/{filename}
 </code></pre>
 <p>Paths always use the /, but maybe they are converted when compiling for Windows?</p>
+  <h3 id="file_handlers">File handlers</h3>
+<p>Work in progress</p>
+<p>You can process file using the syntax: <code>#(./some_file.txt)</code></p>
+<p>The default file handlers are:</p>
+<ul>
+<li>*.js: require(%)</li>
+<li>*.jome: #run(%) ? is it run ?</li>
+</ul>
+<pre><code>let data = #(./some_data.json)
+let lib = #(./some_lib.js) // same as require('./some_lib.js')
+</code></pre>
 <h3>Instance properties (@)</h3>
 <p>One of the objective of Jome is to remove the weird thing that is this.</p>
 <p>I want in Jome this to refer to the current instance when inside a method and that's it.</p>

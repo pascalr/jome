@@ -4,6 +4,12 @@ module.exports = () => {
   let content = mdToHtml(`
   # Formats
 
+  TODO: div, a, p, ... => all the classic html tags should by default be compiled as html
+
+  TODO: Allow semantic formatting defined in config.jome.
+  You could create a custom data format, specify a tokenizer and the language server should use it
+  and tokenize semantically with it.
+
   \`\`\`jome
   let str = "
     In the heart of the enchanted forest, a hidden cottage stood, surrounded by ancient trees. 
