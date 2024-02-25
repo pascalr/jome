@@ -483,7 +483,7 @@ const ANALYZERS = {
     if (!filename) {
       return pushError(node, "Missing filename in import statement.")
     }
-    let useCjsStyle = importFile.parts[0].raw === ':'
+    let useCjsStyle = (importFile.parts[0].raw === ':') || (importFile.parts[0].raw === 'of')
     list.forEach(item => {
       if (item.type === 'meta.named-imports.jome') {
         filterCommas(filterSpaces(item.parts)).forEach(namedImport => {

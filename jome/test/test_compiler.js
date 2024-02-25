@@ -114,13 +114,13 @@ module.exports = () => {
     describe("Common JS imports", function () {
       it("Import all", function () {
         assertCompile(
-          'import name : "module-name"',
+          'import name of "module-name"',
           /const name = require\("module-name"\);/,
         );
       });
       it("Import deconstructed", function () {
         assertCompile(
-          'import { foo, bar } : "module-name"',
+          'import { foo, bar } of "module-name"',
           /const { ?foo, ?bar ?} = require\("module-name"\);/,
         );
       });

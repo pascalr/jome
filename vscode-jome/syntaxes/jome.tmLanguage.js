@@ -110,7 +110,8 @@ let grammar = {
             },
             {
               name: "meta.import-file.jome",
-              match: `(from|\\:) (${REGEX_REGULAR_STRING})`,
+              // TODO: deprecate the colon, it is ugly
+              match: `(from|\\:|of) (${REGEX_REGULAR_STRING})`,
               captures: {
                 1: { name: "keyword.control.jome" },
                 2: { name: "string.quoted.jome" }

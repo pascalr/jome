@@ -104,10 +104,10 @@ describe "Imports" do
 
   describe "Common JS imports" do
     it 'Import all' do
-      assertCompile(`import name : "module-name"`, /const name = require\("module-name"\);/);
+      assertCompile(`import name of "module-name"`, /const name = require\("module-name"\);/);
     end
     it 'Import deconstructed' do
-      assertCompile(`import { foo, bar } : "module-name"`, /const { ?foo, ?bar ?} = require\("module-name"\);/);
+      assertCompile(`import { foo, bar } of "module-name"`, /const { ?foo, ?bar ?} = require\("module-name"\);/);
     end
   end
 end
