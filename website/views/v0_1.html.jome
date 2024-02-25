@@ -801,39 +801,26 @@ let content = <md>
 
   Paths always use the /, but maybe they are converted when compiling for Windows?
 
-  <h3 id="file_handlers">File handlers</h3>
+  <h3 id="req_file_handlers">Require file handlers</h3>
 
   Work in progress
 
-  You can process file using the syntax: `#(./some_file.txt)`
+  You can process files using the syntax: `#(./some_file.txt)`
 
   The default file handlers are:
-  - *.js, js: require(%)
-  - *.jome, jome: #run(%) ? is it run ?
+  - *.js, js: Same as the function `require`
+  - *.jome, jome: Compiles the file, use `require` and run jome file
 
   ```jome
-  let data = #(./some_data.json)
-  let lib = #(./some_lib.js) // same as require('./some_lib.js')
+  let data = #("./some_data.json")
+  let lib = #("./some_lib.js") // same as require('./some_lib.js')
+  let result = #("./some_command.jome")
   ```
 
   You can use the keyword as to using another string as a matching string instead of the filename
 
   ```jome
   let data = #(./some_data as "json")
-  ```
-
-  Maybe all #() does is require...
-
-  But what about the case that I want to include text? How about ...#() ?
-
-  ```jome
-  let data = ...#("./some_data") // Noo because this could be bad in another context (inside an object)
-  let data = #...("./some_data")
-  ```
-
-  ```jome
-  #(./foo) => require("./foo")
-  #...(./foo) => "content of foo is read at compile time and inserted as a string here"
   ```
 
   How about let's say an image?
@@ -851,15 +838,19 @@ let content = <md>
   let img = new PNG('some_image.png');
   ```
 
-  FIXMEEEE: Est-ce que je veux que #() exécute tout de suite????
+  You can pass arguments to the file handlers. For jome files, they will be given to the file for example.
 
-  Quand c'est un fichier .js, non, parce que la plupart du temps ce n'est probablement même pas une fonction de toute façon...
+  ```jome
+  let result = #(./some_command.jome, "someArg")
+  ```
 
-  Quand c'est un fichier .jome? C'est toujours une fonction. Alors oui?
+  <h3 id="include_file_handlers">Include file handlers</h3>
 
-  Mais ça fais bizarre et pas très constant que dans un cas tu exécutes la fonction et pas dans l'autre cas...
+  Read the give file and insert the content as a string to the js file.
 
-  Mon idée était de pouvoir faire #("./some_file.jome", someArg), mais cela implique que #() exécute tout de suite?
+  ```jome
+  let data = #...("./some_data")
+  ```
 
   ### Instance properties (@)
 

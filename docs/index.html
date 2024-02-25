@@ -616,27 +616,20 @@ a function in another file and you are sure it will reference the proper file.</
 let filepath = #./some/dir/{filename}
 </code></pre>
 <p>Paths always use the /, but maybe they are converted when compiling for Windows?</p>
-  <h3 id="file_handlers">File handlers</h3>
+  <h3 id="req_file_handlers">Require file handlers</h3>
 <p>Work in progress</p>
-<p>You can process file using the syntax: <code>#(./some_file.txt)</code></p>
+<p>You can process files using the syntax: <code>#(./some_file.txt)</code></p>
 <p>The default file handlers are:</p>
 <ul>
-<li>*.js, js: require(%)</li>
-<li>*.jome, jome: #run(%) ? is it run ?</li>
+<li>*.js, js: Same as the function <code>require</code></li>
+<li>*.jome, jome: Compiles the file, use <code>require</code> and run jome file</li>
 </ul>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = #(./<span class="hljs-variable">some_data</span>.<span class="hljs-variable">json</span>)
-<span class="hljs-keyword">let</span> <span class="hljs-variable">lib</span> = #(./<span class="hljs-variable">some_lib</span>.<span class="hljs-variable">js</span>) <span class="hljs-comment">// same as require(&#x27;./some_lib.js&#x27;)</span>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = #(<span class="hljs-string">&quot;./some_data.json&quot;</span>)
+<span class="hljs-keyword">let</span> <span class="hljs-variable">lib</span> = #(<span class="hljs-string">&quot;./some_lib.js&quot;</span>) <span class="hljs-comment">// same as require(&#x27;./some_lib.js&#x27;)</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">result</span> = #(<span class="hljs-string">&quot;./some_command.jome&quot;</span>)
 </code></pre>
 <p>You can use the keyword as to using another string as a matching string instead of the filename</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = #(./<span class="hljs-variable">some_data</span> <span class="hljs-variable">as</span> <span class="hljs-string">&quot;json&quot;</span>)
-</code></pre>
-<p>Maybe all #() does is require...</p>
-<p>But what about the case that I want to include text? How about ...#() ?</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = ...#(<span class="hljs-string">&quot;./some_data&quot;</span>) <span class="hljs-comment">// Noo because this could be bad in another context (inside an object)</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-string">#..</span>.(<span class="hljs-string">&quot;./some_data&quot;</span>)
-</code></pre>
-<pre><code class="language-jome">#(./<span class="hljs-variable">foo</span>) =&gt; <span class="hljs-title function_ invoke__">require</span>(<span class="hljs-string">&quot;./foo&quot;</span>)
-<span class="hljs-string">#..</span>.(./<span class="hljs-variable">foo</span>) =&gt; <span class="hljs-string">&quot;content of foo is read at compile time and inserted as a string here&quot;</span>
 </code></pre>
 <p>How about let's say an image?</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">img</span> = #(./<span class="hljs-variable">some_img</span>.<span class="hljs-variable">jpg</span>)
@@ -646,6 +639,13 @@ let filepath = #./some/dir/{filename}
 <span class="hljs-comment">// Here it could be compiled for example to:</span>
 <span class="hljs-variable">const</span> <span class="hljs-title class_">PNG</span> = <span class="hljs-title function_ invoke__">require</span>(<span class="hljs-string">&#x27;png-js&#x27;</span>);
 <span class="hljs-keyword">let</span> <span class="hljs-variable">img</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">PNG</span>(<span class="hljs-string">&#x27;some_image.png&#x27;</span>);
+</code></pre>
+<p>You can pass arguments to the file handlers. For jome files, they will be given to the file for example.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">result</span> = #(./<span class="hljs-variable">some_command</span>.<span class="hljs-variable">jome</span>, <span class="hljs-string">&quot;someArg&quot;</span>)
+</code></pre>
+  <h3 id="include_file_handlers">Include file handlers</h3>
+<p>Read the give file and insert the content as a string to the js file.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-string">#..</span>.(<span class="hljs-string">&quot;./some_data&quot;</span>)
 </code></pre>
 <h3>Instance properties (@)</h3>
 <p>One of the objective of Jome is to remove the weird thing that is this.</p>
