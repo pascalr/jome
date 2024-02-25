@@ -763,18 +763,21 @@ end
   });
   describe("Require file handlers", function () {
     it("js file", function () {
-      assertCompile("#('./file.js')", /^require\(".\/file.js"\);?$/);
+      assertCompile("#('./file.js')", /^require\(".\/file.js"\);?\s*$/);
     });
     it("js file with arg", function () {
-      assertCompile("#('./file.js', 10)", /^require\(".\/file.js"\)\(10\);?$/);
+      assertCompile(
+        "#('./file.js', 10)",
+        /^require\(".\/file.js"\)\(10\);?\s*$/,
+      );
     });
     it("jome file", function () {
-      assertCompile("#('./file.jome')", /^require\(".\/file.js"\);?$/);
+      assertCompile("#('./file.jome')", /^require\(".\/file.js"\)\(\);?\s*$/);
     });
-    it("jome file with", function () {
+    it("jome file with arg", function () {
       assertCompile(
         "#('./file.jome', 20)",
-        /^require\(".\/file.js"\)\(20\);?$/,
+        /^require\(".\/file.js"\)\(20\);?\s*$/,
       );
     });
   });

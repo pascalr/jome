@@ -794,12 +794,16 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
   "meta.require.jome": (node) => {
     let parts = node.parts.slice(2,-1) // Remove #, (, )
     let file = parts[0].raw.slice(1,-1) // Remove quotes
+    let args = filterCommas(filterNewlines(parts.slice(1)))
     if (file.endsWith('.jome')) {
       node.ctxFile.addDependency(file)
       file = file.slice(0, -5)+'.js'
+      return `require("${file}")(${args.map(a => genCode(a)).join(',')})`
+    } else if (file.endsWith('.js')) {
+      return args?.length ? `require("${file}")(${args.map(a => genCode(a)).join(',')})` : `require("${file}")`
+    } else {
+      throw new Error("Required file not supported yet: "+file)
     }
-    let args = parts.slice(1).filter(p => p.type !== 'punctuation.separator.delimiter.jome')
-    return args ? `require("${file}")(${args.map(a => genCode(a)).join(',')})` : `require(${file})`
   },
 
   "meta.include.jome": (node) => {

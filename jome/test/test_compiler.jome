@@ -912,16 +912,16 @@ describe 'Require file handlers' do
   // TODO: For svg file, I would like the default to import it inline inside the file so you don't have to read it?
   // Or that's bad because it duplicates data for nothing?
   it 'js file' do
-    assertCompile("#('./file.js')", /^require\(".\/file.js"\);?$/)
+    assertCompile("#('./file.js')", /^require\(".\/file.js"\);?\s*$/)
   end
   it 'js file with arg' do
-    assertCompile("#('./file.js', 10)", /^require\(".\/file.js"\)\(10\);?$/)
+    assertCompile("#('./file.js', 10)", /^require\(".\/file.js"\)\(10\);?\s*$/)
   end
   it 'jome file' do
-    assertCompile("#('./file.jome')", /^require\(".\/file.js"\);?$/)
+    assertCompile("#('./file.jome')", /^require\(".\/file.js"\)\(\);?\s*$/)
   end
-  it 'jome file with' do
-    assertCompile("#('./file.jome', 20)", /^require\(".\/file.js"\)\(20\);?$/)
+  it 'jome file with arg' do
+    assertCompile("#('./file.jome', 20)", /^require\(".\/file.js"\)\(20\);?\s*$/)
   end
 end
 
