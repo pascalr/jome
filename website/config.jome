@@ -1,4 +1,7 @@
 // import {write, writeSync, build, compile, execSh} from '@jome/core'
+// import mdToHtml of '@jome/md-to-html'
+// import hljs of 'highlightjs-jome'
+// import {trim, indent} of '@jome/core'
 import mdToHtml : '@jome/md-to-html'
 import hljs : 'highlightjs-jome'
 import {trim, indent} : '@jome/core'
@@ -8,8 +11,16 @@ def highlight(code)
   return hljs.highlight(code, { language: 'jome' }).value;
 end
 
+/*
+TODO: Parse the whole config file before compiling .jomm imports in this file.
+*/
+
 return {
   main: "index.jome"
+  // operators: {
+  //   "==": (a, b) => a == b,
+  //   "===": (a, b) => a === b
+  // },
   formats: {
     "ex.jome": {chain: [indent, trim], wrap: highlight}
   },
