@@ -763,16 +763,19 @@ end
   });
   describe("Require file handlers", function () {
     it("js file", function () {
-      assertCompile("#('./file.js')", /require\(".\/file.js"\)/);
+      assertCompile("#('./file.js')", /^require\(".\/file.js"\);?$/);
     });
     it("js file with arg", function () {
-      assertCompile("#('./file.js', 10)", /require\(".\/file.js"\)\(10\)/);
+      assertCompile("#('./file.js', 10)", /^require\(".\/file.js"\)\(10\);?$/);
     });
     it("jome file", function () {
-      assertCompile("#('./file.jome')", /require\(".\/file.js"\)/);
+      assertCompile("#('./file.jome')", /^require\(".\/file.js"\);?$/);
     });
     it("jome file with", function () {
-      assertCompile("#('./file.jome', 20)", /require\(".\/file.js"\)\(20\)/);
+      assertCompile(
+        "#('./file.jome', 20)",
+        /^require\(".\/file.js"\)\(20\);?$/,
+      );
     });
   });
   describe("Include file handlers", function () {
@@ -786,6 +789,9 @@ end
         "let port = options.port || 3000",
         /`let port = options.port \|\| 3000`/,
       );
+    });
+    it("with options = {} end", function () {
+      assertCompile("with options = {} end", /\s*/);
     });
   });
 };

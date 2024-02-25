@@ -851,6 +851,16 @@ let content = <md>
   let img = new PNG('some_image.png');
   ```
 
+  FIXMEEEE: Est-ce que je veux que #() exécute tout de suite????
+
+  Quand c'est un fichier .js, non, parce que la plupart du temps ce n'est probablement même pas une fonction de toute façon...
+
+  Quand c'est un fichier .jome? C'est toujours une fonction. Alors oui?
+
+  Mais ça fais bizarre et pas très constant que dans un cas tu exécutes la fonction et pas dans l'autre cas...
+
+  Mon idée était de pouvoir faire #("./some_file.jome", someArg), mais cela implique que #() exécute tout de suite?
+
   ### Instance properties (@)
 
   One of the objective of Jome is to remove the weird thing that is this.

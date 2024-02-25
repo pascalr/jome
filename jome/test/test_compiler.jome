@@ -912,16 +912,16 @@ describe 'Require file handlers' do
   // TODO: For svg file, I would like the default to import it inline inside the file so you don't have to read it?
   // Or that's bad because it duplicates data for nothing?
   it 'js file' do
-    assertCompile("#('./file.js')", /require\(".\/file.js"\)/)
+    assertCompile("#('./file.js')", /^require\(".\/file.js"\);?$/)
   end
   it 'js file with arg' do
-    assertCompile("#('./file.js', 10)", /require\(".\/file.js"\)\(10\)/)
+    assertCompile("#('./file.js', 10)", /^require\(".\/file.js"\)\(10\);?$/)
   end
   it 'jome file' do
-    assertCompile("#('./file.jome')", /require\(".\/file.js"\)/)
+    assertCompile("#('./file.jome')", /^require\(".\/file.js"\);?$/)
   end
   it 'jome file with' do
-    assertCompile("#('./file.jome', 20)", /require\(".\/file.js"\)\(20\)/)
+    assertCompile("#('./file.jome', 20)", /^require\(".\/file.js"\)\(20\);?$/)
   end
 end
 
@@ -948,5 +948,11 @@ describe 'General bugs' do
   it 'let port = options.port || 3000' do
     assertCompile("let port = options.port || 3000", /`let port = options.port \|\| 3000`/)
   end
+  it 'with options = {} end' do
+    assertCompile('with options = {} end', /\s*/)
+  end
+
+  
+
 end
 
