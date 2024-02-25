@@ -740,15 +740,15 @@ end
   });
   describe("Require file handlers", function () {
     it("js file", function () {
-      assertCompile("#(./file.js)", /require\(".\/file.js"\)/);
+      assertCompile("#('./file.js')", /require\(".\/file.js"\)/);
     });
     it("jome file", function () {
-      assertCompile("#(./file.jome)", /TODO/);
+      assertCompile("#('./file.jome')", /TODO/);
     });
   });
   describe("Include file handlers", function () {
     it("include txt file", function () {
-      assertCompile("#...(./test.txt)", /`test1212`/);
+      assertCompile("#...('./test.txt')", /`test1212`/);
     });
   });
 };

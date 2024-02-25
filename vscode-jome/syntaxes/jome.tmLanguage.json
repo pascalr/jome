@@ -1052,6 +1052,56 @@
     "utilities": {
       "patterns": [
         {
+          "name": "meta.include.jome",
+          "begin": "(#\\.\\.\\.)(\\()",
+          "beginCaptures": {
+            "1": {
+              "name": "support.function.include.jome"
+            },
+            "2": {
+              "name": "punctuation.paren.open.jome"
+            }
+          },
+          "end": "\\)",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.paren.close.jome"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        },
+        {
+          "name": "meta.require.jome",
+          "begin": "(#)(\\()",
+          "beginCaptures": {
+            "1": {
+              "name": "support.function.include.jome"
+            },
+            "2": {
+              "name": "punctuation.paren.open.jome"
+            }
+          },
+          "end": "\\)",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.paren.close.jome"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        },
+        {
+          "name": "string.other.path.jome",
+          "match": "(#\\.{0,2}/[^ \\(\\)\\,]*)|(#cwd/[^ \\(\\)\\,]*)|(#\\.{1,2})"
+        },
+        {
           "name": "variable.other.constant.utility.jome",
           "match": "#\\b(PI|env|cwd|argv)\\b",
           "notWorkingMatch": "#\\b\\w+\\b(?!\\(|#)"
@@ -1317,11 +1367,6 @@
               "name": "punctuation.definition.string.end.jome"
             }
           }
-        },
-        {
-          "comment": "Allow #~ for home too?",
-          "name": "string.other.path.jome",
-          "match": "(#\\.{0,2}/[^ \\(\\)\\,]*)|(#cwd/[^ \\(\\)\\,]*)|(#\\.{1,2})"
         },
         {
           "name": "string.quoted.verbatim.jome",

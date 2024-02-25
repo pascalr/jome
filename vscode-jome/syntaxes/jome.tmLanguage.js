@@ -9,6 +9,8 @@ const REGEX_CLASS_NAME = "[A-Za-z_$]\\w*" // FIXME: Accents
 const REGEX_VARIABLE = "[A-Za-z_$]\\w*" // FIXME: Accents
 const REGEX_PROPERTY = `\\.${REGEX_VARIABLE}` // .property
 
+const REGEX_PATH_CHARS = "[^ \\(\\)\\,]*"
+
 const REGEX_XML_NAME = "[_:A-Za-z][A-Za-z0-9\\-_\\:.]*"
 
 const REGEX_PRIMITIVE_TYPE = "\\b(?:int|string|bool|float)\\b(?:\\[\\])*" // FIXME: Accents
@@ -680,6 +682,32 @@ let grammar = {
     utilities: {
       patterns: [
         {
+          name: "meta.include.jome",
+          begin: `(#\\.\\.\\.)(\\()`,
+          beginCaptures: {
+            1: { name: "support.function.include.jome" },
+            2: { name: "punctuation.paren.open.jome" }
+          },
+          end: "\\)",
+          endCaptures: { 0: { name: "punctuation.paren.close.jome" } },
+          patterns: [{ include: "#expression" }]
+        },
+        {
+          name: "meta.require.jome", // "Allow #~ for home too?"
+          begin: `(#)(\\()`,
+          beginCaptures: {
+            1: { name: "support.function.include.jome" },
+            2: { name: "punctuation.paren.open.jome" }
+          },
+          end: "\\)",
+          endCaptures: { 0: { name: "punctuation.paren.close.jome" } },
+          patterns: [{ include: "#expression" }]
+        },
+        {
+          name: "string.other.path.jome", // "Allow #~ for home too?"
+          match: `(#\\.{0,2}/${REGEX_PATH_CHARS})|(#cwd/${REGEX_PATH_CHARS})|(#\\.{1,2})`
+        },
+        {
           name: "variable.other.constant.utility.jome",
           match: "#\\b(PI|env|cwd|argv)\\b",
           notWorkingMatch: "#\\b\\w+\\b(?!\\(|#)"
@@ -791,11 +819,6 @@ let grammar = {
         PATTERN_STRING("string.quoted.backtick.jome", "`"),
         PATTERN_STRING("string.quoted.multi.jome", "\"\"\"", "\\{\\{", "\\}\\}"),
         PATTERN_STRING("string.quoted.double.jome", "\"", "\\{", "\\}"),
-        {
-          comment: "Allow #~ for home too?",
-          name: "string.other.path.jome",
-          match: "(#\\.{0,2}/[^ \\(\\)\\,]*)|(#cwd/[^ \\(\\)\\,]*)|(#\\.{1,2})"
-        },
         {
           name: "string.quoted.verbatim.jome",
           begin: "@(\"|'|\"\"\"|''')",

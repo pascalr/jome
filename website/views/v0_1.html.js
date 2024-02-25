@@ -805,12 +805,47 @@ module.exports = () => {
   You can process file using the syntax: \`#(./some_file.txt)\`
 
   The default file handlers are:
-  - *.js: require(%)
-  - *.jome: #run(%) ? is it run ?
+  - *.js, js: require(%)
+  - *.jome, jome: #run(%) ? is it run ?
 
-  \`\`\`
+  \`\`\`jome
   let data = #(./some_data.json)
   let lib = #(./some_lib.js) // same as require('./some_lib.js')
+  \`\`\`
+
+  You can use the keyword as to using another string as a matching string instead of the filename
+
+  \`\`\`jome
+  let data = #(./some_data as "json")
+  \`\`\`
+
+  Maybe all #() does is require...
+
+  But what about the case that I want to include text? How about ...#() ?
+
+  \`\`\`jome
+  let data = ...#("./some_data") // Noo because this could be bad in another context (inside an object)
+  let data = #...("./some_data")
+  \`\`\`
+
+  \`\`\`jome
+  #(./foo) => require("./foo")
+  #...(./foo) => "content of foo is read at compile time and inserted as a string here"
+  \`\`\`
+
+  How about let's say an image?
+
+  \`\`\`jome
+  let img = #(./some_img.jpg)
+  \`\`\`
+
+  Well in that case instead of using require, you could define a custom file handler.
+
+  \`\`\`jome
+  let img = #(./some_image.png)
+  // Here it could be compiled for example to:
+  const PNG = require('png-js');
+  let img = new PNG('some_image.png');
   \`\`\`
 
   ### Instance properties (@)

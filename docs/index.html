@@ -621,11 +621,31 @@ let filepath = #./some/dir/{filename}
 <p>You can process file using the syntax: <code>#(./some_file.txt)</code></p>
 <p>The default file handlers are:</p>
 <ul>
-<li>*.js: require(%)</li>
-<li>*.jome: #run(%) ? is it run ?</li>
+<li>*.js, js: require(%)</li>
+<li>*.jome, jome: #run(%) ? is it run ?</li>
 </ul>
-<pre><code>let data = #(./some_data.json)
-let lib = #(./some_lib.js) // same as require('./some_lib.js')
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = #(./<span class="hljs-variable">some_data</span>.<span class="hljs-variable">json</span>)
+<span class="hljs-keyword">let</span> <span class="hljs-variable">lib</span> = #(./<span class="hljs-variable">some_lib</span>.<span class="hljs-variable">js</span>) <span class="hljs-comment">// same as require(&#x27;./some_lib.js&#x27;)</span>
+</code></pre>
+<p>You can use the keyword as to using another string as a matching string instead of the filename</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = #(./<span class="hljs-variable">some_data</span> <span class="hljs-variable">as</span> <span class="hljs-string">&quot;json&quot;</span>)
+</code></pre>
+<p>Maybe all #() does is require...</p>
+<p>But what about the case that I want to include text? How about ...#() ?</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = ...#(<span class="hljs-string">&quot;./some_data&quot;</span>) <span class="hljs-comment">// Noo because this could be bad in another context (inside an object)</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-string">#..</span>.(<span class="hljs-string">&quot;./some_data&quot;</span>)
+</code></pre>
+<pre><code class="language-jome">#(./<span class="hljs-variable">foo</span>) =&gt; <span class="hljs-title function_ invoke__">require</span>(<span class="hljs-string">&quot;./foo&quot;</span>)
+<span class="hljs-string">#..</span>.(./<span class="hljs-variable">foo</span>) =&gt; <span class="hljs-string">&quot;content of foo is read at compile time and inserted as a string here&quot;</span>
+</code></pre>
+<p>How about let's say an image?</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">img</span> = #(./<span class="hljs-variable">some_img</span>.<span class="hljs-variable">jpg</span>)
+</code></pre>
+<p>Well in that case instead of using require, you could define a custom file handler.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">img</span> = #(./<span class="hljs-variable">some_image</span>.<span class="hljs-variable">png</span>)
+<span class="hljs-comment">// Here it could be compiled for example to:</span>
+<span class="hljs-variable">const</span> <span class="hljs-title class_">PNG</span> = <span class="hljs-title function_ invoke__">require</span>(<span class="hljs-string">&#x27;png-js&#x27;</span>);
+<span class="hljs-keyword">let</span> <span class="hljs-variable">img</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">PNG</span>(<span class="hljs-string">&#x27;some_image.png&#x27;</span>);
 </code></pre>
 <h3>Instance properties (@)</h3>
 <p>One of the objective of Jome is to remove the weird thing that is this.</p>
