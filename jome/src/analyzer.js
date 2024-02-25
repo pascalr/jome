@@ -292,7 +292,7 @@ const ANALYZERS = {
     if (node.parts[0].raw !== 'def') {
       throw new Error("Internal error. meta.def.jome should always start with keyword def")
     }
-    if (node.parts[1].type !== 'entity.name.function.jome') {
+    if (node.parts[1]?.type !== 'entity.name.function.jome') {
       return pushError(node, "Syntax error. Missing function name after keyword def.")
     }
     // Arguments, if present, should always be right after the function name
@@ -302,7 +302,7 @@ const ANALYZERS = {
 
     let name = node.parts[1].raw
     node.lexEnv.addBinding(name, {type: 'def'})
-    let args = node.parts[2].type === 'meta.args.jome' ? node.parts[2] : null
+    let args = node.parts[2]?.type === 'meta.args.jome' ? node.parts[2] : null
 
     if (node.operands.length) {
       node.data = {name, expressions: node.operands, args}

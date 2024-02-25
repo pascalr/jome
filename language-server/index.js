@@ -180,7 +180,7 @@ async function validateTextDocument(textDocument) {
     // Send the computed diagnostics to VSCode.
     connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
   } catch (err) {
-    connection.console.log('Caught error while trying to validate document: ', err);
+    connection.console.error(err.stack);
   }
 }
 
