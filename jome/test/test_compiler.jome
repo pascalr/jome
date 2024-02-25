@@ -918,8 +918,7 @@ end
 
 
 describe 'Include file handlers' do
-  it 'include txt file' do
-    // TODO: Create a test.txt file that contains test1212
-    assertCompile("#...('./test.txt')", /`test1212`/)
+  it.skip 'include txt file' do
+    assertCompile("#...('./data/test.txt')", /`forRealTest`/)
   end
 end

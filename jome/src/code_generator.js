@@ -803,9 +803,7 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
   },
 
   "meta.include.jome": (node) => {
-    let parts = node.parts.slice(2,-1) // Remove #, (, )
-    let file = parts[0].raw
-    return 'TODO'
+    return `\`${node.data.content}\``
   },
 
   "meta.forall.jome": (node) => {

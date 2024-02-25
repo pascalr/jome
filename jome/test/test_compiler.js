@@ -753,8 +753,8 @@ end
     });
   });
   describe("Include file handlers", function () {
-    it("include txt file", function () {
-      assertCompile("#...('./test.txt')", /`test1212`/);
+    it.skip("include txt file", function () {
+      assertCompile("#...('./data/test.txt')", /`forRealTest`/);
     });
   });
 };

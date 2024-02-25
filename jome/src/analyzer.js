@@ -2,6 +2,9 @@ const {OPERAND_TYPES, filterSpaces, filterStrings, compileTokenRaw} = require(".
 
 const {FileImports} = require("./context.js")
 
+const fs = require("fs")
+const path = require("path")
+
 // TODO: Rename this to analyzer and give this file the responsability too of building the lexical environment.
 // Because I need the lexical environment for the language server too without generating code.
 
@@ -605,6 +608,21 @@ const ANALYZERS = {
   },
 
   "meta.tag.jome": validateTag,
+
+  "meta.include.jome": (node) => {
+    let parts = node.parts.slice(2,-1) // Remove #, (, )
+    let file = parts[0].raw.slice(1,-1) // Remove quotes
+    let absPath = file;
+    if (file[0] === '.') {
+      absPath = path.resolve(node.ctxFile.absPath, '..', file)
+    }
+    if (!fs.existsSync(absPath)) {
+      return pushError(node, "Missing file "+absPath)
+    }
+    // TODO: Try catch
+    let content = fs.readFileSync(absPath)
+    node.data = {content}
+  },
 
   "meta.forall.jome": (node) => {
     ensureStartRaw(node, 'forall')
