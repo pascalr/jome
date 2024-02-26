@@ -6,6 +6,7 @@
         "blockComment": [ "/*", "*/" ]
     },
     // symbols used as brackets
+    // This is used to highlight the matching pair and for "Go to Bracket" or "Select a Bracket"
     "brackets": [
         ["{", "}"],
         ["[", "]"],
@@ -24,16 +25,41 @@
         ["<css>", "</css>"],
         ["<%=", " %>"],
         ["<%-", " %>"],
-        ["\"", "\""],
-        ["'", "'"]
+        { "open": "'", "close": "'", "notIn": ["string", "comment"] },
+        { "open": "\"", "close": "\"", "notIn": ["string"] },
+        { "open": "`", "close": "`", "notIn": ["string", "comment"] },
+        { "open": "/**", "close": " */", "notIn": ["string"] }
     ],
+    // By default, VS Code only autocloses pairs if there is whitespace right after the cursor.
+    "autoCloseBefore": ";:.,=}])>` \n\t",
+
     // symbols that can be used to surround a selection
     "surroundingPairs": [
         ["{", "}"],
         ["[", "]"],
         ["(", ")"],
-        ["<>", "</>"],
         ["\"", "\""],
-        ["'", "'"]
-    ]
+        ["'", "'"],
+        ["`", "`"],
+    ],
+
+    // Word pattern ? Use default ?
+
+    // Indentation rules
+    "indentationRules": {
+      //"increaseIndentPattern": "^((?!\\/\\/).)*(\\{[^}\"'`]*|\\([^)\"'`]*|\\[[^\\]\"'`]*)$",
+      //"decreaseIndentPattern": "^((?!.*?\\/\\*).*\\*/)?\\s*[\\)\\}\\]].*$",
+      //"indentNextLinePattern": ""
+      // "unIndentedLinePattern"
+    },
+
+    // // On enter rules
+    // "onEnterRules": [
+    // {
+    //   //"beforeText": "^\\s*(?:if).*?:\\s*$",
+    //   "beforeText": "^\\s*(?:if).*$",
+    //   THIS DOES NOT WORK... It puts the cursor after the end keyword...
+    //   "action": { "indent": "indent", "appendText": "\nend", "removeText": 2 }
+    // }
+    // ]
 }

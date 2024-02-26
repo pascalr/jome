@@ -18,6 +18,10 @@ let PARTIAL = <md>
 
 let content = <md>
 
+  TODO: Language configuration guide: increaseIndentPattern, indentNextLinePattern (when ends with colon)
+
+  TODO: Tokenize the tags simply as strings with interpolation and add semantic tokenization after.
+
   TODO: For the website, do more like Civet. Put v0_1.html.jome should be in a tab called Reference.
   Inside the home page, only put the best of Jome. The goal is to dazzle.
 
