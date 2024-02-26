@@ -1,3 +1,15 @@
+TODO:
+Code completion:
+if true: // when pressing enter, should indent next line (can do that through language configuration)
+if true // when pressing enter, should indent next line and add "end" on the line after, the cursor should stay on the second line
+if true {|} // when pressing enter, should indent next line and move "}" on the line after
+
+
+Snippets?
+- express server snippet?
+
+
+
 TODO: Use \\1 insides the regexes for example when there is an optional quote: This explains it well:
 
 The regular expression you've provided seems to be part of a syntax definition or pattern matching context. It is not complete on its own, and it appears to be designed to match a specific pattern within a larger string.

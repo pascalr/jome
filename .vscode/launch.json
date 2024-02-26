@@ -7,7 +7,7 @@
     {
       "type": "node-terminal",
       "request": "launch",
-      "name": "Run server",
+      "name": "Run web server",
       "cwd": "${workspaceFolder}/website",
       "skipFiles": [
         "<node_internals>/**"
@@ -35,12 +35,14 @@
       "command": "npx jome test/test_all.jome"
     },
     {
-      "name": "Launch Extension",
       "type": "extensionHost",
       "request": "launch",
+      "name": "Launch Extension",
+      "runtimeExecutable": "${execPath}",
       "args": [
           "--extensionDevelopmentPath=${workspaceFolder/vscode-jome}"
-      ]
+      ],
+      "autoAttachChildProcesses": true,
     },
     {
       "type": "jome",

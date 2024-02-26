@@ -60,14 +60,19 @@ function compileNodes(nodes) {
   //return nodes.map(node => genCode(node)).join(';')+';'
 }
 
-function analyzeCode(code) {
+function parseAndAnalyzeCode(code) {
   let compiler = new Compiler()
   let ctxFile = new ContextFile()
   ctxFile.compiler = compiler
   let tokens = tokenize(code).children
   let topNodes = parse(tokens, null, ctxFile.lexEnv)
   analyzeNodes(topNodes, false)
-  return ctxFile
+  return {ctxFile, nodes: topNodes}
+}
+
+// Deprecated, use parseAndAnalyzeCode instead
+function analyzeCode(code) {
+  return parseAndAnalyzeCode(code).ctxFile
 }
 
 function compileCode(code, options) {
@@ -202,5 +207,6 @@ module.exports = {
   compileNodes,
   compileAndSaveFile,
   analyzeCode,
-  compileFileGetCtx
+  compileFileGetCtx,
+  parseAndAnalyzeCode
 }
