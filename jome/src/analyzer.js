@@ -22,6 +22,15 @@ function pushError(node, message) {
   return error
 }
 
+function pushBinding(node, bindingName, data) {
+  node.lexEnv.addBinding(bindingName, {
+    lineNb: node.token.lineNb,
+    startIndex: node.token.chStartIdx,
+    endIndex: node.token.chStartIdx + node.raw.length,
+    ...data
+  })
+}
+
 // TODO: Make sure no infinite loop
 function analyzeNodes(nodes, throwError = true) {
   nodes.forEach(node => {
@@ -274,7 +283,7 @@ const ANALYZERS = {
     } else if (node.parts[0].type === 'storage.type.primitive.jome') {
       variableType = node.parts[0].raw
     }
-    node.lexEnv.addBinding(name, {type: 'declaration', keyword, variableType, kind: BindingKind.Variable})
+    pushBinding(node, name, {type: 'declaration', keyword, variableType, kind: BindingKind.Variable})
     node.data = {keyword, name, variableType}
   },
   // do |args| /* ... */ end
@@ -307,7 +316,7 @@ const ANALYZERS = {
     }
 
     let name = node.parts[1].raw
-    node.lexEnv.addBinding(name, {type: 'def', kind: BindingKind.Function})
+    pushBinding(node, name, {type: 'def', kind: BindingKind.Function})
     let args = node.parts[2]?.type === 'meta.args.jome' ? node.parts[2] : null
 
     if (node.operands.length) {
@@ -521,7 +530,7 @@ const ANALYZERS = {
 
     bindings.forEach(binding => {
       // FIXME: The kind is not always variable, it could be function or class too...
-      node.lexEnv.addBinding(binding.name, {...binding, file: filename, kind: BindingKind.Variable})
+      pushBinding(node, binding.name, {...binding, file: filename, kind: BindingKind.Variable})
     })
 
     // let relPath = getRelativePath(file, ctx)
