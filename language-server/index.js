@@ -43,20 +43,23 @@ connection.onInitialize((params) => {
       capabilities.textDocument.publishDiagnostics.relatedInformation);
       
   const result = {
-      capabilities: {
-          textDocumentSync: TextDocumentSyncKind.Incremental,
-          // Tell the client that this server supports code completion.
-          completionProvider: {
-              resolveProvider: true
-          }
+    capabilities: {
+      textDocumentSync: TextDocumentSyncKind.Incremental,
+      // Tell the client that this server supports code completion.
+      completionProvider: {
+        resolveProvider: true
+      },
+      documentLinkProvider: {
+        resolveProvider: true
       }
+    }
   };
   if (hasWorkspaceFolderCapability) {
-      result.capabilities.workspace = {
-          workspaceFolders: {
-              supported: true
-          }
-      };
+    result.capabilities.workspace = {
+      workspaceFolders: {
+        supported: true
+      }
+    };
   }
   return result;
 });
@@ -194,6 +197,14 @@ connection.onDidChangeWatchedFiles(_change => {
   // Monitored files have change in VSCode
   connection.console.log('We received an file change event');
 });
+
+connection.onDocumentLinks((params, token, workDoneProgress, resultProgress) => {
+  connection.console.log('onDocumentLinks');
+})
+
+connection.onDocumentLinkResolve((params, token) => {
+  connection.console.log('onDocumentLinkResolve');
+})
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion((_textDocumentPosition) => {
