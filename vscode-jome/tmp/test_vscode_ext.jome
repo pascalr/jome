@@ -13,3 +13,7 @@ let f = new Foo()
 class Bar
 
 end
+
+def someFunc
+  
+end

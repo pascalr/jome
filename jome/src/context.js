@@ -44,6 +44,11 @@ class ContextFile {
   }
 }
 
+const BindingKind = {
+  Function: 1,
+  Variable: 2,
+}
+
 // A local scope (inside a function, an if block, ...)
 class LexicalEnvironment {
   constructor(outerEnvironment = null) {
@@ -88,9 +93,19 @@ class LexicalEnvironment {
     return (this.getBindingEnv(name)?.bindings || this.bindings)[name]
     // throw new ReferenceError(`${name} is not defined.`);
   }
+
+  // Returns all the bindings of itself and it's children
+  getAllBindings() {
+    let all = {...this.bindings}
+    this.nestedEnvs.forEach(env => {
+      all = {...all, ...env.getAllBindings()}
+    })
+    return all
+  }
 }
 
 module.exports = {
   LexicalEnvironment,
   ContextFile,
+  BindingKind
 }

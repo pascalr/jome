@@ -14,6 +14,7 @@ const {TextDocument} = require("vscode-languageserver-textdocument");
 
 // //import {validateCode} from 'jomec/src/compiler.js';
 const { parseAndAnalyzeCode } = require('jome.js/src/compiler.js');
+const { BindingKind } = require('jome.js/src/context.js');
 
 // This stores the parsed data for every file
 const dataByURI = {}
@@ -195,14 +196,38 @@ connection.onDidChangeWatchedFiles(_change => {
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion((_textDocumentPosition) => {
+
   let uri = _textDocumentPosition.textDocument.uri
   let {ctxFile, nodes} = dataByURI[uri]
+
   let classIdentifiers = [...ctxFile.classIdentifiers]
+  let bindingIdentifiers = []
+  
   let rawKeywords = "new|chain|with|then|end|if|class|export|import|from|for|in|while|do|def|var|let|code|unit|return|module|interface|main|type|else|elif|elsif";
   let keywords = rawKeywords.split('|').map(k => ({ label: k, kind: CompletionItemKind.Keyword }));
+  
+  let bindings = ctxFile.lexEnv.getAllBindings()
+  Object.keys(bindings).forEach(k => {
+    let binding = bindings[k]
+    if (binding.kind === BindingKind.Function) {
+      bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Function })
+    } else if (binding.kind === BindingKind.Variable) {
+      bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Variable })
+    } else {
+      bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Text })
+    }
+  })
+  // CompletionItemKind.Method
+  // CompletionItemKind.Function
+  // CompletionItemKind.Constant
+  // CompletionItemKind.Unit
+  // CompletionItemKind.Struct
+  // CompletionItemKind.Interface
+  // CompletionItemKind.Variable
   return [
       ...keywords,
-      ...classIdentifiers.map(k => ({ label: k, kind: CompletionItemKind.Class }))
+      ...classIdentifiers.map(k => ({ label: k, kind: CompletionItemKind.Class })),
+      ...bindingIdentifiers
   ];
 });
 

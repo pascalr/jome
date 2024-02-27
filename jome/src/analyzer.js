@@ -1,6 +1,6 @@
 const {OPERAND_TYPES, filterSpaces, filterStrings, compileTokenRaw} = require("./parser.js")
 
-const {FileImports} = require("./context.js")
+const {FileImports, BindingKind} = require("./context.js")
 
 const fs = require("fs")
 const path = require("path")
@@ -274,7 +274,7 @@ const ANALYZERS = {
     } else if (node.parts[0].type === 'storage.type.primitive.jome') {
       variableType = node.parts[0].raw
     }
-    node.lexEnv.addBinding(name, {type: 'declaration', keyword, variableType})
+    node.lexEnv.addBinding(name, {type: 'declaration', keyword, variableType, kind: BindingKind.Variable})
     node.data = {keyword, name, variableType}
   },
   // do |args| /* ... */ end
@@ -304,7 +304,7 @@ const ANALYZERS = {
     }
 
     let name = node.parts[1].raw
-    node.lexEnv.addBinding(name, {type: 'def'})
+    node.lexEnv.addBinding(name, {type: 'def', kind: BindingKind.Function})
     let args = node.parts[2]?.type === 'meta.args.jome' ? node.parts[2] : null
 
     if (node.operands.length) {
@@ -520,7 +520,8 @@ const ANALYZERS = {
     })
 
     bindings.forEach(binding => {
-      node.lexEnv.addBinding(binding.name, {...binding, file: filename})
+      // FIXME: The kind is not always variable, it could be function or class too...
+      node.lexEnv.addBinding(binding.name, {...binding, file: filename, kind: BindingKind.Variable})
     })
 
     // let relPath = getRelativePath(file, ctx)
