@@ -146,7 +146,8 @@ async function validateTextDocument(textDocument) {
   const diagnostics = [];
   try {
     let {ctxFile, nodes} = parseAndAnalyzeCode(text)
-    dataByURI[textDocument.uri] = {ctxFile, nodes}
+    let bindings = ctxFile.lexEnv.getAllBindings()
+    dataByURI[textDocument.uri] = {ctxFile, nodes, bindings}
     let errors = ctxFile.errors
     console.log('Errors found: ', errors)
     for (let i = 0; i < errors.length && i < settings.maxNumberOfProblems; i++) {
@@ -198,7 +199,7 @@ connection.onDidChangeWatchedFiles(_change => {
 connection.onCompletion((_textDocumentPosition) => {
 
   let uri = _textDocumentPosition.textDocument.uri
-  let {ctxFile, nodes} = dataByURI[uri]
+  let {ctxFile, bindings} = dataByURI[uri]
 
   let classIdentifiers = [...ctxFile.classIdentifiers]
   let bindingIdentifiers = []
@@ -206,7 +207,6 @@ connection.onCompletion((_textDocumentPosition) => {
   let rawKeywords = "new|chain|with|then|end|if|class|export|import|from|for|in|while|do|def|var|let|code|unit|return|module|interface|main|type|else|elif|elsif";
   let keywords = rawKeywords.split('|').map(k => ({ label: k, kind: CompletionItemKind.Keyword }));
   
-  let bindings = ctxFile.lexEnv.getAllBindings()
   Object.keys(bindings).forEach(k => {
     let binding = bindings[k]
     if (binding.kind === BindingKind.Function) {
