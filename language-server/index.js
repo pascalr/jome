@@ -1,5 +1,29 @@
 #!/usr/bin/env node
 
+/*
+TODO:
+# Some func does something
+def someFunc(int someArg)
+end
+
+someFunc(
+
+TODO: Hover someFunc
+TODO: Help with function signatures
+TODO: When someFunc is used, link to where it is created
+TODO: When double clicking someFunc, highlight all in the same lex env only
+TODO: Show parameter type
+TODO: Show function documentation
+TODO: Rename!!!!!
+TODO: Folding
+*/
+
+// TODO: <color>#FFF</color>: Use DocumentColor & Color Presentation
+
+// TODO: Formatting (use config as defined inside config.jome)
+
+// FIXME: How does unused variable work???!!!
+
 const {
   createConnection,
 	TextDocuments,
