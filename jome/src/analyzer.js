@@ -5,16 +5,19 @@ const {FileImports, BindingKind} = require("./context.js")
 const fs = require("fs")
 const path = require("path")
 
-// TODO: Rename this to analyzer and give this file the responsability too of building the lexical environment.
-// Because I need the lexical environment for the language server too without generating code.
+function nodePositionData(node) {
+  return {
+    lineNb: node.token.lineNb,
+    startIndex: node.token.chStartIdx,
+    endIndex: node.token.chStartIdx + node.raw.length,
+  }
+}
 
 function pushError(node, message) {
   // this.suggestions = []
   // this.uid = null // A four or five digits number? See Language Server Diagnostic source
   let error = {
-    lineNb: node.token.lineNb,
-    startIndex: node.token.chStartIdx,
-    endIndex: node.token.chStartIdx + node.raw.length,
+    ...nodePositionData(node),
     message
   }
   //throw new Error(message)
@@ -24,11 +27,13 @@ function pushError(node, message) {
 
 function pushBinding(node, bindingName, data) {
   node.lexEnv.addBinding(bindingName, {
-    lineNb: node.token.lineNb,
-    startIndex: node.token.chStartIdx,
-    endIndex: node.token.chStartIdx + node.raw.length,
+    ...nodePositionData(node),
     ...data
   })
+}
+
+function pushFileLink(node, file, data={}) {
+  node.ctxFile.filesLinks.push({file, ...nodePositionData(node), ...data})
 }
 
 // TODO: Make sure no infinite loop
@@ -529,6 +534,7 @@ const ANALYZERS = {
     })
 
     bindings.forEach(binding => {
+      pushFileLink(node, filename)
       // FIXME: The kind is not always variable, it could be function or class too...
       pushBinding(node, binding.name, {...binding, file: filename, kind: BindingKind.Variable})
     })

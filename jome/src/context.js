@@ -17,6 +17,7 @@ class ContextFile {
     this.foralls = DEFAULT_FORALLS
     this.errors = [] // A list of errors found when analyzing
     this.fileImportDependenciesByFile = {}
+    this.filesLinks = [] // The files linked from imports, every path, ... They can be duplicated. #./some_file.js multiple times will be inserted multiple times here
   }
 
   addFileImportDependency(name, type, file) {
