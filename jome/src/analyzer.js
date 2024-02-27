@@ -302,6 +302,9 @@ const ANALYZERS = {
     if (node.parts.slice(3,-1).find(c => c.type === 'meta.args.jome')) {
       return pushError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
     }
+    if (!node.operands.length && node.parts[node.parts.length-1].raw !== 'end') {
+      return pushError(node, "Missing colon or end statement after keyword def")
+    }
 
     let name = node.parts[1].raw
     node.lexEnv.addBinding(name, {type: 'def', kind: BindingKind.Function})
@@ -312,9 +315,6 @@ const ANALYZERS = {
       return
     }
 
-    if (node.parts[node.parts.length-1].raw !== 'end') {
-      return pushError(node, "Missing colon or end statement after keyword def")
-    }
     let expressions = node.parts.slice((args ? 3 : 2), -1) // Remove keywords def, end, and function name
     node.data = {name, expressions, args}
 },
