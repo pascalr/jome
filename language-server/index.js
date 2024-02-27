@@ -16,7 +16,7 @@ const {TextDocument} = require("vscode-languageserver-textdocument");
 const { parseAndAnalyzeCode } = require('jome.js/src/compiler.js');
 
 // This stores the parsed data for every file
-const nodesByURI = {}
+const dataByURI = {}
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -145,7 +145,7 @@ async function validateTextDocument(textDocument) {
   const diagnostics = [];
   try {
     let {ctxFile, nodes} = parseAndAnalyzeCode(text)
-    nodesByURI[textDocument.uri, nodes]
+    dataByURI[textDocument.uri] = {ctxFile, nodes}
     let errors = ctxFile.errors
     console.log('Errors found: ', errors)
     for (let i = 0; i < errors.length && i < settings.maxNumberOfProblems; i++) {
@@ -195,11 +195,14 @@ connection.onDidChangeWatchedFiles(_change => {
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion((_textDocumentPosition) => {
-  connection.console.log('_textDocumentPosition', JSON.stringify(_textDocumentPosition));
+  let uri = _textDocumentPosition.textDocument.uri
+  let {ctxFile, nodes} = dataByURI[uri]
+  let classIdentifiers = [...ctxFile.classIdentifiers]
   let rawKeywords = "new|chain|with|then|end|if|class|export|import|from|for|in|while|do|def|var|let|code|unit|return|module|interface|main|type|else|elif|elsif";
   let keywords = rawKeywords.split('|').map(k => ({ label: k, kind: CompletionItemKind.Keyword }));
   return [
-      ...keywords
+      ...keywords,
+      ...classIdentifiers.map(k => ({ label: k, kind: CompletionItemKind.Class }))
   ];
 });
 

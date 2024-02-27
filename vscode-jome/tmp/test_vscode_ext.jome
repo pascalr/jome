@@ -1,5 +1,15 @@
+import &Baz from 'foo'
+
 let x = 10
 let y = 20
 let y = 30
-let
-let
+
+class Foo
+
+end
+
+let f = new Foo()
+
+class Bar
+
+end
