@@ -18,6 +18,8 @@ let PARTIAL = <md>
 
 let content = <md>
 
+  Allow #http://... as paths? #http should autocomplete to add the slashes after
+
   TODO: Language configuration guide: increaseIndentPattern, indentNextLinePattern (when ends with colon)
 
   TODO: Tokenize the tags simply as strings with interpolation and add semantic tokenization after.

@@ -222,8 +222,35 @@ connection.onDidChangeWatchedFiles(_change => {
   connection.console.log('We received an file change event');
 });
 
+// FIXME................
+// onDocumentLinks is sometime called before validate document
+// TODO: validate document if not already validated
 connection.onDocumentLinks((params, token, workDoneProgress, resultProgress) => {
   connection.console.log('onDocumentLinks');
+
+  let uri = params.textDocument.uri
+  connection.console.log('uri: '+uri);
+  if (!dataByURI[uri]) {
+    connection.console.log("Can't send document links document has not been parsed yet");
+    return null
+  }
+  let {ctxFile} = dataByURI[uri]
+
+  let result = []
+  ctxFile.filesLinks.forEach(fileLink => {
+    result.push({
+      range: {
+        start: fileLink.startIndex,
+        end: fileLink.endIndex,
+      },
+      //target: uri, //fileLink.file, // FIXME: Must be a URI (file:///home/...)
+      tooltip: 'thisisatooltip'
+    })
+  })
+
+  connection.console.log('Found '+result.length+' document links.');
+
+  return result
 })
 
 connection.onDocumentLinkResolve((params, token) => {
