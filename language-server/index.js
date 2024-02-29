@@ -32,6 +32,7 @@ const {
 	CompletionItemKind,
 	TextDocumentSyncKind,
   DiagnosticSeverity,
+  SymbolKind
 } = require("vscode-languageserver/node");
 
 const {TextDocument} = require("vscode-languageserver-textdocument");
@@ -87,6 +88,7 @@ connection.onInitialize((params) => {
       // documentFormattingProvider: "true" // TODO: Not implemented yet
       // documentRangeFormattingProvider: "true"  // TODO: Not implemented yet
       renameProvider: "true",
+      documentSymbolProvider: "true"
     }
   };
   if (hasWorkspaceFolderCapability) {
@@ -409,6 +411,22 @@ connection.onPrepareRename((params, token) => {
 connection.onRenameRequest((params, token, workDoneProgress, resultProgress) => {
   let {textDocument, position, newName} = params
   connection.console.log("onRenameRequest")
+})
+
+connection.onDocumentSymbol((params, token, workDoneProgress, resultProgress) => {
+  let {textDocument} = params
+  connection.console.log("onDocumentSymbol")
+
+  let ex = {
+    name: 'symbol name',
+    detail: "Symbol detail",
+    kind: SymbolKind.Function,
+    tags: [],
+    deprecated: false,
+    range: {start: 0, end: 10}, // To determine if cursor is inside the symbol
+    selectionRange: {start: 0, end: 10}, // Highlight for example the name of the function, must be included in range
+    children: []
+  }
 })
 
 // Make the text document manager listen on the connection
