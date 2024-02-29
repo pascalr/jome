@@ -239,10 +239,15 @@ connection.onDidChangeWatchedFiles(_change => {
 connection.onDocumentLinks((params, token, workDoneProgress, resultProgress) => {
   connection.console.log('onDocumentLinks');
 
+  let doc = documents.get(params.textDocument.uri)
+
   let uri = params.textDocument.uri
   connection.console.log('uri: '+uri);
-  if (!dataByURI[uri]) {
+  if (!dataByURI[uri] && !doc) {
     connection.console.log("Can't send document links document has not been parsed yet");
+    return null
+  } else if (doc) {
+    connection.console.log("Documents has doc, but not dataByURI");
     return null
   }
   let {ctxFile} = dataByURI[uri]
