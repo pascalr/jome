@@ -76,13 +76,17 @@ connection.onInitialize((params) => {
       documentLinkProvider: {
         resolveProvider: true
       },
-      hoverProvider : "true",
-      signatureHelpProvider : {
+      hoverProvider: "true",
+      signatureHelpProvider: {
         triggerCharacters: [ '(', ' ' ]
       },
-      definitionProvider : "true",
-      referencesProvider : "true",
+      definitionProvider: "true",
+      referencesProvider: "true",
       // documentHighlightProvider : "true", // I don't know about that one, the default is good enough?
+      colorProvider: "true",
+      // documentFormattingProvider: "true" // TODO: Not implemented yet
+      // documentRangeFormattingProvider: "true"  // TODO: Not implemented yet
+      renameProvider: "true",
     }
   };
   if (hasWorkspaceFolderCapability) {
@@ -385,6 +389,26 @@ connection.onReferences((params, token, workDoneProgress, resultProgress) => {
 connection.onDocumentHighlight((params, token, workDoneProgress, resultProgress) => {
   let {textDocument, position} = params
   connection.console.log("onDocumentHighlight")
+})
+
+connection.onDocumentColor((params, token, workDoneProgress, resultProgress) => {
+  let {textDocument} = params
+  connection.console.log("onDocumentColor")
+})
+
+connection.onColorPresentation((params, token, workDoneProgress, resultProgress) => {
+  let {textDocument, color, range} = params
+  connection.console.log("onColorPresentation")
+})
+
+connection.onPrepareRename((params, token) => {
+  let {textDocument, position} = params
+  connection.console.log("onPrepareRename")
+})
+
+connection.onRenameRequest((params, token, workDoneProgress, resultProgress) => {
+  let {textDocument, position, newName} = params
+  connection.console.log("onRenameRequest")
 })
 
 // Make the text document manager listen on the connection
