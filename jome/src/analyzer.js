@@ -32,6 +32,10 @@ function pushBinding(node, bindingName, data) {
   })
 }
 
+function pushOccurence(node, data) {
+  node.ctxFile.occurences.push({...nodePositionData(node), ...data})
+}
+
 function pushFileLink(node, file, data={}) {
   node.ctxFile.filesLinks.push({file, ...nodePositionData(node), ...data})
 }
@@ -322,6 +326,7 @@ const ANALYZERS = {
 
     let name = node.parts[1].raw
     pushBinding(node, name, {type: 'def', kind: BindingKind.Function})
+    pushOccurence(node.parts[1], {name, kind: 'function'})
     let args = node.parts[2]?.type === 'meta.args.jome' ? node.parts[2] : null
 
     if (node.operands.length) {

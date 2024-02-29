@@ -75,7 +75,8 @@ connection.onInitialize((params) => {
       },
       documentLinkProvider: {
         resolveProvider: true
-      }
+      },
+      hoverProvider : "true",
     }
   };
   if (hasWorkspaceFolderCapability) {
@@ -305,6 +306,20 @@ connection.onCompletionResolve(item => {
   // }
   return item;
 });
+
+connection.onHover((params, token, workDoneProgress, resultProgress) => {
+  connection.console.log('onHover')
+  let uri = params.textDocument.uri
+  let {ctxFile, bindings} = dataByURI[uri]
+  // Somehow params.line starts at 0... Weird choice...
+  let occurence = ctxFile.occurences.find(o => o.lineNb === (params.line-1) && o.startIndex <= params.character && o.endIndex >= params.character)
+  if (occurence) {
+    connection.console.log('Hovering over occurence!!!')
+  }
+  return {
+    contents: "Some hover"
+  }
+})
 
 // Make the text document manager listen on the connection
 // for open, change and close text document events
