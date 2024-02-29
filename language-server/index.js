@@ -57,8 +57,9 @@ let hasWorkspaceFolderCapability = false;
 let hasDiagnosticRelatedInformationCapability = false;
 
 connection.onInitialize((params) => {
+  connection.console.log("onInitialize")
   const capabilities = params.capabilities;
-  connection.console.log(JSON.stringify(params.initializationOptions));
+  //connection.console.log(JSON.stringify(params.initializationOptions));
   // Does the client support the `workspace/configuration` request?
   // If not, we fall back using global settings.
   hasConfigurationCapability = !!(capabilities.workspace && !!capabilities.workspace.configuration);
@@ -102,6 +103,7 @@ connection.onInitialize((params) => {
 });
 
 connection.onInitialized(() => {
+  connection.console.log("onInitialized")
   if (hasConfigurationCapability) {
     // Register for all configuration changes.
     connection.client.register(DidChangeConfigurationNotification.type, undefined);
@@ -121,6 +123,7 @@ let globalSettings = defaultSettings;
 // Cache the settings of all open documents
 const documentSettings = new Map();
 connection.onDidChangeConfiguration(change => {
+  connection.console.log("onDidChangeConfiguration")
   if (hasConfigurationCapability) {
       // Reset all cached document settings
       documentSettings.clear();
@@ -149,33 +152,29 @@ function getDocumentSettings(resource) {
 
 // Only keep settings for open documents
 documents.onDidClose(e => {
-    documentSettings.delete(e.document.uri);
+  connection.console.log("onDidClose")
+  documentSettings.delete(e.document.uri);
 });
 
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {
+  connection.console.log("onDidChangeContent")
   validateTextDocument(change.document);
 });
 
 connection.onDidOpenTextDocument((params) => {
-  // A text document was opened in VS Code.
-  // params.uri uniquely identifies the document. For documents stored on disk, this is a file URI.
-  // params.text the initial full content of the document.
+  console.log('onDidOpenTextDocument')
   validateTextDocument(params.text)
 });
 
 connection.onDidChangeTextDocument((params) => {
-  // The content of a text document has change in VS Code.
-  // params.uri uniquely identifies the document.
-  // params.contentChanges describe the content changes to the document.
-  console.log('content changes', params.contentChanges)
+  console.log('onDidChangeTextDocument')
   validateTextDocument(params.contentChanges)
 });
 
 connection.onDidCloseTextDocument((params) => {
-  // A text document was closed in VS Code.
-  // params.uri uniquely identifies the document.
+  console.log('onDidCloseTextDocument')
 });
 
 async function validateTextDocument(textDocument) {
@@ -231,8 +230,7 @@ async function validateTextDocument(textDocument) {
 }
 
 connection.onDidChangeWatchedFiles(_change => {
-  // Monitored files have change in VSCode
-  connection.console.log('We received an file change event');
+  connection.console.log('onDidChangeWatchedFiles');
 });
 
 // FIXME................
@@ -272,6 +270,7 @@ connection.onDocumentLinkResolve((params, token) => {
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion((_textDocumentPosition) => {
+  connection.console.log('onCompletion');
 
   let uri = _textDocumentPosition.textDocument.uri
   let {ctxFile, bindings} = dataByURI[uri]
@@ -309,6 +308,7 @@ connection.onCompletion((_textDocumentPosition) => {
 // This handler resolves additional information for the item selected in
 // the completion list.
 connection.onCompletionResolve(item => {
+  connection.console.log('onCompletionResolve');
   // if (item.data === 1) {
   //   item.detail = 'TypeScript details';
   //   item.documentation = 'TypeScript documentation';
