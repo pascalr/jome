@@ -82,7 +82,9 @@ function decodeTokensAsTree(lines) {
   let root = new ScopeNode("ROOT");
   let currentNode = root;
   let chStartIdx = 0
+  let linesStartIndex = {}
   lines.forEach((lineTags, lineNbIdx) => {
+    linesStartIndex[lineNbIdx+1] = chStartIdx
     let {line, tags} = lineTags
     let offset = 0;
     for (let i = 0; i < tags.length; i++) {
@@ -120,7 +122,7 @@ function decodeTokensAsTree(lines) {
     }
     chStartIdx += 1
   });
-  return root.children[0];
+  return {result: root.children[0], linesStartIndex};
 }
 
 class LineTags {
@@ -149,12 +151,17 @@ function tokenizeLines(text) {
   return results;
 }
 
-function tokenize(text) {
+function tokenizeWithDetails(text) {
   let lines = tokenizeLines(text)
   return decodeTokensAsTree(lines)
 }
 
+function tokenize(text) {
+  return tokenizeWithDetails(text).result
+}
+
 module.exports = {
   POST_PROCESSES,
-  tokenize
+  tokenize,
+  tokenizeWithDetails
 }

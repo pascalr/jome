@@ -311,13 +311,15 @@ connection.onHover((params, token, workDoneProgress, resultProgress) => {
   connection.console.log('onHover')
   let uri = params.textDocument.uri
   let {ctxFile, bindings} = dataByURI[uri]
-  // Somehow params.line starts at 0... Weird choice...
-  let occurence = ctxFile.occurences.find(o => o.lineNb === (params.line-1) && o.startIndex <= params.character && o.endIndex >= params.character)
+  // Somehow params.line starts at 0...
+  let lineStartIndex = ctxFile.linesStartIndex[params.position.line+1]
+  if (!lineStartIndex) {return null}
+  let index = lineStartIndex + params.position.character
+  let occurence = ctxFile.occurences.find(o => o.startIndex <= index && o.endIndex > index)
   if (occurence) {
-    connection.console.log('Hovering over occurence!!!')
-  }
-  return {
-    contents: "Some hover"
+    return {
+      contents: occurence.kind
+    }
   }
 })
 
