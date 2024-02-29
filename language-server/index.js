@@ -79,7 +79,10 @@ connection.onInitialize((params) => {
       hoverProvider : "true",
       signatureHelpProvider : {
         triggerCharacters: [ '(', ' ' ]
-      }
+      },
+      definitionProvider : "true",
+      referencesProvider : "true",
+      // documentHighlightProvider : "true", // I don't know about that one, the default is good enough?
     }
   };
   if (hasWorkspaceFolderCapability) {
@@ -333,11 +336,55 @@ connection.onSignatureHelp((params, token, workDoneProgress, resultProgress) => 
   connection.console.log('onSignatureHelp')
   return {
     signatures: [{
-      label: 'label',
-      documentation: 'documentation'
+      label: 'onSignatureHelp label',
+      documentation: 'onSignatureHelp documentation'
     }],
     activeParameter: 0
   }
+})
+
+// /**
+//      * Represents the connection of two locations. Provides additional metadata over normal {@link Location locations},
+//      * including an origin range.
+//  */
+// export interface LocationLink {
+//   /**
+//    * Span of the origin of this link.
+//    *
+//    * Used as the underlined span for mouse interaction. Defaults to the word range at
+//    * the definition position.
+//    */
+//   originSelectionRange?: Range;
+//   /**
+//    * The target resource identifier of this link.
+//    */
+//   targetUri: DocumentUri;
+//   /**
+//    * The full target range of this link. If the target for example is a symbol then target range is the
+//    * range enclosing this symbol not including leading/trailing whitespace but everything else
+//    * like comments. This information is typically used to highlight the range in the editor.
+//    */
+//   targetRange: Range;
+//   /**
+//    * The range that should be selected and revealed when this link is being followed, e.g the name of a function.
+//    * Must be contained by the `targetRange`. See also `DocumentSymbol#range`
+//    */
+//   targetSelectionRange: Range;
+// }
+
+connection.onDefinition((params, token, workDoneProgress, resultProgress) => {
+  let {textDocument, position} = params
+  connection.console.log("onDefinition")
+})
+
+connection.onReferences((params, token, workDoneProgress, resultProgress) => {
+  let {textDocument, position, context} = params
+  connection.console.log("onReferences")
+})
+
+connection.onDocumentHighlight((params, token, workDoneProgress, resultProgress) => {
+  let {textDocument, position} = params
+  connection.console.log("onDocumentHighlight")
 })
 
 // Make the text document manager listen on the connection
