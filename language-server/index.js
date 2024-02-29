@@ -414,8 +414,26 @@ connection.onRenameRequest((params, token, workDoneProgress, resultProgress) => 
 })
 
 connection.onDocumentSymbol((params, token, workDoneProgress, resultProgress) => {
-  let {textDocument} = params
   connection.console.log("onDocumentSymbol")
+
+  let {textDocument} = params
+  let uri = textDocument.uri
+  let {ctxFile, bindings} = dataByURI[uri]
+
+  let list = []
+
+  ctxFile.occurences.forEach(occurence => {
+    list.push({
+      name: occurence.name,
+      detail: "Symbol detail",
+      kind: SymbolKind.Function,
+      tags: [],
+      deprecated: false,
+      range: {start: occurence.startIndex, end: occurence.endIndex}, // To determine if cursor is inside the symbol
+      selectionRange: {start: occurence.startIndex, end: occurence.endIndex}, // Highlight for example the name of the function, must be included in range
+      children: []
+    })
+  })
 
   let ex = {
     name: 'symbol name',
@@ -427,6 +445,8 @@ connection.onDocumentSymbol((params, token, workDoneProgress, resultProgress) =>
     selectionRange: {start: 0, end: 10}, // Highlight for example the name of the function, must be included in range
     children: []
   }
+
+  return list
 })
 
 // Make the text document manager listen on the connection
