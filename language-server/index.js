@@ -316,9 +316,10 @@ connection.onHover((params, token, workDoneProgress, resultProgress) => {
   if (!lineStartIndex) {return null}
   let index = lineStartIndex + params.position.character
   let occurence = ctxFile.occurences.find(o => o.startIndex <= index && o.endIndex > index)
+  // FIXME: How to colorize the contents?
   if (occurence) {
     return {
-      contents: occurence.kind
+      contents: `(${occurence.kind}) ${occurence.name}`
     }
   }
 })
