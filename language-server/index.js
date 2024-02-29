@@ -77,6 +77,9 @@ connection.onInitialize((params) => {
         resolveProvider: true
       },
       hoverProvider : "true",
+      signatureHelpProvider : {
+        triggerCharacters: [ '(', ' ' ]
+      }
     }
   };
   if (hasWorkspaceFolderCapability) {
@@ -307,6 +310,7 @@ connection.onCompletionResolve(item => {
   return item;
 });
 
+// Je vais voir les autres options avant de continuer plus loin, ce n'est pas trop clair comment ça fonctionne
 connection.onHover((params, token, workDoneProgress, resultProgress) => {
   connection.console.log('onHover')
   let uri = params.textDocument.uri
@@ -321,6 +325,18 @@ connection.onHover((params, token, workDoneProgress, resultProgress) => {
     return {
       contents: `(${occurence.kind}) ${occurence.name}`
     }
+  }
+})
+
+connection.onSignatureHelp((params, token, workDoneProgress, resultProgress) => {
+  let {textDocument, position} = params
+  connection.console.log('onSignatureHelp')
+  return {
+    signatures: [{
+      label: 'label',
+      documentation: 'documentation'
+    }],
+    activeParameter: 0
   }
 })
 
