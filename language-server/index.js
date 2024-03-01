@@ -52,7 +52,7 @@ connection.onInitialize((params) => {
       // documentLinkProvider: {
       //   resolveProvider: true
       // },
-      // hoverProvider: "true",
+      hoverProvider: "true",
       // signatureHelpProvider: {
       //   triggerCharacters: [ '(', ' ' ]
       // },
@@ -173,23 +173,27 @@ connection.onCompletionResolve(item => {
   return item;
 });
 
-// // Je vais voir les autres options avant de continuer plus loin, ce n'est pas trop clair comment ça fonctionne
-// connection.onHover((params, token, workDoneProgress, resultProgress) => {
-//   connection.console.log('onHover')
-//   let uri = params.textDocument.uri
-//   let {ctxFile, bindings} = dataByURI[uri]
-//   // Somehow params.line starts at 0...
-//   let lineStartIndex = ctxFile.linesStartIndex[params.position.line+1]
-//   if (!lineStartIndex) {return null}
-//   let index = lineStartIndex + params.position.character
-//   let occurence = ctxFile.occurences.find(o => o.startIndex <= index && o.endIndex > index)
-//   // FIXME: How to colorize the contents?
-//   if (occurence) {
-//     return {
-//       contents: `(${occurence.kind}) ${occurence.name}`
-//     }
-//   }
-// })
+// Je vais voir les autres options avant de continuer plus loin, ce n'est pas trop clair comment ça fonctionne
+connection.onHover(({textDocument, position}, token, workDoneProgress, resultProgress) => {
+  connection.console.log('onHover')
+  let doc = documents.get(textDocument.uri)
+  let {ctxFile, bindings} = documents.getParsed(textDocument.uri)
+  let index = doc.offsetAt(position)
+  let occurence = ctxFile.occurences.find(o => o.startIndex <= index && o.endIndex > index)
+  // FIXME: How to colorize the contents?
+  if (occurence) {
+    return {
+      contents: {
+        kind: 'markdown',
+        value: `(${occurence.kind}) ${occurence.name}
+___
+This is *some* description.
+\\033[31;1;4mHello\\033[0m
+Hooooooow tooooo adddddd collloooorrrrssss?!?!?!?!?!`
+      }
+    }
+  }
+})
 
 // connection.onSignatureHelp((params, token, workDoneProgress, resultProgress) => {
 //   let {textDocument, position} = params

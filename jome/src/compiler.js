@@ -1,5 +1,5 @@
 const { parse } = require("./parser")
-const { tokenizeWithDetails } = require('./tokenizer.js')
+const { tokenize } = require('./tokenizer.js')
 const { genCode, genImports, genImportsFromBindings } = require("./code_generator.js")
 const { analyzeNodes } = require("./analyzer")
 const { ContextFile } = require("./context.js")
@@ -64,9 +64,7 @@ function parseAndAnalyzeCode(code) {
   let compiler = new Compiler()
   let ctxFile = new ContextFile()
   ctxFile.compiler = compiler
-  let {result: tokenenizeResult, linesStartIndex} = tokenizeWithDetails(code)
-  let tokens = tokenenizeResult.children
-  ctxFile.linesStartIndex = linesStartIndex
+  let tokens = tokenize(code).children
   let topNodes = parse(tokens, null, ctxFile.lexEnv)
   analyzeNodes(topNodes, false)
   return {ctxFile, nodes: topNodes}
@@ -156,10 +154,8 @@ class Compiler {
 
   compileCode(code, options={}, ctxFile) {
     let opts = {...this.options, ...options}
-    let {result: tokenenizeResult, linesStartIndex} = tokenizeWithDetails(code)
-    let tokens = tokenenizeResult.children
+    let tokens = tokenize(code).children
     ctxFile = ctxFile || new ContextFile(null, this.config?.lexEnv)
-    ctxFile.linesStartIndex = linesStartIndex
     ctxFile.compiler = this
     ctxFile.compilerOptions = this.options // TODO: Get the options through the compiler, not compilerOptions
     let topNodes = parse(tokens, null, ctxFile.lexEnv)
