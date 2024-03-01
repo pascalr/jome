@@ -2,6 +2,10 @@
 
 const {TextDocument} = require("vscode-languageserver-textdocument");
 
+const { parseAndAnalyzeCode } = require('jome.js/src/compiler.js');
+
+const validate = require('./validate.js');
+
 class Documents {
 
   constructor() {
@@ -21,27 +25,40 @@ class Documents {
     return Object.values(this.docsByUri)
   }
 
+  _parseDocument(connection, uri, doc) {
+    try {
+      let parsedData = parseAndAnalyzeCode(doc.getText())
+      parsedData.bindings = parsedData.ctxFile.lexEnv.getAllBindings()
+      this.parsedDataByUri[uri] = parsedData
+      let diagnostics = validate(doc, parsedData)
+      connection.sendDiagnostics({uri, diagnostics})
+    } catch (err) {
+      connection.console.error(err.stack);
+    }
+  }
+
   listen(connection) {
     //connection.__textDocumentSync = vscode_languageserver_protocol_1.TextDocumentSyncKind.Incremental;
     
     connection.onDidOpenTextDocument(({textDocument: td}) => {
       connection.console.log("onDidOpenTextDocument")
-      connection.console.log("TODO: Check text document text here, I believe it contains the text and I should validate here")
       let doc = TextDocument.create(td.uri, td.languageId, td.version, td.text)
       this.docsByUri[td.uri] = doc
+      this._parseDocument(connection, td.uri, doc)
     })
 
-    connection.onDidChangeTextDocument(({textDocument, contentChanges}) => {
+    connection.onDidChangeTextDocument(({textDocument: td, contentChanges}) => {
       connection.console.log("onDidChangeTextDocument")
-      let version = textDocument.version
+      let version = td.version
       if (contentChanges.length === 0) { return; }
       if (version === null || version === undefined) {
-        throw new Error(`Received document change event for ${textDocument.uri} without valid version identifier`);
+        throw new Error(`Received document change event for ${td.uri} without valid version identifier`);
       }
-      let doc = this.docsByUri[textDocument.uri]
+      let doc = this.docsByUri[td.uri]
       if (doc !== undefined) {
         doc = TextDocument.update(doc, contentChanges, version);
-        this.docsByUri[textDocument.uri] = doc
+        this.docsByUri[td.uri] = doc
+        this._parseDocument(connection, td.uri, doc)
       }
     })
 

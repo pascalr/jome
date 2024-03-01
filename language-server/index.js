@@ -1,20 +1,19 @@
 #!/usr/bin/env node
 
+// TODO: Use TextDocument.positionAt to convert offset to line and character!!!!!!!!
+
 // FIXME: How does unused variable work???!!!
 
 const {
   createConnection,
-	TextDocuments,
 	ProposedFeatures,
 	DidChangeConfigurationNotification,
 	CompletionItemKind,
 	TextDocumentSyncKind,
-  DiagnosticSeverity,
   SymbolKind
 } = require("vscode-languageserver/node");
 
 // //import {validateCode} from 'jomec/src/compiler.js';
-const { parseAndAnalyzeCode } = require('jome.js/src/compiler.js');
 const { BindingKind } = require('jome.js/src/context.js');
 const Documents = require("./src/documents");
 
