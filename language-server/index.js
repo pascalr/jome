@@ -159,19 +159,19 @@ connection.onCompletion(({textDocument}) => {
   ];
 });
 
-// // This handler resolves additional information for the item selected in
-// // the completion list.
-// connection.onCompletionResolve(item => {
-//   connection.console.log('onCompletionResolve');
-//   // if (item.data === 1) {
-//   //   item.detail = 'TypeScript details';
-//   //   item.documentation = 'TypeScript documentation';
-//   // } else if (item.data === 2) {
-//   //   item.detail = 'JavaScript details';
-//   //   item.documentation = 'JavaScript documentation';
-//   // }
-//   return item;
-// });
+// This handler resolves additional information for the item selected in
+// the completion list.
+connection.onCompletionResolve(item => {
+  connection.console.log('onCompletionResolve');
+  // if (item.data === 1) {
+  //   item.detail = 'TypeScript details';
+  //   item.documentation = 'TypeScript documentation';
+  // } else if (item.data === 2) {
+  //   item.detail = 'JavaScript details';
+  //   item.documentation = 'JavaScript documentation';
+  // }
+  return item;
+});
 
 // // Je vais voir les autres options avant de continuer plus loin, ce n'est pas trop clair comment ça fonctionne
 // connection.onHover((params, token, workDoneProgress, resultProgress) => {
@@ -267,9 +267,14 @@ connection.onCompletion(({textDocument}) => {
 //   connection.console.log("onRenameRequest")
 // })
 
+/**
+ * This mainly adds the symbol to the outline accordeon on the explorer tab.
+ * It also adds the symbol to the path just above the editor when you click on it.
+ */
 connection.onDocumentSymbol(({textDocument}, token, workDoneProgress, resultProgress) => {
   connection.console.log("onDocumentSymbol")
 
+  let doc = documents.get(textDocument.uri)
   let {ctxFile, bindings} = documents.getParsed(textDocument.uri)
 
   let list = []
@@ -278,25 +283,25 @@ connection.onDocumentSymbol(({textDocument}, token, workDoneProgress, resultProg
     // SymbolInformation[] | DocumentSymbol[]
     // The docs recommend to use DocumentSymbol instead of SymbolInformation
     // but when I try to use it it throws an error because location is undefined...
-    list.push({
-      name: occurence.name,
-      kind: SymbolKind.Function,
-      deprecated: false,
-      location: {
-        uri: textDocument.uri,
-        range: {start: occurence.startIndex, end: occurence.endIndex}
-      }
-    })
     // list.push({
     //   name: occurence.name,
-    //   detail: "Symbol detail",
     //   kind: SymbolKind.Function,
-    //   //tags: [],
     //   deprecated: false,
-    //   range: {start: occurence.startIndex, end: occurence.endIndex}, // To determine if cursor is inside the symbol
-    //   selectionRange: {start: occurence.startIndex, end: occurence.endIndex}, // Highlight for example the name of the function, must be included in range
-    //   //children: []
+    //   location: {
+    //     uri: textDocument.uri,
+    //     range: {start: doc.positionAt(occurence.startIndex), end: doc.positionAt(occurence.endIndex)}
+    //   }
     // })
+    list.push({
+      name: occurence.name,
+      detail: "Symbol detail",
+      kind: SymbolKind.Function,
+      //tags: [],
+      deprecated: false,
+      range: {start: doc.positionAt(occurence.startIndex), end: doc.positionAt(occurence.endIndex)}, // To determine if cursor is inside the symbol
+      selectionRange: {start: doc.positionAt(occurence.startIndex), end: doc.positionAt(occurence.endIndex)}, // Highlight for example the name of the function, must be included in range
+      //children: []
+    })
   })
 
   // let ex = {

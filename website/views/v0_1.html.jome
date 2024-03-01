@@ -20,6 +20,11 @@ let content = <md>
 
   Allow #http://... as paths? #http should autocomplete to add the slashes after
 
+  TODO: Handle int returnTypeOnTheLeft = (int arg0, int arg1) => {/* ... */}
+  This mandates that the function returns an int.
+  It's the compromise of not being able to do int function(int arg0, int arg1) { /* ... */ }
+  Though you can do than for methods inside a class.
+
   TODO: Language configuration guide: increaseIndentPattern, indentNextLinePattern (when ends with colon)
 
   TODO: Tokenize the tags simply as strings with interpolation and add semantic tokenization after.

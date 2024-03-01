@@ -16,6 +16,8 @@ import {
 	TextDocumentSyncKind,
 	InitializeResult,
 	DocumentDiagnosticReportKind,
+  DocumentSymbol,
+  SymbolKind,
 	type DocumentDiagnosticReport
 } from 'vscode-languageserver/node';
 
@@ -244,6 +246,62 @@ connection.onCompletionResolve(
 		return item;
 	}
 );
+
+connection.onDocumentSymbol((params, token, workDoneProgress, resultProgress): DocumentSymbol[] => {
+
+  let list: DocumentSymbol[] = []
+
+  let doc = documents.get(params.textDocument.uri)
+
+  if (doc) {
+    let e: DocumentSymbol =  {
+      name: "some name",
+      detail: "Symbol detail",
+      kind: SymbolKind.Function,
+      //tags: [],
+      deprecated: false,
+      range: {start: doc.positionAt(0), end: doc.positionAt(10)}, // To determine if cursor is inside the symbol
+      selectionRange: {start: doc.positionAt(0), end: doc.positionAt(10)}, // Highlight for example the name of the function, must be included in range
+      //children: []
+    }
+  
+    list = [...list, e]
+  }
+
+  return list
+})
+
+// connection.onDocumentSymbol(({textDocument}, token, workDoneProgress) => {
+//   connection.console.log("onDocumentSymbol")
+
+//   let {ctxFile, bindings} = documents.getParsed(textDocument.uri)
+
+//   let list = []
+
+//   ctxFile.occurences.forEach(occurence => {
+//     // SymbolInformation[] | DocumentSymbol[]
+//     // The docs recommend to use DocumentSymbol instead of SymbolInformation
+//     // but when I try to use it it throws an error because location is undefined...
+//     list.push({
+//       name: occurence.name,
+//       kind: SymbolKind.Function,
+//       deprecated: false,
+//       location: {
+//         uri: textDocument.uri,
+//         range: {start: occurence.startIndex, end: occurence.endIndex}
+//       }
+//     })
+//     // list.push({
+//     //   name: occurence.name,
+//     //   detail: "Symbol detail",
+//     //   kind: SymbolKind.Function,
+//     //   //tags: [],
+//     //   deprecated: false,
+//     //   range: {start: occurence.startIndex, end: occurence.endIndex}, // To determine if cursor is inside the symbol
+//     //   selectionRange: {start: occurence.startIndex, end: occurence.endIndex}, // Highlight for example the name of the function, must be included in range
+//     //   //children: []
+//     // })
+//   })
 
 // Make the text document manager listen on the connection
 // for open, change and close text document events
