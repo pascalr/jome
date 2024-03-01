@@ -56,6 +56,10 @@ class Documents {
     // connection.onDidSaveTextDocument((event) => {
     //   let doc = this.documents.get(event.textDocument.uri);
     // })
+
+    // connection.onDidChangeWatchedFiles(_change => {
+    //   connection.console.log('onDidChangeWatchedFiles');
+    // });
   }
 }
 
