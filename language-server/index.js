@@ -163,6 +163,8 @@ documents.onDidChangeContent(change => {
   validateTextDocument(change.document);
 });
 
+// FIXME: These are duplicate with documents
+
 connection.onDidOpenTextDocument((params) => {
   console.log('onDidOpenTextDocument')
   validateTextDocument(params.text)
