@@ -63,7 +63,7 @@ connection.onInitialize((params) => {
       // // documentFormattingProvider: "true" // TODO: Not implemented yet
       // // documentRangeFormattingProvider: "true"  // TODO: Not implemented yet
       // renameProvider: "true",
-      // documentSymbolProvider: "true"
+      documentSymbolProvider: "true",
     }
   };
   if (hasWorkspaceFolderCapability) {
@@ -267,41 +267,51 @@ connection.onCompletion(({textDocument}) => {
 //   connection.console.log("onRenameRequest")
 // })
 
-// connection.onDocumentSymbol((params, token, workDoneProgress, resultProgress) => {
-//   connection.console.log("onDocumentSymbol")
+connection.onDocumentSymbol(({textDocument}, token, workDoneProgress, resultProgress) => {
+  connection.console.log("onDocumentSymbol")
 
-//   let {textDocument} = params
-//   let uri = textDocument.uri
-//   let {ctxFile, bindings} = dataByURI[uri]
+  let {ctxFile, bindings} = documents.getParsed(textDocument.uri)
 
-//   let list = []
+  let list = []
 
-//   ctxFile.occurences.forEach(occurence => {
-//     list.push({
-//       name: occurence.name,
-//       detail: "Symbol detail",
-//       kind: SymbolKind.Function,
-//       tags: [],
-//       deprecated: false,
-//       range: {start: occurence.startIndex, end: occurence.endIndex}, // To determine if cursor is inside the symbol
-//       selectionRange: {start: occurence.startIndex, end: occurence.endIndex}, // Highlight for example the name of the function, must be included in range
-//       children: []
-//     })
-//   })
+  ctxFile.occurences.forEach(occurence => {
+    // SymbolInformation[] | DocumentSymbol[]
+    // The docs recommend to use DocumentSymbol instead of SymbolInformation
+    // but when I try to use it it throws an error because location is undefined...
+    list.push({
+      name: occurence.name,
+      kind: SymbolKind.Function,
+      deprecated: false,
+      location: {
+        uri: textDocument.uri,
+        range: {start: occurence.startIndex, end: occurence.endIndex}
+      }
+    })
+    // list.push({
+    //   name: occurence.name,
+    //   detail: "Symbol detail",
+    //   kind: SymbolKind.Function,
+    //   //tags: [],
+    //   deprecated: false,
+    //   range: {start: occurence.startIndex, end: occurence.endIndex}, // To determine if cursor is inside the symbol
+    //   selectionRange: {start: occurence.startIndex, end: occurence.endIndex}, // Highlight for example the name of the function, must be included in range
+    //   //children: []
+    // })
+  })
 
-//   let ex = {
-//     name: 'symbol name',
-//     detail: "Symbol detail",
-//     kind: SymbolKind.Function,
-//     tags: [],
-//     deprecated: false,
-//     range: {start: 0, end: 10}, // To determine if cursor is inside the symbol
-//     selectionRange: {start: 0, end: 10}, // Highlight for example the name of the function, must be included in range
-//     children: []
-//   }
+  // let ex = {
+  //   name: 'symbol name',
+  //   detail: "Symbol detail",
+  //   kind: SymbolKind.Function,
+  //   tags: [],
+  //   deprecated: false,
+  //   range: {start: 0, end: 10}, // To determine if cursor is inside the symbol
+  //   selectionRange: {start: 0, end: 10}, // Highlight for example the name of the function, must be included in range
+  //   children: []
+  // }
 
-//   return list
-// })
+  return list
+})
 
 documents.listen(connection);
 
