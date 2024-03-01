@@ -46,9 +46,9 @@ connection.onInitialize((params) => {
     capabilities: {
       textDocumentSync: TextDocumentSyncKind.Incremental,
       // Tell the client that this server supports code completion.
-      // completionProvider: {
-      //   resolveProvider: true
-      // },
+      completionProvider: {
+        resolveProvider: true
+      },
       // documentLinkProvider: {
       //   resolveProvider: true
       // },
@@ -129,42 +129,35 @@ connection.onInitialized(() => {
 //   connection.console.log('onDocumentLinkResolve');
 // })
 
-// // This handler provides the initial list of the completion items.
-// connection.onCompletion((_textDocumentPosition) => {
-//   connection.console.log('onCompletion');
+// This handler provides the initial list of the completion items.
+connection.onCompletion(({textDocument}) => {
+  connection.console.log('onCompletion');
 
-//   let uri = _textDocumentPosition.textDocument.uri
-//   let {ctxFile, bindings} = dataByURI[uri]
+  let {ctxFile, bindings} = documents.getParsed(textDocument.uri)
 
-//   let classIdentifiers = [...ctxFile.classIdentifiers]
-//   let bindingIdentifiers = []
+  let classIdentifiers = [...ctxFile.classIdentifiers]
+  let bindingIdentifiers = []
   
-//   let rawKeywords = "new|chain|with|then|end|if|class|export|import|from|for|in|while|do|def|var|let|code|unit|return|module|interface|main|type|else|elif|elsif";
-//   let keywords = rawKeywords.split('|').map(k => ({ label: k, kind: CompletionItemKind.Keyword }));
+  let rawKeywords = "new|chain|with|then|end|if|class|export|import|from|for|in|while|do|def|var|let|code|unit|return|module|interface|main|type|else|elif|elsif";
+  let keywords = rawKeywords.split('|').map(k => ({ label: k, kind: CompletionItemKind.Keyword }));
   
-//   Object.keys(bindings).forEach(k => {
-//     let binding = bindings[k]
-//     if (binding.kind === BindingKind.Function) {
-//       bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Function })
-//     } else if (binding.kind === BindingKind.Variable) {
-//       bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Variable })
-//     } else {
-//       bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Text })
-//     }
-//   })
-//   // CompletionItemKind.Method
-//   // CompletionItemKind.Function
-//   // CompletionItemKind.Constant
-//   // CompletionItemKind.Unit
-//   // CompletionItemKind.Struct
-//   // CompletionItemKind.Interface
-//   // CompletionItemKind.Variable
-//   return [
-//       ...keywords,
-//       ...classIdentifiers.map(k => ({ label: k, kind: CompletionItemKind.Class })),
-//       ...bindingIdentifiers
-//   ];
-// });
+  Object.keys(bindings).forEach(k => {
+    let binding = bindings[k]
+    if (binding.kind === BindingKind.Function) {
+      bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Function })
+    } else if (binding.kind === BindingKind.Variable) {
+      bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Variable })
+    } else {
+      bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Text })
+    }
+  })
+  // CompletionItemKind.Method, Function, Constant, Unit, Struct, Interface, Variable, ...
+  return [
+      ...keywords,
+      ...classIdentifiers.map(k => ({ label: k, kind: CompletionItemKind.Class })),
+      ...bindingIdentifiers
+  ];
+});
 
 // // This handler resolves additional information for the item selected in
 // // the completion list.
