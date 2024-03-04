@@ -134,6 +134,8 @@ connection.onCompletion(({textDocument}) => {
       bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Function })
     } else if (binding.kind === BindingKind.Variable) {
       bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Variable })
+    } else if (binding.kind === BindingKind.Class) {
+      bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Class })
     } else {
       bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Text })
     }

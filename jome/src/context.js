@@ -50,6 +50,7 @@ class ContextFile {
 const BindingKind = {
   Function: 1,
   Variable: 2,
+  Class: 3,
 }
 
 // A local scope (inside a function, an if block, ...)

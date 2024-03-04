@@ -691,6 +691,18 @@ const ANALYZERS = {
     })
     node.data = {tagName, chainFunctions, wrapFunctions}
   },
+
+  // class
+  "meta.class.jome": (node) => {
+    let name = node.parts[1].raw
+    node.ctxFile.classIdentifiers.add(name)
+    pushBinding(node.parts[1], name, {type: 'class', kind: BindingKind.Class})
+    pushSymbol(node.parts[1], {name, kind: 'class'})
+    pushOccurence(node.parts[1], {name})
+    // let methods = parts.filter(p => p.type === 'meta.def.jome')
+    // Do something with methods? Or it's handled somewhere else?
+    node.data = {name}
+  },
 }
 
 module.exports = {

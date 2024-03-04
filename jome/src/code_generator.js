@@ -582,8 +582,7 @@ const CODE_GENERATORS = {
   },
   // class
   "meta.class.jome": (node) => {
-    let name = node.parts[1].raw
-    node.ctxFile.classIdentifiers.add(name)
+    let {name} = node.data
     let parts = node.parts.slice(2,-1)
     let methods = parts.filter(p => p.type === 'meta.def.jome')
     let compiledMethods = compileConstrutor(node)
