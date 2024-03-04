@@ -1,6 +1,7 @@
 import &Webpage : '../src/webpage.jomm'
 
 let content = <md>
+
   # Formats
 
   ```jome
@@ -173,6 +174,13 @@ let content = <md>
   ## maps
 
   \<map>An address</map> and it would show a map with this address.
+
+  ## Colors
+
+  <rgb></rgb>
+  <rgba></rgba>
+  <hsl></hsl>
+  <color></color>
 
   ## TODO
 
