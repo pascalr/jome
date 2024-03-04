@@ -357,6 +357,14 @@ let grammar = {
             4: { name: "entity.name.type.jome" }
           }
         },
+        {
+          name: "meta.declaration.jome",
+          match: `(${REGEX_TYPE})\\s+(?!\\b(?:chain|do)\\b)(${REGEX_VARIABLE})\\s*(?=\n|;)`,
+          captures: {
+            1: { name: "entity.name.type.jome" },
+            2: { name: "variable.other.jome" }
+          }
+        },
       ]
     },
     def: {
