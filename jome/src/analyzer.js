@@ -501,7 +501,8 @@ const ANALYZERS = {
       return pushError(node, "Missing filename in import statement.")
     }
     let cs = filterSpaces(importFile.parts)
-    let filename = cs[cs.length-1].raw.slice(1,-1)
+    let filenameToken = cs[cs.length-1]
+    let filename = filenameToken.raw.slice(1,-1)
     if (!filename) {
       return pushError(node, "Missing filename in import statement.")
     }
@@ -539,7 +540,7 @@ const ANALYZERS = {
     })
 
     bindings.forEach(binding => {
-      pushFileLink(node, filename)
+      pushFileLink(filenameToken, filename)
       // FIXME: The kind is not always variable, it could be function or class too...
       pushBinding(node, binding.name, {...binding, file: filename, kind: BindingKind.Variable})
     })

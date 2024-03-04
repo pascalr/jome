@@ -49,9 +49,9 @@ connection.onInitialize((params) => {
       completionProvider: {
         resolveProvider: true
       },
-      // documentLinkProvider: {
-      //   resolveProvider: true
-      // },
+      documentLinkProvider: {
+        resolveProvider: true
+      },
       hoverProvider: "true",
       // signatureHelpProvider: {
       //   triggerCharacters: [ '(', ' ' ]
@@ -89,45 +89,32 @@ connection.onInitialized(() => {
   }
 });
 
-// // FIXME................
-// // onDocumentLinks is sometime called before validate document
-// // TODO: validate document if not already validated
-// connection.onDocumentLinks((params, token, workDoneProgress, resultProgress) => {
-//   connection.console.log('onDocumentLinks');
+connection.onDocumentLinks(({textDocument}, token, workDoneProgress, resultProgress) => {
+  connection.console.log('onDocumentLinks');
 
-//   let doc = oldDocuments.get(params.textDocument.uri)
+  let doc = documents.get(textDocument.uri)
+  let {ctxFile} = documents.getParsed(textDocument.uri)
 
-//   let uri = params.textDocument.uri
-//   connection.console.log('uri: '+uri);
-//   if (!dataByURI[uri] && !doc) {
-//     connection.console.log("Can't send document links document has not been parsed yet");
-//     return null
-//   } else if (doc) {
-//     connection.console.log("Documents has doc, but not dataByURI");
-//     return null
-//   }
-//   let {ctxFile} = dataByURI[uri]
+  let result = []
+  ctxFile.filesLinks.forEach(fileLink => {
+    result.push({
+      range: {
+        start: doc.positionAt(fileLink.startIndex),
+        end: doc.positionAt(fileLink.endIndex),
+      },
+      //target: uri, //fileLink.file, // FIXME: Must be a URI (file:///home/...)
+      tooltip: 'thisisatooltip'
+    })
+  })
 
-//   let result = []
-//   ctxFile.filesLinks.forEach(fileLink => {
-//     result.push({
-//       range: {
-//         start: fileLink.startIndex,
-//         end: fileLink.endIndex,
-//       },
-//       //target: uri, //fileLink.file, // FIXME: Must be a URI (file:///home/...)
-//       tooltip: 'thisisatooltip'
-//     })
-//   })
+  connection.console.log('Found '+result.length+' document links.');
 
-//   connection.console.log('Found '+result.length+' document links.');
+  return result
+})
 
-//   return result
-// })
-
-// connection.onDocumentLinkResolve((params, token) => {
-//   connection.console.log('onDocumentLinkResolve');
-// })
+connection.onDocumentLinkResolve((params, token) => {
+  connection.console.log('onDocumentLinkResolve');
+})
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion(({textDocument}) => {
