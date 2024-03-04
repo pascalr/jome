@@ -32,6 +32,12 @@ function pushBinding(node, bindingName, data) {
   })
 }
 
+// A symbol is something concrete. It will show up in the outline. Ex: function, class, ...
+function pushSymbol(node, data) {
+  node.ctxFile.symbols.push({...nodePositionData(node), ...data})
+}
+
+// An occurence is a usage of a symbol. For exemple, every time a variable is used, it creates an occurence. The declaration creates an occurence too.
 function pushOccurence(node, data) {
   node.ctxFile.occurences.push({...nodePositionData(node), ...data})
 }
@@ -326,7 +332,8 @@ const ANALYZERS = {
 
     let name = node.parts[1].raw
     pushBinding(node, name, {type: 'def', kind: BindingKind.Function})
-    pushOccurence(node.parts[1], {name, kind: 'function'})
+    pushSymbol(node.parts[1], {name, kind: 'function'})
+    pushOccurence(node.parts[1], {name})
     let args = node.parts[2]?.type === 'meta.args.jome' ? node.parts[2] : null
 
     if (node.operands.length) {
@@ -414,6 +421,10 @@ const ANALYZERS = {
       let elems = parseList(node.parts.slice(1,-1))
       node.data = {elems}
     }
+  },
+  "variable.other.jome": (node) => {
+    let name = node.raw
+    pushOccurence(node, {name})
   },
   // =
   'keyword.operator.assignment.jome': (node) => {

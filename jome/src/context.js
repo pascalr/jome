@@ -18,6 +18,7 @@ class ContextFile {
     this.errors = [] // A list of errors found when analyzing
     this.fileImportDependenciesByFile = {}
     this.filesLinks = [] // The files linked from imports, every path, ... They can be duplicated. #./some_file.js multiple times will be inserted multiple times here
+    this.symbols = [] // Something concrete like a function, a variable, a class, ...
     this.occurences = [] // Either a declaration or a usage of a symbol
   }
 

@@ -12,6 +12,22 @@ def highlight(code)
 end
 
 /*
+// Everything after this meta tag will use this.
+// Put imports before of after meta tags is important. They will be used or not.
+meta #{
+  operators:
+    "==": ...
+    "===": ...
+  units:
+    px: ...
+  formats:
+    sh: ...
+  globals:
+    map: #map
+}
+*/
+
+/*
 TODO: Parse the whole config file before compiling .jomm imports in this file.
 */
 

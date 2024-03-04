@@ -268,15 +268,15 @@ connection.onDocumentSymbol(({textDocument}, token, workDoneProgress, resultProg
 
   let list = []
 
-  ctxFile.occurences.forEach(occurence => {
+  ctxFile.symbols.forEach(symbol => {
     list.push({
-      name: occurence.name,
+      name: symbol.name,
       detail: "Symbol detail",
       kind: SymbolKind.Function,
       //tags: [],
       deprecated: false,
-      range: {start: doc.positionAt(occurence.startIndex), end: doc.positionAt(occurence.endIndex)}, // To determine if cursor is inside the symbol
-      selectionRange: {start: doc.positionAt(occurence.startIndex), end: doc.positionAt(occurence.endIndex)}, // Highlight for example the name of the function, must be included in range
+      range: {start: doc.positionAt(symbol.startIndex), end: doc.positionAt(symbol.endIndex)}, // To determine if cursor is inside the symbol
+      selectionRange: {start: doc.positionAt(symbol.startIndex), end: doc.positionAt(symbol.endIndex)}, // Highlight for example the name of the function, must be included in range
       //children: []
     })
   })

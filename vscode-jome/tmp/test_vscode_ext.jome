@@ -19,3 +19,6 @@ end
 
 def someFunc(someArg)
 end
+
+def someOtherFunc
+end
