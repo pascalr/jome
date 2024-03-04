@@ -43,7 +43,7 @@ function pushSymbol(node, data) {
 
 // An occurence is a usage of a symbol. For exemple, every time a variable is used, it creates an occurence. The declaration creates an occurence too.
 function pushOccurence(node, data) {
-  node.ctxFile.occurences.push({...nodePositionData(node), ...data})
+  node.ctxFile.occurences.push({...nodePositionData(node), ...data, lexEnv: node.lexEnv})
 }
 
 function pushFileLink(node, file, data={}) {
@@ -51,7 +51,7 @@ function pushFileLink(node, file, data={}) {
 }
 
 // TODO: Make sure no infinite loop
-function analyzeNodes(nodes, throwError = true) {
+function _analyzeNodes(nodes, throwError = true) {
   nodes.forEach(node => {
     // Analyze the operands first
     if (node.operands?.length) {
@@ -71,6 +71,23 @@ function analyzeNodes(nodes, throwError = true) {
     }
   });
   return nodes[0]?.ctxFile.errors
+}
+
+// TODO: Make sure no infinite loop
+function analyzeNodes(nodes, throwError = true) {
+  let errors = _analyzeNodes(nodes, throwError)
+  let ctxFile = nodes[0].ctxFile
+  let lexEnv = ctxFile.lexEnv
+  ctxFile.occurences.forEach(occurence => {
+    let binding = lexEnv.getBinding(occurence.name)
+    if (binding) {
+      occurence.kind = binding.kind
+    } else {
+      ctxFile.undeclaredOccurences.push(occurence)
+    }
+    // TODO: Check if the occurence was declared in the lex env
+  })
+  return errors
 }
 
 function ensureLhsOperand(node) {

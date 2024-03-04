@@ -20,6 +20,7 @@ class ContextFile {
     this.filesLinks = [] // The files linked from imports, every path, ... They can be duplicated. #./some_file.js multiple times will be inserted multiple times here
     this.symbols = [] // Something concrete like a function, a variable, a class, ...
     this.occurences = [] // Either a declaration or a usage of a symbol
+    this.undeclaredOccurences = [] // Using a variable or other symbol when it has not been declared
   }
 
   addFileImportDependency(name, type, file) {

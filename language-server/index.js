@@ -166,7 +166,7 @@ connection.onHover(({textDocument, position}, token, workDoneProgress, resultPro
     return {
       contents: {
         kind: 'markdown',
-        value: `(${occurence.kind}) ${occurence.name}
+        value: `(${bindingKindToText(occurence.kind)}) ${occurence.name}
 ___
 This is *some* description.
 \\033[31;1;4mHello\\033[0m
@@ -300,6 +300,15 @@ function bindingKindToSymbolKind(kind) {
     case BindingKind.Class: return SymbolKind.Class
     case BindingKind.Function: return SymbolKind.Function
     case BindingKind.Variable: return SymbolKind.Variable
+    default: throw new Error("asdfasf9i23hf09ahsn0fp")
+  }
+}
+
+function bindingKindToText(kind) {
+  switch (kind) {
+    case BindingKind.Class: return 'class'
+    case BindingKind.Function: return 'function'
+    case BindingKind.Variable: return 'variable'
     default: throw new Error("asdfasf9i23hf09ahsn0fp")
   }
 }
