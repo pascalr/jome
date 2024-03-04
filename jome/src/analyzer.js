@@ -30,6 +30,10 @@ function pushBinding(node, bindingName, data) {
     ...nodePositionData(node),
     ...data
   })
+  if (data.kind) {
+    pushSymbol(node, {name: bindingName, ...data})
+    pushOccurence(node, {name: bindingName})
+  }
 }
 
 // A symbol is something concrete. It will show up in the outline. Ex: function, class, ...
@@ -332,8 +336,6 @@ const ANALYZERS = {
 
     let name = node.parts[1].raw
     pushBinding(node, name, {type: 'def', kind: BindingKind.Function})
-    pushSymbol(node.parts[1], {name, kind: BindingKind.Function})
-    pushOccurence(node.parts[1], {name})
     let args = node.parts[2]?.type === 'meta.args.jome' ? node.parts[2] : null
 
     if (node.operands.length) {
@@ -697,8 +699,6 @@ const ANALYZERS = {
     let name = node.parts[1].raw
     node.ctxFile.classIdentifiers.add(name)
     pushBinding(node.parts[1], name, {type: 'class', kind: BindingKind.Class})
-    pushSymbol(node.parts[1], {name, kind: BindingKind.Class})
-    pushOccurence(node.parts[1], {name})
     // let methods = parts.filter(p => p.type === 'meta.def.jome')
     // Do something with methods? Or it's handled somewhere else?
     node.data = {name}
