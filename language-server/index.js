@@ -130,15 +130,7 @@ connection.onCompletion(({textDocument}) => {
   
   Object.keys(bindings).forEach(k => {
     let binding = bindings[k]
-    if (binding.kind === BindingKind.Function) {
-      bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Function })
-    } else if (binding.kind === BindingKind.Variable) {
-      bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Variable })
-    } else if (binding.kind === BindingKind.Class) {
-      bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Class })
-    } else {
-      bindingIdentifiers.push({ label: k, kind: CompletionItemKind.Text })
-    }
+    bindingIdentifiers.push(bindingKindToCompletionItemKind(binding.kind))
   })
   // CompletionItemKind.Method, Function, Constant, Unit, Struct, Interface, Variable, ...
   return [
@@ -274,7 +266,7 @@ connection.onDocumentSymbol(({textDocument}, token, workDoneProgress, resultProg
     list.push({
       name: symbol.name,
       detail: "Symbol detail",
-      kind: SymbolKind.Function,
+      kind: bindingKindToSymbolKind(symbol.kind),
       //tags: [],
       deprecated: false,
       range: {start: doc.positionAt(symbol.startIndex), end: doc.positionAt(symbol.endIndex)}, // To determine if cursor is inside the symbol
@@ -293,3 +285,21 @@ console.log('Listening...')
 connection.listen();
 //# sourceMappingURL=server.js.map
 console.log('Done')
+
+function bindingKindToCompletionItemKind(kind) {
+  switch (kind) {
+    case BindingKind.Class: return CompletionItemKind.Class
+    case BindingKind.Function: return CompletionItemKind.Function
+    case BindingKind.Variable: return CompletionItemKind.Variable
+    default: throw new Error("asdfasf9i23hf09ahsn0fp")
+  }
+}
+
+function bindingKindToSymbolKind(kind) {
+  switch (kind) {
+    case BindingKind.Class: return SymbolKind.Class
+    case BindingKind.Function: return SymbolKind.Function
+    case BindingKind.Variable: return SymbolKind.Variable
+    default: throw new Error("asdfasf9i23hf09ahsn0fp")
+  }
+}
