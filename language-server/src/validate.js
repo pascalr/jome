@@ -5,38 +5,33 @@ function validate(textDocument, {ctxFile}) {
   // In this simple example we get the settings for every validate run.
   const diagnostics = [];
   let errors = ctxFile.errors
-  console.log('Errors found: ', errors)
   for (let i = 0; i < errors.length && i < 1000; i++) {
     let err = errors[i]
-    let startIndex = err.startIndex || 10 // random number temporary for testing
-    let endIndex = err.endIndex || 20 // random number temporary for testing
     const diagnostic = {
       severity: DiagnosticSeverity.Error,
       range: {
-        start: textDocument.positionAt(startIndex),
-        end: textDocument.positionAt(endIndex)
+        start: textDocument.positionAt(err.startIndex),
+        end: textDocument.positionAt(err.endIndex)
       },
       message: err.message || err,
       source: 'jome(1234)'
     };
-    // if (hasDiagnosticRelatedInformationCapability) {
-    // 	diagnostic.relatedInformation = [
-    // 		{
-    // 			location: {
-    // 				uri: textDocument.uri,
-    // 				range: Object.assign({}, diagnostic.range)
-    // 			},
-    // 			message: 'Spelling matters'
-    // 		},
-    // 		{
-    // 			location: {
-    // 				uri: textDocument.uri,
-    // 				range: Object.assign({}, diagnostic.range)
-    // 			},
-    // 			message: 'Particularly for names'
-    // 		}
-    // 	];
-    // }
+    diagnostics.push(diagnostic);
+  }
+
+  let undeclaredOccurences = ctxFile.undeclaredOccurences
+  for (let i = 0; i < undeclaredOccurences.length && i < 1000; i++) {
+    let occurence = undeclaredOccurences[i]
+    const diagnostic = {
+      // TODO: Allow strict mode in jome.config, this would be an Error in strict mode and not only a hint
+      severity: DiagnosticSeverity.Hint,
+      range: {
+        start: textDocument.positionAt(occurence.startIndex),
+        end: textDocument.positionAt(occurence.endIndex)
+      },
+      message: `Undeclared symbol ${occurence.name}`,
+      source: 'jome(1234)'
+    };
     diagnostics.push(diagnostic);
   }
 

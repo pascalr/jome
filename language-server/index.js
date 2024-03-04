@@ -160,7 +160,7 @@ connection.onHover(({textDocument, position}, token, workDoneProgress, resultPro
   let doc = documents.get(textDocument.uri)
   let {ctxFile, bindings} = documents.getParsed(textDocument.uri)
   let index = doc.offsetAt(position)
-  let occurence = ctxFile.occurences.find(o => o.startIndex <= index && o.endIndex > index)
+  let occurence = ctxFile.validOccurences.find(o => o.startIndex <= index && o.endIndex > index)
   // FIXME: How to colorize the contents?
   if (occurence) {
     return {
@@ -309,6 +309,6 @@ function bindingKindToText(kind) {
     case BindingKind.Class: return 'class'
     case BindingKind.Function: return 'function'
     case BindingKind.Variable: return 'variable'
-    default: throw new Error("asdfasf9i23hf09ahsn0fp")
+    default: return 'undefined'
   }
 }

@@ -82,6 +82,7 @@ function analyzeNodes(nodes, throwError = true) {
     let binding = lexEnv.getBinding(occurence.name)
     if (binding) {
       occurence.kind = binding.kind
+      ctxFile.validOccurences.push(occurence)
     } else {
       ctxFile.undeclaredOccurences.push(occurence)
     }

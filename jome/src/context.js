@@ -21,6 +21,7 @@ class ContextFile {
     this.symbols = [] // Something concrete like a function, a variable, a class, ...
     this.occurences = [] // Either a declaration or a usage of a symbol
     this.undeclaredOccurences = [] // Using a variable or other symbol when it has not been declared
+    this.validOccurences = []
   }
 
   addFileImportDependency(name, type, file) {
