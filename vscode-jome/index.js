@@ -2,6 +2,8 @@ const {workspace, commands, window} = require("vscode");
 const {LanguageClient} = require("vscode-languageclient/node");
 const path = require("path");
 
+const NodeTreeProvider = require("./src/NodeTreeProvider.js")
+
 let client;
 
 function activate(context) {
@@ -63,6 +65,10 @@ commands.registerCommand('extension.vscode-jome.getProgramName', config => {
     placeHolder: 'Please enter the name of a jome file in the workspace folder',
     value: 'index.jome'
   });
+});
+
+window.createTreeView('jomeExplorerNodes', {
+  treeDataProvider: new NodeTreeProvider()
 });
 
 module.exports = {

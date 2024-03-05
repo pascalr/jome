@@ -20,6 +20,23 @@
     "Programming Languages"
   ],
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "jome-explorer",
+          "title": "Jome Explorer",
+          "icon": "assets/code_black_24dp.svg"
+        }
+      ]
+    },
+    "views": {
+      "jome-explorer": [
+        {
+          "id": "jomeExplorerNodes",
+          "name": "Nodes"
+        }
+      ]
+    },
     "breakpoints": [{ "language": "jome" }],
     "debuggers": [
       {
