@@ -78,6 +78,7 @@ function analyzeNodes(nodes, throwError = true) {
   let errors = _analyzeNodes(nodes, throwError)
   let ctxFile = nodes[0].ctxFile
   let lexEnv = ctxFile.lexEnv
+  // TODO: Make sure that the occurence is declared before being used for variables and classes.
   ctxFile.occurences.forEach(occurence => {
     let binding = lexEnv.getBinding(occurence.name)
     if (binding) {
