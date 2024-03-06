@@ -53,22 +53,22 @@ return <html>
         <li><a href="<%= ROOT %>/ref/#contributing">Contributing</a></li>
         <li><a href="<%= ROOT %>/ref/#ack">Acknowledgements</a></li>
       </ul>
-      <li><a href="<%= ROOT %>/templates">Templates and Examples</a></li>
+      <li><a href="<%= ROOT %>/ex">Templates and Examples</a></li>
       <ul class="nav-list nav-sub">
-        <li><a href="<%= ROOT %>/templates/TODO">Basic (TODO: Hello world)</a></li>
-        <li><a href="<%= ROOT %>/templates/TODO">Static website (TODO)</a></li>
-        <li><a href="<%= ROOT %>/templates/TODO">Web server (TODO)</a></li>
-        <li><a href="<%= ROOT %>/templates/TODO">MVC server (TODO)</a></li>
-        <li><a href="<%= ROOT %>/templates/TODO">React (TODO)</a></li>
-        <li><a href="<%= ROOT %>/templates/TODO">Vue (TODO)</a></li>
-        <li><a href="<%= ROOT %>/templates/TODO">Svelte (TODO)</a></li>
-        <li><a href="<%= ROOT %>/templates/TODO">2d game (TODO: Snake)</a></li>
-        <li><a href="<%= ROOT %>/templates/TODO">3d game (TODO)</a></li>
-        <li><a href="<%= ROOT %>/templates/TODO">Android app (TODO)</a></li>
-        <li><a href="<%= ROOT %>/templates/TODO">Ios app (TODO)</a></li>
-        <li><a href="<%= ROOT %>/templates/TODO">Command line tool (TODO)</a></li>
+        <li><a href="<%= ROOT %>/ex/TODO">Basic (TODO: Hello world)</a></li>
+        <li><a href="<%= ROOT %>/ex/TODO">Static website (TODO)</a></li>
+        <li><a href="<%= ROOT %>/ex/TODO">Web server (TODO)</a></li>
+        <li><a href="<%= ROOT %>/ex/TODO">MVC server (TODO)</a></li>
+        <li><a href="<%= ROOT %>/ex/TODO">React (TODO)</a></li>
+        <li><a href="<%= ROOT %>/ex/TODO">Vue (TODO)</a></li>
+        <li><a href="<%= ROOT %>/ex/TODO">Svelte (TODO)</a></li>
+        <li><a href="<%= ROOT %>/ex/TODO">2d game (TODO: Snake)</a></li>
+        <li><a href="<%= ROOT %>/ex/TODO">3d game (TODO)</a></li>
+        <li><a href="<%= ROOT %>/ex/TODO">Android app (TODO)</a></li>
+        <li><a href="<%= ROOT %>/ex/TODO">Ios app (TODO)</a></li>
+        <li><a href="<%= ROOT %>/ex/TODO">Command line tool (TODO)</a></li>
       </ul>
-      <li><a href="<%= ROOT %>/lib">In depth</a></li>
+      <li><a href="<%= ROOT %>/in_depth">In depth</a></li>
       <ul class="nav-list nav-sub">
         <li><a href="<%= ROOT %>/utils">Utils</a></li>
         <li><a href="<%= ROOT %>/formats">Formats</a></li>

@@ -9,6 +9,11 @@ module.exports = (f) => {
     path.join(__dirname, "../docs/js/ex_vanilla.js"),
   );
   build(
+    path.join(__dirname, "views/in_depth.html.jome"),
+    path.join(__dirname, "../docs/in_depth/index.html"),
+    { force: force },
+  );
+  build(
     path.join(__dirname, "views/home.html.jome"),
     path.join(__dirname, "../docs/index.html"),
     { force: force },

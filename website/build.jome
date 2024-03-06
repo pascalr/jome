@@ -28,6 +28,7 @@ of the source file.
 #compile #./js/ex_vanilla.jomm, :force
 #cp! #./js/ex_vanilla.js, #../docs/js/ex_vanilla.js
 
+#build(#./views/in_depth.html.jome, #../docs/in_depth/index.html, :force)
 #build(#./views/home.html.jome, #../docs/index.html, :force)
 #build(#./views/getting_started.html.jome, #../docs/getting_started/index.html, :force)
 #build(#./views/examples.html.jome, #../docs/ex/index.html, :force)
