@@ -1,0 +1,1 @@
+Un document vide .jome fait une erreur dans mon extension.

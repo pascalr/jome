@@ -88,39 +88,43 @@
   </div>
             <div class="scrollable" style="width: 100%;">
               <div class="main">
-                <h1>Jome v0.1</h1>
-<p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
-has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>
-<p>Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.</p>
-<p><strong>Flexible typing</strong> - You can use static typing for robustness and usability or omit them for development speed and simplicity.</p>
-<p><strong>Flexible syntax</strong> - You can use curly braces, block statements with end keyword or inline with colon at the end.</p>
-<p><strong>Customizable builtins</strong> - Jome comes with a lot of builtins which you can map to keywords you want. You can also define your own.</p>
-<p><strong>Reactivity</strong> - TODO</p>
-<p><strong>Node structure like Godot</strong> - TODO</p>
-  <h2 id="overview">Overview</h2>
-<pre><code class="language-jome"><span class="hljs-comment">// .jome files are functions</span>
-<span class="hljs-comment">// you can give parameters using a with block</span>
-<span class="hljs-comment">// you can set default values, here it&#x27;s english</span>
-<span class="hljs-keyword">with</span> <span class="hljs-variable">locale</span> = <span class="hljs-string">&#x27;en&#x27;</span> <span class="hljs-keyword">end</span>
-<span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbar&quot;</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbrand&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span>&gt;</span>Jome<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/editor&quot;</span>&gt;</span>Editor<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/&quot;</span>&gt;</span>Home<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/utils&quot;</span>&gt;</span>Utils<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://github.com/pascalr/jome&quot;</span>&gt;</span>GitHub<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span>
-
-<span class="hljs-comment">// You can then import it from another file or run this file directly to get html</span>
-<span class="language-shell">&lt;sh&gt;jome ./navbar.html.jome fr &gt; ./navbar.html&lt;/sh&gt;</span>
-<span class="hljs-comment">// or</span>
-<span class="hljs-keyword">import</span> <span class="hljs-variable">navbar</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./navbar.html.jome&#x27;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">frenchNavbar</span> = <span class="hljs-title function_ invoke__">navbar</span>(<span class="hljs-string">&quot;fr&quot;</span>)
+                  <h2 id="install">Installation</h2>
+<pre><code class="language-sh">npm install jome.js -g
 </code></pre>
-<h2>Disclaimer</h2>
-<p>The language is very, very young and still contains a log of bugs. I don't recommend using yet for any real project.</p>
-<p>I don't have a list of bugs yet, because there are too many.</p>
+  <h2 id="usage">Usage</h2>
+<pre><code class="language-sh"><span class="hljs-comment"># Usage</span>
+jome <span class="hljs-comment"># executes index.jome or the file specified by the entry main in config.jome</span>
+jome file.jome <span class="hljs-comment"># execute the given file</span>
+jome server start <span class="hljs-comment"># pass the arguments &quot;server&quot; and &quot;start&quot; to index.jome executable</span>
+</code></pre>
+  <h2 id="hello-world">Hello world</h2>
+<p>Create a file <code>hello.jome</code> with the following content:</p>
+<pre><code class="language-jome"><span class="hljs-built_in function_">#log</span> <span class="hljs-string">&quot;Hello world!&quot;</span> <span class="hljs-comment">// #log is a shortcut for console.log</span>
+</code></pre>
+<p>Run it with <code>jome hello.jome</code></p>
+<h3>File parameters</h3>
+<p>A .jome file is compiled into a function. You can pass arguments to it using the <code>with</code> keyword.</p>
+<p>Let's modify the file <code>hello.jome</code></p>
+<pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">name</span> <span class="hljs-keyword">end</span>
+<span class="hljs-built_in function_">#log</span> <span class="hljs-string">&quot;Hello {name}!&quot;</span>
+</code></pre>
+<p>The result is</p>
+<pre><code class="language-sh">jome hello.jome Paul
+<span class="hljs-comment"># =&gt; Hello Paul!</span>
+</code></pre>
+  <h3 id="index-jome">index.jome</h3>
+<p>The Jome CLI command checks if the first argument is a .jome source file and executes it if so. Otherwise, it will execute index.jome or the file specified by the entry main in config.jome</p>
+<p>Let's write inside the file <code>index.jome</code></p>
+<pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">cmd</span>, <span class="hljs-variable">message</span> <span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">if</span> <span class="hljs-variable">cmd</span> === <span class="hljs-string">&#x27;say&#x27;</span>
+  <span class="hljs-built_in function_">#log</span> <span class="hljs-variable">message</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p>The result is</p>
+<pre><code class="language-sh">jome say <span class="hljs-string">&quot;Hello Anna!&quot;</span>
+<span class="hljs-comment"># =&gt; Hello Anna!</span>
+</code></pre>
 
               </div>
             </div>

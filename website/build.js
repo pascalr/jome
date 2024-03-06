@@ -9,6 +9,16 @@ module.exports = (f) => {
     path.join(__dirname, "../docs/js/ex_vanilla.js"),
   );
   build(
+    path.join(__dirname, "views/home.html.jome"),
+    path.join(__dirname, "../docs/index.html"),
+    { force: force },
+  );
+  build(
+    path.join(__dirname, "views/getting_started.html.jome"),
+    path.join(__dirname, "../docs/getting_started/index.html"),
+    { force: force },
+  );
+  build(
     path.join(__dirname, "views/examples.html.jome"),
     path.join(__dirname, "../docs/ex/index.html"),
     { force: force },
@@ -40,7 +50,7 @@ module.exports = (f) => {
   );
   build(
     path.join(__dirname, "views/v0_1.html.jome"),
-    path.join(__dirname, "../docs/index.html"),
+    path.join(__dirname, "../docs/ref/index.html"),
     { force: force },
   );
   build(

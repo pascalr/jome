@@ -28,13 +28,15 @@ of the source file.
 #compile #./js/ex_vanilla.jomm, :force
 #cp! #./js/ex_vanilla.js, #../docs/js/ex_vanilla.js
 
+#build(#./views/home.html.jome, #../docs/index.html, :force)
+#build(#./views/getting_started.html.jome, #../docs/getting_started/index.html, :force)
 #build(#./views/examples.html.jome, #../docs/ex/index.html, :force)
 #build(#./views/test.html.jome, #../docs/test/index.html, :force)
 #build(#./views/librairies.html.jome, #../docs/lib/index.html, :force)
 #build(#./views/utils.html.jome, #../docs/utils/index.html, :force)
 #build(#./views/formats.html.jome, #../docs/formats/index.html, :force)
 #build(#./views/v0_2.html.jome, #../docs/v0.2/index.html, :force)
-#build(#./views/v0_1.html.jome, #../docs/index.html, :force)
+#build(#./views/v0_1.html.jome, #../docs/ref/index.html, :force)
 #build(#./views/v0_0.html.jome, #../docs/v0.0/index.html, :force)
 
 // TODO: Copy reset.css and jome-html.css too?
