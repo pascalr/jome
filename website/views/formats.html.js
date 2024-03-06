@@ -2,6 +2,7 @@ const Webpage = require("../src/webpage.js");
 const mdToHtml = require("@jome/md-to-html");
 module.exports = () => {
   let content = mdToHtml(`
+
   # Formats
 
   \`\`\`jome
@@ -174,6 +175,13 @@ module.exports = () => {
   ## maps
 
   \<map>An address</map> and it would show a map with this address.
+
+  ## Colors
+
+  <rgb></rgb>
+  <rgba></rgba>
+  <hsl></hsl>
+  <color></color>
 
   ## TODO
 

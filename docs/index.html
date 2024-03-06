@@ -87,7 +87,74 @@
   </div>
             <div class="scrollable" style="width: 100%;">
               <div class="main">
-                <p>TODO: For the website, do more like Civet. Put v0_1.html.jome should be in a tab called Reference.
+                <h2>Tmp begin</h2>
+<p>TODO: Explain this better somewhere else.</p>
+<p>Declaration and initialization takes precedence over function call.</p>
+<pre><code class="language-jome"><span class="hljs-title class_">Recipe</span> <span class="hljs-variable">recipe</span> <span class="hljs-comment">// here the variable recipe is declared</span>
+<span class="hljs-title class_">Recipe</span> <span class="hljs-variable">recipe</span>, <span class="hljs-number">10</span> <span class="hljs-comment">// here recipe and 10 are given to the function call Recipe</span>
+<span class="hljs-title function_ invoke__">Recipe</span>(<span class="hljs-variable">recipe</span>) <span class="hljs-comment">// here recipe is given to the function call Recipe</span>
+<span class="hljs-title class_">Recipe</span> <span class="hljs-title function_ invoke__">recipe</span>() <span class="hljs-comment">// Here the constructor of recipe is called</span>
+<span class="hljs-title class_">Recipe</span> <span class="hljs-title function_ invoke__">recipe</span>() {<span class="hljs-comment">/* ... */</span>} <span class="hljs-comment">// Here a function called recipe is created</span>
+</code></pre>
+<pre><code class="language-jome"><span class="hljs-title class_">Recipe</span> #{<span class="hljs-comment">/* ... */</span>} <span class="hljs-comment">// Creation of a Recipe node</span>
+<span class="hljs-title class_">Recipe</span> <span class="hljs-variable">recipe</span> #{<span class="hljs-comment">/* ... */</span>} <span class="hljs-comment">// Creation of a Recipe node with the node name being recipe</span>
+<span class="hljs-title function_ invoke__">Recipe</span>(<span class="hljs-variable">recipe</span>) #{<span class="hljs-comment">/* ... */</span>} <span class="hljs-comment">// Creation of a Recipe node with recipe being passed to the constructor</span>
+<span class="hljs-title class_">Recipe</span> <span class="hljs-variable">recipe</span> #{
+  name: <span class="hljs-string">&quot;Weird family recipe&quot;</span>
+  <span class="hljs-title class_">Ingredient</span> <span class="hljs-title function_ invoke__">mainIngredient</span>(<span class="hljs-string">&quot;salt&quot;</span>) <span class="hljs-comment">// recipe.mainIngredient =&gt; Ingredient(&quot;salt&quot;)</span>
+  <span class="hljs-title class_">Ingredient</span> <span class="hljs-string">&quot;pepper&quot;</span>
+  <span class="hljs-title function_ invoke__">SomeFunction</span>(<span class="hljs-variable">someVal</span>)
+}
+</code></pre>
+<p>TODO: Supporter:</p>
+<pre><code class="language-jome"><span class="hljs-variable">fn</span> {<span class="hljs-comment">/* ... */</span>}
+<span class="hljs-variable">fn</span> <span class="hljs-type">int</span> {<span class="hljs-comment">/* ... */</span>}
+<span class="hljs-variable">fn</span> <span class="hljs-title function_ invoke__">foo</span>() {<span class="hljs-comment">/* ... */</span>}
+<span class="hljs-variable">fn</span> <span class="hljs-type">int</span> <span class="hljs-title function_ invoke__">foo</span>() {<span class="hljs-comment">/* ... */</span>}
+
+<span class="hljs-variable">fn</span> -&gt; <span class="hljs-type">int</span> {<span class="hljs-comment">/* ... */</span>}
+<span class="hljs-variable">fn</span> <span class="hljs-title function_ invoke__">foo</span>() -&gt; <span class="hljs-type">int</span> {<span class="hljs-comment">/* ... */</span>}
+</code></pre>
+<p>TODO: once</p>
+<pre><code class="language-jome"><span class="hljs-keyword">while</span> <span class="hljs-variable">once</span> <span class="hljs-variable">or</span> <span class="hljs-variable">someCondition</span>
+  <span class="hljs-comment">/* ... */</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-comment">/* =&gt;
+let once_0 = 0
+while (!(once_0++)) // Does this work???
+*/</span>
+</code></pre>
+<p>TODO: Supporter</p>
+<pre><code class="language-jome"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> <span class="hljs-variable">i</span> = <span class="hljs-number">0</span>; <span class="hljs-variable">i</span> &lt; <span class="hljs-number">0</span>; <span class="hljs-variable">i</span>++) { <span class="hljs-comment">/* ... */</span> }
+<span class="hljs-comment">// These are all the same:</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> <span class="hljs-variable">el</span> : <span class="hljs-variable">elems</span>) { <span class="hljs-comment">/* ... */</span> }
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> <span class="hljs-variable">el</span> <span class="hljs-variable">of</span> <span class="hljs-variable">elems</span>) { <span class="hljs-comment">/* ... */</span> }
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> <span class="hljs-variable">el</span> <span class="hljs-keyword">in</span> <span class="hljs-variable">elems</span>) { <span class="hljs-comment">/* ... */</span> }
+</code></pre>
+<p>TODO: Supporter</p>
+<pre><code class="language-jome"><span class="hljs-keyword">if</span> <span class="hljs-literal">true</span>
+  <span class="hljs-variable">x</span> = <span class="hljs-number">10</span>
+  <span class="hljs-variable">y</span> = <span class="hljs-number">20</span>
+<span class="hljs-keyword">else</span>:
+  <span class="hljs-variable">z</span> = <span class="hljs-number">30</span>
+</code></pre>
+<h3>Gotchas</h3>
+<p>Main gotchas compared to javascript:</p>
+<ul>
+<li>for in for of</li>
+<li>No do ... while, use while once instead</li>
+<li>No octal? use <oct></oct> instead</li>
+</ul>
+<h2>Tmp end</h2>
+<p>TODO: A tree view like in godot in vscode extension.</p>
+<p>Allow #http://... as paths? #http should autocomplete to add the slashes after</p>
+<p>TODO: Handle int returnTypeOnTheLeft = (int arg0, int arg1) =&gt; {/* ... <em>/}
+This mandates that the function returns an int.
+It's the compromise of not being able to do int function(int arg0, int arg1) { /</em> ... */ }
+Though you can do than for methods inside a class.</p>
+<p>TODO: Language configuration guide: increaseIndentPattern, indentNextLinePattern (when ends with colon)</p>
+<p>TODO: Tokenize the tags simply as strings with interpolation and add semantic tokenization after.</p>
+<p>TODO: For the website, do more like Civet. Put v0_1.html.jome should be in a tab called Reference.
 Inside the home page, only put the best of Jome. The goal is to dazzle.</p>
 <p>TODO: Allow to specify syntax highlighting color theme inside config.jome.
 Use semantic coloring to customize colors using the language server.
