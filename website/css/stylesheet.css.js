@@ -129,8 +129,9 @@ module.exports = () => {
   .navbar {
     background-color: #333;
     color: #fff;
-    padding: 10px;
-    height: 30px;
+    height: 3em;
+    display: flex;
+    align-items: center;
   }
 
   /* Style for navbar links */
@@ -148,7 +149,6 @@ module.exports = () => {
   
   .navbrand {
     font-size: 1.4em;
-    padding: 14px 16px;
     font-weight: bold;
   }
 
