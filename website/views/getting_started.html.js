@@ -24,8 +24,7 @@ module.exports = () => {
   <h2 id="usage">Usage</h2>
 
   \`\`\`sh
-  # Usage
-  jome # executes index.jome or the file specified by the entry main in config.jome
+  jome # executes index.jome or the file specified by the entry "main" in config.jome
   jome file.jome # execute the given file
   jome server start # pass the arguments "server" and "start" to index.jome executable
   \`\`\`
@@ -38,7 +37,11 @@ module.exports = () => {
   #log "Hello world!" // #log is a shortcut for console.log
   \`\`\`
 
-  Run it with \`jome hello.jome\`
+  In a terminal, this gives:
+  \`\`\`sh
+  jome hello.jome
+  # => Hello world!
+  \`\`\`
 
   ### File parameters
 
@@ -51,15 +54,15 @@ module.exports = () => {
   #log "Hello {name}!"
   \`\`\`
 
-  The result is
+  This gives:
   \`\`\`sh
   jome hello.jome Paul
   # => Hello Paul!
   \`\`\`
 
-  <h3 id="index-jome">index.jome</h3>
+  <h2 id="index-jome">index.jome</h2>
 
-  The Jome CLI command checks if the first argument is a .jome source file and executes it if so. Otherwise, it will execute index.jome or the file specified by the entry main in config.jome
+  By default, index.jome is executed if no .jome file is given to the CLI.
 
   Let's write inside the file \`index.jome\`
 
@@ -71,10 +74,25 @@ module.exports = () => {
   end
   \`\`\`
 
-  The result is
+  This gives:
   \`\`\`sh
   jome say "Hello Anna!"
   # => Hello Anna!
-  \`\`\``);
+  \`\`\`
+
+  <h2 id="config-jome">config.jome</h2>
+
+  config.jome contains all the configuration of the project and the language itself.
+
+  TODO: Give an example of a config.jome file.
+
+  \`\`\`jome
+  meta #{
+    main: "./server.jome" // Set server.jome as the default file executed when running jome without a file.
+    scripts: 
+      s: {file: "./server.jome", alias: "server"}
+  }
+  \`\`\`
+`);
   return new Webpage("Jome", content).render();
 };

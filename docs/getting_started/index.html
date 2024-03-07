@@ -41,8 +41,8 @@
         <li><a href="/jome/getting_started/#install">Install</a></li>
         <li><a href="/jome/getting_started/#usage">Usage</a></li>
         <li><a href="/jome/getting_started/#hello-world">Hello world</a></li>
-        <li><a href="/jome/getting_started/#partials">Partials</a></li>
-        <li><a href="/jome/getting_started/#templates">Templates</a></li>
+        <li><a href="/jome/getting_started/#index-jome">index.jome</a></li>
+        <li><a href="/jome/getting_started/#config-jome">config.jome</a></li>
       </ul>
       <li><a href="/jome/ref">Language Reference</a></li>
       <ul class="nav-list nav-sub">
@@ -110,8 +110,7 @@
 <pre><code class="language-sh">npm install jome.js -g
 </code></pre>
   <h2 id="usage">Usage</h2>
-<pre><code class="language-sh"><span class="hljs-comment"># Usage</span>
-jome <span class="hljs-comment"># executes index.jome or the file specified by the entry main in config.jome</span>
+<pre><code class="language-sh">jome <span class="hljs-comment"># executes index.jome or the file specified by the entry &quot;main&quot; in config.jome</span>
 jome file.jome <span class="hljs-comment"># execute the given file</span>
 jome server start <span class="hljs-comment"># pass the arguments &quot;server&quot; and &quot;start&quot; to index.jome executable</span>
 </code></pre>
@@ -119,19 +118,22 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <p>Create a file <code>hello.jome</code> with the following content:</p>
 <pre><code class="language-jome"><span class="hljs-built_in function_">#log</span> <span class="hljs-string">&quot;Hello world!&quot;</span> <span class="hljs-comment">// #log is a shortcut for console.log</span>
 </code></pre>
-<p>Run it with <code>jome hello.jome</code></p>
+<p>In a terminal, this gives:</p>
+<pre><code class="language-sh">jome hello.jome
+<span class="hljs-comment"># =&gt; Hello world!</span>
+</code></pre>
 <h3>File parameters</h3>
 <p>A .jome file is compiled into a function. You can pass arguments to it using the <code>with</code> keyword.</p>
 <p>Let's modify the file <code>hello.jome</code></p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">name</span> <span class="hljs-keyword">end</span>
 <span class="hljs-built_in function_">#log</span> <span class="hljs-string">&quot;Hello {name}!&quot;</span>
 </code></pre>
-<p>The result is</p>
+<p>This gives:</p>
 <pre><code class="language-sh">jome hello.jome Paul
 <span class="hljs-comment"># =&gt; Hello Paul!</span>
 </code></pre>
-  <h3 id="index-jome">index.jome</h3>
-<p>The Jome CLI command checks if the first argument is a .jome source file and executes it if so. Otherwise, it will execute index.jome or the file specified by the entry main in config.jome</p>
+  <h2 id="index-jome">index.jome</h2>
+<p>By default, index.jome is executed if no .jome file is given to the CLI.</p>
 <p>Let's write inside the file <code>index.jome</code></p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">cmd</span>, <span class="hljs-variable">message</span> <span class="hljs-keyword">end</span>
 
@@ -139,9 +141,18 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
   <span class="hljs-built_in function_">#log</span> <span class="hljs-variable">message</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
-<p>The result is</p>
+<p>This gives:</p>
 <pre><code class="language-sh">jome say <span class="hljs-string">&quot;Hello Anna!&quot;</span>
 <span class="hljs-comment"># =&gt; Hello Anna!</span>
+</code></pre>
+  <h2 id="config-jome">config.jome</h2>
+<p>config.jome contains all the configuration of the project and the language itself.</p>
+<p>TODO: Give an example of a config.jome file.</p>
+<pre><code class="language-jome"><span class="hljs-variable">meta</span> #{
+  <span class="hljs-keyword">main</span>: <span class="hljs-string">&quot;./server.jome&quot;</span> <span class="hljs-comment">// Set server.jome as the default file executed when running jome without a file.</span>
+  scripts: 
+    s: {file: <span class="hljs-string">&quot;./server.jome&quot;</span>, alias: <span class="hljs-string">&quot;server&quot;</span>}
+}
 </code></pre>
 
               </div>

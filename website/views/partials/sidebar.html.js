@@ -12,8 +12,8 @@ module.exports = () => {
         <li><a href="${ROOT}/getting_started/#install">Install</a></li>
         <li><a href="${ROOT}/getting_started/#usage">Usage</a></li>
         <li><a href="${ROOT}/getting_started/#hello-world">Hello world</a></li>
-        <li><a href="${ROOT}/getting_started/#partials">Partials</a></li>
-        <li><a href="${ROOT}/getting_started/#templates">Templates</a></li>
+        <li><a href="${ROOT}/getting_started/#index-jome">index.jome</a></li>
+        <li><a href="${ROOT}/getting_started/#config-jome">config.jome</a></li>
       </ul>
       <li><a href="${ROOT}/ref">Language Reference</a></li>
       <ul class="nav-list nav-sub">
