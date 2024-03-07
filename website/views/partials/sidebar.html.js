@@ -64,6 +64,8 @@ module.exports = () => {
       </ul>
       <li><a href="${ROOT}/in_depth">In depth</a></li>
       <ul class="nav-list nav-sub">
+        <li><a href="${ROOT}/TODO">CLI</a></li>
+        <li><a href="${ROOT}/TODO">config.jome</a></li>
         <li><a href="${ROOT}/utils">Utils</a></li>
         <li><a href="${ROOT}/formats">Formats</a></li>
         <li><a href="${ROOT}/lib">Librairies</a></li>

@@ -29,6 +29,8 @@ module.exports = () => {
   jome server start # pass the arguments "server" and "start" to index.jome executable
   \`\`\`
 
+  TODO: Link: For the complete overview, see [CLI in depth](/TODO).
+
   <h2 id="hello-world">Hello world</h2>
   
   Create a file \`hello.jome\` with the following content:
@@ -93,6 +95,8 @@ module.exports = () => {
       s: {file: "./server.jome", alias: "server"}
   }
   \`\`\`
+
+  TODO: Link: For the complete overview, see [config.jome in depth](/TODO).
 `);
   return new Webpage("Jome", content).render();
 };
