@@ -183,6 +183,19 @@ module.exports = () => {
   <hsl></hsl>
   <color></color>
 
+  ## jsx
+
+  See civet programming language jsx, it's nice:
+
+  \`\`\`
+  function Listing(props)
+    <h1 #heading>Hello Civet!
+    <ul .items>
+      <For each=props.items>
+        (item) =>
+          <li .item {props.style}><Item {item}>
+  \`\`\`
+
   ## TODO
 
   MAYBE list:

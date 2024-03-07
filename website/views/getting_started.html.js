@@ -97,6 +97,23 @@ module.exports = () => {
   \`\`\`
 
   TODO: Link: For the complete overview, see [config.jome in depth](/TODO).
+
+  <h2 id="createjomeapp">createjomeapp</h2>
+
+  To help you get started, you can use the createjomeapp command and answer it's questions.
+
+  \`\`\`sh
+  npm install createjomeapp -g
+  \`\`\`
+
+  Usage:
+  \`\`\`sh
+  createjomeapp . # Configure the current folder
+  createjomeapp some/folder # Create or configure a given folder
+  createjomeapp --flavor=js --template=web_server . # You can specify some settings directly
+  \`\`\`
+
+  TODO: Link: For the complete overview, see [createjomeapp](/TODO).
 `);
   return new Webpage("Jome", content).render();
 };
