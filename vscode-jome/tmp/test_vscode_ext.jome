@@ -1,24 +1,49 @@
+// TODO: Do all import types here
+# Imports
 import &Baz from 'foo'
 import &Baz from 'foo'
 
+# Comments
+// Single line
+/* Multi line */
+
+# Variables
 let x = 10
-let y = 20
-let y = 30
+var y = 20
+const z = 30
 
-class Recipe
+# Functions without types without args
+def functionNoArgs_1 return null end
+def functionNoArgs_2() return null end
+def functionNoArgs_3: null
+// let functionNoArgs_4 = () => {return null} // Does not work!!!
+let functionNoArgs_5 = () => (null)
+let functionNoArgs_6 = () => null
+// let functionNoArgs_7 = fn () {return null} // Does not work!!!
+// fn functionNoArgs_8() {return null} // Does not work!!!
+function functionNoArgs_9() {return null} // Does not work!!!
 
-end
+# Functions without types with args
+def functionArgs_1(arg1, arg2) return null end
+def functionArgs_2(arg1, arg2): null
+// let functionArgs_3 = (arg1, arg2) => {return null} // Does not work!!!
+let functionArgs_4 = (arg1, arg2) => (null)
+let functionArgs_5 = (arg1, arg2) => null
+// let functionArgs_6 = fn (arg1, arg2) {return null} // Does not work!!!
+// fn functionArgs_7(arg1, arg2) {return null} // Does not work!!!
+function functionArgs_8(arg1, arg2) {return null} // Does not work!!!
 
-Recipe recipe
+# Classes
+class Klass_1 end
+class Klass_2 { }
+
+# Methods
+// TODO
+
+# Typed variables
+Klass_1 klass_1
+let klass_2: Klass_2
 
 let f = new Foo()
 
-class Bar
-
-end
-
-def someFunc(someArg)
-end
-
-def someOtherFunc
-end
+# Functions
