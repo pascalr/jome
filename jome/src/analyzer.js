@@ -295,8 +295,8 @@ function validateTag(node) { // A generic version of the heredoc. It is not yet 
 
 const ANALYZERS = {
   "meta.function.jome": (node) => {
-    if (node.parts[0].raw !== 'function') {
-      return pushError(node, "Internal error. meta.function.jome should always start with keyword function")
+    if (node.parts[0].raw !== 'function' && node.parts[0].raw !== 'fn') {
+      return pushError(node, "Internal error. meta.function.jome should always start with keyword function or fn")
     }
     if (node.parts[node.parts.length-1].raw !== 'end') {
       return pushError(node, "Internal error. meta.function.jome should always end with keyword end")

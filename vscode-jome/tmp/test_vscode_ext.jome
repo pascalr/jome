@@ -16,22 +16,22 @@ const z = 30
 def functionNoArgs_1 return null end
 def functionNoArgs_2() return null end
 def functionNoArgs_3: null
-// let functionNoArgs_4 = () => {return null} // Does not work!!!
+let functionNoArgs_4 = () => {return null}
 let functionNoArgs_5 = () => (null)
 let functionNoArgs_6 = () => null
-// let functionNoArgs_7 = fn () {return null} // Does not work!!!
-// fn functionNoArgs_8() {return null} // Does not work!!!
-// function functionNoArgs_9() {return null} // Does not work!!!
+let functionNoArgs_7 = fn () {return null} // Does not work!!!
+fn functionNoArgs_8() {return null} // Does not work!!!
+function functionNoArgs_9() {return null} // Does not work!!!
 
 # Functions without types with args
 def functionArgs_1(arg1, arg2) return null end
 def functionArgs_2(arg1, arg2): null
-// let functionArgs_3 = (arg1, arg2) => {return null} // Does not work!!!
+let functionArgs_3 = (arg1, arg2) => {return null}
 let functionArgs_4 = (arg1, arg2) => (null)
 let functionArgs_5 = (arg1, arg2) => null
-// let functionArgs_6 = fn (arg1, arg2) {return null} // Does not work!!!
-// fn functionArgs_7(arg1, arg2) {return null} // Does not work!!!
-// function functionArgs_8(arg1, arg2) {return null} // Does not work!!!
+let functionArgs_6 = fn (arg1, arg2) {return null} // Does not work!!!
+fn functionArgs_7(arg1, arg2) {return null} // Does not work!!!
+function functionArgs_8(arg1, arg2) {return null} // Does not work!!!
 
 # Classes
 class Klass_1 end

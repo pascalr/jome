@@ -199,6 +199,7 @@ let grammar = {
         { include: "#support-items" },
         { include: "#variable" },
         { include: "#block-array" },
+        { include: "#code_block"},
         { include: "#block"},
         { include: "#semicolon" }, // ;
         { include: "#comma" }, // ,
@@ -405,10 +406,10 @@ let grammar = {
     },
     function: {
       name: "meta.function.jome",
-      begin: "\\b(function)\\b\\s*",
+      begin: "\\b(function|fn)\\b\\s*",
       beginCaptures: { 1: { name: "keyword.control.jome" } },
-      end: "\\b(end)\\b",
-      endCaptures: { 0: { name: "keyword.control.jome" } },
+      end: "(\\bend\\b)|(?:(?<=\\))(?=\\s*\\{))",
+      endCaptures: { 1: { name: "keyword.control.jome" } },
       patterns: [
         { include: "#paren-args" },
         { include: "#expression" }
@@ -942,6 +943,29 @@ let grammar = {
           include: "#block-content"
         }
       ]
+    },
+    // A block of code being executed. For example
+    // () => {/* everything here is inside the code-block */}
+    code_block: {
+      patterns: [
+        {
+          begin: "(?<=\\=\\>)\\s*\\{",
+          end: "\\}",
+          beginCaptures: { 0: { name: "punctuation.curly-braces.open" } },
+          endCaptures: { 0: { name: "punctuation.curly-braces.close" } },
+          name: "meta.code-block.jome",
+          patterns: [{include: "#expression"}]
+        },
+        {
+          begin: "(?<=\\))\\s*\\{",
+          end: "\\}",
+          beginCaptures: { 0: { name: "punctuation.curly-braces.open" } },
+          endCaptures: { 0: { name: "punctuation.curly-braces.close" } },
+          name: "meta.code-block.jome",
+          patterns: [{include: "#expression"}]
+        }
+      ]
+      
     },
     block: {
       begin: "\\{",

@@ -253,6 +253,9 @@
           "include": "#block-array"
         },
         {
+          "include": "#code_block"
+        },
+        {
           "include": "#block"
         },
         {
@@ -571,15 +574,15 @@
     },
     "function": {
       "name": "meta.function.jome",
-      "begin": "\\b(function)\\b\\s*",
+      "begin": "\\b(function|fn)\\b\\s*",
       "beginCaptures": {
         "1": {
           "name": "keyword.control.jome"
         }
       },
-      "end": "\\b(end)\\b",
+      "end": "(\\bend\\b)|(?:(?<=\\))(?=\\s*\\{))",
       "endCaptures": {
-        "0": {
+        "1": {
           "name": "keyword.control.jome"
         }
       },
@@ -1509,6 +1512,50 @@
       "patterns": [
         {
           "include": "#block-content"
+        }
+      ]
+    },
+    "code_block": {
+      "patterns": [
+        {
+          "begin": "(?<=\\=\\>)\\s*\\{",
+          "end": "\\}",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.curly-braces.open"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.curly-braces.close"
+            }
+          },
+          "name": "meta.code-block.jome",
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        },
+        {
+          "begin": "(?<=\\))\\s*\\{",
+          "end": "\\}",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.curly-braces.open"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.curly-braces.close"
+            }
+          },
+          "name": "meta.code-block.jome",
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
         }
       ]
     },
