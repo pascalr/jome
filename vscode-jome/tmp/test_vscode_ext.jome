@@ -21,7 +21,7 @@ let functionNoArgs_5 = () => (null)
 let functionNoArgs_6 = () => null
 // let functionNoArgs_7 = fn () {return null} // Does not work!!!
 // fn functionNoArgs_8() {return null} // Does not work!!!
-function functionNoArgs_9() {return null} // Does not work!!!
+// function functionNoArgs_9() {return null} // Does not work!!!
 
 # Functions without types with args
 def functionArgs_1(arg1, arg2) return null end

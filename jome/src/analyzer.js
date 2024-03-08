@@ -51,7 +51,7 @@ function pushFileLink(node, file, data={}) {
 }
 
 // TODO: Make sure no infinite loop
-function _analyzeNodes(nodes, throwError = true) {
+function _analyzeNodes(nodes) {
   nodes.forEach(node => {
     // Analyze the operands first
     if (node.operands?.length) {
@@ -59,12 +59,7 @@ function _analyzeNodes(nodes, throwError = true) {
     }
     let analyzer = ANALYZERS[node.type]
     if (analyzer) {
-      let err = analyzer(node)
-      if (err || node.errors.length) {
-        if (throwError) {
-          pushError(node, err?.message || err || node.errors[0])
-        }
-      }
+      analyzer(node)
     }
     if (node.parts?.length) {
       analyzeNodes(node.parts)
@@ -74,8 +69,8 @@ function _analyzeNodes(nodes, throwError = true) {
 }
 
 // TODO: Make sure no infinite loop
-function analyzeNodes(nodes, throwError = true) {
-  let errors = _analyzeNodes(nodes, throwError)
+function analyzeNodes(nodes) {
+  let errors = _analyzeNodes(nodes)
   let ctxFile = nodes[0].ctxFile
   let lexEnv = ctxFile.lexEnv
   // TODO: Make sure that the occurence is declared before being used for variables and classes.
@@ -273,22 +268,22 @@ function validateTag(node) { // A generic version of the heredoc. It is not yet 
 const ANALYZERS = {
   "meta.function.jome": (node) => {
     if (node.parts[0].raw !== 'function') {
-      return "Internal error. meta.function.jome should always start with keyword function"
+      return pushError(node, "Internal error. meta.function.jome should always start with keyword function")
     }
     if (node.parts[node.parts.length-1].raw !== 'end') {
-      return "Internal error. meta.function.jome should always end with keyword end"
+      return pushError(node, "Internal error. meta.function.jome should always end with keyword end")
     }
     // Arguments, if present, should always be at the beginning
     if (node.parts.slice(2,-1).find(c => c.type === 'meta.args.jome')) {
-      return "Syntax error. Arguments should always be at the beginning of the function block."
+      return pushError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
     }
   },
   "meta.block.jome": (node) => {
     if (node.parts[0].type !== 'punctuation.curly-braces.open') {
-      return "Internal error. meta.block.jome should always start with punctuation.curly-braces.open"
+      return pushError(node, "Internal error. meta.block.jome should always start with punctuation.curly-braces.open")
     }
     if (node.parts[node.parts.length-1].type !== 'punctuation.curly-braces.close') {
-      return "Internal error. meta.block.jome should always end with punctuation.curly-braces.close"
+      return pushError(node, "Internal error. meta.block.jome should always end with punctuation.curly-braces.close")
     }
   },
   // obj->callFunc
@@ -327,10 +322,10 @@ const ANALYZERS = {
   // do |args| /* ... */ end
   'meta.do-end.jome': (node) => {
     if (node.parts[0].raw !== 'do') {
-      return "Internal error. meta.do-end.jome should always start with keyword do"
+      return pushError(node, "Internal error. meta.do-end.jome should always start with keyword do")
     }
     if (node.parts[node.parts.length-1].raw !== 'end') {
-      return "Internal error. meta.do-end.jome should always end with keyword end"
+      return pushError(node, "Internal error. meta.do-end.jome should always end with keyword end")
     }
     // Arguments, if present, should always be right after the function name
     if (node.parts.slice(2,-1).find(c => c.type === 'meta.args.jome')) {
