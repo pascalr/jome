@@ -13,6 +13,11 @@ function nodePositionData(node) {
   }
 }
 
+function analyzeFunction(node, name, args, expressions) {
+
+  pushBinding(node, name, {type: 'def', kind: BindingKind.Function})
+}
+
 function pushError(node, message) {
   // this.suggestions = []
   // this.uid = null // A four or five digits number? See Language Server Diagnostic source
@@ -351,13 +356,16 @@ const ANALYZERS = {
     let name = node.parts[1].raw
     pushBinding(node, name, {type: 'def', kind: BindingKind.Function})
     let args = node.parts[2]?.type === 'meta.args.jome' ? node.parts[2] : null
+    let expressions;
 
     if (node.operands.length) {
-      node.data = {name, expressions: node.operands, args}
-      return
+      expressions = node.operands
+    } else {
+      expressions = node.parts.slice((args ? 3 : 2), -1) // Remove keywords def, end, and function name
     }
 
-    let expressions = node.parts.slice((args ? 3 : 2), -1) // Remove keywords def, end, and function name
+    analyzeFunction(node, name, args, expressions)
+
     node.data = {name, expressions, args}
 },
   // js uses more specifically:
