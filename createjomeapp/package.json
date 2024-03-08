@@ -1,0 +1,14 @@
+{
+  "name": "createjomeapp",
+  "version": "0.0.1",
+  "description": "Jome starter app tool.",
+  "bin": {
+    "createjomeapp": "src/cli.js"
+  },
+  "keywords": [
+    "Jome",
+    "js"
+  ],
+  "author": "Pascal Rainville",
+  "license": "MIT"
+}
