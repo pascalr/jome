@@ -15,6 +15,7 @@ function nodePositionData(node) {
 
 // TODO: Call this function inside: meta.do-end.jome
 // TODO: Call this function inside: meta.function.jome
+// TODO: Create a nested lex env and analyze the expressions
 function analyzeFunction(node, name, argsNode, expressions) {
 
   pushBinding(node, name, {type: 'def', kind: BindingKind.Function})
@@ -52,7 +53,10 @@ function pushBinding(node, bindingName, data) {
     ...data
   })
   if (data.kind) {
-    pushSymbol(node, {name: bindingName, ...data})
+    let t = data.type
+    if (t === 'declaration' || t === 'def' || t === 'class') {
+      pushSymbol(node, {name: bindingName, ...data})
+    }
     pushOccurence(node, {name: bindingName})
   }
 }
