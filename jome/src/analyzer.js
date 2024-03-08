@@ -13,9 +13,25 @@ function nodePositionData(node) {
   }
 }
 
-function analyzeFunction(node, name, args, expressions) {
+// TODO: Call this function inside: meta.do-end.jome
+// TODO: Call this function inside: meta.function.jome
+function analyzeFunction(node, name, argsNode, expressions) {
 
   pushBinding(node, name, {type: 'def', kind: BindingKind.Function})
+
+  if (argsNode) {
+    if (argsNode.type !== 'meta.args.jome') {
+      return pushError(node, "Internal error expected analyzeFunction to receive node of type meta.args.jome")
+    }
+    let parts = argsNode.parts.slice(1, -1) // Remove opening and closing parenthesis of vertical bar
+    parts.forEach(part => {
+      if (part.type === 'variable.other.jome') {
+        pushBinding(part, part.raw, {type: 'argument', kind: BindingKind.Variable})
+      // } else if (part.type === 'TODO assignement') {
+      }
+    })
+    argsNode.analyzed = true
+  }
 }
 
 function pushError(node, message) {
@@ -58,6 +74,7 @@ function pushFileLink(node, file, data={}) {
 // TODO: Make sure no infinite loop
 function _analyzeNodes(nodes) {
   nodes.forEach(node => {
+    if(node.analyzed) {return;} // Skip already analyzed
     // Analyze the operands first
     if (node.operands?.length) {
       analyzeNodes(node.operands)
