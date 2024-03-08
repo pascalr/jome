@@ -16,9 +16,9 @@ function nodePositionData(node) {
 // TODO: Call this function inside: meta.do-end.jome
 // TODO: Call this function inside: meta.function.jome
 // TODO: Create a nested lex env and analyze the expressions
-function analyzeFunction(node, name, argsNode, expressions) {
+function analyzeFunction(node, nameNode, argsNode, expressions) {
 
-  pushBinding(node, name, {type: 'def', kind: BindingKind.Function})
+  pushBinding(nameNode, nameNode.raw, {type: 'def', kind: BindingKind.Function})
 
   if (argsNode) {
     if (argsNode.type !== 'meta.args.jome') {
@@ -375,7 +375,6 @@ const ANALYZERS = {
     }
 
     let name = node.parts[1].raw
-    pushBinding(node, name, {type: 'def', kind: BindingKind.Function})
     let args = node.parts[2]?.type === 'meta.args.jome' ? node.parts[2] : null
     let expressions;
 
@@ -385,7 +384,7 @@ const ANALYZERS = {
       expressions = node.parts.slice((args ? 3 : 2), -1) // Remove keywords def, end, and function name
     }
 
-    analyzeFunction(node, name, args, expressions)
+    analyzeFunction(node, node.parts[1], args, expressions)
 
     node.data = {name, expressions, args}
 },

@@ -166,11 +166,7 @@ connection.onHover(({textDocument, position}, token, workDoneProgress, resultPro
     return {
       contents: {
         kind: 'markdown',
-        value: `(${bindingKindToText(occurence.kind)}) ${occurence.name}
-___
-This is *some* description.
-\\033[31;1;4mHello\\033[0m
-Hooooooow tooooo adddddd collloooorrrrssss?!?!?!?!?!`
+        value: `(${bindingKindToText(occurence.kind)}) ${occurence.name}`
       }
     }
   }
