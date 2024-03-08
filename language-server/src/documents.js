@@ -26,15 +26,16 @@ class Documents {
   }
 
   _parseDocument(connection, uri, doc) {
-    try {
+    // try {
       let parsedData = parseAndAnalyzeCode(doc.getText())
       parsedData.bindings = parsedData.ctxFile.lexEnv.getAllBindings()
       this.parsedDataByUri[uri] = parsedData
       let diagnostics = validate(doc, parsedData)
       connection.sendDiagnostics({uri, diagnostics})
-    } catch (err) {
-      connection.console.error(err.stack);
-    }
+    // } catch (err) {
+    // I don't know how to handle when there is an exception, so don't catch it.
+    //  connection.console.error(err.stack);
+    // }
   }
 
   listen(connection) {

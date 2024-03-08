@@ -20,7 +20,7 @@ function pushError(node, message) {
     ...nodePositionData(node),
     message
   }
-  //throw new Error(message)
+  //pushError(node, message)
   node.ctxFile.errors.push(error)
   return error
 }
@@ -62,7 +62,7 @@ function _analyzeNodes(nodes, throwError = true) {
       let err = analyzer(node)
       if (err || node.errors.length) {
         if (throwError) {
-          throw new Error(err?.message || err || node.errors[0])
+          pushError(node, err?.message || err || node.errors[0])
         }
       }
     }
@@ -95,45 +95,45 @@ function analyzeNodes(nodes, throwError = true) {
 function ensureLhsOperand(node) {
   // return validateoperands(2, OPERAND_TYPES)(node)
   if (node.operands.length !== 1) {
-    throw new Error(`Missing left hand side operand for token ${node.type}`)
+    pushError(node, `Missing left hand side operand for token ${node.type}`)
   }
   if (node.operands.length && !OPERAND_TYPES.includes(node.operands[0].type)) {
-    throw new Error(`Invalid operand type for operator ${node.type}. Was: ${node.operands[0].type}`)
+    pushError(node, `Invalid operand type for operator ${node.type}. Was: ${node.operands[0].type}`)
   }
 }
 function ensureStartRaw(node, str) {
   if (node.parts[0]?.raw !== str) {
-    throw new Error(`Internal error. ${node.type} should always start with token ${str}. Was ${node.parts[0]?.raw}`)
+    pushError(node, `Internal error. ${node.type} should always start with token ${str}. Was ${node.parts[0]?.raw}`)
   }
 }
 function ensureStartType(node, str) {
   if (node.parts[0]?.type !== str) {
-    throw new Error(`Internal error. ${node.type} should always start with token of type ${str}. Was ${node.parts[0]?.type}`)
+    pushError(node, `Internal error. ${node.type} should always start with token of type ${str}. Was ${node.parts[0]?.type}`)
   }
 }
 function ensureEndRaw(node, str) {
   let s = node.parts[node.parts.length-1]?.raw
   if (s !== str) {
-    throw new Error(`Internal error. ${node.type} should always end with token ${str}. Was ${s}`)
+    pushError(node, `Internal error. ${node.type} should always end with token ${str}. Was ${s}`)
   }
 }
 function ensureEndType(node, str) {
   let s = node.parts[node.parts.length-1]?.type
   if (s !== str) {
-    throw new Error(`Internal error. ${node.type} should always end with token of type ${str}. Was ${s}`)
+    pushError(node, `Internal error. ${node.type} should always end with token of type ${str}. Was ${s}`)
   }
 }
 function ensureAllType(node, list, str) {
   list.forEach(el => {
     if (el.type !== str) {
-      throw new Error(`Error. ${node.type} should only contain tokens of type ${str}. Was ${el.type}`)
+      pushError(node, `Error. ${node.type} should only contain tokens of type ${str}. Was ${el.type}`)
     }
   })
 }
 function ensureAllTypeIn(node, list, arr) {
   list.forEach(el => {
     if (!arr.includes(el.type)) {
-      throw new Error(`Error. ${node.type} malformed expression. Unexpected children token type ${el.type}`)
+      pushError(node, `Error. ${node.type} malformed expression. Unexpected children token type ${el.type}`)
     }
   })
 }
@@ -141,7 +141,7 @@ function ensureAllTypeIn(node, list, arr) {
 function ensureListSeparatedByCommas(node, items) {
   // All the even index operands should be punctuation.separator.delimiter.jome
   if (items.some((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
-    throw new Error("Syntax error. Expecting commas between every element inside a list")
+    pushError(node, "Syntax error. Expecting commas between every element inside a list")
   }
 }
 
@@ -160,7 +160,7 @@ function parseList(items) {
         itemBefore = false
       }
     } else if (itemBefore) {
-      throw new Error("Syntax error. Expecting commas or newlines between every element inside a list")
+      pushError(node, "Syntax error. Expecting commas or newlines between every element inside a list")
     } else {
       modified.push(item)
       itemBefore = true
@@ -172,7 +172,7 @@ function parseList(items) {
 function ensureListSeparatedByCommasOrNewlines(node, items) {
   // All the even index operands should be punctuation.separator.delimiter.jome
   if (items.some((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
-    throw new Error("Syntax error. Expecting commas between every element inside a list")
+    pushError(node, "Syntax error. Expecting commas between every element inside a list")
   }
 }
 
@@ -229,14 +229,14 @@ function validateString(node, char) {
 
 function validateFuncCall(node, hasDot) {
   if (hasDot && node.parts[0].type !== "punctuation.dot.jome") {
-    throw new Error("Internal error. Expected dot before function call in this circonstance.")
+    pushError(node, "Internal error. Expected dot before function call in this circonstance.")
   }
   if (hasDot && node.operands.length !== 1) {
-    throw new Error("Internal error. A function call with a dot should have a left operand.")
+    pushError(node, "Internal error. A function call with a dot should have a left operand.")
   }
   let nameTok = node.parts[hasDot ? 1 : 0]
   if (nameTok.type !== 'entity.name.function.jome' && nameTok.type !== "support.function.builtin.jome") {
-    throw new Error("Internal error. Function calls should always start with a name.")
+    pushError(node, "Internal error. Function calls should always start with a name.")
   }
   let parts = node.parts.slice(hasDot ? 2 : 1)
   let args = [];
@@ -253,16 +253,16 @@ function validateFuncCall(node, hasDot) {
 
 function validateTag(node) { // A generic version of the heredoc. It is not yet clear how to call those things.
   if (node.type !== "meta.tag.jome") {
-    throw new Error(`Internal error. A tag should always start with type meta.embedded.block. Was ${node.type}`)
+    pushError(node, `Internal error. A tag should always start with type meta.embedded.block. Was ${node.type}`)
   }
   ensureStartType(node, 'punctuation.definition.tag.begin.jome')
   if (node.parts[1].type !== "entity.name.tag.jome") {
-    throw new Error(`Internal error. A tag have a name of type entity.name.tag.jome. Was ${node.parts[1].type}`)
+    pushError(node, `Internal error. A tag have a name of type entity.name.tag.jome. Was ${node.parts[1].type}`)
   }
   let openingTagName = node.parts[1].raw
   let closingTagName = node.parts[node.parts.length-2].raw;
   if (openingTagName !== closingTagName) {
-    throw new Error(`Internal error. Heredoc should always have a matching closing tage. Opening: ${openingTagName}. Closing: ${closingTagName}`)
+    pushError(node, `Internal error. Heredoc should always have a matching closing tage. Opening: ${openingTagName}. Closing: ${closingTagName}`)
   }
   let contentStartIdx = node.parts.findIndex(p => p.type === 'punctuation.definition.tag.end.jome')+1
   // TODO: Parse attributes
@@ -340,7 +340,7 @@ const ANALYZERS = {
   // def someFunc end
   'meta.def.jome': (node) => {
     if (node.parts[0].raw !== 'def') {
-      throw new Error("Internal error. meta.def.jome should always start with keyword def")
+      pushError(node, "Internal error. meta.def.jome should always start with keyword def")
     }
     if (node.parts[1]?.type !== 'entity.name.function.jome') {
       return pushError(node, "Syntax error. Missing function name after keyword def.")
@@ -426,10 +426,10 @@ const ANALYZERS = {
   // called square-bracket because it can be an array or an operator
   "meta.square-bracket.jome": (node) => {
     if (node.parts[0].type !== 'punctuation.definition.square-bracket.begin.jome') {
-      throw new Error("Internal error. meta.square-bracket.jome should always start with punctuation.definition.square-bracket.begin.jome")
+      pushError(node, "Internal error. meta.square-bracket.jome should always start with punctuation.definition.square-bracket.begin.jome")
     }
     if (node.parts[node.parts.length-1].type !== 'punctuation.definition.square-bracket.end.jome') {
-      throw new Error("Internal error. meta.square-bracket.jome should always end with punctuation.definition.square-bracket.end.jome")
+      pushError(node, "Internal error. meta.square-bracket.jome should always end with punctuation.definition.square-bracket.end.jome")
     }
     let isOperator = node.operands.length
     if (isOperator) {
@@ -550,11 +550,11 @@ const ANALYZERS = {
             //fileImports.addAliasImport(namedImport.parts[0].raw, namedImport.parts[2].raw)
             bindings.push({name: getName(name), type: 'alias-import', original})
           } else {
-            throw new Error("sfj9234hr9h239rhrf923h3r")
+            pushError(node, "sfj9234hr9h239rhrf923h3r")
           }
         })
         //   } else if (imp.type === 'meta.import-alias.jome') {
-        //     throw new Error("TODO: import {foo as bar} syntax")
+        //     pushError(node, "TODO: import {foo as bar} syntax")
         //   }
       } else if (item.type === 'meta.import-file.jome') {
         // already handled
@@ -567,7 +567,7 @@ const ANALYZERS = {
       } else if (item.type === 'meta.namespace-import.jome') {
         bindings.push({name: getName(item.parts[2].raw), type: 'namespace-import'})
       } else {
-        throw new Error("Error 234j90s7adfg1")
+        pushError(node, "Error 234j90s7adfg1")
       }
     })
 
@@ -694,7 +694,7 @@ const ANALYZERS = {
         let funcs = part.parts.slice(1) // skip keyword chain
         funcs.forEach(func => {
           if (func.type !== 'entity.name.function.jome') {
-            throw new Error("sdf890230r23j0fj230f230ih")
+            pushError(node, "sdf890230r23j0fj230f230ih")
           }
           chainFunctions.push(func.raw)
         })
@@ -704,7 +704,7 @@ const ANALYZERS = {
         let funcs = part.parts.slice(1) // skip keyword wrap
         funcs.forEach(func => {
           if (func.type !== 'entity.name.function.jome') {
-            throw new Error("df9h2890fh92uu9sbdf1sdlf")
+            pushError(node, "df9h2890fh92uu9sbdf1sdlf")
           }
           wrapFunctions.push(func.raw)
         })

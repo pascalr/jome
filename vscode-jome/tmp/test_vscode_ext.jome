@@ -31,7 +31,7 @@ let functionArgs_4 = (arg1, arg2) => (null)
 let functionArgs_5 = (arg1, arg2) => null
 // let functionArgs_6 = fn (arg1, arg2) {return null} // Does not work!!!
 // fn functionArgs_7(arg1, arg2) {return null} // Does not work!!!
-function functionArgs_8(arg1, arg2) {return null} // Does not work!!!
+// function functionArgs_8(arg1, arg2) {return null} // Does not work!!!
 
 # Classes
 class Klass_1 end
