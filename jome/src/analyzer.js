@@ -5,6 +5,22 @@ const {FileImports, BindingKind} = require("./context.js")
 const fs = require("fs")
 const path = require("path")
 
+class SyntaxError extends Error {
+  constructor(node, message) {
+    super(message);
+    this.node = node
+  }
+}
+// try {
+//   analyzer(node)
+// } catch (error) {
+//   if (error instanceof SyntaxError) {
+//     pushError(error.node, error.message)
+//   } else {
+//     throw error;
+//   }
+// }
+
 function nodePositionData(node) {
   return {
     lineNb: node.token.lineNb,
