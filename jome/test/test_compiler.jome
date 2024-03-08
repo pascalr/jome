@@ -454,6 +454,17 @@ describe "Creating functions" do
   end
 
   describe "With curly braces" do
+
+    it 'let keyword with fn' do
+      assertCompile('let functionNoArgs_7 = fn () {return null}', /TODO/);
+    end
+    it 'fn keyword' do
+      assertCompile('fn functionNoArgs_8() {return null}', /TODO/);
+    end
+    it 'function keyword' do
+      assertCompile('function functionNoArgs_9() {return null}', /TODO/);
+    end
+
     // TODO: (curly braces are always right before a closing parenthesis)
     // let f = () => {return 10}
     // let f = function () {return 10}

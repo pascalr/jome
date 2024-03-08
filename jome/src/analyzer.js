@@ -293,18 +293,41 @@ function validateTag(node) { // A generic version of the heredoc. It is not yet 
   node.data = {content, tagName: openingTagName}
 }
 
+function popIf(list, condition) {
+  if (condition && list.length > 0) {
+    return list.shift();
+  }
+}
+
 const ANALYZERS = {
   "meta.function.jome": (node) => {
     if (node.parts[0].raw !== 'function' && node.parts[0].raw !== 'fn') {
       return pushError(node, "Internal error. meta.function.jome should always start with keyword function or fn")
     }
+
+    // let nameNode;
+    // if (node.parts[1]?.type === 'entity.name.function.jome') {
+    //   nameNode = node.parts[1]
+    // }
+
     if (node.parts[node.parts.length-1].raw !== 'end') {
       return pushError(node, "Internal error. meta.function.jome should always end with keyword end")
     }
+
+    // let argsNode;
+    // if (node.parts[1]?.type === 'entity.name.function.jome') {
+    //   nameNode = node.parts[1]
+    // }
+
     // Arguments, if present, should always be at the beginning
+    // if (node.parts.slice(nameNode ? 3 : 2,-1).find(c => c.type === 'meta.args.jome')) {
     if (node.parts.slice(2,-1).find(c => c.type === 'meta.args.jome')) {
       return pushError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
     }
+
+
+
+    //analyzeFunction(node, nameNode, argsNode, expressions)
   },
   "meta.block.jome": (node) => {
     if (node.parts[0].type !== 'punctuation.curly-braces.open') {

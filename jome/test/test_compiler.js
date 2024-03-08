@@ -440,6 +440,16 @@ class Person {
     });
 
     describe("With curly braces", function () {
+      it("let keyword with fn", function () {
+        assertCompile("let functionNoArgs_7 = fn () {return null}", /TODO/);
+      });
+      it("fn keyword", function () {
+        assertCompile("fn functionNoArgs_8() {return null}", /TODO/);
+      });
+      it("function keyword", function () {
+        assertCompile("function functionNoArgs_9() {return null}", /TODO/);
+      });
+
       it("inline with arrow function with args", function () {
         assertCompile("(x) => x", /\(x\) => \(?x\)?/);
       });
