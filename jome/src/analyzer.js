@@ -13,12 +13,12 @@ function nodePositionData(node) {
   }
 }
 
-// TODO: Call this function inside: meta.do-end.jome
 // TODO: Call this function inside: meta.function.jome
-// TODO: Create a nested lex env and analyze the expressions
 function analyzeFunction(node, nameNode, argsNode, expressions) {
 
-  pushBinding(nameNode, nameNode.raw, {type: 'def', kind: BindingKind.Function})
+  if (nameNode) {
+    pushBinding(nameNode, nameNode.raw, {type: 'def', kind: BindingKind.Function})
+  }
 
   if (argsNode) {
     if (argsNode.type !== 'meta.args.jome') {
@@ -33,6 +33,8 @@ function analyzeFunction(node, nameNode, argsNode, expressions) {
     })
     argsNode.analyzed = true
   }
+
+  // TODO: Create a nested lex env and analyze the expressions
 }
 
 function pushError(node, message) {
@@ -357,6 +359,11 @@ const ANALYZERS = {
     if (node.parts.slice(2,-1).find(c => c.type === 'meta.args.jome')) {
       return pushError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
     }
+
+    let args = node.parts[1]?.type === 'meta.args.jome' ? node.parts[1] : null
+    let expressions = args ? node.parts.slice(2, -1) : node.parts.slice(1, -1)
+
+    analyzeFunction(node, null, args, expressions)
   },
   // def someFunc end
   'meta.def.jome': (node) => {

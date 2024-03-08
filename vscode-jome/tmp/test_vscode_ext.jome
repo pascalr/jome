@@ -47,3 +47,9 @@ let klass_2: Klass_2
 let f = new Foo()
 
 # Functions
+
+
+# Do end
+[1,2,3].#each do |nb|
+  
+end
