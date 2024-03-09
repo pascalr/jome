@@ -5,7 +5,7 @@ const { describe, it } = require("minispec");
 module.exports = () => {
   describe("Parse operation", function () {
     it("1 + 2", function () {
-      let list = parse(tokenize("1+2"));
+      let list = parse(tokenize("1+2").children);
       assert.equal(list?.length, 1);
       let ast = list[0];
       assert.equal(ast?.raw, "+");
@@ -14,7 +14,7 @@ module.exports = () => {
     });
 
     it("2 + 3 * 4 + 5 == 19", function () {
-      let list = parse(tokenize("2 + 3 * 4 + 5 == 19"));
+      let list = parse(tokenize("2 + 3 * 4 + 5 == 19").children);
       assert.equal(list?.length, 1);
       let ast = list[0];
       assert.equal(ast?.raw, "==");
@@ -66,7 +66,7 @@ module.exports = () => {
     }
   }
   function testParse(code, expected) {
-    let list = parse(tokenize(code));
+    let list = parse(tokenize(code).children);
     assertSameLength(list, expected, "Number of expressions");
     expected.forEach(function (e, i) {
       validatePart(list[i], e, `Expression[${i}]`);
@@ -93,14 +93,14 @@ module.exports = () => {
     });
 
     it("let x; let y", function () {
-      let list = parse(tokenize("let x; let y"));
+      let list = parse(tokenize("let x; let y").children);
       assert.equal(list?.length, 3);
       assert.equal(list[0]?.raw, "let x");
       assert.match(list[2]?.raw, /let y/);
     });
 
     it("[1][0]", function () {
-      let list = parse(tokenize("[1][0]"));
+      let list = parse(tokenize("[1][0]").children);
       assert.equal(list?.length, 1);
       let ast = list[0];
       assert.equal(ast?.parts?.length, 3);
