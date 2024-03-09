@@ -370,7 +370,7 @@ const ANALYZERS = {
   // var bar
   'declaration': (node) => {
     let keyword = 'let'
-    if (node.parts[0].type === 'keyword.control.declaration.jome') {
+    if (node.parts[0].type === 'keyword-declaration') {
       keyword = node.parts[0].raw.trimLeft()
     }
     if (node.parts.length < 2) {
@@ -520,7 +520,7 @@ const ANALYZERS = {
   'keyword.operator.assignment.jome': (node) => {
     if (node.operands.length !== 2) {
       return pushError(node, "An assignment must have a two operands")
-    // } else if (!['keyword.control.declaration.jome'].includes(node.operands[0].type)) {
+    // } else if (!['keyword-declaration'].includes(node.operands[0].type)) {
     //   return `Invalid left hand side for assignement ${node.type}. Was: ${node.type}`
     // } else if (!OPERAND_TYPES.includes(node.operands[1].type)) {
     //   return `Invalid value for assignement ${node.type}. Was: ${node.type}`

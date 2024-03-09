@@ -78,7 +78,7 @@ module.exports = () => {
         {
           type: "declaration",
           parts: [
-            { type: "keyword.control.declaration.jome" },
+            { type: "keyword-declaration" },
             { type: "variable.other.jome" },
           ],
         },
@@ -90,7 +90,7 @@ module.exports = () => {
         {
           type: "declaration",
           parts: [
-            { type: "keyword.control.declaration.jome" },
+            { type: "keyword-declaration" },
             { type: "variable.other.jome" },
           ],
         },
