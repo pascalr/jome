@@ -162,15 +162,6 @@ function compileArgsV2(args) {
     return a.raw // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEe
   })).join(', ')})`
   return out
-  let x = 10
-  let y = 20
-  if (node.type === 'VARIABLE') {
-    return node.raw
-  }
-  let cs = node.parts.slice(1, -1) // remove vertical bars
-  //let args = 
-  //let todo = 10
-  return `(${cs.map(c => genCode(c)).join('')})`
 }
 
 function compileArgs(node) { 
@@ -252,16 +243,6 @@ function compileFUNCTION(node) {
     return `function ${name||''}${compileArgsV2(args)} {${expressions.map(c => genCode(c)).join('')}}`
   } else {
     return `function ${name||''}() {${expressions.map(c => genCode(c)).join('')}}`
-  }
-}
-
-// A def outside a class
-function compileDefFunction(node) {
-  let {name, args, expressions} = node.data
-  if (args) {
-    return `function ${name}${compileArgs(args)} {${expressions.map(c => genCode(c)).join('')}}`
-  } else {
-    return `function ${name}() {${expressions.map(c => genCode(c)).join('')}}`
   }
 }
 
@@ -532,8 +513,6 @@ const CODE_GENERATORS = {
   //     c => typeof c === 'string' ? c : '${'+compileJsBlock(c.children.slice(1,-1), ctx)+'}'
   //   ).join('')+'`'
   // },
-  // function(arg) end
-  "meta.function.jome": compileStandaloneFunction,
   // foo:
   "meta.dictionary-key.jome": (node) => {
     let foo = "bar"

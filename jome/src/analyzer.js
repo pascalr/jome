@@ -65,7 +65,6 @@ function analyzeFUNCTION(node, nameNode, argsNodes, expressions) {
   // argsNodes.analyzed = true
 }
 
-// TODO: Call this function inside: meta.function.jome
 function analyzeFunction(node, nameNode, argsNode, expressions) {
 
   if (nameNode) {
@@ -352,35 +351,6 @@ function popIf(list, condition) {
 }
 
 const ANALYZERS = {
-  "meta.function.jome": (node) => {
-    if (node.parts[0].raw !== 'function' && node.parts[0].raw !== 'fn') {
-      return pushError(node, "Internal error. meta.function.jome should always start with keyword function or fn")
-    }
-
-    // let nameNode;
-    // if (node.parts[1]?.type === 'entity.name.function.jome') {
-    //   nameNode = node.parts[1]
-    // }
-
-    if (node.parts[node.parts.length-1].raw !== 'end') {
-      return pushError(node, "Internal error. meta.function.jome should always end with keyword end")
-    }
-
-    // let argsNode;
-    // if (node.parts[1]?.type === 'entity.name.function.jome') {
-    //   nameNode = node.parts[1]
-    // }
-
-    // Arguments, if present, should always be at the beginning
-    // if (node.parts.slice(nameNode ? 3 : 2,-1).find(c => c.type === 'arguments')) {
-    if (node.parts.slice(2,-1).find(c => c.type === 'ARGUMENTS')) {
-      return pushError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
-    }
-
-
-
-    //analyzeFunction(node, nameNode, argsNode, expressions)
-  },
   "meta.block.jome": (node) => {
     if (node.parts[0].type !== 'punctuation.curly-braces.open') {
       return pushError(node, "Internal error. meta.block.jome should always start with punctuation.curly-braces.open")
