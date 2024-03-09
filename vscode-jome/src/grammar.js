@@ -409,7 +409,7 @@ let grammar = {
       name: "meta.def.jome",
       begin: `\\b(def)\\s*(${REGEX_VARIABLE})?\\b\\s*`,
       beginCaptures: {
-        1: { name: "keyword.control.jome" },
+        1: { name: "keyword.control.jome", type: 'FUNCTION_STYLE' },
         2: { name: "entity.name.function.jome", type: 'FUNCTION_NAME' }
       },
       end: "(\\bend\\b)|((?<!\\s)\\:\\s)",
@@ -442,13 +442,15 @@ let grammar = {
       ]
     },
     function: {
+      strict: true,
+      type: "FUNCTION",
       name: "meta.function.jome",
       begin: "\\b(function|fn)\\b\\s*",
-      beginCaptures: { 1: { name: "keyword.control.jome" } },
+      beginCaptures: { 1: { name: "keyword.control.jome", type: 'FUNCTION_STYLE' } },
       end: "(\\bend\\b)|(?:(?<=\\))(?=\\s*\\{))",
       endCaptures: { 1: { name: "keyword.control.jome" } },
       patterns: [
-        { include: "#paren-args" },
+        { include: "#paren-args-v2" },
         { include: "#expression" }
       ]
     },

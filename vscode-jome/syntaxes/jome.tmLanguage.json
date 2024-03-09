@@ -604,6 +604,7 @@
       ]
     },
     "function": {
+      "strict": true,
       "name": "meta.function.jome",
       "begin": "\\b(function|fn)\\b\\s*",
       "beginCaptures": {
@@ -619,7 +620,7 @@
       },
       "patterns": [
         {
-          "include": "#paren-args"
+          "include": "#paren-args-v2"
         },
         {
           "include": "#expression"

@@ -443,16 +443,17 @@ const ANALYZERS = {
     let name = nameNode?.raw
     let args = node.parts.filter(p => p.type === 'ARGUMENT')
     let isInline = !!node.parts.find(p => p.type === 'BEGIN_SECTION')
+    let style = node.parts.find(p => p.type === 'FUNCTION_STYLE')?.raw
     let expressions;
     if (node.operands.length) {
       expressions = node.operands
     } else {
       expressions = expressions = filterCommas(filterSpaces(node.parts.filter(
-        p => p.type !== 'FUNCTION_NAME' && p.type !== 'ARGUMENT' && p.type !== 'BEGIN_SECTION'
+        p => p.type !== 'FUNCTION_NAME' && p.type !== 'ARGUMENT' && p.type !== 'BEGIN_SECTION' && p.type !== 'FUNCTION_STYLE'
       )))
     }
     // TODO: Return type
-    if (!name) {
+    if (style === 'def' && !name) {
       return pushError(node, "Missing function name")
     }
 

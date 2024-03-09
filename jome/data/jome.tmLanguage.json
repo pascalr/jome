@@ -493,6 +493,9 @@
     "def": {
       "begin": "\\b(def)\\s*([A-Za-z_$]\\w*)?\\b\\s*",
       "beginCaptures": {
+        "1": {
+          "name": "FUNCTION_STYLE"
+        },
         "2": {
           "name": "FUNCTION_NAME"
         }
@@ -557,27 +560,22 @@
       ]
     },
     "function": {
-      "name": "meta.function.jome",
       "begin": "\\b(function|fn)\\b\\s*",
       "beginCaptures": {
         "1": {
-          "name": "keyword.control.jome"
+          "name": "FUNCTION_STYLE"
         }
       },
       "end": "(\\bend\\b)|(?:(?<=\\))(?=\\s*\\{))",
-      "endCaptures": {
-        "1": {
-          "name": "keyword.control.jome"
-        }
-      },
       "patterns": [
         {
-          "include": "#paren-args"
+          "include": "#paren-args-v2"
         },
         {
           "include": "#expression"
         }
-      ]
+      ],
+      "name": "FUNCTION"
     },
     "if_block": {
       "name": "meta.if-block.jome",

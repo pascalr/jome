@@ -249,9 +249,9 @@ function compileMethod(node) {
 function compileFUNCTION(node) {
   let {name, args, expressions} = node.data
   if (args) {
-    return `function ${name}${compileArgsV2(args)} {${expressions.map(c => genCode(c)).join('')}}`
+    return `function ${name||''}${compileArgsV2(args)} {${expressions.map(c => genCode(c)).join('')}}`
   } else {
-    return `function ${name}() {${expressions.map(c => genCode(c)).join('')}}`
+    return `function ${name||''}() {${expressions.map(c => genCode(c)).join('')}}`
   }
 }
 
