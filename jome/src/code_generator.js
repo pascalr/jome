@@ -547,6 +547,7 @@ const CODE_GENERATORS = {
   },
   'VARIABLE': compileRaw,
   'ARGUMENT': compileRaw,
+  'FUNCTION_NAME': compileRaw,
   'variable.assignment.jome': (node) => {
     if (node.raw[0] === '$') {
       return `global.${GLOBAL_PREFIX}${node.raw.slice(1)}`
@@ -579,7 +580,7 @@ const CODE_GENERATORS = {
   "support.function-call.WIP.jome": compileFuncCall, // someFunc "some arg"
   "support.function-call.jome": compileFuncCall, // someFunc("some arg")
   "meta.function-call.WIP.jome": compileMetaFuncCall, // .someFunc "some arg"
-  "meta.function-call.jome": compileMetaFuncCall, // .someFunc("some arg")
+  "INLINE_FUNCTION_CALL": compileMetaFuncCall, // .someFunc("some arg")
   // js uses more specifically:
   // keyword.operator.arithmetic.jome
   // keyword.operator.logical.jome

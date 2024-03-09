@@ -575,21 +575,25 @@ let grammar = {
     function_call: {
       patterns: [
         {
+          strict: true,
+          type: "INLINE_FUNCTION_CALL",
           name: "meta.function-call.jome",
           begin: "(\\.)(\\w+)\\(",
           beginCaptures: {
             1: { name: "punctuation.dot.jome" },
-            2: { name: "entity.name.function.jome" }
+            2: { name: "entity.name.function.jome", type: "FUNCTION_NAME" }
           },
           end: "\\)",
           patterns: [{ include: "#expression" }]
         },
         {
+          strict: true,
+          type: "INLINE_FUNCTION_CALL",
           name: "meta.function-call.jome",
           begin: "(\\.)(#\\w+\\!?)\\(",
           beginCaptures: {
             1: { name: "punctuation.dot.jome" },
-            2: { name: "support.function.builtin.jome" }
+            2: { name: "support.function.builtin.jome", type: "BUILT_IN" }
           },
           end: "\\)",
           patterns: [{ include: "#expression" }]

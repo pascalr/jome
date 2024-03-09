@@ -822,6 +822,7 @@
     "function_call": {
       "patterns": [
         {
+          "strict": true,
           "name": "meta.function-call.jome",
           "begin": "(\\.)(\\w+)\\(",
           "beginCaptures": {
@@ -840,6 +841,7 @@
           ]
         },
         {
+          "strict": true,
           "name": "meta.function-call.jome",
           "begin": "(\\.)(#\\w+\\!?)\\(",
           "beginCaptures": {
