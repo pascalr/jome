@@ -77,7 +77,7 @@
                   "name": "keyword.control.jome"
                 },
                 "2": {
-                  "name": "string.quoted.jome"
+                  "name": "IMPORT_FILE"
                 }
               }
             },

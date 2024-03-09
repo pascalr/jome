@@ -120,7 +120,7 @@ let grammar = {
               match: `(from|\\:|of) (${REGEX_REGULAR_STRING})`,
               captures: {
                 1: { name: "keyword.control.jome" },
-                2: { name: "string.quoted.jome" }
+                2: { name: "string.quoted.jome", type: "IMPORT_FILE" }
               }
             },
             {
