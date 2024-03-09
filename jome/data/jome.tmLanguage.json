@@ -703,7 +703,7 @@
               "patterns": [
                 {
                   "match": "\\w+",
-                  "name": "support.type.jome"
+                  "name": "type"
                 }
               ]
             }
@@ -961,7 +961,7 @@
               "name": "keyword.operator.type.annotation.jome"
             },
             "3": {
-              "name": "support.type.jome"
+              "name": "type"
             }
           }
         },
@@ -1197,7 +1197,7 @@
               "name": "keyword.operator.type.annotation.jome"
             },
             "3": {
-              "name": "support.type.jome"
+              "name": "type"
             },
             "4": {
               "name": "keyword.operator.assignment.jome"

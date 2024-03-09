@@ -487,7 +487,8 @@ let grammar = {
               patterns: [
                 {
                   match: "\\w+",
-                  name: "support.type.jome"
+                  name: "support.type.jome",
+                  type: "type"
                 }
               ]
             }
@@ -635,7 +636,7 @@ let grammar = {
           captures: {
             1: { name: "variable.other.jome" },
             2: { name: "keyword.operator.type.annotation.jome" },
-            3: { name: "support.type.jome" }
+            3: { name: "support.type.jome", type: "type" }
           }
         },
         {
@@ -797,7 +798,7 @@ let grammar = {
           captures: {
             1: { name: "variable.assignment.jome" },
             2: { name: "keyword.operator.type.annotation.jome" },
-            3: { name: "support.type.jome" },
+            3: { name: "support.type.jome", type: "type" },
             4: { name: "keyword.operator.assignment.jome" }
           }
         },
