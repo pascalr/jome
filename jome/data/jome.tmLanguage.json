@@ -513,10 +513,13 @@
       "name": "DO_END"
     },
     "function": {
-      "begin": "\\b(function|fn)\\b\\s*",
+      "begin": "\\b(function|fn)\\b\\s*([A-Za-z_$]\\w*(?=\\)))?\\s*",
       "beginCaptures": {
         "1": {
           "name": "FUNCTION_STYLE"
+        },
+        "2": {
+          "name": "FUNCTION_NAME"
         }
       },
       "end": "(\\bend\\b)|(?:(?<=\\))(?=\\s*\\{))",
@@ -1476,42 +1479,22 @@
         {
           "begin": "(?<=\\=\\>)\\s*\\{",
           "end": "\\}",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.curly-braces.open"
-            }
-          },
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.curly-braces.close"
-            }
-          },
-          "name": "meta.code-block.jome",
           "patterns": [
             {
               "include": "#expression"
             }
-          ]
+          ],
+          "name": "CODE_BLOCK"
         },
         {
           "begin": "(?<=\\))\\s*\\{",
           "end": "\\}",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.curly-braces.open"
-            }
-          },
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.curly-braces.close"
-            }
-          },
-          "name": "meta.code-block.jome",
           "patterns": [
             {
               "include": "#expression"
             }
-          ]
+          ],
+          "name": "CODE_BLOCK"
         }
       ]
     },

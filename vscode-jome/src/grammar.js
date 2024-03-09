@@ -434,8 +434,11 @@ let grammar = {
       strict: true,
       type: "FUNCTION",
       name: "meta.function.jome",
-      begin: "\\b(function|fn)\\b\\s*",
-      beginCaptures: { 1: { name: "keyword.control.jome", type: 'FUNCTION_STYLE' } },
+      begin: `\\b(function|fn)\\b\\s*(${REGEX_VARIABLE}(?=\\)))?\\s*`,
+      beginCaptures: {
+        1: { name: "keyword.control.jome", type: 'FUNCTION_STYLE' },
+        2: { name: "entity.name.function.jome", type: 'FUNCTION_NAME' }
+      },
       end: "(\\bend\\b)|(?:(?<=\\))(?=\\s*\\{))",
       endCaptures: { 1: { name: "keyword.control.jome" } },
       patterns: [
@@ -1029,6 +1032,8 @@ let grammar = {
     code_block: {
       patterns: [
         {
+          strict: true,
+          type: "CODE_BLOCK",
           begin: "(?<=\\=\\>)\\s*\\{",
           end: "\\}",
           beginCaptures: { 0: { name: "punctuation.curly-braces.open" } },
@@ -1037,6 +1042,8 @@ let grammar = {
           patterns: [{include: "#expression"}]
         },
         {
+          strict: true,
+          type: "CODE_BLOCK",
           begin: "(?<=\\))\\s*\\{",
           end: "\\}",
           beginCaptures: { 0: { name: "punctuation.curly-braces.open" } },

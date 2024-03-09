@@ -582,10 +582,13 @@
     "function": {
       "strict": true,
       "name": "meta.function.jome",
-      "begin": "\\b(function|fn)\\b\\s*",
+      "begin": "\\b(function|fn)\\b\\s*([A-Za-z_$]\\w*(?=\\)))?\\s*",
       "beginCaptures": {
         "1": {
           "name": "keyword.control.jome"
+        },
+        "2": {
+          "name": "entity.name.function.jome"
         }
       },
       "end": "(\\bend\\b)|(?:(?<=\\))(?=\\s*\\{))",
@@ -1581,6 +1584,7 @@
     "code_block": {
       "patterns": [
         {
+          "strict": true,
           "begin": "(?<=\\=\\>)\\s*\\{",
           "end": "\\}",
           "beginCaptures": {
@@ -1601,6 +1605,7 @@
           ]
         },
         {
+          "strict": true,
           "begin": "(?<=\\))\\s*\\{",
           "end": "\\}",
           "beginCaptures": {

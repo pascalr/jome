@@ -779,6 +779,10 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
     return `finally {\n ${node.parts.slice(1).map(p => genCode(p)).join('')}\n}`
   },
 
+  "CODE_BLOCK": (node) => {
+    return ` {\n${node.parts.map(c => genCode(c)).join('')}}\n`
+  },
+
   "meta.require.jome": (node) => {
     let parts = node.parts.slice(2,-1) // Remove #, (, )
     let file = parts[0].raw.slice(1,-1) // Remove quotes
