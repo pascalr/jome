@@ -549,7 +549,7 @@ const ANALYZERS = {
     ensureEndType(node, 'keyword.control.jome')
     ensureLhsOperand(node)
     let parts = filterNewlines(node.parts.slice(1,-1)) // remove chain, end keyword, and remove newlines
-    ensureAllTypeIn(node, parts, ['support.function-call.WIP.jome', 'support.function-call.jome', 'keyword.operator.assignment.jome'])
+    ensureAllTypeIn(node, parts, ['FUNCTION_CALL', 'keyword.operator.assignment.jome'])
     node.data = {items: parts}
   },
   // if ... end
@@ -652,9 +652,6 @@ const ANALYZERS = {
     let code = node.parts[1]
     node.data = {code}
   },
-
-  "support.function-call.WIP.jome": (node) => validateFuncCall(node, false,),
-  "support.function-call.jome": (node) => validateFuncCall(node, false),
 
   "FUNCTION_CALL": (node) => {
 

@@ -641,16 +641,20 @@ let grammar = {
           patterns: [{ include: "#expression" }]
         },
         {
+          strict: true,
+          type: "FUNCTION_CALL",
           name: "support.function-call.WIP.jome",
           begin: `(#\\w+\\b\\!?)${LOOKAHEAD_FUNC_CALL_WIP}`,
-          beginCaptures: { 1: { name: "support.function.builtin.jome" } },
+          beginCaptures: { 1: { name: "support.function.builtin.jome", type: "BUILT_IN" } },
           end: "\r\n|\n|$|chain",
           patterns: [{ include: "#expression" }]
         },
         {
+          strict: true,
+          type: "FUNCTION_CALL",
           name: "support.function-call.WIP.jome",
           begin: `\\b(\\w+)\\b${LOOKAHEAD_FUNC_CALL_WIP}`,
-          beginCaptures: { 1: { name: "entity.name.function.jome" } },
+          beginCaptures: { 1: { name: "entity.name.function.jome", type: "FUNCTION_NAME" } },
           end: "\r\n|\n|$|chain",
           patterns: [{ include: "#expression" }]
         }

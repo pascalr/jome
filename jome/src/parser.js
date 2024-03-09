@@ -32,7 +32,6 @@ const OPERAND_TYPES = [
   "constant.language.jome",
   "support.variable.jome",
   "FUNCTION_CALL",
-  "support.function-call.WIP.jome",
   // FIXME: These should be renamed, they should end with .jome ... meta.embedded.js.jome, meta.embedded.md.jome, etc
   "meta.embedded.block.javascript",
   "meta.embedded.block.shell",

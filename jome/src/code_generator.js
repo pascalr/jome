@@ -578,7 +578,6 @@ const CODE_GENERATORS = {
   'support.function.builtin.jome': (node) => compUtility(node), // #log
   'BUILT_IN': (node) => compUtility(node), // #log
   "variable.other.constant.utility.jome": (node) => compUtility(node), // #PI
-  "support.function-call.WIP.jome": compileFuncCall, // someFunc "some arg"
   "FUNCTION_CALL": compileFuncCall, // someFunc("some arg")
   "INLINE_FUNCTION_CALL": compileMetaFuncCall, // .someFunc("some arg")
   // js uses more specifically:
