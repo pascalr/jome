@@ -50,6 +50,21 @@ function nodePositionData(node) {
   }
 }
 
+function analyzeFUNCTION(node, nameNode, argsNodes, expressions) {
+
+  if (nameNode) {
+    pushBinding(nameNode, nameNode.raw, {type: 'def', kind: BindingKind.Function})
+  }
+
+  ;(argsNodes||[]).forEach(part => {
+    if (part.type === 'ARGUMENT') {
+      pushBinding(part, part.raw, {type: 'argument', kind: BindingKind.Variable})
+    // } else if (part.type === 'TODO assignement') {
+    }
+  })
+  // argsNodes.analyzed = true
+}
+
 // TODO: Call this function inside: meta.function.jome
 function analyzeFunction(node, nameNode, argsNode, expressions) {
 
@@ -424,7 +439,8 @@ const ANALYZERS = {
     analyzeFunction(node, null, args, expressions)
   },
   "FUNCTION": (node) => {
-    let name = node.parts.find(p => p.type === 'FUNCTION_NAME')?.raw
+    let nameNode = node.parts.find(p => p.type === 'FUNCTION_NAME')
+    let name = nameNode?.raw
     let args = node.parts.filter(p => p.type === 'ARGUMENT')
     let isInline = !!node.parts.find(p => p.type === 'BEGIN_SECTION')
     let expressions;
@@ -440,7 +456,7 @@ const ANALYZERS = {
       return pushError(node, "Missing function name")
     }
 
-    // analyzeFunction(node, node.parts[1], args, expressions)
+    analyzeFUNCTION(node, nameNode, args, expressions)
 
     node.data = {name, expressions, args, isInline}
   },
