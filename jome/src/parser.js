@@ -169,7 +169,7 @@ function parse(tokens, parent, lexEnv) {
       // } else {
         lhs.operands.push(parseSingleExpression(nodes.shift(), lhs.precedence)) // FIXME: No idea if lhs.precedence is correct, pure guess
       // }
-    } else if (lhs.captureSection && lhs.parts[lhs.parts.length-1].type === "punctuation.section.function.begin.jome") {
+    } else if (lhs.captureSection && (lhs.parts[lhs.parts.length-1].type === "punctuation.section.function.begin.jome" || lhs.parts[lhs.parts.length-1].type === "BEGIN_SECTION")) {
       let next = nodes.shift()
       while (next && next.type === 'newline') {
         next = nodes.shift()
@@ -333,6 +333,9 @@ const TOKENS = {
   },
   // def
   "meta.def.jome": {
+    captureSection: true
+  },
+  "FUNCTION": {
     captureSection: true
   },
   // async

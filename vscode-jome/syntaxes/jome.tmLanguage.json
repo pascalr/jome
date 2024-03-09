@@ -413,6 +413,7 @@
       ]
     },
     "paren-args-v2": {
+      "strict": true,
       "name": "meta.args.jome",
       "begin": "\\G\\(",
       "beginCaptures": {
@@ -428,7 +429,7 @@
       },
       "patterns": [
         {
-          "include": "#argument"
+          "include": "#argument_v2"
         },
         {
           "include": "#along"
@@ -530,6 +531,7 @@
       ]
     },
     "def": {
+      "strict": true,
       "name": "meta.def.jome",
       "begin": "\\b(def)\\s*([A-Za-z_$]\\w*)?\\b\\s*",
       "beginCaptures": {
@@ -551,7 +553,7 @@
       },
       "patterns": [
         {
-          "include": "#paren-args"
+          "include": "#paren-args-v2"
         },
         {
           "include": "#expression"
@@ -979,6 +981,7 @@
       ]
     },
     "argument_v2": {
+      "strict": true,
       "patterns": [
         {
           "match": "([A-Za-z_$]\\w*)\\s*(:)\\s*([A-Za-z]\\w*)",

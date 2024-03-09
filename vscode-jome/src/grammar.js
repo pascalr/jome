@@ -333,14 +333,14 @@ let grammar = {
       ]
     },
     "paren-args-v2": {
-      type: 'ARGUMENTS',
+      strict: true,
       name: "meta.args.jome",
       begin: "\\G\\(",
       beginCaptures: { 0: { name: "punctuation.paren.open" } },
       end: "\\)",
       endCaptures: { 0: { name: "punctuation.paren.close" } },
       patterns: [
-        { include: "#argument" },
+        { include: "#argument_v2" },
         { include: "#along" },
         { include: "#expression" }
       ]
@@ -404,20 +404,21 @@ let grammar = {
       ]
     },
     def: {
-      /* type: 'FUNCTION' */
+      strict: true,
+      type: 'FUNCTION',
       name: "meta.def.jome",
       begin: `\\b(def)\\s*(${REGEX_VARIABLE})?\\b\\s*`,
       beginCaptures: {
         1: { name: "keyword.control.jome" },
-        2: { name: "entity.name.function.jome"/*, type: 'FUNCTION-NAME' */ }
+        2: { name: "entity.name.function.jome", type: 'FUNCTION_NAME' }
       },
       end: "(\\bend\\b)|((?<!\\s)\\:\\s)",
       endCaptures: {
         1: { name: "keyword.control.jome" },
-        2: { name: "punctuation.section.function.begin.jome" }
+        2: { name: "punctuation.section.function.begin.jome", type: 'BEGIN_SECTION' }
       },
       patterns: [
-        { include: "#paren-args" },
+        { include: "#paren-args-v2" },
         { include: "#expression" }
       ]
     },
@@ -655,6 +656,7 @@ let grammar = {
       ]
     },
     argument_v2: {
+      strict: true,
       patterns: [
         {
           type: "ARGUMENT",
@@ -1445,13 +1447,14 @@ function convertToRunGrammar(data, strict=false) {
     return data.map(item => convertToRunGrammar(item, strict)).filter(f => f);
   } else if (typeof data === 'object' && data !== null) {
 
+    strict = strict || data.strict
     let keysToRemove = [...['type', 'containsType', 'strict'], ...(strict ? ['name'] : [])]
 
     // If it's an object, create a copy omitting specified keys
     const copy = {};
     for (let key in data) {
       if (!keysToRemove.includes(key)) {
-        let val = convertToRunGrammar(data[key], strict || data.strict);
+        let val = convertToRunGrammar(data[key], strict);
         if (val) {copy[key] = val}
       }
     }

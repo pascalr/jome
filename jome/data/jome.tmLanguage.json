@@ -29,7 +29,6 @@
     "statement": {
       "patterns": [
         {
-          "name": "IMPORT",
           "begin": "^(import) ?(&?[A-Za-z_$]\\w*)?",
           "beginCaptures": {
             "2": {
@@ -119,7 +118,8 @@
                 }
               ]
             }
-          ]
+          ],
+          "name": "IMPORT"
         }
       ]
     },
@@ -392,22 +392,11 @@
       ]
     },
     "paren-args-v2": {
-      "name": "ARGUMENTS",
       "begin": "\\G\\(",
-      "beginCaptures": {
-        "0": {
-          "name": "punctuation.paren.open"
-        }
-      },
       "end": "\\)",
-      "endCaptures": {
-        "0": {
-          "name": "punctuation.paren.close"
-        }
-      },
       "patterns": [
         {
-          "include": "#argument"
+          "include": "#argument_v2"
         },
         {
           "include": "#along"
@@ -502,33 +491,27 @@
       ]
     },
     "def": {
-      "name": "meta.def.jome",
       "begin": "\\b(def)\\s*([A-Za-z_$]\\w*)?\\b\\s*",
       "beginCaptures": {
-        "1": {
-          "name": "keyword.control.jome"
-        },
         "2": {
-          "name": "entity.name.function.jome"
+          "name": "FUNCTION_NAME"
         }
       },
       "end": "(\\bend\\b)|((?<!\\s)\\:\\s)",
       "endCaptures": {
-        "1": {
-          "name": "keyword.control.jome"
-        },
         "2": {
-          "name": "punctuation.section.function.begin.jome"
+          "name": "BEGIN_SECTION"
         }
       },
       "patterns": [
         {
-          "include": "#paren-args"
+          "include": "#paren-args-v2"
         },
         {
           "include": "#expression"
         }
-      ]
+      ],
+      "name": "FUNCTION"
     },
     "chain-bloc": {
       "name": "meta.chain.jome",
@@ -958,9 +941,6 @@
             "1": {
               "name": "NAME"
             },
-            "2": {
-              "name": "keyword.operator.type.annotation.jome"
-            },
             "3": {
               "name": "TYPE"
             }
@@ -972,19 +952,8 @@
           "name": "ARGUMENT"
         },
         {
-          "name": "meta.deconstructed-arg.jome",
           "begin": "\\{",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.curly-braces.open.jome"
-            }
-          },
           "end": "\\}",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.curly-braces.close.jome"
-            }
-          },
           "patterns": [
             {
               "include": "#argument_v2"

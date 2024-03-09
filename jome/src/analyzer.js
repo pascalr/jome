@@ -423,7 +423,24 @@ const ANALYZERS = {
 
     analyzeFunction(node, null, args, expressions)
   },
+  "FUNCTION": (node) => {
+    let name = node.parts.find(p => p.type === 'FUNCTION_NAME')?.raw
+    let args = node.parts.filter(p => p.type === 'ARGUMENT')
+    let isInline = !!node.parts.find(p => p.type === 'BEGIN_SECTION')
+    let expressions = filterCommas(filterSpaces(node.parts.filter(
+      p => p.type !== 'FUNCTION_NAME' && p.type !== 'ARGUMENT' && p.type !== 'BEGIN_SECTION'
+    )))
+    // TODO: Return type
+    if (!name) {
+      return pushError(node, "Missing function name")
+    }
+
+    // analyzeFunction(node, node.parts[1], args, expressions)
+
+    node.data = {name, expressions, args, isInline}
+  },
   // def someFunc end
+  // DEPRECATED: Using FUNCTION now
   'meta.def.jome': (node) => {
     if (node.parts[0].raw !== 'def') {
       pushError(node, "Internal error. meta.def.jome should always start with keyword def")

@@ -157,6 +157,22 @@ function compileRaw(node) {
   return node.raw
 }
 
+function compileArgsV2(args) {
+  let out = `(${args.map((a => {
+    return a.raw // FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEe
+  })).join(', ')})`
+  return out
+  let x = 10
+  let y = 20
+  if (node.type === 'VARIABLE') {
+    return node.raw
+  }
+  let cs = node.parts.slice(1, -1) // remove vertical bars
+  //let args = 
+  //let todo = 10
+  return `(${cs.map(c => genCode(c)).join('')})`
+}
+
 function compileArgs(node) { 
   if (node.type === 'VARIABLE') {
     return node.raw
@@ -219,6 +235,15 @@ function compileMethod(node) {
     return `${name} = ${compileArgs(args)} => {\n${cs.slice(1).map(c => genCode(c)).join('')}\n}`
   } else {
     return `${name} = () => {\n${cs.map(c => genCode(c)).join('')}\n}`
+  }
+}
+
+function compileFUNCTION(node) {
+  let {name, args, expressions} = node.data
+  if (args) {
+    return `function ${name}${compileArgsV2(args)} {${expressions.map(c => genCode(c)).join('')}}`
+  } else {
+    return `function ${name}() {${expressions.map(c => genCode(c)).join('')}}`
   }
 }
 
@@ -556,6 +581,7 @@ const CODE_GENERATORS = {
   'meta.do-end.jome': compileStandaloneFunction,
   // def someFunc end
   'meta.def.jome': compileDefFunction,
+  'FUNCTION': compileFUNCTION,
   // if ... end
   'meta.if-block.jome': (node) => {
     return node.data.sections.map(sect => {
