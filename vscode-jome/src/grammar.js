@@ -332,7 +332,7 @@ let grammar = {
         { include: "#expression" }
       ]
     },
-    "paren-args-v2": {
+    "paren-args": {
       strict: true,
       name: "meta.args.jome",
       begin: "\\G\\(",
@@ -341,19 +341,6 @@ let grammar = {
       endCaptures: { 0: { name: "punctuation.paren.close" } },
       patterns: [
         { include: "#argument_v2" },
-        { include: "#along" },
-        { include: "#expression" }
-      ]
-    },
-    "paren-args": {
-      type: 'ARGUMENTS',
-      name: "meta.args.jome",
-      begin: "\\G\\(",
-      beginCaptures: { 0: { name: "punctuation.paren.open" } },
-      end: "\\)",
-      endCaptures: { 0: { name: "punctuation.paren.close" } },
-      patterns: [
-        { include: "#argument" },
         { include: "#along" },
         { include: "#expression" }
       ]
@@ -418,7 +405,7 @@ let grammar = {
         2: { name: "punctuation.section.function.begin.jome", type: 'BEGIN_SECTION' }
       },
       patterns: [
-        { include: "#paren-args-v2" },
+        { include: "#paren-args" },
         { include: "#expression" }
       ]
     },
@@ -450,7 +437,7 @@ let grammar = {
       end: "(\\bend\\b)|(?:(?<=\\))(?=\\s*\\{))",
       endCaptures: { 1: { name: "keyword.control.jome" } },
       patterns: [
-        { include: "#paren-args-v2" },
+        { include: "#paren-args" },
         { include: "#expression" }
       ]
     },

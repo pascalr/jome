@@ -391,38 +391,12 @@
         }
       ]
     },
-    "paren-args-v2": {
+    "paren-args": {
       "begin": "\\G\\(",
       "end": "\\)",
       "patterns": [
         {
           "include": "#argument_v2"
-        },
-        {
-          "include": "#along"
-        },
-        {
-          "include": "#expression"
-        }
-      ]
-    },
-    "paren-args": {
-      "name": "ARGUMENTS",
-      "begin": "\\G\\(",
-      "beginCaptures": {
-        "0": {
-          "name": "punctuation.paren.open"
-        }
-      },
-      "end": "\\)",
-      "endCaptures": {
-        "0": {
-          "name": "punctuation.paren.close"
-        }
-      },
-      "patterns": [
-        {
-          "include": "#argument"
         },
         {
           "include": "#along"
@@ -508,7 +482,7 @@
       },
       "patterns": [
         {
-          "include": "#paren-args-v2"
+          "include": "#paren-args"
         },
         {
           "include": "#expression"
@@ -569,7 +543,7 @@
       "end": "(\\bend\\b)|(?:(?<=\\))(?=\\s*\\{))",
       "patterns": [
         {
-          "include": "#paren-args-v2"
+          "include": "#paren-args"
         },
         {
           "include": "#expression"

@@ -412,7 +412,7 @@
         }
       ]
     },
-    "paren-args-v2": {
+    "paren-args": {
       "strict": true,
       "name": "meta.args.jome",
       "begin": "\\G\\(",
@@ -430,32 +430,6 @@
       "patterns": [
         {
           "include": "#argument_v2"
-        },
-        {
-          "include": "#along"
-        },
-        {
-          "include": "#expression"
-        }
-      ]
-    },
-    "paren-args": {
-      "name": "meta.args.jome",
-      "begin": "\\G\\(",
-      "beginCaptures": {
-        "0": {
-          "name": "punctuation.paren.open"
-        }
-      },
-      "end": "\\)",
-      "endCaptures": {
-        "0": {
-          "name": "punctuation.paren.close"
-        }
-      },
-      "patterns": [
-        {
-          "include": "#argument"
         },
         {
           "include": "#along"
@@ -553,7 +527,7 @@
       },
       "patterns": [
         {
-          "include": "#paren-args-v2"
+          "include": "#paren-args"
         },
         {
           "include": "#expression"
@@ -620,7 +594,7 @@
       },
       "patterns": [
         {
-          "include": "#paren-args-v2"
+          "include": "#paren-args"
         },
         {
           "include": "#expression"
