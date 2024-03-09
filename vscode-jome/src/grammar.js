@@ -1384,16 +1384,21 @@ function removeKeysRecursive(data) {
 
 // To run grammar
 // Instead of creating a grammar designed for tokenization, create one design to analyze and run code.
-function convertToRunGrammar(data) {
+// Whenever a node is strict, it ignores all the names underneath
+// This is temporary, at one point, everything will be strict by default
+function convertToRunGrammar(data, strict=false) {
   if (Array.isArray(data)) {
     // If it's an array, map over its elements recursively
-    return data.map(item => convertToRunGrammar(item));
+    return data.map(item => convertToRunGrammar(item, strict));
   } else if (typeof data === 'object' && data !== null) {
+
+    let keysToRemove = [...['type', 'containsType', 'strict'], ...(strict ? ['name'] : [])]
+
     // If it's an object, create a copy omitting specified keys
     const copy = {};
     for (let key in data) {
       if (!keysToRemove.includes(key)) {
-        copy[key] = convertToRunGrammar(data[key]);
+        copy[key] = convertToRunGrammar(data[key], strict || data.strict);
       }
     }
     if (data['type']) {
