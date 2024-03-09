@@ -444,37 +444,7 @@ const ANALYZERS = {
 
     node.data = {name, expressions, args, isInline}
   },
-  // def someFunc end
-  // DEPRECATED: Using FUNCTION now
-  'meta.def.jome': (node) => {
-    if (node.parts[0].raw !== 'def') {
-      pushError(node, "Internal error. meta.def.jome should always start with keyword def")
-    }
-    if (node.parts[1]?.type !== 'entity.name.function.jome') {
-      return pushError(node, "Syntax error. Missing function name after keyword def.")
-    }
-    // Arguments, if present, should always be right after the function name
-    if (node.parts.slice(3,-1).find(c => c.type === 'ARGUMENTS')) {
-      return pushError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
-    }
-    if (!node.operands.length && node.parts[node.parts.length-1].raw !== 'end') {
-      return pushError(node, "Missing colon or end statement after keyword def")
-    }
 
-    let name = node.parts[1].raw
-    let args = node.parts[2]?.type === 'ARGUMENTS' ? node.parts[2] : null
-    let expressions;
-
-    if (node.operands.length) {
-      expressions = node.operands
-    } else {
-      expressions = node.parts.slice((args ? 3 : 2), -1) // Remove keywords def, end, and function name
-    }
-
-    analyzeFunction(node, node.parts[1], args, expressions)
-
-    node.data = {name, expressions, args}
-},
   // js uses more specifically:
   // keyword.operator.arithmetic.jome
   // keyword.operator.logical.jome

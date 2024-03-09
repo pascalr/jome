@@ -226,16 +226,24 @@ function compileConstrutor(node) {
   return ''
 }
 
-// A def inside a class
+// A FUNCTION inside a class
 function compileMethod(node) {
-  let name = node.parts[1].raw
-  let cs = node.parts.slice(2,-1) // Remove keywords def, end, and function name
-  let args = cs[0].type === 'ARGUMENTS' ? cs[0] : null
+
+  let {name, args, expressions} = node.data
   if (args) {
-    return `${name} = ${compileArgs(args)} => {\n${cs.slice(1).map(c => genCode(c)).join('')}\n}`
+    return `${name} = ${compileArgsV2(args)} => {\n${expressions.map(c => genCode(c)).join('')}}\n`
   } else {
-    return `${name} = () => {\n${cs.map(c => genCode(c)).join('')}\n}`
+    return `${name} = () => {\n${expressions.map(c => genCode(c)).join('')}\n}`
   }
+
+  // let name = node.parts[1].raw
+  // let cs = node.parts.slice(2,-1) // Remove keywords def, end, and function name
+  // let args = cs[0].type === 'ARGUMENTS' ? cs[0] : null
+  // if (args) {
+  //   return `${name} = ${compileArgs(args)} => {\n${cs.slice(1).map(c => genCode(c)).join('')}\n}`
+  // } else {
+  //   return `${name} = () => {\n${cs.map(c => genCode(c)).join('')}\n}`
+  // }
 }
 
 function compileFUNCTION(node) {
@@ -579,8 +587,6 @@ const CODE_GENERATORS = {
   },
   // do |args| /* ... */ end
   'meta.do-end.jome': compileStandaloneFunction,
-  // def someFunc end
-  'meta.def.jome': compileDefFunction,
   'FUNCTION': compileFUNCTION,
   // if ... end
   'meta.if-block.jome': (node) => {
@@ -611,7 +617,7 @@ const CODE_GENERATORS = {
   "meta.class.jome": (node) => {
     let {name} = node.data
     let parts = node.parts.slice(2,-1)
-    let methods = parts.filter(p => p.type === 'meta.def.jome')
+    let methods = parts.filter(p => p.type === 'FUNCTION')
     let compiledMethods = compileConstrutor(node)
     compiledMethods += methods.map(m => compileMethod(m)).join('\n')
     return `class ${name} {\n${compiledMethods}\n}`
