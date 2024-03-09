@@ -32,16 +32,14 @@
           "name": "IMPORT",
           "begin": "^(import) ?(&?[A-Za-z_$]\\w*)?",
           "beginCaptures": {
-            "1": {
-              "name": "keyword.control.jome"
-            },
+            "1": {},
             "2": {
-              "name": "DEFAULT_IMPORT",
               "patterns": [
                 {
                   "include": "#import-identifier"
                 }
-              ]
+              ],
+              "name": "DEFAULT_IMPORT"
             }
           },
           "end": "\r\n|\n|$",
@@ -50,31 +48,25 @@
               "match": "\\s+"
             },
             {
-              "name": "meta.namespace-import.jome",
               "match": "(\\*) (as) (&?[A-Za-z_$]\\w*)",
               "captures": {
-                "1": {
-                  "name": "constant.language.import-export-all.jome"
-                },
-                "2": {
-                  "name": "keyword.control.jome"
-                },
+                "1": {},
+                "2": {},
                 "3": {
-                  "name": "NAMESPACE_IMPORT",
                   "patterns": [
                     {
                       "include": "#import-identifier"
                     }
-                  ]
+                  ],
+                  "name": "NAMESPACE_IMPORT"
                 }
               }
             },
             {
-              "name": "meta.import-file.jome",
               "match": "(from|\\:|of) (\"[^\"]*\"|'[^']*')",
               "captures": {
                 "1": {
-                  "name": "keyword.control.jome"
+                  "name": "IMPORT_STYLE"
                 },
                 "2": {
                   "name": "IMPORT_FILE"
@@ -82,53 +74,43 @@
               }
             },
             {
-              "name": "meta.named-imports.jome",
               "begin": "\\{",
               "end": "\\}",
               "patterns": [
                 {
-                  "name": "ALIAS_IMPORT",
                   "match": "(&?[A-Za-z_$]\\w*) (as) ([A-Za-z_$]\\w*)",
                   "captures": {
                     "1": {
-                      "name": "variable.other.readwrite.jome",
                       "patterns": [
                         {
                           "include": "#import-identifier"
                         }
                       ]
                     },
-                    "2": {
-                      "name": "keyword.control.jome"
-                    },
+                    "2": {},
                     "3": {
-                      "name": "variable.other.readwrite.alias.jome"
+                      "name": "VARIABLE"
                     }
-                  }
+                  },
+                  "name": "ALIAS_IMPORT"
                 },
                 {
-                  "name": "ALIAS_IMPORT",
                   "match": "(\"[^\"]*\"|'[^']*') (as) ([A-Za-z_$]\\w*)",
                   "captures": {
-                    "1": {
-                      "name": "string.quoted.jome"
-                    },
-                    "2": {
-                      "name": "keyword.control.jome"
-                    },
-                    "3": {
-                      "name": "variable.other.readwrite.alias.jome"
-                    }
-                  }
+                    "1": {},
+                    "2": {},
+                    "3": {}
+                  },
+                  "name": "ALIAS_IMPORT"
                 },
                 {
-                  "name": "NAMED_IMPORT",
                   "match": "&?[A-Za-z_$]\\w*",
                   "patterns": [
                     {
                       "include": "#import-identifier"
                     }
-                  ]
+                  ],
+                  "name": "NAMED_IMPORT"
                 },
                 {
                   "include": "#comma"

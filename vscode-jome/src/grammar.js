@@ -89,7 +89,7 @@ let grammar = {
       patterns: [
         {
           type: "IMPORT",
-          //strict: true,
+          strict: true,
           name: "meta.statement.import.jome",
           begin: `^(import) ?(&?${REGEX_VARIABLE})?`,
           beginCaptures: {
@@ -121,7 +121,7 @@ let grammar = {
               // TODO: deprecate the colon, it is ugly
               match: `(from|\\:|of) (${REGEX_REGULAR_STRING})`,
               captures: {
-                1: { name: "keyword.control.jome" },
+                1: { name: "keyword.control.jome", type: "IMPORT_STYLE" },
                 2: { name: "string.quoted.jome", type: "IMPORT_FILE" }
               }
             },
@@ -142,7 +142,7 @@ let grammar = {
                       ]
                     },
                     2: { name: "keyword.control.jome" },
-                    3: { name: "variable.other.readwrite.alias.jome" }
+                    3: { name: "variable.other.readwrite.alias.jome", type: "VARIABLE" }
                   }
                 },
                 {
