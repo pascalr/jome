@@ -34,20 +34,6 @@ function extractImportBindingsByFile(lexEnv, acc={}) {
   return acc
 }
 
-// Check env and nested
-// function extractImportBindingsByFile(lexEnv, acc={}) {
-//   Object.values(lexEnv.bindings).forEach(binding => {
-//     let t = binding.type
-//     if (t === 'default-import' || t === 'namespace-import' || t === 'named-import' || t === 'alias-import') {
-//       acc[binding.file] = [...(acc[binding.file]||[]), binding]
-//     }
-//   })
-//   lexEnv.nestedEnvs.forEach(nested => {
-//     acc = extractImportBindingsByFile(nested, acc)
-//   })
-//   return acc
-// }
-
 let GLOBAL_LIBS = ["assert", "buffer", "child_process", "cluster", "crypto", "dgram", "dns", "domain", "events",
 "fs", "http", "https", "net", "os", "path", "punycode", "querystring", "readline", "stream", "string_decoder",
 "timers", "tls", "tty", "url", "util", "v8", "vm", "zlib"]
@@ -226,15 +212,6 @@ function compileMethod(node) {
   } else {
     return `${name} = () => {\n${expressions.map(c => genCode(c)).join('')}\n}`
   }
-
-  // let name = node.parts[1].raw
-  // let cs = node.parts.slice(2,-1) // Remove keywords def, end, and function name
-  // let args = cs[0].type === 'ARGUMENTS' ? cs[0] : null
-  // if (args) {
-  //   return `${name} = ${compileArgs(args)} => {\n${cs.slice(1).map(c => genCode(c)).join('')}\n}`
-  // } else {
-  //   return `${name} = () => {\n${cs.map(c => genCode(c)).join('')}\n}`
-  // }
 }
 
 function compileFUNCTION(node) {

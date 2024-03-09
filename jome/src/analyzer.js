@@ -65,29 +65,6 @@ function analyzeFUNCTION(node, nameNode, argsNodes, expressions) {
   // argsNodes.analyzed = true
 }
 
-function analyzeFunction(node, nameNode, argsNode, expressions) {
-
-  if (nameNode) {
-    pushBinding(nameNode, nameNode.raw, {type: 'def', kind: BindingKind.Function})
-  }
-
-  if (argsNode) {
-    if (argsNode.type !== 'ARGUMENTS') {
-      return pushError(node, "Internal error expected analyzeFunction to receive node of type arguments")
-    }
-    let parts = argsNode.parts.slice(1, -1) // Remove opening and closing parenthesis of vertical bar
-    parts.forEach(part => {
-      if (part.type === 'VARIABLE') {
-        pushBinding(part, part.raw, {type: 'argument', kind: BindingKind.Variable})
-      // } else if (part.type === 'TODO assignement') {
-      }
-    })
-    argsNode.analyzed = true
-  }
-
-  // TODO: Create a nested lex env and analyze the expressions
-}
-
 function pushError(node, message) {
   // this.suggestions = []
   // this.uid = null // A four or five digits number? See Language Server Diagnostic source
@@ -197,13 +174,6 @@ function ensureEndType(node, str) {
     pushError(node, `Internal error. ${node.type} should always end with token of type ${str}. Was ${s}`)
   }
 }
-function ensureAllType(node, list, str) {
-  list.forEach(el => {
-    if (el.type !== str) {
-      pushError(node, `Error. ${node.type} should only contain tokens of type ${str}. Was ${el.type}`)
-    }
-  })
-}
 function ensureAllTypeIn(node, list, arr) {
   list.forEach(el => {
     if (!arr.includes(el.type)) {
@@ -241,13 +211,6 @@ function parseList(items) {
     }
   })
   return modified
-}
-
-function ensureListSeparatedByCommasOrNewlines(node, items) {
-  // All the even index operands should be punctuation.separator.delimiter.jome
-  if (items.some((c,i) => (i % 2 === 1) && (c.type !== 'punctuation.separator.delimiter.jome'))) {
-    pushError(node, "Syntax error. Expecting commas between every element inside a list")
-  }
 }
 
 function filterNewlines(list) {
