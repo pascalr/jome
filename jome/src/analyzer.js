@@ -21,6 +21,27 @@ class SyntaxError extends Error {
 //   }
 // }
 
+function groupManyByType(arr) {
+  return arr.reduce((grouped, item) => {
+    if (!grouped[item.type]) {
+      grouped[item.type] = [];
+    }
+    grouped[item.type].push(item);
+    return grouped;
+  }, {});
+}
+
+function groupByType(arr) {
+  return arr.reduce((grouped, item) => {
+    if (grouped[item.type]) {
+      // throw new SyntaxError()
+      throw new Error("groupByType expects a single element of each type only. Use groupManyByType to have many")
+    }
+    grouped[item.type] = item;
+    return grouped;
+  }, {});
+}
+
 function nodePositionData(node) {
   return {
     lineNb: node.token.lineNb,
@@ -370,9 +391,14 @@ const ANALYZERS = {
   // var bar
   'DECLARATION': (node) => {
 
-    let keyword = node.parts.find(p => p.type === 'KEYWORD_DECLARATION')?.raw || 'let'
-    let name = node.parts.find(p => p.type === 'VARIABLE')?.raw
-    let variableType = node.parts.find(p => p.type === 'TYPE')?.raw
+    let data = groupByType(node.parts)
+    let keyword = data['KEYWORD_DECLARATION']?.raw || "let"
+    let name = data['VARIABLE']?.raw
+    let variableType = data['TYPE']?.raw
+
+    // let keyword = node.parts.find(p => p.type === 'KEYWORD_DECLARATION')?.raw || 'let'
+    // let name = node.parts.find(p => p.type === 'VARIABLE')?.raw
+    // let variableType = node.parts.find(p => p.type === 'TYPE')?.raw
 
     if (!name) { return pushError(node, "Missing variable name after keyword "+keyword) }
 
