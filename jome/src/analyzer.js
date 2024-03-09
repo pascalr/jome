@@ -346,6 +346,7 @@ const ANALYZERS = {
     let isInline = !!node.parts.find(p => p.type === 'BEGIN_SECTION')
     let style = node.parts.find(p => p.type === 'FUNCTION_STYLE')?.raw
     let expressions;
+    // When the function uses the colon style, the expressions will be the operands
     if (node.operands.length) {
       expressions = node.operands
     } else {

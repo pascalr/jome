@@ -31,7 +31,7 @@
         {
           "strict": true,
           "name": "meta.statement.import.jome",
-          "begin": "^(import) ?(&?[A-Za-z_$]\\w*)?",
+          "begin": "^(import) ?(&?[A-Za-z_$][A-Za-z0-9_]*)?",
           "beginCaptures": {
             "1": {
               "name": "keyword.control.jome"
@@ -52,7 +52,7 @@
             },
             {
               "name": "meta.namespace-import.jome",
-              "match": "(\\*) (as) (&?[A-Za-z_$]\\w*)",
+              "match": "(\\*) (as) (&?[A-Za-z_$][A-Za-z0-9_]*)",
               "captures": {
                 "1": {
                   "name": "constant.language.import-export-all.jome"
@@ -89,7 +89,7 @@
               "patterns": [
                 {
                   "name": "meta.import-alias.jome",
-                  "match": "(&?[A-Za-z_$]\\w*) (as) ([A-Za-z_$]\\w*)",
+                  "match": "(&?[A-Za-z_$][A-Za-z0-9_]*) (as) ([A-Za-z_$][A-Za-z0-9_]*)",
                   "captures": {
                     "1": {
                       "name": "variable.other.readwrite.jome",
@@ -109,7 +109,7 @@
                 },
                 {
                   "name": "meta.import-alias.jome",
-                  "match": "(\"[^\"]*\"|'[^']*') (as) ([A-Za-z_$]\\w*)",
+                  "match": "(\"[^\"]*\"|'[^']*') (as) ([A-Za-z_$][A-Za-z0-9_]*)",
                   "captures": {
                     "1": {
                       "name": "string.quoted.jome"
@@ -124,7 +124,7 @@
                 },
                 {
                   "name": "variable.other.named-import.jome",
-                  "match": "&?[A-Za-z_$]\\w*",
+                  "match": "&?[A-Za-z_$][A-Za-z0-9_]*",
                   "patterns": [
                     {
                       "include": "#import-identifier"
@@ -347,11 +347,11 @@
     "symbols": {
       "patterns": [
         {
-          "match": ":[A-Za-z_$]\\w*\\!",
+          "match": ":[A-Za-z_$][A-Za-z0-9_]*\\!",
           "name": "variable.symbol.true.jome"
         },
         {
-          "match": ":([A-Za-z_$]\\w*)",
+          "match": ":([A-Za-z_$][A-Za-z0-9_]*)",
           "name": "variable.symbol.jome"
         }
       ]
@@ -445,7 +445,7 @@
       "patterns": [
         {
           "name": "meta.declaration.jome",
-          "match": "(\\b(?:int|string|bool|float)\\b(?:\\[\\])*)\\s+([A-Za-z_$]\\w*)",
+          "match": "(\\b(?:int|string|bool|float)\\b(?:\\[\\])*)\\s+([A-Za-z_$][A-Za-z0-9_]*)",
           "captures": {
             "1": {
               "name": "storage.type.jome"
@@ -457,7 +457,7 @@
         },
         {
           "name": "meta.declaration.jome",
-          "match": "\\b(let|var|const)\\b\\s*([A-Za-z_$]\\w*)?(?:\\s*(\\:)\\s*(\\b(?:int|string|bool|float)\\b(?:\\[\\])*))",
+          "match": "\\b(let|var|const)\\b\\s*([A-Za-z_$][A-Za-z0-9_]*)?(?:\\s*(\\:)\\s*(\\b(?:int|string|bool|float)\\b(?:\\[\\])*))",
           "captures": {
             "1": {
               "name": "keyword.control.declaration.jome"
@@ -475,7 +475,7 @@
         },
         {
           "name": "meta.declaration.jome",
-          "match": "\\b(let|var|const)\\b\\s*([A-Za-z_$]\\w*)?(?:\\s*(\\:)\\s*([A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*))?",
+          "match": "\\b(let|var|const)\\b\\s*([A-Za-z_$][A-Za-z0-9_]*)?(?:\\s*(\\:)\\s*([A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*))?",
           "captures": {
             "1": {
               "name": "keyword.control.declaration.jome"
@@ -493,7 +493,7 @@
         },
         {
           "name": "meta.declaration.jome",
-          "match": "([A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*)\\s+(?!\\b(?:chain|do)\\b)([A-Za-z_$]\\w*)\\s*(?=\n|;)",
+          "match": "([A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*)\\s+(?!\\b(?:chain|do)\\b)([A-Za-z_$][A-Za-z0-9_]*)\\s*(?=\n|;)",
           "captures": {
             "1": {
               "name": "entity.name.type.jome"
@@ -508,7 +508,7 @@
     "def": {
       "strict": true,
       "name": "meta.def.jome",
-      "begin": "\\b(def)\\s*([A-Za-z_$]\\w*)?\\b\\s*",
+      "begin": "\\b(def)\\s*([A-Za-z_$][A-Za-z0-9_]*)?\\b\\s*",
       "beginCaptures": {
         "1": {
           "name": "keyword.control.jome"
@@ -582,7 +582,7 @@
     "function": {
       "strict": true,
       "name": "meta.function.jome",
-      "begin": "\\b(function|fn)\\b\\s*([A-Za-z_$]\\w*(?=\\)))?\\s*",
+      "begin": "\\b(function|fn)\\b\\s*([A-Za-z_$][A-Za-z0-9_]*(?=\\())?\\s*",
       "beginCaptures": {
         "1": {
           "name": "keyword.control.jome"
@@ -645,7 +645,7 @@
         },
         {
           "name": "meta.catch.jome",
-          "begin": "\\b(catch)\\b\\s*(?:\\(\\s*([A-Za-z_$]\\w*)\\)\\s*)?\\s*\\{",
+          "begin": "\\b(catch)\\b\\s*(?:\\(\\s*([A-Za-z_$][A-Za-z0-9_]*)\\)\\s*)?\\s*\\{",
           "beginCaptures": {
             "1": {
               "name": "keyword.control.trycatch.jome"
@@ -972,7 +972,7 @@
       "strict": true,
       "patterns": [
         {
-          "match": "([A-Za-z_$]\\w*)\\s*(:)\\s*([A-Za-z]\\w*)",
+          "match": "([A-Za-z_$][A-Za-z0-9_]*)\\s*(:)\\s*([A-Za-z]\\w*)",
           "captures": {
             "1": {
               "name": "variable.other.jome"
@@ -986,7 +986,7 @@
           }
         },
         {
-          "match": "[A-Za-z_$]\\w*",
+          "match": "[A-Za-z_$][A-Za-z0-9_]*",
           "name": "variable.other.jome"
         },
         {
@@ -1017,7 +1017,7 @@
     "argument": {
       "patterns": [
         {
-          "match": "([A-Za-z_$]\\w*)\\s*(:)\\s*([A-Za-z]\\w*)",
+          "match": "([A-Za-z_$][A-Za-z0-9_]*)\\s*(:)\\s*([A-Za-z]\\w*)",
           "captures": {
             "1": {
               "name": "variable.other.jome"
@@ -1031,7 +1031,7 @@
           }
         },
         {
-          "match": "[A-Za-z_$]\\w*",
+          "match": "[A-Za-z_$][A-Za-z0-9_]*",
           "name": "variable.other.jome"
         },
         {
@@ -1060,7 +1060,7 @@
       ]
     },
     "variable": {
-      "match": "[A-Za-z_$]\\w*",
+      "match": "[A-Za-z_$][A-Za-z0-9_]*",
       "name": "variable.other.jome"
     },
     "caller": {

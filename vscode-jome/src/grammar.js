@@ -8,7 +8,7 @@ const path = require('path');
 const REGEX_CLASS_NAME = "[A-Za-z_$]\\w*" // FIXME: Accents
 // FIXME: REGEX_CLASS_NAME and REGEX_VARIABLE should be the same otherwise the patterns must be modified
 // I don't know if they are the same, but I think so.
-const REGEX_VARIABLE = "[A-Za-z_$]\\w*" // FIXME: Accents
+const REGEX_VARIABLE = "[A-Za-z_$][A-Za-z0-9_]*" // FIXME: Accents
 const REGEX_PROPERTY = `\\.${REGEX_VARIABLE}` // .property
 
 const REGEX_PATH_CHARS = "[^ \\(\\)\\,]*"
@@ -434,7 +434,7 @@ let grammar = {
       strict: true,
       type: "FUNCTION",
       name: "meta.function.jome",
-      begin: `\\b(function|fn)\\b\\s*(${REGEX_VARIABLE}(?=\\)))?\\s*`,
+      begin: `\\b(function|fn)\\b\\s*(${REGEX_VARIABLE}(?=\\())?\\s*`,
       beginCaptures: {
         1: { name: "keyword.control.jome", type: 'FUNCTION_STYLE' },
         2: { name: "entity.name.function.jome", type: 'FUNCTION_NAME' }
