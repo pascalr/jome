@@ -32,7 +32,6 @@
           "name": "IMPORT",
           "begin": "^(import) ?(&?[A-Za-z_$]\\w*)?",
           "beginCaptures": {
-            "1": {},
             "2": {
               "patterns": [
                 {
@@ -50,8 +49,6 @@
             {
               "match": "(\\*) (as) (&?[A-Za-z_$]\\w*)",
               "captures": {
-                "1": {},
-                "2": {},
                 "3": {
                   "patterns": [
                     {
@@ -87,7 +84,6 @@
                         }
                       ]
                     },
-                    "2": {},
                     "3": {
                       "name": "VARIABLE"
                     }
@@ -97,9 +93,12 @@
                 {
                   "match": "(\"[^\"]*\"|'[^']*') (as) ([A-Za-z_$]\\w*)",
                   "captures": {
-                    "1": {},
-                    "2": {},
-                    "3": {}
+                    "1": {
+                      "name": "STRING"
+                    },
+                    "3": {
+                      "name": "VARIABLE"
+                    }
                   },
                   "name": "ALIAS_IMPORT"
                 },
@@ -441,7 +440,6 @@
             "2": {
               "name": "VARIABLE"
             },
-            "3": {},
             "4": {
               "name": "TYPE"
             }
@@ -457,7 +455,6 @@
             "2": {
               "name": "VARIABLE"
             },
-            "3": {},
             "4": {
               "name": "TYPE"
             }

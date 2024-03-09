@@ -150,9 +150,9 @@ let grammar = {
                   name: "meta.import-alias.jome",
                   match: `(${REGEX_REGULAR_STRING}) (as) (${REGEX_VARIABLE})`,
                   captures: {
-                    1: { name: "string.quoted.jome" },
+                    1: { name: "string.quoted.jome", type: "STRING" },
                     2: { name: "keyword.control.jome" },
-                    3: { name: "variable.other.readwrite.alias.jome" }
+                    3: { name: "variable.other.readwrite.alias.jome", type: "VARIABLE" }
                   }
                 },
                 {
@@ -1395,7 +1395,7 @@ function removeKeysRecursive(data) {
 function convertToRunGrammar(data, strict=false) {
   if (Array.isArray(data)) {
     // If it's an array, map over its elements recursively
-    return data.map(item => convertToRunGrammar(item, strict));
+    return data.map(item => convertToRunGrammar(item, strict)).filter(f => f);
   } else if (typeof data === 'object' && data !== null) {
 
     let keysToRemove = [...['type', 'containsType', 'strict'], ...(strict ? ['name'] : [])]
@@ -1404,13 +1404,14 @@ function convertToRunGrammar(data, strict=false) {
     const copy = {};
     for (let key in data) {
       if (!keysToRemove.includes(key)) {
-        copy[key] = convertToRunGrammar(data[key], strict || data.strict);
+        let val = convertToRunGrammar(data[key], strict || data.strict);
+        if (val) {copy[key] = val}
       }
     }
     if (data['type']) {
       copy['name'] = data['type']
     }
-    return copy;
+    return Object.keys(copy).length ? copy : null;
   } else {
     // For other types, return as is
     return data;
