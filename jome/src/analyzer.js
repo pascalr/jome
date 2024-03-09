@@ -37,8 +37,8 @@ function analyzeFunction(node, nameNode, argsNode, expressions) {
   }
 
   if (argsNode) {
-    if (argsNode.type !== 'meta.args.jome') {
-      return pushError(node, "Internal error expected analyzeFunction to receive node of type meta.args.jome")
+    if (argsNode.type !== 'arguments') {
+      return pushError(node, "Internal error expected analyzeFunction to receive node of type arguments")
     }
     let parts = argsNode.parts.slice(1, -1) // Remove opening and closing parenthesis of vertical bar
     parts.forEach(part => {
@@ -336,8 +336,8 @@ const ANALYZERS = {
     // }
 
     // Arguments, if present, should always be at the beginning
-    // if (node.parts.slice(nameNode ? 3 : 2,-1).find(c => c.type === 'meta.args.jome')) {
-    if (node.parts.slice(2,-1).find(c => c.type === 'meta.args.jome')) {
+    // if (node.parts.slice(nameNode ? 3 : 2,-1).find(c => c.type === 'arguments')) {
+    if (node.parts.slice(2,-1).find(c => c.type === 'arguments')) {
       return pushError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
     }
 
@@ -395,11 +395,11 @@ const ANALYZERS = {
       return pushError(node, "Internal error. meta.do-end.jome should always end with keyword end")
     }
     // Arguments, if present, should always be right after the function name
-    if (node.parts.slice(2,-1).find(c => c.type === 'meta.args.jome')) {
+    if (node.parts.slice(2,-1).find(c => c.type === 'arguments')) {
       return pushError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
     }
 
-    let args = node.parts[1]?.type === 'meta.args.jome' ? node.parts[1] : null
+    let args = node.parts[1]?.type === 'arguments' ? node.parts[1] : null
     let expressions = args ? node.parts.slice(2, -1) : node.parts.slice(1, -1)
 
     analyzeFunction(node, null, args, expressions)
@@ -413,7 +413,7 @@ const ANALYZERS = {
       return pushError(node, "Syntax error. Missing function name after keyword def.")
     }
     // Arguments, if present, should always be right after the function name
-    if (node.parts.slice(3,-1).find(c => c.type === 'meta.args.jome')) {
+    if (node.parts.slice(3,-1).find(c => c.type === 'arguments')) {
       return pushError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
     }
     if (!node.operands.length && node.parts[node.parts.length-1].raw !== 'end') {
@@ -421,7 +421,7 @@ const ANALYZERS = {
     }
 
     let name = node.parts[1].raw
-    let args = node.parts[2]?.type === 'meta.args.jome' ? node.parts[2] : null
+    let args = node.parts[2]?.type === 'arguments' ? node.parts[2] : null
     let expressions;
 
     if (node.operands.length) {

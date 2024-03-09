@@ -214,7 +214,7 @@ function compileConstrutor(node) {
 function compileMethod(node) {
   let name = node.parts[1].raw
   let cs = node.parts.slice(2,-1) // Remove keywords def, end, and function name
-  let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
+  let args = cs[0].type === 'arguments' ? cs[0] : null
   if (args) {
     return `${name} = ${compileArgs(args)} => {\n${cs.slice(1).map(c => genCode(c)).join('')}\n}`
   } else {
@@ -234,7 +234,7 @@ function compileDefFunction(node) {
 
 function compileStandaloneFunction(node) {
   let cs = node.parts.slice(1,-1) // Remove keywords do and end
-  let args = cs[0].type === 'meta.args.jome' ? cs[0] : null
+  let args = cs[0].type === 'arguments' ? cs[0] : null
   if (args) {
     return `function ${compileArgs(args)} {${cs.slice(1).map(c => genCode(c)).join('')}}`
   } else {

@@ -359,7 +359,7 @@
       "match": "=>| -> "
     },
     "vbars-args": {
-      "name": "meta.args.jome",
+      "name": "arguments",
       "begin": "\\|(?!\\|)",
       "beginCaptures": {
         "0": {
@@ -411,7 +411,7 @@
       ]
     },
     "paren-args": {
-      "name": "meta.args.jome",
+      "name": "arguments",
       "begin": "\\G\\(",
       "beginCaptures": {
         "0": {

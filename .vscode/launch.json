@@ -27,6 +27,16 @@
     {
       "type": "node-terminal",
       "request": "launch",
+      "name": "Build grammar",
+      "cwd": "${workspaceFolder}/vscode-jome",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "command": "npm run build"
+    },
+    {
+      "type": "node-terminal",
+      "request": "launch",
       "name": "Run Tests",
       "cwd": "${workspaceFolder}/jome",
       "skipFiles": [

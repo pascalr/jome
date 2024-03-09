@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+// TODO: Move this in a separate package that can be used by both jome and vscode-jome
+
 // TODO: Use \\p{L} ?
 // Use [:alnum:] ?
 const REGEX_CLASS_NAME = "[A-Za-z_$]\\w*" // FIXME: Accents
@@ -319,7 +321,7 @@ let grammar = {
       ]
     },
     "paren-args": {
-      /* type: 'arguments' */
+      type: 'arguments',
       name: "meta.args.jome",
       begin: "\\G\\(",
       beginCaptures: { 0: { name: "punctuation.paren.open" } },
@@ -1374,14 +1376,17 @@ function removeKeysRecursive(data) {
 function convertToRunGrammar(data) {
   if (Array.isArray(data)) {
     // If it's an array, map over its elements recursively
-    return data.map(item => removeKeysRecursive(item));
+    return data.map(item => convertToRunGrammar(item));
   } else if (typeof data === 'object' && data !== null) {
     // If it's an object, create a copy omitting specified keys
     const copy = {};
     for (let key in data) {
       if (!keysToRemove.includes(key)) {
-        copy[key] = removeKeysRecursive(data[key]);
+        copy[key] = convertToRunGrammar(data[key]);
       }
+    }
+    if (data['type']) {
+      copy['name'] = data['type']
     }
     return copy;
   } else {
