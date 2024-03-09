@@ -443,7 +443,7 @@
           "match": "(\\b(?:int|string|bool|float)\\b(?:\\[\\])*)\\s+([A-Za-z_$]\\w*)",
           "captures": {
             "1": {
-              "name": "storage.type.primitive.jome"
+              "name": "storage.type.jome"
             },
             "2": {
               "name": "variable.other.jome"

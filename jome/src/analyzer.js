@@ -380,7 +380,7 @@ const ANALYZERS = {
     let variableType
     if (node.parts.length === 4) {
       variableType = node.parts[3].raw
-    } else if (node.parts[0].type === 'storage.type.primitive.jome') {
+    } else if (node.parts[0].type === 'type') {
       variableType = node.parts[0].raw
     }
     pushBinding(node, name, {type: 'declaration', keyword, variableType, kind: BindingKind.Variable})

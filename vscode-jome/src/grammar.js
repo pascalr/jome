@@ -341,7 +341,7 @@ let grammar = {
           name: "meta.declaration.jome",
           match: `(${REGEX_PRIMITIVE_TYPE})\\s+(${REGEX_VARIABLE})`,
           captures: {
-            1: { name: "storage.type.primitive.jome"/*, type: 'type' */ },
+            1: { name: "storage.type.jome", type: 'type' }, // primitive type
             2: { name: "variable.other.jome"/*, type: 'variable' */ }
           }
         },
@@ -353,7 +353,7 @@ let grammar = {
             1: { name: "keyword.control.declaration.jome"/*, type: 'keyword.declaration' */ },
             2: { name: "variable.other.jome"/*, type: 'variable' */ },
             3: { name: "punctuation.colon.jome" },
-            4: { name: "storage.type.jome"/*, type: 'type' */ }
+            4: { name: "storage.type.jome", type: 'type' } // primitive type
           }
         },
         {
@@ -364,7 +364,7 @@ let grammar = {
             1: { name: "keyword.control.declaration.jome"/*, type: 'keyword-declaration' */ },
             2: { name: "variable.other.jome"/*, type: 'variable' */ },
             3: { name: "punctuation.colon.jome" },
-            4: { name: "entity.name.type.jome"/*, type: 'type' */ }
+            4: { name: "entity.name.type.jome", type: 'type' } // custom type
           }
         },
         {
@@ -372,7 +372,7 @@ let grammar = {
           name: "meta.declaration.jome",
           match: `(${REGEX_TYPE})\\s+(?!\\b(?:chain|do)\\b)(${REGEX_VARIABLE})\\s*(?=\n|;)`,
           captures: {
-            1: { name: "entity.name.type.jome"/*, type: 'type' */ },
+            1: { name: "entity.name.type.jome", type: 'type' }, // custom type
             2: { name: "variable.other.jome"/*, type: 'variable' */ }
           }
         },
@@ -480,7 +480,8 @@ let grammar = {
               name: "keyword.control.jome"
             },
             2: {
-              name: "entity.name.type.jome"
+              name: "entity.name.type.jome", // custom type
+              type: "type"
             },
             3: {
               patterns: [
@@ -500,7 +501,8 @@ let grammar = {
               name: "keyword.control.jome"
             },
             2: {
-              name: "entity.name.type.jome"
+              name: "entity.name.type.jome", // custom type
+              type: "type"
             }
           },
           end: "\\b(end)\\b",
