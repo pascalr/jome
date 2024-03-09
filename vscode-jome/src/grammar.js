@@ -104,6 +104,7 @@ let grammar = {
           patterns: [
             { match: "\\s+" },
             {
+              type: "NAMESPACE_IMPORT",
               name: "meta.namespace-import.jome",
               match: `(\\*) (as) (&?${REGEX_VARIABLE})`,
               captures: {
