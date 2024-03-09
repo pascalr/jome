@@ -439,7 +439,6 @@
     "declaration": {
       "patterns": [
         {
-          "name": "DECLARATION",
           "match": "(\\b(?:int|string|bool|float)\\b(?:\\[\\])*)\\s+([A-Za-z_$]\\w*)",
           "captures": {
             "1": {
@@ -448,10 +447,10 @@
             "2": {
               "name": "VARIABLE"
             }
-          }
+          },
+          "name": "DECLARATION"
         },
         {
-          "name": "DECLARATION",
           "match": "\\b(let|var|const)\\b\\s*([A-Za-z_$]\\w*)?(?:\\s*(\\:)\\s*(\\b(?:int|string|bool|float)\\b(?:\\[\\])*))",
           "captures": {
             "1": {
@@ -460,16 +459,14 @@
             "2": {
               "name": "VARIABLE"
             },
-            "3": {
-              "name": "punctuation.colon.jome"
-            },
+            "3": {},
             "4": {
               "name": "TYPE"
             }
-          }
+          },
+          "name": "DECLARATION"
         },
         {
-          "name": "DECLARATION",
           "match": "\\b(let|var|const)\\b\\s*([A-Za-z_$]\\w*)?(?:\\s*(\\:)\\s*([A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*))?",
           "captures": {
             "1": {
@@ -478,16 +475,14 @@
             "2": {
               "name": "VARIABLE"
             },
-            "3": {
-              "name": "punctuation.colon.jome"
-            },
+            "3": {},
             "4": {
               "name": "TYPE"
             }
-          }
+          },
+          "name": "DECLARATION"
         },
         {
-          "name": "DECLARATION",
           "match": "([A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*)\\s+(?!\\b(?:chain|do)\\b)([A-Za-z_$]\\w*)\\s*(?=\n|;)",
           "captures": {
             "1": {
@@ -496,7 +491,8 @@
             "2": {
               "name": "VARIABLE"
             }
-          }
+          },
+          "name": "DECLARATION"
         }
       ]
     },

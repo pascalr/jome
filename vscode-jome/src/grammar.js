@@ -89,6 +89,7 @@ let grammar = {
       patterns: [
         {
           type: "IMPORT",
+          //strict: true,
           name: "meta.statement.import.jome",
           begin: `^(import) ?(&?${REGEX_VARIABLE})?`,
           beginCaptures: {
@@ -336,6 +337,7 @@ let grammar = {
       ]
     },
     declaration: {
+      strict: true,
       patterns: [
         {
           type: "DECLARATION",
