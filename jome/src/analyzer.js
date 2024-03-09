@@ -626,7 +626,7 @@ const ANALYZERS = {
         } else {
           bindings.push({name: getName(item.raw), type: 'default-import'})
         }
-      } else if (item.type === 'NAMESPACE_IMPORT') {
+      } else if (item.type === 'meta.namespace-import.jome') {
         bindings.push({name: getName(item.parts[2].raw), type: 'namespace-import'})
       } else {
         pushError(node, "Error 234j90s7adfg1")

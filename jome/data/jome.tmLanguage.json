@@ -50,7 +50,7 @@
               "match": "\\s+"
             },
             {
-              "name": "NAMESPACE_IMPORT",
+              "name": "meta.namespace-import.jome",
               "match": "(\\*) (as) (&?[A-Za-z_$]\\w*)",
               "captures": {
                 "1": {
