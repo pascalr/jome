@@ -22,7 +22,7 @@ class SyntaxError extends Error {
 // }
 
 function groupManyByType(arr) {
-  return arr.reduce((grouped, item) => {
+  return (arr||[]).reduce((grouped, item) => {
     if (!grouped[item.type]) {
       grouped[item.type] = [];
     }
@@ -32,7 +32,7 @@ function groupManyByType(arr) {
 }
 
 function groupByType(arr) {
-  return arr.reduce((grouped, item) => {
+  return (arr||[]).reduce((grouped, item) => {
     if (grouped[item.type]) {
       // throw new SyntaxError()
       throw new Error("groupByType expects a single element of each type only. Use groupManyByType to have many")
@@ -610,7 +610,7 @@ const ANALYZERS = {
     let namespaceImport = data['NAMESPACE_IMPORT']?.[0] // TODO: Validate no more than one
     let aliasImports = data['ALIAS_IMPORT']
     let namedImports = data['NAMED_IMPORT']
-    let useCjs = data['IMPORT_STYLE'][0].raw !== 'from'
+    let useCjs = data['IMPORT_STYLE']?.[0]?.raw !== 'from'
     let importFile2 = data['IMPORT_FILE']?.[0] // TODO: Validate than no more than one
     
     if (!importFile2) {
