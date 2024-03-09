@@ -293,7 +293,7 @@ let grammar = {
       match: "=>| -> "
     },
     "vbars-args": {
-      /* type: 'arguments' */
+      type: 'arguments',
       name: "meta.args.jome",
       begin: "\\|(?!\\|)",
       beginCaptures: { 0: { name: "punctuation.vertical-bar.begin.jome" } },
@@ -1348,11 +1348,33 @@ Use containsType to avoid giving the same type for every one inside the pattern.
 
 */
 
+let keysToRemove = ['type', 'containsType']
+// Helper function to handle recursion for objects and arrays
+function removeKeysRecursive(data) {
+  if (Array.isArray(data)) {
+    // If it's an array, map over its elements recursively
+    return data.map(item => removeKeysRecursive(item));
+  } else if (typeof data === 'object' && data !== null) {
+    // If it's an object, create a copy omitting specified keys
+    const copy = {};
+    for (let key in data) {
+      if (!keysToRemove.includes(key)) {
+        copy[key] = removeKeysRecursive(data[key]);
+      }
+    }
+    return copy;
+  } else {
+    // For other types, return as is
+    return data;
+  }
+}
+
 let tmLanguageFilepath = path.join(__dirname, '..', 'syntaxes', 'jome.tmLanguage.json')
-fs.writeFileSync(tmLanguageFilepath, JSON.stringify(grammar, null, 2), 'utf-8');
+let tmLanguageData = removeKeysRecursive(grammar)
+fs.writeFileSync(tmLanguageFilepath, JSON.stringify(tmLanguageData, null, 2), 'utf-8');
 
 let runGrammarFilepath = path.join(__dirname, '..', '..', 'jome', 'data', 'jome.tmLanguage.json')
-fs.writeFileSync(runGrammarFilepath, JSON.stringify(grammar, null, 2), 'utf-8');
+fs.writeFileSync(runGrammarFilepath, JSON.stringify(tmLanguageData, null, 2), 'utf-8');
 
 // {
 //   name: "meta.statement.require.jome",
