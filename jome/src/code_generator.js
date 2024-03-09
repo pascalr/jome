@@ -340,7 +340,7 @@ function compInlineUtility(node) {
 function compileFuncCall(node) {
   let tok = node.data.nameTok
   let isInlineUtil = tok.type === 'entity.name.function.utility-inline.jome' // .#
-  if (tok.type === 'support.function.builtin.jome' || isInlineUtil) {
+  if (tok.type === 'BUILT_IN' || tok.type === 'support.function.builtin.jome' || isInlineUtil) {
     let name = tok.raw.slice(isInlineUtil ? 2 : 1)
     let args = [...node.operands, ...mergeNamedParameters(node.data.args)].map(c => genCode(c));
     return compileUtility(name, node, args)
@@ -576,9 +576,10 @@ const CODE_GENERATORS = {
   },
   "entity.name.function.utility-inline.jome": (node) => compInlineUtility(node), // "Hello".#log  
   'support.function.builtin.jome': (node) => compUtility(node), // #log
+  'BUILT_IN': (node) => compUtility(node), // #log
   "variable.other.constant.utility.jome": (node) => compUtility(node), // #PI
   "support.function-call.WIP.jome": compileFuncCall, // someFunc "some arg"
-  "support.function-call.jome": compileFuncCall, // someFunc("some arg")
+  "FUNCTION_CALL": compileFuncCall, // someFunc("some arg")
   "INLINE_FUNCTION_CALL": compileMetaFuncCall, // .someFunc("some arg")
   // js uses more specifically:
   // keyword.operator.arithmetic.jome

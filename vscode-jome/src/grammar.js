@@ -623,16 +623,20 @@ let grammar = {
           patterns: [{ include: "#expression" }]
         },
         {
+          strict: true,
+          type: "FUNCTION_CALL",
           name: "support.function-call.jome",
           begin: "(\\w+)\\(",
-          beginCaptures: { 1: { name: "entity.name.function.jome" } },
+          beginCaptures: { 1: { name: "entity.name.function.jome", type: "FUNCTION_NAME" } },
           end: "\\)",
           patterns: [{ include: "#expression" }]
         },
         {
+          strict: true,
+          type: "FUNCTION_CALL",
           name: "support.function-call.jome",
           begin: "(#\\w+\\!?)\\(",
-          beginCaptures: { 1: { name: "support.function.builtin.jome" } },
+          beginCaptures: { 1: { name: "support.function.builtin.jome", type: "BUILT_IN" } },
           end: "\\)",
           patterns: [{ include: "#expression" }]
         },

@@ -656,6 +656,24 @@ const ANALYZERS = {
   "support.function-call.WIP.jome": (node) => validateFuncCall(node, false,),
   "support.function-call.jome": (node) => validateFuncCall(node, false),
 
+  "FUNCTION_CALL": (node) => {
+
+    let nameTok = node.parts.find(p => p.type === 'FUNCTION_NAME' || p.type === 'BUILT_IN')
+
+    // FIXME: Update this old code
+    let parts = node.parts.slice(1)
+    let args = [];
+    if (parts.length && parts[parts.length-1].type === 'meta.do-end.jome') {
+      args.push(parts[parts.length-1])
+      parts = parts.slice(0, -1)
+    }
+    parts = filterNewlines(parts)
+    ensureListSeparatedByCommas(node, parts)
+    args = [...parts.filter((e, i) => i % 2 === 0), ...args]
+  
+    node.data = {nameTok, args}
+  },
+
   "INLINE_FUNCTION_CALL": (node) => {
 
     let nameTok = node.parts.find(p => p.type === 'FUNCTION_NAME' || p.type === 'BUILT_IN')
@@ -664,6 +682,7 @@ const ANALYZERS = {
       pushError(node, "Missing inline function call left operand")
     }
 
+    // FIXME: Update this old code
     let parts = node.parts.slice(1)
     let args = [];
     if (parts.length && parts[parts.length-1].type === 'meta.do-end.jome') {

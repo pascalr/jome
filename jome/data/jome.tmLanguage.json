@@ -832,11 +832,10 @@
           "name": "INLINE_FUNCTION_CALL"
         },
         {
-          "name": "support.function-call.jome",
           "begin": "(\\w+)\\(",
           "beginCaptures": {
             "1": {
-              "name": "entity.name.function.jome"
+              "name": "FUNCTION_NAME"
             }
           },
           "end": "\\)",
@@ -844,14 +843,14 @@
             {
               "include": "#expression"
             }
-          ]
+          ],
+          "name": "FUNCTION_CALL"
         },
         {
-          "name": "support.function-call.jome",
           "begin": "(#\\w+\\!?)\\(",
           "beginCaptures": {
             "1": {
-              "name": "support.function.builtin.jome"
+              "name": "BUILT_IN"
             }
           },
           "end": "\\)",
@@ -859,7 +858,8 @@
             {
               "include": "#expression"
             }
-          ]
+          ],
+          "name": "FUNCTION_CALL"
         },
         {
           "name": "support.function-call.WIP.jome",
