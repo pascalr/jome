@@ -369,20 +369,13 @@ const ANALYZERS = {
   // let foo
   // var bar
   'declaration': (node) => {
-    let keyword = 'let'
-    if (node.parts[0].type === 'keyword-declaration') {
-      keyword = node.parts[0].raw.trimLeft()
-    }
-    if (node.parts.length < 2) {
-      return pushError(node, "Missing variable name after keyword "+keyword)
-    }
-    let name = node.parts[1].raw
-    let variableType
-    if (node.parts.length === 4) {
-      variableType = node.parts[3].raw
-    } else if (node.parts[0].type === 'type') {
-      variableType = node.parts[0].raw
-    }
+
+    let keyword = node.parts.find(p => p.type === 'keyword-declaration')?.raw || 'let'
+    let name = node.parts.find(p => p.type === 'variable')?.raw
+    let variableType = node.parts.find(p => p.type === 'type')?.raw
+
+    if (!name) { return pushError(node, "Missing variable name after keyword "+keyword) }
+
     pushBinding(node, name, {type: 'declaration', keyword, variableType, kind: BindingKind.Variable})
     node.data = {keyword, name, variableType}
   },
