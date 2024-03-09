@@ -131,6 +131,7 @@ let grammar = {
               end: "\\}",
               patterns: [
                 {
+                  type: "ALIAS_IMPORT",
                   name: "meta.import-alias.jome",
                   match: `(&?${REGEX_VARIABLE}) (as) (${REGEX_VARIABLE})`,
                   captures: {
@@ -145,6 +146,7 @@ let grammar = {
                   }
                 },
                 {
+                  type: "ALIAS_IMPORT",
                   name: "meta.import-alias.jome",
                   match: `(${REGEX_REGULAR_STRING}) (as) (${REGEX_VARIABLE})`,
                   captures: {

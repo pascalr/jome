@@ -606,7 +606,7 @@ const ANALYZERS = {
         filterCommas(filterSpaces(item.parts)).forEach(namedImport => {
           if (namedImport.type === 'variable.other.named-import.jome') {
             bindings.push({name: getName(namedImport.raw), type: 'named-import'})
-          } else if (namedImport.type === 'meta.import-alias.jome') {
+          } else if (namedImport.type === 'ALIAS_IMPORT') {
             let original = namedImport.parts[0].raw
             let name = namedImport.parts[2].raw
             //fileImports.addAliasImport(namedImport.parts[0].raw, namedImport.parts[2].raw)
@@ -615,7 +615,7 @@ const ANALYZERS = {
             pushError(node, "sfj9234hr9h239rhrf923h3r")
           }
         })
-        //   } else if (imp.type === 'meta.import-alias.jome') {
+        //   } else if (imp.type === 'ALIAS_IMPORT') {
         //     pushError(node, "TODO: import {foo as bar} syntax")
         //   }
       } else if (item.type === 'meta.import-file.jome') {

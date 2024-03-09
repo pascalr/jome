@@ -87,7 +87,7 @@
               "end": "\\}",
               "patterns": [
                 {
-                  "name": "meta.import-alias.jome",
+                  "name": "ALIAS_IMPORT",
                   "match": "(&?[A-Za-z_$]\\w*) (as) ([A-Za-z_$]\\w*)",
                   "captures": {
                     "1": {
@@ -107,7 +107,7 @@
                   }
                 },
                 {
-                  "name": "meta.import-alias.jome",
+                  "name": "ALIAS_IMPORT",
                   "match": "(\"[^\"]*\"|'[^']*') (as) ([A-Za-z_$]\\w*)",
                   "captures": {
                     "1": {
