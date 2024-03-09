@@ -158,7 +158,7 @@ function compileRaw(node) {
 }
 
 function compileArgs(node) { 
-  if (node.type === 'variable.other.jome') {
+  if (node.type === 'variable') {
     return node.raw
   }
   let cs = node.parts.slice(1, -1) // remove vertical bars
@@ -266,7 +266,7 @@ function toPrimitive(str) {
 }
 
 function parseArgument(node) {
-  if (node.type === 'variable.other.jome') {
+  if (node.type === 'variable') {
     return new Argument(node.raw)
   } else if (node.type === 'keyword.operator.assignment.jome') {
     let arg = parseArgument(node.operands[0])
@@ -383,7 +383,7 @@ function prepareHeredoc(node) {
 
 // Convert the node (string.quoted...) to an array of array for formats to chain.
 function prepareFormatting(node) {
-  if (node.type === 'variable.other.jome') {
+  if (node.type === 'variable') {
     return [[{code: node.raw}]]
   }
   if (node.type === "meta.tag.jome") {
@@ -533,7 +533,7 @@ const CODE_GENERATORS = {
     // If simply a group
     return node.raw
   },
-  'variable.other.jome': compileRaw,
+  'variable': compileRaw,
   'variable.assignment.jome': (node) => {
     if (node.raw[0] === '$') {
       return `global.${GLOBAL_PREFIX}${node.raw.slice(1)}`

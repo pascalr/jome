@@ -42,7 +42,7 @@ function analyzeFunction(node, nameNode, argsNode, expressions) {
     }
     let parts = argsNode.parts.slice(1, -1) // Remove opening and closing parenthesis of vertical bar
     parts.forEach(part => {
-      if (part.type === 'variable.other.jome') {
+      if (part.type === 'variable') {
         pushBinding(part, part.raw, {type: 'argument', kind: BindingKind.Variable})
       // } else if (part.type === 'TODO assignement') {
       }
@@ -448,7 +448,7 @@ const ANALYZERS = {
     // A colon can we used for the else of a ternary, but also for creating an entry for a function call
 
     let t = node.operands[0].type
-    if (t !== 'keyword.operator.existential.jome' && !t.startsWith("string") && t !== 'variable.other.jome') {
+    if (t !== 'keyword.operator.existential.jome' && !t.startsWith("string") && t !== 'variable') {
       return pushError(node, `Invalid use of colon. Wrong left operand: `+t)
     }
 
@@ -468,7 +468,7 @@ const ANALYZERS = {
     } else if (node.operands.length === 2) {
       // With args
       let t = node.operands[0].type
-      if (!(t === 'meta.group.jome' || t === 'variable.other.jome')) {
+      if (!(t === 'meta.group.jome' || t === 'variable')) {
         return pushError(node, "Syntax error. Arrow function expects arguments at it's left side.")
       }
       // TODO: Validate right side
@@ -512,7 +512,7 @@ const ANALYZERS = {
       node.data = {elems}
     }
   },
-  "variable.other.jome": (node) => {
+  "variable": (node) => {
     let name = node.raw
     pushOccurence(node, {name})
   },
@@ -710,7 +710,7 @@ const ANALYZERS = {
       if (part.type === 'keyword.control.trycatch.jome') {
         if (part.raw === 'catch') {
           let next = parts[i+1]
-          if (next.type === 'meta.group.jome' && next.parts[1].type === 'variable.other.jome') {
+          if (next.type === 'meta.group.jome' && next.parts[1].type === 'variable') {
             exceptionVar = next.parts[1].raw
             i += 1
           }

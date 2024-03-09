@@ -342,7 +342,7 @@ let grammar = {
           match: `(${REGEX_PRIMITIVE_TYPE})\\s+(${REGEX_VARIABLE})`,
           captures: {
             1: { name: "storage.type.jome", type: 'type' }, // primitive type
-            2: { name: "variable.other.jome"/*, type: 'variable' */ }
+            2: { name: "variable.other.jome", type: 'variable' }
           }
         },
         {
@@ -351,7 +351,7 @@ let grammar = {
           match: `\\b(let|var|const)\\b\\s*(${REGEX_VARIABLE})?(?:\\s*(\\:)\\s*(${REGEX_PRIMITIVE_TYPE}))`,
           captures: {
             1: { name: "keyword.control.declaration.jome", type: 'keyword-declaration' },
-            2: { name: "variable.other.jome"/*, type: 'variable' */ },
+            2: { name: "variable.other.jome", type: 'variable' },
             3: { name: "punctuation.colon.jome" },
             4: { name: "storage.type.jome", type: 'type' } // primitive type
           }
@@ -362,7 +362,7 @@ let grammar = {
           match: `\\b(let|var|const)\\b\\s*(${REGEX_VARIABLE})?(?:\\s*(\\:)\\s*(${REGEX_TYPE}))?`,
           captures: {
             1: { name: "keyword.control.declaration.jome", type: 'keyword-declaration' },
-            2: { name: "variable.other.jome"/*, type: 'variable' */ },
+            2: { name: "variable.other.jome", type: 'variable' },
             3: { name: "punctuation.colon.jome" },
             4: { name: "entity.name.type.jome", type: 'type' } // custom type
           }
@@ -373,7 +373,7 @@ let grammar = {
           match: `(${REGEX_TYPE})\\s+(?!\\b(?:chain|do)\\b)(${REGEX_VARIABLE})\\s*(?=\n|;)`,
           captures: {
             1: { name: "entity.name.type.jome", type: 'type' }, // custom type
-            2: { name: "variable.other.jome"/*, type: 'variable' */ }
+            2: { name: "variable.other.jome", type: 'variable' }
           }
         },
       ]
@@ -634,7 +634,7 @@ let grammar = {
         {
           match: `(${REGEX_VARIABLE})\\s*(:)\\s*([A-Za-z]\\w*)`,
           captures: {
-            1: { name: "variable.other.jome" },
+            1: { name: "variable.other.jome", type: "variable" },
             2: { name: "keyword.operator.type.annotation.jome" },
             3: { name: "support.type.jome", type: "type" }
           }
@@ -657,7 +657,8 @@ let grammar = {
     },
     variable: {
       match: REGEX_VARIABLE,
-      name: "variable.other.jome"
+      name: "variable.other.jome",
+      type: "variable"
     },
     caller: {
       name: "meta.caller.jome",

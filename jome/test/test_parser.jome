@@ -78,7 +78,7 @@ describe "Parse let assignment" do
   it 'let x' do
     testParse('let x', [{
       type: 'declaration',
-      parts: [{type: 'keyword-declaration'}, {type: 'variable.other.jome'}]
+      parts: [{type: 'keyword-declaration'}, {type: 'variable'}]
     }])
   end
 
@@ -86,7 +86,7 @@ describe "Parse let assignment" do
     testParse('let x;', [
       {
         type: 'declaration',
-        parts: [{type: 'keyword-declaration'}, {type: 'variable.other.jome'}]
+        parts: [{type: 'keyword-declaration'}, {type: 'variable'}]
       },
       {type: 'punctuation.terminator.statement.jome'}
     ])
@@ -140,7 +140,7 @@ end
 //         {type: 'keyword.control.conditional.jome'},
 //         {
 //           type: 'keyword.operator.comparison.jome'
-//           operands: [{type: 'variable.other.jome', type: 'constant.numeric.integer.jome'}]
+//           operands: [{type: 'variable', type: 'constant.numeric.integer.jome'}]
 //         },
 //         {
 //           type: 'support.function-call.jome'

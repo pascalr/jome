@@ -77,10 +77,7 @@ module.exports = () => {
       testParse("let x", [
         {
           type: "declaration",
-          parts: [
-            { type: "keyword-declaration" },
-            { type: "variable.other.jome" },
-          ],
+          parts: [{ type: "keyword-declaration" }, { type: "variable" }],
         },
       ]);
     });
@@ -89,10 +86,7 @@ module.exports = () => {
       testParse("let x;", [
         {
           type: "declaration",
-          parts: [
-            { type: "keyword-declaration" },
-            { type: "variable.other.jome" },
-          ],
+          parts: [{ type: "keyword-declaration" }, { type: "variable" }],
         },
         { type: "punctuation.terminator.statement.jome" },
       ]);

@@ -446,7 +446,7 @@
               "name": "type"
             },
             "2": {
-              "name": "variable.other.jome"
+              "name": "variable"
             }
           }
         },
@@ -458,7 +458,7 @@
               "name": "keyword-declaration"
             },
             "2": {
-              "name": "variable.other.jome"
+              "name": "variable"
             },
             "3": {
               "name": "punctuation.colon.jome"
@@ -476,7 +476,7 @@
               "name": "keyword-declaration"
             },
             "2": {
-              "name": "variable.other.jome"
+              "name": "variable"
             },
             "3": {
               "name": "punctuation.colon.jome"
@@ -494,7 +494,7 @@
               "name": "type"
             },
             "2": {
-              "name": "variable.other.jome"
+              "name": "variable"
             }
           }
         }
@@ -955,7 +955,7 @@
           "match": "([A-Za-z_$]\\w*)\\s*(:)\\s*([A-Za-z]\\w*)",
           "captures": {
             "1": {
-              "name": "variable.other.jome"
+              "name": "variable"
             },
             "2": {
               "name": "keyword.operator.type.annotation.jome"
@@ -995,7 +995,7 @@
     },
     "variable": {
       "match": "[A-Za-z_$]\\w*",
-      "name": "variable.other.jome"
+      "name": "variable"
     },
     "caller": {
       "name": "meta.caller.jome",
