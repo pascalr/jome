@@ -218,10 +218,12 @@ let grammar = {
     "support-items": {
       patterns: [
         {
+          type: "VARIABLE",
           name: "support.variable.jome",
           match: "\\b(console|window|global|document|__dirname|__filename|JSON)\\b"
         },
         {
+          type: "VARIABLE",
           name: "support.class.jome",
           match: "\\b(Array|Error)\\b"
         }
@@ -288,10 +290,12 @@ let grammar = {
     symbols: {
       patterns: [
         {
+          type: "SYMBOL_TRUE",
           match: `:${REGEX_VARIABLE}\\!`,
           name: "variable.symbol.true.jome"
         },
         {
+          type: "SYMBOL",
           match: `:(${REGEX_VARIABLE})`,
           name: "variable.symbol.jome"
         },

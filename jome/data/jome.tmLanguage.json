@@ -250,11 +250,11 @@
     "support-items": {
       "patterns": [
         {
-          "name": "support.variable.jome",
+          "name": "VARIABLE",
           "match": "\\b(console|window|global|document|__dirname|__filename|JSON)\\b"
         },
         {
-          "name": "support.class.jome",
+          "name": "VARIABLE",
           "match": "\\b(Array|Error)\\b"
         }
       ]
@@ -327,11 +327,11 @@
       "patterns": [
         {
           "match": ":[A-Za-z_$]\\w*\\!",
-          "name": "variable.symbol.true.jome"
+          "name": "SYMBOL_TRUE"
         },
         {
           "match": ":([A-Za-z_$]\\w*)",
-          "name": "variable.symbol.jome"
+          "name": "SYMBOL"
         }
       ]
     },
