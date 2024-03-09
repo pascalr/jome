@@ -350,7 +350,7 @@ let grammar = {
           name: "meta.declaration.jome",
           match: `\\b(let|var|const)\\b\\s*(${REGEX_VARIABLE})?(?:\\s*(\\:)\\s*(${REGEX_PRIMITIVE_TYPE}))`,
           captures: {
-            1: { name: "keyword.control.declaration.jome", type: 'KEYWORD-DECLARATION' },
+            1: { name: "keyword.control.declaration.jome", type: 'KEYWORD_DECLARATION' },
             2: { name: "variable.other.jome", type: 'VARIABLE' },
             3: { name: "punctuation.colon.jome" },
             4: { name: "storage.type.jome", type: 'TYPE' } // primitive type
@@ -361,7 +361,7 @@ let grammar = {
           name: "meta.declaration.jome",
           match: `\\b(let|var|const)\\b\\s*(${REGEX_VARIABLE})?(?:\\s*(\\:)\\s*(${REGEX_TYPE}))?`,
           captures: {
-            1: { name: "keyword.control.declaration.jome", type: 'KEYWORD-DECLARATION' },
+            1: { name: "keyword.control.declaration.jome", type: 'KEYWORD_DECLARATION' },
             2: { name: "variable.other.jome", type: 'VARIABLE' },
             3: { name: "punctuation.colon.jome" },
             4: { name: "entity.name.type.jome", type: 'TYPE' } // custom type

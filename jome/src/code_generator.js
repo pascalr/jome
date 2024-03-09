@@ -657,7 +657,7 @@ const CODE_GENERATORS = {
   'keyword.operator.assignment.jome': compileOperator,
   //'keyword.operator.assignment.jome': (node) => (compileOperator(node)+";"),
   // let
-  'KEYWORD-DECLARATION': (node) => `let ${node.operands[0].raw}`,
+  'KEYWORD_DECLARATION': (node) => `let ${node.operands[0].raw}`,
 
   // handles all lines starting with keyword import
   "IMPORT": () => {

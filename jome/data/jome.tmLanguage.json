@@ -455,7 +455,7 @@
           "match": "\\b(let|var|const)\\b\\s*([A-Za-z_$]\\w*)?(?:\\s*(\\:)\\s*(\\b(?:int|string|bool|float)\\b(?:\\[\\])*))",
           "captures": {
             "1": {
-              "name": "KEYWORD-DECLARATION"
+              "name": "KEYWORD_DECLARATION"
             },
             "2": {
               "name": "VARIABLE"
@@ -473,7 +473,7 @@
           "match": "\\b(let|var|const)\\b\\s*([A-Za-z_$]\\w*)?(?:\\s*(\\:)\\s*([A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*))?",
           "captures": {
             "1": {
-              "name": "KEYWORD-DECLARATION"
+              "name": "KEYWORD_DECLARATION"
             },
             "2": {
               "name": "VARIABLE"
