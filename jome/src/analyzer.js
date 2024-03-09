@@ -577,7 +577,7 @@ const ANALYZERS = {
   },
   
   // handles all lines starting with keyword import
-  "meta.statement.import.jome": (node) => {
+  "IMPORT": (node) => {
     ensureStartRaw(node, 'import')
     ensureStartType(node, 'keyword.control.jome')
 

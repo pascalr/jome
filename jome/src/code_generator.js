@@ -660,7 +660,7 @@ const CODE_GENERATORS = {
   'KEYWORD-DECLARATION': (node) => `let ${node.operands[0].raw}`,
 
   // handles all lines starting with keyword import
-  "meta.statement.import.jome": () => {
+  "IMPORT": () => {
     // Nothing to do, already handled by analyzer
   },
 

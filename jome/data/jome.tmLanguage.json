@@ -29,7 +29,7 @@
     "statement": {
       "patterns": [
         {
-          "name": "meta.statement.import.jome",
+          "name": "IMPORT",
           "begin": "^(import) ?(&?[A-Za-z_$]\\w*)?",
           "beginCaptures": {
             "1": {
