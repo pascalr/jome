@@ -966,7 +966,8 @@
           }
         },
         {
-          "include": "#variable"
+          "match": "[A-Za-z_$]\\w*",
+          "name": "variable.other.jome"
         },
         {
           "name": "meta.deconstructed-arg.jome",

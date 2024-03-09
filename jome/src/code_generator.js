@@ -266,7 +266,7 @@ function toPrimitive(str) {
 }
 
 function parseArgument(node) {
-  if (node.type === 'variable') {
+  if (node.type === 'argument') {
     return new Argument(node.raw)
   } else if (node.type === 'keyword.operator.assignment.jome') {
     let arg = parseArgument(node.operands[0])
@@ -534,6 +534,7 @@ const CODE_GENERATORS = {
     return node.raw
   },
   'variable': compileRaw,
+  'argument': compileRaw,
   'variable.assignment.jome': (node) => {
     if (node.raw[0] === '$') {
       return `global.${GLOBAL_PREFIX}${node.raw.slice(1)}`

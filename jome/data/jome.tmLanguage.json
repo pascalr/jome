@@ -955,7 +955,7 @@
           "match": "([A-Za-z_$]\\w*)\\s*(:)\\s*([A-Za-z]\\w*)",
           "captures": {
             "1": {
-              "name": "variable"
+              "name": "argument"
             },
             "2": {
               "name": "keyword.operator.type.annotation.jome"
@@ -966,7 +966,8 @@
           }
         },
         {
-          "include": "#variable"
+          "match": "[A-Za-z_$]\\w*",
+          "name": "argument"
         },
         {
           "name": "meta.deconstructed-arg.jome",

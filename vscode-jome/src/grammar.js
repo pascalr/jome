@@ -634,13 +634,15 @@ let grammar = {
         {
           match: `(${REGEX_VARIABLE})\\s*(:)\\s*([A-Za-z]\\w*)`,
           captures: {
-            1: { name: "variable.other.jome", type: "variable" },
+            1: { name: "variable.other.jome", type: "argument" },
             2: { name: "keyword.operator.type.annotation.jome" },
             3: { name: "support.type.jome", type: "type" }
           }
         },
         {
-          include: "#variable"
+          match: REGEX_VARIABLE,
+          name: "variable.other.jome",
+          type: "argument"
         },
         {
           name: "meta.deconstructed-arg.jome",
