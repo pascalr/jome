@@ -295,7 +295,7 @@ let grammar = {
       match: "=>| -> "
     },
     "vbars-args": {
-      type: 'arguments',
+      type: 'ARGUMENTS',
       name: "meta.args.jome",
       begin: "\\|(?!\\|)",
       beginCaptures: { 0: { name: "punctuation.vertical-bar.begin.jome" } },
@@ -308,7 +308,7 @@ let grammar = {
       ]
     },
     "with-args": {
-      /* type: 'arguments' */
+      /* type: 'ARGUMENTS' */
       name: "meta.with-args.jome",
       begin: "with",
       beginCaptures: { 0: { name: "keyword.control.jome" } },
@@ -321,7 +321,7 @@ let grammar = {
       ]
     },
     "paren-args": {
-      type: 'arguments',
+      type: 'ARGUMENTS',
       name: "meta.args.jome",
       begin: "\\G\\(",
       beginCaptures: { 0: { name: "punctuation.paren.open" } },
@@ -334,57 +334,56 @@ let grammar = {
       ]
     },
     declaration: {
-      /* containsType: 'declaration' */
       patterns: [
         {
-          type: "declaration",
+          type: "DECLARATION",
           name: "meta.declaration.jome",
           match: `(${REGEX_PRIMITIVE_TYPE})\\s+(${REGEX_VARIABLE})`,
           captures: {
-            1: { name: "storage.type.jome", type: 'type' }, // primitive type
-            2: { name: "variable.other.jome", type: 'variable' }
+            1: { name: "storage.type.jome", type: 'TYPE' }, // primitive type
+            2: { name: "variable.other.jome", type: 'VARIABLE' }
           }
         },
         {
-          type: "declaration",
+          type: "DECLARATION",
           name: "meta.declaration.jome",
           match: `\\b(let|var|const)\\b\\s*(${REGEX_VARIABLE})?(?:\\s*(\\:)\\s*(${REGEX_PRIMITIVE_TYPE}))`,
           captures: {
-            1: { name: "keyword.control.declaration.jome", type: 'keyword-declaration' },
-            2: { name: "variable.other.jome", type: 'variable' },
+            1: { name: "keyword.control.declaration.jome", type: 'KEYWORD-DECLARATION' },
+            2: { name: "variable.other.jome", type: 'VARIABLE' },
             3: { name: "punctuation.colon.jome" },
-            4: { name: "storage.type.jome", type: 'type' } // primitive type
+            4: { name: "storage.type.jome", type: 'TYPE' } // primitive type
           }
         },
         {
-          type: "declaration",
+          type: "DECLARATION",
           name: "meta.declaration.jome",
           match: `\\b(let|var|const)\\b\\s*(${REGEX_VARIABLE})?(?:\\s*(\\:)\\s*(${REGEX_TYPE}))?`,
           captures: {
-            1: { name: "keyword.control.declaration.jome", type: 'keyword-declaration' },
-            2: { name: "variable.other.jome", type: 'variable' },
+            1: { name: "keyword.control.declaration.jome", type: 'KEYWORD-DECLARATION' },
+            2: { name: "variable.other.jome", type: 'VARIABLE' },
             3: { name: "punctuation.colon.jome" },
-            4: { name: "entity.name.type.jome", type: 'type' } // custom type
+            4: { name: "entity.name.type.jome", type: 'TYPE' } // custom type
           }
         },
         {
-          type: "declaration",
+          type: "DECLARATION",
           name: "meta.declaration.jome",
           match: `(${REGEX_TYPE})\\s+(?!\\b(?:chain|do)\\b)(${REGEX_VARIABLE})\\s*(?=\n|;)`,
           captures: {
-            1: { name: "entity.name.type.jome", type: 'type' }, // custom type
-            2: { name: "variable.other.jome", type: 'variable' }
+            1: { name: "entity.name.type.jome", type: 'TYPE' }, // custom type
+            2: { name: "variable.other.jome", type: 'VARIABLE' }
           }
         },
       ]
     },
     def: {
-      /* type: 'function' */
+      /* type: 'FUNCTION' */
       name: "meta.def.jome",
       begin: `\\b(def)\\s*(${REGEX_VARIABLE})?\\b\\s*`,
       beginCaptures: {
         1: { name: "keyword.control.jome" },
-        2: { name: "entity.name.function.jome"/*, type: 'function-name' */ }
+        2: { name: "entity.name.function.jome"/*, type: 'FUNCTION-NAME' */ }
       },
       end: "(\\bend\\b)|((?<!\\s)\\:\\s)",
       endCaptures: {
@@ -481,14 +480,14 @@ let grammar = {
             },
             2: {
               name: "entity.name.type.jome", // custom type
-              type: "type"
+              type: "TYPE"
             },
             3: {
               patterns: [
                 {
                   match: "\\w+",
                   name: "support.type.jome",
-                  type: "type"
+                  type: "TYPE"
                 }
               ]
             }
@@ -503,7 +502,7 @@ let grammar = {
             },
             2: {
               name: "entity.name.type.jome", // custom type
-              type: "type"
+              type: "TYPE"
             }
           },
           end: "\\b(end)\\b",
@@ -634,15 +633,15 @@ let grammar = {
         {
           match: `(${REGEX_VARIABLE})\\s*(:)\\s*([A-Za-z]\\w*)`,
           captures: {
-            1: { name: "variable.other.jome", type: "argument" },
+            1: { name: "variable.other.jome", type: "ARGUMENT" },
             2: { name: "keyword.operator.type.annotation.jome" },
-            3: { name: "support.type.jome", type: "type" }
+            3: { name: "support.type.jome", type: "TYPE" }
           }
         },
         {
           match: REGEX_VARIABLE,
           name: "variable.other.jome",
-          type: "argument"
+          type: "ARGUMENT"
         },
         {
           name: "meta.deconstructed-arg.jome",
@@ -660,7 +659,7 @@ let grammar = {
     variable: {
       match: REGEX_VARIABLE,
       name: "variable.other.jome",
-      type: "variable"
+      type: "VARIABLE"
     },
     caller: {
       name: "meta.caller.jome",
@@ -801,7 +800,7 @@ let grammar = {
           captures: {
             1: { name: "variable.assignment.jome" },
             2: { name: "keyword.operator.type.annotation.jome" },
-            3: { name: "support.type.jome", type: "type" },
+            3: { name: "support.type.jome", type: "TYPE" },
             4: { name: "keyword.operator.assignment.jome" }
           }
         },

@@ -37,12 +37,12 @@ function analyzeFunction(node, nameNode, argsNode, expressions) {
   }
 
   if (argsNode) {
-    if (argsNode.type !== 'arguments') {
+    if (argsNode.type !== 'ARGUMENTS') {
       return pushError(node, "Internal error expected analyzeFunction to receive node of type arguments")
     }
     let parts = argsNode.parts.slice(1, -1) // Remove opening and closing parenthesis of vertical bar
     parts.forEach(part => {
-      if (part.type === 'variable') {
+      if (part.type === 'VARIABLE') {
         pushBinding(part, part.raw, {type: 'argument', kind: BindingKind.Variable})
       // } else if (part.type === 'TODO assignement') {
       }
@@ -337,7 +337,7 @@ const ANALYZERS = {
 
     // Arguments, if present, should always be at the beginning
     // if (node.parts.slice(nameNode ? 3 : 2,-1).find(c => c.type === 'arguments')) {
-    if (node.parts.slice(2,-1).find(c => c.type === 'arguments')) {
+    if (node.parts.slice(2,-1).find(c => c.type === 'ARGUMENTS')) {
       return pushError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
     }
 
@@ -368,11 +368,11 @@ const ANALYZERS = {
   },
   // let foo
   // var bar
-  'declaration': (node) => {
+  'DECLARATION': (node) => {
 
-    let keyword = node.parts.find(p => p.type === 'keyword-declaration')?.raw || 'let'
-    let name = node.parts.find(p => p.type === 'variable')?.raw
-    let variableType = node.parts.find(p => p.type === 'type')?.raw
+    let keyword = node.parts.find(p => p.type === 'KEYWORD-DECLARATION')?.raw || 'let'
+    let name = node.parts.find(p => p.type === 'VARIABLE')?.raw
+    let variableType = node.parts.find(p => p.type === 'TYPE')?.raw
 
     if (!name) { return pushError(node, "Missing variable name after keyword "+keyword) }
 
@@ -388,11 +388,11 @@ const ANALYZERS = {
       return pushError(node, "Internal error. meta.do-end.jome should always end with keyword end")
     }
     // Arguments, if present, should always be right after the function name
-    if (node.parts.slice(2,-1).find(c => c.type === 'arguments')) {
+    if (node.parts.slice(2,-1).find(c => c.type === 'ARGUMENTS')) {
       return pushError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
     }
 
-    let args = node.parts[1]?.type === 'arguments' ? node.parts[1] : null
+    let args = node.parts[1]?.type === 'ARGUMENTS' ? node.parts[1] : null
     let expressions = args ? node.parts.slice(2, -1) : node.parts.slice(1, -1)
 
     analyzeFunction(node, null, args, expressions)
@@ -406,7 +406,7 @@ const ANALYZERS = {
       return pushError(node, "Syntax error. Missing function name after keyword def.")
     }
     // Arguments, if present, should always be right after the function name
-    if (node.parts.slice(3,-1).find(c => c.type === 'arguments')) {
+    if (node.parts.slice(3,-1).find(c => c.type === 'ARGUMENTS')) {
       return pushError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
     }
     if (!node.operands.length && node.parts[node.parts.length-1].raw !== 'end') {
@@ -414,7 +414,7 @@ const ANALYZERS = {
     }
 
     let name = node.parts[1].raw
-    let args = node.parts[2]?.type === 'arguments' ? node.parts[2] : null
+    let args = node.parts[2]?.type === 'ARGUMENTS' ? node.parts[2] : null
     let expressions;
 
     if (node.operands.length) {
@@ -441,7 +441,7 @@ const ANALYZERS = {
     // A colon can we used for the else of a ternary, but also for creating an entry for a function call
 
     let t = node.operands[0].type
-    if (t !== 'keyword.operator.existential.jome' && !t.startsWith("string") && t !== 'variable') {
+    if (t !== 'keyword.operator.existential.jome' && !t.startsWith("string") && t !== 'VARIABLE') {
       return pushError(node, `Invalid use of colon. Wrong left operand: `+t)
     }
 
@@ -461,7 +461,7 @@ const ANALYZERS = {
     } else if (node.operands.length === 2) {
       // With args
       let t = node.operands[0].type
-      if (!(t === 'meta.group.jome' || t === 'variable')) {
+      if (!(t === 'meta.group.jome' || t === 'VARIABLE')) {
         return pushError(node, "Syntax error. Arrow function expects arguments at it's left side.")
       }
       // TODO: Validate right side
@@ -505,7 +505,7 @@ const ANALYZERS = {
       node.data = {elems}
     }
   },
-  "variable": (node) => {
+  "VARIABLE": (node) => {
     let name = node.raw
     pushOccurence(node, {name})
   },
@@ -513,13 +513,13 @@ const ANALYZERS = {
   'keyword.operator.assignment.jome': (node) => {
     if (node.operands.length !== 2) {
       return pushError(node, "An assignment must have a two operands")
-    // } else if (!['keyword-declaration'].includes(node.operands[0].type)) {
+    // } else if (!['KEYWORD-DECLARATION'].includes(node.operands[0].type)) {
     //   return `Invalid left hand side for assignement ${node.type}. Was: ${node.type}`
     // } else if (!OPERAND_TYPES.includes(node.operands[1].type)) {
     //   return `Invalid value for assignement ${node.type}. Was: ${node.type}`
     }
     
-    if (node.operands[0].type === 'declaration') {
+    if (node.operands[0].type === 'DECLARATION') {
       // Try to determine the type implicitely
       let binding = node.lexEnv.getBinding(node.operands[0].parts[1].raw)
       if (node.operands[1].type === 'constant.numeric.integer.jome') {
@@ -703,7 +703,7 @@ const ANALYZERS = {
       if (part.type === 'keyword.control.trycatch.jome') {
         if (part.raw === 'catch') {
           let next = parts[i+1]
-          if (next.type === 'meta.group.jome' && next.parts[1].type === 'variable') {
+          if (next.type === 'meta.group.jome' && next.parts[1].type === 'VARIABLE') {
             exceptionVar = next.parts[1].raw
             i += 1
           }

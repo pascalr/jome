@@ -158,7 +158,7 @@ function compileRaw(node) {
 }
 
 function compileArgs(node) { 
-  if (node.type === 'variable') {
+  if (node.type === 'VARIABLE') {
     return node.raw
   }
   let cs = node.parts.slice(1, -1) // remove vertical bars
@@ -214,7 +214,7 @@ function compileConstrutor(node) {
 function compileMethod(node) {
   let name = node.parts[1].raw
   let cs = node.parts.slice(2,-1) // Remove keywords def, end, and function name
-  let args = cs[0].type === 'arguments' ? cs[0] : null
+  let args = cs[0].type === 'ARGUMENTS' ? cs[0] : null
   if (args) {
     return `${name} = ${compileArgs(args)} => {\n${cs.slice(1).map(c => genCode(c)).join('')}\n}`
   } else {
@@ -234,7 +234,7 @@ function compileDefFunction(node) {
 
 function compileStandaloneFunction(node) {
   let cs = node.parts.slice(1,-1) // Remove keywords do and end
-  let args = cs[0].type === 'arguments' ? cs[0] : null
+  let args = cs[0].type === 'ARGUMENTS' ? cs[0] : null
   if (args) {
     return `function ${compileArgs(args)} {${cs.slice(1).map(c => genCode(c)).join('')}}`
   } else {
@@ -266,7 +266,7 @@ function toPrimitive(str) {
 }
 
 function parseArgument(node) {
-  if (node.type === 'argument') {
+  if (node.type === 'ARGUMENT') {
     return new Argument(node.raw)
   } else if (node.type === 'keyword.operator.assignment.jome') {
     let arg = parseArgument(node.operands[0])
@@ -383,7 +383,7 @@ function prepareHeredoc(node) {
 
 // Convert the node (string.quoted...) to an array of array for formats to chain.
 function prepareFormatting(node) {
-  if (node.type === 'variable') {
+  if (node.type === 'VARIABLE') {
     return [[{code: node.raw}]]
   }
   if (node.type === "meta.tag.jome") {
@@ -533,8 +533,8 @@ const CODE_GENERATORS = {
     // If simply a group
     return node.raw
   },
-  'variable': compileRaw,
-  'argument': compileRaw,
+  'VARIABLE': compileRaw,
+  'ARGUMENT': compileRaw,
   'variable.assignment.jome': (node) => {
     if (node.raw[0] === '$') {
       return `global.${GLOBAL_PREFIX}${node.raw.slice(1)}`
@@ -549,7 +549,7 @@ const CODE_GENERATORS = {
   "string.regexp.js": compileRaw,
   // let foo
   // var bar
-  'declaration': (node) => {
+  'DECLARATION': (node) => {
     return `${node.data.keyword} ${node.data.name}`
   },
   // do |args| /* ... */ end
@@ -657,7 +657,7 @@ const CODE_GENERATORS = {
   'keyword.operator.assignment.jome': compileOperator,
   //'keyword.operator.assignment.jome': (node) => (compileOperator(node)+";"),
   // let
-  'keyword-declaration': (node) => `let ${node.operands[0].raw}`,
+  'KEYWORD-DECLARATION': (node) => `let ${node.operands[0].raw}`,
 
   // handles all lines starting with keyword import
   "meta.statement.import.jome": () => {

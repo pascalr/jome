@@ -359,7 +359,7 @@
       "match": "=>| -> "
     },
     "vbars-args": {
-      "name": "arguments",
+      "name": "ARGUMENTS",
       "begin": "\\|(?!\\|)",
       "beginCaptures": {
         "0": {
@@ -411,7 +411,7 @@
       ]
     },
     "paren-args": {
-      "name": "arguments",
+      "name": "ARGUMENTS",
       "begin": "\\G\\(",
       "beginCaptures": {
         "0": {
@@ -439,62 +439,62 @@
     "declaration": {
       "patterns": [
         {
-          "name": "declaration",
+          "name": "DECLARATION",
           "match": "(\\b(?:int|string|bool|float)\\b(?:\\[\\])*)\\s+([A-Za-z_$]\\w*)",
           "captures": {
             "1": {
-              "name": "type"
+              "name": "TYPE"
             },
             "2": {
-              "name": "variable"
+              "name": "VARIABLE"
             }
           }
         },
         {
-          "name": "declaration",
+          "name": "DECLARATION",
           "match": "\\b(let|var|const)\\b\\s*([A-Za-z_$]\\w*)?(?:\\s*(\\:)\\s*(\\b(?:int|string|bool|float)\\b(?:\\[\\])*))",
           "captures": {
             "1": {
-              "name": "keyword-declaration"
+              "name": "KEYWORD-DECLARATION"
             },
             "2": {
-              "name": "variable"
+              "name": "VARIABLE"
             },
             "3": {
               "name": "punctuation.colon.jome"
             },
             "4": {
-              "name": "type"
+              "name": "TYPE"
             }
           }
         },
         {
-          "name": "declaration",
+          "name": "DECLARATION",
           "match": "\\b(let|var|const)\\b\\s*([A-Za-z_$]\\w*)?(?:\\s*(\\:)\\s*([A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*))?",
           "captures": {
             "1": {
-              "name": "keyword-declaration"
+              "name": "KEYWORD-DECLARATION"
             },
             "2": {
-              "name": "variable"
+              "name": "VARIABLE"
             },
             "3": {
               "name": "punctuation.colon.jome"
             },
             "4": {
-              "name": "type"
+              "name": "TYPE"
             }
           }
         },
         {
-          "name": "declaration",
+          "name": "DECLARATION",
           "match": "([A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*)\\s+(?!\\b(?:chain|do)\\b)([A-Za-z_$]\\w*)\\s*(?=\n|;)",
           "captures": {
             "1": {
-              "name": "type"
+              "name": "TYPE"
             },
             "2": {
-              "name": "variable"
+              "name": "VARIABLE"
             }
           }
         }
@@ -697,13 +697,13 @@
               "name": "keyword.control.jome"
             },
             "2": {
-              "name": "type"
+              "name": "TYPE"
             },
             "3": {
               "patterns": [
                 {
                   "match": "\\w+",
-                  "name": "type"
+                  "name": "TYPE"
                 }
               ]
             }
@@ -717,7 +717,7 @@
               "name": "keyword.control.jome"
             },
             "2": {
-              "name": "type"
+              "name": "TYPE"
             }
           },
           "end": "\\b(end)\\b",
@@ -955,19 +955,19 @@
           "match": "([A-Za-z_$]\\w*)\\s*(:)\\s*([A-Za-z]\\w*)",
           "captures": {
             "1": {
-              "name": "argument"
+              "name": "ARGUMENT"
             },
             "2": {
               "name": "keyword.operator.type.annotation.jome"
             },
             "3": {
-              "name": "type"
+              "name": "TYPE"
             }
           }
         },
         {
           "match": "[A-Za-z_$]\\w*",
-          "name": "argument"
+          "name": "ARGUMENT"
         },
         {
           "name": "meta.deconstructed-arg.jome",
@@ -996,7 +996,7 @@
     },
     "variable": {
       "match": "[A-Za-z_$]\\w*",
-      "name": "variable"
+      "name": "VARIABLE"
     },
     "caller": {
       "name": "meta.caller.jome",
@@ -1198,7 +1198,7 @@
               "name": "keyword.operator.type.annotation.jome"
             },
             "3": {
-              "name": "type"
+              "name": "TYPE"
             },
             "4": {
               "name": "keyword.operator.assignment.jome"
