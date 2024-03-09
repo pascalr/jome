@@ -168,12 +168,15 @@ function parse(tokens, parent, lexEnv) {
       // } else {
         lhs.operands.push(parseSingleExpression(nodes.shift(), lhs.precedence)) // FIXME: No idea if lhs.precedence is correct, pure guess
       // }
-    } else if (lhs.captureSection && (lhs.parts[lhs.parts.length-1].type === "punctuation.section.function.begin.jome" || lhs.parts[lhs.parts.length-1].type === "BEGIN_SECTION")) {
-      let next = nodes.shift()
-      while (next && next.type === 'newline') {
-        next = nodes.shift()
+    } else if (lhs.captureSection) {
+      let t = lhs.parts[lhs.parts.length-1].type
+      if (t === "punctuation.section.function.begin.jome" || t === "BEGIN_SECTION" || (nodes[0]?.type === "CODE_BLOCK")) {
+        let next = nodes.shift()
+        while (next && next.type === 'newline') {
+          next = nodes.shift()
+        }
+        lhs.operands.push(parseSingleExpression(next, lhs.precedence)) // FIXME: No idea if lhs.precedence is correct, pure guess
       }
-      lhs.operands.push(parseSingleExpression(next, lhs.precedence)) // FIXME: No idea if lhs.precedence is correct, pure guess
     }
     let lookahead = nodes[0]
     while (

@@ -1,3 +1,5 @@
+TODO: Support "do:" (would be same as do end, but a single operand)
+
 ## Tmp begin
 
   TODO: Explain this better somewhere else.
