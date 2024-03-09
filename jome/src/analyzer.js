@@ -604,7 +604,7 @@ const ANALYZERS = {
     list.forEach(item => {
       if (item.type === 'meta.named-imports.jome') {
         filterCommas(filterSpaces(item.parts)).forEach(namedImport => {
-          if (namedImport.type === 'variable.other.named-import.jome') {
+          if (namedImport.type === 'NAMED_IMPORT') {
             bindings.push({name: getName(namedImport.raw), type: 'named-import'})
           } else if (namedImport.type === 'ALIAS_IMPORT') {
             let original = namedImport.parts[0].raw

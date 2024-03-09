@@ -156,6 +156,7 @@ let grammar = {
                   }
                 },
                 {
+                  type: "NAMED_IMPORT",
                   name: "variable.other.named-import.jome",
                   match: `&?${REGEX_VARIABLE}`,
                   patterns: [{ include: "#import-identifier" }]
