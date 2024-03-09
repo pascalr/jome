@@ -620,7 +620,7 @@ const ANALYZERS = {
         //   }
       } else if (item.type === 'meta.import-file.jome') {
         // already handled
-      } else if (item.type === 'variable.other.default-import.jome') {
+      } else if (item.type === 'DEFAULT_IMPORT') {
         if (useCjsStyle) {
           bindings.push({name: getName(item.raw), type: 'cjs-import'})
         } else {

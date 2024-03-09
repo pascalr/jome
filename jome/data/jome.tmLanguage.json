@@ -36,7 +36,7 @@
               "name": "keyword.control.jome"
             },
             "2": {
-              "name": "variable.other.default-import.jome",
+              "name": "DEFAULT_IMPORT",
               "patterns": [
                 {
                   "include": "#import-identifier"

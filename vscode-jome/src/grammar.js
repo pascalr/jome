@@ -94,6 +94,7 @@ let grammar = {
           beginCaptures: {
             1: { name: "keyword.control.jome" },
             2: {
+              type: "DEFAULT_IMPORT",
               name: "variable.other.default-import.jome",
               patterns: [{ include: "#import-identifier" }]
             }
