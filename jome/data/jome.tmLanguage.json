@@ -19,7 +19,7 @@
       "patterns": [
         {
           "match": "&[A-Za-z_$]\\w*",
-          "name": "entity.name.class.jome"
+          "name": "CLASS_REFERENCE"
         },
         {
           "include": "#variable"

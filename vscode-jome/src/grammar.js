@@ -81,7 +81,7 @@ let grammar = {
   repository: {
     "import-identifier": {
       patterns: [
-        { match: `&${REGEX_CLASS_NAME}`, name: "entity.name.class.jome" },
+        { match: `&${REGEX_CLASS_NAME}`, name: "entity.name.class.jome", type: "CLASS_REFERENCE" },
         { include: "#variable" }
       ]
     },
