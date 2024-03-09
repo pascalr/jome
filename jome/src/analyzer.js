@@ -368,7 +368,7 @@ const ANALYZERS = {
   },
   // let foo
   // var bar
-  'meta.declaration.jome': (node) => {
+  'declaration': (node) => {
     let keyword = 'let'
     if (node.parts[0].type === 'keyword.control.declaration.jome') {
       keyword = node.parts[0].raw.trimLeft()
@@ -526,7 +526,7 @@ const ANALYZERS = {
     //   return `Invalid value for assignement ${node.type}. Was: ${node.type}`
     }
     
-    if (node.operands[0].type === 'meta.declaration.jome') {
+    if (node.operands[0].type === 'declaration') {
       // Try to determine the type implicitely
       let binding = node.lexEnv.getBinding(node.operands[0].parts[1].raw)
       if (node.operands[1].type === 'constant.numeric.integer.jome') {

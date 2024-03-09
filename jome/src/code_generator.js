@@ -548,7 +548,7 @@ const CODE_GENERATORS = {
   "string.regexp.js": compileRaw,
   // let foo
   // var bar
-  'meta.declaration.jome': (node) => {
+  'declaration': (node) => {
     return `${node.data.keyword} ${node.data.name}`
   },
   // do |args| /* ... */ end

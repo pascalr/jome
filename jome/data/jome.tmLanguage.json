@@ -439,7 +439,7 @@
     "declaration": {
       "patterns": [
         {
-          "name": "meta.declaration.jome",
+          "name": "declaration",
           "match": "(\\b(?:int|string|bool|float)\\b(?:\\[\\])*)\\s+([A-Za-z_$]\\w*)",
           "captures": {
             "1": {
@@ -451,7 +451,7 @@
           }
         },
         {
-          "name": "meta.declaration.jome",
+          "name": "declaration",
           "match": "\\b(let|var|const)\\b\\s*([A-Za-z_$]\\w*)?(?:\\s*(\\:)\\s*(\\b(?:int|string|bool|float)\\b(?:\\[\\])*))",
           "captures": {
             "1": {
@@ -469,7 +469,7 @@
           }
         },
         {
-          "name": "meta.declaration.jome",
+          "name": "declaration",
           "match": "\\b(let|var|const)\\b\\s*([A-Za-z_$]\\w*)?(?:\\s*(\\:)\\s*([A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*))?",
           "captures": {
             "1": {
@@ -487,7 +487,7 @@
           }
         },
         {
-          "name": "meta.declaration.jome",
+          "name": "declaration",
           "match": "([A-Za-z_$]\\w*(?:\\<\\w+\\>)?(?:\\[\\])*)\\s+(?!\\b(?:chain|do)\\b)([A-Za-z_$]\\w*)\\s*(?=\n|;)",
           "captures": {
             "1": {

@@ -76,7 +76,7 @@ module.exports = () => {
     it("let x", function () {
       testParse("let x", [
         {
-          type: "meta.declaration.jome",
+          type: "declaration",
           parts: [
             { type: "keyword.control.declaration.jome" },
             { type: "variable.other.jome" },
@@ -88,7 +88,7 @@ module.exports = () => {
     it("let x;", function () {
       testParse("let x;", [
         {
-          type: "meta.declaration.jome",
+          type: "declaration",
           parts: [
             { type: "keyword.control.declaration.jome" },
             { type: "variable.other.jome" },

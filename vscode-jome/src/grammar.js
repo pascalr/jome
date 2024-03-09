@@ -337,6 +337,7 @@ let grammar = {
       /* containsType: 'declaration' */
       patterns: [
         {
+          type: "declaration",
           name: "meta.declaration.jome",
           match: `(${REGEX_PRIMITIVE_TYPE})\\s+(${REGEX_VARIABLE})`,
           captures: {
@@ -345,6 +346,7 @@ let grammar = {
           }
         },
         {
+          type: "declaration",
           name: "meta.declaration.jome",
           match: `\\b(let|var|const)\\b\\s*(${REGEX_VARIABLE})?(?:\\s*(\\:)\\s*(${REGEX_PRIMITIVE_TYPE}))`,
           captures: {
@@ -355,6 +357,7 @@ let grammar = {
           }
         },
         {
+          type: "declaration",
           name: "meta.declaration.jome",
           match: `\\b(let|var|const)\\b\\s*(${REGEX_VARIABLE})?(?:\\s*(\\:)\\s*(${REGEX_TYPE}))?`,
           captures: {
@@ -365,6 +368,7 @@ let grammar = {
           }
         },
         {
+          type: "declaration",
           name: "meta.declaration.jome",
           match: `(${REGEX_TYPE})\\s+(?!\\b(?:chain|do)\\b)(${REGEX_VARIABLE})\\s*(?=\n|;)`,
           captures: {
