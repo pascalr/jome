@@ -110,6 +110,7 @@ let grammar = {
                 1: { name: "constant.language.import-export-all.jome" },
                 2: { name: "keyword.control.jome" },
                 3: {
+                  type: "NAMESPACE_IMPORT",
                   name: "variable.other.namespace-import.jome",
                   patterns: [{ include: "#import-identifier" }]
                 }

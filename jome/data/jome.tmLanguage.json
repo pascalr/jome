@@ -60,7 +60,7 @@
                   "name": "keyword.control.jome"
                 },
                 "3": {
-                  "name": "variable.other.namespace-import.jome",
+                  "name": "NAMESPACE_IMPORT",
                   "patterns": [
                     {
                       "include": "#import-identifier"
