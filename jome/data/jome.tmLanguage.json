@@ -391,6 +391,32 @@
         }
       ]
     },
+    "paren-args-v2": {
+      "name": "ARGUMENTS",
+      "begin": "\\G\\(",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.paren.open"
+        }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.paren.close"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#argument"
+        },
+        {
+          "include": "#along"
+        },
+        {
+          "include": "#expression"
+        }
+      ]
+    },
     "paren-args": {
       "name": "ARGUMENTS",
       "begin": "\\G\\(",
@@ -917,6 +943,52 @@
           },
           "end": "\r\n|\n|$|chain",
           "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        }
+      ]
+    },
+    "argument_v2": {
+      "patterns": [
+        {
+          "match": "([A-Za-z_$]\\w*)\\s*(:)\\s*([A-Za-z]\\w*)",
+          "captures": {
+            "1": {
+              "name": "NAME"
+            },
+            "2": {
+              "name": "keyword.operator.type.annotation.jome"
+            },
+            "3": {
+              "name": "TYPE"
+            }
+          },
+          "name": "ARGUMENT"
+        },
+        {
+          "match": "[A-Za-z_$]\\w*",
+          "name": "ARGUMENT"
+        },
+        {
+          "name": "meta.deconstructed-arg.jome",
+          "begin": "\\{",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.curly-braces.open.jome"
+            }
+          },
+          "end": "\\}",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.curly-braces.close.jome"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#argument_v2"
+            },
             {
               "include": "#expression"
             }

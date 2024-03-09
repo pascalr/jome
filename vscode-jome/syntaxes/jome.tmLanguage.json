@@ -144,6 +144,7 @@
       ]
     },
     "expression": {
+      "strict": false,
       "patterns": [
         {
           "include": "#comment"
@@ -397,6 +398,32 @@
       "endCaptures": {
         "0": {
           "name": "keyword.control.jome"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#argument"
+        },
+        {
+          "include": "#along"
+        },
+        {
+          "include": "#expression"
+        }
+      ]
+    },
+    "paren-args-v2": {
+      "name": "meta.args.jome",
+      "begin": "\\G\\(",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.paren.open"
+        }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.paren.close"
         }
       },
       "patterns": [
@@ -944,6 +971,51 @@
           },
           "end": "\r\n|\n|$|chain",
           "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        }
+      ]
+    },
+    "argument_v2": {
+      "patterns": [
+        {
+          "match": "([A-Za-z_$]\\w*)\\s*(:)\\s*([A-Za-z]\\w*)",
+          "captures": {
+            "1": {
+              "name": "variable.other.jome"
+            },
+            "2": {
+              "name": "keyword.operator.type.annotation.jome"
+            },
+            "3": {
+              "name": "support.type.jome"
+            }
+          }
+        },
+        {
+          "match": "[A-Za-z_$]\\w*",
+          "name": "variable.other.jome"
+        },
+        {
+          "name": "meta.deconstructed-arg.jome",
+          "begin": "\\{",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.curly-braces.open.jome"
+            }
+          },
+          "end": "\\}",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.curly-braces.close.jome"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#argument_v2"
+            },
             {
               "include": "#expression"
             }

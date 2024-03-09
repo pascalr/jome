@@ -170,6 +170,7 @@ let grammar = {
       ]
     },
     expression: {
+      strict: false,
       patterns: [
         { include: "#comment" },
         { include: "#if_block" },
@@ -325,6 +326,19 @@ let grammar = {
       beginCaptures: { 0: { name: "keyword.control.jome" } },
       end: "\\b(end|(?=def)|(?=class)|(?=main)|(?=export))\\b",
       endCaptures: { 0: { name: "keyword.control.jome" } },
+      patterns: [
+        { include: "#argument" },
+        { include: "#along" },
+        { include: "#expression" }
+      ]
+    },
+    "paren-args-v2": {
+      type: 'ARGUMENTS',
+      name: "meta.args.jome",
+      begin: "\\G\\(",
+      beginCaptures: { 0: { name: "punctuation.paren.open" } },
+      end: "\\)",
+      endCaptures: { 0: { name: "punctuation.paren.close" } },
       patterns: [
         { include: "#argument" },
         { include: "#along" },
@@ -637,6 +651,35 @@ let grammar = {
           beginCaptures: { 1: { name: "entity.name.function.jome" } },
           end: "\r\n|\n|$|chain",
           patterns: [{ include: "#expression" }]
+        }
+      ]
+    },
+    argument_v2: {
+      patterns: [
+        {
+          type: "ARGUMENT",
+          match: `(${REGEX_VARIABLE})\\s*(:)\\s*([A-Za-z]\\w*)`,
+          captures: {
+            1: { name: "variable.other.jome", type: "NAME" },
+            2: { name: "keyword.operator.type.annotation.jome" },
+            3: { name: "support.type.jome", type: "TYPE" }
+          }
+        },
+        {
+          match: REGEX_VARIABLE,
+          name: "variable.other.jome",
+          type: "ARGUMENT"
+        },
+        {
+          name: "meta.deconstructed-arg.jome",
+          begin: "\\{",
+          beginCaptures: { 0: { name: "punctuation.curly-braces.open.jome" } },
+          end: "\\}",
+          endCaptures: { 0: { name: "punctuation.curly-braces.close.jome" } },
+          patterns: [
+            { include: "#argument_v2" },
+            { include: "#expression" }
+          ]
         }
       ]
     },
