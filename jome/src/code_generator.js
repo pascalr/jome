@@ -566,7 +566,7 @@ const CODE_GENERATORS = {
     return `${node.data.keyword} ${node.data.name}`
   },
   // do |args| /* ... */ end
-  'meta.do-end.jome': compileStandaloneFunction,
+  'DO_END': compileFUNCTION,
   'FUNCTION': compileFUNCTION,
   // if ... end
   'meta.if-block.jome': (node) => {

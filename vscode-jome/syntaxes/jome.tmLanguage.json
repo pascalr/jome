@@ -361,6 +361,7 @@
       "match": "=>| -> "
     },
     "vbars-args": {
+      "strict": true,
       "name": "meta.args.jome",
       "begin": "\\|(?!\\|)",
       "beginCaptures": {
@@ -376,7 +377,7 @@
       },
       "patterns": [
         {
-          "include": "#argument"
+          "include": "#argument_v2"
         },
         {
           "include": "#along"
@@ -555,6 +556,7 @@
       ]
     },
     "do_end": {
+      "strict": true,
       "name": "meta.do-end.jome",
       "begin": "\\b(do)\\b\\s*",
       "beginCaptures": {

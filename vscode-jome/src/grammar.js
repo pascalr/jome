@@ -307,14 +307,14 @@ let grammar = {
       match: "=>| -> "
     },
     "vbars-args": {
-      type: 'ARGUMENTS',
+      strict: true,
       name: "meta.args.jome",
       begin: "\\|(?!\\|)",
       beginCaptures: { 0: { name: "punctuation.vertical-bar.begin.jome" } },
       end: "\\|",
       endCaptures: { 0: { name: "punctuation.vertical-bar.end.jome" } },
       patterns: [
-        { include: "#argument" },
+        { include: "#argument_v2" },
         { include: "#along" },
         { include: "#expression" }
       ]
@@ -418,6 +418,8 @@ let grammar = {
       patterns: [{ include: "#expression" }]
     },
     do_end: {
+      strict: true,
+      type: "DO_END",
       name: "meta.do-end.jome",
       begin: "\\b(do)\\b\\s*",
       beginCaptures: { 1: { name: "keyword.control.jome" } },

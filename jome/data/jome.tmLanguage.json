@@ -340,22 +340,11 @@
       "match": "=>| -> "
     },
     "vbars-args": {
-      "name": "ARGUMENTS",
       "begin": "\\|(?!\\|)",
-      "beginCaptures": {
-        "0": {
-          "name": "punctuation.vertical-bar.begin.jome"
-        }
-      },
       "end": "\\|",
-      "endCaptures": {
-        "0": {
-          "name": "punctuation.vertical-bar.end.jome"
-        }
-      },
       "patterns": [
         {
-          "include": "#argument"
+          "include": "#argument_v2"
         },
         {
           "include": "#along"
@@ -511,19 +500,8 @@
       ]
     },
     "do_end": {
-      "name": "meta.do-end.jome",
       "begin": "\\b(do)\\b\\s*",
-      "beginCaptures": {
-        "1": {
-          "name": "keyword.control.jome"
-        }
-      },
       "end": "\\b(end)\\b",
-      "endCaptures": {
-        "0": {
-          "name": "keyword.control.jome"
-        }
-      },
       "patterns": [
         {
           "include": "#vbars-args"
@@ -531,7 +509,8 @@
         {
           "include": "#expression"
         }
-      ]
+      ],
+      "name": "DO_END"
     },
     "function": {
       "begin": "\\b(function|fn)\\b\\s*",

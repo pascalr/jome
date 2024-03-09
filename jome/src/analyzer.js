@@ -301,30 +301,6 @@ function validateString(node, char) {
   node.data = {parts}
 }
 
-function validateFuncCall(node, hasDot) {
-  if (hasDot && node.parts[0].type !== "punctuation.dot.jome") {
-    pushError(node, "Internal error. Expected dot before function call in this circonstance.")
-  }
-  if (hasDot && node.operands.length !== 1) {
-    pushError(node, "Internal error. A function call with a dot should have a left operand.")
-  }
-  let nameTok = node.parts[hasDot ? 1 : 0]
-  if (nameTok.type !== 'entity.name.function.jome' && nameTok.type !== "support.function.builtin.jome") {
-    pushError(node, "Internal error. Function calls should always start with a name.")
-  }
-  let parts = node.parts.slice(hasDot ? 2 : 1)
-  let args = [];
-  if (parts.length && parts[parts.length-1].type === 'meta.do-end.jome') {
-    args.push(parts[parts.length-1])
-    parts = parts.slice(0, -1)
-  }
-  parts = filterNewlines(parts)
-  ensureListSeparatedByCommas(node, parts)
-  args = [...parts.filter((e, i) => i % 2 === 0), ...args]
-
-  node.data = {nameTok, args}
-}
-
 function validateTag(node) { // A generic version of the heredoc. It is not yet clear how to call those things.
   if (node.type !== "meta.tag.jome") {
     pushError(node, `Internal error. A tag should always start with type meta.embedded.block. Was ${node.type}`)
@@ -390,24 +366,16 @@ const ANALYZERS = {
     pushBinding(node, name, {type: 'declaration', keyword, variableType, kind: BindingKind.Variable})
     node.data = {keyword, name, variableType}
   },
-  // do |args| /* ... */ end
-  'meta.do-end.jome': (node) => {
-    if (node.parts[0].raw !== 'do') {
-      return pushError(node, "Internal error. meta.do-end.jome should always start with keyword do")
-    }
-    if (node.parts[node.parts.length-1].raw !== 'end') {
-      return pushError(node, "Internal error. meta.do-end.jome should always end with keyword end")
-    }
-    // Arguments, if present, should always be right after the function name
-    if (node.parts.slice(2,-1).find(c => c.type === 'ARGUMENTS')) {
-      return pushError(node, "Syntax error. Arguments should always be at the beginning of the function block.")
-    }
 
-    let args = node.parts[1]?.type === 'ARGUMENTS' ? node.parts[1] : null
-    let expressions = args ? node.parts.slice(2, -1) : node.parts.slice(1, -1)
-
-    analyzeFunction(node, null, args, expressions)
+  'DO_END': (node) => {
+    let args = node.parts.filter(p => p.type === 'ARGUMENT')
+    let expressions = filterCommas(filterSpaces(node.parts.filter(
+      p => p.type !== 'ARGUMENT'
+    )))
+    analyzeFUNCTION(node, null, args, expressions)
+    node.data = {expressions, args}
   },
+
   "FUNCTION": (node) => {
     let nameNode = node.parts.find(p => p.type === 'FUNCTION_NAME')
     let name = nameNode?.raw
@@ -418,7 +386,7 @@ const ANALYZERS = {
     if (node.operands.length) {
       expressions = node.operands
     } else {
-      expressions = expressions = filterCommas(filterSpaces(node.parts.filter(
+      expressions = filterCommas(filterSpaces(node.parts.filter(
         p => p.type !== 'FUNCTION_NAME' && p.type !== 'ARGUMENT' && p.type !== 'BEGIN_SECTION' && p.type !== 'FUNCTION_STYLE'
       )))
     }
@@ -660,7 +628,7 @@ const ANALYZERS = {
     // FIXME: Update this old code
     let parts = node.parts.slice(1)
     let args = [];
-    if (parts.length && parts[parts.length-1].type === 'meta.do-end.jome') {
+    if (parts.length && parts[parts.length-1].type === 'DO_END') {
       args.push(parts[parts.length-1])
       parts = parts.slice(0, -1)
     }
@@ -682,7 +650,7 @@ const ANALYZERS = {
     // FIXME: Update this old code
     let parts = node.parts.slice(1)
     let args = [];
-    if (parts.length && parts[parts.length-1].type === 'meta.do-end.jome') {
+    if (parts.length && parts[parts.length-1].type === 'DO_END') {
       args.push(parts[parts.length-1])
       parts = parts.slice(0, -1)
     }
