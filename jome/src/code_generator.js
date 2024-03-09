@@ -579,7 +579,6 @@ const CODE_GENERATORS = {
   "variable.other.constant.utility.jome": (node) => compUtility(node), // #PI
   "support.function-call.WIP.jome": compileFuncCall, // someFunc "some arg"
   "support.function-call.jome": compileFuncCall, // someFunc("some arg")
-  "meta.function-call.WIP.jome": compileMetaFuncCall, // .someFunc "some arg"
   "INLINE_FUNCTION_CALL": compileMetaFuncCall, // .someFunc("some arg")
   // js uses more specifically:
   // keyword.operator.arithmetic.jome

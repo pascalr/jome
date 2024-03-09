@@ -802,14 +802,10 @@
           "name": "INLINE_FUNCTION_CALL"
         },
         {
-          "name": "meta.function-call.WIP.jome",
           "begin": "(\\.)(#\\w+\\b\\!?)(?!\\:)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))",
           "beginCaptures": {
-            "1": {
-              "name": "punctuation.dot.jome"
-            },
             "2": {
-              "name": "support.function.builtin.jome"
+              "name": "BUILT_IN"
             }
           },
           "end": "\r\n|\n|$|chain",
@@ -817,17 +813,14 @@
             {
               "include": "#expression"
             }
-          ]
+          ],
+          "name": "INLINE_FUNCTION_CALL"
         },
         {
-          "name": "meta.function-call.WIP.jome",
           "begin": "(\\.)\\b(\\w+)\\b(?!\\:)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))",
           "beginCaptures": {
-            "1": {
-              "name": "punctuation.dot.jome"
-            },
             "2": {
-              "name": "entity.name.function.jome"
+              "name": "FUNCTION_NAME"
             }
           },
           "end": "\r\n|\n|$|chain",
@@ -835,7 +828,8 @@
             {
               "include": "#expression"
             }
-          ]
+          ],
+          "name": "INLINE_FUNCTION_CALL"
         },
         {
           "name": "support.function-call.jome",

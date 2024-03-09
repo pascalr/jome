@@ -860,6 +860,7 @@
           ]
         },
         {
+          "strict": true,
           "name": "meta.function-call.WIP.jome",
           "begin": "(\\.)(#\\w+\\b\\!?)(?!\\:)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))",
           "beginCaptures": {
@@ -878,6 +879,7 @@
           ]
         },
         {
+          "strict": true,
           "name": "meta.function-call.WIP.jome",
           "begin": "(\\.)\\b(\\w+)\\b(?!\\:)(?!\\s*([\\+\\-\\*\\/\\|\\^\\=\\,\\.]|\\)|&&|\\!=|\\!==|$|%|;|along|chain|end|\\}|\\?|\\[|\\]))",
           "beginCaptures": {

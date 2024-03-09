@@ -655,7 +655,6 @@ const ANALYZERS = {
 
   "support.function-call.WIP.jome": (node) => validateFuncCall(node, false,),
   "support.function-call.jome": (node) => validateFuncCall(node, false),
-  "meta.function-call.WIP.jome": (node) => validateFuncCall(node, true),
 
   "INLINE_FUNCTION_CALL": (node) => {
 
