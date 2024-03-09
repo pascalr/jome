@@ -10,10 +10,9 @@
   "license": "MIT",
   "publisher": "Pascal Rainville",
   "scripts": {
-    "compile": "node syntaxes/jome.tmLanguage.js",
+    "compile": "node src/grammar.js",
     "install": "cp -R . ~/.vscode/extensions/vscode-jome",
-    "copy": "cp syntaxes/jome.tmLanguage.json ../jome/data/",
-    "build": "npm run compile && npm run copy && npm run install",
+    "build": "npm run compile && npm run install",
     "install-windows": "xcopy /E . C:\\Users\\Loville\\.vscode\\extensions\\vscode-jome"
   },
   "categories": [

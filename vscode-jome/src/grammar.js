@@ -1348,12 +1348,11 @@ Use containsType to avoid giving the same type for every one inside the pattern.
 
 */
 
-let filepath = path.join(__dirname, 'jome.tmLanguage.json')
-fs.writeFileSync(filepath, JSON.stringify(grammar, null, 2), 'utf-8');
+let tmLanguageFilepath = path.join(__dirname, '..', 'syntaxes', 'jome.tmLanguage.json')
+fs.writeFileSync(tmLanguageFilepath, JSON.stringify(grammar, null, 2), 'utf-8');
 
-
-
-
+let runGrammarFilepath = path.join(__dirname, '..', '..', 'jome', 'data', 'jome.tmLanguage.json')
+fs.writeFileSync(runGrammarFilepath, JSON.stringify(grammar, null, 2), 'utf-8');
 
 // {
 //   name: "meta.statement.require.jome",
