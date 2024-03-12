@@ -868,14 +868,14 @@ let grammar = {
             1: { name: "variable.assignment.jome" },
             2: { name: "keyword.operator.type.annotation.jome" },
             3: { name: "support.type.jome", type: "TYPE" },
-            4: { name: "keyword.operator.assignment.jome" }
+            4: { name: "keyword.operator.assignment.jome", type: "ASSIGN" }
           }
         },
         {
           match: "([a-zA-Z$_][\\w$]*)?\\s*(=)(?![>=])",
           captures: {
             1: { name: "variable.assignment.jome" },
-            2: { name: "keyword.operator.assignment.jome" }
+            2: { name: "keyword.operator.assignment.jome", type: "ASSIGN" }
           }
         },
         {

@@ -1159,7 +1159,7 @@
               "name": "TYPE"
             },
             "4": {
-              "name": "keyword.operator.assignment.jome"
+              "name": "ASSIGN"
             }
           }
         },
@@ -1170,7 +1170,7 @@
               "name": "variable.assignment.jome"
             },
             "2": {
-              "name": "keyword.operator.assignment.jome"
+              "name": "ASSIGN"
             }
           }
         },

@@ -259,7 +259,7 @@ function toPrimitive(str) {
 function parseArgument(node) {
   if (node.type === 'ARGUMENT') {
     return new Argument(node.raw)
-  } else if (node.type === 'keyword.operator.assignment.jome') {
+  } else if (node.type === 'ASSIGN') {
     let arg = parseArgument(node.operands[0])
     arg.defaultValue = genCode(node.operands[1])
     return arg
@@ -628,7 +628,7 @@ const CODE_GENERATORS = {
     
     let lastItem = items[items.length-1]
     let otherCalls = items
-    if (lastItem.type === 'keyword.operator.assignment.jome') {
+    if (lastItem.type === 'ASSIGN') {
       lastItem = null
     } else {
       otherCalls = items.slice(0, -1)
@@ -642,8 +642,8 @@ const CODE_GENERATORS = {
 })()`
   },
   // =
-  'keyword.operator.assignment.jome': compileOperator,
-  //'keyword.operator.assignment.jome': (node) => (compileOperator(node)+";"),
+  'ASSIGN': compileOperator,
+  //'ASSIGN': (node) => (compileOperator(node)+";"),
   // let
   'KEYWORD_DECLARATION': (node) => `let ${node.operands[0].raw}`,
 

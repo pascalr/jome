@@ -447,7 +447,7 @@ const ANALYZERS = {
     pushOccurence(node, {name})
   },
   // =
-  'keyword.operator.assignment.jome': (node) => {
+  'ASSIGN': (node) => {
     if (node.operands.length !== 2) {
       return pushError(node, "An assignment must have a two operands")
     // } else if (!['KEYWORD_DECLARATION'].includes(node.operands[0].type)) {

@@ -249,7 +249,7 @@ const PRECEDENCES = {
   // Ternary is higher than arrow function: inspectTruthness = |x| => x ? 'truthy' : 'falsy'
   'keyword.arrow.jome': 300,
   // Arrow function is higher than assignment: add5 = |x| => x + 5
-  'keyword.operator.assignment.jome': 250,
+  'ASSIGN': 250,
   // Assigment and dictionary key have the same precedence. (They should never be used together)
   'meta.dictionary-key.jome': 250,
   // Assignment is higher than new: x = new Foo()
@@ -313,7 +313,7 @@ const TOKENS = {
     captureRight: true,
   },
   // =
-  'keyword.operator.assignment.jome': {
+  'ASSIGN': {
     captureLeft: true,
     captureRight: true,
   },
