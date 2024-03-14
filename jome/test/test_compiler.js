@@ -800,7 +800,7 @@ end
     it("let port = options.port || 3000", function () {
       assertCompile(
         "let port = options.port || 3000",
-        /`let port = options.port \|\| 3000`/,
+        /let port = options.port \|\| 3000/,
       );
     });
     it("with options = {} end", function () {

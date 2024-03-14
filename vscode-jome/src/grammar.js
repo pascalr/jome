@@ -858,10 +858,8 @@ let grammar = {
           match: "\\?\\?",
           name: "keyword.operator.nullish-coalescing.jome"
         },
-        {
-          match: "&&|\\|\\|",
-          name: "keyword.operator.logical.jome"
-        },
+        { match: "&&", name: "keyword.operator.logical.jome", type: "OP_AND" },
+        { match: "\\|\\|", name: "keyword.operator.logical.jome", type: "OP_OR" },
         {
           match: "([a-zA-Z$_][\\w$]*)?(:)\\s*(\\w+)\\s*(=)(?![>=])",
           captures: {

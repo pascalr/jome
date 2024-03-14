@@ -1143,8 +1143,12 @@
           "name": "keyword.operator.nullish-coalescing.jome"
         },
         {
-          "match": "&&|\\|\\|",
-          "name": "keyword.operator.logical.jome"
+          "match": "&&",
+          "name": "OP_AND"
+        },
+        {
+          "match": "\\|\\|",
+          "name": "OP_OR"
         },
         {
           "match": "([a-zA-Z$_][\\w$]*)?(:)\\s*(\\w+)\\s*(=)(?![>=])",

@@ -408,8 +408,8 @@ const ANALYZERS = {
   },
   // !
   "keyword.operator.logical.unary.jome": validateOperatorUnary,
-  // || &&
-  "keyword.operator.logical.jome": validateOperator,
+  "OP_AND": validateOperator,
+  "OP_OR": validateOperator,
   // ==, !=, ===, !===
   'keyword.operator.comparison.jome': validateOperator,
   // statement if cond

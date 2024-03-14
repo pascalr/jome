@@ -1250,7 +1250,11 @@
           "name": "keyword.operator.nullish-coalescing.jome"
         },
         {
-          "match": "&&|\\|\\|",
+          "match": "&&",
+          "name": "keyword.operator.logical.jome"
+        },
+        {
+          "match": "\\|\\|",
           "name": "keyword.operator.logical.jome"
         },
         {

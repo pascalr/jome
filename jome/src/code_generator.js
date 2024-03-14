@@ -594,7 +594,8 @@ const CODE_GENERATORS = {
   // !
   "keyword.operator.logical.unary.jome": compileOperatorUnary,
   // || &&
-  "keyword.operator.logical.jome": compileOperator,
+  "OP_OR": compileOperator,
+  "OP_AND": compileOperator,
   // ==, !=, ===, !===
   'keyword.operator.comparison.jome': compileOperator,
   // statement if cond

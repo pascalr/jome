@@ -239,6 +239,8 @@ const PRECEDENCES = {
       return 1200
     }
   }),
+  "OP_AND": 800,
+  "OP_OR": 700,
   // arithmetic operators are higher than comparison: x + 10 < y - 20
   'keyword.operator.comparison.jome': 500,
   // Comparison is higher than nullish coalescing: x ?? y > z
@@ -293,11 +295,8 @@ const TOKENS = {
   "keyword.operator.logical.unary.jome": {
     captureRight: true,
   },
-  // || &&
-  "keyword.operator.logical.jome": {
-    captureLeft: true,
-    captureRight: true,
-  },
+  "OP_OR": { captureLeft: true, captureRight: true },
+  "OP_AND": { captureLeft: true, captureRight: true },
   // ==, !=, ===, !===
   'keyword.operator.comparison.jome': {
     captureLeft: true,

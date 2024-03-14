@@ -957,7 +957,7 @@ end
 
 describe 'General bugs' do
   it 'let port = options.port || 3000' do
-    assertCompile("let port = options.port || 3000", /`let port = options.port \|\| 3000`/)
+    assertCompile("let port = options.port || 3000", /let port = options.port \|\| 3000/)
   end
   it 'with options = {} end' do
     assertCompile('with options = {} end', /\s*/)
