@@ -450,8 +450,11 @@ let grammar = {
       name: "meta.if-block.jome",
       begin: "(?:^|\\G)\\s*\\b(if)\\b",
       beginCaptures: { 1: { name: "keyword.control.conditional.jome" } },
-      end: "\\b(end)\\b",
-      endCaptures: { 0: { name: "keyword.control.jome" } },
+      end: "(\\bend\\b)|((?<!\\s)\\:\\s)",
+      endCaptures: {
+        1: { name: "keyword.control.jome" },
+        2: { name: "punctuation.section.function.begin.jome", type: 'BEGIN_SECTION' }
+      },
       patterns: [{ include: "#expression" }]
     },
     trycatch: {
