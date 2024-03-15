@@ -486,33 +486,19 @@ const ANALYZERS = {
     ensureAllTypeIn(node, parts, ['FUNCTION_CALL', 'keyword.operator.assignment.jome'])
     node.data = {items: parts}
   },
-  
-  "IF_BLOCK": (node) => {
-    ensureStartRaw(node, 'if')
-    ensureStartType(node, 'keyword.control.conditional.jome')
-    ensureEndRaw(node, 'end')
-    ensureEndType(node, 'keyword.control.jome')
-    let parts = filterNewlines(node.parts.slice(1,-1)) // remove if, end keyword, and remove newlines
 
-    // TODO: Make sure that if and the elsifs have one operand (the condition)
-    let currentSection = {keyword: 'if', cond: node.parts[0].operands[0], statements: []}
-    let sections = [currentSection] // an if, or an elsif, or an else
-    parts.forEach(p => {
-      if (p.type === 'keyword.control.conditional.jome') {
-        // TODO: Make sure that if and the elsifs have one operand (the condition)
-        currentSection = {keyword: 'else if', cond: p.operands[0], statements: []}
-        sections.push(currentSection)
-      } else if (p.type === 'keyword.control.conditional.else.jome') {
-        if (currentSection.keyword === 'else') {
-          return pushError(node, "A condition block can only have a single else statement.")
-        }
-        currentSection = {keyword: 'else', statements: []}
-        sections.push(currentSection)
-      } else {
-        currentSection.statements.push(p)
-      }
-    })
-    node.data = {sections}
+  "IF_BLOCK": (node) => {
+    let parts = filterNewlines(node.parts)
+    node.data = {cond: parts[0], statements: parts.slice(1)}
+  },
+
+  "ELSIF_BLOCK": (node) => {
+    let parts = filterNewlines(node.parts)
+    node.data = {cond: parts[0], statements: parts.slice(1)}
+  },
+
+  "ELSE_BLOCK": (node) => {
+    node.data = {statements: filterNewlines(node.parts)}
   },
   
   // handles all lines starting with keyword import

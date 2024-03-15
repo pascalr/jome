@@ -609,8 +609,54 @@
     "if_block": {
       "patterns": [
         {
-          "name": "meta.if-block.jome",
+          "strict": true,
           "begin": "(?:^|\\G)\\s*\\b(if)\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.conditional.jome"
+            }
+          },
+          "end": "(\\bend\\b)|((?<!\\s)\\:\\s)",
+          "endCaptures": {
+            "1": {
+              "name": "keyword.control.jome"
+            },
+            "2": {
+              "name": "punctuation.section.function.begin.jome"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        },
+        {
+          "strict": true,
+          "begin": "\\b((else if)|(elsif)|(elif))\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.conditional.jome"
+            }
+          },
+          "end": "(\\bend\\b)|((?<!\\s)\\:\\s)|(?=(?:\\belse\\b))|(?=(?:\\belif\\b))|(?=(?:\\belsif\\b))",
+          "endCaptures": {
+            "1": {
+              "name": "keyword.control.jome"
+            },
+            "2": {
+              "name": "punctuation.section.function.begin.jome"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        },
+        {
+          "strict": true,
+          "begin": "\\b(else)\\b",
           "beginCaptures": {
             "1": {
               "name": "keyword.control.conditional.jome"

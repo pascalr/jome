@@ -536,18 +536,9 @@
     "if_block": {
       "patterns": [
         {
-          "name": "IF_BLOCK",
           "begin": "(?:^|\\G)\\s*\\b(if)\\b",
-          "beginCaptures": {
-            "1": {
-              "name": "keyword.control.conditional.jome"
-            }
-          },
           "end": "(\\bend\\b)|((?<!\\s)\\:\\s)",
           "endCaptures": {
-            "1": {
-              "name": "keyword.control.jome"
-            },
             "2": {
               "name": "BEGIN_SECTION"
             }
@@ -556,7 +547,38 @@
             {
               "include": "#expression"
             }
-          ]
+          ],
+          "name": "IF_BLOCK"
+        },
+        {
+          "begin": "\\b((else if)|(elsif)|(elif))\\b",
+          "end": "(\\bend\\b)|((?<!\\s)\\:\\s)|(?=(?:\\belse\\b))|(?=(?:\\belif\\b))|(?=(?:\\belsif\\b))",
+          "endCaptures": {
+            "2": {
+              "name": "BEGIN_SECTION"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ],
+          "name": "ELSIF_BLOCK"
+        },
+        {
+          "begin": "\\b(else)\\b",
+          "end": "(\\bend\\b)|((?<!\\s)\\:\\s)",
+          "endCaptures": {
+            "2": {
+              "name": "BEGIN_SECTION"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ],
+          "name": "ELSE_BLOCK"
         }
       ]
     },

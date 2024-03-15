@@ -449,11 +449,35 @@ let grammar = {
     if_block: {
       patterns: [
         {
+          strict: true,
           type: "IF_BLOCK",
-          name: "meta.if-block.jome",
           begin: "(?:^|\\G)\\s*\\b(if)\\b",
           beginCaptures: { 1: { name: "keyword.control.conditional.jome" } },
           end: "(\\bend\\b)|((?<!\\s)\\:\\s)", // end: "(\\bend\\b)|((?<!\\s)\\:\\s)|(?=(?:\\belse\\b))|(?=(?:\\belif\\b))|(?=(?:\\belsif\\b))",
+          endCaptures: {
+            1: { name: "keyword.control.jome" },
+            2: { name: "punctuation.section.function.begin.jome", type: 'BEGIN_SECTION' }
+          },
+          patterns: [{ include: "#expression" }]
+        },
+        {
+          strict: true,
+          type: "ELSIF_BLOCK",
+          begin: "\\b((else if)|(elsif)|(elif))\\b",
+          beginCaptures: { 1: { name: "keyword.control.conditional.jome" } },
+          end: "(\\bend\\b)|((?<!\\s)\\:\\s)|(?=(?:\\belse\\b))|(?=(?:\\belif\\b))|(?=(?:\\belsif\\b))",
+          endCaptures: {
+            1: { name: "keyword.control.jome" },
+            2: { name: "punctuation.section.function.begin.jome", type: 'BEGIN_SECTION' }
+          },
+          patterns: [{ include: "#expression" }]
+        },
+        {
+          strict: true,
+          type: "ELSE_BLOCK",
+          begin: "\\b(else)\\b",
+          beginCaptures: { 1: { name: "keyword.control.conditional.jome" } },
+          end: "(\\bend\\b)|((?<!\\s)\\:\\s)",
           endCaptures: {
             1: { name: "keyword.control.jome" },
             2: { name: "punctuation.section.function.begin.jome", type: 'BEGIN_SECTION' }
