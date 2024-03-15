@@ -89,6 +89,7 @@ class ASTNode {
       this.captureRight = data.captureRight
       this.captureSection = data.captureSection
     }
+    // this.block = null // Code block
   }
 
   get ctxFile() {
@@ -146,6 +147,22 @@ function mergeCaptureRightHighPrecedence(nodes) {
   return merged
 }
 
+// merge those that are capture right only, not operators that capture left and right
+// only capture those that have the highest precedence (like !)
+function mergeCodeBlocks(nodes) { // TODO: Sections here too?
+  if (!nodes.length) {return []}
+  let merged = [nodes[0]]
+  for (let i = 1; i < nodes.length; i++) {
+    let n = nodes[i]
+    if (n.type === "CODE_BLOCK") {
+      merged[merged.length-1].block = n
+    } else {
+      merged.push(n)
+    }
+  }
+  return merged
+}
+
 // Create an abstract syntax tree (AST) from tokens. Returns a list of ASTNode.
 function parse(tokens, parent, lexEnv) {
 
@@ -154,10 +171,12 @@ function parse(tokens, parent, lexEnv) {
   // Only the top nodes
   let topNodes = []
 
+  // Doing passes like that feels inefficient, but it's simple and works. Good enough for now.
+
   // As a first pass, merge all the chainable nodes together. They have highest precedence.
   let firstPass = mergeChainables(allNodes)
-
-  let nodes = mergeCaptureRightHighPrecedence(firstPass)
+  let secondPass = mergeCodeBlocks(firstPass)
+  let nodes = mergeCaptureRightHighPrecedence(secondPass)
 
   // lhs === left hand side
   // rhs === right hand side
