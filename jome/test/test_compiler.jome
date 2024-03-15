@@ -312,6 +312,30 @@ describe "Colon section begin" do
   end
 end
 
+/*
+if someCondition {
+  doSomething()
+} else if someOtherCondition:
+  doSomething()
+else
+  doSomething()
+end
+
+if someCondition
+  doSomething()
+else if someOtherCondition {
+  doSomething()
+} else:
+  doSomething()
+
+if someCondition
+  doSomething()
+else if someOtherCondition
+  doSomething()
+else:
+  doSomething()
+*/
+
 // But I'd like to have punctuation available for def, if, for
 // Maybe only allow inline or the next line right after I would be fine with that
 /*

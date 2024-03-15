@@ -486,8 +486,8 @@ const ANALYZERS = {
     ensureAllTypeIn(node, parts, ['FUNCTION_CALL', 'keyword.operator.assignment.jome'])
     node.data = {items: parts}
   },
-  // if ... end
-  "meta.if-block.jome": (node) => {
+  
+  "IF_BLOCK": (node) => {
     ensureStartRaw(node, 'if')
     ensureStartType(node, 'keyword.control.conditional.jome')
     ensureEndRaw(node, 'end')

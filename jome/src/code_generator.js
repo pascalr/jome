@@ -545,8 +545,7 @@ const CODE_GENERATORS = {
   // do |args| /* ... */ end
   'DO_END': compileFUNCTION,
   'FUNCTION': compileFUNCTION,
-  // if ... end
-  'meta.if-block.jome': (node) => {
+  'IF_BLOCK': (node) => {
     return node.data.sections.map(sect => {
       return `${sect.keyword} ${sect.cond ? `(${genCode(sect.cond)})` : ''} {${sect.statements.map(c => genCode(c)).join(';')}}`
     }).join(' ');

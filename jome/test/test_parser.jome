@@ -135,7 +135,7 @@ end
 
 //   it 'if statements blocks, operation condition' do
 //     testParse('if x === 1\n  #log("hello")\nend', [{
-//       type: 'meta.if-block.jome',
+//       type: 'IF_BLOCK',
 //       parts: [
 //         {type: 'keyword.control.conditional.jome'},
 //         {

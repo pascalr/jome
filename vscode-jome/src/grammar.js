@@ -447,15 +447,20 @@ let grammar = {
       ]
     },
     if_block: {
-      name: "meta.if-block.jome",
-      begin: "(?:^|\\G)\\s*\\b(if)\\b",
-      beginCaptures: { 1: { name: "keyword.control.conditional.jome" } },
-      end: "(\\bend\\b)|((?<!\\s)\\:\\s)",
-      endCaptures: {
-        1: { name: "keyword.control.jome" },
-        2: { name: "punctuation.section.function.begin.jome", type: 'BEGIN_SECTION' }
-      },
-      patterns: [{ include: "#expression" }]
+      patterns: [
+        {
+          type: "IF_BLOCK",
+          name: "meta.if-block.jome",
+          begin: "(?:^|\\G)\\s*\\b(if)\\b",
+          beginCaptures: { 1: { name: "keyword.control.conditional.jome" } },
+          end: "(\\bend\\b)|((?<!\\s)\\:\\s)", // end: "(\\bend\\b)|((?<!\\s)\\:\\s)|(?=(?:\\belse\\b))|(?=(?:\\belif\\b))|(?=(?:\\belsif\\b))",
+          endCaptures: {
+            1: { name: "keyword.control.jome" },
+            2: { name: "punctuation.section.function.begin.jome", type: 'BEGIN_SECTION' }
+          },
+          patterns: [{ include: "#expression" }]
+        }
+      ]
     },
     trycatch: {
       patterns: [
