@@ -490,15 +490,26 @@ const ANALYZERS = {
   "IF_BLOCK": (node) => {
     let parts = filterNewlines(node.parts)
     node.data = {cond: parts[0], statements: parts.slice(1)}
+    let selfIdx = node.parent.parts.find(p => p === node)
+    for (let i = selfIdx; i < node.parent.parts.length; i++) {
+      let n = node.parent.parts[i]
+      if (n.type !== "ELSIF_BLOCK" && n.type !== "ELSE_BLOCK") {break;}
+      if (n.type === "ELSIF_BLOCK") {
+        let ps = filterNewlines(n.parts)
+        n.data = {cond: ps[0], statements: ps.slice(1)}
+      } else {
+        n.data = {statements: filterNewlines(n.parts)}
+      }
+      n.analyzed = true
+    }
   },
 
   "ELSIF_BLOCK": (node) => {
-    let parts = filterNewlines(node.parts)
-    node.data = {cond: parts[0], statements: parts.slice(1)}
+    pushError(node, "Unexpected elsif block, missing if block before.")
   },
 
   "ELSE_BLOCK": (node) => {
-    node.data = {statements: filterNewlines(node.parts)}
+    pushError(node, "Unexpected else block, missing if block before.")
   },
   
   // handles all lines starting with keyword import

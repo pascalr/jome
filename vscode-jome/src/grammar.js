@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
+// TODO: Instead of defining name: meta.....jome, simply add id to syntax automatically if it has type, but no name
+// This simply makes it easier to debug.
+
 // TODO: Move this in a separate package that can be used by both jome and vscode-jome
 
 // TODO: Use \\p{L} ?
@@ -233,14 +236,6 @@ let grammar = {
     keywords: {
       patterns: [
         {
-          name: "keyword.control.conditional.jome",
-          match: "\\b(elif|elsif|else if)\\b"
-        },
-        {
-          name: "keyword.control.conditional.else.jome",
-          match: "\\b(else|sinon)\\b"
-        },
-        {
           name: "keyword.control.inline-conditional.jome",
           match: "\\b(if|si)\\b"
         },
@@ -451,9 +446,10 @@ let grammar = {
         {
           strict: true,
           type: "IF_BLOCK",
+          name: "meta.if-block.jome",
           begin: "(?:^|\\G)\\s*\\b(if)\\b",
           beginCaptures: { 1: { name: "keyword.control.conditional.jome" } },
-          end: "(\\bend\\b)|((?<!\\s)\\:\\s)", // end: "(\\bend\\b)|((?<!\\s)\\:\\s)|(?=(?:\\belse\\b))|(?=(?:\\belif\\b))|(?=(?:\\belsif\\b))",
+          end: "(\\bend\\b)|((?<!\\s)\\:\\s)|(?=(?:\\belse\\b))|(?=(?:\\belif\\b))|(?=(?:\\belsif\\b))",
           endCaptures: {
             1: { name: "keyword.control.jome" },
             2: { name: "punctuation.section.function.begin.jome", type: 'BEGIN_SECTION' }
@@ -463,6 +459,7 @@ let grammar = {
         {
           strict: true,
           type: "ELSIF_BLOCK",
+          name: "meta.elsif-block.jome",
           begin: "\\b((else if)|(elsif)|(elif))\\b",
           beginCaptures: { 1: { name: "keyword.control.conditional.jome" } },
           end: "(\\bend\\b)|((?<!\\s)\\:\\s)|(?=(?:\\belse\\b))|(?=(?:\\belif\\b))|(?=(?:\\belsif\\b))",
@@ -475,6 +472,7 @@ let grammar = {
         {
           strict: true,
           type: "ELSE_BLOCK",
+          name: "meta.else-block.jome",
           begin: "\\b(else)\\b",
           beginCaptures: { 1: { name: "keyword.control.conditional.jome" } },
           end: "(\\bend\\b)|((?<!\\s)\\:\\s)",

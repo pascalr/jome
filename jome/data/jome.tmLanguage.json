@@ -262,14 +262,6 @@
     "keywords": {
       "patterns": [
         {
-          "name": "keyword.control.conditional.jome",
-          "match": "\\b(elif|elsif|else if)\\b"
-        },
-        {
-          "name": "keyword.control.conditional.else.jome",
-          "match": "\\b(else|sinon)\\b"
-        },
-        {
           "name": "keyword.control.inline-conditional.jome",
           "match": "\\b(if|si)\\b"
         },
@@ -537,7 +529,7 @@
       "patterns": [
         {
           "begin": "(?:^|\\G)\\s*\\b(if)\\b",
-          "end": "(\\bend\\b)|((?<!\\s)\\:\\s)",
+          "end": "(\\bend\\b)|((?<!\\s)\\:\\s)|(?=(?:\\belse\\b))|(?=(?:\\belif\\b))|(?=(?:\\belsif\\b))",
           "endCaptures": {
             "2": {
               "name": "BEGIN_SECTION"
