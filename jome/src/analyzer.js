@@ -489,18 +489,19 @@ const ANALYZERS = {
 
   "IF_BLOCK": (node) => {
     let parts = filterNewlines(node.parts)
-    node.data = {cond: parts[0], statements: parts.slice(1)}
+    let sections = [{keyword: "if", cond: parts[0], statements: parts.slice(1)}]
     for (let i = node.siblingIdx+1; i < node.parent.parts.length; i++) {
       let n = node.parent.parts[i]
       if (n.type !== "ELSIF_BLOCK" && n.type !== "ELSE_BLOCK") {break;}
       if (n.type === "ELSIF_BLOCK") {
         let ps = filterNewlines(n.parts)
-        n.data = {cond: ps[0], statements: ps.slice(1)}
+        sections.push({keyword: "else if", cond: ps[0], statements: ps.slice(1)})
       } else {
-        n.data = {statements: filterNewlines(n.parts)}
+        sections.push({keyword: "else", statements: filterNewlines(n.parts)})
       }
       n.analyzed = true
     }
+    node.data = {sections}
   },
 
   "ELSIF_BLOCK": (node) => {

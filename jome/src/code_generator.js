@@ -546,14 +546,12 @@ const CODE_GENERATORS = {
   'DO_END': compileFUNCTION,
   'FUNCTION': compileFUNCTION,
   'IF_BLOCK': (node) => {
-    return `if (${genCode(node.data.cond)}) {${node.data.statements.map(c => genCode(c)).join(';')}}`
+    return node.data.sections.map(sect => {
+      return `${sect.keyword} ${sect.cond ? `(${genCode(sect.cond)})` : ''} {${sect.statements.map(c => genCode(c)).join(';')}}`
+    }).join(' ');
   },
-  'ELSIF_BLOCK': (node) => {
-    return `else if (${genCode(node.data.cond)}) {${node.data.statements.map(c => genCode(c)).join(';')}}`
-  },
-  'ELSE_BLOCK': (node) => {
-    return `else {${node.data.statements.map(c => genCode(c)).join(';')}}`
-  },
+  'ELSIF_BLOCK': (node) => {return ''}, // Handled inside IF_BLOCK
+  'ELSE_BLOCK': (node) => {return ''}, // Handled inside IF_BLOCK
   "entity.name.function.utility-inline.jome": (node) => compInlineUtility(node), // "Hello".#log  
   'support.function.builtin.jome': (node) => compUtility(node), // #log
   'BUILT_IN': (node) => compUtility(node), // #log
