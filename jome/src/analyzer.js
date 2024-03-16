@@ -22,7 +22,7 @@ class SyntaxError extends Error {
 // }
 
 // Extract expressions from curly braces, a colon or end keyword.
-function extractExpressions(node, partsFilterList) {
+function extractExpressionsFUNCTION(node, partsFilterList=[]) {
   if (node.block) {
     return node.block.parts
   } else if (node.operands.length) {
@@ -30,6 +30,18 @@ function extractExpressions(node, partsFilterList) {
     return node.operands
   } else {
     return filterCommas(filterSpaces(node.parts.filter(p => !partsFilterList.includes(p.type))))
+  }
+}
+
+// Extract expressions from curly braces, a colon or end keyword.
+function extractExpressionsIF_BLOCK(node, parts) {
+  if (node.block) {
+    return node.block.parts
+  } else if (node.operands.length) {
+    // When the function uses the colon style, the expressions will be the operands
+    return node.operands
+  } else {
+    return parts
   }
 }
 
@@ -357,7 +369,7 @@ const ANALYZERS = {
     let args = node.parts.filter(p => p.type === 'ARGUMENT')
     let isInline = !!node.parts.find(p => p.type === 'BEGIN_SECTION')
     let style = node.parts.find(p => p.type === 'FUNCTION_STYLE')?.raw
-    let expressions = extractExpressions(node, ['FUNCTION_NAME', 'ARGUMENT', 'BEGIN_SECTION', 'FUNCTION_STYLE'])
+    let expressions = extractExpressionsFUNCTION(node, ['FUNCTION_NAME', 'ARGUMENT', 'BEGIN_SECTION', 'FUNCTION_STYLE'])
     // TODO: Return type
     if (style === 'def' && !name) {
       return pushError(node, "Missing function name")
@@ -491,15 +503,15 @@ const ANALYZERS = {
 
   "IF_BLOCK": (node) => {
     let parts = filterNewlines(node.parts)
-    let sections = [{keyword: "if", cond: parts[0], statements: parts.slice(1)}]
+    let sections = [{keyword: "if", cond: parts[0], statements: extractExpressionsIF_BLOCK(node, parts.slice(1))}]
     for (let i = node.siblingIdx+1; i < node.parent.parts.length; i++) {
       let n = node.parent.parts[i]
       if (n.type !== "ELSIF_BLOCK" && n.type !== "ELSE_BLOCK") {break;}
       if (n.type === "ELSIF_BLOCK") {
         let ps = filterNewlines(n.parts)
-        sections.push({keyword: "else if", cond: ps[0], statements: ps.slice(1)})
+        sections.push({keyword: "else if", cond: ps[0], statements: extractExpressionsIF_BLOCK(n, ps.slice(1))})
       } else {
-        sections.push({keyword: "else", statements: filterNewlines(n.parts)})
+        sections.push({keyword: "else", statements: extractExpressionsIF_BLOCK(n, filterNewlines(n.parts))})
       }
       n.analyzed = true
     }
