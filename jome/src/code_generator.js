@@ -386,7 +386,7 @@ function prepareFormatting(node) {
   node.data.parts.forEach(part => {
     if (part.type === 'raw') {
       currentStr += part.raw
-    } else if (part.type === 'meta.string-template-literal.jome') {
+    } else if (part.type === 'TEMPLATE_LITERAL') {
       if (currentStr.length) {currentLine.push(currentStr); currentStr = ""}
       currentLine.push({tokens: part.data.code})
     } else if (part.type === 'newline') {

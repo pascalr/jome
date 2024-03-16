@@ -1294,24 +1294,14 @@
               "include": "#escape-char"
             },
             {
-              "name": "meta.string-template-literal.jome",
               "begin": "\\{\\{",
-              "beginCaptures": {
-                "0": {
-                  "name": "punctuation.definition.template-expression.begin.jome"
-                }
-              },
               "end": "\\}\\}",
-              "endCaptures": {
-                "0": {
-                  "name": "punctuation.definition.template-expression.end.jome"
-                }
-              },
               "patterns": [
                 {
                   "include": "#expression"
                 }
-              ]
+              ],
+              "name": "TEMPLATE_LITERAL"
             }
           ],
           "begin": "\"\"\"",
@@ -1334,24 +1324,14 @@
               "include": "#escape-char"
             },
             {
-              "name": "meta.string-template-literal.jome",
               "begin": "\\{",
-              "beginCaptures": {
-                "0": {
-                  "name": "punctuation.definition.template-expression.begin.jome"
-                }
-              },
               "end": "\\}",
-              "endCaptures": {
-                "0": {
-                  "name": "punctuation.definition.template-expression.end.jome"
-                }
-              },
               "patterns": [
                 {
                   "include": "#expression"
                 }
-              ]
+              ],
+              "name": "TEMPLATE_LITERAL"
             }
           ],
           "begin": "\"",

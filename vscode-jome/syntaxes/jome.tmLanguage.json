@@ -1428,6 +1428,7 @@
               "include": "#escape-char"
             },
             {
+              "strict": true,
               "name": "meta.string-template-literal.jome",
               "begin": "\\{\\{",
               "beginCaptures": {
@@ -1468,6 +1469,7 @@
               "include": "#escape-char"
             },
             {
+              "strict": true,
               "name": "meta.string-template-literal.jome",
               "begin": "\\{",
               "beginCaptures": {

@@ -591,16 +591,11 @@ const ANALYZERS = {
   "string.quoted.multi.jome": (node) => validateString(node, "'''"),
   "string.quoted.backtick.jome": (node) => validateString(node, '`'),
 
-  "meta.string-template-literal.jome": (node) => {
-    ensureStartRaw(node, '{')
-    ensureStartType(node, 'punctuation.definition.template-expression.begin.jome')
-    ensureEndRaw(node, '}')
-    ensureEndType(node, 'punctuation.definition.template-expression.end.jome')
-    if (node.parts.length !== 3) {
-      return pushError(node, "Error a template literal should only contain a single expression inside template.")
+  "TEMPLATE_LITERAL": (node) => {
+    if (node.parts.length !== 1) {
+      return pushError(node, "Error a template literal should only contain a single expression.")
     }
-    let code = node.parts[1]
-    node.data = {code}
+    node.data = {code: node.parts[0]}
   },
 
   "FUNCTION_CALL": (node) => {

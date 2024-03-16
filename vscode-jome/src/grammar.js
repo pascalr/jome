@@ -52,6 +52,8 @@ function PATTERN_STRING(type, name, symbols, templateStartSymbols, templateEndSy
   let patterns = [{ include: "#escape-char" }]
   if (templateStartSymbols) {
     patterns.push({
+      strict: true,
+      type: "TEMPLATE_LITERAL",
       name: "meta.string-template-literal.jome",
       begin: templateStartSymbols,
       beginCaptures: { 0: { name: "punctuation.definition.template-expression.begin.jome" } },
