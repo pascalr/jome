@@ -14,5 +14,6 @@ module.exports = () => {
   ## Formats
 
   All the default formats`);
+
   return new Webpage("Jome In Depth", content).render();
 };

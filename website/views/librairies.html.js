@@ -10,5 +10,6 @@ module.exports = () => {
 
   - [Html](${ROOT}/lib/html)
 `);
+
   return new Webpage("Jome librairies", content).render();
 };

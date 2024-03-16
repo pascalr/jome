@@ -110,7 +110,28 @@
   </div>
             <div class="scrollable" style="width: 100%;">
               <div class="main">
-                <h1>Jome v0.1</h1>
+                <h1>Table data</h1>
+<p>I want to be able to easily add table data inside the editor.</p>
+<pre><code>testCompile #[2, tag&lt;jome&gt;, tag&lt;/js]
+</code></pre>
+<p>Or even better, I want to allow to enable inside config.jome arrays for tags instead of strings.</p>
+<pre><code>&lt;test-compile&gt;[&lt;jome&gt;#log &quot;Hello world&quot;&lt;/jome&gt;, &lt;js&gt;console.log(&quot;Hello world&quot;)&lt;/js&gt;]&lt;/test-compile&gt;
+</code></pre>
+<p>In config.jome, I say test compile is an array of jome and js.</p>
+<p>So when I do <code>&lt;test-compile&gt;&lt;/test-compile&gt;</code>, it should add underneath a side-by-side data editor allowing me to edit the content.</p>
+<p>It should hide the <code>&lt;test-compile&gt;&lt;/test-compile&gt;</code>, make a header and show the type of the thing inside the header.</p>
+<p>Actually, do I do this for all tags? No, not inline tags like bin, hex, col, ...</p>
+<p>But this should be the case for html and md.</p>
+<p>If I do,</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">content</span> = &lt; <span class="hljs-variable">md</span> &gt;
+  ...
+&lt; /<span class="hljs-variable">md</span> &gt;
+</code></pre>
+<p>It should hide the tag, and it should indent one more indentation before it does not start at the beginning of the line.</p>
+<h1>Jome</h1>
+<p>Jome is an unopiniated programming language. You code using your own style and use a linter in other to share
+standardized code inside a project with other people.</p>
+<h1>Jome v0.1</h1>
 <p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
 has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>
 <p>Well that's the idea at least. Right now it is very much in experimental phase. There are a lot of bugs and not many tests are written yet.</p>

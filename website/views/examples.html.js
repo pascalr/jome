@@ -7,6 +7,7 @@ module.exports = () => {
   function highlight(code) {
     return hljs.highlight(code, { language: "jome" }).value;
   }
+
   function tabbedContent(contentByTitle) {
     let titles = Object.keys(contentByTitle)
       .map((title) => `<div>${title}</div>`)
@@ -21,6 +22,7 @@ module.exports = () => {
     <pre class='example-content'><code>${contents}</code></pre>
   </div>`;
   }
+
   let counter = `
   import React, { useState } from 'react'; // I would be nice if this was optional because implicit because inside react tag
 
@@ -32,6 +34,7 @@ module.exports = () => {
       Clicked {count} {count === 1 ? 'time' : 'times'}
     </button>
   };`;
+
   let counters = {
     Vanilla: highlight(`// Button counter
 def renderCounter
@@ -53,6 +56,7 @@ renderCounter()`),
     Svelte: "Clicked 0 times",
     React: "Clicked 0 times",
   };
+
   let content = mdToHtml(`
   # Jome examples
 
@@ -211,5 +215,6 @@ renderCounter()`),
   \`\`\`
 
   <script src="${ROOT}/js/ex_vanilla.js"></script>`);
+
   return new Webpage("Jome examples", content).render();
 };

@@ -63,7 +63,7 @@ function compileTokenRaw(token) {
 
 // An abstract syntax tree (AST) node
 class ASTNode {
-  constructor(token, parent, lexEnv, siblingIdx) {
+  constructor(token, parent, lexEnv) {
     if (typeof token === 'string') {
       this.type = 'raw'
       this.raw = token
@@ -71,7 +71,6 @@ class ASTNode {
       this.type = token.type
       this.raw = compileTokenRaw(token.children)
     }
-    this.siblingIdx = siblingIdx
     this.token = token
     this.parent = parent
     let prec = PRECEDENCES[this.type]
@@ -168,7 +167,7 @@ function mergeCodeBlocks(nodes) { // TODO: Sections here too?
 function parse(tokens, parent, lexEnv) {
 
   // All the tokens converted to nodes
-  let allNodes = filterNodes(parent, tokens).map((tok,i) => new ASTNode(tok, parent, lexEnv, i))
+  let allNodes = filterNodes(parent, tokens).map(tok => new ASTNode(tok, parent, lexEnv))
   // Only the top nodes
   let topNodes = []
 
@@ -228,6 +227,8 @@ function parse(tokens, parent, lexEnv) {
   while (nodes.length) {
     topNodes.push(parseSingleExpression(nodes.shift(), 0))
   }
+
+  topNodes.forEach((n,i) => {n.siblingIdx = i})
 
   return topNodes
 }

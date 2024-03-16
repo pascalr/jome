@@ -149,5 +149,6 @@ module.exports = () => {
   - #red: 0xFF0000
   - ...
   Maybe #red_i32 or stuff like that, but that's ugly?`);
+
   return new Webpage("Jome utils", content).render();
 };

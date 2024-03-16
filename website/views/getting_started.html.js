@@ -13,6 +13,7 @@ module.exports = () => {
     </div>
   </html>
   \`\`\``);
+
   let content = mdToHtml(`
 
   <h2 id="install">Installation</h2>
@@ -115,5 +116,6 @@ module.exports = () => {
 
   TODO: Link: For the complete overview, see [createjomeapp](/TODO).
 `);
+
   return new Webpage("Jome", content).render();
 };

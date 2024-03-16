@@ -13,7 +13,47 @@ module.exports = () => {
     </div>
   </html>
   \`\`\``);
+
   let content = mdToHtml(`
+
+  # Table data
+
+  I want to be able to easily add table data inside the editor.
+
+  \`\`\`
+  testCompile #[2, tag<jome>, tag</js]
+  \`\`\`
+
+  Or even better, I want to allow to enable inside config.jome arrays for tags instead of strings.
+
+  \`\`\`
+  <test-compile>[<jome>#log "Hello world"</jome>, <js>console.log("Hello world")</js>]</test-compile>
+  \`\`\`
+
+  In config.jome, I say test compile is an array of jome and js.
+
+  So when I do \`<test-compile></test-compile>\`, it should add underneath a side-by-side data editor allowing me to edit the content.
+
+  It should hide the \`<test-compile></test-compile>\`, make a header and show the type of the thing inside the header.
+
+  Actually, do I do this for all tags? No, not inline tags like bin, hex, col, ...
+
+  But this should be the case for html and md.
+
+  If I do,
+
+  \`\`\`jome
+  let content = < md >
+    ...
+  < /md >
+  \`\`\`
+
+  It should hide the tag, and it should indent one more indentation before it does not start at the beginning of the line.
+
+  # Jome
+
+  Jome is an unopiniated programming language. You code using your own style and use a linter in other to share
+  standardized code inside a project with other people.
 
   # Jome v0.1
 
@@ -61,5 +101,6 @@ module.exports = () => {
   The language is very, very young and still contains a log of bugs. I don't recommend using yet for any real project.
 
   I don't have a list of bugs yet, because there are too many.`);
+
   return new Webpage("Jome", content).render();
 };

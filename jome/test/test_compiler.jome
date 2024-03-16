@@ -617,6 +617,7 @@ end
 
 
 
+
 describe "Test attribute accessor" do
   it '({x:5}).x' do
     assertCompile('({x:5}).x', /\(\{ ?x\: ?5 ?\}\)\.x/);

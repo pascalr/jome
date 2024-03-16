@@ -13,6 +13,7 @@ module.exports = () => {
     </div>
   </html>
   \`\`\``);
+
   let content = mdToHtml(`
 
   <h2 id="lang-ref">Language Reference</h2>
@@ -1241,5 +1242,6 @@ module.exports = () => {
   --args with dashes near each other are grouped together
 
   TODO: Error handly. Try catch...`);
+
   return new Webpage("Jome", content).render();
 };

@@ -4,6 +4,7 @@ const { trim, flat } = require("@jome/core");
 const execSh = require("@jome/core/execSh");
 module.exports = (cmd, args) => {
   global.ROOT = "/jome";
+
   if (cmd === "test") {
     execSh("jome test.jome");
   } else if (cmd === "dev") {
