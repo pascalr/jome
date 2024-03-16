@@ -150,6 +150,7 @@ function _analyzeNodes(nodes) {
 
 // TODO: Make sure no infinite loop
 function analyzeNodes(nodes) {
+  if (!nodes || !nodes.length) {return;}
   let errors = _analyzeNodes(nodes)
   let ctxFile = nodes[0].ctxFile
   let lexEnv = ctxFile.lexEnv
@@ -514,6 +515,9 @@ const ANALYZERS = {
       } else {
         sections.push({keyword: "else", statements: extractExpressionsIF_BLOCK(n, filterNewlines(n.parts))})
       }
+      analyzeNodes(n.parts)
+      if (n.operands) {analyzeNodes(n.operands)}
+      if (n.block) {analyzeNodes(n.block.parts)}
       n.analyzed = true
     }
     node.data = {sections}
