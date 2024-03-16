@@ -304,10 +304,10 @@ describe "Colon section begin" do
       assertCompile('if true: #log("hello")', /\s*if \(true\) \{\s*console.log\("hello"\);?\s*\}/);
     end
     it 'if, elif statement colon' do
-      assertCompile('if true: x = 10; elif true: x = 20', /\s*if \(true\) \{\s*x = 10;?\s*\} else if \(true\) {\s*x = 20;?\s*}/);
+      assertCompile('if true: x = 10\nelif true: x = 20', /\s*if \(true\) \{\s*x = 10;?\s*\} else if \(true\) {\s*x = 20;?\s*}/);
     end
     it 'if, else statement colon' do
-      assertCompile('if true: x = 10; else: x = 20', /\s*if \(true\) \{\s*x = 10;?\s*\} else {\s*x = 20;?\s*}/);
+      assertCompile('if true: x = 10\nelse: x = 20', /\s*if \(true\) \{\s*x = 10;?\s*\} else {\s*x = 20;?\s*}/);
     end
   end
 end

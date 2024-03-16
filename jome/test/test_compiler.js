@@ -351,13 +351,13 @@ class Person {
       });
       it("if, elif statement colon", function () {
         assertCompile(
-          "if true: x = 10; elif true: x = 20",
+          "if true: x = 10\nelif true: x = 20",
           /\s*if \(true\) \{\s*x = 10;?\s*\} else if \(true\) {\s*x = 20;?\s*}/,
         );
       });
       it("if, else statement colon", function () {
         assertCompile(
-          "if true: x = 10; else: x = 20",
+          "if true: x = 10\nelse: x = 20",
           /\s*if \(true\) \{\s*x = 10;?\s*\} else {\s*x = 20;?\s*}/,
         );
       });

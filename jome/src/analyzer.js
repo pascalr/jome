@@ -504,8 +504,9 @@ const ANALYZERS = {
   "IF_BLOCK": (node) => {
     let parts = filterNewlines(node.parts)
     let sections = [{keyword: "if", cond: parts[0], statements: extractExpressionsIF_BLOCK(node, parts.slice(1))}]
-    for (let i = node.siblingIdx+1; i < node.parent.parts.length; i++) {
-      let n = node.parent.parts[i]
+    let siblings = filterNewlines(node.parent.parts.slice(node.siblingIdx+1))
+    for (let i = 0; i < siblings.length; i++) {
+      let n = siblings[i]
       if (n.type !== "ELSIF_BLOCK" && n.type !== "ELSE_BLOCK") {break;}
       if (n.type === "ELSIF_BLOCK") {
         let ps = filterNewlines(n.parts)
