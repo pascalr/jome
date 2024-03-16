@@ -48,7 +48,7 @@ function PATTERN_SCRIPT(name, sourceTagName) {
   }
 }
 
-function PATTERN_STRING(name, symbols, templateStartSymbols, templateEndSymbols) {
+function PATTERN_STRING(type, name, symbols, templateStartSymbols, templateEndSymbols) {
   let patterns = [{ include: "#escape-char" }]
   if (templateStartSymbols) {
     patterns.push({
@@ -61,7 +61,7 @@ function PATTERN_STRING(name, symbols, templateStartSymbols, templateEndSymbols)
     })
   }
   return {
-    name, patterns,
+    type, name, patterns,
     begin: `${symbols}`,
     beginCaptures: { 0: { name: "punctuation.definition.string.begin.jome" } },
     end: `${symbols}`,
@@ -934,11 +934,11 @@ let grammar = {
     },
     strings: {
       patterns: [
-        PATTERN_STRING("string.quoted.multi.jome", "'''"),
-        PATTERN_STRING("string.quoted.single.jome", "'"),
-        PATTERN_STRING("string.quoted.backtick.jome", "`"),
-        PATTERN_STRING("string.quoted.multi.jome", "\"\"\"", "\\{\\{", "\\}\\}"),
-        PATTERN_STRING("string.quoted.double.jome", "\"", "\\{", "\\}"),
+        PATTERN_STRING(null, "string.quoted.multi.jome", "'''"),
+        PATTERN_STRING(null, "string.quoted.single.jome", "'"),
+        PATTERN_STRING(null, "string.quoted.backtick.jome", "`"),
+        PATTERN_STRING(null, "string.quoted.multi.jome", "\"\"\"", "\\{\\{", "\\}\\}"),
+        PATTERN_STRING(null, "string.quoted.double.jome", "\"", "\\{", "\\}"),
         {
           name: "string.quoted.verbatim.jome",
           begin: "@(\"|'|\"\"\"|''')",
