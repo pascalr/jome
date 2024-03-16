@@ -490,8 +490,7 @@ const ANALYZERS = {
   "IF_BLOCK": (node) => {
     let parts = filterNewlines(node.parts)
     node.data = {cond: parts[0], statements: parts.slice(1)}
-    let selfIdx = node.parent.parts.find(p => p === node)
-    for (let i = selfIdx; i < node.parent.parts.length; i++) {
+    for (let i = node.siblingIdx+1; i < node.parent.parts.length; i++) {
       let n = node.parent.parts[i]
       if (n.type !== "ELSIF_BLOCK" && n.type !== "ELSE_BLOCK") {break;}
       if (n.type === "ELSIF_BLOCK") {
