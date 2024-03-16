@@ -21,6 +21,18 @@ class SyntaxError extends Error {
 //   }
 // }
 
+// Extract expressions from curly braces, a colon or end keyword.
+function extractExpressions(node, partsFilterList) {
+  if (node.block) {
+    return node.block.parts
+  } else if (node.operands.length) {
+    // When the function uses the colon style, the expressions will be the operands
+    return node.operands
+  } else {
+    return filterCommas(filterSpaces(node.parts.filter(p => !partsFilterList.includes(p.type))))
+  }
+}
+
 function groupManyByType(arr) {
   return (arr||[]).reduce((grouped, item) => {
     if (!grouped[item.type]) {
@@ -345,17 +357,7 @@ const ANALYZERS = {
     let args = node.parts.filter(p => p.type === 'ARGUMENT')
     let isInline = !!node.parts.find(p => p.type === 'BEGIN_SECTION')
     let style = node.parts.find(p => p.type === 'FUNCTION_STYLE')?.raw
-    let expressions;
-    if (node.block) {
-      expressions = node.block.parts
-    } else if (node.operands.length) {
-      // When the function uses the colon style, the expressions will be the operands
-      expressions = node.operands
-    } else {
-      expressions = filterCommas(filterSpaces(node.parts.filter(
-        p => p.type !== 'FUNCTION_NAME' && p.type !== 'ARGUMENT' && p.type !== 'BEGIN_SECTION' && p.type !== 'FUNCTION_STYLE'
-      )))
-    }
+    let expressions = extractExpressions(node, ['FUNCTION_NAME', 'ARGUMENT', 'BEGIN_SECTION', 'FUNCTION_STYLE'])
     // TODO: Return type
     if (style === 'def' && !name) {
       return pushError(node, "Missing function name")
