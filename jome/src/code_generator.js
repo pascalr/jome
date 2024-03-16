@@ -802,6 +802,10 @@ ${args.map(a => `* @param {*} ${a.name} ${a.docComment||''}`).join('\n')}
     }
   },
 
+  "source.jome": (node) => {
+    return `${node.parts.map(c => genCode(c)).join(';\n')}\n`
+  },
+
   "meta.include.jome": (node) => {
     return `\`${node.data.content}\``
   },

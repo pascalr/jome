@@ -5,14 +5,17 @@ module.exports = () => {
   function compile(code) {
     return compileCode(code, { writeScript: false });
   }
+
   function testCompile(code, expectedResult) {
     return function () {
       assert.match(compile(code), expectedResult, "*** Compile mismatch ***");
     };
   }
+
   function assertCompile(code, expectedResult) {
     assert.match(compile(code), expectedResult, "*** Compile mismatch ***");
   }
+
   describe("Paths", function () {
     it("Dirname shortcuts", function () {
       assertCompile("#.", /__dirname/);
@@ -52,6 +55,7 @@ module.exports = () => {
       );
     });
   });
+
   describe("Imports", function () {
     it("Default import Jome file", function () {
       assertCompile(
@@ -126,6 +130,7 @@ module.exports = () => {
       });
     });
   });
+
   describe("Strings", function () {
     it("Single quote strings", function () {
       assertCompile("'hello Éric'", /"hello Éric"/);
@@ -173,9 +178,11 @@ module.exports = () => {
       assertCompile("'''Hello O'Connor'''", /"Hello O'Connor"/);
     });
   });
+
   describe("Regexes", function () {
     it("/test1212/", testCompile("/test1212/", /\/test1212\//));
   });
+
   describe("Heredocs", function () {
     it("<sh>ls</sh>", function () {
       assertCompile(
@@ -192,6 +199,7 @@ module.exports = () => {
       });
     });
   });
+
   describe("Comments", function () {
     describe("Documentation comments", function () {
       it("Documentation comments should be compiled into js comments", function () {
@@ -199,11 +207,13 @@ module.exports = () => {
       });
     });
   });
+
   describe("Test arrow call", function () {
     it("obj->call", function () {
       assertCompile("obj->call", /obj.call\(\)/);
     });
   });
+
   describe("Test function call", function () {
     it("Function call with parens", function () {
       assertCompile(
@@ -252,6 +262,7 @@ idle :force!
       );
     });
   });
+
   describe("Test class", function () {
     it("Class with one method with end", function () {
       assertCompile(
@@ -278,6 +289,7 @@ class Person {
       );
     });
   });
+
   describe("Colon section begin", function () {
     describe("def", function () {
       it("def inline", function () {
@@ -351,6 +363,7 @@ class Person {
       });
     });
   });
+
   describe("Test built-ins", function () {
     it("#keys", testCompile("#keys({})", /Object.keys\(\{\}\)/));
     it("#values", testCompile("#values({})", /Object.values\(\{\}\)/));
@@ -371,6 +384,7 @@ class Person {
       assertCompile("{x:1}.#log", /console.log\(\{ ?x\: ?1 ?\}\);?/);
     });
   });
+
   describe("Creating functions", function () {
     it("def keyword", function () {
       assertCompile(
@@ -464,6 +478,7 @@ class Person {
       });
     });
   });
+
   describe("Test if statements", function () {
     it("if statements blocks", function () {
       assertCompile(
@@ -502,6 +517,7 @@ end
       );
     });
   });
+
   describe("Test attribute accessor", function () {
     it("({x:5}).x", function () {
       assertCompile("({x:5}).x", /\(\{ ?x\: ?5 ?\}\)\.x/);
@@ -519,11 +535,13 @@ end
       });
     });
   });
+
   describe("Test attribute setter", function () {
     it("let o; o.x = 10", function () {
       assertCompile("let o; o.x = 10", /let o;\s*?o\.x ?= ?10;?/);
     });
   });
+
   describe("Values", function () {
     it("integer", function () {
       assertCompile("10", /10/);
@@ -553,6 +571,7 @@ end
       );
     });
   });
+
   describe("Types", function () {
     describe("Variable declaration", function () {
       describe("Default types with type before", function () {
@@ -599,6 +618,7 @@ end
       });
     });
   });
+
   describe("Test objects", function () {
     it("({})", testCompile("({})", /\(\{\}\)/));
     it("{x: 1}", testCompile("{x: 1}", /\{\s*x\: ?1;?\s*\}/));
@@ -609,6 +629,7 @@ end
     );
     it("key is quoted string", testCompile('{"x": 1}', /\{\s*x\: ?1;?\s*\}/));
   });
+
   describe("No group", function () {
     it("Test each do end", function () {
       assertCompile(
@@ -631,11 +652,13 @@ end
       );
     });
   });
+
   describe("Assignment", function () {
     it("let x = 1", testCompile("let x = 1", /(var|let)\s+x\s*=\s*1/));
     it("var x = 1", testCompile("var x = 1", /var\s+x\s*=\s*1/));
     it("const x = 1", testCompile("const x = 1", /const\s+x\s*=\s*1/));
   });
+
   describe("Operations", function () {
     describe("Inversion (! operator)", function () {
       it("!true", testCompile("!true", /!true/));
@@ -669,11 +692,13 @@ end
     });
     describe("Priority of operations", function () {});
   });
+
   describe('Test "ternary"', function () {
     it("true ? 1", testCompile("true ? 1", /true \? 1 : null/));
 
     it("false ? 1 : 0", testCompile("false ? 1 : 0", /false \? 1 : 0/));
   });
+
   describe("Error handling", function () {
     it("throw string", function () {
       assertCompile('throw "error"', /throw "error"/);
@@ -754,6 +779,7 @@ end
       );
     });
   });
+
   describe("Parallelization", function () {
     it("async", function () {
       assertCompile(
@@ -765,6 +791,7 @@ end
       assertCompile("await foo()", /await foo\(\)/);
     });
   });
+
   describe("chain", function () {
     it("chain function", function () {
       assertCompile(
@@ -780,6 +807,7 @@ end
       );
     });
   });
+
   describe("Require file handlers", function () {
     it("js file", function () {
       assertCompile("#('./file.js')", /^require\(".\/file.js"\);?\s*$/);
@@ -800,11 +828,13 @@ end
       );
     });
   });
+
   describe("Include file handlers", function () {
     it.skip("include txt file", function () {
       assertCompile("#...('./data/test.txt')", /`forRealTest`/);
     });
   });
+
   describe("General bugs", function () {
     it("let port = options.port || 3000", function () {
       assertCompile(

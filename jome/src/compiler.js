@@ -64,7 +64,7 @@ function parseAndAnalyzeCode(code) {
   let compiler = new Compiler()
   let ctxFile = new ContextFile()
   ctxFile.compiler = compiler
-  let tokens = tokenize(code).children
+  let tokens = [tokenize(code)]
   let topNodes = parse(tokens, null, ctxFile.lexEnv)
   analyzeNodes(topNodes, false)
   return {ctxFile, nodes: topNodes}
@@ -154,7 +154,7 @@ class Compiler {
 
   compileCode(code, options={}, ctxFile) {
     let opts = {...this.options, ...options}
-    let tokens = tokenize(code).children
+    let tokens = [tokenize(code)]
     ctxFile = ctxFile || new ContextFile(null, this.config?.lexEnv)
     ctxFile.compiler = this
     ctxFile.compilerOptions = this.options // TODO: Get the options through the compiler, not compilerOptions

@@ -34,6 +34,7 @@ module.exports = () => {
       assert.equal(ast?.operands?.[1]?.raw, "19");
     });
   });
+
   function assertSameLength(actual, expected, msg) {
     if (actual.length !== expected.length) {
       let a = JSON.stringify(actual.map((p) => p.type));
@@ -41,6 +42,7 @@ module.exports = () => {
       assert.equal(a, e, msg);
     }
   }
+
   function validatePart(part, expected, msg) {
     if (expected.type) {
       assert.equal(part.type, expected.type, msg);
@@ -65,6 +67,7 @@ module.exports = () => {
       });
     }
   }
+
   function testParse(code, expected) {
     let list = parse(tokenize(code).children);
     assertSameLength(list, expected, "Number of expressions");
@@ -72,6 +75,7 @@ module.exports = () => {
       validatePart(list[i], e, `Expression[${i}]`);
     });
   }
+
   describe("Parse let assignment", function () {
     it("let x", function () {
       testParse("let x", [
@@ -108,6 +112,7 @@ module.exports = () => {
       assert.equal(ast?.operands?.[0]?.parts?.length, 3);
     });
   });
+
   describe("Other", function () {
     it("!true === !false", function () {
       testParse("!true === !false", [

@@ -6,6 +6,7 @@ module.exports = () => {
     let ctxFile = analyzeCode(code);
     return ctxFile.lexEnv.getBinding(bindingName);
   }
+
   describe("Incomplete statements", function () {
     it("should return an error keyword let with nothing else", function () {
       let ctxFile = analyzeCode("let");
@@ -16,6 +17,7 @@ module.exports = () => {
       assert.equal(ctxFile.errors.length, 1);
     });
   });
+
   describe("Declaration should add to the lexical environment", function () {
     it("let should add to the lexical environment", function () {
       assert(analyzeCodeGetBinding("let x", "x"));
@@ -27,6 +29,7 @@ module.exports = () => {
       assert(analyzeCodeGetBinding("def add(x, y) return x + y end", "add"));
     });
   });
+
   describe("The bindings should have the good variableType when specified", function () {
     it("int x", function () {
       let binding = analyzeCodeGetBinding("int x", "x");
@@ -37,6 +40,7 @@ module.exports = () => {
       assert.equal(binding.variableType, "int");
     });
   });
+
   describe("The bindings should have the good variableType implicitely detected when possible", function () {
     it("let x = 43", function () {
       let binding = analyzeCodeGetBinding("let x = 43", "x");
