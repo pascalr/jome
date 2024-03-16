@@ -359,6 +359,15 @@ const TOKENS = {
   "FUNCTION": {
     captureSection: true
   },
+  "IF_BLOCK": {
+    captureSection: true
+  },
+  "ELSIF_BLOCK": {
+    captureSection: true
+  },
+  "ELSE_BLOCK": {
+    captureSection: true
+  },
   // async
   "storage.modifier.async.jome": {
     captureRight: true

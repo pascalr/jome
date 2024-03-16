@@ -552,6 +552,7 @@ const CODE_GENERATORS = {
   },
   'ELSIF_BLOCK': (node) => {return ''}, // Handled inside IF_BLOCK
   'ELSE_BLOCK': (node) => {return ''}, // Handled inside IF_BLOCK
+  'BEGIN_SECTION': (node) => {return ''},
   "entity.name.function.utility-inline.jome": (node) => compInlineUtility(node), // "Hello".#log  
   'support.function.builtin.jome': (node) => compUtility(node), // #log
   'BUILT_IN': (node) => compUtility(node), // #log
