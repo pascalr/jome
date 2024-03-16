@@ -164,33 +164,6 @@ function mergeCodeBlocks(nodes) { // TODO: Sections here too?
   return merged
 }
 
-// // IF_BLOCK, ELSIF_BLOCK, ..., ELSE_BLOCK
-// // TRY, CATCH, FINALLY ??? No using this but could?
-// // Create a new node called SEQUENCE that holds the other blocks?
-// function mergeSequences(nodes) {
-//   if (nodes.length <= 1) {return nodes}
-//   let merged = []
-//   let i = 0;
-//   for (; i < nodes.length-1; i++) {
-//     if (nodes[i].type === "IF_BLOCK") {
-//       let j = i
-//       while (nodes[j].type === "ELSIF_BLOCK" || nodes[j].type === "ELSE_BLOCK") {
-//         j += 1
-//       }
-//       if (j != i) {
-//         continue
-//       }
-//       let seq = new ASTNode(new ScopeNode("sequence", lineNbIdx+1, chStartIdx), parent, lexEnv)
-//       merged[merged.length-1].block = n
-//     }
-//     merged.push(nodes[i])
-//   }
-//   if (i === nodes.length-1) {
-//     merged.push(nodes.length-1)
-//   }
-//   return merged
-// }
-
 // Create an abstract syntax tree (AST) from tokens. Returns a list of ASTNode.
 function parse(tokens, parent, lexEnv) {
 
