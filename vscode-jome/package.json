@@ -141,7 +141,25 @@
           "description": "Traces the communication between VS Code and the language server."
         }
       }
-    }
+    },
+    "customEditors": [
+      {
+        "viewType": "jomeEditor",
+        "displayName": "Jome Editor",
+        "selector": [
+          {"filenamePattern": "*.jome"},
+          {"filenamePattern": "*.jomm"}
+        ],
+        "priority": "option"
+      }
+    ],
+    "commands": [
+      {
+        "command": "jomeEditor.start",
+        "title": "Start new jome coding session",
+        "category": "Jome Coding"
+      }
+    ]
   },
   "main": "./index",
   "dependencies": {
