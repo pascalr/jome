@@ -3,10 +3,13 @@ const {LanguageClient} = require("vscode-languageclient/node");
 const path = require("path");
 
 const NodeTreeProvider = require("./src/NodeTreeProvider.js")
+const JomeEditorProvider = require("./src/JomeEditorProvider.js")
 
 let client;
 
 function activate(context) {
+
+  context.subscriptions.push(JomeEditorProvider.register(context));
 
   context.subscriptions.push(
     commands.registerCommand('jomeEditor.start', () => {
