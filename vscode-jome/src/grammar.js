@@ -62,6 +62,7 @@ function PATTERN_STRING(type, name, symbols, templateStartSymbols, templateEndSy
       patterns: [{ include: "#expression" }]
     })
   }
+  // TODO: strict: true, this will remove escape-char and punctuations
   return {
     type, name, patterns,
     begin: `${symbols}`,
