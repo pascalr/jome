@@ -36,12 +36,12 @@
 
     notesContainer.innerHTML = '';
 
-    const text = document.createElement('div');
-    text.className = 'text';
+    const div = document.createElement('div');
+    div.className = 'text';
     const textContent = document.createElement('span');
     textContent.innerText = text;
-    text.appendChild(textContent);
-    notesContainer.appendChild(text);
+    div.appendChild(textContent);
+    notesContainer.appendChild(div);
 
 		notesContainer.appendChild(addButtonContainer);
 	}

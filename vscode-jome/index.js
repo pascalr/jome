@@ -11,20 +11,20 @@ function activate(context) {
 
   context.subscriptions.push(JomeEditorProvider.register(context));
 
-  context.subscriptions.push(
-    commands.registerCommand('jomeEditor.start', () => {
-      // Create and show a new webview
-      const panel = window.createWebviewPanel(
-        'jomeEditor', // Identifies the type of the webview. Used internally
-        'Jome Editor', // Title of the panel displayed to the user
-        ViewColumn.One, // Editor column to show the new webview panel in.
-        {} // Webview options. More on these later.
-      );
+  // context.subscriptions.push(
+  //   commands.registerCommand('jomeEditor.start', () => {
+  //     // Create and show a new webview
+  //     const panel = window.createWebviewPanel(
+  //       'jomeEditor', // Identifies the type of the webview. Used internally
+  //       'Jome Editor', // Title of the panel displayed to the user
+  //       ViewColumn.One, // Editor column to show the new webview panel in.
+  //       {} // Webview options. More on these later.
+  //     );
 
-      // And set its HTML content
-      panel.webview.html = getWebviewContent();
-    })
-  )
+  //     // And set its HTML content
+  //     panel.webview.html = getWebviewContent();
+  //   })
+  // )
 
     // // The server is implemented in node
     // const serverModule = context.asAbsolutePath(
@@ -90,19 +90,19 @@ window.createTreeView('jomeExplorerNodes', {
   treeDataProvider: new NodeTreeProvider()
 });
 
-function getWebviewContent() {
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jome editor</title>
-</head>
-<body>
-    <h1>Hello world</h1>
-</body>
-</html>`;
-}
+// function getWebviewContent() {
+//   return `<!DOCTYPE html>
+// <html lang="en">
+// <head>
+//     <meta charset="UTF-8">
+//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//     <title>Jome editor</title>
+// </head>
+// <body>
+//     <h1>Hello world</h1>
+// </body>
+// </html>`;
+// }
 
 // // Create and show a new webview
 // window.createWebviewPanel(
