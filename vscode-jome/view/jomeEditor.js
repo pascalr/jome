@@ -10,14 +10,14 @@
 	const vscode = acquireVsCodeApi();
 
 
-	const notesContainer = document.querySelector('.notes');
+	const root = document.getElementById('root');
 
-	const addButtonContainer = document.querySelector('.add-button');
-	addButtonContainer.querySelector('button').addEventListener('click', () => {
-		vscode.postMessage({
-			type: 'add'
-		});
-	})
+	// const addButtonContainer = document.querySelector('.add-button');
+	// addButtonContainer.querySelector('button').addEventListener('click', () => {
+	// 	vscode.postMessage({
+	// 		type: 'add'
+	// 	});
+	// })
 
 	// const errorContainer = document.createElement('div');
 	// document.body.appendChild(errorContainer);
@@ -32,18 +32,14 @@
 	 * Render the document in the webview.
 	 */
 	function updateContent(/** @type {string} */ text) {
-		notesContainer.style.display = '';
-
-    notesContainer.innerHTML = '';
+    root.innerHTML = '';
 
     const div = document.createElement('div');
     div.className = 'text';
     const textContent = document.createElement('span');
     textContent.innerText = text;
     div.appendChild(textContent);
-    notesContainer.appendChild(div);
-
-		notesContainer.appendChild(addButtonContainer);
+    root.appendChild(div);
 	}
 
 	// Handle messages sent from the extension to the webview
