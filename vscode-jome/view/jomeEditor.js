@@ -10,7 +10,7 @@
 	const vscode = acquireVsCodeApi();
 
 
-	const notesContainer = /** @type {HTMLElement} */ (document.querySelector('.notes'));
+	const notesContainer = document.querySelector('.notes');
 
 	const addButtonContainer = document.querySelector('.add-button');
 	addButtonContainer.querySelector('button').addEventListener('click', () => {
@@ -36,39 +36,21 @@
 			json = JSON.parse(text);
 		} catch {
 			notesContainer.style.display = 'none';
-			errorContainer.innerText = 'Error: Document is not valid json';
+			errorContainer.innerText = 'Error 12978aghs89d7fg273ug0a78fg80y3g2';
 			errorContainer.style.display = '';
 			return;
 		}
 		notesContainer.style.display = '';
 		errorContainer.style.display = 'none';
 
-		// Render the scratches
-		notesContainer.innerHTML = '';
-		for (const note of json.scratches || []) {
-			const element = document.createElement('div');
-			element.className = 'note';
-			notesContainer.appendChild(element);
+    notesContainer.innerHTML = '';
 
-			const text = document.createElement('div');
-			text.className = 'text';
-			const textContent = document.createElement('span');
-			textContent.innerText = note.text;
-			text.appendChild(textContent);
-			element.appendChild(text);
-
-			const created = document.createElement('div');
-			created.className = 'created';
-			created.innerText = new Date(note.created).toUTCString();
-			element.appendChild(created);
-
-			const deleteButton = document.createElement('button');
-			deleteButton.className = 'delete-button';
-			deleteButton.addEventListener('click', () => {
-				vscode.postMessage({ type: 'delete', id: note.id, });
-			});
-			element.appendChild(deleteButton);
-		}
+    const text = document.createElement('div');
+    text.className = 'text';
+    const textContent = document.createElement('span');
+    textContent.innerText = text;
+    text.appendChild(textContent);
+    notesContainer.appendChild(text);
 
 		notesContainer.appendChild(addButtonContainer);
 	}
