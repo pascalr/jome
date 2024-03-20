@@ -19,29 +19,20 @@
 		});
 	})
 
-	const errorContainer = document.createElement('div');
-	document.body.appendChild(errorContainer);
-	errorContainer.className = 'error'
-	errorContainer.style.display = 'none'
+	// const errorContainer = document.createElement('div');
+	// document.body.appendChild(errorContainer);
+	// errorContainer.className = 'error'
+	// errorContainer.style.display = 'none'
+  // errorContainer.innerText = 'Error 12978aghs89d7fg273ug0a78fg80y3g2';
+  // errorContainer.style.display = '';
+  // errorContainer.style.display = 'none';
+
 
 	/**
 	 * Render the document in the webview.
 	 */
 	function updateContent(/** @type {string} */ text) {
-		let json;
-		try {
-			if (!text) {
-				text = '{}';
-			}
-			json = JSON.parse(text);
-		} catch {
-			notesContainer.style.display = 'none';
-			errorContainer.innerText = 'Error 12978aghs89d7fg273ug0a78fg80y3g2';
-			errorContainer.style.display = '';
-			return;
-		}
 		notesContainer.style.display = '';
-		errorContainer.style.display = 'none';
 
     notesContainer.innerHTML = '';
 
