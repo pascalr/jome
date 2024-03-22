@@ -148,6 +148,20 @@
         "title": "Start new jome coding session",
         "category": "Jome Coding"
       }
+    ],
+    "activationEvents": [
+      "onNotebook:jome-notebook-serializer"
+    ],
+    "notebooks": [
+      {
+        "type": "jome-notebook-serializer",
+        "displayName": "Jome Notebook",
+        "selector": [
+          {
+            "filenamePattern": "*.jome-notebook"
+          }
+        ]
+      }
     ]
   },
   "main": "./index",
