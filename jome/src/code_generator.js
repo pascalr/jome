@@ -471,6 +471,7 @@ const CODE_GENERATORS = {
   "plain": (node) => node.raw,
   "comment.line.documentation.jome": (node) => `// ${node.raw.slice(2)}`,
   'comment.block.jome': () => "",
+  'MD_CELL': () => "",
   'comment.line.double-slash.jome': () => "",
   'newline': () => '\n',
   'punctuation.terminator.statement.jome': compileRaw,

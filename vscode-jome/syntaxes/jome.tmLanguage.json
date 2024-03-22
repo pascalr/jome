@@ -30,6 +30,27 @@
       "patterns": [
         {
           "strict": true,
+          "name": "meta.md-cell.jome",
+          "begin": "^(###)(\r\n|\n|$)",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.definition.tag.md-cell.begin.jome"
+            }
+          },
+          "end": "^(###)(\r\n|\n|$)",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.definition.tag.md-cell.end.jome"
+            }
+          },
+          "patterns": [
+            {
+              "include": "text.html.markdown"
+            }
+          ]
+        },
+        {
+          "strict": true,
           "name": "meta.statement.import.jome",
           "begin": "^(import) ?(&?[A-Za-z_$][A-Za-z0-9_]*)?",
           "beginCaptures": {

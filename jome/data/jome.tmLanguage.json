@@ -29,6 +29,16 @@
     "statement": {
       "patterns": [
         {
+          "begin": "^(###)(\r\n|\n|$)",
+          "end": "^(###)(\r\n|\n|$)",
+          "patterns": [
+            {
+              "include": "text.html.markdown"
+            }
+          ],
+          "name": "MD_CELL"
+        },
+        {
           "begin": "^(import) ?(&?[A-Za-z_$][A-Za-z0-9_]*)?",
           "beginCaptures": {
             "2": {

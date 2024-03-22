@@ -25,7 +25,20 @@ end
 //   </div>";
 
 
+###
+## Paths
+Jome paths are useful shorthands.
 
+There are five? different kinds:
+- Absolute paths: `#/some/abs/path.ext`
+- Relative paths: `#./some/relative/path.ext` or `#../some_file.ext`
+- Current working directory paths: `#cwd/some/path.ext`
+- Home paths (maybe): `#~/some/relative/path.ext`
+
+### Relative paths
+
+Relative paths are relative to the file containing the path. They are converted to use absolute path so they work wherever the file is compiled to.
+###
 
 describe "Paths" do
   it 'Dirname shortcuts' do
