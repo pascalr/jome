@@ -142,17 +142,6 @@
         }
       }
     },
-    "customEditors": [
-      {
-        "viewType": "jomeEditor",
-        "displayName": "Jome Editor",
-        "selector": [
-          {"filenamePattern": "*.jome"},
-          {"filenamePattern": "*.jomm"}
-        ],
-        "priority": "option"
-      }
-    ],
     "commands": [
       {
         "command": "jomeEditor.start",
