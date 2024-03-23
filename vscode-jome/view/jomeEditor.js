@@ -27,6 +27,19 @@
   // errorContainer.style.display = '';
   // errorContainer.style.display = 'none';
 
+  function createTable(cols=2, rows=2) {
+    let table = document.createElement('table');
+    for (let i = 0; i < rows; i++) {
+      let row = document.createElement('tr');
+      for (let j = 0; j < cols; j++) {
+        let cell = document.createElement('td');
+        cell.textContent = `Item ${i*cols + j}`;
+        row.appendChild(cell);
+      }
+      table.appendChild(row);
+    }
+    document.body.appendChild(table);
+  }
 
 	/**
 	 * Render the document in the webview.
@@ -40,6 +53,7 @@
     textContent.innerText = text;
     div.appendChild(textContent);
     root.appendChild(div);
+    root.appendChild(createTable(2,2))
 	}
 
 	// Handle messages sent from the extension to the webview
