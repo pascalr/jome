@@ -78,7 +78,8 @@ let grammar = {
   scopeName: "source.jome",
   fileTypes: [
     ".jome",
-    ".jomm"
+    ".jomm",
+    ".jomn"
   ],
   patterns: [
     {include: "#statement"},

@@ -4,7 +4,8 @@
   "scopeName": "source.jome",
   "fileTypes": [
     ".jome",
-    ".jomm"
+    ".jomm",
+    ".jomn"
   ],
   "patterns": [
     {

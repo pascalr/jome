@@ -26,7 +26,8 @@ function activate(context) {
   //     "displayName": "Jome Editor",
   //     "selector": [
   //       {"filenamePattern": "*.jome"},
-  //       {"filenamePattern": "*.jomm"}
+  //       {"filenamePattern": "*.jomm"},
+  //       {"filenamePattern": "*.jomn"}
   //     ],
   //     "priority": "option"
   //   }

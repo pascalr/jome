@@ -100,7 +100,8 @@
         ],
         "extensions": [
           ".jome",
-          ".jomm"
+          ".jomm",
+          ".jomn"
         ],
         "configuration": "./language-configuration.json"
       }

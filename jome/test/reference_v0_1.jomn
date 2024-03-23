@@ -1,0 +1,26 @@
+###
+<h3 id="comments">Comments</h3>
+
+You can use regular js comments with \`//\` and \`/* */\`.
+
+You can also use \`# \` for documentation comments. Note: The hashtag must be followed by a space.
+
+\`\`\`jome
+// This is a regular comment
+
+# This is a documentation comment that describes the function below.
+# Second line of same documentation comment.
+# @returns Some value
+with
+  string str # Documentation comment that describes what this argument is
+  number nb # A multiline description
+  # can continue under
+
+  # A multiline description
+  # of the arg total
+  float total
+def someFunc
+  /* TODO: implement this function */
+end
+\`\`\`
+###
