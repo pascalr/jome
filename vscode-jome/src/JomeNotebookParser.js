@@ -15,15 +15,20 @@ let RULES = [
   { begin: "'", end: "'" },
   { begin: "`", end: "`" },
   { begin: "###", end: "###", type: 'MD_CELL' },
-  //{ begin: "<(\w+)>", end: "</\\1>", type: 'DATA_CELL' },
 ]
 let CODE_TYPE = 'CODE_CELL'
 
-function createCell(type, value) {
+let DATA_TYPE = 'DATA_CELL'
+let DATA_RULE_BEGIN = /^<(\w+)>/
+let DATA_RULE_BEGIN_REGEX = new RegExp(DATA_RULE_BEGIN)
+
+function createCell(type, value, language = null) {
   if (type === CODE_TYPE) {
     return new vscode.NotebookCellData(vscode.NotebookCellKind.Code, value, 'jome')
   } else if (type === 'MD_CELL') {
     return new vscode.NotebookCellData(vscode.NotebookCellKind.Markup, value, 'markdown')
+  } else if (type === DATA_TYPE) {
+    return new vscode.NotebookCellData(vscode.NotebookCellKind.Code, value, language)
   } else {
     throw new Error("TODO 7fs82u3hr97sgfuas3ubrfusf9qw3")
   }
@@ -35,8 +40,8 @@ function parseWithRules(input) {
   let code = "";
   for (let i = 0; i < input.length;) {
     let beforeIndex = i
+    // Check for rules without regex first
     for (let rule of RULES) {
-      // This does not work with regex for data cell
       if (input.startsWith(rule.begin, i)) {
         let startIndex = i+rule.begin.length
         let endIndex = input.indexOf(rule.end, startIndex);
@@ -52,7 +57,23 @@ function parseWithRules(input) {
       }
     }
     if (i === beforeIndex) {
-      // TODO: Check for tag regex
+      // Check for data tags using regexes
+      if (input[i] === '<') {
+        let sub = input.slice(i)
+        let match = DATA_RULE_BEGIN_REGEX.exec(sub);
+        if (match) {
+          let wholeMatch = match[0]
+          let tagName = match[1]
+          let endRule = `</${tagName}>`
+          let startIndex = i+wholeMatch.length
+          let endIndex = input.indexOf(endRule, startIndex);
+          let inner = input.substring(startIndex, endIndex);
+          if (code) { matches.push(createCell(CODE_TYPE, code)); code = "" }
+          matches.push(createCell(DATA_TYPE, inner, tagName))
+          i = (endIndex === -1) ? input.length : (endIndex+endRule.length)
+          continue
+        }
+      }
       code += input[i]
       i++
     }
