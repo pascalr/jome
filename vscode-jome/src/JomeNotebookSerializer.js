@@ -1,5 +1,5 @@
 const vscode = require('vscode');
-import { TextDecoder, TextEncoder } from 'util';
+const { TextDecoder, TextEncoder } = require('util');
 
 class JomeNotebookSerializer {
   constructor() {

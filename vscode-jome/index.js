@@ -1,13 +1,24 @@
-const {workspace, commands, window, ViewColumn} = require("vscode");
+const vscode = require("vscode");
 const {LanguageClient} = require("vscode-languageclient/node");
 const path = require("path");
 
 const NodeTreeProvider = require("./src/NodeTreeProvider.js")
 //const JomeEditorProvider = require("./src/JomeEditorProvider.js")
+const JomeNotebookSerializer = require("./src/JomeNotebookSerializer.js")
+const JomeNotebookKernel = require("./src/JomeNotebookKernel.js")
 
 let client;
 
+const NOTEBOOK_TYPE = 'jome-notebook-serializer';
+
 function activate(context) {
+
+  context.subscriptions.push(
+		vscode.workspace.registerNotebookSerializer(
+			NOTEBOOK_TYPE, new JomeNotebookSerializer(), { transientOutputs: true }
+		),
+		new JomeNotebookKernel()
+	);
 
   // "customEditors": [
   //   {
@@ -23,12 +34,12 @@ function activate(context) {
   //context.subscriptions.push(JomeEditorProvider.register(context));
 
   // context.subscriptions.push(
-  //   commands.registerCommand('jomeEditor.start', () => {
+  //   vscode.commands.registerCommand('jomeEditor.start', () => {
   //     // Create and show a new webview
-  //     const panel = window.createWebviewPanel(
+  //     const panel = vscode.window.createWebviewPanel(
   //       'jomeEditor', // Identifies the type of the webview. Used internally
   //       'Jome Editor', // Title of the panel displayed to the user
-  //       ViewColumn.One, // Editor column to show the new webview panel in.
+  //       vscode.ViewColumn.One, // Editor column to show the new webview panel in.
   //       {} // Webview options. More on these later.
   //     );
 
@@ -71,7 +82,7 @@ function activate(context) {
         documentSelector: [{ scheme: 'file', language: 'jome' }],
         synchronize: {
             // Notify the server about file changes to '.clientrc files contained in the workspace
-            fileEvents: workspace.createFileSystemWatcher('**/.clientrc')
+            fileEvents: vscode.workspace.createFileSystemWatcher('**/.clientrc')
         }
     };
 
@@ -90,14 +101,14 @@ function deactivate() {
 }
 
 // For the debugger. See package.json
-commands.registerCommand('extension.vscode-jome.getProgramName', config => {
-  return window.showInputBox({
+vscode.commands.registerCommand('extension.vscode-jome.getProgramName', config => {
+  return vscode.window.showInputBox({
     placeHolder: 'Please enter the name of a jome file in the workspace folder',
     value: 'index.jome'
   });
 });
 
-window.createTreeView('jomeExplorerNodes', {
+vscode.window.createTreeView('jomeExplorerNodes', {
   treeDataProvider: new NodeTreeProvider()
 });
 
@@ -116,10 +127,10 @@ window.createTreeView('jomeExplorerNodes', {
 // }
 
 // // Create and show a new webview
-// window.createWebviewPanel(
+// vscode.window.createWebviewPanel(
 //   'jomeEditor', // Identifies the type of the webview. Used internally
 //   'Jome Editor', // Title of the panel displayed to the user
-//   ViewColumn.One, // Editor column to show the new webview panel in.
+//   vscode.ViewColumn.One, // Editor column to show the new webview panel in.
 //   {} // Webview options. More on these later.
 // );
 

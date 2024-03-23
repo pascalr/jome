@@ -158,7 +158,7 @@
         "displayName": "Jome Notebook",
         "selector": [
           {
-            "filenamePattern": "*.jome-notebook"
+            "filenamePattern": "*.jomn"
           }
         ]
       }
