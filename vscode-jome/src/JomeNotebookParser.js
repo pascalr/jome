@@ -1,5 +1,7 @@
 const vscode = require('vscode');
 
+// Comment séparer 2 code blocks?
+
 // TODO: A grammar for serializing. Should be minimilalistic.
 // Comments, strings, ...
 // Ideally, share grammar with tokenizer, instead of parsing it twice.
@@ -31,30 +33,51 @@ function parseWithRules(input) {
   let matches = [];
 
   let code = "";
-  for (let i = 0; i < input.length; i++) {
+  for (let i = 0; i < input.length;) {
+    let beforeIndex = i
     for (let rule of RULES) {
       // This does not work with regex for data cell
       if (input.startsWith(rule.begin, i)) {
-        let endIndex = input.indexOf(rule.end, i);
-        let sub = input.substring(i, endIndex);
+        let startIndex = i+rule.begin.length
+        let endIndex = input.indexOf(rule.end, startIndex);
+        let sub = input.substring(startIndex, endIndex);
         if (rule.type) {
-          if (code) { matches.push(createCell(CODE_TYPE, code)) }
+          if (code) { matches.push(createCell(CODE_TYPE, code)); code = "" }
           matches.push(createCell(rule.type, sub))
         } else {
-          code.push(sub)
+          code += sub
         }
-        i = endIndex
+        i = (endIndex === -1) ? input.length : (endIndex+rule.end.length)
         break;
       }
     }
+    if (i === beforeIndex) {
+      // TODO: Check for tag regex
+      code += input[i]
+      i++
+    }
   }
 
-  if (code) { matches.push(createCell(CODE_TYPE, code)) }
+  if (code && code.length) { matches.push(createCell(CODE_TYPE, code)) }
+
+  // Trim all cells, but don't remove newlines at the very beginning or at the very end?
+  matches = matches.map((cell, i) => {
+    if (i !== 0 && cell.value[0] === '\n') {
+      cell.value = cell.value.slice(1)
+    }
+    //if (i !== (matches.length-1) && cell.value[cell.value.length-1] === '\n') {
+    if (cell.value[cell.value.length-1] === '\n') {
+      cell.value = cell.value.slice(0,-1)
+    }
+    return cell
+  })
 
   return matches;
 }
 
 function parse(text) {
+
+  return parseWithRules(text)
 
   // FIXME: This does not handle # # # inside a comment. I must do a proper minimalistic grammar.
   let parts = text.split(/(?:^|\n)(###)(?:\r\n|\n|$)/)
