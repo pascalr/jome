@@ -143,6 +143,15 @@ let content = <md>
   The idea is that you should be able to enter data in a spreadsheet like format in the notebook.
 
   TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells
+
+  ### Collapsed code cells
+
+  There should also be collapsed by default code cells. For example for imports. If you click on it, you should see it.
+  But you could also that it is collapsed by default.
+
+  But I want to be able to search for it though... CTRL+F should find text hidden inside the collapsed cell. Not sure if that is possible in the browser...
+
+  Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!
   
   ## Disclaimer
 
