@@ -1,5 +1,8 @@
 const vscode = require('vscode');
 
+// TODO: "notebook.showCellStatusBar": false,
+// https://github.com/microsoft/vscode-jupyter/issues/6024
+
 /**
  * The kernel seems to be the thing responsible to execute the code cells.
  */
@@ -40,7 +43,7 @@ class JomeNotebookKernel {
 
 		try {
 			execution.replaceOutput([new vscode.NotebookCellOutput([
-				vscode.NotebookCellOutputItem.json(JSON.parse(cell.document.getText()))
+				vscode.NotebookCellOutputItem.text('<div><b>Hello</b> World</div>', 'text/x-html'),
 			])]);
 
 			execution.end(true, Date.now());
