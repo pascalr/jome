@@ -1,6 +1,8 @@
 const vscode = require('vscode');
 const { TextDecoder, TextEncoder } = require('util');
 
+// const { parseAndAnalyzeCode } = require('jome.js/src/compiler.js');
+
 class JomeNotebookSerializer {
   constructor() {
     this.label = 'Jome Notebook Serializer';
@@ -8,6 +10,10 @@ class JomeNotebookSerializer {
 
 	async deserializeNotebook(data, token) {
 		const contents = new TextDecoder().decode(data); // convert to String
+
+    // const { parseAndAnalyzeCode } = require('jome.js/src/compiler.js');
+
+    // let {ctxFile, nodes} = parseAndAnalyzeCode(contents)
 
 		// // Read file contents
 		// let raw;
