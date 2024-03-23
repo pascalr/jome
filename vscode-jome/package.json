@@ -167,6 +167,8 @@
   },
   "main": "./index",
   "dependencies": {
-    "vscode-languageclient": "^9.0.1"
+    "vscode-languageclient": "^9.0.1",
+    "@jome/core": "^0.0.4",
+    "jome.js": "^0.0.2"
   }
 }
