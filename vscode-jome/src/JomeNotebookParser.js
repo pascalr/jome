@@ -45,12 +45,11 @@ function parseWithRules(input) {
       if (input.startsWith(rule.begin, i)) {
         let startIndex = i+rule.begin.length
         let endIndex = input.indexOf(rule.end, startIndex);
-        let sub = input.substring(startIndex, endIndex);
         if (rule.type) {
           if (code) { matches.push(createCell(CODE_TYPE, code)); code = "" }
-          matches.push(createCell(rule.type, sub))
+          matches.push(createCell(rule.type, input.substring(startIndex, endIndex)))
         } else {
-          code += sub
+          code += input.substring(i, (endIndex === -1) ? -1 : (endIndex+rule.end.length))
         }
         i = (endIndex === -1) ? input.length : (endIndex+rule.end.length)
         break;
