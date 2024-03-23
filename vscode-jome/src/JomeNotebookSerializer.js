@@ -11,6 +11,33 @@ class JomeNotebookSerializer {
 	async deserializeNotebook(data, token) {
 		const contents = new TextDecoder().decode(data); // convert to String
 
+    // FIXME: This does not handle # # # inside a comment. I must do a proper minimalistic grammar.
+    let parts = contents.split(/(?:^|\n)(###)(?:\r\n|\n|$)/)
+
+    // Somehow there is a newline character at the end I have to remove
+    let last = parts[parts.length - 1]
+    if (last.charAt(last.length - 1) === '\n') {
+      parts[parts.length - 1] = last.slice(0, -1)
+    }
+
+    const cells = []
+    let isMdCell = false
+    parts.forEach(part => {
+      if (part === "###") {
+        isMdCell = !isMdCell
+      } else if (part.length) {
+        cells.push(new vscode.NotebookCellData(
+          isMdCell ? vscode.NotebookCellKind.Markup : vscode.NotebookCellKind.Code,
+          part,
+          isMdCell ? 'markdown' : 'jome' // TODO: any language!!! with <*.language-name> or <language-name>
+        ))
+      }
+    })
+
+    // TODO: A grammar for serializing. Should be minimilalistic.
+    // Comments, strings, ...
+    // Ideally, share grammar with tokenizer, instead of parsing it twice.
+
     // const { parseAndAnalyzeCode } = require('jome.js/src/compiler.js');
 
     // let {ctxFile, nodes} = parseAndAnalyzeCode(contents)
@@ -30,17 +57,18 @@ class JomeNotebookSerializer {
 		// 	item.language
 		// ));
 
-    const cells = [new vscode.NotebookCellData(
-			vscode.NotebookCellKind.Code,
-			contents,
-			'jome'// item.cell_type === 'code' ? 'python' : 'markdown'
-		)];
-
 		return new vscode.NotebookData(cells);
 	}
 
 	async serializeNotebook(data, token) {
-    let str = data.cells[0].value
+    let str = ''
+    data.cells.forEach(cell => {
+      if (cell.kind === vscode.NotebookCellKind.Markup) {
+        str += '###\n'+cell.value+'\n###\n'
+      } else {
+        str += cell.value+'\n'
+      }
+    })
     return new TextEncoder().encode(str);
 		// // Map the Notebook data into the format we want to save the Notebook data as
 		// const contents = { cells: [] };
