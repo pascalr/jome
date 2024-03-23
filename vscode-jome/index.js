@@ -79,8 +79,10 @@ function activate(context) {
 
     // Options to control the language client
     const clientOptions = {
-        // Register the server for plain text documents
-        documentSelector: [{ scheme: 'file', language: 'jome' }],
+        // Register the server for jome documents
+        documentSelector: ['jome'],
+        // I want it to work for notebooks too, not just files (so not scheme: 'file')
+        // documentSelector: [{ scheme: 'file', language: 'jome' }],
         synchronize: {
             // Notify the server about file changes to '.clientrc files contained in the workspace
             fileEvents: vscode.workspace.createFileSystemWatcher('**/.clientrc')
