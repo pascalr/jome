@@ -97,6 +97,52 @@ let content = <md>
   import navbar from './navbar.html.jome'
   let frenchNavbar = navbar("fr")
   ```
+
+  ## Notebook like jupyter
+
+  Jome code can be used to create notebooks like jupyter.
+
+  You can use the .jomn extension to denote that the file is expected to be opened as a notebook.
+
+  ### Markdown cells
+
+  You can create markdown cells by surrounding the content with three hashtags alone on a line `###`.
+
+  ```jome
+  ###
+  This is a markdown cell
+  ### This level 3 title
+  Below is the ending
+  ###
+  ```
+
+  ### Code cells
+
+  Not all code cells are executed.
+
+  TODO: What keyword to use to mean that it should be executed???
+
+  ```jome
+  cell
+    // ...
+  end
+
+  script
+    // ...
+  end
+
+  code
+    // ...
+  end
+  ```
+
+  ### Data cells
+
+  Jome introducte the idea of data cells in a notebook.
+
+  The idea is that you should be able to enter data in a spreadsheet like format in the notebook.
+
+  TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells
   
   ## Disclaimer
 
