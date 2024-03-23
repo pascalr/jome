@@ -101,7 +101,8 @@
         "extensions": [
           ".jome",
           ".jomm",
-          ".jomn"
+          ".jomn",
+          ".jomd"
         ],
         "configuration": "./language-configuration.json"
       }
@@ -162,6 +163,16 @@
             "filenamePattern": "*.jomn"
           }
         ]
+      }
+    ],
+    "customEditors": [
+      {
+        "viewType": "jomeDataEditor",
+        "displayName": "Jome Data Editor",
+        "selector": [
+          {"filenamePattern": "*.jomd"}
+        ],
+        "priority": "option"
       }
     ]
   },

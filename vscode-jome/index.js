@@ -3,7 +3,7 @@ const {LanguageClient} = require("vscode-languageclient/node");
 const path = require("path");
 
 const NodeTreeProvider = require("./src/NodeTreeProvider.js")
-//const JomeEditorProvider = require("./src/JomeEditorProvider.js")
+const JomeDataEditorProvider = require("./src/JomeDataEditorProvider.js")
 const JomeNotebookSerializer = require("./src/JomeNotebookSerializer.js")
 const JomeNotebookKernel = require("./src/JomeNotebookKernel.js")
 
@@ -20,19 +20,7 @@ function activate(context) {
 		new JomeNotebookKernel()
 	);
 
-  // "customEditors": [
-  //   {
-  //     "viewType": "jomeEditor",
-  //     "displayName": "Jome Editor",
-  //     "selector": [
-  //       {"filenamePattern": "*.jome"},
-  //       {"filenamePattern": "*.jomm"},
-  //       {"filenamePattern": "*.jomn"}
-  //     ],
-  //     "priority": "option"
-  //   }
-  // ],
-  //context.subscriptions.push(JomeEditorProvider.register(context));
+  context.subscriptions.push(JomeDataEditorProvider.register(context));
 
   // context.subscriptions.push(
   //   vscode.commands.registerCommand('jomeEditor.start', () => {

@@ -9,15 +9,15 @@ function getNonce() {
 	return text;
 }
 
-class JomeEditorProvider {
+class JomeDataEditorProvider {
 
 	static register(context) {
-		const provider = new JomeEditorProvider(context);
-		const providerRegistration = vscode.window.registerCustomEditorProvider(JomeEditorProvider.viewType, provider);
+		const provider = new JomeDataEditorProvider(context);
+		const providerRegistration = vscode.window.registerCustomEditorProvider(JomeDataEditorProvider.viewType, provider);
 		return providerRegistration;
 	}
 
-	static viewType = 'jomeEditor';
+	static viewType = 'jomeDataEditor';
 
 	constructor(context) {
     this.context = context
@@ -183,4 +183,4 @@ class JomeEditorProvider {
 	}
 }
 
-module.exports = JomeEditorProvider
+module.exports = JomeDataEditorProvider
