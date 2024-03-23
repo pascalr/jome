@@ -19,7 +19,11 @@ class JomeNotebookSerializer {
       if (cell.kind === vscode.NotebookCellKind.Markup) {
         str += '###\n'+cell.value+'\n###\n'
       } else {
-        str += cell.value+'\n'
+        if (cell.languageId === 'jome') {
+          str += cell.value+'\n'
+        } else {
+          str += `<${cell.languageId}>`+cell.value+`</${cell.languageId}>\n`
+        }
       }
     })
     return new TextEncoder().encode(str);
