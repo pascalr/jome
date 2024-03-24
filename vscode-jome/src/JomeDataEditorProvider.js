@@ -12,7 +12,24 @@ function getNonce() {
 	return text;
 }
 
-
+let testDataTable = `<table>
+  <tr>
+    <td>Row 1, Column 1</td>
+    <td>Row 1, Column 2</td>
+    <td>Row 1, Column 3</td>
+  </tr>
+  <tr>
+    <td>Row 2, Column 1</td>
+    <td>Row 2, Column 2</td>
+    <td>Row 2, Column 3</td>
+  </tr>
+  <tr>
+    <td>Row 3, Column 1</td>
+    <td>Row 3, Column 2</td>
+    <td>Row 3, Column 3</td>
+  </tr>
+</table>
+`
 
 class JomeDataEditorProvider {
 
@@ -45,11 +62,11 @@ class JomeDataEditorProvider {
       let parsed = parse(text)
       let rendered = parsed.map(p => {
         if (p.type === CODE_TYPE) {
-          return p.value
+          return `<pre class="code_cell"><code>${p.value}</code></pre>`
         } else if (p.type === MD_TYPE) {
           return mdRenderer(p.value)
         } else if (p.type === DATA_TYPE) {
-          return p.value
+          return testDataTable
         } else {
           throw new Error("TODO 7fs82u3hr97sgfuas3ubrfusf9qw3")
         }

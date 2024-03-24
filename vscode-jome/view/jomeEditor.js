@@ -51,7 +51,7 @@
     textContent.innerHTML = text;
     div.appendChild(textContent);
     root.appendChild(div);
-    root.appendChild(createTable(2,2))
+    //root.appendChild(createTable(2,2))
 	}
 
 	// Handle messages sent from the extension to the webview

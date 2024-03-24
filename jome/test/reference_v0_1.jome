@@ -5,7 +5,6 @@ You can use regular js comments with `//` and `/* */`.
 
 You can also use `# ` for documentation comments. Note: The hashtag must be followed by a space.
 ###
-
 let a = 1
 let b = 2
 let c = 3
