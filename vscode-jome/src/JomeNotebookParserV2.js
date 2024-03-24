@@ -15,11 +15,20 @@ let RULES = [
   { begin: "###", end: "###", type: MD_TYPE },
 ]
 
-let DATA_RULE_BEGIN = /^<([_:A-Za-z][A-Za-z0-9\-_\:.]*)>/ // FIXME: Accents
+// TODO: Support all of these
+// let data1 = <xml>...</xml>
+// const data2 = <xml>...</xml>
+// var data3 = <xml>...</xml>
+// TODO:
+// SomeType data4 = <xml>...</xml>
+// data5 := <xml>...</xml>
+
+//                                              variable name                          tag name
+let DATA_RULE_BEGIN = /^(?:let|const|var)\s+([A-Za-z_$][A-Za-z0-9_]*)\s*=\s*<([_:A-Za-z][A-Za-z0-9\-_\:.]*)>/ // FIXME: Accents
 let DATA_RULE_BEGIN_REGEX = new RegExp(DATA_RULE_BEGIN)
 
-function createCell(type, value, language = null) {
-  return {type, value, language}
+function createCell(type, value, data = null) {
+  return {type, value, data}
 }
 
 function parse(input) {
@@ -45,21 +54,20 @@ function parse(input) {
     }
     if (i === beforeIndex) {
       // Check for data tags using regexes
-      if (input[i] === '<') {
-        let sub = input.slice(i)
-        let match = DATA_RULE_BEGIN_REGEX.exec(sub);
-        if (match) {
-          let wholeMatch = match[0]
-          let tagName = match[1]
-          let endRule = `</${tagName}>`
-          let startIndex = i+wholeMatch.length
-          let endIndex = input.indexOf(endRule, startIndex);
-          let inner = input.substring(startIndex, endIndex);
-          if (code) { matches.push(createCell(CODE_TYPE, code)); code = "" }
-          matches.push(createCell(DATA_TYPE, inner, tagName))
-          i = (endIndex === -1) ? input.length : (endIndex+endRule.length)
-          continue
-        }
+      let sub = input.slice(i)
+      let match = DATA_RULE_BEGIN_REGEX.exec(sub);
+      if (match) {
+        let wholeMatch = match[0]
+        let varName = match[1]
+        let tagName = match[2]
+        let endRule = `</${tagName}>`
+        let startIndex = i+wholeMatch.length
+        let endIndex = input.indexOf(endRule, startIndex);
+        let inner = input.substring(startIndex, endIndex);
+        if (code) { matches.push(createCell(CODE_TYPE, code)); code = "" }
+        matches.push(createCell(DATA_TYPE, inner, {tagName, varName}))
+        i = (endIndex === -1) ? input.length : (endIndex+endRule.length)
+        continue
       }
       code += input[i]
       i++
