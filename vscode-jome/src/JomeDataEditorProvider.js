@@ -56,7 +56,7 @@ class JomeDataEditorProvider {
       }).join('\n')
 			webviewPanel.webview.postMessage({
 				type: 'update',
-				text,
+				text: rendered,
 			});
 		}
 

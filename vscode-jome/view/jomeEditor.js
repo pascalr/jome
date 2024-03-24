@@ -47,7 +47,8 @@
     const div = document.createElement('div');
     div.className = 'text';
     const textContent = document.createElement('span');
-    textContent.innerText = text;
+    //textContent.innerText = text;
+    textContent.innerHTML = text;
     div.appendChild(textContent);
     root.appendChild(div);
     root.appendChild(createTable(2,2))
