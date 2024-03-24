@@ -44,6 +44,7 @@ class JomeDataEditorProvider {
       let parsed = parse(text)
       let rendered = parsed.map(p => {
         if (p.type === CODE_TYPE) {
+          if (/^\s*$/.test(p.value)) {return ''}
           return `<pre class="code_cell"><code>${p.value}</code></pre>`
         } else if (p.type === MD_TYPE) {
           return mdRenderer(p.value)

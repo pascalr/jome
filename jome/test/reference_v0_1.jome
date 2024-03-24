@@ -16,6 +16,12 @@ The torque is the result of a force multiplied by a distance. The result is:
 let result = <nb>{force*distance}</nb>
 
 ###
+FIXME: result should be a computed output, not a data input.
+
+I don't know yet how I want to handle that
+###
+
+###
 <h3 id="comments">Comments</h3>
 
 You can use regular js comments with `//` and `/* */`.

@@ -44,6 +44,10 @@ pre code {
   color: gray; /* FIXME: Use vscode theme color */
 }
 
+.data_field {
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}
 .data_field_name::after {
   content: ":";
 }
