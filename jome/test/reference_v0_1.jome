@@ -1,11 +1,11 @@
 ###
 <h3 id="comments">Comments</h3>
 
-You can use regular js comments with \`//\` and \`/* */\`.
+You can use regular js comments with `//` and `/* */`.
 
-You can also use \`# \` for documentation comments. Note: The hashtag must be followed by a space.
+You can also use `# ` for documentation comments. Note: The hashtag must be followed by a space.
 
-\`\`\`jome
+```jome
 // This is a regular comment
 
 # This is a documentation comment that describes the function below.
@@ -22,5 +22,5 @@ with
 def someFunc
   /* TODO: implement this function */
 end
-\`\`\`
+```
 ###
