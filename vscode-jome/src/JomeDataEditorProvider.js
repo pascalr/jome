@@ -1,7 +1,8 @@
 const vscode = require('vscode');
 
 const getMarkdownRenderer = require('./getMarkdownRenderer.js')
-const {parse, MD_TYPE, CODE_TYPE, DATA_TYPE} = require('./JomeNotebookParserV2.js')
+const {parse, MD_TYPE, CODE_TYPE, DATA_TYPE} = require('./JomeNotebookParserV2.js');
+const renderDataTable = require('./renderDataTable.js');
 
 function getNonce() {
 	let text = '';
@@ -11,25 +12,6 @@ function getNonce() {
 	}
 	return text;
 }
-
-let testDataTable = `<table>
-  <tr>
-    <td>Row 1, Column 1</td>
-    <td>Row 1, Column 2</td>
-    <td>Row 1, Column 3</td>
-  </tr>
-  <tr>
-    <td>Row 2, Column 1</td>
-    <td>Row 2, Column 2</td>
-    <td>Row 2, Column 3</td>
-  </tr>
-  <tr>
-    <td>Row 3, Column 1</td>
-    <td>Row 3, Column 2</td>
-    <td>Row 3, Column 3</td>
-  </tr>
-</table>
-`
 
 class JomeDataEditorProvider {
 
@@ -66,7 +48,7 @@ class JomeDataEditorProvider {
         } else if (p.type === MD_TYPE) {
           return mdRenderer(p.value)
         } else if (p.type === DATA_TYPE) {
-          return testDataTable
+          return renderDataTable(p.value)
         } else {
           throw new Error("TODO 7fs82u3hr97sgfuas3ubrfusf9qw3")
         }
