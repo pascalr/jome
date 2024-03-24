@@ -1,6 +1,7 @@
 const vscode = require('vscode');
 
 const getMarkdownRenderer = require('./getMarkdownRenderer.js')
+const {parse, MD_TYPE, CODE_TYPE, DATA_TYPE} = require('./JomeNotebookParserV2.js')
 
 function getNonce() {
 	let text = '';
@@ -37,14 +38,27 @@ class JomeDataEditorProvider {
 		};
 		webviewPanel.webview.html = this.getHtmlForWebview(webviewPanel.webview);
 
+    const mdRenderer = getMarkdownRenderer(true) // FIXME: This does not exist: this.context.workspace.isTrusted
+
 		function updateWebview() {
+      let text = document.getText()
+      let parsed = parse(text)
+      let rendered = parsed.map(p => {
+        if (p.type === CODE_TYPE) {
+          return p.value
+        } else if (p.type === MD_TYPE) {
+          return p.value
+        } else if (p.type === DATA_TYPE) {
+          return p.value
+        } else {
+          throw new Error("TODO 7fs82u3hr97sgfuas3ubrfusf9qw3")
+        }
+      }).join('\n')
 			webviewPanel.webview.postMessage({
 				type: 'update',
-				text: document.getText(),
+				text,
 			});
 		}
-
-    const mdRenderer = getMarkdownRenderer(true) // FIXME: This does not exist: this.context.workspace.isTrusted
 
 		// Hook up event handlers so that we can synchronize the webview with the text document.
 		//
