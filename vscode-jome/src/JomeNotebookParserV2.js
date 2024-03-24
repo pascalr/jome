@@ -22,7 +22,7 @@ function createCell(type, value, language = null) {
   return {type, value, language}
 }
 
-function parse(text) {
+function parse(input) {
   let matches = [];
 
   let code = "";

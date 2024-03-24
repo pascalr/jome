@@ -249,7 +249,35 @@ function slugify(text) {
 }
 
 function getMarkdownRenderer(isWorkspaceTrusted) {
-  return activate(isWorkspaceTrusted).renderOutputItem
+  const markdownIt = new MarkdownIt({
+		html: true,
+		linkify: true,
+		highlight: (str, lang) => {
+			if (lang) {
+				return `<div class="vscode-code-block" data-vscode-code-block-lang="${markdownIt.utils.escapeHtml(lang)}">${markdownIt.utils.escapeHtml(str)}</div>`;
+			}
+			return markdownIt.utils.escapeHtml(str);
+		}
+	});
+	markdownIt.linkify.set({ fuzzyLink: false });
+
+	addNamedHeaderRendering(markdownIt);
+	addLinkRenderer(markdownIt);
+
+  return (text) => {
+    if (text.trim().length === 0) {
+      return ''
+    } else {
+      const markdownText = outputInfo.mime.startsWith('text/x-') ? `\`\`\`${outputInfo.mime.substr(7)}\n${text}\n\`\`\``
+        : (outputInfo.mime.startsWith('application/') ? `\`\`\`${outputInfo.mime.substr(12)}\n${text}\n\`\`\`` : text);
+      const unsanitizedRenderedMarkdown = markdownIt.render(markdownText, {
+        outputItem: outputInfo,
+      });
+      return (isWorkspaceTrusted
+        ? unsanitizedRenderedMarkdown
+        : DOMPurify.sanitize(unsanitizedRenderedMarkdown, sanitizerOptions));
+    }
+  }
 }
 
 module.exports = getMarkdownRenderer

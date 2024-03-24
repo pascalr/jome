@@ -47,7 +47,7 @@ class JomeDataEditorProvider {
         if (p.type === CODE_TYPE) {
           return p.value
         } else if (p.type === MD_TYPE) {
-          return p.value
+          return mdRenderer(p.value)
         } else if (p.type === DATA_TYPE) {
           return p.value
         } else {
