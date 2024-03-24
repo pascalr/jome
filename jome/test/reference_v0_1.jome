@@ -9,4 +9,7 @@ let a = 1
 let b = 2
 let c = 3
 
-let test = <test-jome><test-code>Jome code</test-code><test-expected>Js regex</test-expected></test-jome>
+let test = <test-jome>
+<raw>Jome code</raw>
+<expected>Js regex</expected>
+</test-jome>

@@ -2,7 +2,7 @@ const vscode = require('vscode');
 
 const getMarkdownRenderer = require('./getMarkdownRenderer.js')
 const {parse, MD_TYPE, CODE_TYPE, DATA_TYPE} = require('./JomeNotebookParserV2.js');
-const renderDataTable = require('./renderDataTable.js');
+const renderTable = require('./renderData.js');
 
 function getNonce() {
 	let text = '';
@@ -48,7 +48,7 @@ class JomeDataEditorProvider {
         } else if (p.type === MD_TYPE) {
           return mdRenderer(p.value)
         } else if (p.type === DATA_TYPE) {
-          return renderDataTable({value: p.value, ...p.data})
+          return renderTable({value: p.value, ...p.data})
         } else {
           throw new Error("TODO 7fs82u3hr97sgfuas3ubrfusf9qw3")
         }
