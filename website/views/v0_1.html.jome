@@ -18,6 +18,20 @@ let PARTIAL = <md>
 
 let content = <md>
 
+  TODO: Tags are simply always xml tags. C'est parfait. C'est mieux que JSON, parce que ça fait la distinction entre attribute et enfant.
+
+  L'éditeur se charge de les afficher pour que ce soit beau.
+
+  ```jome
+  let html = <Recipe
+    name="Recipe name"
+    portions=5
+  >
+    <ing qty="100mL" name="water"/>
+    <ing qty="100g" name="sugar"/>
+  </Recipe>
+  ```
+
   TODO: I am thinking of using test_compile.jomn as a notebook and use that as a reference for the language.
   Don't include all the very specific tests, but globals tests would be very nice to explain what the language does,
   and this would avoid repeating myself.
