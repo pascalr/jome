@@ -28,6 +28,14 @@ pre code {
   background-color: inherit;
 }
 
+.data-header {
+  margin-bottom: 0.2em;
+  margin-left: 0.2em;
+}
+.data-header::after {
+  content: ":";
+}
+
 /*
 markdown css from: vscode/extensions/markdown-language-features/notebook/index.ts
 */

@@ -48,7 +48,7 @@ class JomeDataEditorProvider {
         } else if (p.type === MD_TYPE) {
           return mdRenderer(p.value)
         } else if (p.type === DATA_TYPE) {
-          return renderDataTable(p.value)
+          return renderDataTable({value: p.value, ...p.data})
         } else {
           throw new Error("TODO 7fs82u3hr97sgfuas3ubrfusf9qw3")
         }

@@ -17,8 +17,9 @@ let testDataTable = `<table>
 </table>
 `
 
-function renderDataTable(xml) {
-  return testDataTable
+function renderDataTable(data) {
+  let {value, varName, tagName} = data
+  return `<div class="data-header">${varName}</div>`+testDataTable
 }
 
 module.exports = renderDataTable
