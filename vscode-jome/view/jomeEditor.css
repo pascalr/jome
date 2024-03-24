@@ -37,8 +37,11 @@ pre code {
 .data-header {
   margin-left: 0.2em;
 }
-.data-header::after {
+.data-header-name::after {
   content: ":";
+}
+.data-header-tag {
+  color: gray; /* FIXME: Use vscode theme color */
 }
 
 /*

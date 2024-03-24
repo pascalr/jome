@@ -50,10 +50,15 @@ function encodeHtmlString(str) {
 }
 
 function renderHeader(data) {
-  return `<div class="data-header">${data.varName}</div>`
+  return `<div class="data-header">
+  <span class="data-header-name">${data.varName}</span>
+</div>`
+// <span class="data-header-tag">${data.tagName}</span>
 }
 
 function renderDataArea(data) {
+  // TODO: Show tag name in the bottom right of data area. It should be a dropdown that allows you
+  // to change the type of the data area, like in the notebook.
   return `<pre class="data_cell"><code>${encodeHtmlString(data.value)}</code></pre>`
 }
 
