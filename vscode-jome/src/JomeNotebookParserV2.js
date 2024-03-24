@@ -12,8 +12,11 @@ let RULES = [
   { begin: "\"", end: "\"" },
   { begin: "'", end: "'" },
   { begin: "`", end: "`" },
-  { begin: "###", end: "###", type: MD_TYPE },
 ]
+
+//               start             content               end
+let MD_RULE = /^(?:###)(?:\r\n|\n)([\s\S]*?)(?:\r\n|\n)(?:###)(?:\r\n|\n|$)/
+let MD_RULE_REGEX = new RegExp(MD_RULE)
 
 // TODO: Support all of these
 // let data1 = <xml>...</xml>
@@ -42,20 +45,23 @@ function parse(input) {
       if (input.startsWith(rule.begin, i)) {
         let startIndex = i+rule.begin.length
         let endIndex = input.indexOf(rule.end, startIndex);
-        if (rule.type) {
-          if (code) { matches.push(createCell(CODE_TYPE, code)); code = "" }
-          matches.push(createCell(rule.type, input.substring(startIndex, endIndex)))
-        } else {
-          code += input.substring(i, (endIndex === -1) ? -1 : (endIndex+rule.end.length))
-        }
+        code += input.substring(i, (endIndex === -1) ? -1 : (endIndex+rule.end.length))
         i = (endIndex === -1) ? input.length : (endIndex+rule.end.length)
         break;
       }
     }
     if (i === beforeIndex) {
-      // Check for data tags using regexes
       let sub = input.slice(i)
-      let match = DATA_RULE_BEGIN_REGEX.exec(sub);
+      // Check for markdown using regexes
+      let match = MD_RULE_REGEX.exec(sub);
+      if (match) {
+        if (code) { matches.push(createCell(CODE_TYPE, code)); code = "" }
+        matches.push(createCell(MD_TYPE, match[1]))
+        i = i + match[0].length
+        continue
+      }
+      // Check for data tags using regexes
+      match = DATA_RULE_BEGIN_REGEX.exec(sub);
       if (match) {
         let wholeMatch = match[0]
         let varName = match[1]
