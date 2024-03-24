@@ -38,11 +38,24 @@ let testDataTable = `<table>
 </table>
 `
 
-function getConfigForTag(tagName) {
-  // The default just a single textarea. And the value is a string
-  return {
-    dataArea: true
+// render can be:
+// field: Rendered as the name of the field of the left, and the data on the right
+// textarea: Rendered with the name above, and the data in a kind of text area below
+// object: An object will be decomposed and furter parameters will define how to render it
+
+const DEFAULT_CONFIGS = {
+  nb: {
+    render: 'field'
   }
+}
+
+const DEFAULT_CONFIG = {
+  render: 'textarea'
+}
+
+function getConfigForTag(tagName) {
+  // TODO: Parse config.jome and get the config from there
+  return DEFAULT_CONFIGS[tagName] || DEFAULT_CONFIG
 }
 
 function encodeHtmlString(str) {
@@ -54,6 +67,13 @@ function renderHeader(data) {
   <span class="data-header-name">${data.varName}</span>
 </div>`
 // <span class="data-header-tag">${data.tagName}</span>
+}
+
+function renderDataField(data) {
+  return `<div class="data_field">
+  <span class="data_field_name">${data.varName}</span>
+  <span class="data_field_value">${encodeHtmlString(data.value)}</span>
+</div>`
 }
 
 function renderDataArea(data) {
@@ -73,11 +93,13 @@ function renderData(data) {
   let config = getConfigForTag(tagName)
   let header = renderHeader(data)
 
-  if (config.dataArea) {
-    return header+renderDataArea(data)
-  } else {
-    return header+renderTable(data)
+  if (config.render === 'object') {
     // const topLevelNodes = getTopLevelNodes(value);
+    return header+renderTable(data)
+  } else if (config.render === 'field') {
+    return renderDataField(data)
+  } else {
+    return header+renderDataArea(data)
   }
 }
 

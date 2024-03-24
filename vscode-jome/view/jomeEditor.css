@@ -44,6 +44,18 @@ pre code {
   color: gray; /* FIXME: Use vscode theme color */
 }
 
+.data_field_name::after {
+  content: ":";
+}
+.data_field_value {
+  display: inline-block;
+  min-width: 10em;
+  padding: 0.2em;
+  margin-left: 0.5em;
+  border: 1px solid var(--vscode-widget-border);
+  background-color: var(--vscode-textPreformat-background);
+}
+
 /*
 markdown css from: vscode/extensions/markdown-language-features/notebook/index.ts
 */
