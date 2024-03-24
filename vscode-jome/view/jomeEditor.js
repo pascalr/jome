@@ -1,5 +1,3 @@
-// nooo @ts-check
-
 // Script run within the webview itself.
 (function () {
 
@@ -8,7 +6,6 @@
 
 	// @ts-ignore
 	const vscode = acquireVsCodeApi();
-
 
 	const root = document.getElementById('root');
 

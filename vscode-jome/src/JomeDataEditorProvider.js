@@ -1,5 +1,7 @@
 const vscode = require('vscode');
 
+const getMarkdownRenderer = require('./getMarkdownRenderer.js')
+
 function getNonce() {
 	let text = '';
 	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -8,6 +10,8 @@ function getNonce() {
 	}
 	return text;
 }
+
+
 
 class JomeDataEditorProvider {
 
@@ -39,6 +43,8 @@ class JomeDataEditorProvider {
 				text: document.getText(),
 			});
 		}
+
+    const mdRenderer = getMarkdownRenderer(true) // FIXME: This does not exist: this.context.workspace.isTrusted
 
 		// Hook up event handlers so that we can synchronize the webview with the text document.
 		//

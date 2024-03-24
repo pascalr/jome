@@ -36,18 +36,22 @@
         }
       ]
     },
-    "breakpoints": [{ "language": "jome" }],
+    "breakpoints": [
+      {
+        "language": "jome"
+      }
+    ],
     "debuggers": [
       {
         "type": "jome",
         "label": "Jome Debug",
-
         "program": "./debugger.js",
         "runtime": "node",
-
         "configurationAttributes": {
           "launch": {
-            "required": ["program"],
+            "required": [
+              "program"
+            ],
             "properties": {
               "program": {
                 "type": "string",
@@ -62,7 +66,6 @@
             }
           }
         },
-
         "initialConfigurations": [
           {
             "type": "jome",
@@ -72,7 +75,6 @@
             "stopOnEntry": true
           }
         ],
-
         "configurationSnippets": [
           {
             "label": "Jome Debug: Launch",
@@ -85,7 +87,6 @@
             }
           }
         ],
-
         "variables": {
           "AskForProgramName": "extension.vscode-jome.getProgramName"
         }
@@ -170,7 +171,9 @@
         "viewType": "jomeDataEditor",
         "displayName": "Jome Data Editor",
         "selector": [
-          {"filenamePattern": "*.jomd"}
+          {
+            "filenamePattern": "*.jomd"
+          }
         ],
         "priority": "option"
       }
@@ -178,8 +181,10 @@
   },
   "main": "./index",
   "dependencies": {
-    "vscode-languageclient": "^9.0.1",
     "@jome/core": "^0.0.4",
-    "jome.js": "^0.0.2"
+    "dompurify": "^3.0.11",
+    "jome.js": "^0.0.2",
+    "markdown-it": "^14.1.0",
+    "vscode-languageclient": "^9.0.1"
   }
 }
