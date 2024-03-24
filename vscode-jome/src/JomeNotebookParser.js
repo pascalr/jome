@@ -1,5 +1,18 @@
 const vscode = require('vscode');
 
+/*
+
+
+
+
+DEPRECATED: Use JomeNotebookParserV2
+
+
+
+
+
+*/
+
 // Comment séparer 2 code blocks?
 
 // TODO: A grammar for serializing. Should be minimilalistic.

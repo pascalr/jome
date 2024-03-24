@@ -15,7 +15,7 @@ let RULES = [
   { begin: "###", end: "###", type: MD_TYPE },
 ]
 
-let DATA_RULE_BEGIN = /^<(\w+)>/
+let DATA_RULE_BEGIN = /^<([_:A-Za-z][A-Za-z0-9\-_\:.]*)>/ // FIXME: Accents
 let DATA_RULE_BEGIN_REGEX = new RegExp(DATA_RULE_BEGIN)
 
 function createCell(type, value, language = null) {
