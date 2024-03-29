@@ -16,44 +16,19 @@ module.exports = () => {
 
   let content = mdToHtml(`
 
-  # Table data
-
-  I want to be able to easily add table data inside the editor.
-
-  \`\`\`
-  testCompile #[2, tag<jome>, tag</js]
-  \`\`\`
-
-  Or even better, I want to allow to enable inside config.jome arrays for tags instead of strings.
-
-  \`\`\`
-  <test-compile>[<jome>#log "Hello world"</jome>, <js>console.log("Hello world")</js>]</test-compile>
-  \`\`\`
-
-  In config.jome, I say test compile is an array of jome and js.
-
-  So when I do \`<test-compile></test-compile>\`, it should add underneath a side-by-side data editor allowing me to edit the content.
-
-  It should hide the \`<test-compile></test-compile>\`, make a header and show the type of the thing inside the header.
-
-  Actually, do I do this for all tags? No, not inline tags like bin, hex, col, ...
-
-  But this should be the case for html and md.
-
-  If I do,
-
-  \`\`\`jome
-  let content = < md >
-    ...
-  < /md >
-  \`\`\`
-
-  It should hide the tag, and it should indent one more indentation before it does not start at the beginning of the line.
-
   # Jome
 
-  Jome is an unopiniated programming language. You code using your own style and use a linter in other to share
-  standardized code inside a project with other people.
+  Jome tries to be an unopiniated programming language. You code using your own style and use a linter in other to share
+  standardized code with other people.
+
+  You should use a specialized editor (WIP) in order to fully use all it's features such as code evaluation (like Jupyter Notebook)
+  and data editing (like spreadsheet with types inside the editor).
+
+  For the near future, it only compiles to JavaScript.
+
+  ## Flexible typing system
+
+  Like the rest of Jome, the typing system is flexible. You can omit them, you can use hard typing or you can use duct typing.
 
   # Jome v0.1
 
@@ -95,6 +70,66 @@ module.exports = () => {
   import navbar from './navbar.html.jome'
   let frenchNavbar = navbar("fr")
   \`\`\`
+
+  ## Notebook like jupyter
+
+  Jome code can be used to create notebooks like jupyter.
+
+  You can use the .jomn extension to denote that the file is expected to be opened as a notebook.
+
+  ### Markdown cells
+
+  You can create markdown cells by surrounding the content with three hashtags alone on a line \`###\`.
+
+  \`\`\`jome
+  ###
+  This is a markdown cell
+  ### This level 3 title
+  Below is the ending
+  ###
+  \`\`\`
+
+  ### Code cells
+
+  Not all code cells are executed.
+
+  TODO: What keyword to use to mean that it should be executed???
+
+  \`\`\`jome
+  cell
+    // ...
+  end
+
+  script
+    // ...
+  end
+
+  code
+    // ...
+  end
+  \`\`\`
+
+  ### Data cells
+
+  Jome introducte the idea of data cells in a notebook.
+
+  The idea is that you should be able to enter data in a spreadsheet like format in the notebook.
+
+  TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells
+
+  ### Collapsed code cells
+
+  There should also be collapsed by default code cells. For example for imports. If you click on it, you should see it.
+  But you could also that it is collapsed by default.
+
+  But I want to be able to search for it though... CTRL+F should find text hidden inside the collapsed cell. Not sure if that is possible in the browser...
+
+  Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!
+
+  ### with blocks
+
+  Idea: A with block should be showned in a notebook like documentation on the web. It should be pretty, and the script code below would
+  be the content of the function of class.
   
   ## Disclaimer
 

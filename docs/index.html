@@ -110,27 +110,14 @@
   </div>
             <div class="scrollable" style="width: 100%;">
               <div class="main">
-                <h1>Table data</h1>
-<p>I want to be able to easily add table data inside the editor.</p>
-<pre><code>testCompile #[2, tag&lt;jome&gt;, tag&lt;/js]
-</code></pre>
-<p>Or even better, I want to allow to enable inside config.jome arrays for tags instead of strings.</p>
-<pre><code>&lt;test-compile&gt;[&lt;jome&gt;#log &quot;Hello world&quot;&lt;/jome&gt;, &lt;js&gt;console.log(&quot;Hello world&quot;)&lt;/js&gt;]&lt;/test-compile&gt;
-</code></pre>
-<p>In config.jome, I say test compile is an array of jome and js.</p>
-<p>So when I do <code>&lt;test-compile&gt;&lt;/test-compile&gt;</code>, it should add underneath a side-by-side data editor allowing me to edit the content.</p>
-<p>It should hide the <code>&lt;test-compile&gt;&lt;/test-compile&gt;</code>, make a header and show the type of the thing inside the header.</p>
-<p>Actually, do I do this for all tags? No, not inline tags like bin, hex, col, ...</p>
-<p>But this should be the case for html and md.</p>
-<p>If I do,</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">content</span> = &lt; <span class="hljs-variable">md</span> &gt;
-  ...
-&lt; /<span class="hljs-variable">md</span> &gt;
-</code></pre>
-<p>It should hide the tag, and it should indent one more indentation before it does not start at the beginning of the line.</p>
-<h1>Jome</h1>
-<p>Jome is an unopiniated programming language. You code using your own style and use a linter in other to share
-standardized code inside a project with other people.</p>
+                <h1>Jome</h1>
+<p>Jome tries to be an unopiniated programming language. You code using your own style and use a linter in other to share
+standardized code with other people.</p>
+<p>You should use a specialized editor (WIP) in order to fully use all it's features such as code evaluation (like Jupyter Notebook)
+and data editing (like spreadsheet with types inside the editor).</p>
+<p>For the near future, it only compiles to JavaScript.</p>
+<h2>Flexible typing system</h2>
+<p>Like the rest of Jome, the typing system is flexible. You can omit them, you can use hard typing or you can use duct typing.</p>
 <h1>Jome v0.1</h1>
 <p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
 has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>
@@ -161,6 +148,44 @@ has some original features. One day, it will have a node structure like in Godot
 <span class="hljs-keyword">import</span> <span class="hljs-variable">navbar</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./navbar.html.jome&#x27;</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">frenchNavbar</span> = <span class="hljs-title function_ invoke__">navbar</span>(<span class="hljs-string">&quot;fr&quot;</span>)
 </code></pre>
+<h2>Notebook like jupyter</h2>
+<p>Jome code can be used to create notebooks like jupyter.</p>
+<p>You can use the .jomn extension to denote that the file is expected to be opened as a notebook.</p>
+<h3>Markdown cells</h3>
+<p>You can create markdown cells by surrounding the content with three hashtags alone on a line <code>###</code>.</p>
+<pre><code class="language-jome">###
+<span class="hljs-title class_">This</span> <span class="hljs-variable">is</span> <span class="hljs-variable">a</span> <span class="hljs-variable">markdown</span> <span class="hljs-variable">cell</span>
+##<span class="hljs-comment"># This level 3 title</span>
+<span class="hljs-title class_">Below</span> <span class="hljs-variable">is</span> <span class="hljs-variable">the</span> <span class="hljs-variable">ending</span>
+###
+</code></pre>
+<h3>Code cells</h3>
+<p>Not all code cells are executed.</p>
+<p>TODO: What keyword to use to mean that it should be executed???</p>
+<pre><code class="language-jome"><span class="hljs-variable">cell</span>
+  <span class="hljs-comment">// ...</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-variable">script</span>
+  <span class="hljs-comment">// ...</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">code</span>
+  <span class="hljs-comment">// ...</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
+<h3>Data cells</h3>
+<p>Jome introducte the idea of data cells in a notebook.</p>
+<p>The idea is that you should be able to enter data in a spreadsheet like format in the notebook.</p>
+<p>TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells</p>
+<h3>Collapsed code cells</h3>
+<p>There should also be collapsed by default code cells. For example for imports. If you click on it, you should see it.
+But you could also that it is collapsed by default.</p>
+<p>But I want to be able to search for it though... CTRL+F should find text hidden inside the collapsed cell. Not sure if that is possible in the browser...</p>
+<p>Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!</p>
+<h3>with blocks</h3>
+<p>Idea: A with block should be showned in a notebook like documentation on the web. It should be pretty, and the script code below would
+be the content of the function of class.</p>
 <h2>Disclaimer</h2>
 <p>The language is very, very young and still contains a log of bugs. I don't recommend using yet for any real project.</p>
 <p>I don't have a list of bugs yet, because there are too many.</p>

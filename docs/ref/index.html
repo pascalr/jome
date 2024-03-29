@@ -110,7 +110,40 @@
   </div>
             <div class="scrollable" style="width: 100%;">
               <div class="main">
-                  <h2 id="lang-ref">Language Reference</h2>
+                <p>Maybe:</p>
+<pre><code class="language-jome">=&gt; <span class="hljs-number">10</span> <span class="hljs-comment">// A line beginning with =&gt; would be an output in jome. I don&#x27;t know if it&#x27;s legal to put the arrow of an arrow function like that, but I think it should always be on the line before, so this would be fine.</span>
+
+<span class="hljs-comment">// Ok, how about I want to show the value, but I want to assign it to a variable too to use it after...?</span>
+
+<span class="hljs-title class_">This</span> <span class="hljs-variable">does</span> <span class="hljs-variable">not</span> <span class="hljs-variable">work</span>... <span class="hljs-title class_">I</span> <span class="hljs-variable">think</span> <span class="hljs-title class_">I</span> <span class="hljs-variable">need</span> <span class="hljs-variable">a</span> <span class="hljs-variable">keyword</span>. <span class="hljs-title class_">Maybe</span> <span class="hljs-variable">eval</span>??? (<span class="hljs-title class_">To</span> <span class="hljs-variable">use</span> <span class="hljs-variable">js</span> <span class="hljs-variable">eval</span> <span class="hljs-variable">you</span> <span class="hljs-variable">would</span> <span class="hljs-variable">use</span> <span class="hljs-built_in function_">#eval</span>? <span class="hljs-variable">or</span> <span class="hljs-built_in function_">#evalJs</span>?)
+
+<span class="hljs-variable">eval</span> <span class="hljs-number">1</span> + <span class="hljs-number">2</span>
+
+<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-variable">eval</span> <span class="hljs-variable">y</span> + <span class="hljs-variable">z</span>
+
+<span class="hljs-comment">// By assigning a value from a eval to a variable, this would be showned as a field of a textarea, which is empty,</span>
+<span class="hljs-comment">// and when you click run it should fill up the thing with the value.</span>
+
+<span class="hljs-comment">// FIXMEEEE: HOW TO SPECIFY HOW TO RENDER THE EVAL???</span>
+
+<span class="hljs-comment">// Eval would take 2 params, the first is the value, the second is the format to show the value?</span>
+
+<span class="hljs-comment">// Be default?</span>
+</code></pre>
+<p>TODO: Tags are simply always xml tags. C'est parfait. C'est mieux que JSON, parce que ça fait la distinction entre attribute et enfant.</p>
+<p>L'éditeur se charge de les afficher pour que ce soit beau.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">html</span> = &lt;<span class="hljs-title class_">Recipe</span>
+  <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;Recipe name&quot;</span>
+  <span class="hljs-variable">portions</span>=<span class="hljs-number">5</span>
+&gt;
+  &lt;<span class="hljs-variable">ing</span> <span class="hljs-variable">qty</span>=<span class="hljs-string">&quot;100mL&quot;</span> <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;water&quot;</span>/&gt;
+  &lt;<span class="hljs-variable">ing</span> <span class="hljs-variable">qty</span>=<span class="hljs-string">&quot;100g&quot;</span> <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;sugar&quot;</span>/&gt;
+&lt;/<span class="hljs-title class_">Recipe</span>&gt;
+</code></pre>
+<p>TODO: I am thinking of using test_compile.jomn as a notebook and use that as a reference for the language.
+Don't include all the very specific tests, but globals tests would be very nice to explain what the language does,
+and this would avoid repeating myself.</p>
+  <h2 id="lang-ref">Language Reference</h2>
 <p>This documentation assumes the reader is familiar with javascript.</p>
 <p>Jome is similar to JavaScript, but there are a few distinctions that you must be aware of.</p>
 <ul>

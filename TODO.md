@@ -1,3 +1,38 @@
+# Table data
+
+  I want to be able to easily add table data inside the editor.
+
+  ```
+  testCompile #[2, tag<jome>, tag</js]
+  ```
+
+  Or even better, I want to allow to enable inside config.jome arrays for tags instead of strings.
+
+  ```
+  <test-compile>[<jome>#log "Hello world"</jome>, <js>console.log("Hello world")</js>]</test-compile>
+  ```
+
+  In config.jome, I say test compile is an array of jome and js.
+
+  So when I do `<test-compile></test-compile>`, it should add underneath a side-by-side data editor allowing me to edit the content.
+
+  It should hide the `<test-compile></test-compile>`, make a header and show the type of the thing inside the header.
+
+  Actually, do I do this for all tags? No, not inline tags like bin, hex, col, ...
+
+  But this should be the case for html and md.
+
+  If I do,
+
+  ```jome
+  let content = < md >
+    ...
+  < /md >
+  ```
+
+  It should hide the tag, and it should indent one more indentation before it does not start at the beginning of the line.
+
+
 TODO: Support "do:" (would be same as do end, but a single operand)
 
 ## Tmp begin
