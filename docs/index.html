@@ -134,7 +134,22 @@ and data editing (like spreadsheet with types inside the editor).</p>
         m
       </div>
       <p>Then we need some code to calculate the result:</p>
-      <div class="code-block"></div>
+      <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">result</span> = <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
+<span class="hljs-keyword">return</span> <span class="hljs-variable">result</span>
+</code></pre>
+
+      <h2>How to use</h2>
+<p>There are three ways to execute the code.</p>
+<p>You do it directly inside the editor in preview mode.</p>
+<p>You can execute it using the jome CLI tool.</p>
+<pre><code class="language-sh">jome torqueCalculator.jome --force=10 --distance=2
+</code></pre>
+<p>You can also import it from another file to execute this code.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-variable">calculateTorque</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./torqueCalculator.jome&#x27;</span>
+
+<span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">calculateTorque</span> force: <span class="hljs-variable">20N</span>, distance: <span class="hljs-variable">1m</span>
+</code></pre>
+
     </div>
     <div class="code" style="width: 50%; overflow: auto;">
       <pre><code class="language-jome"><span class="hljs-comment">###
@@ -163,12 +178,12 @@ You do it directly inside the editor in preview mode.
 
 You can execute it using the jome CLI tool.
 `sh
-jome filename.jome --force=10 --distance=2
+jome torqueCalculator.jome --force=10 --distance=2
 `
 
 You can also import it from another file to execute this code.
 `jome
-import calculateTorque from &#x27;./filename.jome&#x27;
+import calculateTorque from &#x27;./torqueCalculator.jome&#x27;
 
 let torque = calculateTorque force: 20N, distance: 1m
 `
@@ -177,27 +192,6 @@ let torque = calculateTorque force: 20N, distance: 1m
 
     </div>
   </div></p>
-  <h2 id="overview">Overview</h2>
-<pre><code class="language-jome"><span class="hljs-comment">// .jome files are functions</span>
-<span class="hljs-comment">// you can give parameters using a with block</span>
-<span class="hljs-comment">// you can set default values, here it&#x27;s english</span>
-<span class="hljs-keyword">with</span> <span class="hljs-variable">locale</span> = <span class="hljs-string">&#x27;en&#x27;</span> <span class="hljs-keyword">end</span>
-<span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbar&quot;</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;navbrand&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span>&gt;</span>Jome<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/editor&quot;</span>&gt;</span>Editor<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/&quot;</span>&gt;</span>Home<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;&lt;%= locale %&gt;/utils&quot;</span>&gt;</span>Utils<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://github.com/pascalr/jome&quot;</span>&gt;</span>GitHub<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span>
-
-<span class="hljs-comment">// You can then import it from another file or run this file directly to get html</span>
-<span class="language-shell">&lt;sh&gt;jome ./navbar.html.jome fr &gt; ./navbar.html&lt;/sh&gt;</span>
-<span class="hljs-comment">// or</span>
-<span class="hljs-keyword">import</span> <span class="hljs-variable">navbar</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./navbar.html.jome&#x27;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">frenchNavbar</span> = <span class="hljs-title function_ invoke__">navbar</span>(<span class="hljs-string">&quot;fr&quot;</span>)
-</code></pre>
 <h2>Features</h2>
 <p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
 has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>

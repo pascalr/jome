@@ -15,7 +15,28 @@ module.exports = () => {
   \`\`\``);
 
   let overview01 = mdToHtml(`
-`);
+  \`\`\`jome
+  let result = force * distance
+  return result
+  \`\`\``);
+
+  let overview02 = mdToHtml(`
+  ## How to use
+  There are three ways to execute the code.
+
+  You do it directly inside the editor in preview mode.
+
+  You can execute it using the jome CLI tool.
+  \`\`\`sh
+  jome torqueCalculator.jome --force=10 --distance=2
+  \`\`\`
+
+  You can also import it from another file to execute this code.
+  \`\`\`jome
+  import calculateTorque from './torqueCalculator.jome'
+
+  let torque = calculateTorque force: 20N, distance: 1m
+  \`\`\``);
 
   let overviewSrc = mdToHtml(`
   \`\`\`jome
@@ -45,12 +66,12 @@ module.exports = () => {
 
   You can execute it using the jome CLI tool.
   \`sh
-  jome filename.jome --force=10 --distance=2
+  jome torqueCalculator.jome --force=10 --distance=2
   \`
 
   You can also import it from another file to execute this code.
   \`jome
-  import calculateTorque from './filename.jome'
+  import calculateTorque from './torqueCalculator.jome'
 
   let torque = calculateTorque force: 20N, distance: 1m
   \`
@@ -73,12 +94,16 @@ module.exports = () => {
         m
       </div>
       <p>Then we need some code to calculate the result:</p>
-      <div class="code-block"></div>
+      e7fbf80ba4c5b2cb25858cfa78de66e9
+      f3840e772925caf69af5aeea9447c7d1
     </div>
     <div class="code" style="width: 50%; overflow: auto;">
       045a7bfe3dba9ba99b065d6f5aedfd77
     </div>
-  </div>`.replace("045a7bfe3dba9ba99b065d6f5aedfd77", overviewSrc);
+  </div>`
+    .replace("e7fbf80ba4c5b2cb25858cfa78de66e9", overview01)
+    .replace("f3840e772925caf69af5aeea9447c7d1", overview02)
+    .replace("045a7bfe3dba9ba99b065d6f5aedfd77", overviewSrc);
 
   let content = mdToHtml(`
 
@@ -97,30 +122,6 @@ module.exports = () => {
   Preview mode on the left, and edit mode on the right.
 
   bce059749d61c1c247c303d0118d0d53
-
-  <h2 id="overview">Overview</h2>
-
-  \`\`\`jome
-  // .jome files are functions
-  // you can give parameters using a with block
-  // you can set default values, here it's english
-  with locale = 'en' end
-  return <html>
-    <div class="navbar">
-      <span class="navbrand" href="#">Jome</span>
-      <a href="\<%= locale %>/editor">Editor</a>
-      <a href="\<%= locale %>/">Home</a>
-      <a href="\<%= locale %>/utils">Utils</a>
-      <a href="https://github.com/pascalr/jome">GitHub</a>
-    </div>
-  </html>
-
-  // You can then import it from another file or run this file directly to get html
-  <sh>jome ./navbar.html.jome fr > ./navbar.html</sh>
-  // or
-  import navbar from './navbar.html.jome'
-  let frenchNavbar = navbar("fr")
-  \`\`\`
 
   ## Features
 

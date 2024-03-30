@@ -17,7 +17,29 @@ let PARTIAL = <md>
 </md>
 
 let overview01 = <md>
+  ```jome
+  let result = force * distance
+  return result
+  ```
+</md>
 
+let overview02 = <md>
+  ## How to use
+  There are three ways to execute the code.
+
+  You do it directly inside the editor in preview mode.
+
+  You can execute it using the jome CLI tool.
+  ```sh
+  jome torqueCalculator.jome --force=10 --distance=2
+  ```
+
+  You can also import it from another file to execute this code.
+  ```jome
+  import calculateTorque from './torqueCalculator.jome'
+
+  let torque = calculateTorque force: 20N, distance: 1m
+  ```
 </md>
 
 let overviewSrc = <md>
@@ -48,12 +70,12 @@ let overviewSrc = <md>
 
   You can execute it using the jome CLI tool.
   `sh
-  jome filename.jome --force=10 --distance=2
+  jome torqueCalculator.jome --force=10 --distance=2
   `
 
   You can also import it from another file to execute this code.
   `jome
-  import calculateTorque from './filename.jome'
+  import calculateTorque from './torqueCalculator.jome'
 
   let torque = calculateTorque force: 20N, distance: 1m
   `
@@ -77,7 +99,8 @@ let overview = <html>
         m
       </div>
       <p>Then we need some code to calculate the result:</p>
-      <div class="code-block"></div>
+      <%s overview01 %>
+      <%s overview02 %>
     </div>
     <div class="code" style="width: 50%; overflow: auto;">
       <%s overviewSrc %>
@@ -102,30 +125,6 @@ let content = <md>
   Preview mode on the left, and edit mode on the right.
 
   <%s overview %>
-
-  <h2 id="overview">Overview</h2>
-
-  ```jome
-  // .jome files are functions
-  // you can give parameters using a with block
-  // you can set default values, here it's english
-  with locale = 'en' end
-  return <html>
-    <div class="navbar">
-      <span class="navbrand" href="#">Jome</span>
-      <a href="\<%= locale %>/editor">Editor</a>
-      <a href="\<%= locale %>/">Home</a>
-      <a href="\<%= locale %>/utils">Utils</a>
-      <a href="https://github.com/pascalr/jome">GitHub</a>
-    </div>
-  </html>
-
-  // You can then import it from another file or run this file directly to get html
-  <sh>jome ./navbar.html.jome fr > ./navbar.html</sh>
-  // or
-  import navbar from './navbar.html.jome'
-  let frenchNavbar = navbar("fr")
-  ```
 
   ## Features
 
