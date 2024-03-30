@@ -30,6 +30,18 @@ module.exports = () => {
     flex-direction: column;
   }
 
+  .code {
+    background-color: #dce0e8;
+    padding: 1em;
+    border-radius: 4px;
+  }
+
+  .preview {
+    background-color: #e8dcdc;
+    padding: 1em;
+    border-radius: 4px;
+  }
+
   pre {
     background-color: #dce0e8;
     padding: 1em;

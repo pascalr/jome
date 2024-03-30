@@ -16,6 +16,34 @@ let PARTIAL = <md>
   ```
 </md>
 
+let overview01 = <md>
+
+</md>
+
+let overviewSrc = <md>
+  ```jome
+  ###
+  # Overview
+  This is a markdown comment. It is shown as HTML when previewing.
+  ###
+  ```
+</md>
+
+let overview = <html>
+  <div style="display: flex; width: calc(100vw - 340px);">
+    <div class="preview" style="width: 50%; overflow: auto;">
+      <h1>Overview</h1>
+      <p>Jome code can be .</p>
+      <p>This is a markdown comment. It is shown as HTML when previewing.</p>
+      <p>To do something useful, we need some inputs:</p>
+      <div class="code-block"></div>
+    </div>
+    <div class="code" style="width: 50%; overflow: auto;">
+      <%s overviewSrc %>
+    </div>
+  </div>
+</html>
+
 let content = <md>
 
   # Jome
@@ -27,6 +55,12 @@ let content = <md>
   and data editing (like spreadsheet with types inside the editor).
 
   For the near future, it only compiles to JavaScript.
+
+  <h2 id="overview">Overview V2</h2>
+
+  Preview mode on the left, and edit mode on the right.
+
+  <%s overview %>
 
   <h2 id="overview">Overview</h2>
 
