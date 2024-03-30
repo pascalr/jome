@@ -23,8 +23,40 @@ let overview01 = <md>
 let overviewSrc = <md>
   ```jome
   ###
-  # Overview
-  This is a markdown comment. It is shown as HTML when previewing.
+  # Torque Calculator Example
+
+  To do something useful, we need some **inputs**:
+  ###
+
+  with
+    Number<N> force
+    Number<m> distance
+  end
+
+  ###
+  Then we need some code to calculate the result:
+  ###
+
+  let result = force * distance
+  return result
+
+  ###
+  ## How to use
+  There are three ways to execute the code.
+
+  You do it directly inside the editor in preview mode.
+
+  You can execute it using the jome CLI tool.
+  `sh
+  jome filename.jome --force=10 --distance=2
+  `
+
+  You can also import it from another file to execute this code.
+  `jome
+  import calculateTorque from './filename.jome'
+
+  let torque = calculateTorque force: 20N, distance: 1m
+  `
   ###
   ```
 </md>
@@ -32,10 +64,19 @@ let overviewSrc = <md>
 let overview = <html>
   <div style="display: flex; width: calc(100vw - 340px);">
     <div class="preview" style="width: 50%; overflow: auto;">
-      <h1>Overview</h1>
-      <p>Jome code can be .</p>
-      <p>This is a markdown comment. It is shown as HTML when previewing.</p>
-      <p>To do something useful, we need some inputs:</p>
+      <h1>Torque Calculator Example</h1>
+      <p>To do something useful, we need some <b>inputs</b>:</p>
+      <div class="input-container">
+        <label for="input-field">force:</label>
+        <input type="text" id="input-field" name="input-field">
+        N
+      </div>
+      <div class="input-container">
+        <label for="input-field">distance:</label>
+        <input type="text" id="input-field" name="input-field">
+        m
+      </div>
+      <p>Then we need some code to calculate the result:</p>
       <div class="code-block"></div>
     </div>
     <div class="code" style="width: 50%; overflow: auto;">
@@ -56,7 +97,7 @@ let content = <md>
 
   For the near future, it only compiles to JavaScript.
 
-  <h2 id="overview">Overview V2</h2>
+  <h2 id="overview">Overview</h2>
 
   Preview mode on the left, and edit mode on the right.
 

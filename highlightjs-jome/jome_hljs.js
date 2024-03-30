@@ -138,16 +138,17 @@ const highlighter = function(hljs) {
       String("'", "'"),
       String('`', '`'),
       String('@"', '"'),
-      PATH,
       {
         scope: "comment",
         variants: [
           // JSDOC_COMMENT,
           hljs.C_BLOCK_COMMENT_MODE,
           hljs.C_LINE_COMMENT_MODE,
-          hljs.COMMENT('# ', '$',)
+          hljs.COMMENT('# ', '$',),
+          hljs.COMMENT('###\n', '###\n',)
         ]
       },
+      PATH,
       TYPES,
       NUMBER,
       KEYWORD,
