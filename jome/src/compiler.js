@@ -107,8 +107,8 @@ class Compiler {
       throw new Error("Can't compile and save missing file " + absPath)
     }
 
-    if (!(absPath.endsWith('.jome')||absPath.endsWith('.jomm')||absPath.endsWith('.jomn'))) {
-      throw new Error('Cannot compile file without .jome, .jomn or .jomm extension. ' + absPath);
+    if (!(absPath.endsWith('.jome')||absPath.endsWith('.jomm')||absPath.endsWith('.jomn')||absPath.endsWith('.jomd'))) {
+      throw new Error('Cannot compile file without .jome, .jomn, .jomd or .jomm extension. ' + absPath);
     }
   
     // Read the contents of the file synchronously

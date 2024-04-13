@@ -51,11 +51,13 @@ module.exports = () => {
     Number<m> distance
   end
 
-  ###
-  Then we need some code to calculate the result:
-  ###
+  # Then we need some code to calculate the result:
 
-  let result = force * distance
+  // We use a jome tag because it's a script that can be run
+  <jome >
+    let result = force * distance
+    #log \`Result: \${result}\`
+  </jome >
   return result
 
   ###

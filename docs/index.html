@@ -163,11 +163,13 @@ To do something useful, we need some **inputs**:
   <span class="hljs-title class_">Number</span>&lt;<span class="hljs-variable">m</span>&gt; <span class="hljs-variable">distance</span>
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-comment">###
-Then we need some code to calculate the result:
-###
-</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">result</span> = <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
+<span class="hljs-comment"># Then we need some code to calculate the result:</span>
+
+<span class="hljs-comment">// We use a jome tag because it&#x27;s a script that can be run</span>
+&lt;<span class="hljs-variable">jome</span> &gt;
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">result</span> = <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
+  <span class="hljs-built_in function_">#log</span> <span class="hljs-string">`Result: ${result}`</span>
+&lt;/<span class="hljs-variable">jome</span> &gt;
 <span class="hljs-keyword">return</span> <span class="hljs-variable">result</span>
 
 <span class="hljs-comment">###

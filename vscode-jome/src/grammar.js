@@ -79,6 +79,7 @@ let grammar = {
   fileTypes: [
     ".jome",
     ".jomm",
+    ".jomd",
     ".jomn"
   ],
   patterns: [

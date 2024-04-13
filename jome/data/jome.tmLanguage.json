@@ -5,6 +5,7 @@
   "fileTypes": [
     ".jome",
     ".jomm",
+    ".jomd",
     ".jomn"
   ],
   "patterns": [

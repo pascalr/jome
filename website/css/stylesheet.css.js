@@ -31,15 +31,15 @@ module.exports = () => {
   }
 
   .code {
-    background-color: #dce0e8;
+    border: 2px solid black;
     padding: 1em;
-    border-radius: 4px;
+    border-radius: 1em;
   }
 
   .preview {
-    background-color: #e8dcdc;
+    border: 2px solid black;
     padding: 1em;
-    border-radius: 4px;
+    border-radius: 1em;
   }
 
   pre {
