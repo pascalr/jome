@@ -177,14 +177,16 @@ let content = <md>
 
   ### Markdown cells
 
-  You can create markdown cells by surrounding the content with three hashtags alone on a line `###`.
+  You can create markdown cells by surrounding the content with an hashtag and a star `#* This is a *markdown* cell *#`.
+
+  Note: ### is deprecated. Starting and ending with three hastags alone on a line is deprecated because it's confusing when you don't know if it's a start or an end.
 
   ```jome
-  ###
+  #*
   This is a markdown cell
   ### This level 3 title
   Below is the ending
-  ###
+  *#
   ```
 
   ### Code cells

@@ -99,11 +99,11 @@ let grammar = {
           type: "MD_CELL", // Markdown cell (for notebook like jupyter)
           strict: true,
           name: "meta.md-cell.jome",
-          begin: `^(###)(\r\n|\n|$)`,
+          begin: `^((###)|(#\\*))(\r\n|\n|$)`,
           beginCaptures: {
             1: { name: "punctuation.definition.tag.md-cell.begin.jome" },
           },
-          end: "^(###)(\r\n|\n|$)",
+          end: "^((###)|(\\*#))(\r\n|\n|$)",
           endCaptures: {
             1: { name: "punctuation.definition.tag.md-cell.end.jome" },
           },

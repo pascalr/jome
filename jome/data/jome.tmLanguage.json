@@ -31,8 +31,8 @@
     "statement": {
       "patterns": [
         {
-          "begin": "^(###)(\r\n|\n|$)",
-          "end": "^(###)(\r\n|\n|$)",
+          "begin": "^((###)|(#\\*))(\r\n|\n|$)",
+          "end": "^((###)|(\\*#))(\r\n|\n|$)",
           "patterns": [
             {
               "include": "text.html.markdown"
