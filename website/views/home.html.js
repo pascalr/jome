@@ -119,6 +119,28 @@ module.exports = () => {
 
   For the near future, it only compiles to JavaScript.
 
+  ## WIP
+
+  You can use an hashtag for utils shortcut. You define it using import * from 'lib' // or './file'
+
+  \`\`\`
+  import * from 'lodash'
+
+  let list = [1,2,3,4].#reduce((s,i) => s+i, 0) // TODO: Changer d'exemple parce qu'on peut simplement faire reduce...
+  \`\`\`
+
+  Using multiple import like this is not allowed because it would be annoying to know where the function is coming from and this avoids name conflicts.
+
+  If you want multiple import, then create a file or library and join the import and export them.
+
+  \`\`\`
+  export * from 'ThingA';
+  export * from 'ThingB';
+  export * from 'ThingC';
+  \`\`\`
+
+  Ouin, finalement ce n'est pas super, parce que ce n'est pas plus clair ainsi, c'est juste un truc de plus... mais bon cette syntaxe est déjà accepté donc c'est OK
+
   <h2 id="overview">Overview</h2>
 
   Preview mode on the left, and edit mode on the right.

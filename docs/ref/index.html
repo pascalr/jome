@@ -110,7 +110,13 @@
   </div>
             <div class="scrollable" style="width: 100%;">
               <div class="main">
-                <p>Maybe:</p>
+                <p>.jomd extension is used to store data in the Jome language. The only difference with .jome, is that the last line of code is returned implicitely. If you use
+a .jome and use return on the last line, it is the same thing. NOT THE ONLY DIFFERENCE, SEE BELOW, DIFFERENT FOR IMPORT TOO, IMPORT IS DATA, NOT FUNCTION...</p>
+<p>Wait, what about, import someData from './some_file.jomd', here I would expect someData to be some data, but it's a function because it is the same thing
+as .jome... Or maybe when doing this, call the function directly.</p>
+<p>But for #('./some_file.jomd') it works with this syntax.
+let someData = #('./some_file.jomd')</p>
+<p>Maybe:</p>
 <pre><code class="language-jome">=&gt; <span class="hljs-number">10</span> <span class="hljs-comment">// A line beginning with =&gt; would be an output in jome. I don&#x27;t know if it&#x27;s legal to put the arrow of an arrow function like that, but I think it should always be on the line before, so this would be fine.</span>
 
 <span class="hljs-comment">// Ok, how about I want to show the value, but I want to assign it to a variable too to use it after...?</span>
