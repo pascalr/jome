@@ -6,6 +6,7 @@ module.exports = () => {
     <a href="${ROOT}/getting_started">Getting started</a>
     <a href="${ROOT}/ref">Language Reference</a>
     <a href="${ROOT}/ex">Examples</a>
+    <a href="${ROOT}/jome_lib">JomeLib</a>
     <a href="${ROOT}/in_depth">In depth</a>
     <a href="${ROOT}/editor">Editor</a>
     <a href="https://github.com/pascalr/jome">GitHub</a>

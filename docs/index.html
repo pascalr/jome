@@ -21,6 +21,7 @@
     <a href="/jome/getting_started">Getting started</a>
     <a href="/jome/ref">Language Reference</a>
     <a href="/jome/ex">Examples</a>
+    <a href="/jome/jome_lib">JomeLib</a>
     <a href="/jome/in_depth">In depth</a>
     <a href="/jome/editor">Editor</a>
     <a href="https://github.com/pascalr/jome">GitHub</a>
@@ -97,7 +98,6 @@
         <li><a href="/jome/TODO">createjomeapp</a></li>
         <li><a href="/jome/TODO">config.jome</a></li>
         <li><a href="/jome/TODO">CLI</a></li>
-        <li><a href="/jome/utils">Utils</a></li>
         <li><a href="/jome/formats">Formats</a></li>
         <li><a href="/jome/lib">Librairies</a></li>
         <ul class="nav-list nav-sub-sub">
@@ -221,13 +221,14 @@ has some original features. One day, it will have a node structure like in Godot
 <p>Jome code can be used to create notebooks like jupyter.</p>
 <p>You can use the .jomn extension to denote that the file is expected to be opened as a notebook.</p>
 <h3>Markdown cells</h3>
-<p>You can create markdown cells by surrounding the content with three hashtags alone on a line <code>###</code>.</p>
-<pre><code class="language-jome"><span class="hljs-comment">###
-This is a markdown cell
-### This level 3 title
-Below is the ending
-###
-</span></code></pre>
+<p>You can create markdown cells by surrounding the content with an hashtag and a star <code>#* This is a *markdown* cell *#</code>.</p>
+<p>Note: ### is deprecated. Starting and ending with three hastags alone on a line is deprecated because it's confusing when you don't know if it's a start or an end.</p>
+<pre><code class="language-jome">#*
+<span class="hljs-title class_">This</span> <span class="hljs-variable">is</span> <span class="hljs-variable">a</span> <span class="hljs-variable">markdown</span> <span class="hljs-variable">cell</span>
+##<span class="hljs-comment"># This level 3 title</span>
+<span class="hljs-title class_">Below</span> <span class="hljs-variable">is</span> <span class="hljs-variable">the</span> <span class="hljs-variable">ending</span>
+*#
+</code></pre>
 <h3>Code cells</h3>
 <p>Not all code cells are executed.</p>
 <p>TODO: What keyword to use to mean that it should be executed???</p>

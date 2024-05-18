@@ -7,10 +7,6 @@ module.exports = () => {
 
   TODO
 
-  ## Utils
-
-  All the utils
-
   ## Formats
 
   All the default formats`);

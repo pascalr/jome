@@ -36,6 +36,7 @@ of the source file.
 #build(#./views/librairies.html.jome, #../docs/lib/index.html, :force)
 #build(#./views/utils.html.jome, #../docs/utils/index.html, :force)
 #build(#./views/formats.html.jome, #../docs/formats/index.html, :force)
+#build(#./views/jome_lib.html.jome, #../docs/jome_lib/index.html, :force)
 #build(#./views/v0_2.html.jome, #../docs/v0.2/index.html, :force)
 #build(#./views/v0_1.html.jome, #../docs/ref/index.html, :force)
 #build(#./views/v0_0.html.jome, #../docs/v0.0/index.html, :force)
