@@ -10,6 +10,49 @@ let content = <md>
   
   It is like a playlist. It gives you something to get started quickly. Over time, you will probably make your own playlist.
 
+  <h2 id="builtins">Built-Ins</h2>
+
+  The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.
+
+  For the complete list of utils: see the [utils page](<%= ROOT %>/utils).
+
+  ```jome
+  // A constant
+  let x = #PI/2
+  let e = #e // Euler's number
+
+  // A function
+  let angle = #sin(x)
+  let logarithmic = #log10(2)
+  #log("The angle is:", angle) // #log is a shorthand for console.log
+  ```
+
+  By addind a dot before the hashtag, you can call the function with the preceding token as an argument.
+
+  ```jome
+  // A function acting upon a variable
+  let keys = obj.#keys // same as #keys(obj) or Object.keys(obj)
+  ```
+
+  Utils include most things global in javascript and useful utils like in underscore.js.
+  
+  Math: #PI, #sin, #cos, #tan, ..., #rand?
+  console: #log, ...
+  process: #argv, #env, #cwd...
+  underscore.js: #map, #reduce, ...
+
+  For functions that have a sync and async version, use the exclamation mark after to use the sync version.
+  ```jome
+  #write! 'Some content', to: './somefile.txt', overwrite: true
+  ```
+
+  ### Piping
+
+  You can write the input to a function call to the left by using the operators `:.`, `|>` or `.#`
+
+  `.#` refer to built-in functions which are always available. The other two will use local functions or global ones
+  defined in the file `config.jome`.
+
 </md>
 
 return Webpage('JomeLib', content).render()

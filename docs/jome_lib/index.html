@@ -114,6 +114,34 @@
 <p>JomeLib is the opiniated part of Jome. It gives access to a lot of utilities to help you get started.</p>
 <p>It is a list of functions and constants.</p>
 <p>It is like a playlist. It gives you something to get started quickly. Over time, you will probably make your own playlist.</p>
+  <h2 id="builtins">Built-Ins</h2>
+<p>The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.</p>
+<p>For the complete list of utils: see the <a href="/jome/utils">utils page</a>.</p>
+<pre><code class="language-jome"><span class="hljs-comment">// A constant</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-built_in variable_">#PI</span>/<span class="hljs-number">2</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">e</span> = <span class="hljs-built_in function_">#e</span> <span class="hljs-comment">// Euler&#x27;s number</span>
+
+<span class="hljs-comment">// A function</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">angle</span> = <span class="hljs-built_in function_">#sin</span>(<span class="hljs-variable">x</span>)
+<span class="hljs-keyword">let</span> <span class="hljs-variable">logarithmic</span> = <span class="hljs-built_in function_">#log10</span>(<span class="hljs-number">2</span>)
+<span class="hljs-built_in function_">#log</span>(<span class="hljs-string">&quot;The angle is:&quot;</span>, <span class="hljs-variable">angle</span>) <span class="hljs-comment">// #log is a shorthand for console.log</span>
+</code></pre>
+<p>By addind a dot before the hashtag, you can call the function with the preceding token as an argument.</p>
+<pre><code class="language-jome"><span class="hljs-comment">// A function acting upon a variable</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">keys</span> = <span class="hljs-variable">obj</span>.<span class="hljs-built_in function_">#keys</span> <span class="hljs-comment">// same as #keys(obj) or Object.keys(obj)</span>
+</code></pre>
+<p>Utils include most things global in javascript and useful utils like in underscore.js.</p>
+<p>Math: #PI, #sin, #cos, #tan, ..., #rand?
+console: #log, ...
+process: #argv, #env, #cwd...
+underscore.js: #map, #reduce, ...</p>
+<p>For functions that have a sync and async version, use the exclamation mark after to use the sync version.</p>
+<pre><code class="language-jome"><span class="hljs-built_in function_">#write!</span> <span class="hljs-string">&#x27;Some content&#x27;</span>, to: <span class="hljs-string">&#x27;./somefile.txt&#x27;</span>, overwrite: <span class="hljs-literal">true</span>
+</code></pre>
+<h3>Piping</h3>
+<p>You can write the input to a function call to the left by using the operators <code>:.</code>, <code>|&gt;</code> or <code>.#</code></p>
+<p><code>.#</code> refer to built-in functions which are always available. The other two will use local functions or global ones
+defined in the file <code>config.jome</code>.</p>
 
               </div>
             </div>

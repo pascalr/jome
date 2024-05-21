@@ -73,7 +73,7 @@ module.exports = () => {
   Jome is similar to JavaScript, but there are a few distinctions that you must be aware of.
   - Execution is different: You execute .jome files using the jome CLI.
   - The [syntax](#syntax) is more permissive. You can have a syntax like javascript or something similar to the ruby programming language.
-  - There are a lot of [builtin functions and constants](#utils). They start with an hashtag (ex: #log is the same as console.log)
+  - You can use a default library. Functions and constants become available using the hashtag. TODO
   - There are [heredocs](#heredocs) to include code from other languages (html, css, ...) written as xml tags.
 
   <h2 id="syntax">Syntax - WIP</h2>
@@ -89,7 +89,7 @@ module.exports = () => {
   \`\`\`jome
   class Person
     sayHello() {
-      #log 'Hello!' // #log is a util shorthand of console.log
+      console.log 'Hello!'
     }
   end
   \`\`\`
@@ -99,7 +99,7 @@ module.exports = () => {
   \`\`\`jome
   class Person {
     def sayHello
-      #log 'Hello!' // #log is a util shorthand of console.log
+      console.log 'Hello!'
     end
   }
   \`\`\`
@@ -130,13 +130,14 @@ module.exports = () => {
   You can use a colon prefix with an exclamation mark at the end to make a boolean entry equal true.
 
   \`\`\`jome
-  #write "Some text", to: "./someFile.txt", :force! // same as force: true
+  doWrite "Some text", to: "./someFile.txt", :force! // same as force: true
   \`\`\`
 
   You can use \`do\` ... \`end\` syntax at the end of a function call to pass a function as a parameter.
   The syntax is similar to ruby. You pass arguments between vertical bars.
 
   \`\`\`jome
+  import * from 'jome-lib'
   [1,2,3,4,5].#each do |i|
     #log i
   end
@@ -152,6 +153,7 @@ module.exports = () => {
   The difference between \`:.\` and \`|>\` is the precedence. \`:.\` has the highest precedence same as \`.\`
 
   \`\`\`jome
+  import * from 'jome-lib'
   obj.#keys.#filter(k => k[0] === 'p').#each do |k|
     // ...
   end
@@ -194,6 +196,7 @@ module.exports = () => {
   You can use \`do ... end\` to create functions. You pass arguments between vertical bars.
 
   \`\`\`jome
+  import * from 'jome-lib'
   [1,2,3,4,5].#each do |i|
     #log i
   end
@@ -278,42 +281,6 @@ module.exports = () => {
   
   \`\`\`jome
   someFunc :someArg // same as someFunc({someArg})
-  \`\`\`
-
-  <h2 id="builtins">Built-Ins</h2>
-
-  The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.
-
-  For the complete list of utils: see the [utils page](${ROOT}/utils).
-
-  \`\`\`jome
-  // A constant
-  let x = #PI/2
-  let e = #e // Euler's number
-
-  // A function
-  let angle = #sin(x)
-  let logarithmic = #log10(2)
-  #log("The angle is:", angle) // #log is a shorthand for console.log
-  \`\`\`
-
-  By addind a dot before the hashtag, you can call the function with the preceding token as an argument.
-
-  \`\`\`jome
-  // A function acting upon a variable
-  let keys = obj.#keys // same as #keys(obj) or Object.keys(obj)
-  \`\`\`
-
-  Utils include most things global in javascript and useful utils like in underscore.js.
-  
-  Math: #PI, #sin, #cos, #tan, ..., #rand?
-  console: #log, ...
-  process: #argv, #env, #cwd...
-  underscore.js: #map, #reduce, ...
-
-  For functions that have a sync and async version, use the exclamation mark after to use the sync version.
-  \`\`\`jome
-  #write! 'Some content', to: './somefile.txt', overwrite: true
   \`\`\`
 
   ## Assignment - TODO WIP
@@ -779,6 +746,22 @@ module.exports = () => {
   let data = #...("./some_data")
   \`\`\`
 
+  ### Jome global object
+
+  Create a global object jome, much like window, to contain jome specific data.
+
+  Maybe jome object would be the way to be language agnostic.
+
+  Create an API that people can use. So for example, you do jome.log instead of console.log, this way it works when compiling to python it would use print.
+
+  jome.evt => refers to this inside an event
+  jome.window => refers to the window
+  jome.params; Deprecated?
+  jome.env // to set environment variables (process.env in js)
+  jome.global => to set global variables (globalThis in js)
+
+  You can also use the configuration file config.jome to define global variables or functions. See [config.jome](#config-jome).
+
   ### Instance properties (@)
 
   One of the objective of Jome is to remove the weird thing that is this.
@@ -810,8 +793,8 @@ module.exports = () => {
   TODO: Use the keyword self instead of this, this makes it clear that it refers to self inside a class,
   and that it is a little different than this in javascript in that it always refer to the class instance.
 
-  Use #evt to get current event
-  Use window or #window to get the window
+  Use jome.evt to get current event
+  Use window or jome.window to get the window
 
   FIXME: This clashes with decorators. But it can still work too I believe. Decorators are before class and method definitions. Attribute accessors are inside.
 
@@ -938,7 +921,7 @@ module.exports = () => {
 
   class Person
     @username: string = "Bigdaddy007" // same as doing @username = "Bigdaddy007" inside the constructor
-    @username?: string = "Bigdaddy007" // same as doing @username = #params.username || "Bigdaddy007" inside the constructor
+    @username?: string = "Bigdaddy007" // same as doing @username = jome.params.username || "Bigdaddy007" inside the constructor
     @usersame // does nothing
     @username // same as doing @username = null inside the constructor
     
@@ -1075,11 +1058,11 @@ module.exports = () => {
   \`\`\`jome
   // Utilise la syntaxe comme ruby
   def sayHello
-    #log('Hello')
+    console.log('Hello')
   end
 
   def sayHelloTo(name)
-    #log("Hello! {name}")
+    console.log("Hello! {name}")
   end
   \`\`\`
 
@@ -1092,6 +1075,7 @@ module.exports = () => {
   It can be standalone in a .jome file which means they are arguments that can be given to the file function.
   
   \`\`\`jome
+  import * from 'jome-lib'
   with src, dest end
   #cp src, dest
   \`\`\`
@@ -1144,9 +1128,9 @@ module.exports = () => {
 
   \`\`\`jome
   def debug = |msg along code| => (
-    #log(code+':', msg)
+    console.log(code+':', msg)
   )
-  debug(nomDeVariable) // => #log("nomDeVariable:", nomDeVariable)
+  debug(nomDeVariable) // => console.log("nomDeVariable:", nomDeVariable)
 
   // When calling in javascript, you need to supply both arguments
   debug(nomDeVariable, "nomDeVariable")
@@ -1219,25 +1203,6 @@ module.exports = () => {
   let r = x if y // si x, alors y, sinon undefined
   let r = \`{x ? y}\` // si x, alors \`{y}\`, sinon \`null\`
   let r = \`{x if y}\` // si x, alors \`{y}\`, sinon \`\` J'aimerais vraiment ça!!!!!!!!!!!!!!
-
-  ## Environment variables
-
-  Use #env for environment variables
-
-  \`\`\`jome
-  #env.MY_ENV_VAR = 'foo' // => process.env.MY_ENV_VAR = 'foo'
-  \`\`\`
-
-  ## Global variables
-
-  Global variables can be set like in javascript with the \`globalThis\` global property. You can also use the #global util.
-  
-  \`\`\`jome
-  globalThis.MY_GLOBAL_VARIABLE = "some value"
-  #global.MY_OTHER_GLOBAL_VARIABLE = "some value"
-  \`\`\`
-
-  You can also use the configuration file config.jome to define global variables or functions. See [config.jome](#config-jome).
 
   ## Chaining methods
 
