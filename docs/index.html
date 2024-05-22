@@ -116,19 +116,6 @@ standardized code with other people.</p>
 <p>You should use a specialized editor (WIP) in order to fully use all it's features such as code evaluation (like Jupyter Notebook)
 and data editing (like spreadsheet with types inside the editor).</p>
 <p>For the near future, it only compiles to JavaScript.</p>
-<h2>WIP</h2>
-<p>You can use an hashtag for utils shortcut. You define it using import * from 'lib' // or './file'</p>
-<pre><code>import * from 'lodash'
-
-let list = [1,2,3,4].#reduce((s,i) =&gt; s+i, 0) // TODO: Changer d'exemple parce qu'on peut simplement faire reduce...
-</code></pre>
-<p>Using multiple import like this is not allowed because it would be annoying to know where the function is coming from and this avoids name conflicts.</p>
-<p>If you want multiple import, then create a file or library and join the import and export them.</p>
-<pre><code>export * from 'ThingA';
-export * from 'ThingB';
-export * from 'ThingC';
-</code></pre>
-<p>Ouin, finalement ce n'est pas super, parce que ce n'est pas plus clair ainsi, c'est juste un truc de plus... mais bon cette syntaxe est déjà accepté donc c'est OK</p>
   <h2 id="overview">Overview</h2>
 <p>Preview mode on the left, and edit mode on the right.</p>
 <p>
@@ -165,12 +152,12 @@ export * from 'ThingC';
 
     </div>
     <div class="code" style="width: 50%; overflow: auto;">
-      <pre><code class="language-jome"><span class="hljs-comment">###
+      <pre><code class="language-jome"><span class="hljs-comment">#*
 # Torque Calculator Example
 
 To do something useful, we need some **inputs**:
-###
-</span>
+*#</span>
+
 <span class="hljs-keyword">with</span>
   <span class="hljs-title class_">Number</span>&lt;<span class="hljs-title class_">N</span>&gt; <span class="hljs-variable">force</span>
   <span class="hljs-title class_">Number</span>&lt;<span class="hljs-variable">m</span>&gt; <span class="hljs-variable">distance</span>
@@ -185,7 +172,7 @@ To do something useful, we need some **inputs**:
 &lt;/<span class="hljs-variable">jome</span> &gt;
 <span class="hljs-keyword">return</span> <span class="hljs-variable">result</span>
 
-<span class="hljs-comment">###
+<span class="hljs-comment">#*
 ## How to use
 There are three ways to execute the code.
 
@@ -202,8 +189,8 @@ import calculateTorque from &#x27;./torqueCalculator.jome&#x27;
 
 let torque = calculateTorque force: 20N, distance: 1m
 `
-###
-</span></code></pre>
+*#</span>
+</code></pre>
 
     </div>
   </div></p>
@@ -223,11 +210,11 @@ has some original features. One day, it will have a node structure like in Godot
 <h3>Markdown cells</h3>
 <p>You can create markdown cells by surrounding the content with an hashtag and a star <code>#* This is a *markdown* cell *#</code>.</p>
 <p>Note: ### is deprecated. Starting and ending with three hastags alone on a line is deprecated because it's confusing when you don't know if it's a start or an end.</p>
-<pre><code class="language-jome">#*
-<span class="hljs-title class_">This</span> <span class="hljs-variable">is</span> <span class="hljs-variable">a</span> <span class="hljs-variable">markdown</span> <span class="hljs-variable">cell</span>
-##<span class="hljs-comment"># This level 3 title</span>
-<span class="hljs-title class_">Below</span> <span class="hljs-variable">is</span> <span class="hljs-variable">the</span> <span class="hljs-variable">ending</span>
-*#
+<pre><code class="language-jome"><span class="hljs-comment">#*
+This is a markdown cell
+### This level 3 title
+Below is the ending
+*#</span>
 </code></pre>
 <h3>Code cells</h3>
 <p>Not all code cells are executed.</p>
@@ -256,6 +243,19 @@ But you could also that it is collapsed by default.</p>
 <h3>with blocks</h3>
 <p>Idea: A with block should be showned in a notebook like documentation on the web. It should be pretty, and the script code below would
 be the content of the function of class.</p>
+<h2>WIP - Base library</h2>
+<p>You can use an hashtag for utils shortcut. You define it using import * from 'lib' // or './file'</p>
+<pre><code>import * from 'lodash'
+
+let list = [1,2,3,4].#reduce((s,i) =&gt; s+i, 0) // TODO: Changer d'exemple parce qu'on peut simplement faire reduce...
+</code></pre>
+<p>Using multiple import like this is not allowed because it would be annoying to know where the function is coming from and this avoids name conflicts.</p>
+<p>If you want multiple import, then create a file or library and join the import and export them.</p>
+<pre><code>export * from 'ThingA';
+export * from 'ThingB';
+export * from 'ThingC';
+</code></pre>
+<p>Ouin, finalement ce n'est pas super, parce que ce n'est pas plus clair ainsi, c'est juste un truc de plus... mais bon cette syntaxe est déjà accepté donc c'est OK</p>
 <h2>Disclaimer</h2>
 <p>The language is very, very young and still contains a log of bugs. I don't recommend using yet for any real project.</p>
 <p>I don't have a list of bugs yet, because there are too many.</p>

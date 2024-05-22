@@ -44,11 +44,11 @@ let overview02 = <md>
 
 let overviewSrc = <md>
   ```jome
-  ###
+  #*
   # Torque Calculator Example
 
   To do something useful, we need some **inputs**:
-  ###
+  *#
 
   with
     Number<N> force
@@ -64,7 +64,7 @@ let overviewSrc = <md>
   </jome >
   return result
 
-  ###
+  #*
   ## How to use
   There are three ways to execute the code.
 
@@ -81,7 +81,7 @@ let overviewSrc = <md>
 
   let torque = calculateTorque force: 20N, distance: 1m
   `
-  ###
+  *#
   ```
 </md>
 
@@ -121,28 +121,6 @@ let content = <md>
   and data editing (like spreadsheet with types inside the editor).
 
   For the near future, it only compiles to JavaScript.
-
-  ## WIP
-
-  You can use an hashtag for utils shortcut. You define it using import * from 'lib' // or './file'
-
-  ```
-  import * from 'lodash'
-
-  let list = [1,2,3,4].#reduce((s,i) => s+i, 0) // TODO: Changer d'exemple parce qu'on peut simplement faire reduce...
-  ```
-
-  Using multiple import like this is not allowed because it would be annoying to know where the function is coming from and this avoids name conflicts.
-
-  If you want multiple import, then create a file or library and join the import and export them.
-
-  ```
-  export * from 'ThingA';
-  export * from 'ThingB';
-  export * from 'ThingC';
-  ```
-
-  Ouin, finalement ce n'est pas super, parce que ce n'est pas plus clair ainsi, c'est juste un truc de plus... mais bon cette syntaxe est déjà accepté donc c'est OK
 
   <h2 id="overview">Overview</h2>
 
@@ -230,6 +208,28 @@ let content = <md>
 
   Idea: A with block should be showned in a notebook like documentation on the web. It should be pretty, and the script code below would
   be the content of the function of class.
+
+   ## WIP - Base library
+
+  You can use an hashtag for utils shortcut. You define it using import * from 'lib' // or './file'
+
+  ```
+  import * from 'lodash'
+
+  let list = [1,2,3,4].#reduce((s,i) => s+i, 0) // TODO: Changer d'exemple parce qu'on peut simplement faire reduce...
+  ```
+
+  Using multiple import like this is not allowed because it would be annoying to know where the function is coming from and this avoids name conflicts.
+
+  If you want multiple import, then create a file or library and join the import and export them.
+
+  ```
+  export * from 'ThingA';
+  export * from 'ThingB';
+  export * from 'ThingC';
+  ```
+
+  Ouin, finalement ce n'est pas super, parce que ce n'est pas plus clair ainsi, c'est juste un truc de plus... mais bon cette syntaxe est déjà accepté donc c'est OK
   
   ## Disclaimer
 

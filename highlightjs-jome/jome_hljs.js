@@ -145,7 +145,8 @@ const highlighter = function(hljs) {
           hljs.C_BLOCK_COMMENT_MODE,
           hljs.C_LINE_COMMENT_MODE,
           hljs.COMMENT('# ', '$',),
-          hljs.COMMENT('###\n', '###\n',)
+          hljs.COMMENT('#\\*', '\\*#',)
+          //hljs.COMMENT('###\n', '###\n',)
         ]
       },
       PATH,
