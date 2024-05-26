@@ -142,6 +142,10 @@ let content = <md>
 
   5. **Notebook comments** - You can add documentation comments using markdown to create a notebook like jupyter.
 
+  6. **Custom base language** - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)
+
+  7. **Easy scripting** - .jome files define functions which can be executed from the CLI or from another file easily
+
   ## Flexible syntax
 
   You can code using the syntax you prefer. The project should specify a linter so the code is converted to a standard when you save.
@@ -152,6 +156,7 @@ let content = <md>
   if val == 20: doSomething()
   if (val == 20) { doSomething() }
   if (val == 20) doSomething() end
+  calcSomething 1, 2 // You can omit parentheses for a function call
   ```
 
   Read more on [Flexible syntax]() (TODO Link)
@@ -287,6 +292,25 @@ let content = <md>
   // Here, sleep should specify that the unit is mandatory
   jome.sleep(20 ms)
   ```
+
+  ## Custom base language (flavor?)
+
+  Only javascript is supported for now.
+
+  Jome is compiled into the base language choosen.
+
+  Jome operators are exactly the same as the base language.
+
+  It also makes all the globals available from the base language available in Jome.
+
+  ```jome
+  with flavor js // you can omit this, this is the default
+  
+  console.log("Hello") // console is available because of javascript
+  let y = 10 ** 2 // ** is the exponentiation operator like javascript
+  ```
+
+  If you want total control even let's say on the operators, you could eventually design a custom language.
 
   ## Disclaimer
 

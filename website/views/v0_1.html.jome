@@ -1263,6 +1263,68 @@ let content = <md>
 
   Chain returns the value of the last command.
 
+  ## Notebook like jupyter
+
+  Jome code can be used to create notebooks like jupyter.
+
+  You can use the .jomn extension to denote that the file is expected to be opened as a notebook.
+
+  ### Markdown cells
+
+  You can create markdown cells by surrounding the content with an hashtag and a star `#* This is a *markdown* cell *#`.
+
+  Note: ### is deprecated. Starting and ending with three hastags alone on a line is deprecated because it's confusing when you don't know if it's a start or an end.
+
+  ```jome
+  #*
+  This is a markdown cell
+  ### This level 3 title
+  Below is the ending
+  *#
+  ```
+
+  ### Code cells
+
+  Not all code cells are executed.
+
+  TODO: What keyword to use to mean that it should be executed???
+
+  ```jome
+  cell
+    // ...
+  end
+
+  script
+    // ...
+  end
+
+  code
+    // ...
+  end
+  ```
+
+  ### Data cells
+
+  Jome introducte the idea of data cells in a notebook.
+
+  The idea is that you should be able to enter data in a spreadsheet like format in the notebook.
+
+  TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells
+
+  ### Collapsed code cells
+
+  There should also be collapsed by default code cells. For example for imports. If you click on it, you should see it.
+  But you could also that it is collapsed by default.
+
+  But I want to be able to search for it though... CTRL+F should find text hidden inside the collapsed cell. Not sure if that is possible in the browser...
+
+  Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!
+
+  ### with blocks
+
+  Idea: A with block should be showned in a notebook like documentation on the web. It should be pretty, and the script code below would
+  be the content of the function of class.
+
   ## Bugs
 
   TODO: Link to BUGS.md

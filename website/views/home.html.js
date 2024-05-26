@@ -47,8 +47,8 @@ module.exports = () => {
   *#
 
   with
-    Number force = ?N
-    Number distance = ?m
+    Number force = ? N
+    Number distance = ? m
   end
 
   # Then we need some code to calculate the result:
@@ -133,18 +133,27 @@ module.exports = () => {
 
   2. **Flexible typing** - You can use static typing for robustness and usability or omit them for development speed and simplicity.
 
-  3. **Custom base library** - Choose the base library for your project to reuse common functionalities
+  3. **Custom base library** - Choose the base library for your project to reuse common functionalities.
+
+  4. **A unit system** - You can add units to numbers. Smart conversions are done at compile time to ensure you use the proper units.
+
+  5. **Notebook comments** - You can add documentation comments using markdown to create a notebook like jupyter.
+
+  6. **Custom base language** - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)
+
+  7. **Easy scripting** - .jome files define functions which can be executed from the CLI or from another file easily
 
   ## Flexible syntax
 
   You can code using the syntax you prefer. The project should specify a linter so the code is converted to a standard when you save.
 
-  Also, the idea is that when you open a page, the editor should show you in the syntax that you prefer.
+  Also, the idea is that when you open a page, the editor should show you the code in the syntax that you prefer.
 
   \`\`\`jome
   if val == 20: doSomething()
   if (val == 20) { doSomething() }
   if (val == 20) doSomething() end
+  calcSomething 1, 2 // You can omit parentheses for a function call
   \`\`\`
 
   Read more on [Flexible syntax]() (TODO Link)
@@ -247,6 +256,58 @@ module.exports = () => {
   \`\`\`
 
   Read more on [Base library]() (TODO Link)
+
+  ## Unit system
+
+  Note: This is a work in progress.
+
+  You can add units to variables. They are only used at compile time.
+
+  You can specify the unit after a number or use the middle dot (·) to apply a unit to a variable.
+  The editor should make this symbol easyily accessible. You can also simply multiply by 1 of the unit.
+
+  \`\`\`jome
+  let width = 5
+  let force = 10 N // Newtons
+  let distance = width·m // meters // same as width*1m
+  let torque = force * distance
+  jome.log(torque)
+  // → 50 N·m
+  \`\`\`
+
+  with nb = ? foos end
+
+  You can get the type of a variable as a string using the \`unitof\` operator.
+
+  let unit = unitof someVar
+
+  You can also do it using the along keyword inside a function.
+
+  TODO: There must be a way to say that it is required to specify a unit.
+
+  \`\`\`jome
+  // Here, sleep should specify that the unit is mandatory
+  jome.sleep(20 ms)
+  \`\`\`
+
+  ## Custom base language (flavor?)
+
+  Only javascript is supported for now.
+
+  Jome is compiled into the base language choosen.
+
+  Jome operators are exactly the same as the base language.
+
+  It also makes all the globals available from the base language available in Jome.
+
+  \`\`\`jome
+  with flavor js // you can omit this, this is the default
+  
+  console.log("Hello") // console is available because of javascript
+  let y = 10 ** 2 // ** is the exponentiation operator like javascript
+  \`\`\`
+
+  If you want total control even let's say on the operators, you could eventually design a custom language.
 
   ## Disclaimer
 

@@ -159,8 +159,8 @@ To do something useful, we need some **inputs**:
 *#</span>
 
 <span class="hljs-keyword">with</span>
-  <span class="hljs-title class_">Number</span> <span class="hljs-variable">force</span> = ?<span class="hljs-title class_">N</span>
-  <span class="hljs-title class_">Number</span> <span class="hljs-variable">distance</span> = ?<span class="hljs-variable">m</span>
+  <span class="hljs-title class_">Number</span> <span class="hljs-variable">force</span> = ? <span class="hljs-title class_">N</span>
+  <span class="hljs-title class_">Number</span> <span class="hljs-variable">distance</span> = ? <span class="hljs-variable">m</span>
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-comment"># Then we need some code to calculate the result:</span>
@@ -204,15 +204,28 @@ let torque = calculateTorque force: 20N, distance: 1m
 <p><strong>Flexible typing</strong> - You can use static typing for robustness and usability or omit them for development speed and simplicity.</p>
 </li>
 <li>
-<p><strong>Custom base library</strong> - Choose the base library for your project to reuse common functionalities</p>
+<p><strong>Custom base library</strong> - Choose the base library for your project to reuse common functionalities.</p>
+</li>
+<li>
+<p><strong>A unit system</strong> - You can add units to numbers. Smart conversions are done at compile time to ensure you use the proper units.</p>
+</li>
+<li>
+<p><strong>Notebook comments</strong> - You can add documentation comments using markdown to create a notebook like jupyter.</p>
+</li>
+<li>
+<p><strong>Custom base language</strong> - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)</p>
+</li>
+<li>
+<p><strong>Easy scripting</strong> - .jome files define functions which can be executed from the CLI or from another file easily</p>
 </li>
 </ol>
 <h2>Flexible syntax</h2>
 <p>You can code using the syntax you prefer. The project should specify a linter so the code is converted to a standard when you save.</p>
-<p>Also, the idea is that when you open a page, the editor should show you in the syntax that you prefer.</p>
+<p>Also, the idea is that when you open a page, the editor should show you the code in the syntax that you prefer.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">if</span> <span class="hljs-variable">val</span> == <span class="hljs-number">20</span>: <span class="hljs-title function_ invoke__">doSomething</span>()
 <span class="hljs-keyword">if</span> (<span class="hljs-variable">val</span> == <span class="hljs-number">20</span>) { <span class="hljs-title function_ invoke__">doSomething</span>() }
 <span class="hljs-keyword">if</span> (<span class="hljs-variable">val</span> == <span class="hljs-number">20</span>) <span class="hljs-title function_ invoke__">doSomething</span>() <span class="hljs-keyword">end</span>
+<span class="hljs-variable">calcSomething</span> <span class="hljs-number">1</span>, <span class="hljs-number">2</span> <span class="hljs-comment">// You can omit parentheses for a function call</span>
 </code></pre>
 <p>Read more on <a href="">Flexible syntax</a> (TODO Link)</p>
 <h2>Flexible typing system</h2>
@@ -279,6 +292,37 @@ be the content of the function of class.</p>
 <span class="hljs-comment">// → { &#x27;a&#x27;: 1, &#x27;b&#x27;: 2 }</span>
 </code></pre>
 <p>Read more on <a href="">Base library</a> (TODO Link)</p>
+<h2>Unit system</h2>
+<p>Note: This is a work in progress.</p>
+<p>You can add units to variables. They are only used at compile time.</p>
+<p>You can specify the unit after a number or use the middle dot (·) to apply a unit to a variable.
+The editor should make this symbol easyily accessible. You can also simply multiply by 1 of the unit.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">width</span> = <span class="hljs-number">5</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">force</span> = <span class="hljs-number">10</span> <span class="hljs-title class_">N</span> <span class="hljs-comment">// Newtons</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">distance</span> = <span class="hljs-variable">width</span>·<span class="hljs-variable">m</span> <span class="hljs-comment">// meters // same as width*1m</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
+<span class="hljs-variable">jome</span>.<span class="hljs-title function_ invoke__">log</span>(<span class="hljs-variable">torque</span>)
+<span class="hljs-comment">// → 50 N·m</span>
+</code></pre>
+<p>with nb = ? foos end</p>
+<p>You can get the type of a variable as a string using the <code>unitof</code> operator.</p>
+<p>let unit = unitof someVar</p>
+<p>You can also do it using the along keyword inside a function.</p>
+<p>TODO: There must be a way to say that it is required to specify a unit.</p>
+<pre><code class="language-jome"><span class="hljs-comment">// Here, sleep should specify that the unit is mandatory</span>
+<span class="hljs-variable">jome</span>.<span class="hljs-title function_ invoke__">sleep</span>(<span class="hljs-number">20</span> <span class="hljs-variable">ms</span>)
+</code></pre>
+<h2>Custom base language (flavor?)</h2>
+<p>Only javascript is supported for now.</p>
+<p>Jome is compiled into the base language choosen.</p>
+<p>Jome operators are exactly the same as the base language.</p>
+<p>It also makes all the globals available from the base language available in Jome.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">flavor</span> <span class="hljs-variable">js</span> <span class="hljs-comment">// you can omit this, this is the default</span>
+
+<span class="hljs-variable">console</span>.<span class="hljs-title function_ invoke__">log</span>(<span class="hljs-string">&quot;Hello&quot;</span>) <span class="hljs-comment">// console is available because of javascript</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = <span class="hljs-number">10</span> ** <span class="hljs-number">2</span> <span class="hljs-comment">// ** is the exponentiation operator like javascript</span>
+</code></pre>
+<p>If you want total control even let's say on the operators, you could eventually design a custom language.</p>
 <h2>Disclaimer</h2>
 <p>The language is very, very young and still contains a log of bugs. I don't recommend using yet for any real project.</p>
 <p>I don't have a list of bugs yet, because there are too many.</p>
