@@ -177,6 +177,14 @@ be supported. Curly braces would be supported too.</p>
   <span class="hljs-keyword">end</span>
 }
 </code></pre>
+<p>Or put this in advanced?
+In advanced I should detail ALL the available syntax (a little like mozilla for javascript)</p>
+<p>void doSomething() { /* ... <em>/ }
+def doSomething /</em> ... <em>/ end
+fn doSomething() { /</em> ... <em>/ }
+function doSomething() { /</em> ... <em>/ }
+let doSomething = () =&gt; { /</em> ... <em>/ }
+let doSomething = =&gt; { /</em> ... */ }</p>
 <h3>Function calls</h3>
 <p>Parentheses are optional for function calls.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">add</span> = (<span class="hljs-variable">x</span>,<span class="hljs-variable">y</span>) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
@@ -874,6 +882,27 @@ This allows easy documentation of the code without having to repeat yourself in 
 def debug = |msg along code as customCodeName along type as customTypeName along unit as customUnitName| =&gt; (</p>
 <p>You can't only get the modifier value, but then again you can simply assign an unused variable name</p>
 <p>def printType = |unused along type|</p>
+<h2>Base library</h2>
+<p>Every project can choose a base library. This library should contain common utility functions and constants.</p>
+<p>For example:</p>
+<pre><code class="language-jome"><span class="hljs-comment">// Using lodash as a base library</span>
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span>
+
+<span class="hljs-comment">// Then you get access to all the named exports by prepending an hashtag symbol before.</span>
+<span class="hljs-built_in function_">#partition</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>], <span class="hljs-variable">n</span> =&gt; <span class="hljs-variable">n</span> % <span class="hljs-number">2</span>)
+<span class="hljs-comment">// → [[1, 3], [2, 4]]</span>
+
+<span class="hljs-comment">// You can also use the hashtag operator (.#) to put the first operand before instead of after.</span>
+{ <span class="hljs-string">&#x27;a&#x27;</span>: <span class="hljs-number">1</span> }.<span class="hljs-built_in function_">#defaults</span>({ <span class="hljs-string">&#x27;a&#x27;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;b&#x27;</span>: <span class="hljs-number">2</span> })
+<span class="hljs-comment">// → { &#x27;a&#x27;: 1, &#x27;b&#x27;: 2 }</span>
+</code></pre>
+<p>Using multiple import like this is not allowed because it would be annoying to know where the function is coming from and this avoids name conflicts.</p>
+<p>If you want multiple import, then create a file or library and join the import and export them.</p>
+<pre><code>export * from 'ThingA';
+export * from 'ThingB';
+export * from 'ThingC';
+</code></pre>
+<p>Ouin, finalement ce n'est pas super, parce que ce n'est pas plus clair ainsi, c'est juste un truc de plus... mais bon cette syntaxe est déjà accepté donc c'est OK</p>
 <h2>Capture de code - TODO WIP</h2>
 <p>TODO</p>
 <p>Je pense que la syntaxe que je veux est d'utiliser le type 'code'.</p>

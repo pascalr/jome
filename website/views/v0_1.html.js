@@ -104,6 +104,16 @@ module.exports = () => {
   }
   \`\`\`
 
+  Or put this in advanced?
+  In advanced I should detail ALL the available syntax (a little like mozilla for javascript)
+
+  void doSomething() { /* ... */ }
+  def doSomething /* ... */ end
+  fn doSomething() { /* ... */ }
+  function doSomething() { /* ... */ }
+  let doSomething = () => { /* ... */ }
+  let doSomething = => { /* ... */ }
+
   ### Function calls
 
   Parentheses are optional for function calls.
@@ -1119,6 +1129,37 @@ module.exports = () => {
   You can't only get the modifier value, but then again you can simply assign an unused variable name
 
   def printType = |unused along type|
+
+  ## Base library
+
+  Every project can choose a base library. This library should contain common utility functions and constants.
+
+  For example:
+
+  \`\`\`jome
+  // Using lodash as a base library
+  import * from 'lodash'
+
+  // Then you get access to all the named exports by prepending an hashtag symbol before.
+  #partition([1, 2, 3, 4], n => n % 2)
+  // → [[1, 3], [2, 4]]
+
+  // You can also use the hashtag operator (.#) to put the first operand before instead of after.
+  { 'a': 1 }.#defaults({ 'a': 3, 'b': 2 })
+  // → { 'a': 1, 'b': 2 }
+  \`\`\`
+
+  Using multiple import like this is not allowed because it would be annoying to know where the function is coming from and this avoids name conflicts.
+
+  If you want multiple import, then create a file or library and join the import and export them.
+
+  \`\`\`
+  export * from 'ThingA';
+  export * from 'ThingB';
+  export * from 'ThingC';
+  \`\`\`
+
+  Ouin, finalement ce n'est pas super, parce que ce n'est pas plus clair ainsi, c'est juste un truc de plus... mais bon cette syntaxe est déjà accepté donc c'est OK
 
   ## Capture de code - TODO WIP
 

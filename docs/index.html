@@ -159,8 +159,8 @@ To do something useful, we need some **inputs**:
 *#</span>
 
 <span class="hljs-keyword">with</span>
-  <span class="hljs-title class_">Number</span>&lt;<span class="hljs-title class_">N</span>&gt; <span class="hljs-variable">force</span>
-  <span class="hljs-title class_">Number</span>&lt;<span class="hljs-variable">m</span>&gt; <span class="hljs-variable">distance</span>
+  <span class="hljs-title class_">Number</span> <span class="hljs-variable">force</span> = ?<span class="hljs-title class_">N</span>
+  <span class="hljs-title class_">Number</span> <span class="hljs-variable">distance</span> = ?<span class="hljs-variable">m</span>
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-comment"># Then we need some code to calculate the result:</span>
@@ -194,16 +194,38 @@ let torque = calculateTorque force: 20N, distance: 1m
 
     </div>
   </div></p>
-<h2>Features</h2>
-<p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
-has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>
+  <h2 id="features">Features</h2>
+<p>Jome has a few original features (to my knowledge):</p>
+<ol>
+<li>
+<p><strong>Flexible syntax</strong> - You can code using the style you prefer and use a linter to share code in a standardized way.</p>
+</li>
+<li>
 <p><strong>Flexible typing</strong> - You can use static typing for robustness and usability or omit them for development speed and simplicity.</p>
-<p><strong>Flexible syntax</strong> - You can use curly braces, block statements with end keyword or inline with colon at the end.</p>
-<p><strong>Customizable builtins</strong> - Jome comes with a lot of builtins which you can map to keywords you want. You can also define your own.</p>
-<p><strong>Reactivity</strong> - TODO</p>
-<p><strong>Node structure like Godot</strong> - TODO</p>
+</li>
+<li>
+<p><strong>Custom base library</strong> - Choose the base library for your project to reuse common functionalities</p>
+</li>
+</ol>
+<h2>Flexible syntax</h2>
+<p>You can code using the syntax you prefer. The project should specify a linter so the code is converted to a standard when you save.</p>
+<p>Also, the idea is that when you open a page, the editor should show you in the syntax that you prefer.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">if</span> <span class="hljs-variable">val</span> == <span class="hljs-number">20</span>: <span class="hljs-title function_ invoke__">doSomething</span>()
+<span class="hljs-keyword">if</span> (<span class="hljs-variable">val</span> == <span class="hljs-number">20</span>) { <span class="hljs-title function_ invoke__">doSomething</span>() }
+<span class="hljs-keyword">if</span> (<span class="hljs-variable">val</span> == <span class="hljs-number">20</span>) <span class="hljs-title function_ invoke__">doSomething</span>() <span class="hljs-keyword">end</span>
+</code></pre>
+<p>Read more on <a href="">Flexible syntax</a> (TODO Link)</p>
 <h2>Flexible typing system</h2>
 <p>Like the rest of Jome, the typing system is flexible. You can omit them, you can use hard typing or you can use duct typing.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">addInts</span> = (<span class="hljs-variable">x</span>, <span class="hljs-variable">y</span>) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">addInts</span> = (<span class="hljs-type">int</span> <span class="hljs-variable">x</span>, <span class="hljs-type">int</span> <span class="hljs-variable">y</span>) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
+<span class="hljs-type">int</span> <span class="hljs-variable">addInts</span> = (<span class="hljs-type">int</span> <span class="hljs-variable">x</span>, <span class="hljs-type">int</span> <span class="hljs-variable">y</span>) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">addInts</span> = (<span class="hljs-variable">x</span> : <span class="hljs-type">int</span>, <span class="hljs-variable">y</span> : <span class="hljs-type">int</span>) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">addInts</span> : <span class="hljs-type">int</span> = (<span class="hljs-variable">x</span> : <span class="hljs-type">int</span>, <span class="hljs-variable">y</span> : <span class="hljs-type">int</span>) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
+</code></pre>
+<h2>Rigid operators</h2>
+<p>I think operators will be rigid. Otherwise it becomes a mess and you see code and you don't know how it behaves because it depends on how the operator was written.</p>
+<p>Maybe allow some flexible operators? Like ===, !== ? Probably not</p>
 <h2>Notebook like jupyter</h2>
 <p>Jome code can be used to create notebooks like jupyter.</p>
 <p>You can use the .jomn extension to denote that the file is expected to be opened as a notebook.</p>
@@ -243,22 +265,29 @@ But you could also that it is collapsed by default.</p>
 <h3>with blocks</h3>
 <p>Idea: A with block should be showned in a notebook like documentation on the web. It should be pretty, and the script code below would
 be the content of the function of class.</p>
-<h2>WIP - Base library</h2>
-<p>You can use an hashtag for utils shortcut. You define it using import * from 'lib' // or './file'</p>
-<pre><code>import * from 'lodash'
+<h2>Base library</h2>
+<p>Every project can choose a base library. This library should contain common utility functions and constants.</p>
+<pre><code class="language-jome"><span class="hljs-comment">// Example using lodash as a base library</span>
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span>
 
-let list = [1,2,3,4].#reduce((s,i) =&gt; s+i, 0) // TODO: Changer d'exemple parce qu'on peut simplement faire reduce...
+<span class="hljs-comment">// Then you get access to all the named exports by prepending an hashtag symbol before.</span>
+<span class="hljs-built_in function_">#partition</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>], <span class="hljs-variable">n</span> =&gt; <span class="hljs-variable">n</span> % <span class="hljs-number">2</span>)
+<span class="hljs-comment">// → [[1, 3], [2, 4]]</span>
+
+<span class="hljs-comment">// You can also use the hashtag operator (.#) to put the first operand before instead of after.</span>
+{ <span class="hljs-string">&#x27;a&#x27;</span>: <span class="hljs-number">1</span> }.<span class="hljs-built_in function_">#defaults</span>({ <span class="hljs-string">&#x27;a&#x27;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;b&#x27;</span>: <span class="hljs-number">2</span> })
+<span class="hljs-comment">// → { &#x27;a&#x27;: 1, &#x27;b&#x27;: 2 }</span>
 </code></pre>
-<p>Using multiple import like this is not allowed because it would be annoying to know where the function is coming from and this avoids name conflicts.</p>
-<p>If you want multiple import, then create a file or library and join the import and export them.</p>
-<pre><code>export * from 'ThingA';
-export * from 'ThingB';
-export * from 'ThingC';
-</code></pre>
-<p>Ouin, finalement ce n'est pas super, parce que ce n'est pas plus clair ainsi, c'est juste un truc de plus... mais bon cette syntaxe est déjà accepté donc c'est OK</p>
+<p>Read more on <a href="">Base library</a> (TODO Link)</p>
 <h2>Disclaimer</h2>
 <p>The language is very, very young and still contains a log of bugs. I don't recommend using yet for any real project.</p>
 <p>I don't have a list of bugs yet, because there are too many.</p>
+<h2>Trash</h2>
+<p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
+has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>
+<p><strong>Customizable builtins</strong> - Jome comes with a lot of builtins which you can map to keywords you want. You can also define your own.</p>
+<p><strong>Reactivity</strong> - TODO</p>
+<p><strong>Node structure like Godot</strong> - TODO</p>
 
               </div>
             </div>

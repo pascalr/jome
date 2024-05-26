@@ -47,8 +47,8 @@ module.exports = () => {
   *#
 
   with
-    Number<N> force
-    Number<m> distance
+    Number force = ?N
+    Number distance = ?m
   end
 
   # Then we need some code to calculate the result:
@@ -125,24 +125,47 @@ module.exports = () => {
 
   bce059749d61c1c247c303d0118d0d53
 
-  ## Features
+  <h2 id="features">Features</h2>
 
-  Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
-  has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.
+  Jome has a few original features (to my knowledge):
 
-  **Flexible typing** - You can use static typing for robustness and usability or omit them for development speed and simplicity.
+  1. **Flexible syntax** - You can code using the style you prefer and use a linter to share code in a standardized way.
 
-  **Flexible syntax** - You can use curly braces, block statements with end keyword or inline with colon at the end.
+  2. **Flexible typing** - You can use static typing for robustness and usability or omit them for development speed and simplicity.
 
-  **Customizable builtins** - Jome comes with a lot of builtins which you can map to keywords you want. You can also define your own.
+  3. **Custom base library** - Choose the base library for your project to reuse common functionalities
 
-  **Reactivity** - TODO
+  ## Flexible syntax
 
-  **Node structure like Godot** - TODO
+  You can code using the syntax you prefer. The project should specify a linter so the code is converted to a standard when you save.
+
+  Also, the idea is that when you open a page, the editor should show you in the syntax that you prefer.
+
+  \`\`\`jome
+  if val == 20: doSomething()
+  if (val == 20) { doSomething() }
+  if (val == 20) doSomething() end
+  \`\`\`
+
+  Read more on [Flexible syntax]() (TODO Link)
 
   ## Flexible typing system
 
   Like the rest of Jome, the typing system is flexible. You can omit them, you can use hard typing or you can use duct typing.
+
+  \`\`\`jome
+  let addInts = (x, y) => x + y
+  let addInts = (int x, int y) => x + y
+  int addInts = (int x, int y) => x + y
+  let addInts = (x : int, y : int) => x + y
+  let addInts : int = (x : int, y : int) => x + y
+  \`\`\`
+
+  ## Rigid operators
+
+  I think operators will be rigid. Otherwise it becomes a mess and you see code and you don't know how it behaves because it depends on how the operator was written.
+
+  Maybe allow some flexible operators? Like ===, !== ? Probably not
 
   ## Notebook like jupyter
 
@@ -206,33 +229,41 @@ module.exports = () => {
   Idea: A with block should be showned in a notebook like documentation on the web. It should be pretty, and the script code below would
   be the content of the function of class.
 
-   ## WIP - Base library
+  ## Base library
 
-  You can use an hashtag for utils shortcut. You define it using import * from 'lib' // or './file'
+  Every project can choose a base library. This library should contain common utility functions and constants.
 
-  \`\`\`
+  \`\`\`jome
+  // Example using lodash as a base library
   import * from 'lodash'
 
-  let list = [1,2,3,4].#reduce((s,i) => s+i, 0) // TODO: Changer d'exemple parce qu'on peut simplement faire reduce...
+  // Then you get access to all the named exports by prepending an hashtag symbol before.
+  #partition([1, 2, 3, 4], n => n % 2)
+  // → [[1, 3], [2, 4]]
+
+  // You can also use the hashtag operator (.#) to put the first operand before instead of after.
+  { 'a': 1 }.#defaults({ 'a': 3, 'b': 2 })
+  // → { 'a': 1, 'b': 2 }
   \`\`\`
 
-  Using multiple import like this is not allowed because it would be annoying to know where the function is coming from and this avoids name conflicts.
+  Read more on [Base library]() (TODO Link)
 
-  If you want multiple import, then create a file or library and join the import and export them.
-
-  \`\`\`
-  export * from 'ThingA';
-  export * from 'ThingB';
-  export * from 'ThingC';
-  \`\`\`
-
-  Ouin, finalement ce n'est pas super, parce que ce n'est pas plus clair ainsi, c'est juste un truc de plus... mais bon cette syntaxe est déjà accepté donc c'est OK
-  
   ## Disclaimer
 
   The language is very, very young and still contains a log of bugs. I don't recommend using yet for any real project.
 
-  I don't have a list of bugs yet, because there are too many.`).replace(
+  I don't have a list of bugs yet, because there are too many.
+
+  ## Trash
+
+  Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
+  has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.
+
+  **Customizable builtins** - Jome comes with a lot of builtins which you can map to keywords you want. You can also define your own.
+
+  **Reactivity** - TODO
+
+  **Node structure like Godot** - TODO`).replace(
     "bce059749d61c1c247c303d0118d0d53",
     overview,
   );
