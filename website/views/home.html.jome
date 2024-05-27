@@ -132,19 +132,21 @@ let content = <md>
 
   Jome has a few original features (to my knowledge):
 
-  1. **Flexible syntax** - You can code using the style you prefer and use a linter to share code in a standardized way.
+  1. **Easy scripting** - .jome files define functions which can be executed from the CLI or from another file easily
 
-  2. **Flexible typing** - You can use static typing for robustness and usability or omit them for development speed and simplicity.
+  2. **Notebook comments** - You can add documentation comments using markdown to create a notebook like jupyter.
 
-  3. **Custom base library** - Choose the base library for your project to reuse common functionalities.
+  3. **Inline data** - TODO: You can do advamced stuff with inline data using tags (preprocessing, ...)
 
-  4. **A unit system** - You can add units to numbers. Smart conversions are done at compile time to ensure you use the proper units.
+  4. **Flexible syntax** - You can code using the style you prefer and use a linter to share code in a standardized way.
 
-  5. **Notebook comments** - You can add documentation comments using markdown to create a notebook like jupyter.
+  5. **Flexible typing** - You can use static typing for robustness and usability or omit them for development speed and simplicity.
 
-  6. **Custom base language** - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)
+  6. **Custom base library** - Choose the base library for your project to reuse common functionalities.
 
-  7. **Easy scripting** - .jome files define functions which can be executed from the CLI or from another file easily
+  7. **A unit system** - You can add units to numbers. Smart conversions are done at compile time to ensure you use the proper units.
+
+  8. **Custom base language** - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)
 
   ## Flexible syntax
 
