@@ -18,45 +18,6 @@ let PARTIAL = <md>
 
 let content = <md>
 
-  
-
-  Maybe:
-
-  ```jome
-  => 10 // A line beginning with => would be an output in jome. I don't know if it's legal to put the arrow of an arrow function like that, but I think it should always be on the line before, so this would be fine.
-
-  // Ok, how about I want to show the value, but I want to assign it to a variable too to use it after...?
-
-  This does not work... I think I need a keyword. Maybe eval??? (To use js eval you would use #eval? or #evalJs?)
-
-  eval 1 + 2
-
-  let x = eval y + z
-  
-  // By assigning a value from a eval to a variable, this would be showned as a field of a textarea, which is empty,
-  // and when you click run it should fill up the thing with the value.
-
-  // FIXMEEEE: HOW TO SPECIFY HOW TO RENDER THE EVAL???
-
-  // Eval would take 2 params, the first is the value, the second is the format to show the value?
-
-  // Be default?
-  ```
-
-  TODO: Tags are simply always xml tags. C'est parfait. C'est mieux que JSON, parce que ça fait la distinction entre attribute et enfant.
-
-  L'éditeur se charge de les afficher pour que ce soit beau.
-
-  ```jome
-  let html = <Recipe
-    name="Recipe name"
-    portions=5
-  >
-    <ing qty="100mL" name="water"/>
-    <ing qty="100g" name="sugar"/>
-  </Recipe>
-  ```
-
   TODO: I am thinking of using test_compile.jomn as a notebook and use that as a reference for the language.
   Don't include all the very specific tests, but globals tests would be very nice to explain what the language does,
   and this would avoid repeating myself.
@@ -1401,6 +1362,24 @@ let content = <md>
 
   But for #('./some_file.jomd') it works with this syntax.
   let someData = #('./some_file.jomd')
+
+
+
+  
+
+  Tags are simply always xml tags. C'est parfait. C'est mieux que JSON, parce que ça fait la distinction entre attribute et enfant.
+
+  L'éditeur se charge de les afficher pour que ce soit beau.
+
+  ```jome
+  let html = <Recipe
+    name="Recipe name"
+    portions=5
+  >
+    <ing qty="100mL" name="water"/>
+    <ing qty="100g" name="sugar"/>
+  </Recipe>
+  ```
 
 </md>
 
