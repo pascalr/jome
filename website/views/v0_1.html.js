@@ -16,14 +16,7 @@ module.exports = () => {
 
   let content = mdToHtml(`
 
-  .jomd extension is used to store data in the Jome language. The only difference with .jome, is that the last line of code is returned implicitely. If you use
-  a .jome and use return on the last line, it is the same thing. NOT THE ONLY DIFFERENCE, SEE BELOW, DIFFERENT FOR IMPORT TOO, IMPORT IS DATA, NOT FUNCTION...
-
-  Wait, what about, import someData from './some_file.jomd', here I would expect someData to be some data, but it's a function because it is the same thing
-  as .jome... Or maybe when doing this, call the function directly.
-
-  But for #('./some_file.jomd') it works with this syntax.
-  let someData = #('./some_file.jomd')
+  
 
   Maybe:
 
@@ -181,6 +174,36 @@ module.exports = () => {
 
   A good rule of thumb would be to use .# for utils you don't use often and use :. for utils you use often and that you
   don't mind the name being global.
+
+  ## Implicit return for tags
+
+  If the last expression of a function or a file is a tag, it is implicitely returned.
+
+  \`\`\`jome
+  def render
+    let name = "Marc"
+    <html>
+      <div><p>Hello {name}!</p></div>
+    </html>
+  end
+  \`\`\`
+
+  \`\`\`jome
+  // Last expression of a file
+  <css>
+    .someClass {
+      color: red;
+    }
+  </css>
+  \`\`\`
+
+  ## TODO: Move this somewhere else with tags
+
+  There is no default for tags. You must specify how to handle them.
+
+  You can treat them simply as a string. You can allow interpolation using curly braces \`{variable}\` or using \`<% = variable %>\`
+
+  You can parse tags as xml or not.
 
   ## config.jome
 
@@ -474,6 +497,11 @@ module.exports = () => {
   TODO: Support them, just not interpolation yet because I don't know which interpolation I want to be able to use.
 
   Note: All strings are allowed to be multiline.
+
+  In order to have consistency, strings shall always be compiled into strings. For example, if you compile to ruby, than backtick strings shall be converted
+  to double quote strings because executing shell commands this way is not allowd in Jome. Use < sh > tags for that instead.
+
+  Similarly, single quote strings compiled to c++ will be using double quote strings so that it is a valid string.
 
   <h3 id="formatting">Formatting v5</h3>
 
@@ -1359,7 +1387,19 @@ module.exports = () => {
   TODO: args are passed space separated instead of comma separated
   --args with dashes near each other are grouped together
 
-  TODO: Error handly. Try catch...`);
+  TODO: Error handly. Try catch...
+
+  ## Other
+
+  .jomd extension is used to store data in the Jome language. The only difference with .jome, is that the last line of code is returned implicitely. If you use
+  a .jome and use return on the last line, it is the same thing. NOT THE ONLY DIFFERENCE, SEE BELOW, DIFFERENT FOR IMPORT TOO, IMPORT IS DATA, NOT FUNCTION...
+
+  Wait, what about, import someData from './some_file.jomd', here I would expect someData to be some data, but it's a function because it is the same thing
+  as .jome... Or maybe when doing this, call the function directly.
+
+  But for #('./some_file.jomd') it works with this syntax.
+  let someData = #('./some_file.jomd')
+`);
 
   return new Webpage("Jome", content).render();
 };
