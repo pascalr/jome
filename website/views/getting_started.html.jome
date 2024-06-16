@@ -39,7 +39,7 @@ let content = <md>
   Create a file `hello.jome` with the following content:
 
   ```jome
-  #log "Hello world!" // #log is a shortcut for console.log
+  console.log "Hello world!"
   ```
 
   In a terminal, this gives:
@@ -56,7 +56,7 @@ let content = <md>
 
   ```jome
   with name end
-  #log "Hello {name}!"
+  console.log "Hello {name}!"
   ```
 
   This gives:
@@ -75,7 +75,7 @@ let content = <md>
   with cmd, message end
 
   if cmd === 'say'
-    #log message
+    console.log message
   end
   ```
 

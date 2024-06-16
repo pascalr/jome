@@ -2,7 +2,8 @@ module.exports = () => {
   return `
   body {
     margin: 0;
-    background-color: #f9f4f4;
+    color: #fff;
+    background-color: #080e14;
   }
 
   .scrollable {
@@ -43,12 +44,12 @@ module.exports = () => {
   }
 
   pre {
-    background-color: #dce0e8;
+    background-color: #181d2b;
     padding: 1em;
     border-radius: 4px;
   }
   code:not(pre code) {
-    background-color: #dce0e8;
+    background-color: #181d2b;
     padding: 0.2em;
     border-radius: 4px;
   }
@@ -66,7 +67,7 @@ module.exports = () => {
 
   ul.nav-list li a {
     text-decoration: none;
-    color: #333;
+    color: white;
     padding: 10px;
     display: block;
   }
@@ -107,9 +108,9 @@ module.exports = () => {
 
   #left-nav {
     width: 18em;
-    background-color: #e6e1df;;
     margin-right: 1.5em;
     flex-shrink: 0;
+    border-right: 1px solid white;
   }
 
   .onglets {
@@ -139,7 +140,8 @@ module.exports = () => {
 
     /* Add some basic CSS for the navbar */
   .navbar {
-    background-color: #333;
+    background-color: #040609;
+    border-bottom: 1px solid white;
     color: #fff;
     height: 3em;
     display: flex;

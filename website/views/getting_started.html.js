@@ -37,7 +37,7 @@ module.exports = () => {
   Create a file \`hello.jome\` with the following content:
 
   \`\`\`jome
-  #log "Hello world!" // #log is a shortcut for console.log
+  console.log "Hello world!"
   \`\`\`
 
   In a terminal, this gives:
@@ -54,7 +54,7 @@ module.exports = () => {
 
   \`\`\`jome
   with name end
-  #log "Hello {name}!"
+  console.log "Hello {name}!"
   \`\`\`
 
   This gives:
@@ -73,7 +73,7 @@ module.exports = () => {
   with cmd, message end
 
   if cmd === 'say'
-    #log message
+    console.log message
   end
   \`\`\`
 

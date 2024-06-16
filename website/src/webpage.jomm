@@ -16,6 +16,7 @@ main class Webpage
           <title><%= @title %></title>
           <link rel="stylesheet" type="text/css" href="<%= ROOT %>/stylesheet.css">
           <link rel="stylesheet" type="text/css" href="<%= ROOT %>/highlight.js.min.css">
+          <link rel="stylesheet" type="text/css" href="<%= ROOT %>/hljs_tomorrow_night_bright.css">
           <link rel="apple-touch-icon" sizes="180x180" href="<%= ROOT %>/apple-touch-icon.png">
           <link rel="icon" type="image/png" sizes="32x32" href="<%= ROOT %>/favicon-32x32.png">
           <link rel="icon" type="image/png" sizes="16x16" href="<%= ROOT %>/favicon-16x16.png">

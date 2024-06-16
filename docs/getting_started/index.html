@@ -7,6 +7,7 @@
           <title>Jome</title>
           <link rel="stylesheet" type="text/css" href="/jome/stylesheet.css">
           <link rel="stylesheet" type="text/css" href="/jome/highlight.js.min.css">
+          <link rel="stylesheet" type="text/css" href="/jome/hljs_tomorrow_night_bright.css">
           <link rel="apple-touch-icon" sizes="180x180" href="/jome/apple-touch-icon.png">
           <link rel="icon" type="image/png" sizes="32x32" href="/jome/favicon-32x32.png">
           <link rel="icon" type="image/png" sizes="16x16" href="/jome/favicon-16x16.png">
@@ -121,7 +122,7 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <p>TODO: Link: For the complete overview, see <a href="/TODO">CLI in depth</a>.</p>
   <h2 id="hello-world">Hello world</h2>
 <p>Create a file <code>hello.jome</code> with the following content:</p>
-<pre><code class="language-jome"><span class="hljs-built_in function_">#log</span> <span class="hljs-string">&quot;Hello world!&quot;</span> <span class="hljs-comment">// #log is a shortcut for console.log</span>
+<pre><code class="language-jome"><span class="hljs-variable">console</span>.<span class="hljs-variable">log</span> <span class="hljs-string">&quot;Hello world!&quot;</span>
 </code></pre>
 <p>In a terminal, this gives:</p>
 <pre><code class="language-sh">jome hello.jome
@@ -131,7 +132,7 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <p>A .jome file is compiled into a function. You can pass arguments to it using the <code>with</code> keyword.</p>
 <p>Let's modify the file <code>hello.jome</code></p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">name</span> <span class="hljs-keyword">end</span>
-<span class="hljs-built_in function_">#log</span> <span class="hljs-string">&quot;Hello {name}!&quot;</span>
+<span class="hljs-variable">console</span>.<span class="hljs-variable">log</span> <span class="hljs-string">&quot;Hello {name}!&quot;</span>
 </code></pre>
 <p>This gives:</p>
 <pre><code class="language-sh">jome hello.jome Paul
@@ -143,7 +144,7 @@ jome server start <span class="hljs-comment"># pass the arguments &quot;server&q
 <pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">cmd</span>, <span class="hljs-variable">message</span> <span class="hljs-keyword">end</span>
 
 <span class="hljs-keyword">if</span> <span class="hljs-variable">cmd</span> === <span class="hljs-string">&#x27;say&#x27;</span>
-  <span class="hljs-built_in function_">#log</span> <span class="hljs-variable">message</span>
+  <span class="hljs-variable">console</span>.<span class="hljs-variable">log</span> <span class="hljs-variable">message</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <p>This gives:</p>
