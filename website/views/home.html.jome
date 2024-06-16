@@ -23,31 +23,10 @@ let overview01 = <md>
   ```
 </md>
 
-let overview02 = <md>
-  ## How to use
-  There are three ways to execute the code.
-
-  You do it directly inside the editor in preview mode.
-
-  You can execute it using the jome CLI tool.
-  ```sh
-  jome torqueCalculator.jome --force=10 --distance=2
-  ```
-
-  You can also import it from another file to execute this code.
-  ```jome
-  import calculateTorque from './torqueCalculator.jome'
-
-  let torque = calculateTorque force: 20N, distance: 1m
-  ```
-</md>
-
 let overviewSrc = <md>
   ```jome
   #*
   # Torque Calculator Example
-
-  To do something useful, we need some **inputs**:
   *#
 
   with
@@ -55,7 +34,7 @@ let overviewSrc = <md>
     Number distance = ? m
   end
 
-  # Then we need some code to calculate the result:
+  # Torque is the result of a force multiplied by a distance from a pivot point.
 
   // We use a jome tag because it's a script that can be run
   <jome >
@@ -63,25 +42,6 @@ let overviewSrc = <md>
     #log `Result: ${result}`
   </jome >
   return result
-
-  #*
-  ## How to use
-  There are three ways to execute the code.
-
-  You do it directly inside the editor in preview mode.
-
-  You can execute it using the jome CLI tool.
-  `sh
-  jome torqueCalculator.jome --force=10 --distance=2
-  `
-
-  You can also import it from another file to execute this code.
-  `jome
-  import calculateTorque from './torqueCalculator.jome'
-
-  let torque = calculateTorque force: 20N, distance: 1m
-  `
-  *#
   ```
 </md>
 
@@ -89,7 +49,6 @@ let overview = <html>
   <div style="display: flex; width: calc(100vw - 340px);">
     <div class="preview" style="width: 50%; overflow: auto;">
       <h1>Torque Calculator Example</h1>
-      <p>To do something useful, we need some <b>inputs</b>:</p>
       <div class="input-container">
         <label for="input-field">force:</label>
         <input type="text" id="input-field" name="input-field">
@@ -100,9 +59,8 @@ let overview = <html>
         <input type="text" id="input-field" name="input-field">
         m
       </div>
-      <p>Then we need some code to calculate the result:</p>
+      <p>Torque is the result of a force multiplied by a distance from a pivot point.</p>
       <%s overview01 %>
-      <%s overview02 %>
     </div>
     <div class="code" style="width: 50%; overflow: auto;">
       <%s overviewSrc %>
@@ -147,6 +105,24 @@ let content = <md>
   7. **A unit system** - You can add units to numbers. Smart conversions are done at compile time to ensure you use the proper units.
 
   8. **Custom base language** - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)
+
+  ## Easy Execution
+
+  There are three ways to execute the code.
+
+  You do it directly inside the editor in preview mode.
+
+  You can execute it using the jome CLI tool.
+  `sh
+  jome torqueCalculator.jome --force=10 --distance=2
+  `
+
+  You can also import it from another file to execute this code.
+  `jome
+  import calculateTorque from './torqueCalculator.jome'
+
+  let torque = calculateTorque force: 20N, distance: 1m
+  `
 
   ## Flexible syntax
 

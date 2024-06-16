@@ -122,7 +122,6 @@ and data editing (like spreadsheet with types inside the editor).</p>
   <div style="display: flex; width: calc(100vw - 340px);">
     <div class="preview" style="width: 50%; overflow: auto;">
       <h1>Torque Calculator Example</h1>
-      <p>To do something useful, we need some <b>inputs</b>:</p>
       <div class="input-container">
         <label for="input-field">force:</label>
         <input type="text" id="input-field" name="input-field">
@@ -133,29 +132,15 @@ and data editing (like spreadsheet with types inside the editor).</p>
         <input type="text" id="input-field" name="input-field">
         m
       </div>
-      <p>Then we need some code to calculate the result:</p>
+      <p>Torque is the result of a force multiplied by a distance from a pivot point.</p>
       <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">result</span> = <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
 <span class="hljs-keyword">return</span> <span class="hljs-variable">result</span>
-</code></pre>
-
-      <h2>How to use</h2>
-<p>There are three ways to execute the code.</p>
-<p>You do it directly inside the editor in preview mode.</p>
-<p>You can execute it using the jome CLI tool.</p>
-<pre><code class="language-sh">jome torqueCalculator.jome --force=10 --distance=2
-</code></pre>
-<p>You can also import it from another file to execute this code.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-variable">calculateTorque</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./torqueCalculator.jome&#x27;</span>
-
-<span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">calculateTorque</span> force: <span class="hljs-variable">20N</span>, distance: <span class="hljs-variable">1m</span>
 </code></pre>
 
     </div>
     <div class="code" style="width: 50%; overflow: auto;">
       <pre><code class="language-jome"><span class="hljs-comment">#*
 # Torque Calculator Example
-
-To do something useful, we need some **inputs**:
 *#</span>
 
 <span class="hljs-keyword">with</span>
@@ -163,7 +148,7 @@ To do something useful, we need some **inputs**:
   <span class="hljs-title class_">Number</span> <span class="hljs-variable">distance</span> = ? <span class="hljs-variable">m</span>
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-comment"># Then we need some code to calculate the result:</span>
+<span class="hljs-comment"># Torque is the result of a force multiplied by a distance from a pivot point.</span>
 
 <span class="hljs-comment">// We use a jome tag because it&#x27;s a script that can be run</span>
 &lt;<span class="hljs-variable">jome</span> &gt;
@@ -171,25 +156,6 @@ To do something useful, we need some **inputs**:
   <span class="hljs-built_in function_">#log</span> <span class="hljs-string">`Result: ${result}`</span>
 &lt;/<span class="hljs-variable">jome</span> &gt;
 <span class="hljs-keyword">return</span> <span class="hljs-variable">result</span>
-
-<span class="hljs-comment">#*
-## How to use
-There are three ways to execute the code.
-
-You do it directly inside the editor in preview mode.
-
-You can execute it using the jome CLI tool.
-`sh
-jome torqueCalculator.jome --force=10 --distance=2
-`
-
-You can also import it from another file to execute this code.
-`jome
-import calculateTorque from &#x27;./torqueCalculator.jome&#x27;
-
-let torque = calculateTorque force: 20N, distance: 1m
-`
-*#</span>
 </code></pre>
 
     </div>
@@ -222,6 +188,16 @@ let torque = calculateTorque force: 20N, distance: 1m
 <p><strong>Custom base language</strong> - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)</p>
 </li>
 </ol>
+<h2>Easy Execution</h2>
+<p>There are three ways to execute the code.</p>
+<p>You do it directly inside the editor in preview mode.</p>
+<p>You can execute it using the jome CLI tool.
+<code>sh   jome torqueCalculator.jome --force=10 --distance=2   </code></p>
+<p>You can also import it from another file to execute this code.
+`jome
+import calculateTorque from './torqueCalculator.jome'</p>
+<p>let torque = calculateTorque force: 20N, distance: 1m
+`</p>
 <h2>Flexible syntax</h2>
 <p>You can code using the syntax you prefer. The project should specify a linter so the code is converted to a standard when you save.</p>
 <p>Also, the idea is that when you open a page, the editor should show you the code in the syntax that you prefer.</p>
