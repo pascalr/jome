@@ -29,8 +29,8 @@ let overviewSrc = <md>
   *#
 
   with
-    Number force = ? N
-    Number distance = ? m
+    Number force = ? N | lb
+    Number distance = ? m | in
   end
 
   # Torque is the result of a force multiplied by a distance from a pivot point.
@@ -60,7 +60,6 @@ let overview = <html>
       <%s overview01 %>
     </div>
     <div class="code" style="width: 50%; overflow: auto;">
-      <%s overviewSrc %>
     </div>
   </div>
 </html>
@@ -79,9 +78,26 @@ let content = <md>
 
   <h2 id="sample">Sample</h2>
 
-  Preview mode on the left, and edit mode on the right.
+  <%s overviewSrc %>
+
+  Result inside the editor:
 
   <%s overview %>
+
+  Result inside the shell:
+
+  ```sh
+  jome torqueCalculator.jome --force=10 --distance=2
+  # => 20 N·m
+  ```
+
+  Usage inside another file:
+
+  ```jome
+  import calculateTorque from './torqueCalculator.jome'
+
+  let torque = calculateTorque force: 20 lbs, distance: 1 in
+  ```
 
   <h2 id="features">Features</h2>
 

@@ -26,8 +26,8 @@ module.exports = () => {
   *#
 
   with
-    Number force = ? N
-    Number distance = ? m
+    Number force = ? N | lb
+    Number distance = ? m | in
   end
 
   # Torque is the result of a force multiplied by a distance from a pivot point.
@@ -56,11 +56,8 @@ module.exports = () => {
       e7fbf80ba4c5b2cb25858cfa78de66e9
     </div>
     <div class="code" style="width: 50%; overflow: auto;">
-      045a7bfe3dba9ba99b065d6f5aedfd77
     </div>
-  </div>`
-    .replace("e7fbf80ba4c5b2cb25858cfa78de66e9", overview01)
-    .replace("045a7bfe3dba9ba99b065d6f5aedfd77", overviewSrc);
+  </div>`.replace("e7fbf80ba4c5b2cb25858cfa78de66e9", overview01);
 
   let content = mdToHtml(`
 
@@ -76,9 +73,26 @@ module.exports = () => {
 
   <h2 id="sample">Sample</h2>
 
-  Preview mode on the left, and edit mode on the right.
+  045a7bfe3dba9ba99b065d6f5aedfd77
+
+  Result inside the editor:
 
   bce059749d61c1c247c303d0118d0d53
+
+  Result inside the shell:
+
+  \`\`\`sh
+  jome torqueCalculator.jome --force=10 --distance=2
+  # => 20 N·m
+  \`\`\`
+
+  Usage inside another file:
+
+  \`\`\`jome
+  import calculateTorque from './torqueCalculator.jome'
+
+  let torque = calculateTorque force: 20 lbs, distance: 1 in
+  \`\`\`
 
   <h2 id="features">Features</h2>
 
@@ -299,10 +313,9 @@ module.exports = () => {
 
   **Reactivity** - TODO
 
-  **Node structure like Godot** - TODO`).replace(
-    "bce059749d61c1c247c303d0118d0d53",
-    overview,
-  );
+  **Node structure like Godot** - TODO`)
+    .replace("045a7bfe3dba9ba99b065d6f5aedfd77", overviewSrc)
+    .replace("bce059749d61c1c247c303d0118d0d53", overview);
 
   return new Webpage("Jome", content).render();
 };

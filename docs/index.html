@@ -118,7 +118,24 @@ standardized code with other people.</p>
 and data editing (like spreadsheet with types inside the editor).</p>
 <p>For the near future, it only compiles to JavaScript.</p>
   <h2 id="sample">Sample</h2>
-<p>Preview mode on the left, and edit mode on the right.</p>
+<p><pre><code class="language-jome"><span class="hljs-comment">#*
+# Torque Calculator Example
+*#</span>
+
+<span class="hljs-keyword">with</span>
+  <span class="hljs-variable">Number</span> <span class="hljs-variable">force</span> = ? <span class="hljs-variable">N</span> | <span class="hljs-variable">lb</span>
+  <span class="hljs-variable">Number</span> <span class="hljs-variable">distance</span> = ? <span class="hljs-variable">m</span> | <span class="hljs-keyword">in</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-comment"># Torque is the result of a force multiplied by a distance from a pivot point.</span>
+
+<span class="hljs-comment">// We use a jome tag because it&#x27;s a script that can be run</span>
+<span class="hljs-keyword">return</span> &lt;<span class="hljs-variable">jome</span> &gt;
+  <span class="hljs-keyword">return</span> <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
+&lt;/<span class="hljs-variable">jome</span> &gt;
+</code></pre>
+</p>
+<p>Result inside the editor:</p>
 <p>
   <div style="display: flex; width: calc(100vw - 340px);">
     <div class="preview" style="width: 50%; overflow: auto;">
@@ -139,25 +156,17 @@ and data editing (like spreadsheet with types inside the editor).</p>
 
     </div>
     <div class="code" style="width: 50%; overflow: auto;">
-      <pre><code class="language-jome"><span class="hljs-comment">#*
-# Torque Calculator Example
-*#</span>
-
-<span class="hljs-keyword">with</span>
-  <span class="hljs-variable">Number</span> <span class="hljs-variable">force</span> = ? <span class="hljs-variable">N</span>
-  <span class="hljs-variable">Number</span> <span class="hljs-variable">distance</span> = ? <span class="hljs-variable">m</span>
-<span class="hljs-keyword">end</span>
-
-<span class="hljs-comment"># Torque is the result of a force multiplied by a distance from a pivot point.</span>
-
-<span class="hljs-comment">// We use a jome tag because it&#x27;s a script that can be run</span>
-<span class="hljs-keyword">return</span> &lt;<span class="hljs-variable">jome</span> &gt;
-  <span class="hljs-keyword">return</span> <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
-&lt;/<span class="hljs-variable">jome</span> &gt;
-</code></pre>
-
     </div>
   </div></p>
+<p>Result inside the shell:</p>
+<pre><code class="language-sh">jome torqueCalculator.jome --force=10 --distance=2
+<span class="hljs-comment"># =&gt; 20 N·m</span>
+</code></pre>
+<p>Usage inside another file:</p>
+<pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-variable">calculateTorque</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./torqueCalculator.jome&#x27;</span>
+
+<span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">calculateTorque</span> force: <span class="hljs-number">20</span> <span class="hljs-variable">lbs</span>, distance: <span class="hljs-number">1</span> <span class="hljs-keyword">in</span>
+</code></pre>
   <h2 id="features">Features</h2>
 <p>Jome has a few original features (to my knowledge):</p>
 <ol>
