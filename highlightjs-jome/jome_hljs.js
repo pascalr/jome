@@ -92,6 +92,16 @@ const highlighter = function(hljs) {
     className: "title.function",
     relevance: 0
   }
+
+  const NUMBER_PLACEHOLDER = {
+    match: [
+      /=\s+/,
+      /\?\s+\w+(\s*\|\s*\w+)*/,
+    ],
+    scope: {
+      2: "number",
+    },
+  };
   
   // const CLASS_NAME_WITH_NAMESPACE_RE = regex.concat(CLASS_NAME_RE, /(::\w+)*/)
   const NUMBER = {
@@ -101,6 +111,8 @@ const highlighter = function(hljs) {
       { begin: `(\\b(${decimalInteger})((${frac})|\\.)?|(${frac}))` +
         `[eE][+-]?(${decimalDigits})\\b` },
       { begin: `\\b(${decimalInteger})\\b((${frac})\\b|\\.)?|(${frac})\\b` },
+
+      // FIXME: Are those below even supported in Jome?
 
       // DecimalBigIntegerLiteral
       { begin: `\\b(0|[1-9](_?[0-9])*)n\\b` },
@@ -115,6 +127,11 @@ const highlighter = function(hljs) {
       { begin: "\\b0[0-7]+n?\\b" },
     ],
     relevance: 0
+  };
+
+  const NUMBER_WITH_UNIT = {
+    match: /\d+(\.\d+)?\s*\w+/,
+    scope: "number",
   };
 
   // // https://github.com/highlightjs/highlight.js/blob/main/src/languages/ruby.js
@@ -219,7 +236,9 @@ const highlighter = function(hljs) {
       },
       PATH,
       TYPES,
+      NUMBER_WITH_UNIT,
       NUMBER,
+      NUMBER_PLACEHOLDER,
       CLASS_DEFINITION,
       FUNCTION_CALL, // FIXME: two function calls definitions
       KEYWORD,

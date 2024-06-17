@@ -6,6 +6,15 @@ module.exports = () => {
     background-color: #080e14;
   }
 
+  input {
+    background-color: inherit;
+    color: white;
+    border: none;
+    padding: 0.3em;
+    margin-bottom: 0.5em;
+    border-bottom: 1px solid white;
+  }
+
   .scrollable {
     overflow-x: hidden;
     overflow-y: auto;

@@ -123,8 +123,8 @@ and data editing (like spreadsheet with types inside the editor).</p>
 *#</span>
 
 <span class="hljs-keyword">with</span>
-  <span class="hljs-variable">Number</span> <span class="hljs-variable">force</span> = ? <span class="hljs-variable">N</span> | <span class="hljs-variable">lb</span>
-  <span class="hljs-variable">Number</span> <span class="hljs-variable">distance</span> = ? <span class="hljs-variable">m</span> | <span class="hljs-keyword">in</span>
+  <span class="hljs-variable">Number</span> <span class="hljs-variable">force</span> = <span class="hljs-number">? N | lb</span>
+  <span class="hljs-variable">Number</span> <span class="hljs-variable">distance</span> = <span class="hljs-number">? m | in</span>
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-comment"># Torque is the result of a force multiplied by a distance from a pivot point.</span>
@@ -165,7 +165,7 @@ and data editing (like spreadsheet with types inside the editor).</p>
 <p>Usage inside another file:</p>
 <pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-variable">calculateTorque</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./torqueCalculator.jome&#x27;</span>
 
-<span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">calculateTorque</span> force: <span class="hljs-number">20</span> <span class="hljs-variable">lbs</span>, distance: <span class="hljs-number">1</span> <span class="hljs-keyword">in</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">calculateTorque</span> force: <span class="hljs-number">20 lbs</span>, distance: <span class="hljs-number">1 in</span>
 </code></pre>
   <h2 id="features">Features</h2>
 <p>Jome has a few original features (to my knowledge):</p>
@@ -283,8 +283,8 @@ be the content of the function of class.</p>
 <p>You can add units to variables. They are only used at compile time.</p>
 <p>You can specify the unit after a number or use the middle dot (·) to apply a unit to a variable.
 The editor should make this symbol easyily accessible. You can also simply multiply by 1 of the unit.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">width</span> = <span class="hljs-number">5</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">force</span> = <span class="hljs-number">10</span> <span class="hljs-variable">N</span> <span class="hljs-comment">// Newtons</span>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">width</span> = <span class="hljs-number">5
+let</span> <span class="hljs-variable">force</span> = <span class="hljs-number">10 N</span> <span class="hljs-comment">// Newtons</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">distance</span> = <span class="hljs-variable">width</span>·<span class="hljs-variable">m</span> <span class="hljs-comment">// meters // same as width*1m</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
 <span class="hljs-variable">jome</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable">torque</span>)
@@ -296,7 +296,7 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <p>You can also do it using the along keyword inside a function.</p>
 <p>TODO: There must be a way to say that it is required to specify a unit.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Here, sleep should specify that the unit is mandatory</span>
-<span class="hljs-variable">jome</span>.<span class="hljs-title function_">sleep</span>(<span class="hljs-number">20</span> <span class="hljs-variable">ms</span>)
+<span class="hljs-variable">jome</span>.<span class="hljs-title function_">sleep</span>(<span class="hljs-number">20 ms</span>)
 </code></pre>
 <h2>Custom base language (flavor?)</h2>
 <p>Only javascript is supported for now.</p>

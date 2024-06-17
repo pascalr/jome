@@ -308,8 +308,8 @@ Foo foo = Foo(&quot;arg&quot;) // no, use instead: let foo = Foo(&quot;arg&quot;
 def sum(int x, int y) -&gt; int</p>
 <p>The types are specified before the variable name like in C++ or Java, not after like in typescript.</p>
 <p>You can declare primitive types directly, but you still use the keyword <code>let</code> for class instances. (You can't do it like c++ because it would be confused with function calls)</p>
-<pre><code class="language-jome"><span class="hljs-type">int</span> <span class="hljs-variable">i</span> = <span class="hljs-number">0</span>
-<span class="hljs-type">string</span> <span class="hljs-variable">str</span> = <span class="hljs-string">&quot;some string&quot;</span>
+<pre><code class="language-jome"><span class="hljs-type">int</span> <span class="hljs-variable">i</span> = <span class="hljs-number">0
+string</span> <span class="hljs-variable">str</span> = <span class="hljs-string">&quot;some string&quot;</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">any</span> = <span class="hljs-string">&quot;some string&quot;</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">obj</span> = <span class="hljs-title function_">SomeClass</span>(<span class="hljs-string">&quot;param&quot;</span>)
 </code></pre>
@@ -365,8 +365,8 @@ A def with no args does not require parentheses, but this syntax does.</p>
 <p>How does it work for instance variables initialization? Works well</p>
 <pre><code class="language-jome"><span class="hljs-keyword">class </span><span class="hljs-title class_">SomeClass</span>
 
-  <span class="hljs-type">int</span> <span class="hljs-variable">@count</span> = <span class="hljs-number">0</span>
-  <span class="hljs-type">string</span> <span class="hljs-variable">@message</span> = <span class="hljs-string">&quot;Hello world!&quot;</span>
+  <span class="hljs-type">int</span> <span class="hljs-variable">@count</span> = <span class="hljs-number">0
+  string</span> <span class="hljs-variable">@message</span> = <span class="hljs-string">&quot;Hello world!&quot;</span>
 
 <span class="hljs-keyword">end</span>
 </code></pre>
@@ -952,7 +952,7 @@ let r = <code>{x if y}</code> // si x, alors <code>{y}</code>, sinon `` J'aimera
 <h2>Chaining methods</h2>
 <p>You can execute multiple methods on the same object using the <code>chain</code> keyword.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a route and start it</span>
-<span class="hljs-variable">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-keyword">chain</span>
+<span class="hljs-variable">ExpressServer</span> port: <span class="hljs-number">3000 chain</span>
   <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
     <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-variable">homePage</span>)
   <span class="hljs-keyword">end</span>

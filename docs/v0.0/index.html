@@ -223,8 +223,8 @@ And you use the end keyword instead of curly braces.</p>
 <p>The language includes a lot of built-in functions and constants. They start with a hashtag (#) symbol.</p>
 <p>For the complete list of utils: see the <a href="/jome/utils">utils page</a>.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// A constant</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-built_in variable_">#PI</span>/<span class="hljs-number">2</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">e</span> = <span class="hljs-built_in function_">#e</span> <span class="hljs-comment">// Euler&#x27;s number</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-built_in variable_">#PI</span>/<span class="hljs-number">2
+let</span> <span class="hljs-variable">e</span> = <span class="hljs-built_in function_">#e</span> <span class="hljs-comment">// Euler&#x27;s number</span>
 
 <span class="hljs-comment">// A function</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">angle</span> = <span class="hljs-built_in function_">#sin</span>(<span class="hljs-variable">x</span>)
@@ -278,7 +278,7 @@ objects, execute functions and to create <a href="#nodes">nodes</a></p>
 <pre><code class="language-jome"><span class="hljs-comment">// objects</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">details</span> = {
   distanceX: <span class="hljs-number">30</span>, distanceY: <span class="hljs-number">40</span> <span class="hljs-comment">// comma is optional</span>
-  totalDistance: <span class="hljs-number">50</span>, eta: <span class="hljs-variable">10min</span>
+  totalDistance: <span class="hljs-number">50</span>, eta: <span class="hljs-number">10min</span>
 }
 
 <span class="hljs-comment">// values</span>
@@ -327,10 +327,10 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
 <pre><code class="language-jome">{
 <span class="hljs-variable">Recipe</span>
   name: <span class="hljs-string">&#x27;Chickpea balls&#x27;</span>
-  prepare: <span class="hljs-variable">1h</span>
-  <span class="hljs-variable">Ing</span> <span class="hljs-variable">1cup</span>, <span class="hljs-string">&quot;dry chickpeas&quot;</span>
-  <span class="hljs-variable">Ing</span> <span class="hljs-variable">2cup</span>, <span class="hljs-string">&quot;water&quot;</span>
-  <span class="hljs-variable">Ing</span> <span class="hljs-variable">2tbsp</span>, <span class="hljs-string">&quot;parmesan&quot;</span>
+  prepare: <span class="hljs-number">1h</span>
+  <span class="hljs-variable">Ing</span> <span class="hljs-number">1cup</span>, <span class="hljs-string">&quot;dry chickpeas&quot;</span>
+  <span class="hljs-variable">Ing</span> <span class="hljs-number">2cup</span>, <span class="hljs-string">&quot;water&quot;</span>
+  <span class="hljs-variable">Ing</span> <span class="hljs-number">2tbsp</span>, <span class="hljs-string">&quot;parmesan&quot;</span>
   <span class="hljs-variable">Step</span> <span class="hljs-string">`Put {@1} into {@2}...`</span> <span class="hljs-comment">// @1 is the first children</span>
   <span class="hljs-variable">Step</span> <span class="hljs-string">&quot;Mix ...&quot;</span>
   <span class="hljs-variable">Step</span> <span class="hljs-string">&quot;Blah blah ...&quot;</span>
@@ -365,10 +365,10 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
 </code></pre>
 <pre><code class="language-jome"><span class="hljs-variable">Recipe</span> #{
   name: <span class="hljs-string">&#x27;Chickpea balls&#x27;</span>
-  prepare: <span class="hljs-variable">1h</span>
-  <span class="hljs-variable">Ing</span> <span class="hljs-variable">1cup</span>, <span class="hljs-string">&quot;dry chickpeas&quot;</span>
-  <span class="hljs-variable">Ing</span> <span class="hljs-variable">2cup</span>, <span class="hljs-string">&quot;water&quot;</span>
-  <span class="hljs-variable">Ing</span> <span class="hljs-variable">2tbsp</span>, <span class="hljs-string">&quot;parmesan&quot;</span>
+  prepare: <span class="hljs-number">1h</span>
+  <span class="hljs-variable">Ing</span> <span class="hljs-number">1cup</span>, <span class="hljs-string">&quot;dry chickpeas&quot;</span>
+  <span class="hljs-variable">Ing</span> <span class="hljs-number">2cup</span>, <span class="hljs-string">&quot;water&quot;</span>
+  <span class="hljs-variable">Ing</span> <span class="hljs-number">2tbsp</span>, <span class="hljs-string">&quot;parmesan&quot;</span>
   <span class="hljs-variable">Step</span> <span class="hljs-string">`Put {@1} into {@2}...`</span> <span class="hljs-comment">// @1 is the first children</span>
   <span class="hljs-variable">Step</span> <span class="hljs-string">&quot;Mix ...&quot;</span>
   <span class="hljs-variable">Step</span> <span class="hljs-string">&quot;Blah blah ...&quot;</span>
@@ -380,7 +380,7 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
 <p>You can create a chain block using chain ... end.</p>
 <p>Chain returns the value of the last command.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a get handler and start it</span>
-<span class="hljs-variable">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-keyword">chain</span>
+<span class="hljs-variable">ExpressServer</span> port: <span class="hljs-number">3000 chain</span>
   <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
     <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-variable">homePage</span>)
   <span class="hljs-keyword">end</span>
@@ -389,8 +389,8 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
 </code></pre>
 <pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a get handler and start it</span>
 {
-  <span class="hljs-variable">ExpressServer</span> port: <span class="hljs-number">3000</span>
-    someProp: <span class="hljs-string">&#x27;someVal&#x27;</span>
+  <span class="hljs-variable">ExpressServer</span> port: <span class="hljs-number">3000
+    someProp</span>: <span class="hljs-string">&#x27;someVal&#x27;</span>
     <span class="hljs-keyword">chain</span>
       <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
         <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-variable">homePage</span>)
@@ -401,9 +401,9 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
 </code></pre>
 <pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-variable">express</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;express&#x27;</span>
 
-<span class="hljs-keyword">let</span> <span class="hljs-variable">port</span> = <span class="hljs-number">3000</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">port</span> = <span class="hljs-number">3000
 
-<span class="hljs-variable">express</span> <span class="hljs-keyword">chain</span>
+express</span> <span class="hljs-keyword">chain</span>
   <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span> <span class="hljs-keyword">do</span> |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>|
     <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-string">&#x27;Hello world!&#x27;</span>)
   <span class="hljs-keyword">end</span>
@@ -602,12 +602,12 @@ Maybe exec ... while ???</p>
 <h3>Adding children to nodes</h3>
 <p>In order to add children to nodes, you can use the &lt;&lt; operator.</p>
 <pre><code class="language-jome"><span class="hljs-variable">hero</span>.<span class="hljs-variable">inventory</span> &lt;&lt; {[
-  <span class="hljs-variable">Sword</span> damage: <span class="hljs-number">10</span>, weight: <span class="hljs-variable">500g</span>
-  <span class="hljs-variable">Shield</span> armor: <span class="hljs-number">8</span>, weight: <span class="hljs-variable">400g</span>
+  <span class="hljs-variable">Sword</span> damage: <span class="hljs-number">10</span>, weight: <span class="hljs-number">500g</span>
+  <span class="hljs-variable">Shield</span> armor: <span class="hljs-number">8</span>, weight: <span class="hljs-number">400g</span>
   <span class="hljs-variable">Scroll</span> <span class="hljs-string">&quot;Scroll of wisdom&quot;</span>
   <span class="hljs-variable">Belt</span>
-    <span class="hljs-variable">HealingPotion</span> life: <span class="hljs-number">200</span>
-    <span class="hljs-variable">ManaPotion</span> mana: <span class="hljs-number">100</span>
+    <span class="hljs-variable">HealingPotion</span> life: <span class="hljs-number">200
+    ManaPotion</span> mana: <span class="hljs-number">100</span>
 ]}
 </code></pre>
 <h3>Children attached with key</h3>
@@ -615,8 +615,8 @@ Maybe exec ... while ???</p>
 QUAND TU ATTACHES UN CHILDREN AVEC UNE CLÉ, il est là ET il est dans la liste de children.
 si tu veux mettre à un attribute, mais pas children, alors utiliser @attr</p>
 <pre><code class="language-jome">$ &lt;&lt;
-  someVar: <span class="hljs-number">10</span>
-  page: <span class="hljs-variable">Page</span>
+  someVar: <span class="hljs-number">10
+  page</span>: <span class="hljs-variable">Page</span>
     navbar: <span class="hljs-variable">Navbar</span>
       list: <span class="hljs-variable">List</span>
         <span class="hljs-variable">Link</span> <span class="hljs-string">&quot;Musics&quot;</span>, to: <span class="hljs-string">&#x27;/musics&#x27;</span>
@@ -888,8 +888,8 @@ end
 <pre><code class="language-jome"><span class="hljs-keyword">module</span>
   <span class="hljs-keyword">def</span> <span class="hljs-variable">someFunc</span>
   <span class="hljs-keyword">end</span>
-  <span class="hljs-keyword">let</span> <span class="hljs-variable">someVar</span> = <span class="hljs-number">10</span>
-<span class="hljs-keyword">end</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">someVar</span> = <span class="hljs-number">10
+end</span>
 </code></pre>
 <p>Compiles to</p>
 <pre><code class="language-js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
@@ -906,8 +906,8 @@ end
 <pre><code class="language-jome"><span class="hljs-keyword">module</span> <span class="hljs-variable">SomeModule</span>
   <span class="hljs-keyword">def</span> <span class="hljs-variable">someFunc</span>
   <span class="hljs-keyword">end</span>
-  <span class="hljs-keyword">let</span> <span class="hljs-variable">someVar</span> = <span class="hljs-number">10</span>
-<span class="hljs-keyword">end</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">someVar</span> = <span class="hljs-number">10
+end</span>
 
 <span class="hljs-comment">// usage:</span>
 <span class="hljs-comment">// import {SomeModule} from &#x27;./some_file.jome&#x27;</span>
@@ -981,7 +981,7 @@ the confusion, you cannot declare an object with type. So you use interface for 
 <p>Contrary to Typescript, you can add default values in an interface.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">interface</span> <span class="hljs-variable">Options</span>
   method: <span class="hljs-type">string</span> = <span class="hljs-string">&#x27;get&#x27;</span>
-  ttl: <span class="hljs-variable">number</span> = <span class="hljs-variable">30s</span>
+  ttl: <span class="hljs-variable">number</span> = <span class="hljs-number">30s</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <h3>Declaration Merging</h3>
@@ -1224,12 +1224,12 @@ btn.<span class="hljs-title function_">click</span>()
 <p>When you declare a variable without a keyword, the variable will be a constant. To declare a variable, use the var keyword.
 To declare a function, use de def function.</p>
 <p>TODO: Keywords, var, def, let</p>
-<pre><code class="language-jome"><span class="hljs-variable">PI</span> = <span class="hljs-number">3.1415</span>
-<span class="hljs-variable">PI</span> = <span class="hljs-number">10</span> <span class="hljs-comment">// ERROR. PI is not allowed to be redeclared anywhere nested inside the scope</span>
-<span class="hljs-keyword">var</span> <span class="hljs-variable">x</span> = <span class="hljs-number">10</span>
-<span class="hljs-variable">x</span> = <span class="hljs-number">20</span>
-<span class="hljs-keyword">def</span> <span class="hljs-variable">add10</span> = <span class="hljs-variable">x</span> =&gt; <span class="hljs-variable">x</span> + <span class="hljs-number">10</span>
-<span class="hljs-title function_">add10</span>(<span class="hljs-number">20</span>)
+<pre><code class="language-jome"><span class="hljs-variable">PI</span> = <span class="hljs-number">3.1415
+PI</span> = <span class="hljs-number">10</span> <span class="hljs-comment">// ERROR. PI is not allowed to be redeclared anywhere nested inside the scope</span>
+<span class="hljs-keyword">var</span> <span class="hljs-variable">x</span> = <span class="hljs-number">10
+x</span> = <span class="hljs-number">20
+def</span> <span class="hljs-variable">add10</span> = <span class="hljs-variable">x</span> =&gt; <span class="hljs-variable">x</span> + <span class="hljs-number">10
+add10</span>(<span class="hljs-number">20</span>)
 <span class="hljs-variable">add10</span> = <span class="hljs-variable">x</span> =&gt; <span class="hljs-variable">x</span> + <span class="hljs-number">20</span> <span class="hljs-comment">// ERROR. add10 can only be redeclared in a nested scope</span>
 </code></pre>
 <h2>along keyword</h2>
@@ -1480,9 +1480,9 @@ Page
   <span class="hljs-string">&quot;Paul&quot;</span>
 }
 <span class="hljs-variable">matrix</span> = {
-  <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>
-  <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>
-  <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>
+  <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0
+  0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0
+  0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>
 }
 </code></pre>
 <h2>Features</h2>
@@ -1569,10 +1569,10 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
 <pre><code class="language-jome">{
 <span class="hljs-variable">Recipe</span>
   name: <span class="hljs-string">&#x27;Chickpea balls&#x27;</span>
-  prepare: <span class="hljs-variable">1h</span>
-  <span class="hljs-variable">Ing</span> <span class="hljs-variable">1cup</span>, <span class="hljs-string">&quot;dry chickpeas&quot;</span>
-  <span class="hljs-variable">Ing</span> <span class="hljs-variable">2cup</span>, <span class="hljs-string">&quot;water&quot;</span>
-  <span class="hljs-variable">Ing</span> <span class="hljs-variable">2tbsp</span>, <span class="hljs-string">&quot;parmesan&quot;</span>
+  prepare: <span class="hljs-number">1h</span>
+  <span class="hljs-variable">Ing</span> <span class="hljs-number">1cup</span>, <span class="hljs-string">&quot;dry chickpeas&quot;</span>
+  <span class="hljs-variable">Ing</span> <span class="hljs-number">2cup</span>, <span class="hljs-string">&quot;water&quot;</span>
+  <span class="hljs-variable">Ing</span> <span class="hljs-number">2tbsp</span>, <span class="hljs-string">&quot;parmesan&quot;</span>
   <span class="hljs-variable">Step</span> <span class="hljs-string">`Put {@1} into {@2}...`</span> <span class="hljs-comment">// @1 is the first children</span>
   <span class="hljs-variable">Step</span> <span class="hljs-string">&quot;Mix ...&quot;</span>
   <span class="hljs-variable">Step</span> <span class="hljs-string">&quot;Blah blah ...&quot;</span>
@@ -1598,7 +1598,7 @@ là? Ça devrait être assez explicit en général. Et tu peux quand même le fa
 </code></pre>
 <pre><code class="language-jome"><span class="hljs-comment">// Create a server, add a get handler and start it</span>
 {
-  <span class="hljs-variable">ExpressServer</span> port: <span class="hljs-number">3000</span> <span class="hljs-variable">exec</span>
+  <span class="hljs-variable">ExpressServer</span> port: <span class="hljs-number">3000 exec</span>
     <span class="hljs-variable">get</span> <span class="hljs-string">&#x27;/&#x27;</span>, |<span class="hljs-variable">req</span>, <span class="hljs-variable">res</span>| =&gt; (
       <span class="hljs-variable">res</span>.<span class="hljs-title function_">send</span>(<span class="hljs-variable">homePage</span>)
     )
