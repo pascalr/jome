@@ -1,5 +1,7 @@
 // TODO: Inside an object, scope: "attr" for object keys
 
+const ECMAScript = require('./lib/ecmascript.js')
+
 // Example of an example:
 // https://github.com/highlightjs/highlight.js/blob/main/src/languages/css.js
 // https://github.com/highlightjs/highlight.js/blob/main/src/languages/ruby.js
@@ -21,6 +23,11 @@ function String(begin, end) {
 const highlighter = function(hljs) {
 
   const regex = hljs.regex;
+
+  function noneOf(list) {
+    return regex.concat("(?!", list.join("|"), ")");
+  }
+
   // Source: https://github.com/highlightjs/highlight.js/blob/main/src/languages/javascript.js
   // https://tc39.es/ecma262/#sec-literals-numeric-literals
   const decimalDigits = '[0-9](_?[0-9])*';
@@ -45,6 +52,46 @@ const highlighter = function(hljs) {
     },
     // keywords: RUBY_KEYWORDS
   };
+
+  /*const FUNCTION_DEFINITION = {
+    variants: [
+      {
+        match: [
+          /function/,
+          /\s+/,
+          IDENT_RE,
+          /(?=\s*\()/
+        ]
+      },
+      // anonymous function
+      {
+        match: [
+          /function/,
+          /\s*(?=\()/
+        ]
+      }
+    ],
+    className: {
+      1: "keyword",
+      3: "title.function"
+    },
+    label: "func.def",
+    contains: [ PARAMS ],
+    illegal: /%/
+  };*/
+
+  const FUNCTION_CALL = {
+    match: regex.concat(
+      /\b/,
+      noneOf([
+        ...ECMAScript.BUILT_IN_GLOBALS,
+        "super",
+        "import"
+      ].map(x => `${x}\\s*\\(`)),
+      ECMAScript.IDENT_RE, regex.lookahead(/\s*\(/)),
+    className: "title.function",
+    relevance: 0
+  }
   
   // const CLASS_NAME_WITH_NAMESPACE_RE = regex.concat(CLASS_NAME_RE, /(::\w+)*/)
   const NUMBER = {
@@ -174,8 +221,9 @@ const highlighter = function(hljs) {
       TYPES,
       NUMBER,
       CLASS_DEFINITION,
+      FUNCTION_CALL, // FIXME: two function calls definitions
       KEYWORD,
-      FUNC_CALL,
+      FUNC_CALL, // FIXME: two function calls definitions
       UTIL_CONST,
       UTIL_FUNC,
       OBJ_KEY,

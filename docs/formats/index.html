@@ -146,7 +146,7 @@ the air, inviting anyone who entered to linger and embrace the serenity.
 <span class="hljs-comment">// Ah! Inside config.jome, for formats, allow them to handle file input like this</span>
 <span class="hljs-comment">// Here it could be compiled for example to:</span>
 <span class="hljs-variable">const</span> <span class="hljs-variable">PNG</span> = <span class="hljs-title function_ invoke__">require</span>(<span class="hljs-string">&#x27;png-js&#x27;</span>);
-<span class="hljs-keyword">let</span> <span class="hljs-variable">img</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">PNG</span>(<span class="hljs-string">&#x27;some_image.png&#x27;</span>);
+<span class="hljs-keyword">let</span> <span class="hljs-variable">img</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_">PNG</span>(<span class="hljs-string">&#x27;some_image.png&#x27;</span>);
 </code></pre>
 <p>TODO: Deprecate the syntax &quot;Hello,world&quot;%csv
 Use the keyword as or something similar instead.
@@ -154,7 +154,7 @@ I want typecasting to be done using parentheses, not lt and gt and not the keywo
 <pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">foo</span> -&gt; <span class="hljs-variable">any</span>
   <span class="hljs-keyword">return</span> <span class="hljs-number">10</span>
 <span class="hljs-keyword">end</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">nb</span> = (<span class="hljs-type">int</span>) <span class="hljs-title function_ invoke__">foo</span>()
+<span class="hljs-keyword">let</span> <span class="hljs-variable">nb</span> = (<span class="hljs-type">int</span>) <span class="hljs-title function_">foo</span>()
 <span class="hljs-comment">// Based on the context I will know if int is a type or something else</span>
 </code></pre>
 <h2>csv, json, yaml</h2>

@@ -202,9 +202,9 @@ import calculateTorque from './torqueCalculator.jome'</p>
 <h2>Flexible syntax</h2>
 <p>You can code using the syntax you prefer. The project should specify a linter so the code is converted to a standard when you save.</p>
 <p>Also, the idea is that when you open a page, the editor should show you the code in the syntax that you prefer.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">if</span> <span class="hljs-variable">val</span> == <span class="hljs-number">20</span>: <span class="hljs-title function_ invoke__">doSomething</span>()
-<span class="hljs-keyword">if</span> (<span class="hljs-variable">val</span> == <span class="hljs-number">20</span>) { <span class="hljs-title function_ invoke__">doSomething</span>() }
-<span class="hljs-keyword">if</span> (<span class="hljs-variable">val</span> == <span class="hljs-number">20</span>) <span class="hljs-title function_ invoke__">doSomething</span>() <span class="hljs-keyword">end</span>
+<pre><code class="language-jome"><span class="hljs-keyword">if</span> <span class="hljs-variable">val</span> == <span class="hljs-number">20</span>: <span class="hljs-title function_">doSomething</span>()
+<span class="hljs-title function_">if</span> (<span class="hljs-variable">val</span> == <span class="hljs-number">20</span>) { <span class="hljs-title function_">doSomething</span>() }
+<span class="hljs-title function_">if</span> (<span class="hljs-variable">val</span> == <span class="hljs-number">20</span>) <span class="hljs-title function_">doSomething</span>() <span class="hljs-keyword">end</span>
 <span class="hljs-variable">calcSomething</span> <span class="hljs-number">1</span>, <span class="hljs-number">2</span> <span class="hljs-comment">// You can omit parentheses for a function call</span>
 </code></pre>
 <p>Read more on <a href="">Flexible syntax</a> (TODO Link)</p>
@@ -281,7 +281,7 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <span class="hljs-keyword">let</span> <span class="hljs-variable">force</span> = <span class="hljs-number">10</span> <span class="hljs-variable">N</span> <span class="hljs-comment">// Newtons</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">distance</span> = <span class="hljs-variable">width</span>·<span class="hljs-variable">m</span> <span class="hljs-comment">// meters // same as width*1m</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
-<span class="hljs-variable">jome</span>.<span class="hljs-title function_ invoke__">log</span>(<span class="hljs-variable">torque</span>)
+<span class="hljs-variable">jome</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable">torque</span>)
 <span class="hljs-comment">// → 50 N·m</span>
 </code></pre>
 <p>with nb = ? foos end</p>
@@ -290,7 +290,7 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <p>You can also do it using the along keyword inside a function.</p>
 <p>TODO: There must be a way to say that it is required to specify a unit.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Here, sleep should specify that the unit is mandatory</span>
-<span class="hljs-variable">jome</span>.<span class="hljs-title function_ invoke__">sleep</span>(<span class="hljs-number">20</span> <span class="hljs-variable">ms</span>)
+<span class="hljs-variable">jome</span>.<span class="hljs-title function_">sleep</span>(<span class="hljs-number">20</span> <span class="hljs-variable">ms</span>)
 </code></pre>
 <h2>Custom base language (flavor?)</h2>
 <p>Only javascript is supported for now.</p>
@@ -299,7 +299,7 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <p>It also makes all the globals available from the base language available in Jome.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">flavor</span> <span class="hljs-variable">js</span> <span class="hljs-comment">// you can omit this, this is the default</span>
 
-<span class="hljs-variable">console</span>.<span class="hljs-title function_ invoke__">log</span>(<span class="hljs-string">&quot;Hello&quot;</span>) <span class="hljs-comment">// console is available because of javascript</span>
+<span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hello&quot;</span>) <span class="hljs-comment">// console is available because of javascript</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = <span class="hljs-number">10</span> ** <span class="hljs-number">2</span> <span class="hljs-comment">// ** is the exponentiation operator like javascript</span>
 </code></pre>
 <p>If you want total control even let's say on the operators, you could eventually design a custom language.</p>
