@@ -117,7 +117,7 @@ standardized code with other people.</p>
 <p>You should use a specialized editor (WIP) in order to fully use all it's features such as code evaluation (like Jupyter Notebook)
 and data editing (like spreadsheet with types inside the editor).</p>
 <p>For the near future, it only compiles to JavaScript.</p>
-  <h2 id="overview">Overview</h2>
+  <h2 id="sample">Sample</h2>
 <p>Preview mode on the left, and edit mode on the right.</p>
 <p>
   <div style="display: flex; width: calc(100vw - 340px);">
@@ -134,8 +134,7 @@ and data editing (like spreadsheet with types inside the editor).</p>
         m
       </div>
       <p>Torque is the result of a force multiplied by a distance from a pivot point.</p>
-      <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">result</span> = <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
-<span class="hljs-keyword">return</span> <span class="hljs-variable">result</span>
+      <pre><code class="language-jome"><span class="hljs-keyword">return</span> <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
 </code></pre>
 
     </div>
@@ -152,11 +151,9 @@ and data editing (like spreadsheet with types inside the editor).</p>
 <span class="hljs-comment"># Torque is the result of a force multiplied by a distance from a pivot point.</span>
 
 <span class="hljs-comment">// We use a jome tag because it&#x27;s a script that can be run</span>
-&lt;<span class="hljs-variable">jome</span> &gt;
-  <span class="hljs-keyword">let</span> <span class="hljs-variable">result</span> = <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
-  <span class="hljs-built_in function_">#log</span> <span class="hljs-string">`Result: ${result}`</span>
+<span class="hljs-keyword">return</span> &lt;<span class="hljs-variable">jome</span> &gt;
+  <span class="hljs-keyword">return</span> <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
 &lt;/<span class="hljs-variable">jome</span> &gt;
-<span class="hljs-keyword">return</span> <span class="hljs-variable">result</span>
 </code></pre>
 
     </div>

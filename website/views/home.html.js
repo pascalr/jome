@@ -16,8 +16,7 @@ module.exports = () => {
 
   let overview01 = mdToHtml(`
   \`\`\`jome
-  let result = force * distance
-  return result
+  return force * distance
   \`\`\``);
 
   let overviewSrc = mdToHtml(`
@@ -34,11 +33,9 @@ module.exports = () => {
   # Torque is the result of a force multiplied by a distance from a pivot point.
 
   // We use a jome tag because it's a script that can be run
-  <jome >
-    let result = force * distance
-    #log \`Result: \${result}\`
+  return <jome >
+    return force * distance
   </jome >
-  return result
   \`\`\``);
 
   let overview = `
@@ -77,7 +74,7 @@ module.exports = () => {
 
   For the near future, it only compiles to JavaScript.
 
-  <h2 id="overview">Overview</h2>
+  <h2 id="sample">Sample</h2>
 
   Preview mode on the left, and edit mode on the right.
 
