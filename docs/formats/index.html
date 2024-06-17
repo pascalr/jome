@@ -145,7 +145,7 @@ the air, inviting anyone who entered to linger and embrace the serenity.
 <span class="hljs-keyword">let</span> <span class="hljs-variable">img</span> = #(./<span class="hljs-variable">some_image</span>.<span class="hljs-variable">png</span>)
 <span class="hljs-comment">// Ah! Inside config.jome, for formats, allow them to handle file input like this</span>
 <span class="hljs-comment">// Here it could be compiled for example to:</span>
-<span class="hljs-variable">const</span> <span class="hljs-title class_">PNG</span> = <span class="hljs-title function_ invoke__">require</span>(<span class="hljs-string">&#x27;png-js&#x27;</span>);
+<span class="hljs-variable">const</span> <span class="hljs-variable">PNG</span> = <span class="hljs-title function_ invoke__">require</span>(<span class="hljs-string">&#x27;png-js&#x27;</span>);
 <span class="hljs-keyword">let</span> <span class="hljs-variable">img</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">PNG</span>(<span class="hljs-string">&#x27;some_image.png&#x27;</span>);
 </code></pre>
 <p>TODO: Deprecate the syntax &quot;Hello,world&quot;%csv
@@ -165,7 +165,7 @@ I want typecasting to be done using parentheses, not lt and gt and not the keywo
 <h2>bin, hex, oct</h2>
 <p>You can't declare the same way a binary, hexadecimal or octodecimal number in Jome because it could be confusing with units.</p>
 <p>Instead you use tags.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">netmask</span> = &lt;<span class="hljs-variable">hex</span>&gt;<span class="hljs-title class_">FFFFFF00</span>&lt;/<span class="hljs-variable">hex</span>&gt; <span class="hljs-comment">// compiles to 0xFFFFFF00</span>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">netmask</span> = &lt;<span class="hljs-variable">hex</span>&gt;<span class="hljs-variable">FFFFFF00</span>&lt;/<span class="hljs-variable">hex</span>&gt; <span class="hljs-comment">// compiles to 0xFFFFFF00</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">flags</span> = &lt;<span class="hljs-variable">bin</span>&gt;<span class="hljs-number">01100101</span>&lt;/<span class="hljs-variable">bin</span>&gt; <span class="hljs-comment">// compiles to 0b01100101</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">octodecimalNb</span> = &lt;<span class="hljs-variable">oct</span>&gt;<span class="hljs-number">712</span>&lt;/<span class="hljs-variable">oct</span>&gt; <span class="hljs-comment">// compiles to 0o712</span>
 </code></pre>

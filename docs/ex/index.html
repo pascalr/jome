@@ -150,15 +150,15 @@ Show the code 75% of the space at the left, and 25% the simple counter button on
   <h3>Vanilla js</h3>
   <h3>Web components</h3>
   <h3 id="react-component">React component</h3>
-<pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { <span class="hljs-variable">useState</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-variable">React</span>, { <span class="hljs-variable">useState</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 
-<span class="hljs-variable">const</span> <span class="hljs-title class_">Counter</span> = () =&gt; {
+<span class="hljs-variable">const</span> <span class="hljs-variable">Counter</span> = () =&gt; {
   <span class="hljs-comment">// Define state variable &#x27;count&#x27; with initial value 0 and a function &#x27;setCount&#x27; to update it</span>
   <span class="hljs-variable">const</span> [<span class="hljs-variable">count</span>, <span class="hljs-variable">setCount</span>] = <span class="hljs-title function_ invoke__">useState</span>(<span class="hljs-number">0</span>);
 
   <span class="hljs-keyword">return</span> &lt;<span class="hljs-variable">react</span>&gt;
     &lt;<span class="hljs-variable">button</span> <span class="hljs-variable">onClick</span>={<span class="hljs-title function_ invoke__">setCount</span>(<span class="hljs-variable">count</span>+<span class="hljs-number">1</span>)}&gt;
-      <span class="hljs-title class_">Clicked</span> {<span class="hljs-variable">count</span>} {<span class="hljs-variable">count</span> === <span class="hljs-number">1</span> ? <span class="hljs-string">&#x27;time&#x27;</span> : <span class="hljs-string">&#x27;times&#x27;</span>}
+      <span class="hljs-variable">Clicked</span> {<span class="hljs-variable">count</span>} {<span class="hljs-variable">count</span> === <span class="hljs-number">1</span> ? <span class="hljs-string">&#x27;time&#x27;</span> : <span class="hljs-string">&#x27;times&#x27;</span>}
     &lt;/<span class="hljs-variable">button</span>&gt;
   &lt;/<span class="hljs-variable">react</span>&gt;
 };
@@ -178,22 +178,22 @@ Show the code 75% of the space at the left, and 25% the simple counter button on
 </code></pre>
   <h3 id="html-library">Html library</h3>
 <pre><code class="language-jome"><span class="hljs-variable">html</span> = «
-  <span class="hljs-title class_">IFrame</span> <span class="hljs-comment">// for demo only</span>
-    <span class="hljs-title class_">Html</span> title: <span class="hljs-string">&#x27;My html page&#x27;</span>
-      page: <span class="hljs-title class_">Col</span>
-        navbar: <span class="hljs-title class_">Row</span>
-          <span class="hljs-title class_">Link</span> <span class="hljs-string">&#x27;Some page&#x27;</span>
-          <span class="hljs-title class_">Link</span> <span class="hljs-string">&#x27;Another page&#x27;</span>
-          <span class="hljs-title class_">Link</span> <span class="hljs-string">&#x27;Yet another page&#x27;</span>
+  <span class="hljs-variable">IFrame</span> <span class="hljs-comment">// for demo only</span>
+    <span class="hljs-variable">Html</span> title: <span class="hljs-string">&#x27;My html page&#x27;</span>
+      page: <span class="hljs-variable">Col</span>
+        navbar: <span class="hljs-variable">Row</span>
+          <span class="hljs-variable">Link</span> <span class="hljs-string">&#x27;Some page&#x27;</span>
+          <span class="hljs-variable">Link</span> <span class="hljs-string">&#x27;Another page&#x27;</span>
+          <span class="hljs-variable">Link</span> <span class="hljs-string">&#x27;Yet another page&#x27;</span>
 »
 </code></pre>
   <h3 id="snake">Snake</h3>
   <h3 id="html-button">Html button</h3>
-<pre><code class="language-jome"><span class="hljs-keyword">import</span> {<span class="hljs-title class_">Btn</span>, <span class="hljs-title class_">Txt</span>, <span class="hljs-variable">renderHTML</span>} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;html&quot;</span>
+<pre><code class="language-jome"><span class="hljs-keyword">import</span> {<span class="hljs-variable">Btn</span>, <span class="hljs-variable">Txt</span>, <span class="hljs-variable">renderHTML</span>} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;html&quot;</span>
 
 <span class="hljs-title function_ invoke__">renderHTML</span>(target: <span class="hljs-string">&#x27;#div-id&#x27;</span>, {
-  <span class="hljs-title class_">Btn</span> %count: <span class="hljs-number">0</span>, ~click: =&gt; (%<span class="hljs-variable">count</span> += <span class="hljs-number">1</span>)
-    <span class="hljs-title class_">Txt</span> =&gt; <span class="hljs-string">&quot;Clicked {%count} {%count == 1 ? &#x27;time&#x27; : &#x27;times&#x27;}&quot;</span>
+  <span class="hljs-variable">Btn</span> %count: <span class="hljs-number">0</span>, ~click: =&gt; (%<span class="hljs-variable">count</span> += <span class="hljs-number">1</span>)
+    <span class="hljs-variable">Txt</span> =&gt; <span class="hljs-string">&quot;Clicked {%count} {%count == 1 ? &#x27;time&#x27; : &#x27;times&#x27;}&quot;</span>
 })
 </code></pre>
 <p>Example compiled JavaScript output:</p>
@@ -215,16 +215,16 @@ jome.<span class="hljs-title function_">createObj</span>($.$.$btn, <span class="
 </code></pre>
 <h2>Recipe?</h2>
 <pre><code class="language-jome">{
-  <span class="hljs-title class_">Recipe</span>
+  <span class="hljs-variable">Recipe</span>
     <span class="hljs-variable">attr</span>
       name: <span class="hljs-string">&#x27;Chickpea balls&#x27;</span>
       prepare: <span class="hljs-variable">1h</span>
-    <span class="hljs-title class_">Ing</span> <span class="hljs-variable">1cup</span>, <span class="hljs-string">&quot;dry chickpeas&quot;</span>
-    <span class="hljs-title class_">Ing</span> <span class="hljs-variable">2cup</span>, <span class="hljs-string">&quot;water&quot;</span>
-    <span class="hljs-title class_">Ing</span> <span class="hljs-variable">2tbsp</span>, <span class="hljs-string">&quot;parmesan&quot;</span>
-    <span class="hljs-title class_">Step</span> <span class="hljs-string">`Put {@1} into {@2}...`</span> <span class="hljs-comment">// @1 is the first children</span>
-    <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Mix ...&quot;</span>
-    <span class="hljs-title class_">Step</span> <span class="hljs-string">&quot;Blah blah ...&quot;</span>
+    <span class="hljs-variable">Ing</span> <span class="hljs-variable">1cup</span>, <span class="hljs-string">&quot;dry chickpeas&quot;</span>
+    <span class="hljs-variable">Ing</span> <span class="hljs-variable">2cup</span>, <span class="hljs-string">&quot;water&quot;</span>
+    <span class="hljs-variable">Ing</span> <span class="hljs-variable">2tbsp</span>, <span class="hljs-string">&quot;parmesan&quot;</span>
+    <span class="hljs-variable">Step</span> <span class="hljs-string">`Put {@1} into {@2}...`</span> <span class="hljs-comment">// @1 is the first children</span>
+    <span class="hljs-variable">Step</span> <span class="hljs-string">&quot;Mix ...&quot;</span>
+    <span class="hljs-variable">Step</span> <span class="hljs-string">&quot;Blah blah ...&quot;</span>
 }
 </code></pre>
 <h2>A format database like?</h2>

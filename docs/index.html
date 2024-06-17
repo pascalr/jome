@@ -145,8 +145,8 @@ and data editing (like spreadsheet with types inside the editor).</p>
 *#</span>
 
 <span class="hljs-keyword">with</span>
-  <span class="hljs-title class_">Number</span> <span class="hljs-variable">force</span> = ? <span class="hljs-title class_">N</span>
-  <span class="hljs-title class_">Number</span> <span class="hljs-variable">distance</span> = ? <span class="hljs-variable">m</span>
+  <span class="hljs-variable">Number</span> <span class="hljs-variable">force</span> = ? <span class="hljs-variable">N</span>
+  <span class="hljs-variable">Number</span> <span class="hljs-variable">distance</span> = ? <span class="hljs-variable">m</span>
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-comment"># Torque is the result of a force multiplied by a distance from a pivot point.</span>
@@ -278,7 +278,7 @@ be the content of the function of class.</p>
 <p>You can specify the unit after a number or use the middle dot (·) to apply a unit to a variable.
 The editor should make this symbol easyily accessible. You can also simply multiply by 1 of the unit.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">width</span> = <span class="hljs-number">5</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">force</span> = <span class="hljs-number">10</span> <span class="hljs-title class_">N</span> <span class="hljs-comment">// Newtons</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">force</span> = <span class="hljs-number">10</span> <span class="hljs-variable">N</span> <span class="hljs-comment">// Newtons</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">distance</span> = <span class="hljs-variable">width</span>·<span class="hljs-variable">m</span> <span class="hljs-comment">// meters // same as width*1m</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
 <span class="hljs-variable">jome</span>.<span class="hljs-title function_ invoke__">log</span>(<span class="hljs-variable">torque</span>)

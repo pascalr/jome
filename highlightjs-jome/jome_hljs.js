@@ -2,6 +2,7 @@
 
 // Example of an example:
 // https://github.com/highlightjs/highlight.js/blob/main/src/languages/css.js
+// https://github.com/highlightjs/highlight.js/blob/main/src/languages/ruby.js
 
 function ScriptTag(id, name) {
   return {
@@ -19,6 +20,7 @@ function String(begin, end) {
 
 const highlighter = function(hljs) {
 
+  const regex = hljs.regex;
   // Source: https://github.com/highlightjs/highlight.js/blob/main/src/languages/javascript.js
   // https://tc39.es/ecma262/#sec-literals-numeric-literals
   const decimalDigits = '[0-9](_?[0-9])*';
@@ -26,6 +28,25 @@ const highlighter = function(hljs) {
   // DecimalIntegerLiteral, including Annex B NonOctalDecimalIntegerLiteral
   // https://tc39.es/ecma262/#sec-additional-syntax-numeric-literals
   const decimalInteger = `0|[1-9](_?[0-9])*|0[0-7]*[89][0-9]*`;
+  const CLASS_NAME_RE = regex.either(
+    /\b([A-Z]+[a-z0-9]+)+/,
+    // ends in caps
+    /\b([A-Z]+[a-z0-9]+)+[A-Z]+/,
+  )
+
+  const CLASS_DEFINITION = {
+    match: [
+      /class\s+/,
+      CLASS_NAME_RE,
+    ],
+    scope: {
+      1: "keyword",
+      2: "title.class",
+    },
+    // keywords: RUBY_KEYWORDS
+  };
+  
+  // const CLASS_NAME_WITH_NAMESPACE_RE = regex.concat(CLASS_NAME_RE, /(::\w+)*/)
   const NUMBER = {
     scope: 'number',
     variants: [
@@ -89,10 +110,10 @@ const highlighter = function(hljs) {
     begin: '\\b(new|chain|with|then|end|if|class|export|import|from|for|in|while|do|def|var|let|code|unit|return|module|interface|main|type|else|elif|elsif)\\b'
   }
 
-  const CLASS_NAME = {
-    scope: "title class_",
-    begin: "[A-Z]\\w*" //    FIXME: not working... begin: "\\p{Lu}\\w*"
-  }
+  //const CLASS_NAME = {
+  //  scope: "title class_",
+  //  begin: "[A-Z]\\w*" //    FIXME: not working... begin: "\\p{Lu}\\w*"
+  //}
 
   const UTIL_CONST = {
     scope: "built_in.variable",
@@ -152,12 +173,12 @@ const highlighter = function(hljs) {
       PATH,
       TYPES,
       NUMBER,
+      CLASS_DEFINITION,
       KEYWORD,
       FUNC_CALL,
       UTIL_CONST,
       UTIL_FUNC,
       OBJ_KEY,
-      CLASS_NAME,
       VARIABLE,
       ScriptTag('jome', 'jome'),
       ScriptTag('js', 'js'),

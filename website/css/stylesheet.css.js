@@ -43,11 +43,16 @@ module.exports = () => {
     border-radius: 1em;
   }
 
-  pre {
-    background-color: #181d2b;
-    padding: 1em;
-    border-radius: 4px;
+  pre code {
+    display: block;
+    background: black;
+    color: #eaeaea;
+    font-family: Menlo, Monaco, Consolas, monospace;
+    line-height: 1.5;
+    border: 1px solid #ccc;
+    padding: 10px;
   }
+
   code:not(pre code) {
     background-color: #181d2b;
     padding: 0.2em;
