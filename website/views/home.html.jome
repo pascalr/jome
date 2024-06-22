@@ -58,6 +58,7 @@ let overview = <html>
       </div>
       <p>Torque is the result of a force multiplied by a distance from a pivot point.</p>
       <%s overview01 %>
+      <div class="code-result">=> null N·m</div>
     </div>
     <div class="code" style="width: 50%; overflow: auto;">
     </div>
@@ -76,7 +77,7 @@ let content = <md>
 
   For the near future, it only compiles to JavaScript.
 
-  <h2 id="sample">Sample</h2>
+  <h2 id="sample">Code Sample</h2>
 
   <%s overviewSrc %>
 

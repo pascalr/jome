@@ -1352,6 +1352,20 @@ let content = <md>
 
   TODO: Error handly. Try catch...
 
+  ## units
+
+  Soft units vs hard units?
+
+  def doSomething(time in ms) => will always receive ms
+  def doSomething(time = 10 ms) => can receive ms, or s, will get it alongside the unit
+  def doSomething(time = ? ms) => can receive ms, or s, will get it alongside the unit
+
+  // Here I wan't the result to be in lb*ft if I give lbs and fts...
+  def calculateTorque(force = ? N, distance = ? m)
+    return force * distance
+  end
+  How do I specify that I want the result to return the unit???
+
   ## Other
 
   .jomd extension is used to store data in the Jome language. The only difference with .jome, is that the last line of code is returned implicitely. If you use

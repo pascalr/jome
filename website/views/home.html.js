@@ -54,6 +54,7 @@ module.exports = () => {
       </div>
       <p>Torque is the result of a force multiplied by a distance from a pivot point.</p>
       e7fbf80ba4c5b2cb25858cfa78de66e9
+      <div class="code-result">=> null N·m</div>
     </div>
     <div class="code" style="width: 50%; overflow: auto;">
     </div>
@@ -71,7 +72,7 @@ module.exports = () => {
 
   For the near future, it only compiles to JavaScript.
 
-  <h2 id="sample">Sample</h2>
+  <h2 id="sample">Code Sample</h2>
 
   045a7bfe3dba9ba99b065d6f5aedfd77
 

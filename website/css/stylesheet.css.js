@@ -116,7 +116,7 @@ module.exports = () => {
   }
 
   .main a {
-    color: blue;
+    color: #2f9dff;
     text-decoration: none;
   }
 
@@ -187,5 +187,13 @@ module.exports = () => {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     padding: 0.8em;
+  }
+
+  .code-result {
+    border: 1px solid white;
+    margin-top: -1em;
+    border-top: 0px;
+    padding: 0.5em;
+    background-color: #252526;
   }`;
 };

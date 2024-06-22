@@ -1026,6 +1026,16 @@ TODO: config.jome &gt; md &gt; spellcheck: true, I want to see mistakes within v
 <p>TODO: args are passed space separated instead of comma separated
 --args with dashes near each other are grouped together</p>
 <p>TODO: Error handly. Try catch...</p>
+<h2>units</h2>
+<p>Soft units vs hard units?</p>
+<p>def doSomething(time in ms) =&gt; will always receive ms
+def doSomething(time = 10 ms) =&gt; can receive ms, or s, will get it alongside the unit
+def doSomething(time = ? ms) =&gt; can receive ms, or s, will get it alongside the unit</p>
+<p>// Here I wan't the result to be in lb*ft if I give lbs and fts...
+def calculateTorque(force = ? N, distance = ? m)
+return force * distance
+end
+How do I specify that I want the result to return the unit???</p>
 <h2>Other</h2>
 <p>.jomd extension is used to store data in the Jome language. The only difference with .jome, is that the last line of code is returned implicitely. If you use
 a .jome and use return on the last line, it is the same thing. NOT THE ONLY DIFFERENCE, SEE BELOW, DIFFERENT FOR IMPORT TOO, IMPORT IS DATA, NOT FUNCTION...</p>
