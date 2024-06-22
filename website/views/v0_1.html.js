@@ -1364,6 +1364,31 @@ module.exports = () => {
   end
   How do I specify that I want the result to return the unit???
 
+  def doSomethingHard(time = ? ms) // will always receive ms, the cast will be done when calling the function
+  def doSomethingSoft(time = ? ms*) // will receive ms or a unit equivalent. The unit will be given to the function. In js, it will look like this:
+  function doSomething(time, timeUnit="ms")
+
+  doSomethingHard(1 s)
+  doSomethingSoft(1 s)
+
+  let funcRef = doSomething
+
+  How do I know if I need to send 1 or 2 parameters???
+
+  If I am given a callback function that I don't know what it takes, I cannot cast automatically... So the hard version does not work. But the soft works.
+
+  This means, yes, always send 2 parameters. In the case of a hard, it is simply not used. Or is it to handle the conversion???
+
+  How about:
+
+  A unit is simply a tuple of a float and a string?
+  An array with the first being a float and the second being a string?
+
+  This could work runtime.
+
+  Hell, I don't even have to write it as two parameters, a single parameter.
+
+
   ## Other
 
   .jomd extension is used to store data in the Jome language. The only difference with .jome, is that the last line of code is returned implicitely. If you use

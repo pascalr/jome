@@ -123,15 +123,15 @@ and data editing (like spreadsheet with types inside the editor).</p>
 *#</span>
 
 <span class="hljs-keyword">with</span>
-  <span class="hljs-variable">Number</span> <span class="hljs-variable">force</span> = <span class="hljs-number">? N | lb</span>
-  <span class="hljs-variable">Number</span> <span class="hljs-variable">distance</span> = <span class="hljs-number">? m | in</span>
+  <span class="hljs-variable">Number</span> <span class="hljs-variable">force</span> = <span class="hljs-number">? N</span>* <span class="hljs-comment">// Newtons or equivalent</span>
+  <span class="hljs-variable">Number</span> <span class="hljs-variable">distance</span> = <span class="hljs-number">? m</span>* <span class="hljs-comment">// meters or equivalent</span>
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-comment"># Torque is the result of a force multiplied by a distance from a pivot point.</span>
 
 <span class="hljs-comment">// We use a jome tag because it&#x27;s a script that can be run</span>
-<span class="hljs-keyword">return</span> &lt;<span class="hljs-variable">jome</span> &gt;
-  <span class="hljs-keyword">return</span> <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
+<span class="hljs-keyword">return</span> &lt;<span class="hljs-variable">jome</span> <span class="hljs-keyword">unit</span>=<span class="hljs-string">&quot;N·m*&quot;</span>&gt;
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">unitstr</span>(<span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>) <span class="hljs-comment">// unitstr and unitof try to extract the unit from the context</span>
 &lt;/<span class="hljs-variable">jome</span> &gt;
 </code></pre>
 </p>

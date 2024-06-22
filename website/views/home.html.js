@@ -26,15 +26,15 @@ module.exports = () => {
   *#
 
   with
-    Number force = ? N | lb
-    Number distance = ? m | in
+    Number force = ? N* // Newtons or equivalent
+    Number distance = ? m* // meters or equivalent
   end
 
   # Torque is the result of a force multiplied by a distance from a pivot point.
 
   // We use a jome tag because it's a script that can be run
-  return <jome >
-    return force * distance
+  return <jome unit="N·m*">
+    return unitstr(force * distance) // unitstr and unitof try to extract the unit from the context
   </jome >
   \`\`\``);
 
