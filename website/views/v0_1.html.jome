@@ -18,12 +18,6 @@ let PARTIAL = <md>
 
 let content = <md>
 
-  TODO: I am thinking of using test_compile.jomn as a notebook and use that as a reference for the language.
-  Don't include all the very specific tests, but globals tests would be very nice to explain what the language does,
-  and this would avoid repeating myself.
-
-  Nooo, this is a good idea, but for the in depth. And put everything in there.
-
   <h2 id="lang-ref">Language Reference</h2>
 
   This documentation assumes the reader is familiar with javascript.
