@@ -1354,42 +1354,58 @@ let content = <md>
 
   ## units
 
-  Soft units vs hard units?
+  Units are simply an extension of type but for numbers.
 
-  def doSomething(time in ms) => will always receive ms
-  def doSomething(time = 10 ms) => can receive ms, or s, will get it alongside the unit
-  def doSomething(time = ? ms) => can receive ms, or s, will get it alongside the unit
+  They are used for validation at compile time.
 
-  // Here I wan't the result to be in lb*ft if I give lbs and fts...
-  def calculateTorque(force = ? N, distance = ? m)
-    return force * distance
+  They can also be used for automatic conversion. Let's say a function sleeps a given amount of time,
+  you can pass 100 ms, 0.1 s, ... and it will all be the same.
+
+  For this to work, you must specify an exact unit.
+
+  ```jome
+  def sleep(time = ? s)
+    // ...
   end
-  How do I specify that I want the result to return the unit???
+  sleep(0.1 s)
+  sleep(100 ms) // will be compiled into 0.1
+  let ref = sleep
+  ref(100 ms) // the behavior here will depend on the unit checker / type checker
+  ```
 
-  def doSomethingHard(time = ? ms) // will always receive ms, the cast will be done when calling the function
-  def doSomethingSoft(time = ? ms*) // will receive ms or a unit equivalent. The unit will be given to the function. In js, it will look like this:
-  function doSomething(time, timeUnit="ms")
+  A quantity with a unit is just a number. It is not evaluated at runtime.
 
-  doSomethingHard(1 s)
-  doSomethingSoft(1 s)
+  The concept of a unit does not exist at runtime.
 
-  let funcRef = doSomething
+  You can also specify that a function expects a unit of a type or similar. You add an asterisk after the type.
 
-  How do I know if I need to send 1 or 2 parameters???
+  ```jome
+  def applyForce(force = ? N*)
+    // ...
+  end
+  applyForce(2) // ok, defaults to N
+  applyForce(2 N) // ok
+  applyForce(10 lbs) // ok
+  applyForce(1 m) // will throw an error at compile time, a meter is not a valid force
+  ```
 
-  If I am given a callback function that I don't know what it takes, I cannot cast automatically... So the hard version does not work. But the soft works.
+  The asterisk part is a work in progress.
 
-  This means, yes, always send 2 parameters. In the case of a hard, it is simply not used. Or is it to handle the conversion???
+  Maybe this means pass two parameters.
+  def applyForce(force = ? N*) /* same as */ def applyForce(force, unit)
 
-  How about:
+  But this does not work...
 
-  A unit is simply a tuple of a float and a string?
-  An array with the first being a float and the second being a string?
+  The issue is that when I do: applyForce(2 N), I am only passing a single value to the function.
 
-  This could work runtime.
+  Well it's the same thing of along code and along unit idea. Maybe this works, but it becomes a special kind
+  of function that must always be referenced directly?
 
-  Hell, I don't even have to write it as two parameters, a single parameter.
+  This would be illegal: let ref = applyForce
 
+  Whenever you use a function that needs meta data, it must be called directly.
+  
+  I need a name for that.
 
   ## Other
 
