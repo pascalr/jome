@@ -1389,6 +1389,11 @@ let content = <md>
   applyForce(1 m) // will throw an error at compile time, a meter is not a valid force
   ```
 
+  FIXME: An asterisk is not the best because it is confusing with multiply which is pretty common in this context.
+  let someVal = 10N*1m
+
+  But I don't have a better idea that an asterisk, and maybe they are never used in the same context?
+
   The asterisk part is a work in progress.
 
   Maybe this means pass two parameters.
@@ -1406,6 +1411,37 @@ let content = <md>
   Whenever you use a function that needs meta data, it must be called directly.
   
   I need a name for that.
+
+  A macro.
+
+  ## Macros
+
+  Macros are functions that are extended at compile time with the context. Additional parameters are added to the function.
+
+  You can for example, add the text that was given to the parameter be also passed as a string.
+
+  ```jome
+  # Here 
+  def debug(value along code c)
+    console.log(c, ': ', value)
+  end
+  debug(1 + 1)
+  // => 1 + 1: 2
+  ```
+
+  You can also get the unit from a parameter this way.
+
+  ```jome
+  def printUnit(someVal along unit u)
+    console.log(u)
+  end
+  printUnit(10 N)
+  // => N
+  ```
+
+  Maybe a keyword macro to show that it is explicitely a macro?
+
+  The difference between a function and a macro in Jome is that a macro has extra hidden parameters.
 
   ## Other
 

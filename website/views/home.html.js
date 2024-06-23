@@ -33,7 +33,8 @@ module.exports = () => {
   # Torque is the result of a force multiplied by a distance from a pivot point.
 
   // We use a jome tag because it's a script that can be run
-  return <jome unit="N·m*">
+  # The unit checker can infer that this block returns a value with N*m or equivalent as a unit and shows it.
+  return <jome >
     return unitstr(force * distance) // unitstr and unitof try to extract the unit from the context
   </jome >
   \`\`\``);
@@ -69,6 +70,8 @@ module.exports = () => {
 
   You should use a specialized editor (WIP) in order to fully use all it's features such as code evaluation (like Jupyter Notebook)
   and data editing (like spreadsheet with types inside the editor).
+
+  It has nice features like macros.
 
   For the near future, it only compiles to JavaScript.
 

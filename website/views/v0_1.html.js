@@ -1352,42 +1352,94 @@ module.exports = () => {
 
   ## units
 
-  Soft units vs hard units?
+  Units are simply an extension of type but for numbers.
 
-  def doSomething(time in ms) => will always receive ms
-  def doSomething(time = 10 ms) => can receive ms, or s, will get it alongside the unit
-  def doSomething(time = ? ms) => can receive ms, or s, will get it alongside the unit
+  They are used for validation at compile time.
 
-  // Here I wan't the result to be in lb*ft if I give lbs and fts...
-  def calculateTorque(force = ? N, distance = ? m)
-    return force * distance
+  They can also be used for automatic conversion. Let's say a function sleeps a given amount of time,
+  you can pass 100 ms, 0.1 s, ... and it will all be the same.
+
+  For this to work, you must specify an exact unit.
+
+  \`\`\`jome
+  def sleep(time = ? s)
+    // ...
   end
-  How do I specify that I want the result to return the unit???
+  sleep(0.1 s)
+  sleep(100 ms) // will be compiled into 0.1
+  let ref = sleep
+  ref(100 ms) // the behavior here will depend on the unit checker / type checker
+  \`\`\`
 
-  def doSomethingHard(time = ? ms) // will always receive ms, the cast will be done when calling the function
-  def doSomethingSoft(time = ? ms*) // will receive ms or a unit equivalent. The unit will be given to the function. In js, it will look like this:
-  function doSomething(time, timeUnit="ms")
+  A quantity with a unit is just a number. It is not evaluated at runtime.
 
-  doSomethingHard(1 s)
-  doSomethingSoft(1 s)
+  The concept of a unit does not exist at runtime.
 
-  let funcRef = doSomething
+  You can also specify that a function expects a unit of a type or similar. You add an asterisk after the type.
 
-  How do I know if I need to send 1 or 2 parameters???
+  \`\`\`jome
+  def applyForce(force = ? N*)
+    // ...
+  end
+  applyForce(2) // ok, defaults to N
+  applyForce(2 N) // ok
+  applyForce(10 lbs) // ok
+  applyForce(1 m) // will throw an error at compile time, a meter is not a valid force
+  \`\`\`
 
-  If I am given a callback function that I don't know what it takes, I cannot cast automatically... So the hard version does not work. But the soft works.
+  FIXME: An asterisk is not the best because it is confusing with multiply which is pretty common in this context.
+  let someVal = 10N*1m
 
-  This means, yes, always send 2 parameters. In the case of a hard, it is simply not used. Or is it to handle the conversion???
+  But I don't have a better idea that an asterisk, and maybe they are never used in the same context?
 
-  How about:
+  The asterisk part is a work in progress.
 
-  A unit is simply a tuple of a float and a string?
-  An array with the first being a float and the second being a string?
+  Maybe this means pass two parameters.
+  def applyForce(force = ? N*) /* same as */ def applyForce(force, unit)
 
-  This could work runtime.
+  But this does not work...
 
-  Hell, I don't even have to write it as two parameters, a single parameter.
+  The issue is that when I do: applyForce(2 N), I am only passing a single value to the function.
 
+  Well it's the same thing of along code and along unit idea. Maybe this works, but it becomes a special kind
+  of function that must always be referenced directly?
+
+  This would be illegal: let ref = applyForce
+
+  Whenever you use a function that needs meta data, it must be called directly.
+  
+  I need a name for that.
+
+  A macro.
+
+  ## Macros
+
+  Macros are functions that are extended at compile time with the context. Additional parameters are added to the function.
+
+  You can for example, add the text that was given to the parameter be also passed as a string.
+
+  \`\`\`jome
+  # Here 
+  def debug(value along code c)
+    console.log(c, ': ', value)
+  end
+  debug(1 + 1)
+  // => 1 + 1: 2
+  \`\`\`
+
+  You can also get the unit from a parameter this way.
+
+  \`\`\`jome
+  def printUnit(someVal along unit u)
+    console.log(u)
+  end
+  printUnit(10 N)
+  // => N
+  \`\`\`
+
+  Maybe a keyword macro to show that it is explicitely a macro?
+
+  The difference between a function and a macro in Jome is that a macro has extra hidden parameters.
 
   ## Other
 

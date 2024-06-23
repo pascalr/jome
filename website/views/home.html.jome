@@ -28,9 +28,6 @@ let overviewSrc = <md>
   # Torque Calculator Example
   *#
 
-  WIP: Unit is simply a number. Only used for giving errors at compile time if something is given that is not expected.
-  But I wan't to be able to do something smart for inputs and outputs too like here...
-
   with
     Number force = ? N* // Newtons or equivalent
     Number distance = ? m* // meters or equivalent
@@ -78,6 +75,8 @@ let content = <md>
 
   You should use a specialized editor (WIP) in order to fully use all it's features such as code evaluation (like Jupyter Notebook)
   and data editing (like spreadsheet with types inside the editor).
+
+  It has nice features like macros.
 
   For the near future, it only compiles to JavaScript.
 

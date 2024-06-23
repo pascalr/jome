@@ -116,6 +116,7 @@
 standardized code with other people.</p>
 <p>You should use a specialized editor (WIP) in order to fully use all it's features such as code evaluation (like Jupyter Notebook)
 and data editing (like spreadsheet with types inside the editor).</p>
+<p>It has nice features like macros.</p>
 <p>For the near future, it only compiles to JavaScript.</p>
   <h2 id="sample">Code Sample</h2>
 <p><pre><code class="language-jome"><span class="hljs-comment">#*
@@ -130,7 +131,8 @@ and data editing (like spreadsheet with types inside the editor).</p>
 <span class="hljs-comment"># Torque is the result of a force multiplied by a distance from a pivot point.</span>
 
 <span class="hljs-comment">// We use a jome tag because it&#x27;s a script that can be run</span>
-<span class="hljs-keyword">return</span> &lt;<span class="hljs-variable">jome</span> <span class="hljs-keyword">unit</span>=<span class="hljs-string">&quot;N·m*&quot;</span>&gt;
+<span class="hljs-comment"># The unit checker can infer that this block returns a value with N*m or equivalent as a unit and shows it.</span>
+<span class="hljs-keyword">return</span> &lt;<span class="hljs-variable">jome</span> &gt;
   <span class="hljs-keyword">return</span> <span class="hljs-title function_">unitstr</span>(<span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>) <span class="hljs-comment">// unitstr and unitof try to extract the unit from the context</span>
 &lt;/<span class="hljs-variable">jome</span> &gt;
 </code></pre>
