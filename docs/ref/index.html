@@ -308,8 +308,8 @@ Foo foo = Foo(&quot;arg&quot;) // no, use instead: let foo = Foo(&quot;arg&quot;
 def sum(int x, int y) -&gt; int</p>
 <p>The types are specified before the variable name like in C++ or Java, not after like in typescript.</p>
 <p>You can declare primitive types directly, but you still use the keyword <code>let</code> for class instances. (You can't do it like c++ because it would be confused with function calls)</p>
-<pre><code class="language-jome"><span class="hljs-type">int</span> <span class="hljs-variable">i</span> = <span class="hljs-number">0
-string</span> <span class="hljs-variable">str</span> = <span class="hljs-string">&quot;some string&quot;</span>
+<pre><code class="language-jome"><span class="hljs-type">int</span> <span class="hljs-variable">i</span> = <span class="hljs-number">0</span>
+<span class="hljs-type">string</span> <span class="hljs-variable">str</span> = <span class="hljs-string">&quot;some string&quot;</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">any</span> = <span class="hljs-string">&quot;some string&quot;</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">obj</span> = <span class="hljs-title function_">SomeClass</span>(<span class="hljs-string">&quot;param&quot;</span>)
 </code></pre>
@@ -365,8 +365,8 @@ A def with no args does not require parentheses, but this syntax does.</p>
 <p>How does it work for instance variables initialization? Works well</p>
 <pre><code class="language-jome"><span class="hljs-keyword">class </span><span class="hljs-title class_">SomeClass</span>
 
-  <span class="hljs-type">int</span> <span class="hljs-variable">@count</span> = <span class="hljs-number">0
-  string</span> <span class="hljs-variable">@message</span> = <span class="hljs-string">&quot;Hello world!&quot;</span>
+  <span class="hljs-type">int</span> <span class="hljs-variable">@count</span> = <span class="hljs-number">0</span>
+  <span class="hljs-type">string</span> <span class="hljs-variable">@message</span> = <span class="hljs-string">&quot;Hello world!&quot;</span>
 
 <span class="hljs-keyword">end</span>
 </code></pre>

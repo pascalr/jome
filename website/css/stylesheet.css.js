@@ -180,6 +180,12 @@ module.exports = () => {
     font-weight: bold;
   }
 
+  #homepage-example {
+    border: 2px solid black;
+    padding: 1em;
+    background-color: #32343e;
+  }
+
   .example-result {
     border-top: 1px solid black;
     border-left: 1px solid black;

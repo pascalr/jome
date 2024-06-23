@@ -130,7 +130,7 @@ const highlighter = function(hljs) {
   };
 
   const NUMBER_WITH_UNIT = {
-    match: /\d+(\.\d+)?\s*\w+/,
+    match: /\d+(\.\d+)?[ \t]*\w+/,
     scope: "number",
   };
 

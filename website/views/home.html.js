@@ -35,30 +35,26 @@ module.exports = () => {
   // We use a jome tag because it's a script that can be run
   # The unit checker can infer that this block returns a value with N*m or equivalent as a unit and shows it.
   return <jome >
-    return unitstr(force * distance) // unitstr and unitof try to extract the unit from the context
+    return force * distance
   </jome >
   \`\`\``);
 
   let overview = `
-  <div style="display: flex; width: calc(100vw - 340px);">
-    <div class="preview" style="width: 50%; overflow: auto;">
-      <h1>Torque Calculator Example</h1>
-      <div class="input-container">
-        <label for="input-field">force:</label>
-        <input type="text" id="input-field" name="input-field">
-        N
-      </div>
-      <div class="input-container">
-        <label for="input-field">distance:</label>
-        <input type="text" id="input-field" name="input-field">
-        m
-      </div>
-      <p>Torque is the result of a force multiplied by a distance from a pivot point.</p>
-      e7fbf80ba4c5b2cb25858cfa78de66e9
-      <div class="code-result">=> null N·m</div>
+  <div id="homepage-example">
+    <h1>Torque Calculator Example</h1>
+    <div class="input-container">
+      <label for="input-field">force:</label>
+      <input type="text" id="input-field" name="input-field">
+      N
     </div>
-    <div class="code" style="width: 50%; overflow: auto;">
+    <div class="input-container">
+      <label for="input-field">distance:</label>
+      <input type="text" id="input-field" name="input-field">
+      m
     </div>
+    <p>Torque is the result of a force multiplied by a distance from a pivot point.</p>
+    e7fbf80ba4c5b2cb25858cfa78de66e9
+    <div class="code-result">=> null N·m</div>
   </div>`.replace("e7fbf80ba4c5b2cb25858cfa78de66e9", overview01);
 
   let content = mdToHtml(`
@@ -71,7 +67,7 @@ module.exports = () => {
   You should use a specialized editor (WIP) in order to fully use all it's features such as code evaluation (like Jupyter Notebook)
   and data editing (like spreadsheet with types inside the editor).
 
-  It has nice features like macros.
+  It has nice features like a base library and macros.
 
   For the near future, it only compiles to JavaScript.
 
@@ -86,7 +82,7 @@ module.exports = () => {
   Result inside the shell:
 
   \`\`\`sh
-  jome torqueCalculator.jome --force=10 --distance=2
+  jome torqueCalculator.jome --force=10 --distance="2 m"
   # => 20 N·m
   \`\`\`
 

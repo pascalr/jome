@@ -116,7 +116,7 @@
 standardized code with other people.</p>
 <p>You should use a specialized editor (WIP) in order to fully use all it's features such as code evaluation (like Jupyter Notebook)
 and data editing (like spreadsheet with types inside the editor).</p>
-<p>It has nice features like macros.</p>
+<p>It has nice features like a base library and macros.</p>
 <p>For the near future, it only compiles to JavaScript.</p>
   <h2 id="sample">Code Sample</h2>
 <p><pre><code class="language-jome"><span class="hljs-comment">#*
@@ -133,36 +133,32 @@ and data editing (like spreadsheet with types inside the editor).</p>
 <span class="hljs-comment">// We use a jome tag because it&#x27;s a script that can be run</span>
 <span class="hljs-comment"># The unit checker can infer that this block returns a value with N*m or equivalent as a unit and shows it.</span>
 <span class="hljs-keyword">return</span> &lt;<span class="hljs-variable">jome</span> &gt;
-  <span class="hljs-keyword">return</span> <span class="hljs-title function_">unitstr</span>(<span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>) <span class="hljs-comment">// unitstr and unitof try to extract the unit from the context</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
 &lt;/<span class="hljs-variable">jome</span> &gt;
 </code></pre>
 </p>
 <p>Result inside the editor:</p>
 <p>
-  <div style="display: flex; width: calc(100vw - 340px);">
-    <div class="preview" style="width: 50%; overflow: auto;">
-      <h1>Torque Calculator Example</h1>
-      <div class="input-container">
-        <label for="input-field">force:</label>
-        <input type="text" id="input-field" name="input-field">
-        N
-      </div>
-      <div class="input-container">
-        <label for="input-field">distance:</label>
-        <input type="text" id="input-field" name="input-field">
-        m
-      </div>
-      <p>Torque is the result of a force multiplied by a distance from a pivot point.</p>
-      <pre><code class="language-jome"><span class="hljs-keyword">return</span> <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
+  <div id="homepage-example">
+    <h1>Torque Calculator Example</h1>
+    <div class="input-container">
+      <label for="input-field">force:</label>
+      <input type="text" id="input-field" name="input-field">
+      N
+    </div>
+    <div class="input-container">
+      <label for="input-field">distance:</label>
+      <input type="text" id="input-field" name="input-field">
+      m
+    </div>
+    <p>Torque is the result of a force multiplied by a distance from a pivot point.</p>
+    <pre><code class="language-jome"><span class="hljs-keyword">return</span> <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
 </code></pre>
 
-      <div class="code-result">=> null N·m</div>
-    </div>
-    <div class="code" style="width: 50%; overflow: auto;">
-    </div>
+    <div class="code-result">=> null N·m</div>
   </div></p>
 <p>Result inside the shell:</p>
-<pre><code class="language-sh">jome torqueCalculator.jome --force=10 --distance=2
+<pre><code class="language-sh">jome torqueCalculator.jome --force=10 --distance=<span class="hljs-string">&quot;2 m&quot;</span>
 <span class="hljs-comment"># =&gt; 20 N·m</span>
 </code></pre>
 <p>Usage inside another file:</p>
@@ -286,8 +282,8 @@ be the content of the function of class.</p>
 <p>You can add units to variables. They are only used at compile time.</p>
 <p>You can specify the unit after a number or use the middle dot (·) to apply a unit to a variable.
 The editor should make this symbol easyily accessible. You can also simply multiply by 1 of the unit.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">width</span> = <span class="hljs-number">5
-let</span> <span class="hljs-variable">force</span> = <span class="hljs-number">10 N</span> <span class="hljs-comment">// Newtons</span>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">width</span> = <span class="hljs-number">5</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">force</span> = <span class="hljs-number">10 N</span> <span class="hljs-comment">// Newtons</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">distance</span> = <span class="hljs-variable">width</span>·<span class="hljs-variable">m</span> <span class="hljs-comment">// meters // same as width*1m</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
 <span class="hljs-variable">jome</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable">torque</span>)
