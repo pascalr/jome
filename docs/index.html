@@ -171,7 +171,7 @@ and data editing (like spreadsheet with types inside the editor).</p>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">calculateTorque</span> force: <span class="hljs-number">20 lbs</span>, distance: <span class="hljs-number">1 in</span>
 </code></pre>
   <h2 id="features">Features</h2>
-<p>Jome has a few original features (to my knowledge):</p>
+<p>Jome has some original features that sets it appart from other languages.</p>
 <ol>
 <li>
 <p><strong>Notebook comments</strong> - You can add documentation comments using markdown to create a notebook like jupyter.</p>
@@ -194,7 +194,56 @@ and data editing (like spreadsheet with types inside the editor).</p>
 <li>
 <p><strong>Custom base language</strong> - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)</p>
 </li>
+<li>
+<p><strong>Macros</strong> - Add extra parameters given the context of the function call.</p>
+</li>
 </ol>
+<h2>Notebook like jupyter</h2>
+<p>Markdown comments are used for documentation and for creating notebooks.</p>
+<h3>Markdown cells</h3>
+<p>You can create markdown cells by adding an hashtag followed by a space. Multiline is also supported by surrounding the content with an hashtag and a star <code>#* This is a *markdown* cell *#</code>.</p>
+<pre><code class="language-jome"><span class="hljs-comment">#*
+This is a markdown cell
+### This level 3 title
+Below is the ending
+*#</span>
+</code></pre>
+<h3>Code cells</h3>
+<p>Not all code cells are executed.</p>
+<p>TODO: What keyword to use to mean that it should be executed???</p>
+<pre><code class="language-jome">&lt; <span class="hljs-variable">jome</span> &gt;
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">txt</span> = <span class="hljs-string">&quot;This is a code cell&quot;</span>
+&lt; / <span class="hljs-variable">jome</span> &gt;
+</code></pre>
+<h3>Data cells</h3>
+<p>Jome introducte the idea of data cells in a notebook.</p>
+<p>The idea is that you should be able to enter data in a spreadsheet like format in the notebook.</p>
+<p>TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells</p>
+<p>How to support =A1+B2 ?</p>
+<pre><code class="language-jome"><span class="hljs-comment">// A table like this should be editable as a spreadsheet in the editor</span>
+&lt; <span class="hljs-variable">table</span> &gt;
+  &lt; <span class="hljs-variable">tr</span> &gt;
+      &lt; <span class="hljs-variable">th</span> &gt;<span class="hljs-variable">Name</span>&lt;/ <span class="hljs-variable">th</span> &gt;
+      &lt; <span class="hljs-variable">th</span> &gt;<span class="hljs-variable">Age</span>&lt;/ <span class="hljs-variable">th</span> &gt;
+      &lt; <span class="hljs-variable">th</span> &gt;<span class="hljs-variable">City</span>&lt;/ <span class="hljs-variable">th</span> &gt;
+  &lt;/ <span class="hljs-variable">tr</span> &gt;
+  &lt; <span class="hljs-variable">tr</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">John</span> <span class="hljs-variable">Doe</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-number">25</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">Montr</span>é<span class="hljs-variable">al</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+  &lt;/ <span class="hljs-variable">tr</span> &gt;
+  &lt; <span class="hljs-variable">tr</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">Jane</span> <span class="hljs-variable">Smith</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-number">30</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">Qu</span>é<span class="hljs-variable">bec</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+  &lt;/ <span class="hljs-variable">tr</span> &gt;
+&lt; / <span class="hljs-variable">table</span> &gt;
+</code></pre>
+<h3>Collapsed code cells</h3>
+<p>There should also be collapsed by default code cells. For example for imports. If you click on it, you should see it.
+But you could also that it is collapsed by default.</p>
+<p>But I want to be able to search for it though... CTRL+F should find text hidden inside the collapsed cell. Not sure if that is possible in the browser...</p>
+<p>Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!</p>
 <h2>Flexible syntax</h2>
 <p>You can code using the syntax you prefer. The project should specify a linter so the code is converted to a standard when you save.</p>
 <p>Also, the idea is that when you open a page, the editor should show you the code in the syntax that you prefer.</p>
@@ -215,42 +264,6 @@ and data editing (like spreadsheet with types inside the editor).</p>
 <h2>Rigid operators</h2>
 <p>I think operators will be rigid. Otherwise it becomes a mess and you see code and you don't know how it behaves because it depends on how the operator was written.</p>
 <p>Maybe allow some flexible operators? Like ===, !== ? Probably not</p>
-<h2>Notebook like jupyter</h2>
-<p>Jome code can be used to create notebooks like jupyter.</p>
-<p>You can use the .jomn extension to denote that the file is expected to be opened as a notebook.</p>
-<h3>Markdown cells</h3>
-<p>You can create markdown cells by surrounding the content with an hashtag and a star <code>#* This is a *markdown* cell *#</code>.</p>
-<p>Note: ### is deprecated. Starting and ending with three hastags alone on a line is deprecated because it's confusing when you don't know if it's a start or an end.</p>
-<pre><code class="language-jome"><span class="hljs-comment">#*
-This is a markdown cell
-### This level 3 title
-Below is the ending
-*#</span>
-</code></pre>
-<h3>Code cells</h3>
-<p>Not all code cells are executed.</p>
-<p>TODO: What keyword to use to mean that it should be executed???</p>
-<pre><code class="language-jome"><span class="hljs-variable">cell</span>
-  <span class="hljs-comment">// ...</span>
-<span class="hljs-keyword">end</span>
-
-<span class="hljs-variable">script</span>
-  <span class="hljs-comment">// ...</span>
-<span class="hljs-keyword">end</span>
-
-<span class="hljs-keyword">code</span>
-  <span class="hljs-comment">// ...</span>
-<span class="hljs-keyword">end</span>
-</code></pre>
-<h3>Data cells</h3>
-<p>Jome introducte the idea of data cells in a notebook.</p>
-<p>The idea is that you should be able to enter data in a spreadsheet like format in the notebook.</p>
-<p>TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells</p>
-<h3>Collapsed code cells</h3>
-<p>There should also be collapsed by default code cells. For example for imports. If you click on it, you should see it.
-But you could also that it is collapsed by default.</p>
-<p>But I want to be able to search for it though... CTRL+F should find text hidden inside the collapsed cell. Not sure if that is possible in the browser...</p>
-<p>Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!</p>
 <h3>with blocks</h3>
 <p>Idea: A with block should be showned in a notebook like documentation on the web. It should be pretty, and the script code below would
 be the content of the function of class.</p>
@@ -275,7 +288,7 @@ be the content of the function of class.</p>
 The editor should make this symbol easyily accessible. You can also simply multiply by 1 of the unit.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">width</span> = <span class="hljs-number">5</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">force</span> = <span class="hljs-number">10 N</span> <span class="hljs-comment">// Newtons</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">distance</span> = <span class="hljs-variable">width</span>·<span class="hljs-variable">m</span> <span class="hljs-comment">// meters // same as width*1m</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">distance</span> = <span class="hljs-variable">width</span><span class="hljs-number">·m</span> <span class="hljs-comment">// meters // same as width*1m</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
 <span class="hljs-variable">jome</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable">torque</span>)
 <span class="hljs-comment">// → 50 N·m</span>
@@ -299,9 +312,15 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = <span class="hljs-number">10</span> ** <span class="hljs-number">2</span> <span class="hljs-comment">// ** is the exponentiation operator like javascript</span>
 </code></pre>
 <p>If you want total control even let's say on the operators, you could eventually design a custom language.</p>
-<h2>Disclaimer</h2>
-<p>The language is very, very young and still contains a log of bugs. I don't recommend using yet for any real project.</p>
-<p>I don't have a list of bugs yet, because there are too many.</p>
+<h2>Macros</h2>
+<p>Macros are functions that are extended at compile time with the context. Additional parameters are added to the function.</p>
+<p>You can access the code given to the parameter as a string. You can also get the unit of the parameter.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">calc</span>(<span class="hljs-variable">value</span> <span class="hljs-variable">along</span> <span class="hljs-keyword">code</span> <span class="hljs-variable">c</span> <span class="hljs-variable">along</span> <span class="hljs-keyword">unit</span> <span class="hljs-variable">u</span>)
+  <span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable">c</span>, <span class="hljs-string">&#x27; = &#x27;</span>, <span class="hljs-variable">value</span>, <span class="hljs-string">&#x27; &#x27;</span>, <span class="hljs-variable">u</span>)
+<span class="hljs-keyword">end</span>
+<span class="hljs-title function_">calc</span>(<span class="hljs-number">1</span> + <span class="hljs-number">1 N</span>) <span class="hljs-comment">// compiled as calc(1+1, &quot;1 + 1 N&quot;, &quot;N&quot;)</span>
+<span class="hljs-comment">// =&gt; 1 + 1 N = 2 N</span>
+</code></pre>
 <h2>Trash</h2>
 <p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
 has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>

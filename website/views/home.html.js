@@ -103,7 +103,7 @@ module.exports = () => {
 
   <h2 id="features">Features</h2>
 
-  Jome has a few original features (to my knowledge):
+  Jome has some original features that sets it appart from other languages.
 
   1. **Notebook comments** - You can add documentation comments using markdown to create a notebook like jupyter.
 
@@ -118,6 +118,76 @@ module.exports = () => {
   6. **A unit system** - You can add units to numbers. Smart conversions are done at compile time to ensure you use the proper units.
 
   7. **Custom base language** - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)
+
+  8. **Macros** - Add extra parameters given the context of the function call.
+
+  ## Notebook like jupyter
+
+  Markdown comments are used for documentation and for creating notebooks.
+
+  ### Markdown cells
+
+  You can create markdown cells by adding an hashtag followed by a space. Multiline is also supported by surrounding the content with an hashtag and a star \`#* This is a *markdown* cell *#\`.
+
+  \`\`\`jome
+  #*
+  This is a markdown cell
+  ### This level 3 title
+  Below is the ending
+  *#
+  \`\`\`
+
+  ### Code cells
+
+  Not all code cells are executed.
+
+  TODO: What keyword to use to mean that it should be executed???
+
+  \`\`\`jome
+  < jome >
+    let txt = "This is a code cell"
+  < / jome >
+  \`\`\`
+
+  ### Data cells
+
+  Jome introducte the idea of data cells in a notebook.
+
+  The idea is that you should be able to enter data in a spreadsheet like format in the notebook.
+
+  TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells
+
+  How to support =A1+B2 ?
+
+  \`\`\`jome
+  // A table like this should be editable as a spreadsheet in the editor
+  < table >
+    < tr >
+        < th >Name</ th >
+        < th >Age</ th >
+        < th >City</ th >
+    </ tr >
+    < tr >
+        < td >John Doe</ td >
+        < td >25</ td >
+        < td >Montréal</ td >
+    </ tr >
+    < tr >
+        < td >Jane Smith</ td >
+        < td >30</ td >
+        < td >Québec</ td >
+    </ tr >
+  < / table >
+  \`\`\`
+
+  ### Collapsed code cells
+
+  There should also be collapsed by default code cells. For example for imports. If you click on it, you should see it.
+  But you could also that it is collapsed by default.
+
+  But I want to be able to search for it though... CTRL+F should find text hidden inside the collapsed cell. Not sure if that is possible in the browser...
+
+  Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!
 
   ## Flexible syntax
 
@@ -151,63 +221,6 @@ module.exports = () => {
   I think operators will be rigid. Otherwise it becomes a mess and you see code and you don't know how it behaves because it depends on how the operator was written.
 
   Maybe allow some flexible operators? Like ===, !== ? Probably not
-
-  ## Notebook like jupyter
-
-  Jome code can be used to create notebooks like jupyter.
-
-  You can use the .jomn extension to denote that the file is expected to be opened as a notebook.
-
-  ### Markdown cells
-
-  You can create markdown cells by surrounding the content with an hashtag and a star \`#* This is a *markdown* cell *#\`.
-
-  Note: ### is deprecated. Starting and ending with three hastags alone on a line is deprecated because it's confusing when you don't know if it's a start or an end.
-
-  \`\`\`jome
-  #*
-  This is a markdown cell
-  ### This level 3 title
-  Below is the ending
-  *#
-  \`\`\`
-
-  ### Code cells
-
-  Not all code cells are executed.
-
-  TODO: What keyword to use to mean that it should be executed???
-
-  \`\`\`jome
-  cell
-    // ...
-  end
-
-  script
-    // ...
-  end
-
-  code
-    // ...
-  end
-  \`\`\`
-
-  ### Data cells
-
-  Jome introducte the idea of data cells in a notebook.
-
-  The idea is that you should be able to enter data in a spreadsheet like format in the notebook.
-
-  TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells
-
-  ### Collapsed code cells
-
-  There should also be collapsed by default code cells. For example for imports. If you click on it, you should see it.
-  But you could also that it is collapsed by default.
-
-  But I want to be able to search for it though... CTRL+F should find text hidden inside the collapsed cell. Not sure if that is possible in the browser...
-
-  Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!
 
   ### with blocks
 
@@ -285,11 +298,19 @@ module.exports = () => {
 
   If you want total control even let's say on the operators, you could eventually design a custom language.
 
-  ## Disclaimer
+  ## Macros
 
-  The language is very, very young and still contains a log of bugs. I don't recommend using yet for any real project.
+  Macros are functions that are extended at compile time with the context. Additional parameters are added to the function.
 
-  I don't have a list of bugs yet, because there are too many.
+  You can access the code given to the parameter as a string. You can also get the unit of the parameter.
+
+  \`\`\`jome
+  def calc(value along code c along unit u)
+    console.log(c, ' = ', value, ' ', u)
+  end
+  calc(1 + 1 N) // compiled as calc(1+1, "1 + 1 N", "N")
+  // => 1 + 1 N = 2 N
+  \`\`\`
 
   ## Trash
 

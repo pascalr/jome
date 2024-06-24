@@ -133,6 +133,11 @@ const highlighter = function(hljs) {
     match: /\d+(\.\d+)?[ \t]*\w+/,
     scope: "number",
   };
+  
+  const UNIT_OP = {
+    match: /·[ \t]*\w+/,
+    scope: "number",
+  };
 
   // // https://github.com/highlightjs/highlight.js/blob/main/src/languages/ruby.js
   // const VARIABLE = {
@@ -237,6 +242,7 @@ const highlighter = function(hljs) {
       PATH,
       TYPES,
       NUMBER_WITH_UNIT,
+      UNIT_OP,
       NUMBER,
       NUMBER_PLACEHOLDER,
       CLASS_DEFINITION,

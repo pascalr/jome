@@ -1457,6 +1457,10 @@ module.exports = () => {
     <ing qty="100g" name="sugar"/>
   </Recipe>
   \`\`\`
+
+  
+  
+  Note: ### is deprecated. Starting and ending with three hastags alone on a line is deprecated because it's confusing when you don't know if it's a start or an end.
 `);
 
   return new Webpage("Jome", content).render();

@@ -265,7 +265,7 @@ let content = <md>
   let force = 10 N // Newtons
   let distance = width·m // meters // same as width*1m
   let torque = force * distance
-  jome.log(torque)
+  console.log(torque)
   // → 50 N·m
   ```
 
@@ -303,11 +303,29 @@ let content = <md>
 
   If you want total control even let's say on the operators, you could eventually design a custom language.
 
-  ## Disclaimer
+  ## Macros
 
-  The language is very, very young and still contains a log of bugs. I don't recommend using yet for any real project.
+  Macros are functions that are extended at compile time with the context. Additional parameters are added to the function.
 
-  I don't have a list of bugs yet, because there are too many.
+  You can access the code given to the parameter as a string. You can also get the unit of the parameter.
+
+  ```jome
+  def calc(value along code c along unit u)
+    console.log(c, ' = ', value, ' ', u)
+  end
+  calc(1 + 1 N) // compiled as calc(1+1, "1 + 1 N", "N")
+  // => 1 + 1 N = 2 N
+  ```
+
+  ## Jome API (WIP)
+
+  In order to make code that can compile in many programming language, there would be an API available under the Jome object.
+
+  ```jome
+  jome.print("Hello world!") // compiles to console.log in js, printf in c, puts in ruby, etc.
+  ```
+
+  It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.
 
   ## Trash
 
