@@ -224,16 +224,14 @@ let content = <md>
   let addInts : int = (x : int, y : int) => x + y
   ```
 
-  ## Rigid operators
+  ## with blocks
 
-  I think operators will be rigid. Otherwise it becomes a mess and you see code and you don't know how it behaves because it depends on how the operator was written.
+  You can pass parameters to a file using a with block. This allows you to treat a file as a function. You can import it from another file.
+  And uou can call it directly from the CLI.
 
-  Maybe allow some flexible operators? Like ===, !== ? Probably not
-
-  ### with blocks
-
-  Idea: A with block should be showned in a notebook like documentation on the web. It should be pretty, and the script code below would
-  be the content of the function of class.
+  ```jome
+  with {port = 3000} // default port is 3000, but allow to run the file with a different port number
+  ```
 
   ## Base library
 
