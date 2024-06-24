@@ -139,10 +139,6 @@ module.exports = () => {
 
   ### Code cells
 
-  Not all code cells are executed.
-
-  TODO: What keyword to use to mean that it should be executed???
-
   \`\`\`jome
   < jome >
     let txt = "This is a code cell"
@@ -150,6 +146,12 @@ module.exports = () => {
   \`\`\`
 
   ### Data cells
+
+  There is two kinds of data. There is runtime data. And there is static data.
+
+  Runtime data is data given using the with keyword. When you reload this page, you loose this.
+
+  Static data is data directly inserted into the code. When you save you modify the source code.
 
   Jome introducte the idea of data cells in a notebook.
 
@@ -260,7 +262,7 @@ module.exports = () => {
   let force = 10 N // Newtons
   let distance = width·m // meters // same as width*1m
   let torque = force * distance
-  jome.log(torque)
+  console.log(torque)
   // → 50 N·m
   \`\`\`
 
@@ -311,6 +313,16 @@ module.exports = () => {
   calc(1 + 1 N) // compiled as calc(1+1, "1 + 1 N", "N")
   // => 1 + 1 N = 2 N
   \`\`\`
+
+  ## Jome API (WIP)
+
+  In order to make code that can compile in many programming language, there would be an API available under the Jome object.
+
+  \`\`\`jome
+  jome.print("Hello world!") // compiles to console.log in js, printf in c, puts in ruby, etc.
+  \`\`\`
+
+  It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.
 
   ## Trash
 

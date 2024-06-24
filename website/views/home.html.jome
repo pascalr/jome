@@ -22,6 +22,7 @@ let overview01 = <md>
   ```
 </md>
 
+// TODO: Add an option to md, to enable or disable html. This way I can write <jome></jome> without any issues.
 let overviewSrc = <md>
   ```jome
   #*
@@ -144,10 +145,6 @@ let content = <md>
 
   ### Code cells
 
-  Not all code cells are executed.
-
-  TODO: What keyword to use to mean that it should be executed???
-
   ```jome
   < jome >
     let txt = "This is a code cell"
@@ -155,6 +152,12 @@ let content = <md>
   ```
 
   ### Data cells
+
+  There is two kinds of data. There is runtime data. And there is static data.
+
+  Runtime data is data given using the with keyword. When you reload this page, you loose this.
+
+  Static data is data directly inserted into the code. When you save you modify the source code.
 
   Jome introducte the idea of data cells in a notebook.
 

@@ -209,13 +209,14 @@ Below is the ending
 *#</span>
 </code></pre>
 <h3>Code cells</h3>
-<p>Not all code cells are executed.</p>
-<p>TODO: What keyword to use to mean that it should be executed???</p>
 <pre><code class="language-jome">&lt; <span class="hljs-variable">jome</span> &gt;
   <span class="hljs-keyword">let</span> <span class="hljs-variable">txt</span> = <span class="hljs-string">&quot;This is a code cell&quot;</span>
 &lt; / <span class="hljs-variable">jome</span> &gt;
 </code></pre>
 <h3>Data cells</h3>
+<p>There is two kinds of data. There is runtime data. And there is static data.</p>
+<p>Runtime data is data given using the with keyword. When you reload this page, you loose this.</p>
+<p>Static data is data directly inserted into the code. When you save you modify the source code.</p>
 <p>Jome introducte the idea of data cells in a notebook.</p>
 <p>The idea is that you should be able to enter data in a spreadsheet like format in the notebook.</p>
 <p>TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells</p>
@@ -290,7 +291,7 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <span class="hljs-keyword">let</span> <span class="hljs-variable">force</span> = <span class="hljs-number">10 N</span> <span class="hljs-comment">// Newtons</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">distance</span> = <span class="hljs-variable">width</span><span class="hljs-number">·m</span> <span class="hljs-comment">// meters // same as width*1m</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
-<span class="hljs-variable">jome</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable">torque</span>)
+<span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable">torque</span>)
 <span class="hljs-comment">// → 50 N·m</span>
 </code></pre>
 <p>with nb = ? foos end</p>
@@ -321,6 +322,11 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <span class="hljs-title function_">calc</span>(<span class="hljs-number">1</span> + <span class="hljs-number">1 N</span>) <span class="hljs-comment">// compiled as calc(1+1, &quot;1 + 1 N&quot;, &quot;N&quot;)</span>
 <span class="hljs-comment">// =&gt; 1 + 1 N = 2 N</span>
 </code></pre>
+<h2>Jome API (WIP)</h2>
+<p>In order to make code that can compile in many programming language, there would be an API available under the Jome object.</p>
+<pre><code class="language-jome"><span class="hljs-variable">jome</span>.<span class="hljs-title function_">print</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>) <span class="hljs-comment">// compiles to console.log in js, printf in c, puts in ruby, etc.</span>
+</code></pre>
+<p>It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.</p>
 <h2>Trash</h2>
 <p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
 has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>
