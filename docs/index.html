@@ -118,6 +118,9 @@ standardized code with other people.</p>
 and data editing (like spreadsheet with types inside the editor).</p>
 <p>It has nice features like a base library and macros.</p>
 <p>For the near future, it only compiles to JavaScript.</p>
+<h2>Status</h2>
+<p>Jome is in early development stage. It is not usable yet.</p>
+<p>The compiler does not handle all the features described here. Tests are lacking and there is a lot of bugs.</p>
   <h2 id="sample">Code Sample</h2>
 <p><pre><code class="language-jome"><span class="hljs-comment">#*
 # Torque Calculator Example
@@ -131,7 +134,8 @@ and data editing (like spreadsheet with types inside the editor).</p>
 <span class="hljs-comment"># Torque is the result of a force multiplied by a distance from a pivot point.</span>
 
 <span class="hljs-comment">// We use a jome tag because it&#x27;s a script that can be run</span>
-<span class="hljs-comment"># The unit checker can infer that this block returns a value with N*m or equivalent as a unit and shows it.</span>
+<span class="hljs-comment">// The unit checker can infer that this block returns a value</span>
+<span class="hljs-comment">// with N*m or equivalent as a unit and shows it.</span>
 <span class="hljs-keyword">return</span> &lt;<span class="hljs-variable">jome</span> &gt;
   <span class="hljs-keyword">return</span> <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
 &lt;/<span class="hljs-variable">jome</span> &gt;
@@ -170,9 +174,6 @@ and data editing (like spreadsheet with types inside the editor).</p>
 <p>Jome has a few original features (to my knowledge):</p>
 <ol>
 <li>
-<p><strong>Easy scripting</strong> - .jome files define functions which can be executed from the CLI or from another file easily</p>
-</li>
-<li>
 <p><strong>Notebook comments</strong> - You can add documentation comments using markdown to create a notebook like jupyter.</p>
 </li>
 <li>
@@ -194,16 +195,6 @@ and data editing (like spreadsheet with types inside the editor).</p>
 <p><strong>Custom base language</strong> - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)</p>
 </li>
 </ol>
-<h2>Easy Execution</h2>
-<p>There are three ways to execute the code.</p>
-<p>You do it directly inside the editor in preview mode.</p>
-<p>You can execute it using the jome CLI tool.
-<code>sh   jome torqueCalculator.jome --force=10 --distance=2   </code></p>
-<p>You can also import it from another file to execute this code.
-`jome
-import calculateTorque from './torqueCalculator.jome'</p>
-<p>let torque = calculateTorque force: 20N, distance: 1m
-`</p>
 <h2>Flexible syntax</h2>
 <p>You can code using the syntax you prefer. The project should specify a linter so the code is converted to a standard when you save.</p>
 <p>Also, the idea is that when you open a page, the editor should show you the code in the syntax that you prefer.</p>

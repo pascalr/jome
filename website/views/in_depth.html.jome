@@ -14,6 +14,15 @@ let content = <md>
   ## Formats
 
   All the default formats
+
+  ## Syntax
+
+  void doSomething() { /* ... */ }
+  def doSomething /* ... */ end
+  fn doSomething() { /* ... */ }
+  function doSomething() { /* ... */ }
+  let doSomething = () => { /* ... */ }
+  let doSomething = => { /* ... */ }
 </md>
 
 return Webpage('Jome In Depth', content).render()

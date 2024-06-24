@@ -20,6 +20,8 @@ let content = <md>
 
   <h2 id="lang-ref">Language Reference</h2>
 
+  This page explain the concepts used by the Jome programming language.
+
   This documentation assumes the reader is familiar with javascript.
 
   Jome is similar to JavaScript, but there are a few distinctions that you must be aware of.
@@ -55,16 +57,6 @@ let content = <md>
     end
   }
   ```
-
-  Or put this in advanced?
-  In advanced I should detail ALL the available syntax (a little like mozilla for javascript)
-
-  void doSomething() { /* ... */ }
-  def doSomething /* ... */ end
-  fn doSomething() { /* ... */ }
-  function doSomething() { /* ... */ }
-  let doSomething = () => { /* ... */ }
-  let doSomething = => { /* ... */ }
 
   ### Function calls
 
@@ -1467,6 +1459,10 @@ let content = <md>
     <ing qty="100g" name="sugar"/>
   </Recipe>
   ```
+
+  
+  
+  Note: ### is deprecated. Starting and ending with three hastags alone on a line is deprecated because it's confusing when you don't know if it's a start or an end.
 
 </md>
 

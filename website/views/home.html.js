@@ -33,7 +33,8 @@ module.exports = () => {
   # Torque is the result of a force multiplied by a distance from a pivot point.
 
   // We use a jome tag because it's a script that can be run
-  # The unit checker can infer that this block returns a value with N*m or equivalent as a unit and shows it.
+  // The unit checker can infer that this block returns a value
+  // with N*m or equivalent as a unit and shows it.
   return <jome >
     return force * distance
   </jome >
@@ -71,6 +72,12 @@ module.exports = () => {
 
   For the near future, it only compiles to JavaScript.
 
+  ## Status
+
+  Jome is in early development stage. It is not usable yet.
+
+  The compiler does not handle all the features described here. Tests are lacking and there is a lot of bugs.
+
   <h2 id="sample">Code Sample</h2>
 
   045a7bfe3dba9ba99b065d6f5aedfd77
@@ -98,39 +105,19 @@ module.exports = () => {
 
   Jome has a few original features (to my knowledge):
 
-  1. **Easy scripting** - .jome files define functions which can be executed from the CLI or from another file easily
+  1. **Notebook comments** - You can add documentation comments using markdown to create a notebook like jupyter.
 
-  2. **Notebook comments** - You can add documentation comments using markdown to create a notebook like jupyter.
+  2. **Inline data** - TODO: You can do advamced stuff with inline data using tags (preprocessing, ...)
 
-  3. **Inline data** - TODO: You can do advamced stuff with inline data using tags (preprocessing, ...)
+  3. **Flexible syntax** - You can code using the style you prefer and use a linter to share code in a standardized way.
 
-  4. **Flexible syntax** - You can code using the style you prefer and use a linter to share code in a standardized way.
+  4. **Flexible typing** - You can use static typing for robustness and usability or omit them for development speed and simplicity.
 
-  5. **Flexible typing** - You can use static typing for robustness and usability or omit them for development speed and simplicity.
+  5. **Custom base library** - Choose the base library for your project to reuse common functionalities.
 
-  6. **Custom base library** - Choose the base library for your project to reuse common functionalities.
+  6. **A unit system** - You can add units to numbers. Smart conversions are done at compile time to ensure you use the proper units.
 
-  7. **A unit system** - You can add units to numbers. Smart conversions are done at compile time to ensure you use the proper units.
-
-  8. **Custom base language** - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)
-
-  ## Easy Execution
-
-  There are three ways to execute the code.
-
-  You do it directly inside the editor in preview mode.
-
-  You can execute it using the jome CLI tool.
-  \`sh
-  jome torqueCalculator.jome --force=10 --distance=2
-  \`
-
-  You can also import it from another file to execute this code.
-  \`jome
-  import calculateTorque from './torqueCalculator.jome'
-
-  let torque = calculateTorque force: 20N, distance: 1m
-  \`
+  7. **Custom base language** - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)
 
   ## Flexible syntax
 

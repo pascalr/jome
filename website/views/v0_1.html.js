@@ -16,11 +16,9 @@ module.exports = () => {
 
   let content = mdToHtml(`
 
-  TODO: I am thinking of using test_compile.jomn as a notebook and use that as a reference for the language.
-  Don't include all the very specific tests, but globals tests would be very nice to explain what the language does,
-  and this would avoid repeating myself.
-
   <h2 id="lang-ref">Language Reference</h2>
+
+  This page explain the concepts used by the Jome programming language.
 
   This documentation assumes the reader is familiar with javascript.
 
@@ -57,16 +55,6 @@ module.exports = () => {
     end
   }
   \`\`\`
-
-  Or put this in advanced?
-  In advanced I should detail ALL the available syntax (a little like mozilla for javascript)
-
-  void doSomething() { /* ... */ }
-  def doSomething /* ... */ end
-  fn doSomething() { /* ... */ }
-  function doSomething() { /* ... */ }
-  let doSomething = () => { /* ... */ }
-  let doSomething = => { /* ... */ }
 
   ### Function calls
 
