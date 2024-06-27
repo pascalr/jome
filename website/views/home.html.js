@@ -218,16 +218,14 @@ module.exports = () => {
   let addInts : int = (x : int, y : int) => x + y
   \`\`\`
 
-  ## Rigid operators
+  ## with blocks
 
-  I think operators will be rigid. Otherwise it becomes a mess and you see code and you don't know how it behaves because it depends on how the operator was written.
+  You can pass parameters to a file using a with block. This allows you to treat a file as a function. You can import it from another file.
+  And uou can call it directly from the CLI.
 
-  Maybe allow some flexible operators? Like ===, !== ? Probably not
-
-  ### with blocks
-
-  Idea: A with block should be showned in a notebook like documentation on the web. It should be pretty, and the script code below would
-  be the content of the function of class.
+  \`\`\`jome
+  with {port = 3000} // default port is 3000, but allow to run the file with a different port number
+  \`\`\`
 
   ## Base library
 
@@ -250,9 +248,7 @@ module.exports = () => {
 
   ## Unit system
 
-  Note: This is a work in progress.
-
-  You can add units to variables. They are only used at compile time.
+  Unit are a way to be more specific when using numbers. They are only available at compile time.
 
   You can specify the unit after a number or use the middle dot (·) to apply a unit to a variable.
   The editor should make this symbol easyily accessible. You can also simply multiply by 1 of the unit.
@@ -262,23 +258,31 @@ module.exports = () => {
   let force = 10 N // Newtons
   let distance = width·m // meters // same as width*1m
   let torque = force * distance
-  console.log(torque)
+  jome.print(torque) // jome.print is a macro that prints the unit based on the context
   // → 50 N·m
   \`\`\`
 
-  with nb = ? foos end
-
-  You can get the type of a variable as a string using the \`unitof\` operator.
-
-  let unit = unitof someVar
-
-  You can also do it using the along keyword inside a function.
-
-  TODO: There must be a way to say that it is required to specify a unit.
+  Units have limitations. They are a compile time feature.
 
   \`\`\`jome
-  // Here, sleep should specify that the unit is mandatory
-  jome.sleep(20 ms)
+  let force = unitSystem === 'metric' ? 1 lb : 10 N
+  jome.print(force)
+  // → 10 // The unit is not printed because it can't be inferred.
+  \`\`\`
+
+  You can specify that a function takes a value in a specific unit. When called, it can be automatically converted if the given unit is an equivalent.
+
+  \`\`\`jome
+  def sleep(time = ? ms)
+    /* ... */
+  end
+  sleep(2 s) // compiled to: sleep(2000)
+  \`\`\`
+
+  You can get the unit of a variable as a string using the \`unitof\` operator.
+
+  \`\`\`jome
+  let unit = unitof someVar
   \`\`\`
 
   ## Custom base language (flavor?)
@@ -323,6 +327,9 @@ module.exports = () => {
   \`\`\`
 
   It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.
+
+  print: console.log as a macro to print unit
+  debug: console.log as a macro to print code and unit
 
   ## Trash
 

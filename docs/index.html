@@ -262,12 +262,11 @@ But you could also that it is collapsed by default.</p>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">addInts</span> = (<span class="hljs-variable">x</span> : <span class="hljs-type">int</span>, <span class="hljs-variable">y</span> : <span class="hljs-type">int</span>) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">addInts</span> : <span class="hljs-type">int</span> = (<span class="hljs-variable">x</span> : <span class="hljs-type">int</span>, <span class="hljs-variable">y</span> : <span class="hljs-type">int</span>) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
 </code></pre>
-<h2>Rigid operators</h2>
-<p>I think operators will be rigid. Otherwise it becomes a mess and you see code and you don't know how it behaves because it depends on how the operator was written.</p>
-<p>Maybe allow some flexible operators? Like ===, !== ? Probably not</p>
-<h3>with blocks</h3>
-<p>Idea: A with block should be showned in a notebook like documentation on the web. It should be pretty, and the script code below would
-be the content of the function of class.</p>
+<h2>with blocks</h2>
+<p>You can pass parameters to a file using a with block. This allows you to treat a file as a function. You can import it from another file.
+And uou can call it directly from the CLI.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">with</span> {<span class="hljs-variable">port</span> = <span class="hljs-number">3000</span>} <span class="hljs-comment">// default port is 3000, but allow to run the file with a different port number</span>
+</code></pre>
 <h2>Base library</h2>
 <p>Every project can choose a base library. This library should contain common utility functions and constants.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Example using lodash as a base library</span>
@@ -283,24 +282,29 @@ be the content of the function of class.</p>
 </code></pre>
 <p>Read more on <a href="">Base library</a> (TODO Link)</p>
 <h2>Unit system</h2>
-<p>Note: This is a work in progress.</p>
-<p>You can add units to variables. They are only used at compile time.</p>
+<p>Unit are a way to be more specific when using numbers. They are only available at compile time.</p>
 <p>You can specify the unit after a number or use the middle dot (·) to apply a unit to a variable.
 The editor should make this symbol easyily accessible. You can also simply multiply by 1 of the unit.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">width</span> = <span class="hljs-number">5</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">force</span> = <span class="hljs-number">10 N</span> <span class="hljs-comment">// Newtons</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">distance</span> = <span class="hljs-variable">width</span><span class="hljs-number">·m</span> <span class="hljs-comment">// meters // same as width*1m</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
-<span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable">torque</span>)
+<span class="hljs-variable">jome</span>.<span class="hljs-title function_">print</span>(<span class="hljs-variable">torque</span>) <span class="hljs-comment">// jome.print is a macro that prints the unit based on the context</span>
 <span class="hljs-comment">// → 50 N·m</span>
 </code></pre>
-<p>with nb = ? foos end</p>
-<p>You can get the type of a variable as a string using the <code>unitof</code> operator.</p>
-<p>let unit = unitof someVar</p>
-<p>You can also do it using the along keyword inside a function.</p>
-<p>TODO: There must be a way to say that it is required to specify a unit.</p>
-<pre><code class="language-jome"><span class="hljs-comment">// Here, sleep should specify that the unit is mandatory</span>
-<span class="hljs-variable">jome</span>.<span class="hljs-title function_">sleep</span>(<span class="hljs-number">20 ms</span>)
+<p>Units have limitations. They are a compile time feature.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">force</span> = <span class="hljs-variable">unitSystem</span> === <span class="hljs-string">&#x27;metric&#x27;</span> ? <span class="hljs-number">1 lb</span> : <span class="hljs-number">10 N</span>
+<span class="hljs-variable">jome</span>.<span class="hljs-title function_">print</span>(<span class="hljs-variable">force</span>)
+<span class="hljs-comment">// → 10 // The unit is not printed because it can&#x27;t be inferred.</span>
+</code></pre>
+<p>You can specify that a function takes a value in a specific unit. When called, it can be automatically converted if the given unit is an equivalent.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">sleep</span>(<span class="hljs-variable">time</span> = <span class="hljs-number">? ms</span>)
+  <span class="hljs-comment">/* ... */</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-title function_">sleep</span>(<span class="hljs-number">2 s</span>) <span class="hljs-comment">// compiled to: sleep(2000)</span>
+</code></pre>
+<p>You can get the unit of a variable as a string using the <code>unitof</code> operator.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-keyword">unit</span> = <span class="hljs-variable">unitof</span> <span class="hljs-variable">someVar</span>
 </code></pre>
 <h2>Custom base language (flavor?)</h2>
 <p>Only javascript is supported for now.</p>
@@ -327,6 +331,8 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <pre><code class="language-jome"><span class="hljs-variable">jome</span>.<span class="hljs-title function_">print</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>) <span class="hljs-comment">// compiles to console.log in js, printf in c, puts in ruby, etc.</span>
 </code></pre>
 <p>It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.</p>
+<p>print: console.log as a macro to print unit
+debug: console.log as a macro to print code and unit</p>
 <h2>Trash</h2>
 <p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
 has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>
