@@ -333,6 +333,26 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <p>It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.</p>
 <p>print: console.log as a macro to print unit
 debug: console.log as a macro to print code and unit</p>
+<h2>Schemas</h2>
+<p>You can define custom schemas for xml tags.</p>
+<p>schema Recipe {
+def toHTML
+end
+}</p>
+<p>What does defining a schema should do?</p>
+<p>It should create a class that allows you to handle it programmatycally.</p>
+<pre><code class="language-jome"> &lt;<span class="hljs-variable">recipe</span>
+   <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;Biscuits aux brisures de chocolat&quot;</span>
+ &gt;
+   &lt;<span class="hljs-variable">ingredients</span>&gt;
+     &lt;<span class="hljs-variable">ing</span>&gt;&lt;<span class="hljs-variable">qty</span>&gt;<span class="hljs-number">1 t</span>&lt;/<span class="hljs-variable">qty</span>&gt;&lt;<span class="hljs-variable">item</span>&gt;<span class="hljs-variable">farine</span>&lt;/<span class="hljs-variable">item</span>&gt;&lt;/<span class="hljs-variable">ing</span>&gt;
+     &lt;<span class="hljs-variable">ing</span>&gt;&lt;<span class="hljs-variable">qty</span>&gt;<span class="hljs-number">1 t</span>&lt;/<span class="hljs-variable">qty</span>&gt;&lt;<span class="hljs-variable">item</span>&gt;<span class="hljs-variable">beurre</span>&lt;/<span class="hljs-variable">item</span>&gt;&lt;/<span class="hljs-variable">ing</span>&gt;
+   &lt;/<span class="hljs-variable">ingredients</span>&gt;
+   &lt;<span class="hljs-variable">steps</span>&gt;
+     &lt;<span class="hljs-variable">step</span>&gt;<span class="hljs-variable">M</span>é<span class="hljs-variable">langer</span> <span class="hljs-variable">@1</span> <span class="hljs-variable">avec</span> <span class="hljs-variable">@2</span>&lt;/<span class="hljs-variable">step</span>&gt;
+   &lt;/<span class="hljs-variable">steps</span>&gt;
+ &lt;/<span class="hljs-variable">recipe</span>&gt;
+</code></pre>
 <h2>Trash</h2>
 <p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
 has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>

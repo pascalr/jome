@@ -331,6 +331,33 @@ module.exports = () => {
   print: console.log as a macro to print unit
   debug: console.log as a macro to print code and unit
 
+  ## Schemas
+
+  You can define custom schemas for xml tags.
+
+  schema Recipe {
+    def toHTML
+    end
+  }
+
+  What does defining a schema should do?
+
+  It should create a class that allows you to handle it programmatycally.
+
+ \`\`\`jome
+  <recipe
+    name="Biscuits aux brisures de chocolat"
+  >
+    <ingredients>
+      <ing><qty>1 t</qty><item>farine</item></ing>
+      <ing><qty>1 t</qty><item>beurre</item></ing>
+    </ingredients>
+    <steps>
+      <step>Mélanger @1 avec @2</step>
+    </steps>
+  </recipe>
+  \`\`\`
+
   ## Trash
 
   Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it

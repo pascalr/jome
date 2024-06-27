@@ -30,6 +30,119 @@ let content = <md>
   - You can use a default library. Functions and constants become available using the hashtag. TODO
   - There are [heredocs](#heredocs) to include code from other languages (html, css, ...) written as xml tags.
 
+  ## Schemas
+
+  You can define custom schemas for xml tags.
+
+  You define it using the built-in schema, schema.
+
+  schema:
+  - model: The name of what this schema is describing. This is case insensitive. This way you can write < recipe > if you prefer instead of < Recipe >, but still do new Recipe.
+
+  attr:
+  - name: Name of the attribute
+  - type: Type of the attribute. TODO: Link to a list where it is described all possible types.
+  - optional: Whether the attribute is optional
+
+  List allows to have children of different model nested. 
+  list:
+  - name: Name of the list
+  - optional: Whether the list is optional
+
+  many: Can contain one or many children of the type specified by id.
+  - model: The model of the schema of the children allowed
+
+  ```jome
+  <list name="steps" optional>
+    <many model="step" />
+  </list>
+  ```
+
+  has_many: A shorthand for list when all the children are of the same model.
+  - name
+
+  one:
+
+  has_one:
+
+  belongs_to:
+
+  content:
+  - name: The name of the variable to access the content.
+
+  You can also use components. They are the same as schema but only exists within it's scope.
+
+  ```jome
+  <schema model="Recipe">
+    <attr name="name" type="string" />
+    <attr name="servings" type="string" optional />
+    <has_many name="ingredients" model="ing" optional>
+    <has_many name="steps" model="step" optional>
+    <component model="ing">
+      <attr name="qty" type="string" />
+      <attr name="name" type="string" />
+    </component>
+    <component model="step">
+      <content name="text" type="string" />
+    </component>
+  </schema>
+  ```
+
+  You can then extend the schema by using the keyword schema and adding methods like you would to a class.
+
+  The previous xml schema defines the constructor already.
+
+  ```jome
+  schema Recipe {
+    def toHTML
+    end
+  }
+  ```
+
+  Then you can either create an instance with xml or programmatycally.
+
+  ```jome
+  let recipe = <recipe
+    name="Biscuits aux brisures de chocolat"
+  >
+    <ingredients>
+      <ing qty="1 t" name="farine" />
+      <ing qty="1 t" name="beurre" />
+    </ingredients>
+    <steps>
+      <step>Mélanger @1 avec @2</step>
+    </steps>
+  </recipe>
+  ```
+
+  ```jome
+  let recipe = new Recipe({
+    name: "Biscuits aux brisures de chocolat"
+    ingredients: [
+      new Ingredient({qty: "1 t", name: "farine"}),
+      new Ingredient({qty: "1 t", name: "beurre"})
+    ],
+    steps: [
+      new Step({text: "Mélanger @1 avec @2"})
+    ]
+  })
+  ```
+
+  The advantage of the xml version is that the editor should allow you to edit it in a beautiful way.
+  It is nicer when just entering data.
+
+  The advantage of the programmatycally version is if you need to refer to other code a lot, it's simpler this way.
+
+  What happens when you define a schema? How is that compiled to javascript?
+
+  A class is created. A constructor is created. The class extends some base class?
+
+  If you have used the schema keyword, then it is merged with the schema xml into the class.
+
+  A schema is used for validation.
+
+  A serializer and deserializer can be specified. By default JSON.
+
   <h2 id="syntax">Syntax - WIP</h2>
 
   The idea is to support a lot of syntaxes so you can choose the one you prefer. Ideally, the editor would show you the
