@@ -133,11 +133,11 @@ the air, inviting anyone who entered to linger and embrace the serenity.
 <p>You can use it to read and process files at compile time too.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">str</span> = <span class="hljs-string">&quot;some, data&quot;</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-variable">str</span> <span class="hljs-variable">as</span> <span class="hljs-variable">csv</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-string">#./some_data.txt</span> <span class="hljs-variable">as</span> <span class="hljs-variable">csv</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = #./<span class="hljs-variable">some_data</span>.<span class="hljs-variable">txt</span> <span class="hljs-variable">as</span> <span class="hljs-variable">csv</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-string">&quot;some, data&quot;</span> <span class="hljs-variable">as</span> <span class="hljs-variable">csv</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-string">#./some_data.csv</span> <span class="hljs-variable">as</span> <span class="hljs-variable">csv</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = #./<span class="hljs-variable">some_data</span>.<span class="hljs-variable">csv</span> <span class="hljs-variable">as</span> <span class="hljs-variable">csv</span>
 
-<span class="hljs-keyword">let</span> <span class="hljs-variable">str</span> = <span class="hljs-string">#./some_data.cvs</span> <span class="hljs-variable">as</span> <span class="hljs-variable">is</span> <span class="hljs-comment">// as is simply return a string</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">str</span> = #./<span class="hljs-variable">some_data</span>.<span class="hljs-variable">cvs</span> <span class="hljs-variable">as</span> <span class="hljs-variable">is</span> <span class="hljs-comment">// as is simply return a string</span>
 
 <span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = #(./<span class="hljs-variable">some_data</span>.<span class="hljs-variable">cvs</span>) <span class="hljs-comment">// check extension to import</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = #(./<span class="hljs-variable">some_data</span>.<span class="hljs-variable">cvs</span> <span class="hljs-variable">as</span> <span class="hljs-variable">is</span>) <span class="hljs-comment">// no formatting, directly a string</span>
@@ -159,15 +159,15 @@ I want typecasting to be done using parentheses, not lt and gt and not the keywo
 </code></pre>
 <h2>csv, json, yaml</h2>
 <p>These formats are not so usefull inline, but this also means you can easily read them from a file and convert them.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-built_in function_">#read</span>(<span class="hljs-string">#./some_file.csv</span>)%<span class="hljs-variable">csv</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-built_in function_">#read</span> <span class="hljs-string">#./some_file.csv</span> |&gt; %<span class="hljs-variable">csv</span>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-built_in function_">#read</span>(#./<span class="hljs-variable">some_file</span>.<span class="hljs-variable">csv</span>)%<span class="hljs-variable">csv</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-built_in function_">#read</span> #./<span class="hljs-variable">some_file</span>.<span class="hljs-variable">csv</span> |&gt; %<span class="hljs-variable">csv</span>
 </code></pre>
 <h2>bin, hex, oct</h2>
 <p>You can't declare the same way a binary, hexadecimal or octodecimal number in Jome because it could be confusing with units.</p>
 <p>Instead you use tags.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">netmask</span> = &lt;<span class="hljs-variable">hex</span>&gt;<span class="hljs-variable">FFFFFF00</span>&lt;/<span class="hljs-variable">hex</span>&gt; <span class="hljs-comment">// compiles to 0xFFFFFF00</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">flags</span> = &lt;<span class="hljs-variable">bin</span>&gt;<span class="hljs-number">01100101</span>&lt;/<span class="hljs-variable">bin</span>&gt; <span class="hljs-comment">// compiles to 0b01100101</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">octodecimalNb</span> = &lt;<span class="hljs-variable">oct</span>&gt;<span class="hljs-number">712</span>&lt;/<span class="hljs-variable">oct</span>&gt; <span class="hljs-comment">// compiles to 0o712</span>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">netmask</span> = <span class="hljs-tag">&lt;<span class="hljs-name">hex</span>&gt;</span><span class="hljs-variable">FFFFFF00</span><span class="hljs-tag">&lt;/<span class="hljs-name">hex</span>&gt;</span> <span class="hljs-comment">// compiles to 0xFFFFFF00</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">flags</span> = <span class="hljs-tag">&lt;<span class="hljs-name">bin</span>&gt;</span><span class="hljs-number">01100101</span><span class="hljs-tag">&lt;/<span class="hljs-name">bin</span>&gt;</span> <span class="hljs-comment">// compiles to 0b01100101</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">octodecimalNb</span> = <span class="hljs-tag">&lt;<span class="hljs-name">oct</span>&gt;</span><span class="hljs-number">712</span><span class="hljs-tag">&lt;/<span class="hljs-name">oct</span>&gt;</span> <span class="hljs-comment">// compiles to 0o712</span>
 </code></pre>
 <p>TODO: Rajouter du syntax highligh au hex pour changer de couleur à toute les 2 charactères? Afficher comme des
 string et à tous les 2 charactères mettre comme si escaped string pour que la couleur change un peu.</p>
@@ -192,9 +192,9 @@ string et à tous les 2 charactères mettre comme si escaped string pour que la 
 <h2>Music tabs</h2>
 <p>TODO: Rewrite my guitar website with Jome and use tabs!!!</p>
 <p>Tabs for guitar, ukulele, any number of cords?</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">tab</span> = &lt;<span class="hljs-variable">guitar</span>-<span class="hljs-variable">tab</span>&gt;
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">tab</span> = <span class="hljs-tag">&lt;<span class="hljs-name">guitar-tab</span>&gt;</span>
 
-&lt;/<span class="hljs-variable">guitar</span>-<span class="hljs-variable">tab</span>&gt;
+<span class="hljs-tag">&lt;/<span class="hljs-name">guitar-tab</span>&gt;</span>
 </code></pre>
 <p>TODO</p>
 <h2>Music chords</h2>

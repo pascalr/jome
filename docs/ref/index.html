@@ -144,9 +144,9 @@ list:</p>
 <ul>
 <li>model: The model of the schema of the children allowed</li>
 </ul>
-<pre><code class="language-jome">&lt;<span class="hljs-variable">list</span> <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;steps&quot;</span> <span class="hljs-variable">optional</span>&gt;
-  &lt;<span class="hljs-variable">many</span> <span class="hljs-variable">model</span>=<span class="hljs-string">&quot;step&quot;</span> /&gt;
-&lt;/<span class="hljs-variable">list</span>&gt;
+<pre><code class="language-jome"><span class="hljs-tag">&lt;<span class="hljs-name">list</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;steps&quot;</span> <span class="hljs-attr">optional</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">many</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;step&quot;</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">list</span>&gt;</span>
 </code></pre>
 <p>has_many: A shorthand for list when all the children are of the same model.</p>
 <ul>
@@ -160,19 +160,19 @@ list:</p>
 <li>name: The name of the variable to access the content.</li>
 </ul>
 <p>You can also use components. They are the same as schema but only exists within it's scope.</p>
-<pre><code class="language-jome">&lt;<span class="hljs-variable">schema</span> <span class="hljs-variable">model</span>=<span class="hljs-string">&quot;Recipe&quot;</span>&gt;
-  &lt;<span class="hljs-variable">attr</span> <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-keyword">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;
-  &lt;<span class="hljs-variable">attr</span> <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;servings&quot;</span> <span class="hljs-keyword">type</span>=<span class="hljs-string">&quot;string&quot;</span> <span class="hljs-variable">optional</span> /&gt;
-  &lt;<span class="hljs-variable">has_many</span> <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;ingredients&quot;</span> <span class="hljs-variable">model</span>=<span class="hljs-string">&quot;ing&quot;</span> <span class="hljs-variable">optional</span>&gt;
-  &lt;<span class="hljs-variable">has_many</span> <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;steps&quot;</span> <span class="hljs-variable">model</span>=<span class="hljs-string">&quot;step&quot;</span> <span class="hljs-variable">optional</span>&gt;
-  &lt;<span class="hljs-variable">component</span> <span class="hljs-variable">model</span>=<span class="hljs-string">&quot;ing&quot;</span>&gt;
-    &lt;<span class="hljs-variable">attr</span> <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;qty&quot;</span> <span class="hljs-keyword">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;
-    &lt;<span class="hljs-variable">attr</span> <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-keyword">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;
-  &lt;/<span class="hljs-variable">component</span>&gt;
-  &lt;<span class="hljs-variable">component</span> <span class="hljs-variable">model</span>=<span class="hljs-string">&quot;step&quot;</span>&gt;
-    &lt;<span class="hljs-variable">content</span> <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-keyword">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;
-  &lt;/<span class="hljs-variable">component</span>&gt;
-&lt;/<span class="hljs-variable">schema</span>&gt;
+<pre><code class="language-jome"><span class="hljs-tag">&lt;<span class="hljs-name">schema</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;Recipe&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">attr</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">attr</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;servings&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> <span class="hljs-attr">optional</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">has_many</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;ingredients&quot;</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;ing&quot;</span> <span class="hljs-attr">optional</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">has_many</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;steps&quot;</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;step&quot;</span> <span class="hljs-attr">optional</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">component</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;ing&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">attr</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;qty&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">attr</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">component</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">component</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;step&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">content</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">component</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">schema</span>&gt;</span>
 </code></pre>
 <p>You can then extend the schema by using the keyword schema and adding methods like you would to a class.</p>
 <p>The previous xml schema defines the constructor already.</p>
@@ -182,17 +182,17 @@ list:</p>
 }
 </code></pre>
 <p>Then you can either create an instance with xml or programmatycally.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">recipe</span> = &lt;<span class="hljs-variable">recipe</span>
-  <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;Biscuits aux brisures de chocolat&quot;</span>
-&gt;
-  &lt;<span class="hljs-variable">ingredients</span>&gt;
-    &lt;<span class="hljs-variable">ing</span> <span class="hljs-variable">qty</span>=<span class="hljs-string">&quot;1 t&quot;</span> <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;farine&quot;</span> /&gt;
-    &lt;<span class="hljs-variable">ing</span> <span class="hljs-variable">qty</span>=<span class="hljs-string">&quot;1 t&quot;</span> <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;beurre&quot;</span> /&gt;
-  &lt;/<span class="hljs-variable">ingredients</span>&gt;
-  &lt;<span class="hljs-variable">steps</span>&gt;
-    &lt;<span class="hljs-variable">step</span>&gt;<span class="hljs-variable">M</span>é<span class="hljs-variable">langer</span> <span class="hljs-variable">@1</span> <span class="hljs-variable">avec</span> <span class="hljs-variable">@2</span>&lt;/<span class="hljs-variable">step</span>&gt;
-  &lt;/<span class="hljs-variable">steps</span>&gt;
-&lt;/<span class="hljs-variable">recipe</span>&gt;
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">recipe</span> = <span class="hljs-tag">&lt;<span class="hljs-name">recipe</span>
+  <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;Biscuits aux brisures de chocolat&quot;</span>
+&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">ingredients</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">ing</span> <span class="hljs-attr">qty</span>=<span class="hljs-string">&quot;1 t&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;farine&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">ing</span> <span class="hljs-attr">qty</span>=<span class="hljs-string">&quot;1 t&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;beurre&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">ingredients</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">steps</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">step</span>&gt;</span><span class="hljs-variable">M</span>é<span class="hljs-variable">langer</span> <span class="hljs-variable">@1</span> <span class="hljs-variable">avec</span> <span class="hljs-variable">@2</span><span class="hljs-tag">&lt;/<span class="hljs-name">step</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">steps</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">recipe</span>&gt;</span>
 </code></pre>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">recipe</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_">Recipe</span>({
   name: <span class="hljs-string">&quot;Biscuits aux brisures de chocolat&quot;</span>
@@ -213,6 +213,14 @@ It is nicer when just entering data.</p>
 <p>If you have used the schema keyword, then it is merged with the schema xml into the class.</p>
 <p>A schema is used for validation.</p>
 <p>A serializer and deserializer can be specified. By default JSON.</p>
+<p>Example testing using xml schema:</p>
+<pre><code class="language-jome"><span class="hljs-tag">&lt;<span class="hljs-name">test</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">msg</span>&gt;</span><span class="hljs-variable">Trim</span> <span class="hljs-variable">should</span> <span class="hljs-variable">remove</span> <span class="hljs-variable">spaces</span> <span class="hljs-variable">before</span> <span class="hljs-variable">and</span> <span class="hljs-variable">after</span>.<span class="hljs-tag">&lt;/<span class="hljs-name">msg</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">code</span>&gt;</span>(<span class="hljs-string">&quot; foo bar &quot;</span>).<span class="hljs-title function_">trim</span>()<span class="hljs-tag">&lt;/<span class="hljs-name">code</span>&gt;</span> <span class="hljs-comment">// code is of type code</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">expect</span>&gt;</span><span class="hljs-variable">foo</span> <span class="hljs-variable">bar</span><span class="hljs-tag">&lt;/<span class="hljs-name">expect</span>&gt;</span> <span class="hljs-comment">// expect can be any value</span>
+  <span class="hljs-comment">// or &lt;expect type=&quot;string&quot;&gt;foo bar&lt;/expect&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">test</span>&gt;</span>
+</code></pre>
   <h2 id="syntax">Syntax - WIP</h2>
 <p>The idea is to support a lot of syntaxes so you can choose the one you prefer. Ideally, the editor would show you the
 code as you like it and save it in the format used by the organisation.</p>
@@ -269,7 +277,7 @@ defined in the file <code>config.jome</code>.</p>
 
 [<span class="hljs-string">&quot;1&quot;</span>,<span class="hljs-string">&quot;2&quot;</span>,<span class="hljs-string">&quot;3&quot;</span>]:.<span class="hljs-variable">reverse</span>.<span class="hljs-title function_">join</span>(<span class="hljs-string">&quot; &quot;</span>) |&gt; <span class="hljs-variable">console</span>.<span class="hljs-variable">log</span>
 
-<span class="hljs-string">&quot;john&quot;</span> |&gt; <span class="hljs-variable">String</span>.<span class="hljs-variable">upcase</span> |&gt; <span class="hljs-variable">String</span>.<span class="hljs-variable">reverse</span>
+<span class="hljs-string">&quot;john&quot;</span> |&gt; <span class="hljs-type">String</span>.<span class="hljs-variable">upcase</span> |&gt; <span class="hljs-type">String</span>.<span class="hljs-variable">reverse</span>
 </code></pre>
 <p>Piping allows to write in a functional way more easily.</p>
 <p>It's up to the user to choose between using .# or :.. By default in Jome it is using .# because it does not collide names.</p>
@@ -397,7 +405,7 @@ def sum(int x, int y) -&gt; int</p>
 </code></pre>
 <p>When the type is ambiguous, or you prefer to be explicit, you can cast it like so:</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">name</span> = (<span class="hljs-variable">Name</span>) <span class="hljs-title function_">getName</span>(<span class="hljs-number">10</span>)
-<span class="hljs-keyword">let</span> <span class="hljs-variable">someName</span> = (<span class="hljs-variable">Array</span>&lt;<span class="hljs-variable">SomeClass</span>&gt;) [<span class="hljs-title function_">SomeClass</span>(<span class="hljs-number">10</span>)]
+<span class="hljs-keyword">let</span> <span class="hljs-variable">someName</span> = (<span class="hljs-variable">Array</span><span class="hljs-tag">&lt;<span class="hljs-name">SomeClass</span>&gt;</span>) [<span class="hljs-title function_">SomeClass</span>(<span class="hljs-number">10</span>)]
 </code></pre>
 <p>Inside function arguments, it's the same thing. The type comes before the variable name.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">someFunction</span>(<span class="hljs-type">int</span> <span class="hljs-variable">count</span>, <span class="hljs-type">string</span> <span class="hljs-variable">message</span>)
@@ -484,10 +492,10 @@ The return type is given after the <code>return</code> keyword.</p>
 </code></pre>
 <p>TODO: tuple, templates</p>
 <pre><code class="language-jome"><span class="hljs-type">string</span>[] <span class="hljs-variable">names</span> = [<span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span>]
-<span class="hljs-variable">Array</span>&lt;<span class="hljs-type">string</span>&gt; <span class="hljs-variable">names</span> = [<span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span>]
-<span class="hljs-variable">SomeContainer</span>&lt;<span class="hljs-type">string</span>&gt; <span class="hljs-title function_">container</span>()
+<span class="hljs-variable">Array</span><span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span> <span class="hljs-variable">names</span> = [<span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span>]
+<span class="hljs-variable">SomeContainer</span><span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span> <span class="hljs-title function_">container</span>()
 
-<span class="hljs-keyword">class </span><span class="hljs-title class_">SomeContainer</span>&lt;<span class="hljs-variable">T</span>&gt;
+<span class="hljs-keyword">class </span><span class="hljs-title class_">SomeContainer</span><span class="hljs-tag">&lt;<span class="hljs-name">T</span>&gt;</span>
   <span class="hljs-variable">T</span>[] <span class="hljs-variable">@list</span>;
 <span class="hljs-keyword">end</span>
 </code></pre>
@@ -541,7 +549,7 @@ a loop nightmare.</p>
 any sense really...</p>
 <h2>Content tag percent syntax</h2>
 <p>You can define heredoc with xml tags, but you can also simply prepend a percent followed by the tag name.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">isTrue</span> = &lt;<span class="hljs-variable">txt</span>&gt;<span class="hljs-variable">Hello</span>&lt;/<span class="hljs-variable">txt</span>&gt; === <span class="hljs-string">&quot;Hello&quot;</span>%<span class="hljs-variable">txt</span>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">isTrue</span> = <span class="hljs-tag">&lt;<span class="hljs-name">txt</span>&gt;</span><span class="hljs-variable">Hello</span><span class="hljs-tag">&lt;/<span class="hljs-name">txt</span>&gt;</span> === <span class="hljs-string">&quot;Hello&quot;</span>%<span class="hljs-variable">txt</span>
 </code></pre>
 <p>The difference is that you won't get syntax highlighting for things like html, css, etc. But you will at least get syntax highlighting
 for template literals properly.</p>
@@ -595,7 +603,7 @@ them I don't know if I want to do that. Or I want to offer multiple possibilitie
 <span class="language-shell">&lt;sh&gt;ls -A&lt;/sh&gt;</span>
 
 <span class="hljs-comment">// Ruby is a pretty nice language for scripts too </span>
-&lt;<span class="hljs-variable">rb</span>&gt;<span class="hljs-title function_">puts</span> (<span class="hljs-number">1.</span><span class="hljs-number">.10</span>).<span class="hljs-title function_">select</span>(&amp;:<span class="hljs-variable">even</span>?).<span class="hljs-variable">sum</span>&lt;/<span class="hljs-variable">rb</span>&gt;
+<span class="hljs-tag">&lt;<span class="hljs-name">rb</span>&gt;</span><span class="hljs-title function_">puts</span> (<span class="hljs-number">1.</span><span class="hljs-number">.10</span>).<span class="hljs-title function_">select</span>(&amp;:<span class="hljs-variable">even</span>?).<span class="hljs-variable">sum</span><span class="hljs-tag">&lt;/<span class="hljs-name">rb</span>&gt;</span>
 </code></pre>
 <h3>Scripts for data</h3>
 <p>TODO:</p>
@@ -613,13 +621,13 @@ console.log(exponentialNumber); // Outputs: 1230000</p>
 <p>Contrary to other template languages like ejs, you must finish the expression given inside the interpolation tag.</p>
 <p>If you want to do a condition for example, you use a nesting tag &lt; &gt; ... &lt; / &gt;</p>
 <pre><code class="language-jome">&lt; % = <span class="hljs-keyword">if</span> <span class="hljs-literal">true</span> &lt; &gt;
-  &lt;<span class="hljs-variable">div</span> <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;</span>
     &lt; % = <span class="hljs-variable">content</span> % &gt;
-  &lt;/<span class="hljs-variable">div</span>&gt;
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 <span class="hljs-keyword">else</span> &lt; &gt;
-  &lt;<span class="hljs-variable">div</span> <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;</span>
     &lt; % = <span class="hljs-variable">content</span> % &gt;
-  &lt;/<span class="hljs-variable">div</span>&gt;
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 &lt; / &gt; % &gt;
 </code></pre>
 <h3>Substitutions</h3>
@@ -634,21 +642,21 @@ to the current working directory.</p>
 paths relative to the current working directory. They are compiled to become absolute, so you can pass it to
 a function in another file and you are sure it will reference the proper file.</p>
 <p>You can use # to define paths. They must start by '/', '.' or 'cwd/'. (Maybe '~' too)</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">path0</span> = <span class="hljs-string">#.</span> <span class="hljs-comment">// same as __dirname</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">path1</span> = <span class="hljs-string">#/some/absolute/path.txt</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">path2</span> = <span class="hljs-string">#./someFile.jome</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">path3</span> = <span class="hljs-string">#../otherDir/</span><span class="hljs-string">&quot;some file with spaces.txt&quot;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">path4</span> = <span class="hljs-string">#cwd/someFile.txt</span> <span class="hljs-comment">// Allow paths after #cwd to get files inside current working directory.</span>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">path0</span> = #. <span class="hljs-comment">// same as __dirname</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">path1</span> = #/<span class="hljs-variable">some</span>/<span class="hljs-variable">absolute</span>/<span class="hljs-variable">path</span>.<span class="hljs-variable">txt</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">path2</span> = #./<span class="hljs-variable">someFile</span>.<span class="hljs-variable">jome</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">path3</span> = #../<span class="hljs-variable">otherDir</span>/<span class="hljs-string">&quot;some file with spaces.txt&quot;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">path4</span> = <span class="hljs-built_in variable_">#cwd</span>/<span class="hljs-variable">someFile</span>.<span class="hljs-variable">txt</span> <span class="hljs-comment">// Allow paths after #cwd to get files inside current working directory.</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">path5</span> = #~/<span class="hljs-variable">Downloads</span>/<span class="hljs-variable">someFile</span>.<span class="hljs-variable">txt</span> <span class="hljs-comment">// Maybe</span>
 </code></pre>
 <p>Relative paths are converted to absolute paths. It's the same as joining __dirname with the relative path.</p>
 <p>Spaces are not allowed, but you can escape them. Any other character is allowed?</p>
 <p>You can use quotes inside paths, just not at the beginning. You can use like like so:</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = <span class="hljs-string">#./</span><span class="hljs-string">&#x27;some/file with spaces.txt&#x27;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = <span class="hljs-string">#/</span><span class="hljs-string">&#x27;some/file with spaces.txt&#x27;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = <span class="hljs-string">#./</span><span class="hljs-string">&quot;some/file with spaces.txt&quot;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = <span class="hljs-string">#/</span><span class="hljs-string">&quot;some path/file with spaces.txt&quot;</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = <span class="hljs-string">#/some/path/to/some/</span><span class="hljs-string">&quot;file with spaces.txt&quot;</span>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #./<span class="hljs-string">&#x27;some/file with spaces.txt&#x27;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #/<span class="hljs-string">&#x27;some/file with spaces.txt&#x27;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #./<span class="hljs-string">&quot;some/file with spaces.txt&quot;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #/<span class="hljs-string">&quot;some path/file with spaces.txt&quot;</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> = #/<span class="hljs-variable">some</span>/<span class="hljs-variable">path</span>/<span class="hljs-variable">to</span>/<span class="hljs-variable">some</span>/<span class="hljs-string">&quot;file with spaces.txt&quot;</span>
 </code></pre>
 <p>If you want quotes inside your filename, than you need to escape them.</p>
 <p>TODO: Interpolation inside path</p>
@@ -685,7 +693,7 @@ let filepath = #./some/dir/{filename}
 </code></pre>
   <h3 id="include_file_handlers">Include file handlers</h3>
 <p>Read the give file and insert the content as a string to the js file.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-string">#..</span>.(<span class="hljs-string">&quot;./some_data&quot;</span>)
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = #...(<span class="hljs-string">&quot;./some_data&quot;</span>)
 </code></pre>
 <h3>Jome global object</h3>
 <p>Create a global object jome, much like window, to contain jome specific data.</p>
@@ -934,7 +942,7 @@ This allows easy documentation of the code without having to repeat yourself in 
 </code></pre>
 <p>It can also be used to specify the arguments the constructor of a class takes.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span>
-  name: <span class="hljs-variable">String</span> <span class="hljs-comment"># Full name of the personnellement</span>
+  name: <span class="hljs-type">String</span> <span class="hljs-comment"># Full name of the personnellement</span>
 <span class="hljs-keyword">class </span><span class="hljs-title class_">Person</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
@@ -1175,13 +1183,13 @@ as .jome... Or maybe when doing this, call the function directly.</p>
 let someData = #('./some_file.jomd')</p>
 <p>Tags are simply always xml tags. C'est parfait. C'est mieux que JSON, parce que ça fait la distinction entre attribute et enfant.</p>
 <p>L'éditeur se charge de les afficher pour que ce soit beau.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">html</span> = &lt;<span class="hljs-variable">Recipe</span>
-  <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;Recipe name&quot;</span>
-  <span class="hljs-variable">portions</span>=<span class="hljs-number">5</span>
-&gt;
-  &lt;<span class="hljs-variable">ing</span> <span class="hljs-variable">qty</span>=<span class="hljs-string">&quot;100mL&quot;</span> <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;water&quot;</span>/&gt;
-  &lt;<span class="hljs-variable">ing</span> <span class="hljs-variable">qty</span>=<span class="hljs-string">&quot;100g&quot;</span> <span class="hljs-variable">name</span>=<span class="hljs-string">&quot;sugar&quot;</span>/&gt;
-&lt;/<span class="hljs-variable">Recipe</span>&gt;
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">html</span> = <span class="hljs-tag">&lt;<span class="hljs-name">Recipe</span>
+  <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;Recipe name&quot;</span>
+  <span class="hljs-attr">portions</span>=<span class="hljs-string">5</span>
+&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">ing</span> <span class="hljs-attr">qty</span>=<span class="hljs-string">&quot;100mL&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;water&quot;</span>/&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">ing</span> <span class="hljs-attr">qty</span>=<span class="hljs-string">&quot;100g&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;sugar&quot;</span>/&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">Recipe</span>&gt;</span>
 </code></pre>
 <p>Note: ### is deprecated. Starting and ending with three hastags alone on a line is deprecated because it's confusing when you don't know if it's a start or an end.</p>
 

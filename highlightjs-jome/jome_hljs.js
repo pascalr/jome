@@ -214,8 +214,97 @@ const highlighter = function(hljs) {
   //   begin: '<md>', end: '<\\/md>'
   // }
 
+  // source: https://github.com/highlightjs/highlight.js/blob/main/src/languages/xml.js
+  const TAG_NAME_RE = regex.concat(/[\p{L}_]/u, regex.optional(/[\p{L}0-9_.-]*:/u), /[\p{L}0-9_.-]*/u);
+  const XML_IDENT_RE = /[\p{L}0-9._:-]+/u;
+  const XML_ENTITIES = {
+    className: 'symbol',
+    begin: /&[a-z]+;|&#[0-9]+;|&#x[a-f0-9]+;/
+  };
+  const TAG_INTERNALS = {
+    endsWithParent: true,
+    illegal: /</,
+    relevance: 0,
+    contains: [
+      {
+        className: 'attr',
+        begin: XML_IDENT_RE,
+        relevance: 0
+      },
+      {
+        begin: /=\s*/,
+        relevance: 0,
+        contains: [
+          {
+            className: 'string',
+            endsParent: true,
+            variants: [
+              {
+                begin: /"/,
+                end: /"/,
+                contains: [ XML_ENTITIES ]
+              },
+              {
+                begin: /'/,
+                end: /'/,
+                contains: [ XML_ENTITIES ]
+              },
+              { begin: /[^\s"'=<>`]+/ }
+            ]
+          }
+        ]
+      }
+    ]
+  };
+  const OPEN_TAG = {
+    className: 'tag',
+    begin: regex.concat(
+      /</,
+      regex.lookahead(regex.concat(
+        TAG_NAME_RE,
+        // <tag/>
+        // <tag>
+        // <tag ...
+        regex.either(/\/>/, />/, /\s/)
+      ))
+    ),
+    end: /\/?>/,
+    contains: [
+      {
+        className: 'name',
+        begin: TAG_NAME_RE,
+        relevance: 0,
+        starts: TAG_INTERNALS
+      }
+    ]
+  }
+  const CLOSE_TAG = {
+    className: 'tag',
+    begin: regex.concat(
+      /<\//,
+      regex.lookahead(regex.concat(
+        TAG_NAME_RE, />/
+      ))
+    ),
+    contains: [
+      {
+        className: 'name',
+        begin: TAG_NAME_RE,
+        relevance: 0
+      },
+      {
+        begin: />/,
+        relevance: 0,
+        endsParent: true
+      }
+    ]
+  }
+
   return {
-    case_insensitive: false, // language is case sensitive
+    case_insensitive: true, // for a test for xml tags
+    // case_insensitive: false, // language is case sensitive
+    // the language is case sensitive like js, but the highlighter can be case insensitive? Which is faster?
+    unicodeRegex: true, // Expresses whether the grammar in question uses Unicode (u flag) regular expressions
     // keywords: {
     //   keyword: 'if si class classe export import from def var let code unit',
     //   literal: 'false true null vrai faux nul oui non yes no'
@@ -240,7 +329,7 @@ const highlighter = function(hljs) {
           //hljs.COMMENT('###\n', '###\n',)
         ]
       },
-      PATH,
+      // PATH, FIXME: When unicode is enabled, this makes hljs not working
       TYPES,
       NUMBER_WITH_UNIT,
       UNIT_OP,
@@ -260,7 +349,8 @@ const highlighter = function(hljs) {
       ScriptTag('sh', 'shell'),
       ScriptTag('css', 'css'),
       ScriptTag('html', 'xml'),
-      // TAG
+      OPEN_TAG,
+      CLOSE_TAG,
     ]
   }
 }

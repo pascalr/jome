@@ -156,11 +156,11 @@ Show the code 75% of the space at the left, and 25% the simple counter button on
   <span class="hljs-comment">// Define state variable &#x27;count&#x27; with initial value 0 and a function &#x27;setCount&#x27; to update it</span>
   <span class="hljs-variable">const</span> [<span class="hljs-variable">count</span>, <span class="hljs-variable">setCount</span>] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
 
-  <span class="hljs-keyword">return</span> &lt;<span class="hljs-variable">react</span>&gt;
-    &lt;<span class="hljs-variable">button</span> <span class="hljs-variable">onClick</span>={<span class="hljs-title function_">setCount</span>(<span class="hljs-variable">count</span>+<span class="hljs-number">1</span>)}&gt;
+  <span class="hljs-keyword">return</span> <span class="hljs-tag">&lt;<span class="hljs-name">react</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{setCount(count+1)}</span>&gt;</span>
       <span class="hljs-variable">Clicked</span> {<span class="hljs-variable">count</span>} {<span class="hljs-variable">count</span> === <span class="hljs-number">1</span> ? <span class="hljs-string">&#x27;time&#x27;</span> : <span class="hljs-string">&#x27;times&#x27;</span>}
-    &lt;/<span class="hljs-variable">button</span>&gt;
-  &lt;/<span class="hljs-variable">react</span>&gt;
+    <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">react</span>&gt;</span>
 };
 </code></pre>
 <h2>Adder</h2>
