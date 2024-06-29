@@ -144,6 +144,14 @@ list:</p>
 <ul>
 <li>model: The model of the schema of the children allowed</li>
 </ul>
+<p>variants: Can be one of any of the nested types. The same as type union.</p>
+<pre><code class="language-jome"><span class="hljs-tag">&lt;<span class="hljs-name">schema</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;fruit&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">variants</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">include</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;apple&quot;</span>&gt;</span> <span class="hljs-comment">// from a schema defined elsewhere</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">include</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;orange&quot;</span>&gt;</span> <span class="hljs-comment">// from a schema defined elsewhere</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">variants</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">schema</span>&gt;</span>
+</code></pre>
 <pre><code class="language-jome"><span class="hljs-tag">&lt;<span class="hljs-name">list</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;steps&quot;</span> <span class="hljs-attr">optional</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">many</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;step&quot;</span> /&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">list</span>&gt;</span>
@@ -373,17 +381,6 @@ it is being compiled.</p>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <p>By default, regular comments are discarded when compiled and documentation comments are kept.</p>
-<h3>Shorthand key syntax</h3>
-<p>WIP: I want to support like in js too. But also :variable too.</p>
-<p>I've want {} to be a regulvar js object after all. Use #{} or {[]} for nodes.</p>
-<p>The short key syntax is different that in javascript, because it could be confusing with children (a feature coming in v0.2). In Jome, it starts with a colon</p>
-<pre><code class="language-jome"><span class="hljs-variable">obj</span> = {:<span class="hljs-variable">content</span>, :<span class="hljs-variable">value</span>}
-<span class="hljs-comment">// same as</span>
-<span class="hljs-variable">obj</span> = {content: <span class="hljs-variable">content</span>, value: <span class="hljs-variable">value</span>}
-</code></pre>
-<p>Also, this allows you to pass a variable as a named parameter to a function.</p>
-<pre><code class="language-jome"><span class="hljs-variable">someFunc</span> :<span class="hljs-variable">someArg</span> <span class="hljs-comment">// same as someFunc({someArg})</span>
-</code></pre>
 <h2>Assignment - TODO WIP</h2>
 <p>let x = 10 // yes
 int x = 10 // yes, string, float, ... works too
@@ -695,6 +692,9 @@ let filepath = #./some/dir/{filename}
 <p>Read the give file and insert the content as a string to the js file.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = #...(<span class="hljs-string">&quot;./some_data&quot;</span>)
 </code></pre>
+<h3>&lt; % = % &gt; vs { }</h3>
+<p>The syntax allowed will be &lt; % = % &gt; because it is pretty much universal already.</p>
+<p>Curly braces do not work for CSS for example.</p>
 <h3>Jome global object</h3>
 <p>Create a global object jome, much like window, to contain jome specific data.</p>
 <p>Maybe jome object would be the way to be language agnostic.</p>
@@ -1192,6 +1192,7 @@ let someData = #('./some_file.jomd')</p>
 <span class="hljs-tag">&lt;/<span class="hljs-name">Recipe</span>&gt;</span>
 </code></pre>
 <p>Note: ### is deprecated. Starting and ending with three hastags alone on a line is deprecated because it's confusing when you don't know if it's a start or an end.</p>
+<h3>Shorthand key syntax (deprecated, only like js is supported {foo} === {foo: foo})</h3>
 
               </div>
             </div>

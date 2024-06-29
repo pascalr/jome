@@ -52,6 +52,16 @@ let content = <md>
   many: Can contain one or many children of the type specified by id.
   - model: The model of the schema of the children allowed
 
+  variants: Can be one of any of the nested types. The same as type union.
+  ```jome
+  <schema model="fruit">
+    <variants>
+      <include model="apple"> // from a schema defined elsewhere
+      <include model="orange"> // from a schema defined elsewhere
+    </variants>
+  </schema>
+  ```
+
   ```jome
   <list name="steps" optional>
     <many model="step" />
@@ -373,25 +383,6 @@ let content = <md>
   ```
 
   By default, regular comments are discarded when compiled and documentation comments are kept.
-
-  ### Shorthand key syntax
-
-  WIP: I want to support like in js too. But also :variable too.
-
-  I've want {} to be a regulvar js object after all. Use #{} or {[]} for nodes.
-
-  The short key syntax is different that in javascript, because it could be confusing with children (a feature coming in v0.2). In Jome, it starts with a colon
-  ```jome
-  obj = {:content, :value}
-  // same as
-  obj = {content: content, value: value}
-  ```
-
-  Also, this allows you to pass a variable as a named parameter to a function.
-  
-  ```jome
-  someFunc :someArg // same as someFunc({someArg})
-  ```
 
   ## Assignment - TODO WIP
 
@@ -860,6 +851,12 @@ let content = <md>
   ```jome
   let data = #...("./some_data")
   ```
+
+  ### < % = % > vs { }
+
+  The syntax allowed will be < % = % > because it is pretty much universal already.
+
+  Curly braces do not work for CSS for example.
 
   ### Jome global object
 
@@ -1589,6 +1586,8 @@ let content = <md>
   
   
   Note: ### is deprecated. Starting and ending with three hastags alone on a line is deprecated because it's confusing when you don't know if it's a start or an end.
+
+  ### Shorthand key syntax (deprecated, only like js is supported {foo} === {foo: foo})
 
 </md>
 
