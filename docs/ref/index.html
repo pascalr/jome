@@ -287,17 +287,17 @@ don't mind the name being global.</p>
 <p>If the last expression of a function or a file is a tag, it is implicitely returned.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-variable">render</span>
   <span class="hljs-keyword">let</span> <span class="hljs-variable">name</span> = <span class="hljs-string">&quot;Marc&quot;</span>
-  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+  <span class="hljs-tag">&lt;html&gt;</span><span class="language-xml">
     <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Hello {name}!<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span>
+  </span><span class="hljs-tag">&lt;/html&gt;</span>
 <span class="hljs-keyword">end</span>
 </code></pre>
 <pre><code class="language-jome"><span class="hljs-comment">// Last expression of a file</span>
-<span class="language-css">&lt;css&gt;
+<span class="hljs-tag">&lt;css&gt;</span><span class="language-css">
   <span class="hljs-selector-class">.someClass</span> {
     <span class="hljs-attribute">color</span>: red;
   }
-&lt;/css&gt;</span>
+</span><span class="hljs-tag">&lt;/css&gt;</span>
 </code></pre>
 <h2>TODO: Move this somewhere else with tags</h2>
 <p>There is no default for tags. You must specify how to handle them.</p>
@@ -600,7 +600,7 @@ them I don't know if I want to do that. Or I want to offer multiple possibilitie
   <h2 id="heredocs">Heredocs</h2>
 <p>In jome, the idea is that you could include most other programming languages directly using xml tags.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Execute a shell command in a script</span>
-<span class="language-shell">&lt;sh&gt;ls -A&lt;/sh&gt;</span>
+<span class="hljs-tag">&lt;sh&gt;</span><span class="language-shell">ls -A</span><span class="hljs-tag">&lt;/sh&gt;</span>
 
 <span class="hljs-comment">// Ruby is a pretty nice language for scripts too </span>
 <span class="hljs-tag">&lt;<span class="hljs-name">rb</span>&gt;</span><span class="hljs-title function_">puts</span> (<span class="hljs-number">1.</span><span class="hljs-number">.10</span>).<span class="hljs-title function_">select</span>(&amp;:<span class="hljs-variable">even</span>?).<span class="hljs-variable">sum</span><span class="hljs-tag">&lt;/<span class="hljs-name">rb</span>&gt;</span>

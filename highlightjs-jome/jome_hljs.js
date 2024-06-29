@@ -9,7 +9,9 @@ const ECMAScript = require('./lib/ecmascript.js')
 
 function ScriptTag(id, name) {
   return {
-    begin: `<${id}>`, end: `<\\/${id}>`,
+    begin: `(<${id}>)`, end: `(<\\/${id}>)`,
+    beginScope: "tag",
+    endScope: "tag",
     subLanguage: name
   }
 }

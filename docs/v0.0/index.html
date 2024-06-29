@@ -168,7 +168,7 @@ has some original features.......</p>
 <span class="hljs-keyword">var</span> <span class="hljs-variable">hero</span> = { <span class="hljs-variable">Character</span> <span class="hljs-string">&quot;Paul&quot;</span>, weapon: <span class="hljs-variable">startingWeapon</span> }
 
 <span class="hljs-comment">// Scripts (any language, here shell)</span>
-<span class="hljs-keyword">var</span> <span class="hljs-variable">gameSaved</span> = <span class="language-shell">&lt;sh&gt;cat &quot;saved-gamed.json&quot;&lt;/sh&gt;</span>
+<span class="hljs-keyword">var</span> <span class="hljs-variable">gameSaved</span> = <span class="hljs-tag">&lt;sh&gt;</span><span class="language-shell">cat &quot;saved-gamed.json&quot;</span><span class="hljs-tag">&lt;/sh&gt;</span>
 
 <span class="hljs-comment">// Functions</span>
 <span class="hljs-keyword">def</span> <span class="hljs-variable">announceGameIsStarted</span>
@@ -532,13 +532,13 @@ node -e &quot;require('some_compiled_file.js')()&quot; au lieu de juste node som
   {title: <span class="hljs-type">string</span>}
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-keyword">return</span> <span class="hljs-tag">&lt;html&gt;</span><span class="language-xml">
   <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>&lt;% title %&gt;<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span>
+</span><span class="hljs-tag">&lt;/html&gt;</span>
 </code></pre>
 <p>A Jome script is compiled into a function with the parameters described from the with block.</p>
 <pre><code class="language-js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-function">(<span class="hljs-params">{title}</span>) =&gt;</span> {
@@ -1076,7 +1076,7 @@ to declare them, in order to know what is available.</p>
   <h2 id="scripts">Scripts</h2>
 <p>In jome, the idea is that you could include most other programming languages directly using xml tags.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Execute a shell command in a script</span>
-<span class="language-shell">&lt;sh&gt;ls -A&lt;/sh&gt;</span>
+<span class="hljs-tag">&lt;sh&gt;</span><span class="language-shell">ls -A</span><span class="hljs-tag">&lt;/sh&gt;</span>
 
 <span class="hljs-comment">// Ruby is a pretty nice language for scripts too </span>
 <span class="hljs-tag">&lt;<span class="hljs-name">rb</span>&gt;</span><span class="hljs-title function_">puts</span> (<span class="hljs-number">1.</span><span class="hljs-number">.10</span>).<span class="hljs-title function_">select</span>(&amp;:<span class="hljs-variable">even</span>?).<span class="hljs-variable">sum</span><span class="hljs-tag">&lt;/<span class="hljs-name">rb</span>&gt;</span>

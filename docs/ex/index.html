@@ -242,10 +242,10 @@ jome.<span class="hljs-title function_">createObj</span>($.$.$btn, <span class="
 <h2>Sqlite3 export to CSV JavaScript</h2>
 <p>Faire un petit script en Jome qui convertit un fichier .sqlite3 en un dossier avec des .csv pour chaques table un .csv pour le metadata</p>
 <p>TODO: Save metadata too.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">tables</span> = <span class="language-shell">&lt;sh&gt;sqlite3 &lt; % = ARGV[1] % &gt; &quot;.table&quot;&lt;/sh&gt;</span>
-<span class="language-shell">&lt;sh&gt;mkdir &lt; % = ARGV[2] % &gt;&lt;/sh&gt;</span>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">tables</span> = <span class="hljs-tag">&lt;sh&gt;</span><span class="language-shell">sqlite3 &lt; % = ARGV[1] % &gt; &quot;.table&quot;</span><span class="hljs-tag">&lt;/sh&gt;</span>
+<span class="hljs-tag">&lt;sh&gt;</span><span class="language-shell">mkdir &lt; % = ARGV[2] % &gt;</span><span class="hljs-tag">&lt;/sh&gt;</span>
 <span class="hljs-variable">tables</span><span class="hljs-built_in function_">#each</span>(<span class="hljs-variable">table</span> =&gt; (
-  <span class="language-shell">&lt;sh&gt;sqlite3 -header -csv &lt; % = ARGV[1] % &gt; &quot;select * from &lt; % = table % &gt;;&quot; &gt; &lt; % = table % &gt;.csv&lt;/sh&gt;</span>
+  <span class="hljs-tag">&lt;sh&gt;</span><span class="language-shell">sqlite3 -header -csv &lt; % = ARGV[1] % &gt; &quot;select * from &lt; % = table % &gt;;&quot; &gt; &lt; % = table % &gt;.csv</span><span class="hljs-tag">&lt;/sh&gt;</span>
 ))
 </code></pre>
   <script src="/jome/js/ex_vanilla.js"></script>
