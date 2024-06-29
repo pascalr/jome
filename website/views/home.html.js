@@ -35,9 +35,7 @@ module.exports = () => {
   // We use a jome tag because it's a script that can be run
   // The unit checker can infer that this block returns a value
   // with N*m or equivalent as a unit and shows it.
-  return <jome >
-    return force * distance
-  </jome >
+  return <jome>force * distance</jome> // the last value from a Jome tag is returned
   \`\`\``);
 
   let overview = `

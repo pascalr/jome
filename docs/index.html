@@ -136,9 +136,7 @@ and data editing (like spreadsheet with types inside the editor).</p>
 <span class="hljs-comment">// We use a jome tag because it&#x27;s a script that can be run</span>
 <span class="hljs-comment">// The unit checker can infer that this block returns a value</span>
 <span class="hljs-comment">// with N*m or equivalent as a unit and shows it.</span>
-<span class="hljs-keyword">return</span> <span class="hljs-tag">&lt;<span class="hljs-name">jome</span> &gt;</span>
-  <span class="hljs-keyword">return</span> <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
-&lt;/<span class="hljs-variable">jome</span> &gt;
+<span class="hljs-keyword">return</span> <span class="hljs-tag">&lt;jome&gt;</span><span class="language-jome"><span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span></span><span class="hljs-tag">&lt;/jome&gt;</span> <span class="hljs-comment">// the last value from a Jome tag is returned</span>
 </code></pre>
 </p>
 <p>Result inside the editor:</p>
