@@ -143,6 +143,19 @@ let content = <md>
 
   A serializer and deserializer can be specified. By default JSON.
 
+  Example testing using xml schema:
+
+  ```jome
+  <test>
+    <msg>Trim should remove spaces before and after.</msg>
+    <code>(" foo bar ").trim()</code> // code is of type code
+    <expect>foo bar</expect> // expect can be any value
+    // or <expect type="string">foo bar</expect>
+  </test>
+  ```
+
+
+
   <h2 id="syntax">Syntax - WIP</h2>
 
   The idea is to support a lot of syntaxes so you can choose the one you prefer. Ideally, the editor would show you the

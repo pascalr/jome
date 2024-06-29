@@ -5,6 +5,7 @@ const ECMAScript = require('./lib/ecmascript.js')
 // Example of an example:
 // https://github.com/highlightjs/highlight.js/blob/main/src/languages/css.js
 // https://github.com/highlightjs/highlight.js/blob/main/src/languages/ruby.js
+// https://github.com/highlightjs/highlight.js/blob/main/src/languages/vbscript-html.js
 
 function ScriptTag(id, name) {
   return {
