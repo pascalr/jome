@@ -67,7 +67,7 @@ function genImportsFromBindings(ctxFile, compilerOptions) {
   let result = ""
   files.forEach(file => {
     let jsfile = file
-    if (file.endsWith('.jomm') || file.endsWith('.jome') || file.endsWith('.jomd') || file.endsWith('.jomn')) {
+    if (file.endsWith('.jomm') || file.endsWith('.jome') || file.endsWith('.jomn')) {
       ctxFile.addDependency(file)
       jsfile = file.slice(0,-5)+'.js' // remove .jome and replace extension with js
     } else if (compilerOptions.useAbsImportPaths && !path.extname(file) && compilerOptions.cwd) {

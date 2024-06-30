@@ -1182,23 +1182,6 @@ of function that must always be referenced directly?</p>
 <p>Maybe a keyword macro to show that it is explicitely a macro?</p>
 <p>The difference between a function and a macro in Jome is that a macro has extra hidden parameters.</p>
 <h2>Other</h2>
-<p>.jomd extension is used to store data in the Jome language. The only difference with .jome, is that the last line of code is returned implicitely. If you use
-a .jome and use return on the last line, it is the same thing. NOT THE ONLY DIFFERENCE, SEE BELOW, DIFFERENT FOR IMPORT TOO, IMPORT IS DATA, NOT FUNCTION...</p>
-<p>Wait, what about, import someData from './some_file.jomd', here I would expect someData to be some data, but it's a function because it is the same thing
-as .jome... Or maybe when doing this, call the function directly.</p>
-<p>But for #('./some_file.jomd') it works with this syntax.
-let someData = #('./some_file.jomd')</p>
-<p>Tags are simply always xml tags. C'est parfait. C'est mieux que JSON, parce que ça fait la distinction entre attribute et enfant.</p>
-<p>L'éditeur se charge de les afficher pour que ce soit beau.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">html</span> = <span class="hljs-tag">&lt;<span class="hljs-name">Recipe</span>
-  <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;Recipe name&quot;</span>
-  <span class="hljs-attr">portions</span>=<span class="hljs-string">5</span>
-&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">ing</span> <span class="hljs-attr">qty</span>=<span class="hljs-string">&quot;100mL&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;water&quot;</span>/&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">ing</span> <span class="hljs-attr">qty</span>=<span class="hljs-string">&quot;100g&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;sugar&quot;</span>/&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">Recipe</span>&gt;</span>
-</code></pre>
-<p>Note: ### is deprecated. Starting and ending with three hastags alone on a line is deprecated because it's confusing when you don't know if it's a start or an end.</p>
 <h3>Shorthand key syntax (deprecated, only like js is supported {foo} === {foo: foo})</h3>
 
               </div>

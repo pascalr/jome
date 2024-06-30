@@ -1552,37 +1552,6 @@ module.exports = () => {
 
   ## Other
 
-  .jomd extension is used to store data in the Jome language. The only difference with .jome, is that the last line of code is returned implicitely. If you use
-  a .jome and use return on the last line, it is the same thing. NOT THE ONLY DIFFERENCE, SEE BELOW, DIFFERENT FOR IMPORT TOO, IMPORT IS DATA, NOT FUNCTION...
-
-  Wait, what about, import someData from './some_file.jomd', here I would expect someData to be some data, but it's a function because it is the same thing
-  as .jome... Or maybe when doing this, call the function directly.
-
-  But for #('./some_file.jomd') it works with this syntax.
-  let someData = #('./some_file.jomd')
-
-
-
-  
-
-  Tags are simply always xml tags. C'est parfait. C'est mieux que JSON, parce que ça fait la distinction entre attribute et enfant.
-
-  L'éditeur se charge de les afficher pour que ce soit beau.
-
-  \`\`\`jome
-  let html = <Recipe
-    name="Recipe name"
-    portions=5
-  >
-    <ing qty="100mL" name="water"/>
-    <ing qty="100g" name="sugar"/>
-  </Recipe>
-  \`\`\`
-
-  
-  
-  Note: ### is deprecated. Starting and ending with three hastags alone on a line is deprecated because it's confusing when you don't know if it's a start or an end.
-
   ### Shorthand key syntax (deprecated, only like js is supported {foo} === {foo: foo})
 `).replace(
     "236f1f731f37771c028ed6f8eac99cfc",
