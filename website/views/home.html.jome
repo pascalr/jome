@@ -1,5 +1,4 @@
 import &Webpage : '../src/webpage.jomm'
-import FIXME_SHOULD_NOT_HAVE_TO_DO_THIS from './jome_api/summary.md.jome'
 
 // I don't understand how highlight.js is supposed to detected nested languages...
 // So let's do it separately for now.
@@ -323,7 +322,18 @@ let content = <md>
   // => 1 + 1 N = 2 N
   ```
 
-  <%s #("./jome_api/summary.md.jome") %>
+  ## Jome API (WIP)
+
+  In order to make code that can compile in many programming language, there would be an API available under the Jome object.
+
+  ```jome
+  jome.print("Hello world!") // compiles to console.log in js, printf in c, puts in ruby, etc.
+  ```
+
+  It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.
+
+  print: console.log as a macro to print unit
+  debug: console.log as a macro to print code and unit
 
   ## Schemas
 
