@@ -1,4 +1,5 @@
 const Webpage = require("../src/webpage.js");
+const FIXME_SHOULD_NOT_HAVE_TO_DO_THIS = require("./jome_api/summary.md.js");
 const mdToHtml = require("@jome/md-to-html");
 module.exports = () => {
   let PARTIAL = mdToHtml(`
@@ -316,18 +317,7 @@ module.exports = () => {
   // => 1 + 1 N = 2 N
   \`\`\`
 
-  ## Jome API (WIP)
-
-  In order to make code that can compile in many programming language, there would be an API available under the Jome object.
-
-  \`\`\`jome
-  jome.print("Hello world!") // compiles to console.log in js, printf in c, puts in ruby, etc.
-  \`\`\`
-
-  It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.
-
-  print: console.log as a macro to print unit
-  debug: console.log as a macro to print code and unit
+  92dbc7c26cf7eddc2bf5ff0bf5a1cddc
 
   ## Schemas
 
@@ -367,7 +357,11 @@ module.exports = () => {
 
   **Node structure like Godot** - TODO`)
     .replace("045a7bfe3dba9ba99b065d6f5aedfd77", overviewSrc)
-    .replace("bce059749d61c1c247c303d0118d0d53", overview);
+    .replace("bce059749d61c1c247c303d0118d0d53", overview)
+    .replace(
+      "92dbc7c26cf7eddc2bf5ff0bf5a1cddc",
+      require("./jome_api/summary.md.js")(),
+    );
 
   return new Webpage("Jome", content).render();
 };

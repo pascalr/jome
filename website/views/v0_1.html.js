@@ -1,4 +1,5 @@
 const Webpage = require("../src/webpage.js");
+const FIXME_SHOULD_NOT_HAVE_TO_DO_THIS = require("./jome_api/detailed.md.js");
 const mdToHtml = require("@jome/md-to-html");
 module.exports = () => {
   let PARTIAL = mdToHtml(`
@@ -52,12 +53,12 @@ module.exports = () => {
 
   variants: Can be one of any of the nested types. The same as type union.
   \`\`\`jome
-  <schema model="fruit">
+  <?schema model="fruit"
     <variants>
       <include model="apple"> // from a schema defined elsewhere
       <include model="orange"> // from a schema defined elsewhere
     </variants>
-  </schema>
+  ?>
   \`\`\`
 
   \`\`\`jome
@@ -81,7 +82,7 @@ module.exports = () => {
   You can also use components. They are the same as schema but only exists within it's scope.
 
   \`\`\`jome
-  <schema model="Recipe">
+  <?schema model="Recipe"
     <attr name="name" type="string" />
     <attr name="servings" type="string" optional />
     <has_many name="ingredients" model="ing" optional>
@@ -93,7 +94,7 @@ module.exports = () => {
     <component model="step">
       <content name="text" type="string" />
     </component>
-  </schema>
+  ?>
   \`\`\`
 
   You can then extend the schema by using the keyword schema and adding methods like you would to a class.
@@ -801,6 +802,17 @@ module.exports = () => {
 
   <h3 id="req_file_handlers">Require file handlers</h3>
 
+  Version 2:
+
+  For jome file, executes the file and return the data.
+
+  For any other file, simply return the data as a string. Very basic stuff. For streaming or images, use functions directly.
+  Ah well, it would be nice if for .json it would load the JSON directly? Maybe do more fancy stuff. IDK
+
+  \`\`\`jome
+  <?file-loader ext="*.json" ?>
+  \`\`\`
+
   Work in progress
 
   You can process files using the syntax: \`#(./some_file.txt)\`
@@ -856,21 +868,7 @@ module.exports = () => {
 
   Curly braces do not work for CSS for example.
 
-  ### Jome global object
-
-  Create a global object jome, much like window, to contain jome specific data.
-
-  Maybe jome object would be the way to be language agnostic.
-
-  Create an API that people can use. So for example, you do jome.log instead of console.log, this way it works when compiling to python it would use print.
-
-  jome.evt => refers to this inside an event
-  jome.window => refers to the window
-  jome.params; Deprecated?
-  jome.env // to set environment variables (process.env in js)
-  jome.global => to set global variables (globalThis in js)
-
-  You can also use the configuration file config.jome to define global variables or functions. See [config.jome](#config-jome).
+  236f1f731f37771c028ed6f8eac99cfc
 
   ### Instance properties (@)
 
@@ -1586,7 +1584,10 @@ module.exports = () => {
   Note: ### is deprecated. Starting and ending with three hastags alone on a line is deprecated because it's confusing when you don't know if it's a start or an end.
 
   ### Shorthand key syntax (deprecated, only like js is supported {foo} === {foo: foo})
-`);
+`).replace(
+    "236f1f731f37771c028ed6f8eac99cfc",
+    require("./jome_api/detailed.md.js")(),
+  );
 
   return new Webpage("Jome", content).render();
 };

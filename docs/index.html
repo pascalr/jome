@@ -324,13 +324,14 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <span class="hljs-title function_">calc</span>(<span class="hljs-number">1</span> + <span class="hljs-number">1 N</span>) <span class="hljs-comment">// compiled as calc(1+1, &quot;1 + 1 N&quot;, &quot;N&quot;)</span>
 <span class="hljs-comment">// =&gt; 1 + 1 N = 2 N</span>
 </code></pre>
-<h2>Jome API (WIP)</h2>
+<p><h2>Jome API (WIP)</h2>
 <p>In order to make code that can compile in many programming language, there would be an API available under the Jome object.</p>
 <pre><code class="language-jome"><span class="hljs-variable">jome</span>.<span class="hljs-title function_">print</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>) <span class="hljs-comment">// compiles to console.log in js, printf in c, puts in ruby, etc.</span>
 </code></pre>
 <p>It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.</p>
 <p>print: console.log as a macro to print unit
 debug: console.log as a macro to print code and unit</p>
+</p>
 <h2>Schemas</h2>
 <p>You can define custom schemas for xml tags.</p>
 <p>schema Recipe {

@@ -1,0 +1,17 @@
+return <md>
+### Jome global object
+
+Create a global object jome, much like window, to contain jome specific data.
+
+Maybe jome object would be the way to be language agnostic.
+
+Create an API that people can use. So for example, you do jome.log instead of console.log, this way it works when compiling to python it would use print.
+
+jome.evt => refers to this inside an event
+jome.window => refers to the window
+jome.params; Deprecated?
+jome.env // to set environment variables (process.env in js)
+jome.global => to set global variables (globalThis in js)
+
+You can also use the configuration file config.jome to define global variables or functions. See [config.jome](#config-jome).
+</md>
