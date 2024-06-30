@@ -312,11 +312,11 @@ let content = <md>
 
   Macros are functions that are extended at compile time with the context. Additional parameters are added to the function.
 
-  You can access the code given to the parameter as a string. You can also get the unit of the parameter.
+  You can access the source code given to the parameter as a string. You can also get the unit of the parameter.
 
   ```jome
-  def calc(value along code c along unit u)
-    console.log(c, ' = ', value, ' ', u)
+  macro calc(value)
+    console.log(sourceof(value), ' = ', value, ' ', unitof(value))
   end
   calc(1 + 1 N) // compiled as calc(1+1, "1 + 1 N", "N")
   // => 1 + 1 N = 2 N
