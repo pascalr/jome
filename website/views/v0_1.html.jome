@@ -1563,28 +1563,6 @@ let content = <md>
   But for #('./some_file.jomd') it works with this syntax.
   let someData = #('./some_file.jomd')
 
-
-
-  
-
-  Tags are simply always xml tags. C'est parfait. C'est mieux que JSON, parce que ça fait la distinction entre attribute et enfant.
-
-  L'éditeur se charge de les afficher pour que ce soit beau.
-
-  ```jome
-  let html = <Recipe
-    name="Recipe name"
-    portions=5
-  >
-    <ing qty="100mL" name="water"/>
-    <ing qty="100g" name="sugar"/>
-  </Recipe>
-  ```
-
-  
-  
-  Note: ### is deprecated. Starting and ending with three hastags alone on a line is deprecated because it's confusing when you don't know if it's a start or an end.
-
   ### Shorthand key syntax (deprecated, only like js is supported {foo} === {foo: foo})
 
 </md>
