@@ -335,7 +335,49 @@ let content = <md>
   print: console.log as a macro to print unit
   debug: console.log as a macro to print code and unit
 
-  ## Schemas
+  ## Processing instruction
+
+  Jome uses XML processing instructions to define the language. They start with `<?` and end with `?>`.
+
+  Processing instructions are in effect under where it is defined and in config.jome.
+
+  Work in progress.
+
+  The syntax may vary depending on the processing instruction. Refer to the specific one used.
+
+  Processing instructions available:
+  - model: Define a data structure. Ex: <?model Position x: 'int', y: 'int' ?>
+  - file-loader: Define how to load a file with a given extension.
+  - unit: Define a new unit
+
+  ## Models
+
+  A model defines a data strcture. It allows to use xml, validation, serializing, database management...
+
+  You can define your own models which can then be created using xml tags or programmatycally.
+
+  You can create a class with the same name (case insensitive?) than the model to complement it.
+
+  ```jome
+  <?model Recipe name: "string"
+    <attr name="servings" type="string" optional />
+    <has_many name="ingredients" model="ing" optional>
+    <has_many name="steps" model="step" optional>
+    <component model="ing">
+      <attr name="qty" type="string" />
+      <attr name="name" type="string" />
+    </component>
+    <component model="step">
+      <content name="text" type="string" />
+    </component>
+  ?>
+  ```
+
+  A model creates a static function `new` for the class of the same name.
+  Or is this confusing with the constructor which will be called with `new` keyword?
+  Yeahh... don't do this. Override the constructor. This way the validations are always called.
+  If the user defines a constructor inside the class, then simply merge them together? Wait
+  now it's not clear how to call it then...?
 
   You can define custom schemas for xml tags.
 

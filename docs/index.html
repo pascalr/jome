@@ -331,7 +331,39 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <p>It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.</p>
 <p>print: console.log as a macro to print unit
 debug: console.log as a macro to print code and unit</p>
-<h2>Schemas</h2>
+<h2>Processing instruction</h2>
+<p>Jome uses XML processing instructions to define the language. They start with <code>&lt;?</code> and end with <code>?&gt;</code>.</p>
+<p>Processing instructions are in effect under where it is defined and in config.jome.</p>
+<p>Work in progress.</p>
+<p>The syntax may vary depending on the processing instruction. Refer to the specific one used.</p>
+<p>Processing instructions available:</p>
+<ul>
+<li>model: Define a data structure. Ex: <?model Position x: 'int', y: 'int' ?></li>
+<li>file-loader: Define how to load a file with a given extension.</li>
+<li>unit: Define a new unit</li>
+</ul>
+<h2>Models</h2>
+<p>A model defines a data strcture. It allows to use xml, validation, serializing, database management...</p>
+<p>You can define your own models which can then be created using xml tags or programmatycally.</p>
+<p>You can create a class with the same name (case insensitive?) than the model to complement it.</p>
+<pre><code class="language-jome">&lt;?<span class="hljs-variable">model</span> <span class="hljs-variable">Recipe</span> name: <span class="hljs-string">&quot;string&quot;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">attr</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;servings&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> <span class="hljs-attr">optional</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">has_many</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;ingredients&quot;</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;ing&quot;</span> <span class="hljs-attr">optional</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">has_many</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;steps&quot;</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;step&quot;</span> <span class="hljs-attr">optional</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">component</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;ing&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">attr</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;qty&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">attr</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">component</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">component</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;step&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">content</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">component</span>&gt;</span>
+?&gt;
+</code></pre>
+<p>A model creates a static function <code>new</code> for the class of the same name.
+Or is this confusing with the constructor which will be called with <code>new</code> keyword?
+Yeahh... don't do this. Override the constructor. This way the validations are always called.
+If the user defines a constructor inside the class, then simply merge them together? Wait
+now it's not clear how to call it then...?</p>
 <p>You can define custom schemas for xml tags.</p>
 <p>schema Recipe {
 def toHTML
