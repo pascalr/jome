@@ -302,11 +302,24 @@ module.exports = () => {
 
   If you want total control even let's say on the operators, you could eventually design a custom language.
 
-  ## Macros
+  ## sourceof
 
-  Macros are functions that are extended at compile time with the context. Additional parameters are added to the function.
+  The \`sourceof\` keyword tells the compiler to extract the source code of the value of a given variable as a string.
 
-  You can access the source code given to the parameter as a string. You can also get the unit of the parameter.
+  \`\`\`jome
+  def debug(value)
+    console.log(sourceof(value), ': ', value)
+  end
+  let someVar = 3
+  debug(someVar) // compiled as debug(someVar, "someVar")
+  // => someVar: 3
+  \`\`\`
+
+  It should work magically inside functions. Every function using the \`sourceof\` keyword for a parameter would get an extra hidden parameter.
+
+  ## unitof
+
+  The \`unitof\` keyword tells the compiler to extract the unit of the value of a given variable as a string.
 
   \`\`\`jome
   macro calc(value)
@@ -315,6 +328,8 @@ module.exports = () => {
   calc(1 + 1 N) // compiled as calc(1+1, "1 + 1 N", "N")
   // => 1 + 1 N = 2 N
   \`\`\`
+
+  It should work magically inside functions. Every function using the \`unitof\` keyword for a parameter would get an extra hidden parameter.
 
   ## Jome API (WIP)
 

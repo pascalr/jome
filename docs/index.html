@@ -315,15 +315,25 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = <span class="hljs-number">10</span> ** <span class="hljs-number">2</span> <span class="hljs-comment">// ** is the exponentiation operator like javascript</span>
 </code></pre>
 <p>If you want total control even let's say on the operators, you could eventually design a custom language.</p>
-<h2>Macros</h2>
-<p>Macros are functions that are extended at compile time with the context. Additional parameters are added to the function.</p>
-<p>You can access the source code given to the parameter as a string. You can also get the unit of the parameter.</p>
+<h2>sourceof</h2>
+<p>The <code>sourceof</code> keyword tells the compiler to extract the source code of the value of a given variable as a string.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">debug</span>(<span class="hljs-variable">value</span>)
+  <span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sourceof</span>(<span class="hljs-variable">value</span>), <span class="hljs-string">&#x27;: &#x27;</span>, <span class="hljs-variable">value</span>)
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">someVar</span> = <span class="hljs-number">3</span>
+<span class="hljs-title function_">debug</span>(<span class="hljs-variable">someVar</span>) <span class="hljs-comment">// compiled as debug(someVar, &quot;someVar&quot;)</span>
+<span class="hljs-comment">// =&gt; someVar: 3</span>
+</code></pre>
+<p>It should work magically inside functions. Every function using the <code>sourceof</code> keyword for a parameter would get an extra hidden parameter.</p>
+<h2>unitof</h2>
+<p>The <code>unitof</code> keyword tells the compiler to extract the unit of the value of a given variable as a string.</p>
 <pre><code class="language-jome"><span class="hljs-variable">macro</span> <span class="hljs-title function_">calc</span>(<span class="hljs-variable">value</span>)
   <span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sourceof</span>(<span class="hljs-variable">value</span>), <span class="hljs-string">&#x27; = &#x27;</span>, <span class="hljs-variable">value</span>, <span class="hljs-string">&#x27; &#x27;</span>, <span class="hljs-title function_">unitof</span>(<span class="hljs-variable">value</span>))
 <span class="hljs-keyword">end</span>
 <span class="hljs-title function_">calc</span>(<span class="hljs-number">1</span> + <span class="hljs-number">1 N</span>) <span class="hljs-comment">// compiled as calc(1+1, &quot;1 + 1 N&quot;, &quot;N&quot;)</span>
 <span class="hljs-comment">// =&gt; 1 + 1 N = 2 N</span>
 </code></pre>
+<p>It should work magically inside functions. Every function using the <code>unitof</code> keyword for a parameter would get an extra hidden parameter.</p>
 <h2>Jome API (WIP)</h2>
 <p>In order to make code that can compile in many programming language, there would be an API available under the Jome object.</p>
 <pre><code class="language-jome"><span class="hljs-variable">jome</span>.<span class="hljs-title function_">print</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>) <span class="hljs-comment">// compiles to console.log in js, printf in c, puts in ruby, etc.</span>
