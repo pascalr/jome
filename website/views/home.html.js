@@ -277,7 +277,7 @@ module.exports = () => {
   sleep(2 s) // compiled to: sleep(2000)
   \`\`\`
 
-  You can get the unit of a variable as a string using the \`unitof\` operator.
+  You can get the unit of a variable as a string using the \`unitof\` operator. Note: You must use a macro to use this on a parameter.
 
   \`\`\`jome
   let unit = unitof someVar
@@ -306,11 +306,11 @@ module.exports = () => {
 
   Macros are functions that are extended at compile time with the context. Additional parameters are added to the function.
 
-  You can access the code given to the parameter as a string. You can also get the unit of the parameter.
+  You can access the source code given to the parameter as a string. You can also get the unit of the parameter.
 
   \`\`\`jome
-  def calc(value along code c along unit u)
-    console.log(c, ' = ', value, ' ', u)
+  macro calc(value)
+    console.log(sourceof(value), ' = ', value, ' ', unitof(value))
   end
   calc(1 + 1 N) // compiled as calc(1+1, "1 + 1 N", "N")
   // => 1 + 1 N = 2 N
@@ -328,6 +328,10 @@ module.exports = () => {
 
   print: console.log as a macro to print unit
   debug: console.log as a macro to print code and unit
+
+  Wait until implementing this because this would be final and would have to be backward compatible moving onward.
+
+  And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...
 
   ## Processing instruction
 

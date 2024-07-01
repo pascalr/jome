@@ -283,7 +283,7 @@ let content = <md>
   sleep(2 s) // compiled to: sleep(2000)
   ```
 
-  You can get the unit of a variable as a string using the `unitof` operator.
+  You can get the unit of a variable as a string using the `unitof` operator. Note: You must use a macro to use this on a parameter.
 
   ```jome
   let unit = unitof someVar
@@ -334,6 +334,10 @@ let content = <md>
 
   print: console.log as a macro to print unit
   debug: console.log as a macro to print code and unit
+
+  Wait until implementing this because this would be final and would have to be backward compatible moving onward.
+
+  And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...
 
   ## Processing instruction
 

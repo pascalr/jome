@@ -1550,6 +1550,35 @@ module.exports = () => {
 
   The difference between a function and a macro in Jome is that a macro has extra hidden parameters.
 
+  ### Passing data to middleware
+
+  The compiler should be smart enough to know that callFunction needs the unit, callMiddleware
+  can have the unit since it is a macro too. callMiddleware would be flagged by the compiler
+  has requiring unit. Therefore, it's signature would be: \`callMiddleware(val, unit)\`
+
+  \`\`\`jome
+  callMiddleware(1 m)
+
+  macro callMiddleware(val)
+    // How to specify that val has the unit here???
+    callFunction(val)
+  end
+
+  macro callFunction(val)
+    let unit = unitof(val)
+  end
+  \`\`\`
+
+  ### To macro or not to macro
+
+  The compiler could do this all on it's own. It does not have to be explicit with the \`macro\` keyword.
+
+  Is it useful that it is explicit?
+
+  Or we don't care and we don't want to have to deal with this???
+
+  I think we don't care and \`unitof\` and \`sourceof\` could simply behave like magic.
+
   ## Other
 
   ### Shorthand key syntax (deprecated, only like js is supported {foo} === {foo: foo})

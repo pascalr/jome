@@ -301,7 +301,7 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <span class="hljs-keyword">end</span>
 <span class="hljs-title function_">sleep</span>(<span class="hljs-number">2 s</span>) <span class="hljs-comment">// compiled to: sleep(2000)</span>
 </code></pre>
-<p>You can get the unit of a variable as a string using the <code>unitof</code> operator.</p>
+<p>You can get the unit of a variable as a string using the <code>unitof</code> operator. Note: You must use a macro to use this on a parameter.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-keyword">unit</span> = <span class="hljs-variable">unitof</span> <span class="hljs-variable">someVar</span>
 </code></pre>
 <h2>Custom base language (flavor?)</h2>
@@ -317,9 +317,9 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <p>If you want total control even let's say on the operators, you could eventually design a custom language.</p>
 <h2>Macros</h2>
 <p>Macros are functions that are extended at compile time with the context. Additional parameters are added to the function.</p>
-<p>You can access the code given to the parameter as a string. You can also get the unit of the parameter.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">calc</span>(<span class="hljs-variable">value</span> <span class="hljs-variable">along</span> <span class="hljs-keyword">code</span> <span class="hljs-variable">c</span> <span class="hljs-variable">along</span> <span class="hljs-keyword">unit</span> <span class="hljs-variable">u</span>)
-  <span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable">c</span>, <span class="hljs-string">&#x27; = &#x27;</span>, <span class="hljs-variable">value</span>, <span class="hljs-string">&#x27; &#x27;</span>, <span class="hljs-variable">u</span>)
+<p>You can access the source code given to the parameter as a string. You can also get the unit of the parameter.</p>
+<pre><code class="language-jome"><span class="hljs-variable">macro</span> <span class="hljs-title function_">calc</span>(<span class="hljs-variable">value</span>)
+  <span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sourceof</span>(<span class="hljs-variable">value</span>), <span class="hljs-string">&#x27; = &#x27;</span>, <span class="hljs-variable">value</span>, <span class="hljs-string">&#x27; &#x27;</span>, <span class="hljs-title function_">unitof</span>(<span class="hljs-variable">value</span>))
 <span class="hljs-keyword">end</span>
 <span class="hljs-title function_">calc</span>(<span class="hljs-number">1</span> + <span class="hljs-number">1 N</span>) <span class="hljs-comment">// compiled as calc(1+1, &quot;1 + 1 N&quot;, &quot;N&quot;)</span>
 <span class="hljs-comment">// =&gt; 1 + 1 N = 2 N</span>
@@ -331,6 +331,8 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <p>It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.</p>
 <p>print: console.log as a macro to print unit
 debug: console.log as a macro to print code and unit</p>
+<p>Wait until implementing this because this would be final and would have to be backward compatible moving onward.</p>
+<p>And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...</p>
 <h2>Processing instruction</h2>
 <p>Jome uses XML processing instructions to define the language. They start with <code>&lt;?</code> and end with <code>?&gt;</code>.</p>
 <p>Processing instructions are in effect under where it is defined and in config.jome.</p>
