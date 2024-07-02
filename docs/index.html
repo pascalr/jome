@@ -395,6 +395,34 @@ end
    <span class="hljs-tag">&lt;/<span class="hljs-name">steps</span>&gt;</span>
  <span class="hljs-tag">&lt;/<span class="hljs-name">recipe</span>&gt;</span>
 </code></pre>
+<h2>Feature proposal - Function overloading based on type</h2>
+<p>I'd like to be able to overload a function based on type.</p>
+<p>For example:</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-variable">Vector3</span> <span class="hljs-variable">v1</span>, <span class="hljs-variable">Vector3</span> <span class="hljs-variable">v2</span>)
+  <span class="hljs-keyword">return</span> <span class="hljs-variable">v1</span>.<span class="hljs-title function_">add</span>(<span class="hljs-variable">v2</span>)
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-variable">o1</span>, <span class="hljs-variable">o2</span>)
+  <span class="hljs-keyword">return</span> <span class="hljs-variable">o1</span> + <span class="hljs-variable">o2</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-title function_">add</span>(<span class="hljs-title function_">Vector3</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>), <span class="hljs-title function_">Vector3</span>(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)) <span class="hljs-comment">// uses the first because type matches</span>
+<span class="hljs-title function_">add</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>) <span class="hljs-comment">// uses the second, the default one</span>
+</code></pre>
+<h2>Feature proposal - Operator overloading for classes</h2>
+<p>I'd like to be able to overload an operator for a class.</p>
+<p>For example:</p>
+<pre><code class="language-jome"><span class="hljs-keyword">class </span><span class="hljs-title class_">Vector3</span>
+  <span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-variable">v2</span>)
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">Vector3</span>(<span class="hljs-variable">@x</span> + <span class="hljs-variable">v2</span>.<span class="hljs-variable">x</span>, <span class="hljs-variable">@y</span> + <span class="hljs-variable">v2</span>.<span class="hljs-variable">y</span>, <span class="hljs-variable">@z</span> + <span class="hljs-variable">v2</span>.<span class="hljs-variable">z</span>)
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">let</span> <span class="hljs-variable">v3</span> = <span class="hljs-title function_">Vector3</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>) + <span class="hljs-title function_">Vector3</span>(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)
+</code></pre>
+<p>This would mostly be useful to people who enable hardtyping. Because if you forget to specify the type in a function for example, this won't be called.</p>
+<h2>Feature proposal - Class templates</h2>
+<p>I'd like class templates like in c++ I think. Check how other languages are handling that though.</p>
 <h2>Trash</h2>
 <p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
 has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>

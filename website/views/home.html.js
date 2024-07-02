@@ -417,6 +417,47 @@ module.exports = () => {
   </recipe>
   \`\`\`
 
+  ## Feature proposal - Function overloading based on type
+
+  I'd like to be able to overload a function based on type.
+
+  For example:
+
+  \`\`\`jome
+  def add(Vector3 v1, Vector3 v2)
+    return v1.add(v2)
+  end
+
+  def add(o1, o2)
+    return o1 + o2
+  end
+
+  add(Vector3(0,0,0), Vector3(1,1,1)) // uses the first because type matches
+  add(1, 2) // uses the second, the default one
+  \`\`\`
+
+  ## Feature proposal - Operator overloading for classes
+
+  I'd like to be able to overload an operator for a class.
+
+  For example:
+
+  \`\`\`jome
+  class Vector3
+    def add(v2)
+      return Vector3(@x + v2.x, @y + v2.y, @z + v2.z)
+    end
+  end
+
+  let v3 = Vector3(0,0,0) + Vector3(1,1,1)
+  \`\`\`
+
+  This would mostly be useful to people who enable hardtyping. Because if you forget to specify the type in a function for example, this won't be called.
+
+  ## Feature proposal - Class templates
+
+  I'd like class templates like in c++ I think. Check how other languages are handling that though.
+
   ## Trash
 
   Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
