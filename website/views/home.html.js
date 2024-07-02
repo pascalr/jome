@@ -101,25 +101,9 @@ module.exports = () => {
 
   <h2 id="features">Features</h2>
 
-  Jome has some original features that sets it appart from other languages.
+  Here is a list of 14 main features of Jome.
 
-  1. **Notebook comments** - You can add documentation comments using markdown to create a notebook like jupyter.
-
-  2. **Inline data** - TODO: You can do advamced stuff with inline data using tags (preprocessing, ...)
-
-  3. **Flexible syntax** - You can code using the style you prefer and use a linter to share code in a standardized way.
-
-  4. **Flexible typing** - You can use static typing for robustness and usability or omit them for development speed and simplicity.
-
-  5. **Custom base library** - Choose the base library for your project to reuse common functionalities.
-
-  6. **A unit system** - You can add units to numbers. Smart conversions are done at compile time to ensure you use the proper units.
-
-  7. **Custom base language** - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)
-
-  8. **Macros** - Add extra parameters given the context of the function call.
-
-  ## Notebook like jupyter
+  ## 1. Notebook like jupyter
 
   Markdown comments are used for documentation and for creating notebooks.
 
@@ -189,7 +173,7 @@ module.exports = () => {
 
   Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!
 
-  ## Flexible syntax
+  ## 2. Flexible syntax
 
   You can code using the syntax you prefer. The project should specify a linter so the code is converted to a standard when you save.
 
@@ -204,7 +188,7 @@ module.exports = () => {
 
   Read more on [Flexible syntax]() (TODO Link)
 
-  ## Flexible typing system
+  ## 3. Flexible typing system
 
   Like the rest of Jome, the typing system is flexible. You can omit them, you can use hard typing or you can use duct typing.
 
@@ -216,7 +200,7 @@ module.exports = () => {
   let addInts : int = (x : int, y : int) => x + y
   \`\`\`
 
-  ## with blocks
+  ## 4. with blocks
 
   You can pass parameters to a file using a with block. This allows you to treat a file as a function. You can import it from another file.
   And uou can call it directly from the CLI.
@@ -225,7 +209,7 @@ module.exports = () => {
   with {port = 3000} // default port is 3000, but allow to run the file with a different port number
   \`\`\`
 
-  ## Base library
+  ## 5. Base library
 
   Every project can choose a base library. This library should contain common utility functions and constants.
 
@@ -244,7 +228,7 @@ module.exports = () => {
 
   Read more on [Base library]() (TODO Link)
 
-  ## Unit system
+  ## 6. Unit system
 
   Unit are a way to be more specific when using numbers. They are only available at compile time.
 
@@ -283,7 +267,7 @@ module.exports = () => {
   let unit = unitof someVar
   \`\`\`
 
-  ## Custom base language (flavor?)
+  ## 7. Custom base language (flavor?)
 
   Only javascript is supported for now.
 
@@ -302,7 +286,7 @@ module.exports = () => {
 
   If you want total control even let's say on the operators, you could eventually design a custom language.
 
-  ## sourceof
+  ## 8. sourceof
 
   The \`sourceof\` keyword tells the compiler to extract the source code of the value of a given variable as a string.
 
@@ -317,7 +301,7 @@ module.exports = () => {
 
   It should work magically inside functions. Every function using the \`sourceof\` keyword for a parameter would get an extra hidden parameter.
 
-  ## unitof
+  ## 9. unitof
 
   The \`unitof\` keyword tells the compiler to extract the unit of the value of a given variable as a string.
 
@@ -331,7 +315,7 @@ module.exports = () => {
 
   It should work magically inside functions. Every function using the \`unitof\` keyword for a parameter would get an extra hidden parameter.
 
-  ## Jome API (WIP)
+  ## 10. Feature proposal - Jome API
 
   In order to make code that can compile in many programming language, there would be an API available under the Jome object.
 
@@ -348,7 +332,7 @@ module.exports = () => {
 
   And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...
 
-  ## Processing instruction
+  ## 11. Processing instruction
 
   Jome uses XML processing instructions to define the language. They start with \`<?\` and end with \`?>\`.
 
@@ -363,7 +347,7 @@ module.exports = () => {
   - file-loader: Define how to load a file with a given extension.
   - unit: Define a new unit
 
-  ## Models
+  ## 12. Models
 
   A model defines a data strcture. It allows to use xml, validation, serializing, database management...
 
@@ -417,7 +401,7 @@ module.exports = () => {
   </recipe>
   \`\`\`
 
-  ## Feature proposal - Function overloading based on type
+  ## 13. Feature proposal - Function overloading based on type
 
   I'd like to be able to overload a function based on type.
 
@@ -436,7 +420,7 @@ module.exports = () => {
   add(1, 2) // uses the second, the default one
   \`\`\`
 
-  ## Feature proposal - Operator overloading for classes
+  ## 14. Feature proposal - Operator overloading for classes
 
   I'd like to be able to overload an operator for a class.
 
@@ -467,7 +451,23 @@ module.exports = () => {
 
   **Reactivity** - TODO
 
-  **Node structure like Godot** - TODO`)
+  **Node structure like Godot** - TODO
+
+  1. **Notebook comments** - You can add documentation comments using markdown to create a notebook like jupyter.
+
+  2. **Inline data** - TODO: You can do advamced stuff with inline data using tags (preprocessing, ...)
+
+  3. **Flexible syntax** - You can code using the style you prefer and use a linter to share code in a standardized way.
+
+  4. **Flexible typing** - You can use static typing for robustness and usability or omit them for development speed and simplicity.
+
+  5. **Custom base library** - Choose the base library for your project to reuse common functionalities.
+
+  6. **A unit system** - You can add units to numbers. Smart conversions are done at compile time to ensure you use the proper units.
+
+  7. **Custom base language** - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)
+
+  8. **Macros** - Add extra parameters given the context of the function call.`)
     .replace("045a7bfe3dba9ba99b065d6f5aedfd77", overviewSrc)
     .replace("bce059749d61c1c247c303d0118d0d53", overview);
 
