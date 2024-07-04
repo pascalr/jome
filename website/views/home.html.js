@@ -35,7 +35,7 @@ module.exports = () => {
   // We use a jome tag because it's a script that can be run
   // The unit checker can infer that this block returns a value
   // with N*m or equivalent as a unit and shows it.
-  return <jome>force * distance</jome> // the last value from a Jome tag is returned
+  return <? force * distance ?> // the last value from a Jome tag is returned
   \`\`\``);
 
   let overview = `
@@ -101,31 +101,36 @@ module.exports = () => {
 
   <h2 id="features">Features</h2>
 
-  Here is a list of 14 main features of Jome.
+  Here is a list of the features of Jome.
 
-  ## 1. Notebook like jupyter
+  ## 1. Markdown comments
 
-  Markdown comments are used for documentation and for creating notebooks.
+  Thre are regular comments starting with \`//\` or delimited by \`/*\` and \`*/\`.
 
-  ### Markdown cells
+  But there are also comments starting with \`# \` (with space) or delimited by \`#*\` and \`*#\`.
 
-  You can create markdown cells by adding an hashtag followed by a space. Multiline is also supported by surrounding the content with an hashtag and a star \`#* This is a *markdown* cell *#\`.
+  These use markdown and are usefull for documenting code.
 
   \`\`\`jome
   #*
-  This is a markdown cell
-  ### This level 3 title
-  Below is the ending
+  # My awesome application
+  It uses [https://www.sqlite.org/index.html](SQLite) as a databse.
   *#
   \`\`\`
 
-  ### Code cells
+  ## 2. Notebook execution
+
+  The editor should allow you to use Jome as a notebook.
+
+  You write content using markdown comments, and you show code results using a processing instruction delimited by \`<? \` (with space) and \`?>\`
 
   \`\`\`jome
-  < jome >
-    let txt = "This is a code cell"
-  < / jome >
+  let x = 10
+  let y = 2
+  let z = <? 10 ** 2 ?>
   \`\`\`
+
+  You can enter data using to the file using tags or you can enter temporary data using a \`with\` block. See below.
 
   ### Data cells
 

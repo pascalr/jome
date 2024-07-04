@@ -37,6 +37,7 @@
       <ul class="nav-list nav-sub">
         <li><a href="/jome/#overview">Overview</a></li>
         <li><a href="/jome/#features">Features</a></li>
+        <li><a href="/jome/#proposals">Proposals</a></li>
       </ul>
       <li><a href="/jome/getting_started">Getting started</a></li>
       <ul class="nav-list nav-sub">
@@ -136,7 +137,7 @@ and data editing (like spreadsheet with types inside the editor).</p>
 <span class="hljs-comment">// We use a jome tag because it&#x27;s a script that can be run</span>
 <span class="hljs-comment">// The unit checker can infer that this block returns a value</span>
 <span class="hljs-comment">// with N*m or equivalent as a unit and shows it.</span>
-<span class="hljs-keyword">return</span> <span class="hljs-tag">&lt;jome&gt;</span><span class="language-jome"><span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span></span><span class="hljs-tag">&lt;/jome&gt;</span> <span class="hljs-comment">// the last value from a Jome tag is returned</span>
+<span class="hljs-keyword">return</span> &lt;? <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span> ?&gt; <span class="hljs-comment">// the last value from a Jome tag is returned</span>
 </code></pre>
 </p>
 <p>Result inside the editor:</p>
@@ -169,22 +170,24 @@ and data editing (like spreadsheet with types inside the editor).</p>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">calculateTorque</span> force: <span class="hljs-number">20 lbs</span>, distance: <span class="hljs-number">1 in</span>
 </code></pre>
   <h2 id="features">Features</h2>
-<p>Here is a list of 14 main features of Jome.</p>
-<h2>1. Notebook like jupyter</h2>
-<p>Markdown comments are used for documentation and for creating notebooks.</p>
-<h3>Markdown cells</h3>
-<p>You can create markdown cells by adding an hashtag followed by a space. Multiline is also supported by surrounding the content with an hashtag and a star <code>#* This is a *markdown* cell *#</code>.</p>
+<p>Here is a list of the features of Jome.</p>
+<h2>1. Markdown comments</h2>
+<p>Thre are regular comments starting with <code>//</code> or delimited by <code>/*</code> and <code>*/</code>.</p>
+<p>But there are also comments starting with <code># </code> (with space) or delimited by <code>#*</code> and <code>*#</code>.</p>
+<p>These use markdown and are usefull for documenting code.</p>
 <pre><code class="language-jome"><span class="hljs-comment">#*
-This is a markdown cell
-### This level 3 title
-Below is the ending
+# My awesome application
+It uses [https://www.sqlite.org/index.html](SQLite) as a databse.
 *#</span>
 </code></pre>
-<h3>Code cells</h3>
-<pre><code class="language-jome">&lt; <span class="hljs-variable">jome</span> &gt;
-  <span class="hljs-keyword">let</span> <span class="hljs-variable">txt</span> = <span class="hljs-string">&quot;This is a code cell&quot;</span>
-&lt; / <span class="hljs-variable">jome</span> &gt;
+<h2>2. Notebook execution</h2>
+<p>The editor should allow you to use Jome as a notebook.</p>
+<p>You write content using markdown comments, and you show code results using a processing instruction delimited by <code>&lt;? </code> (with space) and <code>?&gt;</code></p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-number">10</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = <span class="hljs-number">2</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">z</span> = &lt;? <span class="hljs-number">10</span> ** <span class="hljs-number">2</span> ?&gt;
 </code></pre>
+<p>You can enter data using to the file using tags or you can enter temporary data using a <code>with</code> block. See below.</p>
 <h3>Data cells</h3>
 <p>There is two kinds of data. There is runtime data. And there is static data.</p>
 <p>Runtime data is data given using the with keyword. When you reload this page, you loose this.</p>

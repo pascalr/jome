@@ -12,6 +12,7 @@ return <html>
       <ul class="nav-list nav-sub">
         <li><a href="<%= ROOT %>/#overview">Overview</a></li>
         <li><a href="<%= ROOT %>/#features">Features</a></li>
+        <li><a href="<%= ROOT %>/#proposals">Proposals</a></li>
       </ul>
       <li><a href="<%= ROOT %>/getting_started">Getting started</a></li>
       <ul class="nav-list nav-sub">
