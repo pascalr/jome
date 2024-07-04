@@ -320,6 +320,13 @@ The editor should make this symbol easyily accessible. You can also simply multi
 debug: console.log as a macro to print code and unit</p>
 <p>Wait until implementing this because this would be final and would have to be backward compatible moving onward.</p>
 <p>And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...</p>
+<h2>11. Operators</h2>
+<p>This depends on other people.</p>
+<p>If the user somehow become popular, then operators are just the same as the flavor. This way it is easy when
+you read someone else code what it does because the operators are standard.</p>
+<p>If the language stays niche, then operators could be defined using the processing instruction <code>&lt;?op ?&gt;</code>.</p>
+<pre><code class="language-jome">&lt;?<span class="hljs-variable">op</span> ^ ** ?&gt;
+</code></pre>
 <h2>11. Processing instruction</h2>
 <p>Jome uses XML processing instructions to define the language. They start with <code>&lt;?</code> and end with <code>?&gt;</code>.</p>
 <p>Processing instructions are in effect under where it is defined and in config.jome.</p>

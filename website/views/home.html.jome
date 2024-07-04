@@ -343,6 +343,19 @@ let content = <md>
 
   And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...
 
+  ## 11. Operators
+
+  This depends on other people.
+
+  If the user somehow become popular, then operators are just the same as the flavor. This way it is easy when
+  you read someone else code what it does because the operators are standard.
+
+  If the language stays niche, then operators could be defined using the processing instruction `<?op ?>`.
+
+  ```jome
+  <?op ^ ** ?>
+  ```
+
   ## 11. Processing instruction
 
   Jome uses XML processing instructions to define the language. They start with `<?` and end with `?>`.
