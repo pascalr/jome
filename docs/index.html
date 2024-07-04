@@ -137,7 +137,7 @@ and data editing (like spreadsheet with types inside the editor).</p>
 <span class="hljs-comment">// We use a jome tag because it&#x27;s a script that can be run</span>
 <span class="hljs-comment">// The unit checker can infer that this block returns a value</span>
 <span class="hljs-comment">// with N*m or equivalent as a unit and shows it.</span>
-<span class="hljs-keyword">return</span> &lt;? <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span> ?&gt; <span class="hljs-comment">// the last value from a Jome tag is returned</span>
+<span class="hljs-keyword">return</span> <span class="hljs-tag">&lt;jome&gt;</span><span class="language-jome"><span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span></span><span class="hljs-tag">&lt;/jome&gt;</span> <span class="hljs-comment">// the last value from a Jome tag is returned</span>
 </code></pre>
 </p>
 <p>Result inside the editor:</p>
@@ -182,10 +182,10 @@ It uses [https://www.sqlite.org/index.html](SQLite) as a databse.
 </code></pre>
 <h2>2. Notebook execution</h2>
 <p>The editor should allow you to use Jome as a notebook.</p>
-<p>You write content using markdown comments, and you show code results using a processing instruction delimited by <code>&lt;? </code> (with space) and <code>?&gt;</code></p>
+<p>You write content using markdown comments, and you show code results using a processing instruction delimited by <code>&lt;jome&gt;</code> and <code>&lt;/jome&gt;</code></p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-number">10</span>
 <span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = <span class="hljs-number">2</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">z</span> = &lt;? <span class="hljs-number">10</span> ** <span class="hljs-number">2</span> ?&gt;
+<span class="hljs-keyword">let</span> <span class="hljs-variable">z</span> = <span class="hljs-tag">&lt;jome&gt;</span><span class="language-jome"><span class="hljs-number">10</span> ** <span class="hljs-number">2</span></span><span class="hljs-tag">&lt;/jome&gt;</span>
 </code></pre>
 <p>You can enter data using to the file using tags or you can enter temporary data using a <code>with</code> block. See below.</p>
 <h3>Data cells</h3>
@@ -330,6 +330,16 @@ debug: console.log as a macro to print code and unit</p>
 <li>model: Define a data structure. Ex: <?model Position x: 'int', y: 'int' ?></li>
 <li>file-loader: Define how to load a file with a given extension.</li>
 <li>unit: Define a new unit</li>
+<li>tag: Define a tag that is not a model</li>
+<li>renderer: Maybe? To define how to render a tag to html for the editor?</li>
+</ul>
+<h2>12. Tags</h2>
+<p>You can define tags like <code>&lt;color&gt;&lt;/color&gt;</code> using the processing instruction <code>&lt;?tag ... ?&gt;</code></p>
+<pre><code class="language-jome">&lt;?<span class="hljs-variable">tag</span> <span class="hljs-variable">color</span> <span class="hljs-keyword">type</span>=<span class="hljs-string">&quot;color&quot;</span> ?&gt;
+</code></pre>
+<p>Parameters:</p>
+<ul>
+<li>type: color, number, text, ... (pretty much all html input types)</li>
 </ul>
 <h2>12. Models</h2>
 <p>A model defines a data strcture. It allows to use xml, validation, serializing, database management...</p>

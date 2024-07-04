@@ -35,7 +35,7 @@ module.exports = () => {
   // We use a jome tag because it's a script that can be run
   // The unit checker can infer that this block returns a value
   // with N*m or equivalent as a unit and shows it.
-  return <? force * distance ?> // the last value from a Jome tag is returned
+  return <jome>force * distance</jome> // the last value from a Jome tag is returned
   \`\`\``);
 
   let overview = `
@@ -122,12 +122,12 @@ module.exports = () => {
 
   The editor should allow you to use Jome as a notebook.
 
-  You write content using markdown comments, and you show code results using a processing instruction delimited by \`<? \` (with space) and \`?>\`
+  You write content using markdown comments, and you show code results using a processing instruction delimited by \`<jome>\` and \`</jome>\`
 
   \`\`\`jome
   let x = 10
   let y = 2
-  let z = <? 10 ** 2 ?>
+  let z = <jome>10 ** 2</jome>
   \`\`\`
 
   You can enter data using to the file using tags or you can enter temporary data using a \`with\` block. See below.
@@ -351,6 +351,19 @@ module.exports = () => {
   - model: Define a data structure. Ex: <?model Position x: 'int', y: 'int' ?>
   - file-loader: Define how to load a file with a given extension.
   - unit: Define a new unit
+  - tag: Define a tag that is not a model
+  - renderer: Maybe? To define how to render a tag to html for the editor?
+
+  ## 12. Tags
+
+  You can define tags like \`<color></color>\` using the processing instruction \`<?tag ... ?>\`
+
+  \`\`\`jome
+  <?tag color type="color" ?>
+  \`\`\`
+
+  Parameters:
+  - type: color, number, text, ... (pretty much all html input types)
 
   ## 12. Models
 
