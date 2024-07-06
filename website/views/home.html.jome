@@ -158,7 +158,7 @@ let content = <md>
   ## 4. with blocks
 
   You can pass parameters to a file using a with block. This allows you to treat a file as a function. You can import it from another file.
-  And uou can call it directly from the CLI.
+  And you can call it directly from the CLI.
 
   ```jome
   with {port = 3000} // default port is 3000, but allow to run the file with a different port number
@@ -298,6 +298,7 @@ let content = <md>
   - tag: Define a tag that is not a model
   - renderer: Maybe? To define how to render a tag to html for the editor?
   - lib: Specify the base library for the project
+  - config-...: Specify a config (or set-...) (ex: <?set-tabstop 4 ?>)
 
   ## 12. Tags
 

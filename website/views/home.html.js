@@ -291,6 +291,7 @@ module.exports = () => {
   - unit: Define a new unit
   - tag: Define a tag that is not a model
   - renderer: Maybe? To define how to render a tag to html for the editor?
+  - lib: Specify the base library for the project
 
   ## 12. Tags
 

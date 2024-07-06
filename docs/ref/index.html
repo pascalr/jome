@@ -37,6 +37,7 @@
       <ul class="nav-list nav-sub">
         <li><a href="/jome/#overview">Overview</a></li>
         <li><a href="/jome/#features">Features</a></li>
+        <li><a href="/jome/#editor">Editor</a></li>
         <li><a href="/jome/#proposals">Proposals</a></li>
       </ul>
       <li><a href="/jome/getting_started">Getting started</a></li>
@@ -146,12 +147,12 @@ list:</p>
 <li>model: The model of the schema of the children allowed</li>
 </ul>
 <p>variants: Can be one of any of the nested types. The same as type union.</p>
-<pre><code class="language-jome">&lt;?<span class="hljs-variable">schema</span> <span class="hljs-variable">model</span>=<span class="hljs-string">&quot;fruit&quot;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">variants</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">include</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;apple&quot;</span>&gt;</span> <span class="hljs-comment">// from a schema defined elsewhere</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">include</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;orange&quot;</span>&gt;</span> <span class="hljs-comment">// from a schema defined elsewhere</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">variants</span>&gt;</span>
-?&gt;
+<pre><code class="language-jome"><span class="hljs-meta">&lt;?schema model=<span class="hljs-string">&quot;fruit&quot;</span>
+  &lt;variants&gt;
+    &lt;include model=<span class="hljs-string">&quot;apple&quot;</span>&gt; // from a schema defined elsewhere
+    &lt;include model=<span class="hljs-string">&quot;orange&quot;</span>&gt; // from a schema defined elsewhere
+  &lt;/variants&gt;
+?&gt;</span>
 </code></pre>
 <pre><code class="language-jome"><span class="hljs-tag">&lt;<span class="hljs-name">list</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;steps&quot;</span> <span class="hljs-attr">optional</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">many</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;step&quot;</span> /&gt;</span>
@@ -169,19 +170,19 @@ list:</p>
 <li>name: The name of the variable to access the content.</li>
 </ul>
 <p>You can also use components. They are the same as schema but only exists within it's scope.</p>
-<pre><code class="language-jome">&lt;?<span class="hljs-variable">schema</span> <span class="hljs-variable">model</span>=<span class="hljs-string">&quot;Recipe&quot;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">attr</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">attr</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;servings&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> <span class="hljs-attr">optional</span> /&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">has_many</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;ingredients&quot;</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;ing&quot;</span> <span class="hljs-attr">optional</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">has_many</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;steps&quot;</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;step&quot;</span> <span class="hljs-attr">optional</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">component</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;ing&quot;</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">attr</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;qty&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">attr</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">component</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">component</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;step&quot;</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">content</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">component</span>&gt;</span>
-?&gt;
+<pre><code class="language-jome"><span class="hljs-meta">&lt;?schema model=<span class="hljs-string">&quot;Recipe&quot;</span>
+  &lt;attr name=<span class="hljs-string">&quot;name&quot;</span> type=<span class="hljs-string">&quot;string&quot;</span> /&gt;
+  &lt;attr name=<span class="hljs-string">&quot;servings&quot;</span> type=<span class="hljs-string">&quot;string&quot;</span> optional /&gt;
+  &lt;has_many name=<span class="hljs-string">&quot;ingredients&quot;</span> model=<span class="hljs-string">&quot;ing&quot;</span> optional&gt;
+  &lt;has_many name=<span class="hljs-string">&quot;steps&quot;</span> model=<span class="hljs-string">&quot;step&quot;</span> optional&gt;
+  &lt;component model=<span class="hljs-string">&quot;ing&quot;</span>&gt;
+    &lt;attr name=<span class="hljs-string">&quot;qty&quot;</span> type=<span class="hljs-string">&quot;string&quot;</span> /&gt;
+    &lt;attr name=<span class="hljs-string">&quot;name&quot;</span> type=<span class="hljs-string">&quot;string&quot;</span> /&gt;
+  &lt;/component&gt;
+  &lt;component model=<span class="hljs-string">&quot;step&quot;</span>&gt;
+    &lt;content name=<span class="hljs-string">&quot;text&quot;</span> type=<span class="hljs-string">&quot;string&quot;</span> /&gt;
+  &lt;/component&gt;
+?&gt;</span>
 </code></pre>
 <p>You can then extend the schema by using the keyword schema and adding methods like you would to a class.</p>
 <p>The previous xml schema defines the constructor already.</p>
@@ -667,7 +668,7 @@ let filepath = #./some/dir/{filename}
 <p>For jome file, executes the file and return the data.</p>
 <p>For any other file, simply return the data as a string. Very basic stuff. For streaming or images, use functions directly.
 Ah well, it would be nice if for .json it would load the JSON directly? Maybe do more fancy stuff. IDK</p>
-<pre><code class="language-jome">&lt;?<span class="hljs-variable">file</span>-<span class="hljs-variable">loader</span> <span class="hljs-variable">ext</span>=<span class="hljs-string">&quot;*.json&quot;</span> ?&gt;
+<pre><code class="language-jome"><span class="hljs-meta">&lt;?file-loader ext=<span class="hljs-string">&quot;*.json&quot;</span> ?&gt;</span>
 </code></pre>
 <p>Work in progress</p>
 <p>You can process files using the syntax: <code>#(./some_file.txt)</code></p>

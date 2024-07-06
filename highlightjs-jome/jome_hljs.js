@@ -182,6 +182,17 @@ const highlighter = function(hljs) {
     begin: '\\b(new|chain|with|then|end|if|class|export|import|from|for|in|while|do|def|var|let|code|unit|return|module|interface|main|type|else|elif|elsif)\\b'
   }
 
+  const PROCESSING_INSTRUCTION = {
+    scope: "meta",
+    begin: /<\?/,
+    end: /\?>/,
+    contains: [
+      String('"', '"'),
+      String("'", "'"),
+      String('`', '`'),
+    ]
+  }
+
   //const CLASS_NAME = {
   //  scope: "title class_",
   //  begin: "[A-Z]\\w*" //    FIXME: not working... begin: "\\p{Lu}\\w*"
@@ -334,6 +345,7 @@ const highlighter = function(hljs) {
       // PATH, FIXME: When unicode is enabled, this makes hljs not working
       TYPES,
       NUMBER_WITH_UNIT,
+      PROCESSING_INSTRUCTION,
       UNIT_OP,
       NUMBER,
       NUMBER_PLACEHOLDER,

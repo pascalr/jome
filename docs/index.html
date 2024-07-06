@@ -175,7 +175,7 @@ and data editing (like spreadsheet with types inside the editor).</p>
 <h2>1. Base library</h2>
 <p>Every project can choose a base library. This library should contain common utility functions and constants.</p>
 <pre><code class="language-jome"><span class="hljs-comment">// Example using lodash as a base library</span>
-&lt;?<span class="hljs-variable">lib</span> <span class="hljs-string">&#x27;lodash&#x27;</span> ?&gt;
+<span class="hljs-meta">&lt;?lib <span class="hljs-string">&#x27;lodash&#x27;</span> ?&gt;</span>
 
 <span class="hljs-comment">// Then you get access to all the named exports by prepending an hashtag symbol before.</span>
 <span class="hljs-built_in function_">#partition</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>], <span class="hljs-variable">n</span> =&gt; <span class="hljs-variable">n</span> % <span class="hljs-number">2</span>)
@@ -277,7 +277,7 @@ debug: console.log as a macro to print code and unit</p>
 <p>If the user somehow become popular, then operators are just the same as the flavor. This way it is easy when
 you read someone else code what it does because the operators are standard.</p>
 <p>If the language stays niche, then operators could be defined using the processing instruction <code>&lt;?op ?&gt;</code>.</p>
-<pre><code class="language-jome">&lt;?<span class="hljs-variable">op</span> ^ ** ?&gt;
+<pre><code class="language-jome"><span class="hljs-meta">&lt;?op ^ ** ?&gt;</span>
 </code></pre>
 <h2>11. Processing instruction</h2>
 <p>Jome uses XML processing instructions to define the language. They start with <code>&lt;?</code> and end with <code>?&gt;</code>.</p>
@@ -291,10 +291,11 @@ you read someone else code what it does because the operators are standard.</p>
 <li>unit: Define a new unit</li>
 <li>tag: Define a tag that is not a model</li>
 <li>renderer: Maybe? To define how to render a tag to html for the editor?</li>
+<li>lib: Specify the base library for the project</li>
 </ul>
 <h2>12. Tags</h2>
 <p>You can define tags like <code>&lt;color&gt;&lt;/color&gt;</code> using the processing instruction <code>&lt;?tag ... ?&gt;</code></p>
-<pre><code class="language-jome">&lt;?<span class="hljs-variable">tag</span> <span class="hljs-variable">color</span> <span class="hljs-keyword">type</span>=<span class="hljs-string">&quot;color&quot;</span> ?&gt;
+<pre><code class="language-jome"><span class="hljs-meta">&lt;?tag color type=<span class="hljs-string">&quot;color&quot;</span> ?&gt;</span>
 </code></pre>
 <p>Parameters:</p>
 <ul>
@@ -304,18 +305,18 @@ you read someone else code what it does because the operators are standard.</p>
 <p>A model defines a data strcture. It allows to use xml, validation, serializing, database management...</p>
 <p>You can define your own models which can then be created using xml tags or programmatycally.</p>
 <p>You can create a class with the same name (case insensitive?) than the model to complement it.</p>
-<pre><code class="language-jome">&lt;?<span class="hljs-variable">model</span> <span class="hljs-variable">Recipe</span> name: <span class="hljs-string">&quot;string&quot;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">attr</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;servings&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> <span class="hljs-attr">optional</span> /&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">has_many</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;ingredients&quot;</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;ing&quot;</span> <span class="hljs-attr">optional</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">has_many</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;steps&quot;</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;step&quot;</span> <span class="hljs-attr">optional</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">component</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;ing&quot;</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">attr</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;qty&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">attr</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">component</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">component</span> <span class="hljs-attr">model</span>=<span class="hljs-string">&quot;step&quot;</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">content</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;string&quot;</span> /&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">component</span>&gt;</span>
-?&gt;
+<pre><code class="language-jome"><span class="hljs-meta">&lt;?model Recipe name: <span class="hljs-string">&quot;string&quot;</span>
+  &lt;attr name=<span class="hljs-string">&quot;servings&quot;</span> type=<span class="hljs-string">&quot;string&quot;</span> optional /&gt;
+  &lt;has_many name=<span class="hljs-string">&quot;ingredients&quot;</span> model=<span class="hljs-string">&quot;ing&quot;</span> optional&gt;
+  &lt;has_many name=<span class="hljs-string">&quot;steps&quot;</span> model=<span class="hljs-string">&quot;step&quot;</span> optional&gt;
+  &lt;component model=<span class="hljs-string">&quot;ing&quot;</span>&gt;
+    &lt;attr name=<span class="hljs-string">&quot;qty&quot;</span> type=<span class="hljs-string">&quot;string&quot;</span> /&gt;
+    &lt;attr name=<span class="hljs-string">&quot;name&quot;</span> type=<span class="hljs-string">&quot;string&quot;</span> /&gt;
+  &lt;/component&gt;
+  &lt;component model=<span class="hljs-string">&quot;step&quot;</span>&gt;
+    &lt;content name=<span class="hljs-string">&quot;text&quot;</span> type=<span class="hljs-string">&quot;string&quot;</span> /&gt;
+  &lt;/component&gt;
+?&gt;</span>
 </code></pre>
 <p>A model creates a static function <code>new</code> for the class of the same name.
 Or is this confusing with the constructor which will be called with <code>new</code> keyword?

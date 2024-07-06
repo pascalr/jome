@@ -25,7 +25,6 @@
 .hljs-literal,
 .hljs-type,
 .hljs-params,
-.hljs-meta,
 .hljs-link {
   color: #e78c45;
 }
@@ -72,4 +71,8 @@
 .hljs-tag .hljs-attr,
 .hljs-tag .hljs-name {
   color: #62c8f3;
+}
+
+.hljs-meta {
+  color: #45e7d8;
 }
