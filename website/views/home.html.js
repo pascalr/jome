@@ -152,7 +152,7 @@ module.exports = () => {
   ## 4. with blocks
 
   You can pass parameters to a file using a with block. This allows you to treat a file as a function. You can import it from another file.
-  And uou can call it directly from the CLI.
+  And you can call it directly from the CLI.
 
   \`\`\`jome
   with {port = 3000} // default port is 3000, but allow to run the file with a different port number
@@ -197,25 +197,6 @@ module.exports = () => {
   let unit = unitof someVar
   \`\`\`
 
-  ## 7. Custom base language (flavor?)
-
-  Only javascript is supported for now.
-
-  Jome is compiled into the base language choosen.
-
-  Jome operators are exactly the same as the base language.
-
-  It also makes all the globals available from the base language available in Jome.
-
-  \`\`\`jome
-  with flavor js // you can omit this, this is the default
-  
-  console.log("Hello") // console is available because of javascript
-  let y = 10 ** 2 // ** is the exponentiation operator like javascript
-  \`\`\`
-
-  If you want total control even let's say on the operators, you could eventually design a custom language.
-
   ## 8. sourceof
 
   The \`sourceof\` keyword tells the compiler to extract the source code of the value of a given variable as a string.
@@ -244,23 +225,6 @@ module.exports = () => {
   \`\`\`
 
   It should work magically inside functions. Every function using the \`unitof\` keyword for a parameter would get an extra hidden parameter.
-
-  ## 10. Feature proposal - Jome API
-
-  In order to make code that can compile in many programming language, there would be an API available under the Jome object.
-
-  \`\`\`jome
-  jome.print("Hello world!") // compiles to console.log in js, printf in c, puts in ruby, etc.
-  \`\`\`
-
-  It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.
-
-  print: console.log as a macro to print unit
-  debug: console.log as a macro to print code and unit
-
-  Wait until implementing this because this would be final and would have to be backward compatible moving onward.
-
-  And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...
 
   ## 11. Operators
 
@@ -292,6 +256,7 @@ module.exports = () => {
   - tag: Define a tag that is not a model
   - renderer: Maybe? To define how to render a tag to html for the editor?
   - lib: Specify the base library for the project
+  - config-...: Specify a config (or set-...) (ex: <?set-tabstop 4 ?>)
 
   ## 12. Tags
 
@@ -449,6 +414,42 @@ module.exports = () => {
   # Feature proposals
 
   Feature ideas
+
+  ## 1. Feature proposal - Custom base language (flavor?)
+
+  Only javascript is supported for now.
+
+  Jome is compiled into the base language choosen.
+
+  Jome operators are exactly the same as the base language.
+
+  It also makes all the globals available from the base language available in Jome.
+
+  \`\`\`jome
+  with flavor js // you can omit this, this is the default
+  
+  console.log("Hello") // console is available because of javascript
+  let y = 10 ** 2 // ** is the exponentiation operator like javascript
+  \`\`\`
+
+  If you want total control even let's say on the operators, you could eventually design a custom language.
+
+  ## 2. Feature proposal - Jome API
+
+  In order to make code that can compile in many programming language, there would be an API available under the Jome object.
+
+  \`\`\`jome
+  jome.print("Hello world!") // compiles to console.log in js, printf in c, puts in ruby, etc.
+  \`\`\`
+
+  It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.
+
+  print: console.log as a macro to print unit
+  debug: console.log as a macro to print code and unit
+
+  Wait until implementing this because this would be final and would have to be backward compatible moving onward.
+
+  And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...
 
   ## 13. Feature proposal - Function overloading based on type
 

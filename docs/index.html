@@ -205,7 +205,7 @@ and data editing (like spreadsheet with types inside the editor).</p>
 </code></pre>
 <h2>4. with blocks</h2>
 <p>You can pass parameters to a file using a with block. This allows you to treat a file as a function. You can import it from another file.
-And uou can call it directly from the CLI.</p>
+And you can call it directly from the CLI.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span> {<span class="hljs-variable">port</span> = <span class="hljs-number">3000</span>} <span class="hljs-comment">// default port is 3000, but allow to run the file with a different port number</span>
 </code></pre>
 <h2>6. Unit system</h2>
@@ -233,17 +233,6 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <p>You can get the unit of a variable as a string using the <code>unitof</code> operator. Note: You must use a macro to use this on a parameter.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-keyword">unit</span> = <span class="hljs-variable">unitof</span> <span class="hljs-variable">someVar</span>
 </code></pre>
-<h2>7. Custom base language (flavor?)</h2>
-<p>Only javascript is supported for now.</p>
-<p>Jome is compiled into the base language choosen.</p>
-<p>Jome operators are exactly the same as the base language.</p>
-<p>It also makes all the globals available from the base language available in Jome.</p>
-<pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">flavor</span> <span class="hljs-variable">js</span> <span class="hljs-comment">// you can omit this, this is the default</span>
-
-<span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hello&quot;</span>) <span class="hljs-comment">// console is available because of javascript</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = <span class="hljs-number">10</span> ** <span class="hljs-number">2</span> <span class="hljs-comment">// ** is the exponentiation operator like javascript</span>
-</code></pre>
-<p>If you want total control even let's say on the operators, you could eventually design a custom language.</p>
 <h2>8. sourceof</h2>
 <p>The <code>sourceof</code> keyword tells the compiler to extract the source code of the value of a given variable as a string.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">debug</span>(<span class="hljs-variable">value</span>)
@@ -263,15 +252,6 @@ The editor should make this symbol easyily accessible. You can also simply multi
 <span class="hljs-comment">// =&gt; 1 + 1 N = 2 N</span>
 </code></pre>
 <p>It should work magically inside functions. Every function using the <code>unitof</code> keyword for a parameter would get an extra hidden parameter.</p>
-<h2>10. Feature proposal - Jome API</h2>
-<p>In order to make code that can compile in many programming language, there would be an API available under the Jome object.</p>
-<pre><code class="language-jome"><span class="hljs-variable">jome</span>.<span class="hljs-title function_">print</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>) <span class="hljs-comment">// compiles to console.log in js, printf in c, puts in ruby, etc.</span>
-</code></pre>
-<p>It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.</p>
-<p>print: console.log as a macro to print unit
-debug: console.log as a macro to print code and unit</p>
-<p>Wait until implementing this because this would be final and would have to be backward compatible moving onward.</p>
-<p>And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...</p>
 <h2>11. Operators</h2>
 <p>This depends on other people.</p>
 <p>If the user somehow become popular, then operators are just the same as the flavor. This way it is easy when
@@ -292,6 +272,7 @@ you read someone else code what it does because the operators are standard.</p>
 <li>tag: Define a tag that is not a model</li>
 <li>renderer: Maybe? To define how to render a tag to html for the editor?</li>
 <li>lib: Specify the base library for the project</li>
+<li>config-...: Specify a config (or set-...) (ex: <?set-tabstop 4 ?>)</li>
 </ul>
 <h2>12. Tags</h2>
 <p>You can define tags like <code>&lt;color&gt;&lt;/color&gt;</code> using the processing instruction <code>&lt;?tag ... ?&gt;</code></p>
@@ -398,6 +379,26 @@ But you could also that it is collapsed by default.</p>
 <p>For example, a <code>&lt;color&gt;</code> tag should show a color picker. A <code>spreadsheet</code> tag should show a spreadsheet table.</p>
 <h1>Feature proposals</h1>
 <p>Feature ideas</p>
+<h2>1. Feature proposal - Custom base language (flavor?)</h2>
+<p>Only javascript is supported for now.</p>
+<p>Jome is compiled into the base language choosen.</p>
+<p>Jome operators are exactly the same as the base language.</p>
+<p>It also makes all the globals available from the base language available in Jome.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">flavor</span> <span class="hljs-variable">js</span> <span class="hljs-comment">// you can omit this, this is the default</span>
+
+<span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hello&quot;</span>) <span class="hljs-comment">// console is available because of javascript</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = <span class="hljs-number">10</span> ** <span class="hljs-number">2</span> <span class="hljs-comment">// ** is the exponentiation operator like javascript</span>
+</code></pre>
+<p>If you want total control even let's say on the operators, you could eventually design a custom language.</p>
+<h2>2. Feature proposal - Jome API</h2>
+<p>In order to make code that can compile in many programming language, there would be an API available under the Jome object.</p>
+<pre><code class="language-jome"><span class="hljs-variable">jome</span>.<span class="hljs-title function_">print</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>) <span class="hljs-comment">// compiles to console.log in js, printf in c, puts in ruby, etc.</span>
+</code></pre>
+<p>It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.</p>
+<p>print: console.log as a macro to print unit
+debug: console.log as a macro to print code and unit</p>
+<p>Wait until implementing this because this would be final and would have to be backward compatible moving onward.</p>
+<p>And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...</p>
 <h2>13. Feature proposal - Function overloading based on type</h2>
 <p>I'd like to be able to overload a function based on type.</p>
 <p>For example:</p>

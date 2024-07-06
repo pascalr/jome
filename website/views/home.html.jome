@@ -203,25 +203,6 @@ let content = <md>
   let unit = unitof someVar
   ```
 
-  ## 7. Custom base language (flavor?)
-
-  Only javascript is supported for now.
-
-  Jome is compiled into the base language choosen.
-
-  Jome operators are exactly the same as the base language.
-
-  It also makes all the globals available from the base language available in Jome.
-
-  ```jome
-  with flavor js // you can omit this, this is the default
-  
-  console.log("Hello") // console is available because of javascript
-  let y = 10 ** 2 // ** is the exponentiation operator like javascript
-  ```
-
-  If you want total control even let's say on the operators, you could eventually design a custom language.
-
   ## 8. sourceof
 
   The `sourceof` keyword tells the compiler to extract the source code of the value of a given variable as a string.
@@ -251,7 +232,7 @@ let content = <md>
 
   It should work magically inside functions. Every function using the `unitof` keyword for a parameter would get an extra hidden parameter.
 
-  ## 10. Feature proposal - Jome API
+  ## 11. User configs## 10. Feature proposal - Jome API
 
   In order to make code that can compile in many programming language, there would be an API available under the Jome object.
 
@@ -268,17 +249,47 @@ let content = <md>
 
   And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...
 
+  Some configs are for the projects. For example the base library.
+
+  Some configs are specific to the user. There should be a file somewhere (offer cloud base storage for this config?) that define your preferences.
+
+  For example, setting if you prefer tabs or spaces. How many spaces is equivalent to a tab...
+
+  Then the editor should show you how you like it.
+
+  You can already customize editors to do this.
+
+  But Jome goes further because it is more customizable. You specify what syntax you prefer for code. The editor should show you code in the syntax you prefer.
+
+  ## 11. Save process
+
+  TODO: Do an image to show this.
+
+  There are 3 things.
+
+  Notebook view: This is what the user sees.
+
+  User code: This is the code in the format that the user prefers.
+
+  Project code: This is how the code is saved to file, as is specified by the linter configs.
+
+  When you open a file in the editor, it should read the project code.
+
+  Then if the user is in view mode, it should show the notebook view.
+
+  If the user is in edit mode, it should show the user code.
+
+  NOTE: The big issue I see is that the translation from user code to project code must work 100% of the time, otherwise there could be reallllllly annoying
+  bugs where the code looks fine, but it's not translated properly and it bugs.
+
   ## 11. Operators
 
-  This depends on other people.
+  Operators are a user specific config. You define what you prefer.
 
-  If the user somehow become popular, then operators are just the same as the flavor. This way it is easy when
-  you read someone else code what it does because the operators are standard.
-
-  If the language stays niche, then operators could be defined using the processing instruction `<?op ?>`.
+  For example, you specify if you prefer `^` or `**` for exponential.
 
   ```jome
-  <?op ^ ** ?>
+  <?op-exp ^ ?>
   ```
 
   ## 11. Processing instruction
@@ -456,6 +467,42 @@ let content = <md>
   # Feature proposals
 
   Feature ideas
+
+  ## 1. Feature proposal - Custom base language (flavor?)
+
+  Only javascript is supported for now.
+
+  Jome is compiled into the base language choosen.
+
+  Jome operators are exactly the same as the base language.
+
+  It also makes all the globals available from the base language available in Jome.
+
+  ```jome
+  with flavor js // you can omit this, this is the default
+  
+  console.log("Hello") // console is available because of javascript
+  let y = 10 ** 2 // ** is the exponentiation operator like javascript
+  ```
+
+  If you want total control even let's say on the operators, you could eventually design a custom language.
+
+  ## 2. Feature proposal - Jome API
+
+  In order to make code that can compile in many programming language, there would be an API available under the Jome object.
+
+  ```jome
+  jome.print("Hello world!") // compiles to console.log in js, printf in c, puts in ruby, etc.
+  ```
+
+  It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.
+
+  print: console.log as a macro to print unit
+  debug: console.log as a macro to print code and unit
+
+  Wait until implementing this because this would be final and would have to be backward compatible moving onward.
+
+  And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...
 
   ## 13. Feature proposal - Function overloading based on type
 
