@@ -6,6 +6,7 @@ module.exports = () => {
       <ul class="nav-list nav-sub">
         <li><a href="${ROOT}/#overview">Overview</a></li>
         <li><a href="${ROOT}/#features">Features</a></li>
+        <li><a href="${ROOT}/#editor">Editor</a></li>
         <li><a href="${ROOT}/#proposals">Proposals</a></li>
       </ul>
       <li><a href="${ROOT}/getting_started">Getting started</a></li>

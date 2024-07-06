@@ -109,6 +109,25 @@ let content = <md>
 
   Here is a list of the features of Jome.
 
+  ## 1. Base library
+
+  Every project can choose a base library. This library should contain common utility functions and constants.
+
+  ```jome
+  // Example using lodash as a base library
+  <?lib 'lodash' ?>
+
+  // Then you get access to all the named exports by prepending an hashtag symbol before.
+  #partition([1, 2, 3, 4], n => n % 2)
+  // → [[1, 3], [2, 4]]
+
+  // You can also use the hashtag operator (.#) to put the first operand before instead of after.
+  { 'a': 1 }.#defaults({ 'a': 3, 'b': 2 })
+  // → { 'a': 1, 'b': 2 }
+  ```
+
+  Read more on [Base library]() (TODO Link)
+
   ## 2. Flexible syntax
 
   You can code using the syntax you prefer. The project should specify a linter so the code is converted to a standard when you save.
@@ -144,25 +163,6 @@ let content = <md>
   ```jome
   with {port = 3000} // default port is 3000, but allow to run the file with a different port number
   ```
-
-  ## 5. Base library
-
-  Every project can choose a base library. This library should contain common utility functions and constants.
-
-  ```jome
-  // Example using lodash as a base library
-  import * from 'lodash'
-
-  // Then you get access to all the named exports by prepending an hashtag symbol before.
-  #partition([1, 2, 3, 4], n => n % 2)
-  // → [[1, 3], [2, 4]]
-
-  // You can also use the hashtag operator (.#) to put the first operand before instead of after.
-  { 'a': 1 }.#defaults({ 'a': 3, 'b': 2 })
-  // → { 'a': 1, 'b': 2 }
-  ```
-
-  Read more on [Base library]() (TODO Link)
 
   ## 6. Unit system
 
@@ -297,6 +297,7 @@ let content = <md>
   - unit: Define a new unit
   - tag: Define a tag that is not a model
   - renderer: Maybe? To define how to render a tag to html for the editor?
+  - lib: Specify the base library for the project
 
   ## 12. Tags
 

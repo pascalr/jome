@@ -103,80 +103,24 @@ module.exports = () => {
 
   Here is a list of the features of Jome.
 
-  ## 1. Markdown comments
+  ## 1. Base library
 
-  Thre are regular comments starting with \`//\` or delimited by \`/*\` and \`*/\`.
-
-  But there are also comments starting with \`# \` (with space) or delimited by \`#*\` and \`*#\`.
-
-  These use markdown and are usefull for documenting code.
+  Every project can choose a base library. This library should contain common utility functions and constants.
 
   \`\`\`jome
-  #*
-  # My awesome application
-  It uses [https://www.sqlite.org/index.html](SQLite) as a databse.
-  *#
+  // Example using lodash as a base library
+  <?lib 'lodash' ?>
+
+  // Then you get access to all the named exports by prepending an hashtag symbol before.
+  #partition([1, 2, 3, 4], n => n % 2)
+  // → [[1, 3], [2, 4]]
+
+  // You can also use the hashtag operator (.#) to put the first operand before instead of after.
+  { 'a': 1 }.#defaults({ 'a': 3, 'b': 2 })
+  // → { 'a': 1, 'b': 2 }
   \`\`\`
 
-  ## 2. Notebook execution
-
-  The editor should allow you to use Jome as a notebook.
-
-  You write content using markdown comments, and you show code results using a processing instruction delimited by \`<jome>\` and \`</jome>\`
-
-  \`\`\`jome
-  let x = 10
-  let y = 2
-  let z = <jome>10 ** 2</jome>
-  \`\`\`
-
-  You can enter data using to the file using tags or you can enter temporary data using a \`with\` block. See below.
-
-  ### Data cells
-
-  There is two kinds of data. There is runtime data. And there is static data.
-
-  Runtime data is data given using the with keyword. When you reload this page, you loose this.
-
-  Static data is data directly inserted into the code. When you save you modify the source code.
-
-  Jome introducte the idea of data cells in a notebook.
-
-  The idea is that you should be able to enter data in a spreadsheet like format in the notebook.
-
-  TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells
-
-  How to support =A1+B2 ?
-
-  \`\`\`jome
-  // A table like this should be editable as a spreadsheet in the editor
-  < table >
-    < tr >
-        < th >Name</ th >
-        < th >Age</ th >
-        < th >City</ th >
-    </ tr >
-    < tr >
-        < td >John Doe</ td >
-        < td >25</ td >
-        < td >Montréal</ td >
-    </ tr >
-    < tr >
-        < td >Jane Smith</ td >
-        < td >30</ td >
-        < td >Québec</ td >
-    </ tr >
-  < / table >
-  \`\`\`
-
-  ### Collapsed code cells
-
-  There should also be collapsed by default code cells. For example for imports. If you click on it, you should see it.
-  But you could also that it is collapsed by default.
-
-  But I want to be able to search for it though... CTRL+F should find text hidden inside the collapsed cell. Not sure if that is possible in the browser...
-
-  Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!
+  Read more on [Base library]() (TODO Link)
 
   ## 2. Flexible syntax
 
@@ -213,25 +157,6 @@ module.exports = () => {
   \`\`\`jome
   with {port = 3000} // default port is 3000, but allow to run the file with a different port number
   \`\`\`
-
-  ## 5. Base library
-
-  Every project can choose a base library. This library should contain common utility functions and constants.
-
-  \`\`\`jome
-  // Example using lodash as a base library
-  import * from 'lodash'
-
-  // Then you get access to all the named exports by prepending an hashtag symbol before.
-  #partition([1, 2, 3, 4], n => n % 2)
-  // → [[1, 3], [2, 4]]
-
-  // You can also use the hashtag operator (.#) to put the first operand before instead of after.
-  { 'a': 1 }.#defaults({ 'a': 3, 'b': 2 })
-  // → { 'a': 1, 'b': 2 }
-  \`\`\`
-
-  Read more on [Base library]() (TODO Link)
 
   ## 6. Unit system
 
@@ -431,6 +356,98 @@ module.exports = () => {
     </steps>
   </recipe>
   \`\`\`
+
+  # Editor
+
+  Jome is meant to be used with a specialized editor in order to fully use it's features. Here are the main features that should be given by an editor.
+
+  ## 1. Notebook view
+
+  There are regular comments starting with \`//\` or delimited by \`/*\` and \`*/\`.
+
+  But there are also comments starting with \`# \` (with space) or delimited by \`#*\` and \`*#\`.
+
+  These use markdown and should be showned rendered as a notebook like jupyter.
+
+  \`\`\`jome
+  #*
+  # My awesome application
+  It uses [https://www.sqlite.org/index.html](SQLite) as a databse.
+  *#
+  \`\`\`
+
+  ## 2. Notebook execution
+
+  The editor should allow you to execute chunks of code and view the result.
+
+  The \`<jome>\` tag is used for this purpose and tells the editor to show the result of the code inside the tag.
+
+  \`\`\`jome
+  let x = 10
+  let y = 2
+  let z = <jome>10 ** 2</jome>
+  \`\`\`
+
+
+
+
+  ### Data cells
+
+  There is two kinds of data. There is runtime data. And there is static data.
+
+  Runtime data is data given using the with keyword. When you reload this page, you loose this.
+
+  Static data is data directly inserted into the code. When you save you modify the source code.
+
+  Jome introducte the idea of data cells in a notebook.
+
+  The idea is that you should be able to enter data in a spreadsheet like format in the notebook.
+
+  TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells
+
+  How to support =A1+B2 ?
+
+  \`\`\`jome
+  // A table like this should be editable as a spreadsheet in the editor
+  < table >
+    < tr >
+        < th >Name</ th >
+        < th >Age</ th >
+        < th >City</ th >
+    </ tr >
+    < tr >
+        < td >John Doe</ td >
+        < td >25</ td >
+        < td >Montréal</ td >
+    </ tr >
+    < tr >
+        < td >Jane Smith</ td >
+        < td >30</ td >
+        < td >Québec</ td >
+    </ tr >
+  < / table >
+  \`\`\`
+
+  ### Collapsed code cells
+
+  There should also be collapsed by default code cells. For example for imports. If you click on it, you should see it.
+  But you could also that it is collapsed by default.
+
+  But I want to be able to search for it though... CTRL+F should find text hidden inside the collapsed cell. Not sure if that is possible in the browser...
+
+  Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!
+
+  You can enter data using to the file using tags or you can enter temporary data using a \`with\` block. See below.
+
+  ## 3. Code data
+
+  You can write code data using xml. The editor should make it easy to edit this data.
+
+  For example, a \`<color>\` tag should show a color picker. A \`spreadsheet\` tag should show a spreadsheet table.
+
+  # Feature proposals
+
+  Feature ideas
 
   ## 13. Feature proposal - Function overloading based on type
 

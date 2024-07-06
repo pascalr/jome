@@ -37,6 +37,7 @@
       <ul class="nav-list nav-sub">
         <li><a href="/jome/#overview">Overview</a></li>
         <li><a href="/jome/#features">Features</a></li>
+        <li><a href="/jome/#editor">Editor</a></li>
         <li><a href="/jome/#proposals">Proposals</a></li>
       </ul>
       <li><a href="/jome/getting_started">Getting started</a></li>
@@ -171,55 +172,20 @@ and data editing (like spreadsheet with types inside the editor).</p>
 </code></pre>
   <h2 id="features">Features</h2>
 <p>Here is a list of the features of Jome.</p>
-<h2>1. Markdown comments</h2>
-<p>Thre are regular comments starting with <code>//</code> or delimited by <code>/*</code> and <code>*/</code>.</p>
-<p>But there are also comments starting with <code># </code> (with space) or delimited by <code>#*</code> and <code>*#</code>.</p>
-<p>These use markdown and are usefull for documenting code.</p>
-<pre><code class="language-jome"><span class="hljs-comment">#*
-# My awesome application
-It uses [https://www.sqlite.org/index.html](SQLite) as a databse.
-*#</span>
+<h2>1. Base library</h2>
+<p>Every project can choose a base library. This library should contain common utility functions and constants.</p>
+<pre><code class="language-jome"><span class="hljs-comment">// Example using lodash as a base library</span>
+&lt;?<span class="hljs-variable">lib</span> <span class="hljs-string">&#x27;lodash&#x27;</span> ?&gt;
+
+<span class="hljs-comment">// Then you get access to all the named exports by prepending an hashtag symbol before.</span>
+<span class="hljs-built_in function_">#partition</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>], <span class="hljs-variable">n</span> =&gt; <span class="hljs-variable">n</span> % <span class="hljs-number">2</span>)
+<span class="hljs-comment">// → [[1, 3], [2, 4]]</span>
+
+<span class="hljs-comment">// You can also use the hashtag operator (.#) to put the first operand before instead of after.</span>
+{ <span class="hljs-string">&#x27;a&#x27;</span>: <span class="hljs-number">1</span> }.<span class="hljs-built_in function_">#defaults</span>({ <span class="hljs-string">&#x27;a&#x27;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;b&#x27;</span>: <span class="hljs-number">2</span> })
+<span class="hljs-comment">// → { &#x27;a&#x27;: 1, &#x27;b&#x27;: 2 }</span>
 </code></pre>
-<h2>2. Notebook execution</h2>
-<p>The editor should allow you to use Jome as a notebook.</p>
-<p>You write content using markdown comments, and you show code results using a processing instruction delimited by <code>&lt;jome&gt;</code> and <code>&lt;/jome&gt;</code></p>
-<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-number">10</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = <span class="hljs-number">2</span>
-<span class="hljs-keyword">let</span> <span class="hljs-variable">z</span> = <span class="hljs-tag">&lt;jome&gt;</span><span class="language-jome"><span class="hljs-number">10</span> ** <span class="hljs-number">2</span></span><span class="hljs-tag">&lt;/jome&gt;</span>
-</code></pre>
-<p>You can enter data using to the file using tags or you can enter temporary data using a <code>with</code> block. See below.</p>
-<h3>Data cells</h3>
-<p>There is two kinds of data. There is runtime data. And there is static data.</p>
-<p>Runtime data is data given using the with keyword. When you reload this page, you loose this.</p>
-<p>Static data is data directly inserted into the code. When you save you modify the source code.</p>
-<p>Jome introducte the idea of data cells in a notebook.</p>
-<p>The idea is that you should be able to enter data in a spreadsheet like format in the notebook.</p>
-<p>TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells</p>
-<p>How to support =A1+B2 ?</p>
-<pre><code class="language-jome"><span class="hljs-comment">// A table like this should be editable as a spreadsheet in the editor</span>
-&lt; <span class="hljs-variable">table</span> &gt;
-  &lt; <span class="hljs-variable">tr</span> &gt;
-      &lt; <span class="hljs-variable">th</span> &gt;<span class="hljs-variable">Name</span>&lt;/ <span class="hljs-variable">th</span> &gt;
-      &lt; <span class="hljs-variable">th</span> &gt;<span class="hljs-variable">Age</span>&lt;/ <span class="hljs-variable">th</span> &gt;
-      &lt; <span class="hljs-variable">th</span> &gt;<span class="hljs-variable">City</span>&lt;/ <span class="hljs-variable">th</span> &gt;
-  &lt;/ <span class="hljs-variable">tr</span> &gt;
-  &lt; <span class="hljs-variable">tr</span> &gt;
-      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">John</span> <span class="hljs-variable">Doe</span>&lt;/ <span class="hljs-variable">td</span> &gt;
-      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-number">25</span>&lt;/ <span class="hljs-variable">td</span> &gt;
-      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">Montr</span>é<span class="hljs-variable">al</span>&lt;/ <span class="hljs-variable">td</span> &gt;
-  &lt;/ <span class="hljs-variable">tr</span> &gt;
-  &lt; <span class="hljs-variable">tr</span> &gt;
-      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">Jane</span> <span class="hljs-variable">Smith</span>&lt;/ <span class="hljs-variable">td</span> &gt;
-      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-number">30</span>&lt;/ <span class="hljs-variable">td</span> &gt;
-      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">Qu</span>é<span class="hljs-variable">bec</span>&lt;/ <span class="hljs-variable">td</span> &gt;
-  &lt;/ <span class="hljs-variable">tr</span> &gt;
-&lt; / <span class="hljs-variable">table</span> &gt;
-</code></pre>
-<h3>Collapsed code cells</h3>
-<p>There should also be collapsed by default code cells. For example for imports. If you click on it, you should see it.
-But you could also that it is collapsed by default.</p>
-<p>But I want to be able to search for it though... CTRL+F should find text hidden inside the collapsed cell. Not sure if that is possible in the browser...</p>
-<p>Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!</p>
+<p>Read more on <a href="">Base library</a> (TODO Link)</p>
 <h2>2. Flexible syntax</h2>
 <p>You can code using the syntax you prefer. The project should specify a linter so the code is converted to a standard when you save.</p>
 <p>Also, the idea is that when you open a page, the editor should show you the code in the syntax that you prefer.</p>
@@ -242,20 +208,6 @@ But you could also that it is collapsed by default.</p>
 And uou can call it directly from the CLI.</p>
 <pre><code class="language-jome"><span class="hljs-keyword">with</span> {<span class="hljs-variable">port</span> = <span class="hljs-number">3000</span>} <span class="hljs-comment">// default port is 3000, but allow to run the file with a different port number</span>
 </code></pre>
-<h2>5. Base library</h2>
-<p>Every project can choose a base library. This library should contain common utility functions and constants.</p>
-<pre><code class="language-jome"><span class="hljs-comment">// Example using lodash as a base library</span>
-<span class="hljs-keyword">import</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span>
-
-<span class="hljs-comment">// Then you get access to all the named exports by prepending an hashtag symbol before.</span>
-<span class="hljs-built_in function_">#partition</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>], <span class="hljs-variable">n</span> =&gt; <span class="hljs-variable">n</span> % <span class="hljs-number">2</span>)
-<span class="hljs-comment">// → [[1, 3], [2, 4]]</span>
-
-<span class="hljs-comment">// You can also use the hashtag operator (.#) to put the first operand before instead of after.</span>
-{ <span class="hljs-string">&#x27;a&#x27;</span>: <span class="hljs-number">1</span> }.<span class="hljs-built_in function_">#defaults</span>({ <span class="hljs-string">&#x27;a&#x27;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;b&#x27;</span>: <span class="hljs-number">2</span> })
-<span class="hljs-comment">// → { &#x27;a&#x27;: 1, &#x27;b&#x27;: 2 }</span>
-</code></pre>
-<p>Read more on <a href="">Base library</a> (TODO Link)</p>
 <h2>6. Unit system</h2>
 <p>Unit are a way to be more specific when using numbers. They are only available at compile time.</p>
 <p>You can specify the unit after a number or use the middle dot (·) to apply a unit to a variable.
@@ -389,6 +341,62 @@ end
    <span class="hljs-tag">&lt;/<span class="hljs-name">steps</span>&gt;</span>
  <span class="hljs-tag">&lt;/<span class="hljs-name">recipe</span>&gt;</span>
 </code></pre>
+<h1>Editor</h1>
+<p>Jome is meant to be used with a specialized editor in order to fully use it's features. Here are the main features that should be given by an editor.</p>
+<h2>1. Notebook view</h2>
+<p>There are regular comments starting with <code>//</code> or delimited by <code>/*</code> and <code>*/</code>.</p>
+<p>But there are also comments starting with <code># </code> (with space) or delimited by <code>#*</code> and <code>*#</code>.</p>
+<p>These use markdown and should be showned rendered as a notebook like jupyter.</p>
+<pre><code class="language-jome"><span class="hljs-comment">#*
+# My awesome application
+It uses [https://www.sqlite.org/index.html](SQLite) as a databse.
+*#</span>
+</code></pre>
+<h2>2. Notebook execution</h2>
+<p>The editor should allow you to execute chunks of code and view the result.</p>
+<p>The <code>&lt;jome&gt;</code> tag is used for this purpose and tells the editor to show the result of the code inside the tag.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-number">10</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = <span class="hljs-number">2</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">z</span> = <span class="hljs-tag">&lt;jome&gt;</span><span class="language-jome"><span class="hljs-number">10</span> ** <span class="hljs-number">2</span></span><span class="hljs-tag">&lt;/jome&gt;</span>
+</code></pre>
+<h3>Data cells</h3>
+<p>There is two kinds of data. There is runtime data. And there is static data.</p>
+<p>Runtime data is data given using the with keyword. When you reload this page, you loose this.</p>
+<p>Static data is data directly inserted into the code. When you save you modify the source code.</p>
+<p>Jome introducte the idea of data cells in a notebook.</p>
+<p>The idea is that you should be able to enter data in a spreadsheet like format in the notebook.</p>
+<p>TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells</p>
+<p>How to support =A1+B2 ?</p>
+<pre><code class="language-jome"><span class="hljs-comment">// A table like this should be editable as a spreadsheet in the editor</span>
+&lt; <span class="hljs-variable">table</span> &gt;
+  &lt; <span class="hljs-variable">tr</span> &gt;
+      &lt; <span class="hljs-variable">th</span> &gt;<span class="hljs-variable">Name</span>&lt;/ <span class="hljs-variable">th</span> &gt;
+      &lt; <span class="hljs-variable">th</span> &gt;<span class="hljs-variable">Age</span>&lt;/ <span class="hljs-variable">th</span> &gt;
+      &lt; <span class="hljs-variable">th</span> &gt;<span class="hljs-variable">City</span>&lt;/ <span class="hljs-variable">th</span> &gt;
+  &lt;/ <span class="hljs-variable">tr</span> &gt;
+  &lt; <span class="hljs-variable">tr</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">John</span> <span class="hljs-variable">Doe</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-number">25</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">Montr</span>é<span class="hljs-variable">al</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+  &lt;/ <span class="hljs-variable">tr</span> &gt;
+  &lt; <span class="hljs-variable">tr</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">Jane</span> <span class="hljs-variable">Smith</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-number">30</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">Qu</span>é<span class="hljs-variable">bec</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+  &lt;/ <span class="hljs-variable">tr</span> &gt;
+&lt; / <span class="hljs-variable">table</span> &gt;
+</code></pre>
+<h3>Collapsed code cells</h3>
+<p>There should also be collapsed by default code cells. For example for imports. If you click on it, you should see it.
+But you could also that it is collapsed by default.</p>
+<p>But I want to be able to search for it though... CTRL+F should find text hidden inside the collapsed cell. Not sure if that is possible in the browser...</p>
+<p>Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!</p>
+<p>You can enter data using to the file using tags or you can enter temporary data using a <code>with</code> block. See below.</p>
+<h2>3. Code data</h2>
+<p>You can write code data using xml. The editor should make it easy to edit this data.</p>
+<p>For example, a <code>&lt;color&gt;</code> tag should show a color picker. A <code>spreadsheet</code> tag should show a spreadsheet table.</p>
+<h1>Feature proposals</h1>
+<p>Feature ideas</p>
 <h2>13. Feature proposal - Function overloading based on type</h2>
 <p>I'd like to be able to overload a function based on type.</p>
 <p>For example:</p>
