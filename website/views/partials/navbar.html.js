@@ -3,6 +3,7 @@ module.exports = () => {
   <div class="navbar">
     <a class="navbrand" href="${ROOT}/" style="margin-left: 4em;">Jome</a>
     <span style="flex-grow: 2;"></span>
+    <a href="${ROOT}/jome_in_js">WIP</a>
     <a href="${ROOT}/getting_started">Getting started</a>
     <a href="${ROOT}/ref">Language Reference</a>
     <a href="${ROOT}/ex">Examples</a>

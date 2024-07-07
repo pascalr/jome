@@ -1,8 +1,9 @@
-const Webpage = require("../src/webpage.js");
-const mdToHtml = require("@jome/md-to-html");
-module.exports = () => {
-  let PARTIAL = mdToHtml(`
-  \`\`\`xml
+import &Webpage : '../src/webpage.jomm'
+
+// I don't understand how highlight.js is supposed to detected nested languages...
+// So let's do it separately for now.
+let PARTIAL = <md>
+  ```xml
   <html>
     <div class="navbar">
       <span class="navbrand" href="#">Jome</span>
@@ -12,15 +13,18 @@ module.exports = () => {
       <a href="https://github.com/pascalr/jome">GitHub</a>
     </div>
   </html>
-  \`\`\``);
+  ```
+</md>
 
-  let overview01 = mdToHtml(`
-  \`\`\`jome
+let overview01 = <md>
+  ```jome
   return force * distance
-  \`\`\``);
+  ```
+</md>
 
-  let overviewSrc = mdToHtml(`
-  \`\`\`jome
+// TODO: Add an option to md, to enable or disable html. This way I can write <jome></jome> without any issues.
+let overviewSrc = <md>
+  ```jome
   #*
   # Torque Calculator Example
   *#
@@ -36,9 +40,10 @@ module.exports = () => {
   // The unit checker can infer that this block returns a value
   // with N*m or equivalent as a unit and shows it.
   return <jome>force * distance</jome> // the last value from a Jome tag is returned
-  \`\`\``);
+  ```
+</md>
 
-  let overview = `
+let overview = <html>
   <div id="homepage-example">
     <h1>Torque Calculator Example</h1>
     <div class="input-container">
@@ -52,11 +57,12 @@ module.exports = () => {
       m
     </div>
     <p>Torque is the result of a force multiplied by a distance from a pivot point.</p>
-    e7fbf80ba4c5b2cb25858cfa78de66e9
+    <%s overview01 %>
     <div class="code-result">=> null N·m</div>
-  </div>`.replace("e7fbf80ba4c5b2cb25858cfa78de66e9", overview01);
+  </div>
+</html>
 
-  let content = mdToHtml(`
+let content = <md>
 
   # Jome
 
@@ -70,6 +76,39 @@ module.exports = () => {
 
   For the near future, it only compiles to JavaScript.
 
+  ## WIP - Idea: no .jome file, only .js file, Jome is an in-memory transcription, and adds annotations to js file
+
+  This would mean using a parser for .js files.
+
+  .js file => jome transcription => some editing => save to same .js file with annotations to lose no information
+
+  No project config. Only user config. User personal library.
+
+  ```jome
+  # Some example
+  with distance = 1 m end
+  let force = 10 N
+  ```
+
+  ```js
+  //@md # Some example
+  let force = 10 //@unit N
+
+  //@arg distance
+  module.exports = (distance = 1 /*@unit m*/) => {
+    
+  }
+  ```
+
+  For Jome data in comments, it uses two stars like JSDoc. So it must be compatible.
+
+  JSDoc already uses about 70 at names. https://jsdoc.app/
+
+
+  Pour du meta data Jome, utiliser deux étoiles comme JSDoc. Donc être comptatible et ne pas utiliser 
+
+  Syntax pour dire que c'est un commentaire Jome: `/** */`
+
   ## Status
 
   Jome is in early development stage. It is not usable yet.
@@ -78,26 +117,26 @@ module.exports = () => {
 
   <h2 id="sample">Code Sample</h2>
 
-  045a7bfe3dba9ba99b065d6f5aedfd77
+  <%s overviewSrc %>
 
   Result inside the editor:
 
-  bce059749d61c1c247c303d0118d0d53
+  <%s overview %>
 
   Result inside the shell:
 
-  \`\`\`sh
+  ```sh
   jome torqueCalculator.jome --force=10 --distance="2 m"
   # => 20 N·m
-  \`\`\`
+  ```
 
   Usage inside another file:
 
-  \`\`\`jome
+  ```jome
   import calculateTorque from './torqueCalculator.jome'
 
   let torque = calculateTorque force: 20 lbs, distance: 1 in
-  \`\`\`
+  ```
 
   <h2 id="features">Features</h2>
 
@@ -107,7 +146,7 @@ module.exports = () => {
 
   Every project can choose a base library. This library should contain common utility functions and constants.
 
-  \`\`\`jome
+  ```jome
   // Example using lodash as a base library
   <?lib 'lodash' ?>
 
@@ -118,7 +157,7 @@ module.exports = () => {
   // You can also use the hashtag operator (.#) to put the first operand before instead of after.
   { 'a': 1 }.#defaults({ 'a': 3, 'b': 2 })
   // → { 'a': 1, 'b': 2 }
-  \`\`\`
+  ```
 
   Read more on [Base library]() (TODO Link)
 
@@ -128,12 +167,12 @@ module.exports = () => {
 
   Also, the idea is that when you open a page, the editor should show you the code in the syntax that you prefer.
 
-  \`\`\`jome
+  ```jome
   if val == 20: doSomething()
   if (val == 20) { doSomething() }
   if (val == 20) doSomething() end
   calcSomething 1, 2 // You can omit parentheses for a function call
-  \`\`\`
+  ```
 
   Read more on [Flexible syntax]() (TODO Link)
 
@@ -141,22 +180,22 @@ module.exports = () => {
 
   Like the rest of Jome, the typing system is flexible. You can omit them, you can use hard typing or you can use duct typing.
 
-  \`\`\`jome
+  ```jome
   let addInts = (x, y) => x + y
   let addInts = (int x, int y) => x + y
   int addInts = (int x, int y) => x + y
   let addInts = (x : int, y : int) => x + y
   let addInts : int = (x : int, y : int) => x + y
-  \`\`\`
+  ```
 
   ## 4. with blocks
 
   You can pass parameters to a file using a with block. This allows you to treat a file as a function. You can import it from another file.
   And you can call it directly from the CLI.
 
-  \`\`\`jome
+  ```jome
   with {port = 3000} // default port is 3000, but allow to run the file with a different port number
-  \`\`\`
+  ```
 
   ## 6. Unit system
 
@@ -165,74 +204,74 @@ module.exports = () => {
   You can specify the unit after a number or use the middle dot (·) to apply a unit to a variable.
   The editor should make this symbol easyily accessible. You can also simply multiply by 1 of the unit.
 
-  \`\`\`jome
+  ```jome
   let width = 5
   let force = 10 N // Newtons
   let distance = width·m // meters // same as width*1m
   let torque = force * distance
   jome.print(torque) // jome.print is a macro that prints the unit based on the context
   // → 50 N·m
-  \`\`\`
+  ```
 
   Units have limitations. They are a compile time feature.
 
-  \`\`\`jome
+  ```jome
   let force = unitSystem === 'metric' ? 1 lb : 10 N
   jome.print(force)
   // → 10 // The unit is not printed because it can't be inferred.
-  \`\`\`
+  ```
 
   You can specify that a function takes a value in a specific unit. When called, it can be automatically converted if the given unit is an equivalent.
 
-  \`\`\`jome
+  ```jome
   def sleep(time = ? ms)
     /* ... */
   end
   sleep(2 s) // compiled to: sleep(2000)
-  \`\`\`
+  ```
 
-  You can get the unit of a variable as a string using the \`unitof\` operator. Note: You must use a macro to use this on a parameter.
+  You can get the unit of a variable as a string using the `unitof` operator. Note: You must use a macro to use this on a parameter.
 
-  \`\`\`jome
+  ```jome
   let unit = unitof someVar
-  \`\`\`
+  ```
 
   ## 8. sourceof
 
-  The \`sourceof\` keyword tells the compiler to extract the source code of the value of a given variable as a string.
+  The `sourceof` keyword tells the compiler to extract the source code of the value of a given variable as a string.
 
-  \`\`\`jome
+  ```jome
   def debug(value)
     console.log(sourceof(value), ': ', value)
   end
   let someVar = 3
   debug(someVar) // compiled as debug(someVar, "someVar")
   // => someVar: 3
-  \`\`\`
+  ```
 
-  It should work magically inside functions. Every function using the \`sourceof\` keyword for a parameter would get an extra hidden parameter.
+  It should work magically inside functions. Every function using the `sourceof` keyword for a parameter would get an extra hidden parameter.
 
   ## 9. unitof
 
-  The \`unitof\` keyword tells the compiler to extract the unit of the value of a given variable as a string.
+  The `unitof` keyword tells the compiler to extract the unit of the value of a given variable as a string.
 
-  \`\`\`jome
+  ```jome
   macro calc(value)
     console.log(sourceof(value), ' = ', value, ' ', unitof(value))
   end
   calc(1 + 1 N) // compiled as calc(1+1, "1 + 1 N", "N")
   // => 1 + 1 N = 2 N
-  \`\`\`
+  ```
 
-  It should work magically inside functions. Every function using the \`unitof\` keyword for a parameter would get an extra hidden parameter.
+  It should work magically inside functions. Every function using the `unitof` keyword for a parameter would get an extra hidden parameter.
 
   ## 11. User configs## 10. Feature proposal - Jome API
 
   In order to make code that can compile in many programming language, there would be an API available under the Jome object.
 
-  \`\`\`jome
+  ```jome
   jome.print("Hello world!") // compiles to console.log in js, printf in c, puts in ruby, etc.
-  \`\`\`
+  ```
 
   It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.
 
@@ -280,15 +319,15 @@ module.exports = () => {
 
   Operators are a user specific config. You define what you prefer.
 
-  For example, you specify if you prefer \`^\` or \`**\` for exponential.
+  For example, you specify if you prefer `^` or `**` for exponential.
 
-  \`\`\`jome
+  ```jome
   <?op-exp ^ ?>
-  \`\`\`
+  ```
 
   ## 11. Processing instruction
 
-  Jome uses XML processing instructions to define the language. They start with \`<?\` and end with \`?>\`.
+  Jome uses XML processing instructions to define the language. They start with `<?` and end with `?>`.
 
   Processing instructions are in effect under where it is defined and in config.jome.
 
@@ -307,11 +346,11 @@ module.exports = () => {
 
   ## 12. Tags
 
-  You can define tags like \`<color></color>\` using the processing instruction \`<?tag ... ?>\`
+  You can define tags like `<color></color>` using the processing instruction `<?tag ... ?>`
 
-  \`\`\`jome
+  ```jome
   <?tag color type="color" ?>
-  \`\`\`
+  ```
 
   Parameters:
   - type: color, number, text, ... (pretty much all html input types)
@@ -324,7 +363,7 @@ module.exports = () => {
 
   You can create a class with the same name (case insensitive?) than the model to complement it.
 
-  \`\`\`jome
+  ```jome
   <?model Recipe name: "string"
     <attr name="servings" type="string" optional />
     <has_many name="ingredients" model="ing" optional>
@@ -337,10 +376,10 @@ module.exports = () => {
       <content name="text" type="string" />
     </component>
   ?>
-  \`\`\`
+  ```
 
-  A model creates a static function \`new\` for the class of the same name.
-  Or is this confusing with the constructor which will be called with \`new\` keyword?
+  A model creates a static function `new` for the class of the same name.
+  Or is this confusing with the constructor which will be called with `new` keyword?
   Yeahh... don't do this. Override the constructor. This way the validations are always called.
   If the user defines a constructor inside the class, then simply merge them together? Wait
   now it's not clear how to call it then...?
@@ -356,7 +395,7 @@ module.exports = () => {
 
   It should create a class that allows you to handle it programmatycally.
 
- \`\`\`jome
+ ```jome
   <recipe
     name="Biscuits aux brisures de chocolat"
   >
@@ -368,7 +407,7 @@ module.exports = () => {
       <step>Mélanger @1 avec @2</step>
     </steps>
   </recipe>
-  \`\`\`
+  ```
 
   # Editor
 
@@ -376,30 +415,30 @@ module.exports = () => {
 
   ## 1. Notebook view
 
-  There are regular comments starting with \`//\` or delimited by \`/*\` and \`*/\`.
+  There are regular comments starting with `//` or delimited by `/*` and `*/`.
 
-  But there are also comments starting with \`# \` (with space) or delimited by \`#*\` and \`*#\`.
+  But there are also comments starting with `# ` (with space) or delimited by `#*` and `*#`.
 
   These use markdown and should be showned rendered as a notebook like jupyter.
 
-  \`\`\`jome
+  ```jome
   #*
   # My awesome application
   It uses [https://www.sqlite.org/index.html](SQLite) as a databse.
   *#
-  \`\`\`
+  ```
 
   ## 2. Notebook execution
 
   The editor should allow you to execute chunks of code and view the result.
 
-  The \`<jome>\` tag is used for this purpose and tells the editor to show the result of the code inside the tag.
+  The `<jome>` tag is used for this purpose and tells the editor to show the result of the code inside the tag.
 
-  \`\`\`jome
+  ```jome
   let x = 10
   let y = 2
   let z = <jome>10 ** 2</jome>
-  \`\`\`
+  ```
 
 
 
@@ -420,7 +459,7 @@ module.exports = () => {
 
   How to support =A1+B2 ?
 
-  \`\`\`jome
+  ```jome
   // A table like this should be editable as a spreadsheet in the editor
   < table >
     < tr >
@@ -439,7 +478,7 @@ module.exports = () => {
         < td >Québec</ td >
     </ tr >
   < / table >
-  \`\`\`
+  ```
 
   ### Collapsed code cells
 
@@ -450,13 +489,13 @@ module.exports = () => {
 
   Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!
 
-  You can enter data using to the file using tags or you can enter temporary data using a \`with\` block. See below.
+  You can enter data using to the file using tags or you can enter temporary data using a `with` block. See below.
 
   ## 3. Code data
 
   You can write code data using xml. The editor should make it easy to edit this data.
 
-  For example, a \`<color>\` tag should show a color picker. A \`spreadsheet\` tag should show a spreadsheet table.
+  For example, a `<color>` tag should show a color picker. A `spreadsheet` tag should show a spreadsheet table.
 
   # Feature proposals
 
@@ -472,12 +511,12 @@ module.exports = () => {
 
   It also makes all the globals available from the base language available in Jome.
 
-  \`\`\`jome
+  ```jome
   with flavor js // you can omit this, this is the default
   
   console.log("Hello") // console is available because of javascript
   let y = 10 ** 2 // ** is the exponentiation operator like javascript
-  \`\`\`
+  ```
 
   If you want total control even let's say on the operators, you could eventually design a custom language.
 
@@ -485,9 +524,9 @@ module.exports = () => {
 
   In order to make code that can compile in many programming language, there would be an API available under the Jome object.
 
-  \`\`\`jome
+  ```jome
   jome.print("Hello world!") // compiles to console.log in js, printf in c, puts in ruby, etc.
-  \`\`\`
+  ```
 
   It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.
 
@@ -504,7 +543,7 @@ module.exports = () => {
 
   For example:
 
-  \`\`\`jome
+  ```jome
   def add(Vector3 v1, Vector3 v2)
     return v1.add(v2)
   end
@@ -515,7 +554,7 @@ module.exports = () => {
 
   add(Vector3(0,0,0), Vector3(1,1,1)) // uses the first because type matches
   add(1, 2) // uses the second, the default one
-  \`\`\`
+  ```
 
   ## 14. Feature proposal - Operator overloading for classes
 
@@ -523,7 +562,7 @@ module.exports = () => {
 
   For example:
 
-  \`\`\`jome
+  ```jome
   class Vector3
     def add(v2)
       return Vector3(@x + v2.x, @y + v2.y, @z + v2.z)
@@ -531,7 +570,7 @@ module.exports = () => {
   end
 
   let v3 = Vector3(0,0,0) + Vector3(1,1,1)
-  \`\`\`
+  ```
 
   This would mostly be useful to people who enable hardtyping. Because if you forget to specify the type in a function for example, this won't be called.
 
@@ -564,9 +603,7 @@ module.exports = () => {
 
   7. **Custom base language** - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)
 
-  8. **Macros** - Add extra parameters given the context of the function call.`)
-    .replace("045a7bfe3dba9ba99b065d6f5aedfd77", overviewSrc)
-    .replace("bce059749d61c1c247c303d0118d0d53", overview);
+  8. **Macros** - Add extra parameters given the context of the function call.
+</md>
 
-  return new Webpage("Jome", content).render();
-};
+return Webpage('Jome', content).render()

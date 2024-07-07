@@ -70,6 +70,39 @@ module.exports = () => {
 
   For the near future, it only compiles to JavaScript.
 
+  ## WIP - Idea: no .jome file, only .js file, Jome is an in-memory transcription, and adds annotations to js file
+
+  This would mean using a parser for .js files.
+
+  .js file => jome transcription => some editing => save to same .js file with annotations to lose no information
+
+  No project config. Only user config. User personal library.
+
+  \`\`\`jome
+  # Some example
+  with distance = 1 m end
+  let force = 10 N
+  \`\`\`
+
+  \`\`\`js
+  //@md # Some example
+  let force = 10 //@unit N
+
+  //@arg distance
+  module.exports = (distance = 1 /*@unit m*/) => {
+    
+  }
+  \`\`\`
+
+  For Jome data in comments, it uses two stars like JSDoc. So it must be compatible.
+
+  JSDoc already uses about 70 at names. https://jsdoc.app/
+
+
+  Pour du meta data Jome, utiliser deux étoiles comme JSDoc. Donc être comptatible et ne pas utiliser 
+
+  Syntax pour dire que c'est un commentaire Jome: \`/** */\`
+
   ## Status
 
   Jome is in early development stage. It is not usable yet.

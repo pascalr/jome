@@ -121,6 +121,26 @@ standardized code with other people.</p>
 and data editing (like spreadsheet with types inside the editor).</p>
 <p>It has nice features like a base library and macros.</p>
 <p>For the near future, it only compiles to JavaScript.</p>
+<h2>WIP - Idea: no .jome file, only .js file, Jome is an in-memory transcription, and adds annotations to js file</h2>
+<p>This would mean using a parser for .js files.</p>
+<p>.js file =&gt; jome transcription =&gt; some editing =&gt; save to same .js file with annotations to lose no information</p>
+<p>No project config. Only user config. User personal library.</p>
+<pre><code class="language-jome"><span class="hljs-comment"># Some example</span>
+<span class="hljs-keyword">with</span> <span class="hljs-variable">distance</span> = <span class="hljs-number">1 m</span> <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">force</span> = <span class="hljs-number">10 N</span>
+</code></pre>
+<pre><code class="language-js"><span class="hljs-comment">//@md # Some example</span>
+<span class="hljs-keyword">let</span> force = <span class="hljs-number">10</span> <span class="hljs-comment">//@unit N</span>
+
+<span class="hljs-comment">//@arg distance</span>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-function">(<span class="hljs-params">distance = <span class="hljs-number">1</span> <span class="hljs-comment">/*@unit m*/</span></span>) =&gt;</span> {
+  
+}
+</code></pre>
+<p>For Jome data in comments, it uses two stars like JSDoc. So it must be compatible.</p>
+<p>JSDoc already uses about 70 at names. https://jsdoc.app/</p>
+<p>Pour du meta data Jome, utiliser deux étoiles comme JSDoc. Donc être comptatible et ne pas utiliser</p>
+<p>Syntax pour dire que c'est un commentaire Jome: <code>/** */</code></p>
 <h2>Status</h2>
 <p>Jome is in early development stage. It is not usable yet.</p>
 <p>The compiler does not handle all the features described here. Tests are lacking and there is a lot of bugs.</p>

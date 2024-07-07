@@ -18,6 +18,12 @@ module.exports = (f) => {
   );
 
   build(
+    path.join(__dirname, "views/jome_in_js.html.jome"),
+    path.join(__dirname, "../docs/jome_in_js/index.html"),
+    { force: force },
+  );
+
+  build(
     path.join(__dirname, "views/home.html.jome"),
     path.join(__dirname, "../docs/index.html"),
     { force: force },
