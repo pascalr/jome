@@ -10313,15 +10313,15 @@
     let highlighted = hljs.highlight(src, { language: "js" }).value;
     document.getElementById("output-editor").innerHTML = highlighted;
     console.log("==>", data2.metaData);
-    document.getElementById("notebook-editor").innerText = data2.metaData.filter((o) => o.first === "@md").map((o) => o.value).join("\n");
+    document.getElementById("notebook-editor").innerText = data2.metaData.filter((o) => o.parts[0].startsWith("md")).map((o) => o.value).join("\n");
   });
   function parseMetaData(metaData) {
     metaData.forEach((data2) => {
-      let first = data2.value.slice(1).trimLeft().match(/^@\w+/);
-      if (first) {
-        data2.first = first[0];
-      }
+      let parts = data2.value.slice(1).trimLeft().split(/~\w+/);
+      console.log("parts: ", parts);
+      data2.parts = parts || [];
     });
+    return metaData;
   }
   function parseJs(js) {
     let allComments = [], tokens = [], comments = [], metaData = [];
