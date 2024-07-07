@@ -11,6 +11,26 @@ module.exports = () => {
 
   It also improves the base language by adding code validation and code generation.
 
+  ## Source file syntax
+
+  Jome stores metadata in comments in Javascript. They are surrounded by \`/*_*\` and \`*/\`.
+
+  \`\`\`js
+  /*_* @jome 0.0.1 */
+  \`\`\`
+
+    If the comment is attached to before or after depends on the annotation. Ex: unit is before, param is after.
+
+  \`\`\`js
+  let x = 1 /*_* @unit m */
+  /*_*
+   * @param a ...
+   */
+  function f(a) {
+    // ...
+  }
+  \`\`\`
+
   ## Plan
 
   ### Step 1 - As is

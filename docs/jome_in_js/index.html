@@ -118,6 +118,20 @@
 <p>Jome is a virtual programming language on top of Javascript. It is a customizable way of seeing and modifying the code.</p>
 <p>Instead of having a separate source file, it adds annotations in comments. This way, you don't need anything special to run it. It's just Javascript.</p>
 <p>It also improves the base language by adding code validation and code generation.</p>
+<h2>Source file syntax</h2>
+<p>Jome stores metadata in comments in Javascript. They are surrounded by <code>/*_*</code> and <code>*/</code>.</p>
+<pre><code class="language-js"><span class="hljs-comment">/*_* @jome 0.0.1 */</span>
+</code></pre>
+<pre><code>If the comment is attached to before or after depends on the annotation. Ex: unit is before, param is after.
+</code></pre>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> x = <span class="hljs-number">1</span> <span class="hljs-comment">/*_* @unit m */</span>
+<span class="hljs-comment">/*_*
+ * @param a ...
+ */</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">f</span>(<span class="hljs-params">a</span>) {
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
 <h2>Plan</h2>
 <h3>Step 1 - As is</h3>
 <p>Parse javascript using the javascript grammar file already available.
