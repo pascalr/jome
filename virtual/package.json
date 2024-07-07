@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "acorn": "^8.12.1"
+    "acorn": "^8.12.1",
+    "escodegen": "^2.1.0"
   }
 }

@@ -115,12 +115,15 @@
             <div class="scrollable" style="width: 100%;">
               <div class="main">
                 <h1>Jome</h1>
-<p>Jome is a improvement on Javascript. Meta data is inserted in comment forms. It allows further code checking, code generation and customization.</p>
+<p>Jome is a virtual programming language on top of Javascript. It is a customizable way of seeing and modifying the code.</p>
+<p>Instead of having a separate source file, it adds annotations in comments. This way, you don't need anything special to run it. It's just Javascript.</p>
+<p>It also improves the base language by adding code validation and code generation.</p>
 <h2>Plan</h2>
 <h3>Step 1 - As is</h3>
 <p>Parse javascript using the javascript grammar file already available.
 Then compile the AST to javascript. Use a linter to standardize the js.
 It should output the same file.</p>
+<p>TODO: Try using acorn.</p>
 <h3>Step 2 - Markdown</h3>
 <p>Convert the AST into a notebook view with markdown given by @md.</p>
 <pre><code class="language-js"><span class="hljs-comment">/** <span class="hljs-doctag">@md</span> # This is a *markdown* header */</span>

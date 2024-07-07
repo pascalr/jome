@@ -94,6 +94,14 @@ let content = <md>
   ?>
   ```
 
+  ## With block
+
+  A with block should be a code generator that generates code to handle stdin.
+
+  ## main
+
+  Since a file is now only a .js file, I need a way to mean execute code. Maybe a main file? Or implicit when using a with block?
+
   ## WIP
 
   This would mean using a parser for .js files.
