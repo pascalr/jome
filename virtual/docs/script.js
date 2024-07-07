@@ -1,13 +1,11 @@
 /*_* @sync_source #../samples/torque_calculator.js */
-let sample01 = `/**
-* @md
-* # Torque Calculator Example
+let sample01 = `/*_* @md
+# Torque Calculator Example
 */
 
-/**
-* @with
-* @arg force, @unit N*, @comment Newtons or equivalent
-* @arg distance, @unit m*, @comment meters or equivalent
+/*_* @with
+@arg force, @unit N*, @comment Newtons or equivalent
+@arg distance, @unit m*, @comment meters or equivalent
 */
 let force, distance;
 
@@ -18,21 +16,19 @@ let force, distance;
 // The unit checker can infer that this block returns a value
 // with N*m or equivalent as a unit and shows it.
 
-/**
-* @main
-* @arg force, @unit N*, @comment Newtons or equivalent
-* @arg distance, @unit m*, @comment meters or equivalent
+/*_*
+@main
+@arg force, @unit N*, @comment Newtons or equivalent
+@arg distance, @unit m*, @comment meters or equivalent
 */
 function main(force, distance) {
- /** @run */
+ /*_* @run */
  return force * distance // the last value from a Jome tag is returned
- /** @end */
+ /*_* @end */
 }`
 
 document.addEventListener('DOMContentLoaded', function() {
-
-  hljs.highlightAll();
-
-  document.getElementById('output-editor').innerText = sample01
-
+  let src = sample01
+  let highlighted = hljs.highlight(src, {language: 'js'}).value
+  document.getElementById('output-editor').innerHTML = highlighted
 });
