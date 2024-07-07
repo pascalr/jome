@@ -125,6 +125,12 @@ let content = <md>
   let cfg = "{foo: 'bar'}"
   ```
 
+  ## CSS
+
+  J'aimerais pouvoir faire la même chose en CSS que en Javascript. Définir mon propre CSS comme toolbox que je réutilise.
+
+  m-x 0, ..., ...
+
   ## Strings and tags
 
   ```js

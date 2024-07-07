@@ -10300,7 +10300,7 @@
   var import_escodegen = __toESM(require_escodegen());
 
   // samples/torque_calculator.js.txt
-  var torque_calculator_js_default = "/*_*\n * @md\n * # Torque Calculator Example\n */\n\n/*_*\n * @with\n * @arg force, @unit N*, @comment Newtons or equivalent\n * @arg distance, @unit m*, @comment meters or equivalent\n */\nlet force, distance;\n\n\n/*_* @md Torque is the result of a force multiplied by a distance from a pivot point. */\n\n// We use a jome tag because it's a script that can be run\n// The unit checker can infer that this block returns a value\n// with N*m or equivalent as a unit and shows it.\n\n/*_*\n * @main\n * @arg force, @unit N*, @comment Newtons or equivalent\n * @arg distance, @unit m*, @comment meters or equivalent\n */\nfunction main(force, distance) {\n  /*_* @run */\n  return force * distance // the last value from a Jome tag is returned\n  /*_* @end */\n}";
+  var torque_calculator_js_default = "/*_* @md\n# Torque Calculator Example\n*/\n\n/*_* @with\n@arg force, @unit N*, @comment Newtons or equivalent\n@arg distance, @unit m*, @comment meters or equivalent\n*/\nlet force, distance;\n\n\n/*_* @md Torque is the result of a force multiplied by a distance from a pivot point. */\n\n// We use a jome tag because it's a script that can be run\n// The unit checker can infer that this block returns a value\n// with N*m or equivalent as a unit and shows it.\n\n/*_* @main\n@arg force, @unit N*, @comment Newtons or equivalent\n@arg distance, @unit m*, @comment meters or equivalent\n*/\nfunction main(force, distance) {\n  /*_* @run */\n  return force * distance // the last value from a Jome tag is returned\n  /*_* @end */\n}";
 
   // src/editor.js
   document.addEventListener("DOMContentLoaded", function() {

@@ -1,13 +1,11 @@
-/*_*
- * @md
- * # Torque Calculator Example
- */
+/*_* @md
+# Torque Calculator Example
+*/
 
-/*_*
- * @with
- * @arg force, @unit N*, @comment Newtons or equivalent
- * @arg distance, @unit m*, @comment meters or equivalent
- */
+/*_* @with
+@arg force, @unit N*, @comment Newtons or equivalent
+@arg distance, @unit m*, @comment meters or equivalent
+*/
 let force, distance;
 
 
@@ -17,11 +15,10 @@ let force, distance;
 // The unit checker can infer that this block returns a value
 // with N*m or equivalent as a unit and shows it.
 
-/*_*
- * @main
- * @arg force, @unit N*, @comment Newtons or equivalent
- * @arg distance, @unit m*, @comment meters or equivalent
- */
+/*_* @main
+@arg force, @unit N*, @comment Newtons or equivalent
+@arg distance, @unit m*, @comment meters or equivalent
+*/
 function main(force, distance) {
   /*_* @run */
   return force * distance // the last value from a Jome tag is returned
