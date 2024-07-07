@@ -17,22 +17,12 @@
     {
       "type": "node-terminal",
       "request": "launch",
-      "name": "Run virtual server",
+      "name": "Build and run virtual server",
       "cwd": "${workspaceFolder}/virtual",
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "command": "node server.js"
-    },
-    {
-      "type": "node-terminal",
-      "request": "launch",
-      "name": "Build virtual server",
-      "cwd": "${workspaceFolder}/virtual",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "command": "node build.js"
+      "command": "node dev.js"
     },
     {
       "type": "node-terminal",

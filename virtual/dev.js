@@ -1,10 +1,13 @@
 const fs = require('fs')
+const express = require("express");
+
+// build
 
 global.ROOT = '/virtual'
 
 const homeGenerator = require('./views/home.html.js')
 
-fs.writeFile('./docs/index.html', homeGenerator(), 'utf8', (err) => {});
+fs.writeFile('./docs/home.html', homeGenerator(), 'utf8', (err) => {});
 
 // /**
 //  * #build
@@ -33,3 +36,16 @@ fs.writeFile('./docs/index.html', homeGenerator(), 'utf8', (err) => {});
 //   fs.writeFile(destFile, out, 'utf8', (err) => handleError(err, options));
 //   // fs.writeFileSync(destFile, out);
 // }
+
+// server
+
+const port = 3000
+const app = express()
+
+app.use("/virtual", express.static("./docs"))
+
+app.get("/", (req, res) => res.redirect("/virtual"));
+
+app.listen(port, function () {
+  console.log(`Server listening on port ${port}`);
+})
