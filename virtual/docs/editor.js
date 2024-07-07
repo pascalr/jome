@@ -10312,7 +10312,8 @@
     console.log(str);
     let highlighted = hljs.highlight(src, { language: "js" }).value;
     document.getElementById("output-editor").innerHTML = highlighted;
-    document.getElementById("notebook-editor").innerText = data2.metaData.map((o) => o.value).join("\n");
+    console.log("==>", data2.metaData);
+    document.getElementById("notebook-editor").innerText = data2.metaData.filter((o) => o.first === "@md").map((o) => o.value).join("\n");
   });
   function parseJs(js) {
     let allComments = [], tokens = [], comments = [], metaData = [];
@@ -10328,6 +10329,12 @@
         metaData.push(comment);
       } else {
         comments.push(comment);
+      }
+    });
+    metaData.forEach((data2) => {
+      let first = data2.value.slice(1).trimLeft().match(/^@\w+/);
+      if (first) {
+        data2.first = first[0];
       }
     });
     return { ast, comments, tokens, metaData };
