@@ -115,6 +115,17 @@ module.exports = () => {
   ?>
   \`\`\`
 
+  ## Sync text from file
+
+  Every time the file is verified, the string is validated to make sure that it matches the content of the file.
+
+  Usefull for inlining stuff inside a webpage for example.
+
+  \`\`\`js
+  /*_* @sync_source config.json */
+  let cfg = "{foo: 'bar'}"
+  \`\`\`
+
   ## Strings and tags
 
   \`\`\`js

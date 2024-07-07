@@ -194,6 +194,12 @@ It should output the same file.</p>
   &lt;/component&gt;
 ?&gt;</span>
 </code></pre>
+<h2>Sync text from file</h2>
+<p>Every time the file is verified, the string is validated to make sure that it matches the content of the file.</p>
+<p>Usefull for inlining stuff inside a webpage for example.</p>
+<pre><code class="language-js"><span class="hljs-comment">/*_* @sync_source config.json */</span>
+<span class="hljs-keyword">let</span> cfg = <span class="hljs-string">&quot;{foo: &#x27;bar&#x27;}&quot;</span>
+</code></pre>
 <h2>Strings and tags</h2>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> color = <span class="hljs-comment">/** <span class="hljs-doctag">@tag</span> color */</span> <span class="hljs-string">`#abcdef`</span>
 </code></pre>
