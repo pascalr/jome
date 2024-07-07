@@ -1,82 +1,94 @@
 import &Webpage : '../src/webpage.jomm'
 
-// I don't understand how highlight.js is supposed to detected nested languages...
-// So let's do it separately for now.
-let PARTIAL = <md>
-  ```xml
-  <html>
-    <div class="navbar">
-      <span class="navbrand" href="#">Jome</span>
-      <a href="\<%= locale %>/editor">Editor</a>
-      <a href="\<%= locale %>/">Home</a>
-      <a href="\<%= locale %>/utils">Utils</a>
-      <a href="https://github.com/pascalr/jome">GitHub</a>
-    </div>
-  </html>
-  ```
-</md>
-
-let overview01 = <md>
-  ```jome
-  return force * distance
-  ```
-</md>
-
-// TODO: Add an option to md, to enable or disable html. This way I can write <jome></jome> without any issues.
-let overviewSrc = <md>
-  ```jome
-  #*
-  # Torque Calculator Example
-  *#
-
-  with
-    Number force = ? N* // Newtons or equivalent
-    Number distance = ? m* // meters or equivalent
-  end
-
-  # Torque is the result of a force multiplied by a distance from a pivot point.
-
-  // We use a jome tag because it's a script that can be run
-  // The unit checker can infer that this block returns a value
-  // with N*m or equivalent as a unit and shows it.
-  return <jome>force * distance</jome> // the last value from a Jome tag is returned
-  ```
-</md>
-
-let overview = <html>
-  <div id="homepage-example">
-    <h1>Torque Calculator Example</h1>
-    <div class="input-container">
-      <label for="input-field">force:</label>
-      <input type="text" id="input-field" name="input-field">
-      N
-    </div>
-    <div class="input-container">
-      <label for="input-field">distance:</label>
-      <input type="text" id="input-field" name="input-field">
-      m
-    </div>
-    <p>Torque is the result of a force multiplied by a distance from a pivot point.</p>
-    <%s overview01 %>
-    <div class="code-result">=> null N·m</div>
-  </div>
-</html>
-
 let content = <md>
 
   # Jome
 
-  Jome tries to be an unopiniated programming language. You code using your own style and use a linter in other to share
-  standardized code with other people.
+  Jome is a improvement on Javascript. Meta data is inserted in comment forms. It allows further code checking, code generation and customization.
 
-  You should use a specialized editor (WIP) in order to fully use all it's features such as code evaluation (like Jupyter Notebook)
-  and data editing (like spreadsheet with types inside the editor).
+  ## Plan
 
-  It has nice features like a base library and macros.
+  ### Step 1 - As is
 
-  For the near future, it only compiles to JavaScript.
+  Parse javascript using the javascript grammar file already available.
+  Then compile the AST to javascript. Use a linter to standardize the js.
+  It should output the same file.
 
-  ## WIP - Idea: no .jome file, only .js file, Jome is an in-memory transcription, and adds annotations to js file
+  ### Step 2 - Markdown
+
+  Convert the AST into a notebook view with markdown given by @md.
+
+  ```js
+  /** @md # This is a *markdown* header */
+  ```
+
+  ### Step 3 - Units
+
+  Inside the notebook view, show @unit into Jome numbers with units.
+
+  ```js
+  let x = 2 /** @unit m */
+  ```
+
+  Should show:
+
+  ```jome
+  let x = 2 m
+  ```
+
+  ### Step 4 - Models
+
+  Show @model into xml tag in editor.
+
+  ```js
+  /** @model Recipe {
+     attrs: [
+       {name: "name", type: "string"}
+       {name: "servings", type: "string", optional: true}
+     ],
+     has_many: [
+       {name: "ingredients", model="ing", optional: true}
+       {name: "steps", model="step", optional: true}
+     ],
+     components: [
+        {
+          model: "ing",
+          attrs: [
+            {name: "qty", type: "string"}
+            {name: "name", type: "string"}
+          ]
+        },
+        {
+          model: "step",
+          content: {name: "text", type: "string"}
+        }
+     ]
+   }
+  */
+
+  // Inside Recipe class if it exists:
+
+  /** @do fr0aw893hf9h32hr08h230rhww3 */
+  // Code generated goes here
+  /** @end fr0aw893hf9h32hr08h230rhww3 */
+  ```
+
+  ```jome
+  <?model Recipe name: "string"
+    <attr name="servings" type="string" optional />
+    <has_many name="ingredients" model="ing" optional>
+    <has_many name="steps" model="step" optional>
+    <component model="ing">
+      <attr name="qty" type="string" />
+      <attr name="name" type="string" />
+    </component>
+    <component model="step">
+      <content name="text" type="string" />
+    </component>
+  ?>
+  ```
+
+  ## WIP
 
   This would mean using a parser for .js files.
 
@@ -108,502 +120,6 @@ let content = <md>
   Pour du meta data Jome, utiliser deux étoiles comme JSDoc. Donc être comptatible et ne pas utiliser 
 
   Syntax pour dire que c'est un commentaire Jome: `/** */`
-
-  ## Status
-
-  Jome is in early development stage. It is not usable yet.
-
-  The compiler does not handle all the features described here. Tests are lacking and there is a lot of bugs.
-
-  <h2 id="sample">Code Sample</h2>
-
-  <%s overviewSrc %>
-
-  Result inside the editor:
-
-  <%s overview %>
-
-  Result inside the shell:
-
-  ```sh
-  jome torqueCalculator.jome --force=10 --distance="2 m"
-  # => 20 N·m
-  ```
-
-  Usage inside another file:
-
-  ```jome
-  import calculateTorque from './torqueCalculator.jome'
-
-  let torque = calculateTorque force: 20 lbs, distance: 1 in
-  ```
-
-  <h2 id="features">Features</h2>
-
-  Here is a list of the features of Jome.
-
-  ## 1. Base library
-
-  Every project can choose a base library. This library should contain common utility functions and constants.
-
-  ```jome
-  // Example using lodash as a base library
-  <?lib 'lodash' ?>
-
-  // Then you get access to all the named exports by prepending an hashtag symbol before.
-  #partition([1, 2, 3, 4], n => n % 2)
-  // → [[1, 3], [2, 4]]
-
-  // You can also use the hashtag operator (.#) to put the first operand before instead of after.
-  { 'a': 1 }.#defaults({ 'a': 3, 'b': 2 })
-  // → { 'a': 1, 'b': 2 }
-  ```
-
-  Read more on [Base library]() (TODO Link)
-
-  ## 2. Flexible syntax
-
-  You can code using the syntax you prefer. The project should specify a linter so the code is converted to a standard when you save.
-
-  Also, the idea is that when you open a page, the editor should show you the code in the syntax that you prefer.
-
-  ```jome
-  if val == 20: doSomething()
-  if (val == 20) { doSomething() }
-  if (val == 20) doSomething() end
-  calcSomething 1, 2 // You can omit parentheses for a function call
-  ```
-
-  Read more on [Flexible syntax]() (TODO Link)
-
-  ## 3. Flexible typing system
-
-  Like the rest of Jome, the typing system is flexible. You can omit them, you can use hard typing or you can use duct typing.
-
-  ```jome
-  let addInts = (x, y) => x + y
-  let addInts = (int x, int y) => x + y
-  int addInts = (int x, int y) => x + y
-  let addInts = (x : int, y : int) => x + y
-  let addInts : int = (x : int, y : int) => x + y
-  ```
-
-  ## 4. with blocks
-
-  You can pass parameters to a file using a with block. This allows you to treat a file as a function. You can import it from another file.
-  And you can call it directly from the CLI.
-
-  ```jome
-  with {port = 3000} // default port is 3000, but allow to run the file with a different port number
-  ```
-
-  ## 6. Unit system
-
-  Unit are a way to be more specific when using numbers. They are only available at compile time.
-
-  You can specify the unit after a number or use the middle dot (·) to apply a unit to a variable.
-  The editor should make this symbol easyily accessible. You can also simply multiply by 1 of the unit.
-
-  ```jome
-  let width = 5
-  let force = 10 N // Newtons
-  let distance = width·m // meters // same as width*1m
-  let torque = force * distance
-  jome.print(torque) // jome.print is a macro that prints the unit based on the context
-  // → 50 N·m
-  ```
-
-  Units have limitations. They are a compile time feature.
-
-  ```jome
-  let force = unitSystem === 'metric' ? 1 lb : 10 N
-  jome.print(force)
-  // → 10 // The unit is not printed because it can't be inferred.
-  ```
-
-  You can specify that a function takes a value in a specific unit. When called, it can be automatically converted if the given unit is an equivalent.
-
-  ```jome
-  def sleep(time = ? ms)
-    /* ... */
-  end
-  sleep(2 s) // compiled to: sleep(2000)
-  ```
-
-  You can get the unit of a variable as a string using the `unitof` operator. Note: You must use a macro to use this on a parameter.
-
-  ```jome
-  let unit = unitof someVar
-  ```
-
-  ## 8. sourceof
-
-  The `sourceof` keyword tells the compiler to extract the source code of the value of a given variable as a string.
-
-  ```jome
-  def debug(value)
-    console.log(sourceof(value), ': ', value)
-  end
-  let someVar = 3
-  debug(someVar) // compiled as debug(someVar, "someVar")
-  // => someVar: 3
-  ```
-
-  It should work magically inside functions. Every function using the `sourceof` keyword for a parameter would get an extra hidden parameter.
-
-  ## 9. unitof
-
-  The `unitof` keyword tells the compiler to extract the unit of the value of a given variable as a string.
-
-  ```jome
-  macro calc(value)
-    console.log(sourceof(value), ' = ', value, ' ', unitof(value))
-  end
-  calc(1 + 1 N) // compiled as calc(1+1, "1 + 1 N", "N")
-  // => 1 + 1 N = 2 N
-  ```
-
-  It should work magically inside functions. Every function using the `unitof` keyword for a parameter would get an extra hidden parameter.
-
-  ## 11. User configs## 10. Feature proposal - Jome API
-
-  In order to make code that can compile in many programming language, there would be an API available under the Jome object.
-
-  ```jome
-  jome.print("Hello world!") // compiles to console.log in js, printf in c, puts in ruby, etc.
-  ```
-
-  It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.
-
-  print: console.log as a macro to print unit
-  debug: console.log as a macro to print code and unit
-
-  Wait until implementing this because this would be final and would have to be backward compatible moving onward.
-
-  And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...
-
-  Some configs are for the projects. For example the base library.
-
-  Some configs are specific to the user. There should be a file somewhere (offer cloud base storage for this config?) that define your preferences.
-
-  For example, setting if you prefer tabs or spaces. How many spaces is equivalent to a tab...
-
-  Then the editor should show you how you like it.
-
-  You can already customize editors to do this.
-
-  But Jome goes further because it is more customizable. You specify what syntax you prefer for code. The editor should show you code in the syntax you prefer.
-
-  ## 11. Save process
-
-  TODO: Do an image to show this.
-
-  There are 3 things.
-
-  Notebook view: This is what the user sees.
-
-  User code: This is the code in the format that the user prefers.
-
-  Project code: This is how the code is saved to file, as is specified by the linter configs.
-
-  When you open a file in the editor, it should read the project code.
-
-  Then if the user is in view mode, it should show the notebook view.
-
-  If the user is in edit mode, it should show the user code.
-
-  NOTE: The big issue I see is that the translation from user code to project code must work 100% of the time, otherwise there could be reallllllly annoying
-  bugs where the code looks fine, but it's not translated properly and it bugs.
-
-  ## 11. Operators
-
-  Operators are a user specific config. You define what you prefer.
-
-  For example, you specify if you prefer `^` or `**` for exponential.
-
-  ```jome
-  <?op-exp ^ ?>
-  ```
-
-  ## 11. Processing instruction
-
-  Jome uses XML processing instructions to define the language. They start with `<?` and end with `?>`.
-
-  Processing instructions are in effect under where it is defined and in config.jome.
-
-  Work in progress.
-
-  The syntax may vary depending on the processing instruction. Refer to the specific one used.
-
-  Processing instructions available:
-  - model: Define a data structure. Ex: <?model Position x: 'int', y: 'int' ?>
-  - file-loader: Define how to load a file with a given extension.
-  - unit: Define a new unit
-  - tag: Define a tag that is not a model
-  - renderer: Maybe? To define how to render a tag to html for the editor?
-  - lib: Specify the base library for the project
-  - config-...: Specify a config (or set-...) (ex: <?set-tabstop 4 ?>)
-
-  ## 12. Tags
-
-  You can define tags like `<color></color>` using the processing instruction `<?tag ... ?>`
-
-  ```jome
-  <?tag color type="color" ?>
-  ```
-
-  Parameters:
-  - type: color, number, text, ... (pretty much all html input types)
-
-  ## 12. Models
-
-  A model defines a data strcture. It allows to use xml, validation, serializing, database management...
-
-  You can define your own models which can then be created using xml tags or programmatycally.
-
-  You can create a class with the same name (case insensitive?) than the model to complement it.
-
-  ```jome
-  <?model Recipe name: "string"
-    <attr name="servings" type="string" optional />
-    <has_many name="ingredients" model="ing" optional>
-    <has_many name="steps" model="step" optional>
-    <component model="ing">
-      <attr name="qty" type="string" />
-      <attr name="name" type="string" />
-    </component>
-    <component model="step">
-      <content name="text" type="string" />
-    </component>
-  ?>
-  ```
-
-  A model creates a static function `new` for the class of the same name.
-  Or is this confusing with the constructor which will be called with `new` keyword?
-  Yeahh... don't do this. Override the constructor. This way the validations are always called.
-  If the user defines a constructor inside the class, then simply merge them together? Wait
-  now it's not clear how to call it then...?
-
-  You can define custom schemas for xml tags.
-
-  schema Recipe {
-    def toHTML
-    end
-  }
-
-  What does defining a schema should do?
-
-  It should create a class that allows you to handle it programmatycally.
-
- ```jome
-  <recipe
-    name="Biscuits aux brisures de chocolat"
-  >
-    <ingredients>
-      <ing><qty>1 t</qty><item>farine</item></ing>
-      <ing><qty>1 t</qty><item>beurre</item></ing>
-    </ingredients>
-    <steps>
-      <step>Mélanger @1 avec @2</step>
-    </steps>
-  </recipe>
-  ```
-
-  # Editor
-
-  Jome is meant to be used with a specialized editor in order to fully use it's features. Here are the main features that should be given by an editor.
-
-  ## 1. Notebook view
-
-  There are regular comments starting with `//` or delimited by `/*` and `*/`.
-
-  But there are also comments starting with `# ` (with space) or delimited by `#*` and `*#`.
-
-  These use markdown and should be showned rendered as a notebook like jupyter.
-
-  ```jome
-  #*
-  # My awesome application
-  It uses [https://www.sqlite.org/index.html](SQLite) as a databse.
-  *#
-  ```
-
-  ## 2. Notebook execution
-
-  The editor should allow you to execute chunks of code and view the result.
-
-  The `<jome>` tag is used for this purpose and tells the editor to show the result of the code inside the tag.
-
-  ```jome
-  let x = 10
-  let y = 2
-  let z = <jome>10 ** 2</jome>
-  ```
-
-
-
-
-  ### Data cells
-
-  There is two kinds of data. There is runtime data. And there is static data.
-
-  Runtime data is data given using the with keyword. When you reload this page, you loose this.
-
-  Static data is data directly inserted into the code. When you save you modify the source code.
-
-  Jome introducte the idea of data cells in a notebook.
-
-  The idea is that you should be able to enter data in a spreadsheet like format in the notebook.
-
-  TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells
-
-  How to support =A1+B2 ?
-
-  ```jome
-  // A table like this should be editable as a spreadsheet in the editor
-  < table >
-    < tr >
-        < th >Name</ th >
-        < th >Age</ th >
-        < th >City</ th >
-    </ tr >
-    < tr >
-        < td >John Doe</ td >
-        < td >25</ td >
-        < td >Montréal</ td >
-    </ tr >
-    < tr >
-        < td >Jane Smith</ td >
-        < td >30</ td >
-        < td >Québec</ td >
-    </ tr >
-  < / table >
-  ```
-
-  ### Collapsed code cells
-
-  There should also be collapsed by default code cells. For example for imports. If you click on it, you should see it.
-  But you could also that it is collapsed by default.
-
-  But I want to be able to search for it though... CTRL+F should find text hidden inside the collapsed cell. Not sure if that is possible in the browser...
-
-  Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!
-
-  You can enter data using to the file using tags or you can enter temporary data using a `with` block. See below.
-
-  ## 3. Code data
-
-  You can write code data using xml. The editor should make it easy to edit this data.
-
-  For example, a `<color>` tag should show a color picker. A `spreadsheet` tag should show a spreadsheet table.
-
-  # Feature proposals
-
-  Feature ideas
-
-  ## 1. Feature proposal - Custom base language (flavor?)
-
-  Only javascript is supported for now.
-
-  Jome is compiled into the base language choosen.
-
-  Jome operators are exactly the same as the base language.
-
-  It also makes all the globals available from the base language available in Jome.
-
-  ```jome
-  with flavor js // you can omit this, this is the default
-  
-  console.log("Hello") // console is available because of javascript
-  let y = 10 ** 2 // ** is the exponentiation operator like javascript
-  ```
-
-  If you want total control even let's say on the operators, you could eventually design a custom language.
-
-  ## 2. Feature proposal - Jome API
-
-  In order to make code that can compile in many programming language, there would be an API available under the Jome object.
-
-  ```jome
-  jome.print("Hello world!") // compiles to console.log in js, printf in c, puts in ruby, etc.
-  ```
-
-  It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.
-
-  print: console.log as a macro to print unit
-  debug: console.log as a macro to print code and unit
-
-  Wait until implementing this because this would be final and would have to be backward compatible moving onward.
-
-  And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...
-
-  ## 13. Feature proposal - Function overloading based on type
-
-  I'd like to be able to overload a function based on type.
-
-  For example:
-
-  ```jome
-  def add(Vector3 v1, Vector3 v2)
-    return v1.add(v2)
-  end
-
-  def add(o1, o2)
-    return o1 + o2
-  end
-
-  add(Vector3(0,0,0), Vector3(1,1,1)) // uses the first because type matches
-  add(1, 2) // uses the second, the default one
-  ```
-
-  ## 14. Feature proposal - Operator overloading for classes
-
-  I'd like to be able to overload an operator for a class.
-
-  For example:
-
-  ```jome
-  class Vector3
-    def add(v2)
-      return Vector3(@x + v2.x, @y + v2.y, @z + v2.z)
-    end
-  end
-
-  let v3 = Vector3(0,0,0) + Vector3(1,1,1)
-  ```
-
-  This would mostly be useful to people who enable hardtyping. Because if you forget to specify the type in a function for example, this won't be called.
-
-  ## Feature proposal - Class templates
-
-  I'd like class templates like in c++ I think. Check how other languages are handling that though.
-
-  ## Trash
-
-  Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
-  has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.
-
-  **Customizable builtins** - Jome comes with a lot of builtins which you can map to keywords you want. You can also define your own.
-
-  **Reactivity** - TODO
-
-  **Node structure like Godot** - TODO
-
-  1. **Notebook comments** - You can add documentation comments using markdown to create a notebook like jupyter.
-
-  2. **Inline data** - TODO: You can do advamced stuff with inline data using tags (preprocessing, ...)
-
-  3. **Flexible syntax** - You can code using the style you prefer and use a linter to share code in a standardized way.
-
-  4. **Flexible typing** - You can use static typing for robustness and usability or omit them for development speed and simplicity.
-
-  5. **Custom base library** - Choose the base library for your project to reuse common functionalities.
-
-  6. **A unit system** - You can add units to numbers. Smart conversions are done at compile time to ensure you use the proper units.
-
-  7. **Custom base language** - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)
-
-  8. **Macros** - Add extra parameters given the context of the function call.
 </md>
 
 return Webpage('Jome', content).render()
