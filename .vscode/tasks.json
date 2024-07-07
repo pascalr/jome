@@ -24,6 +24,14 @@
       "options": {
         "cwd": "${workspaceFolder}/"
       }
+    },
+    {
+      "label": "BuildEditor",
+      "command": "npm",
+      "args": ["run", "build_editor"],
+      "options": {
+        "cwd": "${workspaceFolder}/virtual"
+      }
     }
   ]
 }

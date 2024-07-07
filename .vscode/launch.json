@@ -22,7 +22,8 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "command": "node dev.js"
+      "command": "node dev.js",
+      "preLaunchTask": "BuildEditor"
     },
     {
       "type": "node-terminal",
