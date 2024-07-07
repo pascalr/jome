@@ -1,26 +1,26 @@
-/*_* @md
+/*~ @md
 # Torque Calculator Example
 */
 
-/*_* @with
+/*~ @with
 @arg force, @unit N*, @comment Newtons or equivalent
 @arg distance, @unit m*, @comment meters or equivalent
 */
 let force, distance;
 
 
-/*_* @md Torque is the result of a force multiplied by a distance from a pivot point. */
+/*~ @md Torque is the result of a force multiplied by a distance from a pivot point. */
 
 // We use a jome tag because it's a script that can be run
 // The unit checker can infer that this block returns a value
 // with N*m or equivalent as a unit and shows it.
 
-/*_* @main
+/*~ @main
 @arg force, @unit N*, @comment Newtons or equivalent
 @arg distance, @unit m*, @comment meters or equivalent
 */
 function main(force, distance) {
-  /*_* @run */
+  /*~ @run */
   return force * distance // the last value from a Jome tag is returned
-  /*_* @end */
+  /*~ @end */
 }

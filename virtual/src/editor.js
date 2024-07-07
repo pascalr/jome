@@ -26,7 +26,7 @@ function parseJs(js) {
   })
   allComments.forEach(comment => {
     console.log(comment)
-    if (comment.value.startsWith('_*')) {
+    if (comment.value[0] === '~') {
       metaData.push(comment)
     } else {
       comments.push(comment)

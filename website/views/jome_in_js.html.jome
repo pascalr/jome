@@ -12,17 +12,17 @@ let content = <md>
 
   ## Source file syntax
 
-  Jome stores metadata in comments in Javascript. They are surrounded by `/*_*` and `*/`.
+  Jome stores metadata in comments in Javascript. They are surrounded by `/*~` and `*/`.
 
   ```js
-  /*_* @jome 0.0.1 */
+  /*~ @jome 0.0.1 */
   ```
 
   If the comment is attached to before or after depends on the annotation. Ex: unit is before, param is after.
 
   ```js
-  let area = 2 /*_* @unit m */ * 3 /*_* @unit m */
-  /*_*
+  let area = 2 /*~ @unit m */ * 3 /*~ @unit m */
+  /*~
    * @param a ...
    */
   function f(a) {
@@ -121,7 +121,7 @@ let content = <md>
   Usefull for inlining stuff inside a webpage for example.
 
   ```js
-  /*_* @sync_source config.json */
+  /*~ @sync_source config.json */
   let cfg = "{foo: 'bar'}"
   ```
 
