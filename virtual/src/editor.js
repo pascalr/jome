@@ -16,6 +16,15 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('notebook-editor').innerText = data.metaData.filter(o => o.first === '@md').map(o => o.value).join('\n')
 });
 
+function parseMetaData(metaData) {
+  metaData.forEach(data => {
+    let first = data.value.slice(1).trimLeft().match(/^@\w+/)
+    if (first) {
+      data.first = first[0]
+    }
+  })
+}
+
 // Converts js code to Asbstract Syntax Tree
 function parseJs(js) {
   let allComments = [], tokens = [], comments = [], metaData = [];
@@ -33,11 +42,6 @@ function parseJs(js) {
       comments.push(comment)
     }
   })
-  metaData.forEach(data => {
-    let first = data.value.slice(1).trimLeft().match(/^@\w+/)
-    if (first) {
-      data.first = first[0]
-    }
-  })
+  metaData = parseMetaData(metaData)
   return {ast, comments, tokens, metaData}
 }
