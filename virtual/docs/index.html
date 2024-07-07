@@ -1,0 +1,493 @@
+
+      <!DOCTYPE html>
+      <HTML lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Jome</title>
+          <link rel="stylesheet" type="text/css" href="/jome/stylesheet.css">
+          <link rel="stylesheet" type="text/css" href="/jome/highlight.js.min.css">
+          <link rel="stylesheet" type="text/css" href="/jome/hljs_tomorrow_night_bright.css">
+          <link rel="apple-touch-icon" sizes="180x180" href="/jome/apple-touch-icon.png">
+          <link rel="icon" type="image/png" sizes="32x32" href="/jome/favicon-32x32.png">
+          <link rel="icon" type="image/png" sizes="16x16" href="/jome/favicon-16x16.png">
+          <link rel="manifest" href="/jome/site.webmanifest">
+        </head>
+        <body>
+          <div class="d-flex flex-column" style="min-height: 100vh;">
+          
+  <div class="navbar">
+    <a class="navbrand" href="/jome/" style="margin-left: 4em;">Jome</a>
+    <span style="flex-grow: 2;"></span>
+    <a href="/jome/jome_in_js">WIP</a>
+    <a href="/jome/getting_started">Getting started</a>
+    <a href="/jome/ref">Language Reference</a>
+    <a href="/jome/ex">Examples</a>
+    <a href="/jome/jome_lib">JomeLib</a>
+    <a href="/jome/in_depth">In depth</a>
+    <a href="/jome/editor">Editor</a>
+    <a href="https://github.com/pascalr/jome">GitHub</a>
+    <span style="flex-grow: 1;"></span>
+  </div>
+          <div style="flex-grow: 1; height: calc(100vh - 50px);">
+            <div class="d-flex" style="height: 100%;">
+            
+  <div id="left-nav" class="scrollable">
+    <ul class="nav-list">
+      <li><a href="/jome/">Home</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/jome/#overview">Overview</a></li>
+        <li><a href="/jome/#features">Features</a></li>
+        <li><a href="/jome/#editor">Editor</a></li>
+        <li><a href="/jome/#proposals">Proposals</a></li>
+      </ul>
+      <li><a href="/jome/getting_started">Getting started</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/jome/getting_started/#install">Install</a></li>
+        <li><a href="/jome/getting_started/#usage">Usage</a></li>
+        <li><a href="/jome/getting_started/#hello-world">Hello world</a></li>
+        <li><a href="/jome/getting_started/#index-jome">index.jome</a></li>
+        <li><a href="/jome/getting_started/#config-jome">config.jome</a></li>
+        <li><a href="/jome/getting_started/#createjomeapp">createjomeapp</a></li>
+      </ul>
+      <li><a href="/jome/ref">Language Reference</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/jome/ref/#syntax">Syntax</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="/jome/ref/#keywords">Keywords</a></li>
+          <li><a href="/jome/ref/#comments">Comments</a></li>
+        </ul>
+        <li><a href="/jome/ref/#builtins">Built-Ins</a></li>
+        <li><a href="/jome/ref/#strings">Strings</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="/jome/ref/#formatting">Formatting</a></li>
+          <li><a href="/jome/ref/#heredocs">Heredocs</a></li>
+          <li><a href="/jome/ref/#paths">Paths</a></li>
+        </ul>
+        <li><a href="/jome/ref/#conditions">Conditions</a></li>
+        <li><a href="/jome/ref/#loops">Loops</a></li>
+        <li><a href="/jome/ref/#switch-case">Switch/Case</a></li>
+        <li><a href="/jome/ref/#with">With keyword</a></li>
+        <li><a href="/jome/ref/#classes">Classes</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="/jome/ref/#formatting">Instance properties (@)</a></li>
+        </ul>
+        <li><a href="/jome/ref/#exports">Modules and exports</a></li>
+        <li><a href="/jome/ref/#along">Along keyword</a></li>
+        <li><a href="/jome/ref/#threads">Threads</a></li>
+        <li><a href="/jome/ref/#private">Private</a></li>
+        <li><a href="/jome/ref/#env">Environment variables</a></li>
+        <li><a href="/jome/ref/#global">Global variables</a></li>
+        <li><a href="/jome/ref/#chain">Chain</a></li>
+        <li><a href="/jome/ref/#contributing">Contributing</a></li>
+        <li><a href="/jome/ref/#ack">Acknowledgements</a></li>
+      </ul>
+      <li><a href="/jome/ex">Templates and Examples</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/jome/ex/TODO">Basic (TODO: Hello world)</a></li>
+        <li><a href="/jome/ex/TODO">Static website (TODO)</a></li>
+        <li><a href="/jome/ex/TODO">Web server (TODO)</a></li>
+        <li><a href="/jome/ex/TODO">MVC server (TODO)</a></li>
+        <li><a href="/jome/ex/TODO">React (TODO)</a></li>
+        <li><a href="/jome/ex/TODO">Vue (TODO)</a></li>
+        <li><a href="/jome/ex/TODO">Svelte (TODO)</a></li>
+        <li><a href="/jome/ex/TODO">2d game (TODO: Snake)</a></li>
+        <li><a href="/jome/ex/TODO">3d game (TODO)</a></li>
+        <li><a href="/jome/ex/TODO">Android app (TODO)</a></li>
+        <li><a href="/jome/ex/TODO">Ios app (TODO)</a></li>
+        <li><a href="/jome/ex/TODO">Command line tool (TODO)</a></li>
+      </ul>
+      <li><a href="/jome/in_depth">In depth</a></li>
+      <ul class="nav-list nav-sub">
+        <li><a href="/jome/TODO">createjomeapp</a></li>
+        <li><a href="/jome/TODO">config.jome</a></li>
+        <li><a href="/jome/TODO">CLI</a></li>
+        <li><a href="/jome/formats">Formats</a></li>
+        <li><a href="/jome/lib">Librairies</a></li>
+        <ul class="nav-list nav-sub-sub">
+          <li><a href="/jome/lib/html">Html</a></li>
+          <li><a href="/jome/lib/html-layout">Html Layout</a></li>
+          <li><a href="/jome/lib/express-server">Express Server</a></li>
+        </ul>
+      </ul>
+    </ul>
+  </div>
+            <div class="scrollable" style="width: 100%;">
+              <div class="main">
+                <h1>Jome</h1>
+<p>Jome tries to be an unopiniated programming language. You code using your own style and use a linter in other to share
+standardized code with other people.</p>
+<p>You should use a specialized editor (WIP) in order to fully use all it's features such as code evaluation (like Jupyter Notebook)
+and data editing (like spreadsheet with types inside the editor).</p>
+<p>It has nice features like a base library and macros.</p>
+<p>For the near future, it only compiles to JavaScript.</p>
+<h2>Status</h2>
+<p>Jome is in early development stage. It is not usable yet.</p>
+<p>The compiler does not handle all the features described here. Tests are lacking and there is a lot of bugs.</p>
+  <h2 id="sample">Code Sample</h2>
+<p><pre><code class="language-jome"><span class="hljs-comment">#*
+# Torque Calculator Example
+*#</span>
+
+<span class="hljs-keyword">with</span>
+  <span class="hljs-variable">Number</span> <span class="hljs-variable">force</span> = <span class="hljs-number">? N</span>* <span class="hljs-comment">// Newtons or equivalent</span>
+  <span class="hljs-variable">Number</span> <span class="hljs-variable">distance</span> = <span class="hljs-number">? m</span>* <span class="hljs-comment">// meters or equivalent</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-comment"># Torque is the result of a force multiplied by a distance from a pivot point.</span>
+
+<span class="hljs-comment">// We use a jome tag because it&#x27;s a script that can be run</span>
+<span class="hljs-comment">// The unit checker can infer that this block returns a value</span>
+<span class="hljs-comment">// with N*m or equivalent as a unit and shows it.</span>
+<span class="hljs-keyword">return</span> <span class="hljs-tag">&lt;jome&gt;</span><span class="language-jome"><span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span></span><span class="hljs-tag">&lt;/jome&gt;</span> <span class="hljs-comment">// the last value from a Jome tag is returned</span>
+</code></pre>
+</p>
+<p>Result inside the editor:</p>
+<p>
+  <div id="homepage-example">
+    <h1>Torque Calculator Example</h1>
+    <div class="input-container">
+      <label for="input-field">force:</label>
+      <input type="text" id="input-field" name="input-field">
+      N
+    </div>
+    <div class="input-container">
+      <label for="input-field">distance:</label>
+      <input type="text" id="input-field" name="input-field">
+      m
+    </div>
+    <p>Torque is the result of a force multiplied by a distance from a pivot point.</p>
+    <pre><code class="language-jome"><span class="hljs-keyword">return</span> <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
+</code></pre>
+
+    <div class="code-result">=> null N·m</div>
+  </div></p>
+<p>Result inside the shell:</p>
+<pre><code class="language-sh">jome torqueCalculator.jome --force=10 --distance=<span class="hljs-string">&quot;2 m&quot;</span>
+<span class="hljs-comment"># =&gt; 20 N·m</span>
+</code></pre>
+<p>Usage inside another file:</p>
+<pre><code class="language-jome"><span class="hljs-keyword">import</span> <span class="hljs-variable">calculateTorque</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./torqueCalculator.jome&#x27;</span>
+
+<span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">calculateTorque</span> force: <span class="hljs-number">20 lbs</span>, distance: <span class="hljs-number">1 in</span>
+</code></pre>
+  <h2 id="features">Features</h2>
+<p>Here is a list of the features of Jome.</p>
+<h2>1. Base library</h2>
+<p>Every project can choose a base library. This library should contain common utility functions and constants.</p>
+<pre><code class="language-jome"><span class="hljs-comment">// Example using lodash as a base library</span>
+<span class="hljs-meta">&lt;?lib <span class="hljs-string">&#x27;lodash&#x27;</span> ?&gt;</span>
+
+<span class="hljs-comment">// Then you get access to all the named exports by prepending an hashtag symbol before.</span>
+<span class="hljs-built_in function_">#partition</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>], <span class="hljs-variable">n</span> =&gt; <span class="hljs-variable">n</span> % <span class="hljs-number">2</span>)
+<span class="hljs-comment">// → [[1, 3], [2, 4]]</span>
+
+<span class="hljs-comment">// You can also use the hashtag operator (.#) to put the first operand before instead of after.</span>
+{ <span class="hljs-string">&#x27;a&#x27;</span>: <span class="hljs-number">1</span> }.<span class="hljs-built_in function_">#defaults</span>({ <span class="hljs-string">&#x27;a&#x27;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;b&#x27;</span>: <span class="hljs-number">2</span> })
+<span class="hljs-comment">// → { &#x27;a&#x27;: 1, &#x27;b&#x27;: 2 }</span>
+</code></pre>
+<p>Read more on <a href="">Base library</a> (TODO Link)</p>
+<h2>2. Flexible syntax</h2>
+<p>You can code using the syntax you prefer. The project should specify a linter so the code is converted to a standard when you save.</p>
+<p>Also, the idea is that when you open a page, the editor should show you the code in the syntax that you prefer.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">if</span> <span class="hljs-variable">val</span> == <span class="hljs-number">20</span>: <span class="hljs-title function_">doSomething</span>()
+<span class="hljs-title function_">if</span> (<span class="hljs-variable">val</span> == <span class="hljs-number">20</span>) { <span class="hljs-title function_">doSomething</span>() }
+<span class="hljs-title function_">if</span> (<span class="hljs-variable">val</span> == <span class="hljs-number">20</span>) <span class="hljs-title function_">doSomething</span>() <span class="hljs-keyword">end</span>
+<span class="hljs-variable">calcSomething</span> <span class="hljs-number">1</span>, <span class="hljs-number">2</span> <span class="hljs-comment">// You can omit parentheses for a function call</span>
+</code></pre>
+<p>Read more on <a href="">Flexible syntax</a> (TODO Link)</p>
+<h2>3. Flexible typing system</h2>
+<p>Like the rest of Jome, the typing system is flexible. You can omit them, you can use hard typing or you can use duct typing.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">addInts</span> = (<span class="hljs-variable">x</span>, <span class="hljs-variable">y</span>) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">addInts</span> = (<span class="hljs-type">int</span> <span class="hljs-variable">x</span>, <span class="hljs-type">int</span> <span class="hljs-variable">y</span>) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
+<span class="hljs-type">int</span> <span class="hljs-variable">addInts</span> = (<span class="hljs-type">int</span> <span class="hljs-variable">x</span>, <span class="hljs-type">int</span> <span class="hljs-variable">y</span>) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">addInts</span> = (<span class="hljs-variable">x</span> : <span class="hljs-type">int</span>, <span class="hljs-variable">y</span> : <span class="hljs-type">int</span>) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">addInts</span> : <span class="hljs-type">int</span> = (<span class="hljs-variable">x</span> : <span class="hljs-type">int</span>, <span class="hljs-variable">y</span> : <span class="hljs-type">int</span>) =&gt; <span class="hljs-variable">x</span> + <span class="hljs-variable">y</span>
+</code></pre>
+<h2>4. with blocks</h2>
+<p>You can pass parameters to a file using a with block. This allows you to treat a file as a function. You can import it from another file.
+And you can call it directly from the CLI.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">with</span> {<span class="hljs-variable">port</span> = <span class="hljs-number">3000</span>} <span class="hljs-comment">// default port is 3000, but allow to run the file with a different port number</span>
+</code></pre>
+<h2>6. Unit system</h2>
+<p>Unit are a way to be more specific when using numbers. They are only available at compile time.</p>
+<p>You can specify the unit after a number or use the middle dot (·) to apply a unit to a variable.
+The editor should make this symbol easyily accessible. You can also simply multiply by 1 of the unit.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">width</span> = <span class="hljs-number">5</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">force</span> = <span class="hljs-number">10 N</span> <span class="hljs-comment">// Newtons</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">distance</span> = <span class="hljs-variable">width</span><span class="hljs-number">·m</span> <span class="hljs-comment">// meters // same as width*1m</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">torque</span> = <span class="hljs-variable">force</span> * <span class="hljs-variable">distance</span>
+<span class="hljs-variable">jome</span>.<span class="hljs-title function_">print</span>(<span class="hljs-variable">torque</span>) <span class="hljs-comment">// jome.print is a macro that prints the unit based on the context</span>
+<span class="hljs-comment">// → 50 N·m</span>
+</code></pre>
+<p>Units have limitations. They are a compile time feature.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">force</span> = <span class="hljs-variable">unitSystem</span> === <span class="hljs-string">&#x27;metric&#x27;</span> ? <span class="hljs-number">1 lb</span> : <span class="hljs-number">10 N</span>
+<span class="hljs-variable">jome</span>.<span class="hljs-title function_">print</span>(<span class="hljs-variable">force</span>)
+<span class="hljs-comment">// → 10 // The unit is not printed because it can&#x27;t be inferred.</span>
+</code></pre>
+<p>You can specify that a function takes a value in a specific unit. When called, it can be automatically converted if the given unit is an equivalent.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">sleep</span>(<span class="hljs-variable">time</span> = <span class="hljs-number">? ms</span>)
+  <span class="hljs-comment">/* ... */</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-title function_">sleep</span>(<span class="hljs-number">2 s</span>) <span class="hljs-comment">// compiled to: sleep(2000)</span>
+</code></pre>
+<p>You can get the unit of a variable as a string using the <code>unitof</code> operator. Note: You must use a macro to use this on a parameter.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-keyword">unit</span> = <span class="hljs-variable">unitof</span> <span class="hljs-variable">someVar</span>
+</code></pre>
+<h2>8. sourceof</h2>
+<p>The <code>sourceof</code> keyword tells the compiler to extract the source code of the value of a given variable as a string.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">debug</span>(<span class="hljs-variable">value</span>)
+  <span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sourceof</span>(<span class="hljs-variable">value</span>), <span class="hljs-string">&#x27;: &#x27;</span>, <span class="hljs-variable">value</span>)
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">someVar</span> = <span class="hljs-number">3</span>
+<span class="hljs-title function_">debug</span>(<span class="hljs-variable">someVar</span>) <span class="hljs-comment">// compiled as debug(someVar, &quot;someVar&quot;)</span>
+<span class="hljs-comment">// =&gt; someVar: 3</span>
+</code></pre>
+<p>It should work magically inside functions. Every function using the <code>sourceof</code> keyword for a parameter would get an extra hidden parameter.</p>
+<h2>9. unitof</h2>
+<p>The <code>unitof</code> keyword tells the compiler to extract the unit of the value of a given variable as a string.</p>
+<pre><code class="language-jome"><span class="hljs-variable">macro</span> <span class="hljs-title function_">calc</span>(<span class="hljs-variable">value</span>)
+  <span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sourceof</span>(<span class="hljs-variable">value</span>), <span class="hljs-string">&#x27; = &#x27;</span>, <span class="hljs-variable">value</span>, <span class="hljs-string">&#x27; &#x27;</span>, <span class="hljs-title function_">unitof</span>(<span class="hljs-variable">value</span>))
+<span class="hljs-keyword">end</span>
+<span class="hljs-title function_">calc</span>(<span class="hljs-number">1</span> + <span class="hljs-number">1 N</span>) <span class="hljs-comment">// compiled as calc(1+1, &quot;1 + 1 N&quot;, &quot;N&quot;)</span>
+<span class="hljs-comment">// =&gt; 1 + 1 N = 2 N</span>
+</code></pre>
+<p>It should work magically inside functions. Every function using the <code>unitof</code> keyword for a parameter would get an extra hidden parameter.</p>
+<h2>11. User configs## 10. Feature proposal - Jome API</h2>
+<p>In order to make code that can compile in many programming language, there would be an API available under the Jome object.</p>
+<pre><code class="language-jome"><span class="hljs-variable">jome</span>.<span class="hljs-title function_">print</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>) <span class="hljs-comment">// compiles to console.log in js, printf in c, puts in ruby, etc.</span>
+</code></pre>
+<p>It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.</p>
+<p>print: console.log as a macro to print unit
+debug: console.log as a macro to print code and unit</p>
+<p>Wait until implementing this because this would be final and would have to be backward compatible moving onward.</p>
+<p>And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...</p>
+<p>Some configs are for the projects. For example the base library.</p>
+<p>Some configs are specific to the user. There should be a file somewhere (offer cloud base storage for this config?) that define your preferences.</p>
+<p>For example, setting if you prefer tabs or spaces. How many spaces is equivalent to a tab...</p>
+<p>Then the editor should show you how you like it.</p>
+<p>You can already customize editors to do this.</p>
+<p>But Jome goes further because it is more customizable. You specify what syntax you prefer for code. The editor should show you code in the syntax you prefer.</p>
+<h2>11. Save process</h2>
+<p>TODO: Do an image to show this.</p>
+<p>There are 3 things.</p>
+<p>Notebook view: This is what the user sees.</p>
+<p>User code: This is the code in the format that the user prefers.</p>
+<p>Project code: This is how the code is saved to file, as is specified by the linter configs.</p>
+<p>When you open a file in the editor, it should read the project code.</p>
+<p>Then if the user is in view mode, it should show the notebook view.</p>
+<p>If the user is in edit mode, it should show the user code.</p>
+<p>NOTE: The big issue I see is that the translation from user code to project code must work 100% of the time, otherwise there could be reallllllly annoying
+bugs where the code looks fine, but it's not translated properly and it bugs.</p>
+<h2>11. Operators</h2>
+<p>Operators are a user specific config. You define what you prefer.</p>
+<p>For example, you specify if you prefer <code>^</code> or <code>**</code> for exponential.</p>
+<pre><code class="language-jome"><span class="hljs-meta">&lt;?op-exp ^ ?&gt;</span>
+</code></pre>
+<h2>11. Processing instruction</h2>
+<p>Jome uses XML processing instructions to define the language. They start with <code>&lt;?</code> and end with <code>?&gt;</code>.</p>
+<p>Processing instructions are in effect under where it is defined and in config.jome.</p>
+<p>Work in progress.</p>
+<p>The syntax may vary depending on the processing instruction. Refer to the specific one used.</p>
+<p>Processing instructions available:</p>
+<ul>
+<li>model: Define a data structure. Ex: <?model Position x: 'int', y: 'int' ?></li>
+<li>file-loader: Define how to load a file with a given extension.</li>
+<li>unit: Define a new unit</li>
+<li>tag: Define a tag that is not a model</li>
+<li>renderer: Maybe? To define how to render a tag to html for the editor?</li>
+<li>lib: Specify the base library for the project</li>
+<li>config-...: Specify a config (or set-...) (ex: <?set-tabstop 4 ?>)</li>
+</ul>
+<h2>12. Tags</h2>
+<p>You can define tags like <code>&lt;color&gt;&lt;/color&gt;</code> using the processing instruction <code>&lt;?tag ... ?&gt;</code></p>
+<pre><code class="language-jome"><span class="hljs-meta">&lt;?tag color type=<span class="hljs-string">&quot;color&quot;</span> ?&gt;</span>
+</code></pre>
+<p>Parameters:</p>
+<ul>
+<li>type: color, number, text, ... (pretty much all html input types)</li>
+</ul>
+<h2>12. Models</h2>
+<p>A model defines a data strcture. It allows to use xml, validation, serializing, database management...</p>
+<p>You can define your own models which can then be created using xml tags or programmatycally.</p>
+<p>You can create a class with the same name (case insensitive?) than the model to complement it.</p>
+<pre><code class="language-jome"><span class="hljs-meta">&lt;?model Recipe name: <span class="hljs-string">&quot;string&quot;</span>
+  &lt;attr name=<span class="hljs-string">&quot;servings&quot;</span> type=<span class="hljs-string">&quot;string&quot;</span> optional /&gt;
+  &lt;has_many name=<span class="hljs-string">&quot;ingredients&quot;</span> model=<span class="hljs-string">&quot;ing&quot;</span> optional&gt;
+  &lt;has_many name=<span class="hljs-string">&quot;steps&quot;</span> model=<span class="hljs-string">&quot;step&quot;</span> optional&gt;
+  &lt;component model=<span class="hljs-string">&quot;ing&quot;</span>&gt;
+    &lt;attr name=<span class="hljs-string">&quot;qty&quot;</span> type=<span class="hljs-string">&quot;string&quot;</span> /&gt;
+    &lt;attr name=<span class="hljs-string">&quot;name&quot;</span> type=<span class="hljs-string">&quot;string&quot;</span> /&gt;
+  &lt;/component&gt;
+  &lt;component model=<span class="hljs-string">&quot;step&quot;</span>&gt;
+    &lt;content name=<span class="hljs-string">&quot;text&quot;</span> type=<span class="hljs-string">&quot;string&quot;</span> /&gt;
+  &lt;/component&gt;
+?&gt;</span>
+</code></pre>
+<p>A model creates a static function <code>new</code> for the class of the same name.
+Or is this confusing with the constructor which will be called with <code>new</code> keyword?
+Yeahh... don't do this. Override the constructor. This way the validations are always called.
+If the user defines a constructor inside the class, then simply merge them together? Wait
+now it's not clear how to call it then...?</p>
+<p>You can define custom schemas for xml tags.</p>
+<p>schema Recipe {
+def toHTML
+end
+}</p>
+<p>What does defining a schema should do?</p>
+<p>It should create a class that allows you to handle it programmatycally.</p>
+<pre><code class="language-jome"> <span class="hljs-tag">&lt;<span class="hljs-name">recipe</span>
+   <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;Biscuits aux brisures de chocolat&quot;</span>
+ &gt;</span>
+   <span class="hljs-tag">&lt;<span class="hljs-name">ingredients</span>&gt;</span>
+     <span class="hljs-tag">&lt;<span class="hljs-name">ing</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">qty</span>&gt;</span><span class="hljs-number">1 t</span><span class="hljs-tag">&lt;/<span class="hljs-name">qty</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">item</span>&gt;</span><span class="hljs-variable">farine</span><span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ing</span>&gt;</span>
+     <span class="hljs-tag">&lt;<span class="hljs-name">ing</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">qty</span>&gt;</span><span class="hljs-number">1 t</span><span class="hljs-tag">&lt;/<span class="hljs-name">qty</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">item</span>&gt;</span><span class="hljs-variable">beurre</span><span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ing</span>&gt;</span>
+   <span class="hljs-tag">&lt;/<span class="hljs-name">ingredients</span>&gt;</span>
+   <span class="hljs-tag">&lt;<span class="hljs-name">steps</span>&gt;</span>
+     <span class="hljs-tag">&lt;<span class="hljs-name">step</span>&gt;</span><span class="hljs-variable">M</span>é<span class="hljs-variable">langer</span> <span class="hljs-variable">@1</span> <span class="hljs-variable">avec</span> <span class="hljs-variable">@2</span><span class="hljs-tag">&lt;/<span class="hljs-name">step</span>&gt;</span>
+   <span class="hljs-tag">&lt;/<span class="hljs-name">steps</span>&gt;</span>
+ <span class="hljs-tag">&lt;/<span class="hljs-name">recipe</span>&gt;</span>
+</code></pre>
+<h1>Editor</h1>
+<p>Jome is meant to be used with a specialized editor in order to fully use it's features. Here are the main features that should be given by an editor.</p>
+<h2>1. Notebook view</h2>
+<p>There are regular comments starting with <code>//</code> or delimited by <code>/*</code> and <code>*/</code>.</p>
+<p>But there are also comments starting with <code># </code> (with space) or delimited by <code>#*</code> and <code>*#</code>.</p>
+<p>These use markdown and should be showned rendered as a notebook like jupyter.</p>
+<pre><code class="language-jome"><span class="hljs-comment">#*
+# My awesome application
+It uses [https://www.sqlite.org/index.html](SQLite) as a databse.
+*#</span>
+</code></pre>
+<h2>2. Notebook execution</h2>
+<p>The editor should allow you to execute chunks of code and view the result.</p>
+<p>The <code>&lt;jome&gt;</code> tag is used for this purpose and tells the editor to show the result of the code inside the tag.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-number">10</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = <span class="hljs-number">2</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">z</span> = <span class="hljs-tag">&lt;jome&gt;</span><span class="language-jome"><span class="hljs-number">10</span> ** <span class="hljs-number">2</span></span><span class="hljs-tag">&lt;/jome&gt;</span>
+</code></pre>
+<h3>Data cells</h3>
+<p>There is two kinds of data. There is runtime data. And there is static data.</p>
+<p>Runtime data is data given using the with keyword. When you reload this page, you loose this.</p>
+<p>Static data is data directly inserted into the code. When you save you modify the source code.</p>
+<p>Jome introducte the idea of data cells in a notebook.</p>
+<p>The idea is that you should be able to enter data in a spreadsheet like format in the notebook.</p>
+<p>TODO: Explain that tags are data cells, and that right now I am simply abusing the markdown cells</p>
+<p>How to support =A1+B2 ?</p>
+<pre><code class="language-jome"><span class="hljs-comment">// A table like this should be editable as a spreadsheet in the editor</span>
+&lt; <span class="hljs-variable">table</span> &gt;
+  &lt; <span class="hljs-variable">tr</span> &gt;
+      &lt; <span class="hljs-variable">th</span> &gt;<span class="hljs-variable">Name</span>&lt;/ <span class="hljs-variable">th</span> &gt;
+      &lt; <span class="hljs-variable">th</span> &gt;<span class="hljs-variable">Age</span>&lt;/ <span class="hljs-variable">th</span> &gt;
+      &lt; <span class="hljs-variable">th</span> &gt;<span class="hljs-variable">City</span>&lt;/ <span class="hljs-variable">th</span> &gt;
+  &lt;/ <span class="hljs-variable">tr</span> &gt;
+  &lt; <span class="hljs-variable">tr</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">John</span> <span class="hljs-variable">Doe</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-number">25</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">Montr</span>é<span class="hljs-variable">al</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+  &lt;/ <span class="hljs-variable">tr</span> &gt;
+  &lt; <span class="hljs-variable">tr</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">Jane</span> <span class="hljs-variable">Smith</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-number">30</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+      &lt; <span class="hljs-variable">td</span> &gt;<span class="hljs-variable">Qu</span>é<span class="hljs-variable">bec</span>&lt;/ <span class="hljs-variable">td</span> &gt;
+  &lt;/ <span class="hljs-variable">tr</span> &gt;
+&lt; / <span class="hljs-variable">table</span> &gt;
+</code></pre>
+<h3>Collapsed code cells</h3>
+<p>There should also be collapsed by default code cells. For example for imports. If you click on it, you should see it.
+But you could also that it is collapsed by default.</p>
+<p>But I want to be able to search for it though... CTRL+F should find text hidden inside the collapsed cell. Not sure if that is possible in the browser...</p>
+<p>Ah yes, maybe simply make is small and scrollable, but when it gains focus, it becomes bigger! This should work with CTRL+F!</p>
+<p>You can enter data using to the file using tags or you can enter temporary data using a <code>with</code> block. See below.</p>
+<h2>3. Code data</h2>
+<p>You can write code data using xml. The editor should make it easy to edit this data.</p>
+<p>For example, a <code>&lt;color&gt;</code> tag should show a color picker. A <code>spreadsheet</code> tag should show a spreadsheet table.</p>
+<h1>Feature proposals</h1>
+<p>Feature ideas</p>
+<h2>1. Feature proposal - Custom base language (flavor?)</h2>
+<p>Only javascript is supported for now.</p>
+<p>Jome is compiled into the base language choosen.</p>
+<p>Jome operators are exactly the same as the base language.</p>
+<p>It also makes all the globals available from the base language available in Jome.</p>
+<pre><code class="language-jome"><span class="hljs-keyword">with</span> <span class="hljs-variable">flavor</span> <span class="hljs-variable">js</span> <span class="hljs-comment">// you can omit this, this is the default</span>
+
+<span class="hljs-variable">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hello&quot;</span>) <span class="hljs-comment">// console is available because of javascript</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = <span class="hljs-number">10</span> ** <span class="hljs-number">2</span> <span class="hljs-comment">// ** is the exponentiation operator like javascript</span>
+</code></pre>
+<p>If you want total control even let's say on the operators, you could eventually design a custom language.</p>
+<h2>2. Feature proposal - Jome API</h2>
+<p>In order to make code that can compile in many programming language, there would be an API available under the Jome object.</p>
+<pre><code class="language-jome"><span class="hljs-variable">jome</span>.<span class="hljs-title function_">print</span>(<span class="hljs-string">&quot;Hello world!&quot;</span>) <span class="hljs-comment">// compiles to console.log in js, printf in c, puts in ruby, etc.</span>
+</code></pre>
+<p>It's an idea. It is not implemented yet. Only javascript as a base language is supported for now.</p>
+<p>print: console.log as a macro to print unit
+debug: console.log as a macro to print code and unit</p>
+<p>Wait until implementing this because this would be final and would have to be backward compatible moving onward.</p>
+<p>And maybe do polls. Like for printing to console: jome.print vs jome.log vs jome.cout vs jome.console.log vs ...</p>
+<h2>13. Feature proposal - Function overloading based on type</h2>
+<p>I'd like to be able to overload a function based on type.</p>
+<p>For example:</p>
+<pre><code class="language-jome"><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-variable">Vector3</span> <span class="hljs-variable">v1</span>, <span class="hljs-variable">Vector3</span> <span class="hljs-variable">v2</span>)
+  <span class="hljs-keyword">return</span> <span class="hljs-variable">v1</span>.<span class="hljs-title function_">add</span>(<span class="hljs-variable">v2</span>)
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-variable">o1</span>, <span class="hljs-variable">o2</span>)
+  <span class="hljs-keyword">return</span> <span class="hljs-variable">o1</span> + <span class="hljs-variable">o2</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-title function_">add</span>(<span class="hljs-title function_">Vector3</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>), <span class="hljs-title function_">Vector3</span>(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)) <span class="hljs-comment">// uses the first because type matches</span>
+<span class="hljs-title function_">add</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>) <span class="hljs-comment">// uses the second, the default one</span>
+</code></pre>
+<h2>14. Feature proposal - Operator overloading for classes</h2>
+<p>I'd like to be able to overload an operator for a class.</p>
+<p>For example:</p>
+<pre><code class="language-jome"><span class="hljs-keyword">class </span><span class="hljs-title class_">Vector3</span>
+  <span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-variable">v2</span>)
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">Vector3</span>(<span class="hljs-variable">@x</span> + <span class="hljs-variable">v2</span>.<span class="hljs-variable">x</span>, <span class="hljs-variable">@y</span> + <span class="hljs-variable">v2</span>.<span class="hljs-variable">y</span>, <span class="hljs-variable">@z</span> + <span class="hljs-variable">v2</span>.<span class="hljs-variable">z</span>)
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">let</span> <span class="hljs-variable">v3</span> = <span class="hljs-title function_">Vector3</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>) + <span class="hljs-title function_">Vector3</span>(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)
+</code></pre>
+<p>This would mostly be useful to people who enable hardtyping. Because if you forget to specify the type in a function for example, this won't be called.</p>
+<h2>Feature proposal - Class templates</h2>
+<p>I'd like class templates like in c++ I think. Check how other languages are handling that though.</p>
+<h2>Trash</h2>
+<p>Jome is a language that compiles to JavaScript. It has goodies like CoffeeScript and underscore.js, permissive syntax similar to either javascript or ruby and it
+has some original features. One day, it will have a node structure like in Godot, types like Typescript, and reactivity like svelte.</p>
+<p><strong>Customizable builtins</strong> - Jome comes with a lot of builtins which you can map to keywords you want. You can also define your own.</p>
+<p><strong>Reactivity</strong> - TODO</p>
+<p><strong>Node structure like Godot</strong> - TODO</p>
+<ol>
+<li>
+<p><strong>Notebook comments</strong> - You can add documentation comments using markdown to create a notebook like jupyter.</p>
+</li>
+<li>
+<p><strong>Inline data</strong> - TODO: You can do advamced stuff with inline data using tags (preprocessing, ...)</p>
+</li>
+<li>
+<p><strong>Flexible syntax</strong> - You can code using the style you prefer and use a linter to share code in a standardized way.</p>
+</li>
+<li>
+<p><strong>Flexible typing</strong> - You can use static typing for robustness and usability or omit them for development speed and simplicity.</p>
+</li>
+<li>
+<p><strong>Custom base library</strong> - Choose the base library for your project to reuse common functionalities.</p>
+</li>
+<li>
+<p><strong>A unit system</strong> - You can add units to numbers. Smart conversions are done at compile time to ensure you use the proper units.</p>
+</li>
+<li>
+<p><strong>Custom base language</strong> - Choose the language to jome compiles to and inherits operators and globals (Only javascript supported for now)</p>
+</li>
+<li>
+<p><strong>Macros</strong> - Add extra parameters given the context of the function call.</p>
+</li>
+</ol>
+
+              </div>
+            </div>
+          </div>
+        </body>
+      </HTML>
+    
