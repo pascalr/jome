@@ -94,6 +94,14 @@ let content = <md>
   ?>
   ```
 
+  ## Strings and tags
+
+  ```js
+  let color = /** @tag color */ `#abcdef`
+  ```
+
+  ## Tables
+
   ## With block
 
   A with block should be a code generator that generates code to handle stdin.

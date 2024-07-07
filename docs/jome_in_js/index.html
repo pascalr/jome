@@ -181,6 +181,17 @@ It should output the same file.</p>
   &lt;/component&gt;
 ?&gt;</span>
 </code></pre>
+<h2>Strings and tags</h2>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> color = <span class="hljs-comment">/** <span class="hljs-doctag">@tag</span> color */</span> <span class="hljs-string">`#abcdef`</span>
+</code></pre>
+<h2>Tables</h2>
+<h2>With block</h2>
+<p>A with block should be a code generator that generates code to handle stdin.</p>
+<h2>main</h2>
+<p>Since a file is now only a .js file, I need a way to mean execute code. Maybe a main file? Or implicit when using a with block?</p>
+<h2>Annotation to say that it is Jome code?</h2>
+<pre><code class="language-js"><span class="hljs-comment">/** <span class="hljs-doctag">@jome</span> 0.0.1 */</span>
+</code></pre>
 <h2>WIP</h2>
 <p>This would mean using a parser for .js files.</p>
 <p>.js file =&gt; jome transcription =&gt; some editing =&gt; save to same .js file with annotations to lose no information</p>

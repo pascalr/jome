@@ -95,6 +95,28 @@ module.exports = () => {
   ?>
   \`\`\`
 
+  ## Strings and tags
+
+  \`\`\`js
+  let color = /** @tag color */ \`#abcdef\`
+  \`\`\`
+
+  ## Tables
+
+  ## With block
+
+  A with block should be a code generator that generates code to handle stdin.
+
+  ## main
+
+  Since a file is now only a .js file, I need a way to mean execute code. Maybe a main file? Or implicit when using a with block?
+
+  ## Annotation to say that it is Jome code?
+
+  \`\`\`js
+  /** @jome 0.0.1 */
+  \`\`\`
+
   ## WIP
 
   This would mean using a parser for .js files.
