@@ -4,7 +4,11 @@ let content = <md>
 
   # Jome
 
-  Jome is a improvement on Javascript. Meta data is inserted in comment forms. It allows further code checking, code generation and customization.
+  Jome is a virtual programming language on top of Javascript. It is a customizable way of seeing and modifying the code.
+
+  Instead of having a separate source file, it adds annotations in comments. This way, you don't need anything special to run it. It's just Javascript.
+
+  It also improves the base language by adding code validation and code generation.
 
   ## Plan
 
@@ -13,6 +17,8 @@ let content = <md>
   Parse javascript using the javascript grammar file already available.
   Then compile the AST to javascript. Use a linter to standardize the js.
   It should output the same file.
+
+  TODO: Try using acorn.
 
   ### Step 2 - Markdown
 
