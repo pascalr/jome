@@ -5,23 +5,32 @@ import sample01 from '../samples/torque_calculator.js.txt'
 
 document.addEventListener('DOMContentLoaded', function() {
   let src = sample01
-  let ast = jsToAst(src)
-  escodegen.attachComments(ast.root, ast.comments, ast.tokens);
-  let str = escodegen.generate(ast.root, {comment: true})
-  console.log(ast)
+  let data = parseJs(src)
+  escodegen.attachComments(data.ast, data.comments, data.tokens);
+  let str = escodegen.generate(data.ast, {comment: true})
+  console.log(data)
   console.log(str)
   let highlighted = hljs.highlight(src, {language: 'js'}).value
   document.getElementById('output-editor').innerHTML = highlighted
+  document.getElementById('notebook-editor').innerText = data.metaData.map(o => o.value).join('\n')
 });
 
 // Converts js code to Asbstract Syntax Tree
-function jsToAst(js) {
-  let comments = [], tokens = [];
-  let root = Parser.parse(js, {
+function parseJs(js) {
+  let allComments = [], tokens = [], comments = [], metaData = [];
+  let ast = Parser.parse(js, {
     ecmaVersion: 6,
     ranges: true,
-    onComment: comments,
+    onComment: allComments,
     onToken: tokens
   })
-  return {root, comments, tokens}
+  allComments.forEach(comment => {
+    console.log(comment)
+    if (comment.value.startsWith('_*')) {
+      metaData.push(comment)
+    } else {
+      comments.push(comment)
+    }
+  })
+  return {ast, comments, tokens, metaData}
 }

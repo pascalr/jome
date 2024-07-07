@@ -20,19 +20,23 @@
           
           <h1>Jome virtual - Live editor</h1>
 
+          <p>TODO: Allow Notebook View, Jome View or both. Jome view is text only.</p>
+
           <div id="editor-views">
             <div id="notebook-view">
               <div>Notebook view</div>
+              <hr style="margin-bottom: 0;"/>
               <div id="notebook-editor"></div>
             </div>
-            <div id="jome-view">
+            <div id="jome-view" style="display: none;">
               <div>Jome view</div>
+              <hr style="margin-bottom: 0;"/>
               <div id="jome-editor"></div>
             </div>
             <div id="output-view">
               <div>Output view</div>
-              <hr/>
-              <pre><code id="output-editor" class="language-js"></code></pre>
+              <hr style="margin-bottom: 0;"/>
+              <pre style="margin-top: 0;"><code id="output-editor" class="language-js"></code></pre>
             </div>
           </div>
         </div>

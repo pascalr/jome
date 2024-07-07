@@ -10300,27 +10300,36 @@
   var import_escodegen = __toESM(require_escodegen());
 
   // samples/torque_calculator.js.txt
-  var torque_calculator_js_default = "/**\n * @md\n * # Torque Calculator Example\n */\n\n/**\n * @with\n * @arg force, @unit N*, @comment Newtons or equivalent\n * @arg distance, @unit m*, @comment meters or equivalent\n */\nlet force, distance;\n\n\n/** @md Torque is the result of a force multiplied by a distance from a pivot point. */\n\n// We use a jome tag because it's a script that can be run\n// The unit checker can infer that this block returns a value\n// with N*m or equivalent as a unit and shows it.\n\n/**\n * @main\n * @arg force, @unit N*, @comment Newtons or equivalent\n * @arg distance, @unit m*, @comment meters or equivalent\n */\nfunction main(force, distance) {\n  /** @run */\n  return force * distance // the last value from a Jome tag is returned\n  /** @end */\n}";
+  var torque_calculator_js_default = "/*_*\n * @md\n * # Torque Calculator Example\n */\n\n/*_*\n * @with\n * @arg force, @unit N*, @comment Newtons or equivalent\n * @arg distance, @unit m*, @comment meters or equivalent\n */\nlet force, distance;\n\n\n/*_* @md Torque is the result of a force multiplied by a distance from a pivot point. */\n\n// We use a jome tag because it's a script that can be run\n// The unit checker can infer that this block returns a value\n// with N*m or equivalent as a unit and shows it.\n\n/*_*\n * @main\n * @arg force, @unit N*, @comment Newtons or equivalent\n * @arg distance, @unit m*, @comment meters or equivalent\n */\nfunction main(force, distance) {\n  /*_* @run */\n  return force * distance // the last value from a Jome tag is returned\n  /*_* @end */\n}";
 
   // src/editor.js
   document.addEventListener("DOMContentLoaded", function() {
     let src = torque_calculator_js_default;
-    let ast = jsToAst(src);
-    import_escodegen.default.attachComments(ast.root, ast.comments, ast.tokens);
-    let str = import_escodegen.default.generate(ast.root, { comment: true });
-    console.log(ast);
+    let data2 = parseJs(src);
+    import_escodegen.default.attachComments(data2.ast, data2.comments, data2.tokens);
+    let str = import_escodegen.default.generate(data2.ast, { comment: true });
+    console.log(data2);
     console.log(str);
     let highlighted = hljs.highlight(src, { language: "js" }).value;
     document.getElementById("output-editor").innerHTML = highlighted;
+    document.getElementById("notebook-editor").innerText = data2.metaData.map((o) => o.value).join("\n");
   });
-  function jsToAst(js) {
-    let comments = [], tokens = [];
-    let root = Parser.parse(js, {
+  function parseJs(js) {
+    let allComments = [], tokens = [], comments = [], metaData = [];
+    let ast = Parser.parse(js, {
       ecmaVersion: 6,
       ranges: true,
-      onComment: comments,
+      onComment: allComments,
       onToken: tokens
     });
-    return { root, comments, tokens };
+    allComments.forEach((comment) => {
+      console.log(comment);
+      if (comment.value.startsWith("_*")) {
+        metaData.push(comment);
+      } else {
+        comments.push(comment);
+      }
+    });
+    return { ast, comments, tokens, metaData };
   }
 })();
