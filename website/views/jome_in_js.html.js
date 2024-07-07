@@ -19,10 +19,10 @@ module.exports = () => {
   /*_* @jome 0.0.1 */
   \`\`\`
 
-    If the comment is attached to before or after depends on the annotation. Ex: unit is before, param is after.
+  If the comment is attached to before or after depends on the annotation. Ex: unit is before, param is after.
 
   \`\`\`js
-  let x = 1 /*_* @unit m */
+  let area = 2 /*_* @unit m */ * 3 /*_* @unit m */
   /*_*
    * @param a ...
    */
