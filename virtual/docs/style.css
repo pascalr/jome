@@ -1,9 +1,20 @@
+body {
+  background-color: #080e14;
+  color: #fff;
+}
+
+pre code {
+  color: #eaeaea;
+  font-family: Menlo, Monaco, Consolas, monospace;
+  line-height: 1.5;
+}
+
 #editor-views {
   display: flex;
 }
 
 #editor-views > div {
   flex: 1;
-  border: 1px solid black;
+  border: 1px solid #fff;
   height: 90vh;
 }

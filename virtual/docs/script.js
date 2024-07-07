@@ -31,6 +31,8 @@ function main(force, distance) {
 
 document.addEventListener('DOMContentLoaded', function() {
 
+  hljs.highlightAll();
+
   document.getElementById('output-editor').innerText = sample01
 
 });
