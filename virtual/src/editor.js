@@ -1,6 +1,12 @@
 import {Parser} from "acorn"
 import escodegen from "escodegen"
 
+import pluginBabel from "prettier/plugins/babel";
+import pluginEstree from "prettier/plugins/estree";
+// import pluginHtml from "prettier/plugins/html";
+import * as prettier from "prettier"
+// import prettier from "@prettier/sync";
+
 import mdToHtml from "@jome/md-to-html"
 
 import sample01 from '../samples/torque_calculator.js.txt'
@@ -18,13 +24,10 @@ class MetaData {
 document.addEventListener('DOMContentLoaded', function() {
   let src = sample01
   let data = parseJs(src)
-  escodegen.attachComments(data.ast, data.comments, data.tokens);
-  let str = escodegen.generate(data.ast, {comment: true})
-  console.log(data)
-  console.log(str)
-  let highlighted = hljs.highlight(src, {language: 'js'}).value
-  document.getElementById('output-editor').innerHTML = highlighted
-  document.getElementById('notebook-editor').innerHTML = data.metaDatas.filter(o => o.type === "md").map(o => mdToHtml(o.value)).join('')
+  renderOutputCode(data, (html) => {
+    document.getElementById('output-editor').innerHTML = html
+  })
+  document.getElementById('notebook-editor').innerHTML = renderNotebookView(data)
 });
 
 function parseMetaDatas(metaDataComments) {
@@ -63,13 +66,21 @@ function parseJs(js) {
     }
   })
   const metaDatas = parseMetaDatas(metaDataComments)
-  return {ast, comments, tokens, metaDatas}
+  return {ast, comments, allComments, tokens, metaDatas, raw: js}
 }
 
-function renderJomeCode() {
-  
+function renderJomeCode(data) {
+
 }
 
-function renderNotebookView() {
+function renderNotebookView(data) {
+  return data.metaDatas.filter(o => o.type === "md").map(o => mdToHtml(o.value)).join('');
+}
 
+async function renderOutputCode(data, callback) {
+  escodegen.attachComments(data.ast, data.allComments, data.tokens);
+  let str = escodegen.generate(data.ast, {comment: true})
+  let formatted = await prettier.format(str, {parser: "babel", semi: false, plugins: [pluginBabel, pluginEstree]}) // No semicolons
+  let highlighted = hljs.highlight(formatted, {language: 'js'}).value
+  callback(highlighted)
 }
