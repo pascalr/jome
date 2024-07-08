@@ -10303,6 +10303,12 @@
   var torque_calculator_js_default = "/*~md\n# Torque Calculator Example\n*/\n\n/*~with\n~arg force, ~unit N*, ~comment Newtons or equivalent\n~arg distance, ~unit m*, ~comment meters or equivalent\n*/\nlet force, distance;\n\n\n/*~md Torque is the result of a force multiplied by a distance from a pivot point. */\n\n// We use a jome tag because it's a script that can be run\n// The unit checker can infer that this block returns a value\n// with N*m or equivalent as a unit and shows it.\n\n/*~main\n~arg force, ~unit N*, ~comment Newtons or equivalent\n~arg distance, ~unit m*, ~comment meters or equivalent\n*/\nfunction main(force, distance) {\n  /*~run*/\n  return force * distance // the last value from a Jome tag is returned\n  /*~end*/\n}";
 
   // src/editor.js
+  var MetaData = class {
+    constructor(type, value) {
+      this.type = type;
+      this.value = value;
+    }
+  };
   document.addEventListener("DOMContentLoaded", function() {
     let src = torque_calculator_js_default;
     let data2 = parseJs(src);
@@ -10313,18 +10319,21 @@
     let highlighted = hljs.highlight(src, { language: "js" }).value;
     document.getElementById("output-editor").innerHTML = highlighted;
     console.log("==>", data2.metaData);
-    document.getElementById("notebook-editor").innerText = data2.metaData.filter((o) => o.parts[0].startsWith("md")).map((o) => o.value).join("\n");
+    document.getElementById("notebook-editor").innerText = data2.metaDatas.filter((o) => o.type === "md").map((o) => o.value).join("\n");
   });
-  function parseMetaData(metaData) {
-    metaData.forEach((data2) => {
-      let parts = data2.value.slice(1).trimLeft().split(/~\w+/);
-      console.log("parts: ", parts);
-      data2.parts = parts || [];
+  function parseMetaDatas(metaDataComments) {
+    const metaDatas = [];
+    metaDataComments.forEach((data2) => {
+      let parts = data2.value.split(/(~\w+)/g);
+      if (parts.length >= 3) {
+        metaDatas.push(new MetaData(parts[1].slice(1), parts[2]));
+      }
     });
-    return metaData;
+    console.log("metaDatas: ", metaDatas);
+    return metaDatas;
   }
   function parseJs(js) {
-    let allComments = [], tokens = [], comments = [], metaData = [];
+    let allComments = [], tokens = [], comments = [], metaDataComments = [];
     let ast = Parser.parse(js, {
       ecmaVersion: 6,
       ranges: true,
@@ -10334,12 +10343,12 @@
     allComments.forEach((comment) => {
       console.log(comment);
       if (comment.value[0] === "~") {
-        metaData.push(comment);
+        metaDataComments.push(comment);
       } else {
         comments.push(comment);
       }
     });
-    metaData = parseMetaData(metaData);
-    return { ast, comments, tokens, metaData };
+    const metaDatas = parseMetaDatas(metaDataComments);
+    return { ast, comments, tokens, metaDatas };
   }
 })();
