@@ -11,6 +11,7 @@ pre code {
   line-height: 1.5;
   border: 1px solid #ccc;
   padding: 10px;
+  overflow: scroll;
 }
 
 #editor-views {
@@ -21,4 +22,6 @@ pre code {
   flex: 1;
   border: 1px solid #fff;
   height: 90vh;
+  padding: 0.5em;
+  width: 33.33333%;
 }

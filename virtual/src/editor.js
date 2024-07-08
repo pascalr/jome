@@ -1,6 +1,8 @@
 import {Parser} from "acorn"
 import escodegen from "escodegen"
 
+import mdToHtml from "@jome/md-to-html"
+
 import sample01 from '../samples/torque_calculator.js.txt'
 
 /**
@@ -22,8 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log(str)
   let highlighted = hljs.highlight(src, {language: 'js'}).value
   document.getElementById('output-editor').innerHTML = highlighted
-  console.log('==>', data.metaData)
-  document.getElementById('notebook-editor').innerText = data.metaDatas.filter(o => o.type === "md").map(o => o.value).join('\n')
+  document.getElementById('notebook-editor').innerHTML = data.metaDatas.filter(o => o.type === "md").map(o => mdToHtml(o.value)).join('')
 });
 
 function parseMetaDatas(metaDataComments) {
@@ -63,4 +64,12 @@ function parseJs(js) {
   })
   const metaDatas = parseMetaDatas(metaDataComments)
   return {ast, comments, tokens, metaDatas}
+}
+
+function renderJomeCode() {
+  
+}
+
+function renderNotebookView() {
+
 }
