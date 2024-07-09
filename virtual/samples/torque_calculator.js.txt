@@ -1,6 +1,13 @@
+//~jome 0.0.1
+
 /*~md
 # Torque Calculator Example
 */
+
+//~input {unit: "N*", comment: "Newtons or equivalent", onSave: "setValue"}
+let force;
+//~input {unit: "m*", comment: "meters or equivalent", onSave: "setValue"}
+let distance;
 
 /*~with
 ~arg force, ~unit N*, ~comment Newtons or equivalent

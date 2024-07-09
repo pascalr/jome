@@ -80280,7 +80280,39 @@ in order for it to be formatted.`, cliCategory: "Other" }, tabWidth: { type: "in
   var import_md_to_html = __toESM(require_md_to_html());
 
   // samples/torque_calculator.js.txt
-  var torque_calculator_js_default = "/*~md\n# Torque Calculator Example\n*/\n\n/*~with\n~arg force, ~unit N*, ~comment Newtons or equivalent\n~arg distance, ~unit m*, ~comment meters or equivalent\n*/\nlet force, distance;\n\n\n/*~md Torque is the result of a force multiplied by a distance from a pivot point. */\n\n// We use a jome tag because it's a script that can be run\n// The unit checker can infer that this block returns a value\n// with N*m or equivalent as a unit and shows it.\n\n/*~main\n~arg force, ~unit N*, ~comment Newtons or equivalent\n~arg distance, ~unit m*, ~comment meters or equivalent\n*/\nfunction main(force, distance) {\n  //~run\n  return force * distance; // the last value from a Jome tag is returned\n  //~end\n}";
+  var torque_calculator_js_default = `//~jome 0.0.1
+
+/*~md
+# Torque Calculator Example
+*/
+
+//~input {unit: "N*", comment: "Newtons or equivalent", onSave: "setValue"}
+let force;
+//~input {unit: "m*", comment: "meters or equivalent", onSave: "setValue"}
+let distance;
+
+/*~with
+~arg force, ~unit N*, ~comment Newtons or equivalent
+~arg distance, ~unit m*, ~comment meters or equivalent
+*/
+let force, distance;
+
+
+/*~md Torque is the result of a force multiplied by a distance from a pivot point. */
+
+// We use a jome tag because it's a script that can be run
+// The unit checker can infer that this block returns a value
+// with N*m or equivalent as a unit and shows it.
+
+/*~main
+~arg force, ~unit N*, ~comment Newtons or equivalent
+~arg distance, ~unit m*, ~comment meters or equivalent
+*/
+function main(force, distance) {
+  //~run
+  return force * distance; // the last value from a Jome tag is returned
+  //~end
+}`;
 
   // src/editor.js
   var MetaData = class {
