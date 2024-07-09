@@ -1,5 +1,7 @@
 import {Parser} from "acorn"
 import escodegen from "escodegen"
+// import { parse } from "@babel/parser"; // maybe try these instead
+// import generate from "@babel/generator"; // maybe try these instead
 
 import pluginBabel from "prettier/plugins/babel";
 import pluginEstree from "prettier/plugins/estree";
@@ -80,7 +82,7 @@ function renderNotebookView(data) {
 async function renderOutputCode(data, callback) {
   escodegen.attachComments(data.ast, data.allComments, data.tokens);
   let str = escodegen.generate(data.ast, {comment: true})
-  let formatted = await prettier.format(str, {parser: "babel", semi: false, plugins: [pluginBabel, pluginEstree]}) // No semicolons
+  let formatted = await prettier.format(str, {parser: "babel", plugins: [pluginBabel, pluginEstree]})
   let highlighted = hljs.highlight(formatted, {language: 'js'}).value
   callback(highlighted)
 }

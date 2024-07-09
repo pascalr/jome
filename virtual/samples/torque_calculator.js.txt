@@ -20,7 +20,7 @@ let force, distance;
 ~arg distance, ~unit m*, ~comment meters or equivalent
 */
 function main(force, distance) {
-  /*~run*/
-  return force * distance // the last value from a Jome tag is returned
-  /*~end*/
+  //~run
+  return force * distance; // the last value from a Jome tag is returned
+  //~end
 }

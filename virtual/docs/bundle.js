@@ -80280,7 +80280,7 @@ in order for it to be formatted.`, cliCategory: "Other" }, tabWidth: { type: "in
   var import_md_to_html = __toESM(require_md_to_html());
 
   // samples/torque_calculator.js.txt
-  var torque_calculator_js_default = "/*~md\n# Torque Calculator Example\n*/\n\n/*~with\n~arg force, ~unit N*, ~comment Newtons or equivalent\n~arg distance, ~unit m*, ~comment meters or equivalent\n*/\nlet force, distance;\n\n\n/*~md Torque is the result of a force multiplied by a distance from a pivot point. */\n\n// We use a jome tag because it's a script that can be run\n// The unit checker can infer that this block returns a value\n// with N*m or equivalent as a unit and shows it.\n\n/*~main\n~arg force, ~unit N*, ~comment Newtons or equivalent\n~arg distance, ~unit m*, ~comment meters or equivalent\n*/\nfunction main(force, distance) {\n  /*~run*/\n  return force * distance // the last value from a Jome tag is returned\n  /*~end*/\n}";
+  var torque_calculator_js_default = "/*~md\n# Torque Calculator Example\n*/\n\n/*~with\n~arg force, ~unit N*, ~comment Newtons or equivalent\n~arg distance, ~unit m*, ~comment meters or equivalent\n*/\nlet force, distance;\n\n\n/*~md Torque is the result of a force multiplied by a distance from a pivot point. */\n\n// We use a jome tag because it's a script that can be run\n// The unit checker can infer that this block returns a value\n// with N*m or equivalent as a unit and shows it.\n\n/*~main\n~arg force, ~unit N*, ~comment Newtons or equivalent\n~arg distance, ~unit m*, ~comment meters or equivalent\n*/\nfunction main(force, distance) {\n  //~run\n  return force * distance; // the last value from a Jome tag is returned\n  //~end\n}";
 
   // src/editor.js
   var MetaData = class {
@@ -80333,7 +80333,7 @@ in order for it to be formatted.`, cliCategory: "Other" }, tabWidth: { type: "in
   async function renderOutputCode(data2, callback) {
     import_escodegen.default.attachComments(data2.ast, data2.allComments, data2.tokens);
     let str = import_escodegen.default.generate(data2.ast, { comment: true });
-    let formatted = await mu2(str, { parser: "babel", semi: false, plugins: [Mn, rx] });
+    let formatted = await mu2(str, { parser: "babel", plugins: [Mn, rx] });
     let highlighted = hljs.highlight(formatted, { language: "js" }).value;
     callback(highlighted);
   }
