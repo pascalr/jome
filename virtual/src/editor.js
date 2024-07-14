@@ -1,4 +1,5 @@
 import {Parser} from "acorn"
+import {LooseParser} from "acorn-loose"
 import escodegen from "escodegen"
 // import { parse } from "@babel/parser"; // maybe try these instead
 // import generate from "@babel/generator"; // maybe try these instead
@@ -54,15 +55,22 @@ function parseMetaDatas(metaDataComments) {
 function parseJs(js) {
   let allComments = [], tokens = [], comments = [], metaDataComments = [];
   let ast;
-  // try {
+  try {
     ast = Parser.parse(js, {
       ecmaVersion: 6,
       ranges: true,
       onComment: allComments,
       onToken: tokens
     })
-  // } catch (e) {
-  // }
+  } catch (e) {
+    allComments = [], tokens = [], comments = [], metaDataComments = [];
+    ast = LooseParser.parse(js, {
+      ecmaVersion: 6,
+      ranges: true,
+      onComment: allComments,
+      onToken: tokens
+    })
+  }
   allComments.forEach(comment => {
     console.log(comment)
     if (comment.value[0] === '~') {

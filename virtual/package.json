@@ -3,6 +3,7 @@
     "@jome/md-to-html": "^0.0.2",
     "@prettier/sync": "^0.5.2",
     "acorn": "^8.12.1",
+    "acorn-loose": "^8.4.0",
     "escodegen": "^2.1.0",
     "express": "^4.19.2",
     "prettier": "^3.3.2"
