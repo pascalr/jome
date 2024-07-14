@@ -2,13 +2,13 @@ import {Parser} from "acorn"
 import {LooseParser} from "acorn-loose"
 import acornJomeParser from "./acorn_jome_parser"
 import escodegen from "escodegen"
-// import { parse } from "@babel/parser"; // maybe try these instead
+//import { ESLint } from "eslint";// import { parse } from "@babel/parser"; // maybe try these instead
 // import generate from "@babel/generator"; // maybe try these instead
 
+import * as prettier from "prettier"
 import pluginBabel from "prettier/plugins/babel";
 import pluginEstree from "prettier/plugins/estree";
 // import pluginHtml from "prettier/plugins/html";
-import * as prettier from "prettier"
 // import prettier from "@prettier/sync";
 
 import mdToHtml from "@jome/md-to-html"
@@ -17,6 +17,15 @@ import sample01 from '../samples/torque_calculator.js.txt'
 
 const JomeJsParser = Parser.extend(acornJomeParser)
 const JomeJsLooseParser = LooseParser.extend(acornJomeParser)
+
+// Create an instance of ESLint with the configuration passed to the function
+// function createESLintInstance(overrideConfig) {
+//   return new ESLint({
+//     overrideConfigFile: true,
+//     overrideConfig,
+//     fix: true,
+//   });
+// }
 
 /**
  * The data analyzed inside a jome meta data comment delimited by `/*~` and *\/`
