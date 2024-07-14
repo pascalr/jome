@@ -1,7 +1,4 @@
 {
-  "scripts": {
-    "build_editor": "./node_modules/.bin/esbuild src/editor.js --bundle --outfile=docs/bundle.js"
-  },
   "dependencies": {
     "@jome/md-to-html": "^0.0.2",
     "@prettier/sync": "^0.5.2",

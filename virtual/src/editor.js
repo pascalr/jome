@@ -53,12 +53,16 @@ function parseMetaDatas(metaDataComments) {
 // Converts js code to Asbstract Syntax Tree
 function parseJs(js) {
   let allComments = [], tokens = [], comments = [], metaDataComments = [];
-  let ast = Parser.parse(js, {
-    ecmaVersion: 6,
-    ranges: true,
-    onComment: allComments,
-    onToken: tokens
-  })
+  let ast;
+  // try {
+    ast = Parser.parse(js, {
+      ecmaVersion: 6,
+      ranges: true,
+      onComment: allComments,
+      onToken: tokens
+    })
+  // } catch (e) {
+  // }
   allComments.forEach(comment => {
     console.log(comment)
     if (comment.value[0] === '~') {

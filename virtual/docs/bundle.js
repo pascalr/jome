@@ -80342,7 +80342,8 @@ function main(force, distance) {
   }
   function parseJs(js3) {
     let allComments = [], tokens = [], comments = [], metaDataComments = [];
-    let ast = Parser.parse(js3, {
+    let ast;
+    ast = Parser.parse(js3, {
       ecmaVersion: 6,
       ranges: true,
       onComment: allComments,
@@ -80370,3 +80371,4 @@ function main(force, distance) {
     callback(highlighted);
   }
 })();
+//# sourceMappingURL=bundle.js.map

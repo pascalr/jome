@@ -27,8 +27,8 @@
     },
     {
       "label": "BuildEditor",
-      "command": "npm",
-      "args": ["run", "build_editor"],
+      "command": "node",
+      "args": ["build.mjs"],
       "options": {
         "cwd": "${workspaceFolder}/virtual"
       }
