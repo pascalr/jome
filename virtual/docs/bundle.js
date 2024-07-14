@@ -68173,6 +68173,16 @@
   };
   defaultOptions.tabSize = 4;
 
+  // src/acorn_jome_parser.js
+  function noisyReadToken(Parser3) {
+    return class extends Parser3 {
+      readToken(code) {
+        console.log("Reading a token!");
+        return super.readToken(code);
+      }
+    };
+  }
+
   // src/editor.js
   var import_escodegen = __toESM(require_escodegen());
 
@@ -81803,6 +81813,8 @@ function main(force, distance) {
 }`;
 
   // src/editor.js
+  var JomeJsParser = Parser.extend(noisyReadToken);
+  var JomeJsLooseParser = LooseParser.extend(noisyReadToken);
   var MetaData = class {
     constructor(type, value) {
       this.type = type;
@@ -81832,7 +81844,7 @@ function main(force, distance) {
     let allComments = [], tokens = [], comments = [], metaDataComments = [];
     let ast;
     try {
-      ast = Parser.parse(js3, {
+      ast = JomeJsParser.parse(js3, {
         ecmaVersion: 6,
         ranges: true,
         onComment: allComments,
@@ -81840,7 +81852,7 @@ function main(force, distance) {
       });
     } catch (e) {
       allComments = [], tokens = [], comments = [], metaDataComments = [];
-      ast = LooseParser.parse(js3, {
+      ast = JomeJsLooseParser.parse(js3, {
         ecmaVersion: 6,
         ranges: true,
         onComment: allComments,

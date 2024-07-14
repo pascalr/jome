@@ -1,5 +1,6 @@
 import {Parser} from "acorn"
 import {LooseParser} from "acorn-loose"
+import acornJomeParser from "./acorn_jome_parser"
 import escodegen from "escodegen"
 // import { parse } from "@babel/parser"; // maybe try these instead
 // import generate from "@babel/generator"; // maybe try these instead
@@ -13,6 +14,9 @@ import * as prettier from "prettier"
 import mdToHtml from "@jome/md-to-html"
 
 import sample01 from '../samples/torque_calculator.js.txt'
+
+const JomeJsParser = Parser.extend(acornJomeParser)
+const JomeJsLooseParser = LooseParser.extend(acornJomeParser)
 
 /**
  * The data analyzed inside a jome meta data comment delimited by `/*~` and *\/`
@@ -56,7 +60,7 @@ function parseJs(js) {
   let allComments = [], tokens = [], comments = [], metaDataComments = [];
   let ast;
   try {
-    ast = Parser.parse(js, {
+    ast = JomeJsParser.parse(js, {
       ecmaVersion: 6,
       ranges: true,
       onComment: allComments,
@@ -64,7 +68,7 @@ function parseJs(js) {
     })
   } catch (e) {
     allComments = [], tokens = [], comments = [], metaDataComments = [];
-    ast = LooseParser.parse(js, {
+    ast = JomeJsLooseParser.parse(js, {
       ecmaVersion: 6,
       ranges: true,
       onComment: allComments,
