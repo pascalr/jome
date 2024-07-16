@@ -5,9 +5,11 @@
 */
 
 //~input {unit: "N*", comment: "Newtons or equivalent", onSave: "setValue"}
-let force;
+  let force;
+//~end
 //~input {unit: "m*", comment: "meters or equivalent", onSave: "setValue"}
-let distance;
+  let distance;
+//~end
 
 /*~with
 ~arg force, ~unit N*, ~comment Newtons or equivalent
@@ -31,3 +33,13 @@ function main(force, distance) {
   return force * distance; // the last value from a Jome tag is returned
   //~end
 }
+
+//~main
+  //~arg force, ~unit N*, ~comment Newtons or equivalent
+  //~arg distance, ~unit m*, ~comment meters or equivalent
+  function main(force, distance) {
+    //~run
+    return force * distance; // the last value from a Jome tag is returned
+    //~end
+  }
+//~end
