@@ -1,69 +1,73 @@
 const BLOCK_JS = 1
-const BLOCK_MARKDOWN = 2
-const BLOCK_META_DATA = 3
+const BLOCK_JOME = 2
+const BLOCK_WHITESPACE = 3
 
-// TODO: Test this AI generated code
+function extractBlockComment(str) {
+  let i, result = "/*";
+  for (i = 2; i < str.length && !(str[i] === '*' && str[i + 1] === '/'); i++) {
+    result += str[i];
+  }
+  return (i < length) ? result+'*/' : result
+}
+
+function extractQuote(str) {
+  let i, ch = str[0]
+  let result = ch;
+  for (i = 1; i < str.length && (str[i] !== ch || str[i - 1] === '\\'); i++) {
+    result += str[i];
+  }
+  return (i < length) ? result+ch : result
+}
+
+function extractSingleLineComment(str) {
+  let i, result = "";
+  for (i = 0; i < str.length && (str[i] !== '\n'); i++) {
+    result += str[i];
+  }
+  return (i < length) ? result+'\n' : result
+}
+
 // Split the js code into blocks of different kinds like mardown, source code, data...
 function parseJs(code) {
   let parts = [] // {type: ..., value: ...}
-  let result = {
-    strings: [],
-    comments: [],
-    code: []
-  };
 
   let i = 0;
   let length = code.length;
+  let js = ""
 
   while (i < length) {
+    // TODO: Template literals
+    // strings
     if (code[i] === '"' || code[i] === "'") {
-      let quote = code[i];
-      let str = quote;
-      i++;
-      while (i < length && (code[i] !== quote || code[i - 1] === '\\')) {
-        str += code[i];
-        i++;
-      }
-      if (i < length) {
-        str += code[i];
-        i++;
-      }
-      result.strings.push(str);
+      let str = extractQuote(code.slice(i))
+      js += str;
+      i = i + (str.length || 1);
+    // commments OR jome block
     } else if (code[i] === '/' && code[i + 1] === '/') {
-      let comment = '';
-      while (i < length && code[i] !== '\n') {
-        comment += code[i];
-        i++;
+      let str = extractSingleLineComment(code.slice(i))
+      if (str[2] === '~') {
+        if (js.length) {parts.push({type: BLOCK_JS, value: js}); js = ""}
+        parts.push({type: BLOCK_JOME, value: str})
+      } else {
+        js += str;
       }
-      result.comments.push(comment);
-      if (i < length) {
-        comment += code[i];
-        i++;
-      }
+      i = i + (str.length || 1);
+    // comments or jome block
     } else if (code[i] === '/' && code[i + 1] === '*') {
-      let comment = '';
-      while (i < length && !(code[i] === '*' && code[i + 1] === '/')) {
-        comment += code[i];
-        i++;
+      let str = extractBlockComment(code.slice(i))
+      if (str[2] === '~') {
+        if (js.length) {parts.push({type: BLOCK_JS, value: js}); js = ""}
+        parts.push({type: BLOCK_JOME, value: str})
+      } else {
+        js += str;
       }
-      if (i < length) {
-        comment += '*/';
-        i += 2;
-      }
-      result.comments.push(comment);
+      i = i + (str.length || 1);
     } else {
-      let codeSegment = '';
-      while (i < length && code[i] !== '"' && code[i] !== "'" && !(code[i] === '/' && (code[i + 1] === '/' || code[i + 1] === '*'))) {
-        codeSegment += code[i];
-        i++;
-      }
-      if (codeSegment.trim().length > 0) {
-        result.code.push(codeSegment);
-      }
+      js += code[i]; i++
     }
   }
-
-  return result;
+  if (js.length) {parts.push({type: BLOCK_JS, value: js}); js = ""}
+  return parts
 }
 
-module.exports = {BLOCK_CODE: BLOCK_JS, BLOCK_MARKDOWN}
+module.exports = {BLOCK_JS, BLOCK_JOME, BLOCK_WHITESPACE, parseJs}

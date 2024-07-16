@@ -1,5 +1,7 @@
 // import mdToHtml from "@jome/md-to-html"
 
+import {parseJs} from './parse_js'
+
 import sample01 from '../samples/torque_calculator.js.txt'
 
 // Create an instance of ESLint with the configuration passed to the function
@@ -41,24 +43,20 @@ function parseMetaDatas(metaDataComments) {
 
 document.addEventListener('DOMContentLoaded', function() {
   let src = sample01
-  let data = parseJs(src)
-  document.getElementById('output-editor').innerHTML = renderOutputCode(data)
-  document.getElementById('notebook-editor').innerHTML = renderNotebookView(data)
+  let parts = parseJs(src)
+  console.log("parts", parts)
+  document.getElementById('output-editor').innerHTML = renderOutputCode(src, parts)
+  document.getElementById('notebook-editor').innerHTML = renderNotebookView(src, parts)
 });
 
-// Split the js code into blocks of different kinds like mardown, source code, data...
-function parseJs(js) {
-  return {raw: js}
-}
-
-function renderJomeCode(data) {
+function renderJomeCode(raw, parts) {
   return ''
 }
 
-function renderNotebookView(data) {
+function renderNotebookView(raw, parts) {
   return ''
 }
 
-function renderOutputCode(data) {
-  return hljs.highlight(data.raw, {language: 'js'}).value
+function renderOutputCode(raw, parts) {
+  return hljs.highlight(raw, {language: 'js'}).value
 }
