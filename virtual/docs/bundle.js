@@ -30,6 +30,7 @@
     "src/parse_js.js"(exports, module) {
       var BLOCK_JS = 1;
       var BLOCK_JOME = 2;
+      var BLOCK_WHITESPACE = 3;
       function extractBlockComment(str) {
         let i, result = "/*";
         for (i = 2; i < str.length && !(str[i] === "*" && str[i + 1] === "/"); i++) {
@@ -57,47 +58,46 @@
         let i = 0;
         let length2 = code.length;
         let js = "";
+        let str;
         while (i < length2) {
           if (code[i] === '"' || code[i] === "'") {
-            let str = extractQuote(code.slice(i));
+            str = extractQuote(code.slice(i));
             js += str;
             i = i + (str.length || 1);
+            continue;
           } else if (code[i] === "/" && code[i + 1] === "/") {
-            let str = extractSingleLineComment(code.slice(i));
-            if (str[2] === "~") {
-              if (js.length) {
-                parts.push({ type: BLOCK_JS, value: js });
-                js = "";
-              }
-              parts.push({ type: BLOCK_JOME, value: str });
-            } else {
-              js += str;
-            }
-            i = i + (str.length || 1);
+            str = extractSingleLineComment(code.slice(i));
           } else if (code[i] === "/" && code[i + 1] === "*") {
-            let str = extractBlockComment(code.slice(i));
-            if (str[2] === "~") {
-              if (js.length) {
-                parts.push({ type: BLOCK_JS, value: js });
-                js = "";
-              }
-              parts.push({ type: BLOCK_JOME, value: str });
-            } else {
-              js += str;
-            }
-            i = i + (str.length || 1);
+            str = extractBlockComment(code.slice(i));
           } else {
             js += code[i];
             i++;
+            continue;
           }
+          if (str[2] === "~") {
+            if (js.length) {
+              parts.push({ type: BLOCK_JS, value: js });
+              js = "";
+            }
+            parts.push({ type: BLOCK_JOME, value: str });
+          } else {
+            js += str;
+          }
+          i = i + (str.length || 1);
         }
         if (js.length) {
           parts.push({ type: BLOCK_JS, value: js });
           js = "";
         }
+        parts = parts.map((p) => {
+          if (p.type === BLOCK_JS && /^\s*$/.test(p.value)) {
+            return { type: BLOCK_WHITESPACE, value: p.value };
+          }
+          return p;
+        });
         return parts;
       }
-      module.exports = { BLOCK_JS, BLOCK_JOME, parseJs: parseJs2 };
+      module.exports = { BLOCK_JS, BLOCK_JOME, BLOCK_WHITESPACE, parseJs: parseJs2 };
     }
   });
 

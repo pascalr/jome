@@ -34,39 +34,43 @@ function parseJs(code) {
   let i = 0;
   let length = code.length;
   let js = ""
+  let str;
 
   while (i < length) {
     // TODO: Template literals
     // strings
     if (code[i] === '"' || code[i] === "'") {
-      let str = extractQuote(code.slice(i))
+      str = extractQuote(code.slice(i))
       js += str;
       i = i + (str.length || 1);
+      continue;
     // commments OR jome block
     } else if (code[i] === '/' && code[i + 1] === '/') {
-      let str = extractSingleLineComment(code.slice(i))
-      if (str[2] === '~') {
-        if (js.length) {parts.push({type: BLOCK_JS, value: js}); js = ""}
-        parts.push({type: BLOCK_JOME, value: str})
-      } else {
-        js += str;
-      }
-      i = i + (str.length || 1);
+      str = extractSingleLineComment(code.slice(i))
     // comments or jome block
     } else if (code[i] === '/' && code[i + 1] === '*') {
-      let str = extractBlockComment(code.slice(i))
-      if (str[2] === '~') {
-        if (js.length) {parts.push({type: BLOCK_JS, value: js}); js = ""}
-        parts.push({type: BLOCK_JOME, value: str})
-      } else {
-        js += str;
-      }
-      i = i + (str.length || 1);
+      str = extractBlockComment(code.slice(i))
     } else {
-      js += code[i]; i++
+      js += code[i]; i++; continue;
     }
+    // comments OR jome block only executes this code
+    if (str[2] === '~') {
+      if (js.length) {parts.push({type: BLOCK_JS, value: js}); js = ""}
+      parts.push({type: BLOCK_JOME, value: str})
+    } else {
+      js += str;
+    }
+    i = i + (str.length || 1);
   }
   if (js.length) {parts.push({type: BLOCK_JS, value: js}); js = ""}
+
+  parts = parts.map(p => {
+    if (p.type === BLOCK_JS && /^\s*$/.test(p.value)) {
+      return {type: BLOCK_WHITESPACE, value: p.value}
+    }
+    return p
+  })
+
   return parts
 }
 
