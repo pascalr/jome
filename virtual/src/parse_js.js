@@ -1,7 +1,9 @@
-const BLOCK_JS = 'js'
-const BLOCK_JOME = 'block'
-const BLOCK_WHITESPACE = 'space'
-const BLOCK_CAPTURE = 'capture'
+const BlockType = {
+  js: 'js',
+  block: 'block',
+  whitespace: 'whitespace',
+  capture: 'capture',
+}
 
 function extractBlockComment(str) {
   let i, result = "/*";
@@ -35,18 +37,18 @@ function reduceBlocks(blocks) {
     p = blocks[i] 
 
     // Converts matching blocks to type whitespace
-    if (p.type === BLOCK_JS && /^\s*$/.test(p.value)) {
-      reduced.push({type: BLOCK_WHITESPACE, value: p.value})
+    if (p.type === BlockType.js && /^\s*$/.test(p.value)) {
+      reduced.push({type: BlockType.whitespace, value: p.value})
     
     // Groups blocks between the ~begin and ~end into a capture block
-    } else if (p.type === BLOCK_JOME && p.value.slice(2,8) === "~begin") {
+    } else if (p.type === BlockType.block && p.value.slice(2,8) === "~begin") {
       let j = i + 1;
       for (; j < blocks.length; j++) {
         if (blocks[j].value.slice(2,6) === "~end") {break;}
       }
       // FIXME: This does not work for double nested. Not sure if supported yet. We'll see.
       // TODO: Validate that the last is an end tag. This does not work otherwise (will skip the last block I believe)
-      reduced.push({type: BLOCK_CAPTURE, value: p.value, nested: reduceBlocks(blocks.slice(i+1, j))})
+      reduced.push({type: BlockType.capture, value: p.value, nested: reduceBlocks(blocks.slice(i+1, j))})
       i = j
     } else {
       reduced.push(p)
@@ -83,16 +85,16 @@ function parseJs(code) {
     }
     // comments OR jome block only executes this code
     if (str[2] === '~') {
-      if (js.length) {parts.push({type: BLOCK_JS, value: js}); js = ""}
-      parts.push({type: BLOCK_JOME, value: str})
+      if (js.length) {parts.push({type: BlockType.js, value: js}); js = ""}
+      parts.push({type: BlockType.block, value: str})
     } else {
       js += str;
     }
     i = i + (str.length || 1);
   }
-  if (js.length) {parts.push({type: BLOCK_JS, value: js}); js = ""}
+  if (js.length) {parts.push({type: BlockType.js, value: js}); js = ""}
 
   return reduceBlocks(parts)
 }
 
-module.exports = {BLOCK_JS, BLOCK_JOME, BLOCK_WHITESPACE, BLOCK_CAPTURE, parseJs}
+module.exports = {BlockType, parseJs}

@@ -1,6 +1,6 @@
 // import mdToHtml from "@jome/md-to-html"
 
-import {parseJs} from './parse_js'
+import {parseJs, BlockType} from './parse_js'
 
 import sample01 from '../samples/torque_calculator.js.txt'
 
@@ -54,7 +54,13 @@ function renderJomeCode(raw, parts) {
 }
 
 function renderNotebookView(raw, parts) {
-  return ''
+  let html = ''
+  parts.forEach(p => {
+    if (p.type === BlockType.block) {
+      
+    }
+  })
+  return html
 }
 
 function renderOutputCode(raw, parts) {

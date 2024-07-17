@@ -28,10 +28,12 @@
   // src/parse_js.js
   var require_parse_js = __commonJS({
     "src/parse_js.js"(exports, module) {
-      var BLOCK_JS = "js";
-      var BLOCK_JOME = "block";
-      var BLOCK_WHITESPACE = "space";
-      var BLOCK_CAPTURE = "capture";
+      var BlockType2 = {
+        js: "js",
+        block: "block",
+        whitespace: "whitespace",
+        capture: "capture"
+      };
       function extractBlockComment(str) {
         let i, result = "/*";
         for (i = 2; i < str.length && !(str[i] === "*" && str[i + 1] === "/"); i++) {
@@ -61,16 +63,16 @@
         let reduced = [];
         for (let i = 0; i < blocks.length; i++) {
           p = blocks[i];
-          if (p.type === BLOCK_JS && /^\s*$/.test(p.value)) {
-            reduced.push({ type: BLOCK_WHITESPACE, value: p.value });
-          } else if (p.type === BLOCK_JOME && p.value.slice(2, 8) === "~begin") {
+          if (p.type === BlockType2.js && /^\s*$/.test(p.value)) {
+            reduced.push({ type: BlockType2.whitespace, value: p.value });
+          } else if (p.type === BlockType2.block && p.value.slice(2, 8) === "~begin") {
             let j = i + 1;
             for (; j < blocks.length; j++) {
               if (blocks[j].value.slice(2, 6) === "~end") {
                 break;
               }
             }
-            reduced.push({ type: BLOCK_CAPTURE, value: p.value, nested: reduceBlocks(blocks.slice(i + 1, j)) });
+            reduced.push({ type: BlockType2.capture, value: p.value, nested: reduceBlocks(blocks.slice(i + 1, j)) });
             i = j;
           } else {
             reduced.push(p);
@@ -101,22 +103,22 @@
           }
           if (str[2] === "~") {
             if (js.length) {
-              parts.push({ type: BLOCK_JS, value: js });
+              parts.push({ type: BlockType2.js, value: js });
               js = "";
             }
-            parts.push({ type: BLOCK_JOME, value: str });
+            parts.push({ type: BlockType2.block, value: str });
           } else {
             js += str;
           }
           i = i + (str.length || 1);
         }
         if (js.length) {
-          parts.push({ type: BLOCK_JS, value: js });
+          parts.push({ type: BlockType2.js, value: js });
           js = "";
         }
         return reduceBlocks(parts);
       }
-      module.exports = { BLOCK_JS, BLOCK_JOME, BLOCK_WHITESPACE, BLOCK_CAPTURE, parseJs: parseJs2 };
+      module.exports = { BlockType: BlockType2, parseJs: parseJs2 };
     }
   });
 
@@ -177,7 +179,12 @@ function main(force, distance) {
     document.getElementById("notebook-editor").innerHTML = renderNotebookView(src, parts);
   });
   function renderNotebookView(raw, parts) {
-    return "";
+    let html = "";
+    parts.forEach((p2) => {
+      if (p2.type === import_parse_js.BlockType.block) {
+      }
+    });
+    return html;
   }
   function renderOutputCode(raw, parts) {
     return hljs.highlight(raw, { language: "js" }).value;
