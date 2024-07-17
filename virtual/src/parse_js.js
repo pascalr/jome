@@ -31,6 +31,19 @@ function extractSingleLineComment(str) {
   return (i < str.length) ? result+'\n' : result
 }
 
+function analyzeBlocks(blocks) {
+  return blocks.map(b => {
+    if (b.type === BlockType.block) {
+      b.tag = b.value.slice(3).match(/\w+/)[0]
+      let s = b.value.trimEnd()
+      // FIXME: This assumes always a space after tag name. Correct?
+      // Remove */ if present
+      b.content = s.substring(4+b.tag.length, s.length - (b.value[1] === '*' ? 2 : 0))
+    }
+    return b
+  })
+}
+
 function reduceBlocks(blocks) {
   let reduced = []
   for (let i = 0; i < blocks.length; i++) {
@@ -83,7 +96,7 @@ function parseJs(code) {
     } else {
       js += code[i]; i++; continue;
     }
-    // comments OR jome block only executes this code
+    // comments OR jome block only they execute this code
     if (str[2] === '~') {
       if (js.length) {parts.push({type: BlockType.js, value: js}); js = ""}
       parts.push({type: BlockType.block, value: str})
@@ -94,7 +107,7 @@ function parseJs(code) {
   }
   if (js.length) {parts.push({type: BlockType.js, value: js}); js = ""}
 
-  return reduceBlocks(parts)
+  return analyzeBlocks(reduceBlocks(parts))
 }
 
 module.exports = {BlockType, parseJs}

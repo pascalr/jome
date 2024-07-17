@@ -1,4 +1,4 @@
-// import mdToHtml from "@jome/md-to-html"
+import mdToHtml from "@jome/md-to-html"
 
 import {parseJs, BlockType} from './parse_js'
 
@@ -56,8 +56,8 @@ function renderJomeCode(raw, parts) {
 function renderNotebookView(raw, parts) {
   let html = ''
   parts.forEach(p => {
-    if (p.type === BlockType.block) {
-      
+    if (p.type === BlockType.block && p.tag === 'md') {
+      html += mdToHtml(p.content)
     }
   })
   return html
