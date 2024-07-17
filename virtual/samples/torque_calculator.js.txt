@@ -4,10 +4,10 @@
 # Torque Calculator Example
 */
 
-//~input {unit: "N*", comment: "Newtons or equivalent", onSave: "setValue"}
+//~begin input {unit: "N*", comment: "Newtons or equivalent", onSave: "setValue"}
   let force;
 //~end
-//~input {unit: "m*", comment: "meters or equivalent", onSave: "setValue"}
+//~begin input {unit: "m*", comment: "meters or equivalent", onSave: "setValue"}
   let distance;
 //~end
 
@@ -34,7 +34,7 @@ function main(force, distance) {
   //~end
 }
 
-//~main
+//~begin main
   //~arg force, ~unit N*, ~comment Newtons or equivalent
   //~arg distance, ~unit m*, ~comment meters or equivalent
   function main(force, distance) {

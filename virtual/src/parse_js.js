@@ -1,13 +1,15 @@
 const BLOCK_JS = 1
 const BLOCK_JOME = 2
 const BLOCK_WHITESPACE = 3
+const BLOCK_CAPTURE = 4
 
 function extractBlockComment(str) {
   let i, result = "/*";
   for (i = 2; i < str.length && !(str[i] === '*' && str[i + 1] === '/'); i++) {
     result += str[i];
   }
-  return (i < length) ? result+'*/' : result
+  if (str[i+2] === '\n') {return result+'*/\n'}
+  return (i < str.length) ? result+'*/' : result
 }
 
 function extractQuote(str) {
@@ -16,7 +18,7 @@ function extractQuote(str) {
   for (i = 1; i < str.length && (str[i] !== ch || str[i - 1] === '\\'); i++) {
     result += str[i];
   }
-  return (i < length) ? result+ch : result
+  return (i < str.length) ? result+ch : result
 }
 
 function extractSingleLineComment(str) {
@@ -24,7 +26,7 @@ function extractSingleLineComment(str) {
   for (i = 0; i < str.length && (str[i] !== '\n'); i++) {
     result += str[i];
   }
-  return (i < length) ? result+'\n' : result
+  return (i < str.length) ? result+'\n' : result
 }
 
 // Split the js code into blocks of different kinds like mardown, source code, data...
@@ -67,6 +69,8 @@ function parseJs(code) {
   parts = parts.map(p => {
     if (p.type === BLOCK_JS && /^\s*$/.test(p.value)) {
       return {type: BLOCK_WHITESPACE, value: p.value}
+    } else if (p.type === BLOCK_JOME && p.value.slice(2,8) === "~begin") {
+      // TODO: Capture nested blocks until the end tag is reached
     }
     return p
   })
@@ -74,4 +78,4 @@ function parseJs(code) {
   return parts
 }
 
-module.exports = {BLOCK_JS, BLOCK_JOME, BLOCK_WHITESPACE, parseJs}
+module.exports = {BLOCK_JS, BLOCK_JOME, BLOCK_WHITESPACE, BLOCK_CAPTURE, parseJs}

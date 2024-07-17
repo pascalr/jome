@@ -31,12 +31,16 @@
       var BLOCK_JS = 1;
       var BLOCK_JOME = 2;
       var BLOCK_WHITESPACE = 3;
+      var BLOCK_CAPTURE = 4;
       function extractBlockComment(str) {
         let i, result = "/*";
         for (i = 2; i < str.length && !(str[i] === "*" && str[i + 1] === "/"); i++) {
           result += str[i];
         }
-        return i < length ? result + "*/" : result;
+        if (str[i + 2] === "\n") {
+          return result + "*/\n";
+        }
+        return i < str.length ? result + "*/" : result;
       }
       function extractQuote(str) {
         let i, ch = str[0];
@@ -44,22 +48,22 @@
         for (i = 1; i < str.length && (str[i] !== ch || str[i - 1] === "\\"); i++) {
           result += str[i];
         }
-        return i < length ? result + ch : result;
+        return i < str.length ? result + ch : result;
       }
       function extractSingleLineComment(str) {
         let i, result = "";
         for (i = 0; i < str.length && str[i] !== "\n"; i++) {
           result += str[i];
         }
-        return i < length ? result + "\n" : result;
+        return i < str.length ? result + "\n" : result;
       }
       function parseJs2(code) {
         let parts = [];
         let i = 0;
-        let length2 = code.length;
+        let length = code.length;
         let js = "";
         let str;
-        while (i < length2) {
+        while (i < length) {
           if (code[i] === '"' || code[i] === "'") {
             str = extractQuote(code.slice(i));
             js += str;
@@ -92,12 +96,13 @@
         parts = parts.map((p) => {
           if (p.type === BLOCK_JS && /^\s*$/.test(p.value)) {
             return { type: BLOCK_WHITESPACE, value: p.value };
+          } else if (p.type === BLOCK_JOME && p.value.slice(2, 8) === "~begin") {
           }
           return p;
         });
         return parts;
       }
-      module.exports = { BLOCK_JS, BLOCK_JOME, BLOCK_WHITESPACE, parseJs: parseJs2 };
+      module.exports = { BLOCK_JS, BLOCK_JOME, BLOCK_WHITESPACE, BLOCK_CAPTURE, parseJs: parseJs2 };
     }
   });
 
@@ -111,10 +116,10 @@
 # Torque Calculator Example
 */
 
-//~input {unit: "N*", comment: "Newtons or equivalent", onSave: "setValue"}
+//~begin input {unit: "N*", comment: "Newtons or equivalent", onSave: "setValue"}
   let force;
 //~end
-//~input {unit: "m*", comment: "meters or equivalent", onSave: "setValue"}
+//~begin input {unit: "m*", comment: "meters or equivalent", onSave: "setValue"}
   let distance;
 //~end
 
@@ -141,7 +146,7 @@ function main(force, distance) {
   //~end
 }
 
-//~main
+//~begin main
   //~arg force, ~unit N*, ~comment Newtons or equivalent
   //~arg distance, ~unit m*, ~comment meters or equivalent
   function main(force, distance) {
