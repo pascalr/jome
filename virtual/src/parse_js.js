@@ -29,6 +29,32 @@ function extractSingleLineComment(str) {
   return (i < str.length) ? result+'\n' : result
 }
 
+function reduceBlocks(blocks) {
+  let reduced = []
+  for (let i = 0; i < blocks.length; i++) {
+    p = blocks[i] 
+
+    // Converts matching blocks to type whitespace
+    if (p.type === BLOCK_JS && /^\s*$/.test(p.value)) {
+      reduced.push({type: BLOCK_WHITESPACE, value: p.value})
+    
+    // Groups blocks between the ~begin and ~end into a capture block
+    } else if (p.type === BLOCK_JOME && p.value.slice(2,8) === "~begin") {
+      let j = i + 1;
+      for (; j < blocks.length; j++) {
+        if (blocks[j].value.slice(2,6) === "~end") {break;}
+      }
+      // FIXME: This does not work for double nested. Not sure if supported yet. We'll see.
+      // TODO: Validate that the last is an end tag. This does not work otherwise (will skip the last block I believe)
+      reduced.push({type: BLOCK_CAPTURE, value: p.value, nested: reduceBlocks(blocks.slice(i+1, j))})
+      i = j
+    } else {
+      reduced.push(p)
+    }
+  }
+  return reduced
+}
+
 // Split the js code into blocks of different kinds like mardown, source code, data...
 function parseJs(code) {
   let parts = [] // {type: ..., value: ...}
@@ -66,30 +92,7 @@ function parseJs(code) {
   }
   if (js.length) {parts.push({type: BLOCK_JS, value: js}); js = ""}
 
-  // Analyze the blocks
-  let reduced = []
-  for (let i = 0; i < parts.length; i++) {
-    p = parts[i] 
-
-    // Converts matching blocks to type whitespace
-    if (p.type === BLOCK_JS && /^\s*$/.test(p.value)) {
-      reduced.push({type: BLOCK_WHITESPACE, value: p.value})
-    
-    // Groups blocks between the ~begin and ~end into a capture block
-    } else if (p.type === BLOCK_JOME && p.value.slice(2,8) === "~begin") {
-      let j = i + 1;
-      for (; j < parts.length; j++) {
-        if (parts[j].value.slice(2,6) === "~end") {break;}
-      }
-      // TODO: Validate that the last is an end tag. This does not work otherwise (will skip the last block I believe)
-      reduced.push({type: BLOCK_CAPTURE, value: p.value, nested: parts.slice(i+1, j)})
-      i = j
-    } else {
-      reduced.push(p)
-    }
-  }
-
-  return reduced
+  return reduceBlocks(parts)
 }
 
 module.exports = {BLOCK_JS, BLOCK_JOME, BLOCK_WHITESPACE, BLOCK_CAPTURE, parseJs}

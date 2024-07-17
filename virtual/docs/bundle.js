@@ -57,6 +57,27 @@
         }
         return i < str.length ? result + "\n" : result;
       }
+      function reduceBlocks(blocks) {
+        let reduced = [];
+        for (let i = 0; i < blocks.length; i++) {
+          p = blocks[i];
+          if (p.type === BLOCK_JS && /^\s*$/.test(p.value)) {
+            reduced.push({ type: BLOCK_WHITESPACE, value: p.value });
+          } else if (p.type === BLOCK_JOME && p.value.slice(2, 8) === "~begin") {
+            let j = i + 1;
+            for (; j < blocks.length; j++) {
+              if (blocks[j].value.slice(2, 6) === "~end") {
+                break;
+              }
+            }
+            reduced.push({ type: BLOCK_CAPTURE, value: p.value, nested: reduceBlocks(blocks.slice(i + 1, j)) });
+            i = j;
+          } else {
+            reduced.push(p);
+          }
+        }
+        return reduced;
+      }
       function parseJs2(code) {
         let parts = [];
         let i = 0;
@@ -93,25 +114,7 @@
           parts.push({ type: BLOCK_JS, value: js });
           js = "";
         }
-        let reduced = [];
-        for (let i2 = 0; i2 < parts.length; i2++) {
-          p = parts[i2];
-          if (p.type === BLOCK_JS && /^\s*$/.test(p.value)) {
-            reduced.push({ type: BLOCK_WHITESPACE, value: p.value });
-          } else if (p.type === BLOCK_JOME && p.value.slice(2, 8) === "~begin") {
-            let j = i2 + 1;
-            for (; j < parts.length; j++) {
-              if (parts[j].value.slice(2, 6) === "~end") {
-                break;
-              }
-            }
-            reduced.push({ type: BLOCK_CAPTURE, value: p.value, nested: parts.slice(i2 + 1, j) });
-            i2 = j;
-          } else {
-            reduced.push(p);
-          }
-        }
-        return reduced;
+        return reduceBlocks(parts);
       }
       module.exports = { BLOCK_JS, BLOCK_JOME, BLOCK_WHITESPACE, BLOCK_CAPTURE, parseJs: parseJs2 };
     }
