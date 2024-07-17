@@ -67,21 +67,29 @@ function parseJs(code) {
   if (js.length) {parts.push({type: BLOCK_JS, value: js}); js = ""}
 
   // Analyze the blocks
-  parts = parts.map(p => {
-    
+  let reduced = []
+  for (let i = 0; i < parts.length; i++) {
+    p = parts[i] 
+
     // Converts matching blocks to type whitespace
     if (p.type === BLOCK_JS && /^\s*$/.test(p.value)) {
-      return {type: BLOCK_WHITESPACE, value: p.value}
+      reduced.push({type: BLOCK_WHITESPACE, value: p.value})
     
-      // Groups blocks between the ~begin and ~end into a capture block
+    // Groups blocks between the ~begin and ~end into a capture block
     } else if (p.type === BLOCK_JOME && p.value.slice(2,8) === "~begin") {
-      return {type: BLOCK_CAPTURE, value: p.value}
-      // TODO: Capture nested blocks until the end tag is reached
+      let j = i + 1;
+      for (; j < parts.length; j++) {
+        if (parts[j].value.slice(2,6) === "~end") {break;}
+      }
+      // TODO: Validate that the last is an end tag. This does not work otherwise (will skip the last block I believe)
+      reduced.push({type: BLOCK_CAPTURE, value: p.value, nested: parts.slice(i+1, j)})
+      i = j
+    } else {
+      reduced.push(p)
     }
-    return p
-  })
+  }
 
-  return parts
+  return reduced
 }
 
 module.exports = {BLOCK_JS, BLOCK_JOME, BLOCK_WHITESPACE, BLOCK_CAPTURE, parseJs}

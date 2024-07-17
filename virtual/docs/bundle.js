@@ -93,15 +93,25 @@
           parts.push({ type: BLOCK_JS, value: js });
           js = "";
         }
-        parts = parts.map((p) => {
+        let reduced = [];
+        for (let i2 = 0; i2 < parts.length; i2++) {
+          p = parts[i2];
           if (p.type === BLOCK_JS && /^\s*$/.test(p.value)) {
-            return { type: BLOCK_WHITESPACE, value: p.value };
+            reduced.push({ type: BLOCK_WHITESPACE, value: p.value });
           } else if (p.type === BLOCK_JOME && p.value.slice(2, 8) === "~begin") {
-            return { type: BLOCK_CAPTURE, value: p.value };
+            let j = i2 + 1;
+            for (; j < parts.length; j++) {
+              if (parts[j].value.slice(2, 6) === "~end") {
+                break;
+              }
+            }
+            reduced.push({ type: BLOCK_CAPTURE, value: p.value, nested: parts.slice(i2 + 1, j) });
+            i2 = j;
+          } else {
+            reduced.push(p);
           }
-          return p;
-        });
-        return parts;
+        }
+        return reduced;
       }
       module.exports = { BLOCK_JS, BLOCK_JOME, BLOCK_WHITESPACE, BLOCK_CAPTURE, parseJs: parseJs2 };
     }
@@ -151,9 +161,7 @@ function main(force, distance) {
   //~arg force, ~unit N*, ~comment Newtons or equivalent
   //~arg distance, ~unit m*, ~comment meters or equivalent
   function main(force, distance) {
-    //~run
     return force * distance; // the last value from a Jome tag is returned
-    //~end
   }
 //~end`;
 
