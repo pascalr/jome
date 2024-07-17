@@ -28,10 +28,10 @@
   // src/parse_js.js
   var require_parse_js = __commonJS({
     "src/parse_js.js"(exports, module) {
-      var BLOCK_JS = 1;
-      var BLOCK_JOME = 2;
-      var BLOCK_WHITESPACE = 3;
-      var BLOCK_CAPTURE = 4;
+      var BLOCK_JS = "js";
+      var BLOCK_JOME = "block";
+      var BLOCK_WHITESPACE = "space";
+      var BLOCK_CAPTURE = "capture";
       function extractBlockComment(str) {
         let i, result = "/*";
         for (i = 2; i < str.length && !(str[i] === "*" && str[i + 1] === "/"); i++) {
@@ -97,6 +97,7 @@
           if (p.type === BLOCK_JS && /^\s*$/.test(p.value)) {
             return { type: BLOCK_WHITESPACE, value: p.value };
           } else if (p.type === BLOCK_JOME && p.value.slice(2, 8) === "~begin") {
+            return { type: BLOCK_CAPTURE, value: p.value };
           }
           return p;
         });

@@ -1,7 +1,7 @@
-const BLOCK_JS = 1
-const BLOCK_JOME = 2
-const BLOCK_WHITESPACE = 3
-const BLOCK_CAPTURE = 4
+const BLOCK_JS = 'js'
+const BLOCK_JOME = 'block'
+const BLOCK_WHITESPACE = 'space'
+const BLOCK_CAPTURE = 'capture'
 
 function extractBlockComment(str) {
   let i, result = "/*";
@@ -66,10 +66,16 @@ function parseJs(code) {
   }
   if (js.length) {parts.push({type: BLOCK_JS, value: js}); js = ""}
 
+  // Analyze the blocks
   parts = parts.map(p => {
+    
+    // Converts matching blocks to type whitespace
     if (p.type === BLOCK_JS && /^\s*$/.test(p.value)) {
       return {type: BLOCK_WHITESPACE, value: p.value}
+    
+      // Groups blocks between the ~begin and ~end into a capture block
     } else if (p.type === BLOCK_JOME && p.value.slice(2,8) === "~begin") {
+      return {type: BLOCK_CAPTURE, value: p.value}
       // TODO: Capture nested blocks until the end tag is reached
     }
     return p
