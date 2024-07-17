@@ -56533,24 +56533,20 @@
 */
 
 //~begin input {unit: "N*", comment: "Newtons or equivalent", onSave: "setValue"}
+  // Jome code view: input force in N* // Newtons or equivalent
   let force;
 //~end
 //~begin input {unit: "m*", comment: "meters or equivalent", onSave: "setValue"}
   let distance;
 //~end
 
-/*~with
-~arg force, ~unit N*, ~comment Newtons or equivalent
-~arg distance, ~unit m*, ~comment meters or equivalent
-*/
-let force, distance;
-
-
 /*~md Torque is the result of a force multiplied by a distance from a pivot point. */
 
-// We use a jome tag because it's a script that can be run
-// The unit checker can infer that this block returns a value
-// with N*m or equivalent as a unit and shows it.
+/*~ignore
+We use a jome tag because it's a script that can be run
+The unit checker can infer that this block returns a value
+with N*m or equivalent as a unit and shows it.
+*/
 
 /*~main
 ~arg force, ~unit N*, ~comment Newtons or equivalent
@@ -56583,6 +56579,8 @@ function main(force, distance) {
     parts.forEach((p2) => {
       if (p2.type === import_parse_js.BlockType.block && p2.tag === "md") {
         html += (0, import_md_to_html.default)(p2.content);
+      } else if (p2.type === import_parse_js.BlockType.js) {
+        html += `<pre><code>${p2.value}</code></pre>`;
       }
     });
     return html;

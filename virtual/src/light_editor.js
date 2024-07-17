@@ -58,6 +58,8 @@ function renderNotebookView(raw, parts) {
   parts.forEach(p => {
     if (p.type === BlockType.block && p.tag === 'md') {
       html += mdToHtml(p.content)
+    } else if (p.type === BlockType.js) {
+      html += `<pre><code>${p.value}</code></pre>`
     }
   })
   return html
