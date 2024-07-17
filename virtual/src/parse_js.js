@@ -39,6 +39,8 @@ function analyzeBlocks(blocks) {
       // FIXME: This assumes always a space after tag name. Correct?
       // Remove */ if present
       b.content = s.substring(4+b.tag.length, s.length - (b.value[1] === '*' ? 2 : 0))
+    } else if (b.type === BlockType.capture) {
+      b.tag = b.value.slice(9).match(/\w+/)[0]
     }
     return b
   })

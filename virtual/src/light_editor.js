@@ -60,6 +60,8 @@ function renderNotebookView(raw, parts) {
       html += mdToHtml(p.content)
     } else if (p.type === BlockType.js) {
       html += `<pre><code>${p.value}</code></pre>`
+    } else if (p.type === BlockType.capture && p.tag === 'input') {
+      html += `<input />`
     }
   })
   return html

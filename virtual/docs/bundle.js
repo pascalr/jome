@@ -56454,6 +56454,8 @@
             b.tag = b.value.slice(3).match(/\w+/)[0];
             let s = b.value.trimEnd();
             b.content = s.substring(4 + b.tag.length, s.length - (b.value[1] === "*" ? 2 : 0));
+          } else if (b.type === BlockType2.capture) {
+            b.tag = b.value.slice(9).match(/\w+/)[0];
           }
           return b;
         });
@@ -56564,7 +56566,13 @@ function main(force, distance) {
   function main(force, distance) {
     return force * distance; // the last value from a Jome tag is returned
   }
-//~end`;
+//~end
+
+/*~ignore
+Ideas:
+~html: Insert html
+~txt: Insert text
+*/`;
 
   // src/light_editor.js
   document.addEventListener("DOMContentLoaded", function() {
@@ -56581,6 +56589,8 @@ function main(force, distance) {
         html += (0, import_md_to_html.default)(p2.content);
       } else if (p2.type === import_parse_js.BlockType.js) {
         html += `<pre><code>${p2.value}</code></pre>`;
+      } else if (p2.type === import_parse_js.BlockType.capture && p2.tag === "input") {
+        html += `<input />`;
       }
     });
     return html;
