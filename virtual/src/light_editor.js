@@ -61,7 +61,8 @@ function renderNotebookView(raw, parts) {
     } else if (p.type === BlockType.js) {
       html += `<pre><code>${p.value}</code></pre>`
     } else if (p.type === BlockType.capture && p.tag === 'input') {
-      html += `<input />`
+      let id = `"input_${p.data.name}"`
+      html += `<div><label for=${id}>${p.data.name}: </label><input id=${id} /></div>`
     }
   })
   return html

@@ -56456,6 +56456,14 @@
             b.content = s.substring(4 + b.tag.length, s.length - (b.value[1] === "*" ? 2 : 0));
           } else if (b.type === BlockType2.capture) {
             b.tag = b.value.slice(9).match(/\w+/)[0];
+            let s = b.value.slice(9 + b.tag.length).trimStart().trimEnd();
+            try {
+              console.log(s);
+              let o = JSON.parse(s);
+              b.data = o;
+            } catch (e) {
+              console.error(e);
+            }
           }
           return b;
         });
@@ -56528,50 +56536,50 @@
   var import_parse_js = __toESM(require_parse_js());
 
   // samples/torque_calculator.js.txt
-  var torque_calculator_js_default = `//~jome 0.0.1
-
-/*~md
-# Torque Calculator Example
-*/
-
-//~begin input {unit: "N*", comment: "Newtons or equivalent", onSave: "setValue"}
-  // Jome code view: input force in N* // Newtons or equivalent
-  let force;
-//~end
-//~begin input {unit: "m*", comment: "meters or equivalent", onSave: "setValue"}
-  let distance;
-//~end
-
-/*~md Torque is the result of a force multiplied by a distance from a pivot point. */
-
-/*~ignore
-We use a jome tag because it's a script that can be run
-The unit checker can infer that this block returns a value
-with N*m or equivalent as a unit and shows it.
-*/
-
-/*~main
-~arg force, ~unit N*, ~comment Newtons or equivalent
-~arg distance, ~unit m*, ~comment meters or equivalent
-*/
-function main(force, distance) {
-  //~run
-  return force * distance; // the last value from a Jome tag is returned
-  //~end
-}
-
-//~begin main
-  //~arg force, ~unit N*, ~comment Newtons or equivalent
-  //~arg distance, ~unit m*, ~comment meters or equivalent
-  function main(force, distance) {
-    return force * distance; // the last value from a Jome tag is returned
-  }
-//~end
-
-/*~ignore
-Ideas:
-~html: Insert html
-~txt: Insert text
+  var torque_calculator_js_default = `//~jome 0.0.1\r
+\r
+/*~md\r
+# Torque Calculator Example\r
+*/\r
+\r
+//~begin input {"name": "force", "unit": "N*", "comment": "Newtons or equivalent", "onSave": "setValue"}\r
+  // Jome code view: input force in N* // Newtons or equivalent\r
+  let force;\r
+//~end\r
+//~begin input {"name": "distance", "unit": "m*", "comment": "meters or equivalent", "onSave": "setValue"}\r
+  let distance;\r
+//~end\r
+\r
+/*~md Torque is the result of a force multiplied by a distance from a pivot point. */\r
+\r
+/*~ignore\r
+We use a jome tag because it's a script that can be run\r
+The unit checker can infer that this block returns a value\r
+with N*m or equivalent as a unit and shows it.\r
+*/\r
+\r
+/*~main\r
+~arg force, ~unit N*, ~comment Newtons or equivalent\r
+~arg distance, ~unit m*, ~comment meters or equivalent\r
+*/\r
+function main(force, distance) {\r
+  //~run\r
+  return force * distance; // the last value from a Jome tag is returned\r
+  //~end\r
+}\r
+\r
+//~begin main\r
+  //~arg force, ~unit N*, ~comment Newtons or equivalent\r
+  //~arg distance, ~unit m*, ~comment meters or equivalent\r
+  function main(force, distance) {\r
+    return force * distance; // the last value from a Jome tag is returned\r
+  }\r
+//~end\r
+\r
+/*~ignore\r
+Ideas:\r
+~html: Insert html\r
+~txt: Insert text\r
 */`;
 
   // src/light_editor.js
@@ -56590,7 +56598,8 @@ Ideas:
       } else if (p2.type === import_parse_js.BlockType.js) {
         html += `<pre><code>${p2.value}</code></pre>`;
       } else if (p2.type === import_parse_js.BlockType.capture && p2.tag === "input") {
-        html += `<input />`;
+        let id = `"input_${p2.data.name}"`;
+        html += `<div><label for=${id}>${p2.data.name}: </label><input id=${id} /></div>`;
       }
     });
     return html;

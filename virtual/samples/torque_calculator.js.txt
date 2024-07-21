@@ -4,11 +4,11 @@
 # Torque Calculator Example
 */
 
-//~begin input {unit: "N*", comment: "Newtons or equivalent", onSave: "setValue"}
+//~begin input {"name": "force", "unit": "N*", "comment": "Newtons or equivalent", "onSave": "setValue"}
   // Jome code view: input force in N* // Newtons or equivalent
   let force;
 //~end
-//~begin input {unit: "m*", comment: "meters or equivalent", onSave: "setValue"}
+//~begin input {"name": "distance", "unit": "m*", "comment": "meters or equivalent", "onSave": "setValue"}
   let distance;
 //~end
 
