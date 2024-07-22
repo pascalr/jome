@@ -63,6 +63,12 @@ function reduceBlocks(blocks) {
     // Converts matching blocks to type whitespace
     if (p.type === BlockType.js && /^\s*$/.test(p.value)) {
       reduced.push({type: BlockType.whitespace, value: p.value})
+
+    // Converts matching blocks to type md
+    } else if (p.type === BlockType.block && p.value.startsWith("/*~ ")) {
+      reduced.push({type: BlockType.md, value: p.value, content: p.value.slice(4,-2)})
+    } else if (p.type === BlockType.block && p.value.startsWith("//~ ")) {
+      reduced.push({type: BlockType.md, value: p.value, content: p.value.slice(4)})
     
     // Groups blocks between the ~begin and ~end into a capture block
     } else if (p.type === BlockType.block && p.value.slice(2,8) === "~begin") {

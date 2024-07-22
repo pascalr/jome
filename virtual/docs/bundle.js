@@ -56420,6 +56420,7 @@
       var BlockType2 = {
         js: "js",
         block: "block",
+        md: "md",
         whitespace: "whitespace",
         capture: "capture"
       };
@@ -56474,6 +56475,10 @@
           p = blocks[i];
           if (p.type === BlockType2.js && /^\s*$/.test(p.value)) {
             reduced.push({ type: BlockType2.whitespace, value: p.value });
+          } else if (p.type === BlockType2.block && p.value.startsWith("/*~ ")) {
+            reduced.push({ type: BlockType2.md, value: p.value, content: p.value.slice(4, -2) });
+          } else if (p.type === BlockType2.block && p.value.startsWith("//~ ")) {
+            reduced.push({ type: BlockType2.md, value: p.value, content: p.value.slice(4) });
           } else if (p.type === BlockType2.block && p.value.slice(2, 8) === "~begin") {
             let j = i + 1;
             for (; j < blocks.length; j++) {
@@ -56538,9 +56543,7 @@
   // samples/torque_calculator.js.txt
   var torque_calculator_js_default = `//~jome 0.0.1\r
 \r
-/*~md\r
-# Torque Calculator Example\r
-*/\r
+/*~ # Torque Calculator Example */\r
 \r
 //~begin input {"name": "force", "unit": "N*", "comment": "Newtons or equivalent", "onSave": "setValue"}\r
   // Jome code view: input force in N* // Newtons or equivalent\r
@@ -56550,7 +56553,7 @@
   let distance;\r
 //~end\r
 \r
-/*~md Torque is the result of a force multiplied by a distance from a pivot point. */\r
+/*~ Torque is the result of a force multiplied by a distance from a pivot point. */\r
 \r
 /*~ignore\r
 We use a jome tag because it's a script that can be run\r
@@ -56593,7 +56596,7 @@ Ideas:\r
   function renderNotebookView(raw, parts) {
     let html = "";
     parts.forEach((p2) => {
-      if (p2.type === import_parse_js.BlockType.block && p2.tag === "md") {
+      if (p2.type === import_parse_js.BlockType.md) {
         html += (0, import_md_to_html.default)(p2.content);
       } else if (p2.type === import_parse_js.BlockType.js) {
         html += `<pre><code>${p2.value}</code></pre>`;

@@ -1,8 +1,6 @@
 //~jome 0.0.1
 
-/*~md
-# Torque Calculator Example
-*/
+/*~ # Torque Calculator Example */
 
 //~begin input {"name": "force", "unit": "N*", "comment": "Newtons or equivalent", "onSave": "setValue"}
   // Jome code view: input force in N* // Newtons or equivalent
@@ -12,7 +10,7 @@
   let distance;
 //~end
 
-/*~md Torque is the result of a force multiplied by a distance from a pivot point. */
+/*~ Torque is the result of a force multiplied by a distance from a pivot point. */
 
 /*~ignore
 We use a jome tag because it's a script that can be run

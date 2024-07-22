@@ -56,7 +56,7 @@ function renderJomeCode(raw, parts) {
 function renderNotebookView(raw, parts) {
   let html = ''
   parts.forEach(p => {
-    if (p.type === BlockType.block && p.tag === 'md') {
+    if (p.type === BlockType.md) {
       html += mdToHtml(p.content)
     } else if (p.type === BlockType.js) {
       html += `<pre><code>${p.value}</code></pre>`

@@ -1,4 +1,4 @@
-/*~md
+/*~
 Par défaut, quand il n'y a pas du tag qui définit le commentaire, ça serait du markdown?
 Pour entre autres permettre de faire: //~# Titre 1
 
@@ -6,11 +6,10 @@ Pour entre autres permettre de faire: //~# Titre 1
 car ça ne fais pas de sens dans notre cas, le code est du code.
 
 Les types supportés:
-- md: pour pseudo markdown
 - h1,h2,h3,h4,h5,h6: peut-être, peut-être pas et doit utiliser markdown
 - unit
 - type
--  
+- 
 
 Nice:
 > :warning: **Warning:** Do not push the big red button.
