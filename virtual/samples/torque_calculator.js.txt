@@ -2,12 +2,11 @@
 
 /*~ # Torque Calculator Example */
 
-//~begin input {"name": "force", "unit": "N*", "comment": "Newtons or equivalent", "onSave": "setValue"}
-  // Jome code view: input force in N* // Newtons or equivalent
-  let force;
+//~begin input {"name": "force", "unit": "N*", "type": "number", "defaultValue": "10", "comment": "Newtons or equivalent", "onSave": "setValue"}
+  let force = 10;
 //~end
-//~begin input {"name": "distance", "unit": "m*", "comment": "meters or equivalent", "onSave": "setValue"}
-  let distance;
+//~begin input {"name": "distance", "unit": "m*", "type": "number", "defaultValue": "2", "comment": "meters or equivalent", "onSave": "setValue"}
+  let distance = 2;
 //~end
 
 /*~ Torque is the result of a force multiplied by a distance from a pivot point. */
@@ -18,26 +17,6 @@ The unit checker can infer that this block returns a value
 with N*m or equivalent as a unit and shows it.
 */
 
-/*~main
-~arg force, ~unit N*, ~comment Newtons or equivalent
-~arg distance, ~unit m*, ~comment meters or equivalent
-*/
-function main(force, distance) {
-  //~run
-  return force * distance; // the last value from a Jome tag is returned
-  //~end
-}
-
-//~begin main
-  //~arg force, ~unit N*, ~comment Newtons or equivalent
-  //~arg distance, ~unit m*, ~comment meters or equivalent
-  function main(force, distance) {
-    return force * distance; // the last value from a Jome tag is returned
-  }
+//~begin code {"startRun": "1"}
+let torque = force * distance;
 //~end
-
-/*~ignore
-Ideas:
-~html: Insert html
-~txt: Insert text
-*/

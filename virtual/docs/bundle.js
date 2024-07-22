@@ -6359,7 +6359,7 @@
           }
           return classes.split(/\s+/).find((_class) => shouldNotHighlight(_class) || getLanguage(_class));
         }
-        function highlight2(codeOrLanguageName, optionsOrCode, ignoreIllegals) {
+        function highlight3(codeOrLanguageName, optionsOrCode, ignoreIllegals) {
           let code = "";
           let languageName = "";
           if (typeof optionsOrCode === "object") {
@@ -6780,7 +6780,7 @@
           }
           node = element;
           const text = node.textContent;
-          const result = language ? highlight2(text, { language, ignoreIllegals: true }) : highlightAuto(text);
+          const result = language ? highlight3(text, { language, ignoreIllegals: true }) : highlightAuto(text);
           element.innerHTML = result.value;
           element.dataset.highlighted = "yes";
           updateClassName(element, language, result.language);
@@ -6911,7 +6911,7 @@
           return highlightElement(el);
         }
         Object.assign(hljs2, {
-          highlight: highlight2,
+          highlight: highlight3,
           highlightAuto,
           highlightAll,
           highlightElement,
@@ -6952,11 +6952,11 @@
         Object.assign(hljs2, MODES);
         return hljs2;
       };
-      var highlight = HLJS({});
-      highlight.newInstance = () => HLJS({});
-      module.exports = highlight;
-      highlight.HighlightJS = highlight;
-      highlight.default = highlight;
+      var highlight2 = HLJS({});
+      highlight2.newInstance = () => HLJS({});
+      module.exports = highlight2;
+      highlight2.HighlightJS = highlight2;
+      highlight2.default = highlight2;
     }
   });
 
@@ -56545,12 +56545,11 @@
 \r
 /*~ # Torque Calculator Example */\r
 \r
-//~begin input {"name": "force", "unit": "N*", "comment": "Newtons or equivalent", "onSave": "setValue"}\r
-  // Jome code view: input force in N* // Newtons or equivalent\r
-  let force;\r
+//~begin input {"name": "force", "unit": "N*", "type": "number", "defaultValue": "10", "comment": "Newtons or equivalent", "onSave": "setValue"}\r
+  let force = 10;\r
 //~end\r
-//~begin input {"name": "distance", "unit": "m*", "comment": "meters or equivalent", "onSave": "setValue"}\r
-  let distance;\r
+//~begin input {"name": "distance", "unit": "m*", "type": "number", "defaultValue": "2", "comment": "meters or equivalent", "onSave": "setValue"}\r
+  let distance = 2;\r
 //~end\r
 \r
 /*~ Torque is the result of a force multiplied by a distance from a pivot point. */\r
@@ -56561,29 +56560,9 @@ The unit checker can infer that this block returns a value\r
 with N*m or equivalent as a unit and shows it.\r
 */\r
 \r
-/*~main\r
-~arg force, ~unit N*, ~comment Newtons or equivalent\r
-~arg distance, ~unit m*, ~comment meters or equivalent\r
-*/\r
-function main(force, distance) {\r
-  //~run\r
-  return force * distance; // the last value from a Jome tag is returned\r
-  //~end\r
-}\r
-\r
-//~begin main\r
-  //~arg force, ~unit N*, ~comment Newtons or equivalent\r
-  //~arg distance, ~unit m*, ~comment meters or equivalent\r
-  function main(force, distance) {\r
-    return force * distance; // the last value from a Jome tag is returned\r
-  }\r
-//~end\r
-\r
-/*~ignore\r
-Ideas:\r
-~html: Insert html\r
-~txt: Insert text\r
-*/`;
+//~begin code\r
+let torque = force * distance;\r
+//~end`;
 
   // src/light_editor.js
   document.addEventListener("DOMContentLoaded", function() {
@@ -56599,16 +56578,33 @@ Ideas:\r
       if (p2.type === import_parse_js.BlockType.md) {
         html += (0, import_md_to_html.default)(p2.content);
       } else if (p2.type === import_parse_js.BlockType.js) {
-        html += `<pre><code>${p2.value}</code></pre>`;
+        html += `<pre><code>${highlight(p2.value)}</code></pre>`;
+      } else if (p2.type === import_parse_js.BlockType.capture && p2.tag === "code") {
+        html += `<pre><code>${highlight(p2.nested.map((o) => o.value).join(""))}</code></pre>`;
       } else if (p2.type === import_parse_js.BlockType.capture && p2.tag === "input") {
         let id = `"input_${p2.data.name}"`;
-        html += `<div><label for=${id}>${p2.data.name}: </label><input id=${id} /></div>`;
+        let type = p2.data.type || "text";
+        html += `<div>`;
+        html += `<label for=${id}>${p2.data.name}: </label>`;
+        html += `<input id=${id} type="${type}"${p2.data.defaultValue ? ` value="${p2.data.defaultValue}"` : ""}>`;
+        if (p2.data.unit && p2.data.unit.endsWith("*")) {
+          let u = p2.data.unit.slice(0, -1);
+          html += `<select name="${id}_unit" id="${id}_unit">
+        <option value="${u}">${u}</option>
+      </select>`;
+        } else if (p2.data.unit) {
+          html += p2.data.unit;
+        }
+        html += `</div>`;
       }
     });
     return html;
   }
   function renderOutputCode(raw, parts) {
-    return hljs.highlight(raw, { language: "js" }).value;
+    return highlight(raw);
+  }
+  function highlight(code) {
+    return hljs.highlight(code, { language: "js" }).value;
   }
 })();
 //# sourceMappingURL=bundle.js.map

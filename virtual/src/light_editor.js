@@ -59,15 +59,33 @@ function renderNotebookView(raw, parts) {
     if (p.type === BlockType.md) {
       html += mdToHtml(p.content)
     } else if (p.type === BlockType.js) {
-      html += `<pre><code>${p.value}</code></pre>`
+      html += `<pre><code>${highlight(p.value)}</code></pre>`
+    } else if (p.type === BlockType.capture && p.tag === 'code') {
+      html += `<pre><code>${highlight(p.nested.map(o => o.value).join(''))}</code></pre>`
     } else if (p.type === BlockType.capture && p.tag === 'input') {
       let id = `"input_${p.data.name}"`
-      html += `<div><label for=${id}>${p.data.name}: </label><input id=${id} /></div>`
+      let type = p.data.type||"text"
+      html += `<div>`
+      html += `<label for=${id}>${p.data.name}: </label>`
+      html += `<input id=${id} type="${type}"${p.data.defaultValue ? ` value="${p.data.defaultValue}"` : ''}>`
+      if (p.data.unit && p.data.unit.endsWith("*")) {
+        let u = p.data.unit.slice(0,-1)
+        html += `<select name="${id}_unit" id="${id}_unit">
+        <option value="${u}">${u}</option>
+      </select>`
+      } else if (p.data.unit) {
+        html += p.data.unit
+      }
+      html += `</div>`
     }
   })
   return html
 }
 
 function renderOutputCode(raw, parts) {
-  return hljs.highlight(raw, {language: 'js'}).value
+  return highlight(raw)
+}
+
+function highlight(code) {
+  return hljs.highlight(code, {language: 'js'}).value
 }
