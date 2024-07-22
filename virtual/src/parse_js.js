@@ -1,6 +1,7 @@
 const BlockType = {
   js: 'js',
   block: 'block',
+  md: "md",
   whitespace: 'whitespace',
   capture: 'capture',
 }
