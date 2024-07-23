@@ -36,7 +36,7 @@ Breaking down the provided components:
 Copier le dossier dans mon C:\Users\...\... ne fonctionnait pas.
 
 J'ai fait Ctrl+Shift+P dans vscode, ensuite Developper : Install extension from location,
-j'ai sélectionné grammar comme dossier et ça l'a finalement fonctionné!
+j'ai sélectionné vscode-jome comme dossier et ça l'a finalement fonctionné!
 
 
 MERCIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII https://www.apeth.com/nonblog/stories/textmatebundle.html

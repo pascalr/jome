@@ -1,0 +1,89 @@
+{
+  "name": "vscode-virtual",
+  "displayName": "Jome Virtual for VS Code",
+  "description": "Jome Virtual language support for VS Code",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.81.0"
+  },
+  "author": "Pascal Rainville",
+  "license": "MIT",
+  "publisher": "Pascal Rainville",
+  "scripts": {
+    "install-linux": "cp -R . ~/.vscode/extensions/vscode-jome",
+    "install-windows": "xcopy /E . C:\\Users\\Loville\\.vscode\\extensions\\vscode-jome"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "jome-explorer",
+          "title": "Jome Explorer",
+          "icon": "assets/code_black_24dp.svg"
+        }
+      ]
+    },
+    "views": {
+      "jome-explorer": [
+        {
+          "id": "jomeExplorerNodes",
+          "name": "Nodes"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Example configuration",
+      "properties": {
+        "languageServerExample.maxNumberOfProblems": {
+          "scope": "resource",
+          "type": "number",
+          "default": 100,
+          "description": "Controls the maximum number of problems produced by the server."
+        },
+        "languageServerExample.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "jomeEditor.start",
+        "title": "Start new jome coding session",
+        "category": "Jome Coding"
+      }
+    ],
+    "activationEvents": [
+      "onNotebook:jome-notebook-serializer"
+    ],
+    "customEditors": [
+      {
+        "viewType": "jomvDataEditor",
+        "displayName": "Jomv Data Editor",
+        "selector": [
+          { "filenamePattern": "*.js" },
+          { "filenamePattern": "*.mjs" },
+          { "filenamePattern": "*.cjs" }
+        ],
+        "priority": "option"
+      }
+    ]
+  },
+  "main": "./index",
+  "dependencies": {
+    "dompurify": "^3.0.11",
+    "markdown-it": "^14.1.0",
+    "vscode-languageclient": "^9.0.1"
+  }
+}
