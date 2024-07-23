@@ -56557,6 +56557,10 @@
   let distance = 2;\r
 //~end\r
 \r
+//~! TODO: Create an image here. The editor should allow basic svg creation.\r
+\r
+/*~svg ... */\r
+\r
 /*~ Torque is the result of a force multiplied by a distance from a pivot point. */\r
 \r
 /*~!\r
