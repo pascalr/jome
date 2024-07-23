@@ -56421,6 +56421,7 @@
         js: "js",
         block: "block",
         md: "md",
+        comment: "comment",
         whitespace: "whitespace",
         capture: "capture"
       };
@@ -56475,6 +56476,10 @@
           p = blocks[i];
           if (p.type === BlockType2.js && /^\s*$/.test(p.value)) {
             reduced.push({ type: BlockType2.whitespace, value: p.value });
+          } else if (p.type === BlockType2.block && p.value.startsWith("/*~!")) {
+            reduced.push({ type: BlockType2.comment, value: p.value });
+          } else if (p.type === BlockType2.block && p.value.startsWith("//~!")) {
+            reduced.push({ type: BlockType2.comment, value: p.value });
           } else if (p.type === BlockType2.block && p.value.startsWith("/*~ ")) {
             reduced.push({ type: BlockType2.md, value: p.value, content: p.value.slice(4, -2) });
           } else if (p.type === BlockType2.block && p.value.startsWith("//~ ")) {
@@ -56554,13 +56559,13 @@
 \r
 /*~ Torque is the result of a force multiplied by a distance from a pivot point. */\r
 \r
-/*~ignore\r
+/*~!\r
 We use a jome tag because it's a script that can be run\r
 The unit checker can infer that this block returns a value\r
 with N*m or equivalent as a unit and shows it.\r
 */\r
 \r
-//~begin code\r
+//~begin code {"startRun": "1"}\r
 let torque = force * distance;\r
 //~end`;
 

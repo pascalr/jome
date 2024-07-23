@@ -11,7 +11,7 @@
 
 /*~ Torque is the result of a force multiplied by a distance from a pivot point. */
 
-/*~ignore
+/*~!
 We use a jome tag because it's a script that can be run
 The unit checker can infer that this block returns a value
 with N*m or equivalent as a unit and shows it.
