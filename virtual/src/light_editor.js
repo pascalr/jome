@@ -62,6 +62,10 @@ function renderNotebookView(raw, parts) {
       html += `<pre><code>${highlight(p.value)}</code></pre>`
     } else if (p.type === BlockType.capture && p.tag === 'code') {
       html += `<pre><code>${highlight(p.nested.map(o => o.value).join(''))}</code></pre>`
+    } else if (p.type === BlockType.block && p.tag === 'html') {
+      html += p.content
+    } else if (p.type === BlockType.block && p.tag === 'svg') {
+      html += "<svg>"+p.content+"</svg>"
     } else if (p.type === BlockType.capture && p.tag === 'input') {
       let id = `"input_${p.data.name}"`
       let type = p.data.type||"text"

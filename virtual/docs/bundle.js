@@ -56559,7 +56559,15 @@
 \r
 //~! TODO: Create an image here. The editor should allow basic svg creation.\r
 \r
-/*~svg ... */\r
+/*~svg:\r
+  <!-- Draw the rectangle (beam) -->\r
+  <rect x="50" y="50" width="200" height="20" fill="steelblue" />\r
+  <!-- Draw the triangle (pivot point) -->\r
+  <polygon points="150,80 140,100 160,100" fill="gray" />\r
+  <!-- Draw the vertical red arrow pointing downward -->\r
+  <line x1="30" y1="50" x2="30" y2="80" stroke="red" stroke-width="2" />\r
+  <polygon points="30,80 25,70 35,70" fill="red" />\r
+*/\r
 \r
 /*~ Torque is the result of a force multiplied by a distance from a pivot point. */\r
 \r
@@ -56590,6 +56598,10 @@ let torque = force * distance;\r
         html += `<pre><code>${highlight(p2.value)}</code></pre>`;
       } else if (p2.type === import_parse_js.BlockType.capture && p2.tag === "code") {
         html += `<pre><code>${highlight(p2.nested.map((o) => o.value).join(""))}</code></pre>`;
+      } else if (p2.type === import_parse_js.BlockType.block && p2.tag === "html") {
+        html += p2.content;
+      } else if (p2.type === import_parse_js.BlockType.block && p2.tag === "svg") {
+        html += "<svg>" + p2.content + "</svg>";
       } else if (p2.type === import_parse_js.BlockType.capture && p2.tag === "input") {
         let id = `"input_${p2.data.name}"`;
         let type = p2.data.type || "text";
