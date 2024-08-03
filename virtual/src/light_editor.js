@@ -3,8 +3,6 @@ import {LooseParser} from "acorn-loose"
 
 import {parseJs, BlockType} from './parse_js'
 
-import sample01 from '../samples/torque_calculator.js.txt'
-
 // Create an instance of ESLint with the configuration passed to the function
 // function createESLintInstance(overrideConfig) {
 //   return new ESLint({
@@ -42,12 +40,31 @@ function parseMetaDatas(metaDataComments) {
   return metaDatas
 }
 
+function loadFile(filename, callback) {
+  fetch('/virtual/samples/'+filename)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.text(); // Convert response to text
+  })
+  .then(data => {
+    callback(data)
+  })
+  .catch(error => {
+    // TODO: handle error
+    // document.getElementById('file-content').textContent = 'Error: ' + error;
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-  let src = sample01
-  let parts = parseJs(src)
-  console.log("parts", parts)
-  document.getElementById('output-editor').innerHTML = renderOutputCode(src, parts)
-  document.getElementById('notebook-editor').innerHTML = renderNotebookView(src, parts)
+  let samples = ["torque_calculator.js", "jome.js", "paths.js", "tests.js", "tests.js"]
+  loadFile(samples[0], (src) => {
+    let parts = parseJs(src)
+    console.log("parts", parts)
+    document.getElementById('output-editor').innerHTML = renderOutputCode(src, parts)
+    document.getElementById('notebook-editor').innerHTML = renderNotebookView(src, parts)
+  })
 });
 
 function renderJomeCode(raw, parts) {

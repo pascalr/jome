@@ -63428,48 +63428,25 @@
 
   // src/light_editor.js
   var import_parse_js = __toESM(require_parse_js());
-
-  // samples/torque_calculator.js.txt
-  var torque_calculator_js_default = `//~jome 0.0.1\r
-\r
-/*~ # Torque Calculator Example */\r
-\r
-//~begin input {"name": "force", "unit": "N*", "type": "number", "defaultValue": "10", "comment": "Newtons or equivalent", "onSave": "setValue"}\r
-  let force = 10;\r
-//~end\r
-//~begin input {"name": "distance", "unit": "m*", "type": "number", "defaultValue": "2", "comment": "meters or equivalent", "onSave": "setValue"}\r
-  let distance = 2;\r
-//~end\r
-\r
-/*~svg:\r
-  <!-- Draw the rectangle (beam) -->\r
-  <rect x="50" y="50" width="200" height="20" fill="steelblue" />\r
-  <!-- Draw the triangle (pivot point) -->\r
-  <polygon points="150,80 140,100 160,100" fill="gray" />\r
-  <!-- Draw the vertical red arrow pointing downward -->\r
-  <line x1="30" y1="50" x2="30" y2="80" stroke="red" stroke-width="2" />\r
-  <polygon points="30,80 25,70 35,70" fill="red" />\r
-*/\r
-\r
-/*~ Torque is the result of a force multiplied by a distance from a pivot point. */\r
-\r
-/*~!\r
-We use a jome tag because it's a script that can be run\r
-The unit checker can infer that this block returns a value\r
-with N*m or equivalent as a unit and shows it.\r
-*/\r
-\r
-//~begin code {"startRun": "1"}\r
-let torque = force * distance;\r
-//~end`;
-
-  // src/light_editor.js
+  function loadFile(filename, callback) {
+    fetch("/virtual/samples/" + filename).then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+      return response.text();
+    }).then((data2) => {
+      callback(data2);
+    }).catch((error) => {
+    });
+  }
   document.addEventListener("DOMContentLoaded", function() {
-    let src = torque_calculator_js_default;
-    let parts = (0, import_parse_js.parseJs)(src);
-    console.log("parts", parts);
-    document.getElementById("output-editor").innerHTML = renderOutputCode(src, parts);
-    document.getElementById("notebook-editor").innerHTML = renderNotebookView(src, parts);
+    let samples = ["torque_calculator.js", "jome.js", "paths.js", "tests.js", "tests.js"];
+    loadFile(samples[0], (src) => {
+      let parts = (0, import_parse_js.parseJs)(src);
+      console.log("parts", parts);
+      document.getElementById("output-editor").innerHTML = renderOutputCode(src, parts);
+      document.getElementById("notebook-editor").innerHTML = renderNotebookView(src, parts);
+    });
   });
   function evaluateCell(cell) {
   }
