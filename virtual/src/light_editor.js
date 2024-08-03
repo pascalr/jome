@@ -41,6 +41,7 @@ function parseMetaDatas(metaDataComments) {
 }
 
 function loadFile(filename, callback) {
+  document.getElementById("current_filename").innerText = filename
   fetch('/virtual/samples/'+filename)
   .then(response => {
     if (!response.ok) {
@@ -57,14 +58,22 @@ function loadFile(filename, callback) {
   });
 }
 
+function onFileLoad(src) {
+  let parts = parseJs(src)
+  console.log("parts", parts)
+  document.getElementById('output-editor').innerHTML = renderOutputCode(src, parts)
+  document.getElementById('notebook-editor').innerHTML = renderNotebookView(src, parts)
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   let samples = ["torque_calculator.js", "jome.js", "paths.js", "tests.js", "tests.js"]
-  loadFile(samples[0], (src) => {
-    let parts = parseJs(src)
-    console.log("parts", parts)
-    document.getElementById('output-editor').innerHTML = renderOutputCode(src, parts)
-    document.getElementById('notebook-editor').innerHTML = renderNotebookView(src, parts)
-  })
+  loadFile(samples[0], onFileLoad)
+
+  const selectSampleElement = document.getElementById('sample_select');
+  selectSampleElement.addEventListener('change', function (event) {
+    console.log("HERE!!!!!!!!!!!!!!!!")
+    loadFile(event.target.value, onFileLoad)
+  });
 });
 
 function renderJomeCode(raw, parts) {

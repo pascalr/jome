@@ -21,8 +21,9 @@
           
           <h1>Jome virtual - Live editor</h1>
 
-          <div>Sample: <select name="sample" id=sample">
-            <option value="torque_calculator">Torque calculator</option>
+          <div>Sample: <select name="sample" id="sample_select">
+            <option value="torque_calculator.js">Torque calculator</option>
+            <option value="webpage.html">Webpage</option>
           </select>`</div>
 
           <p>TODO: Allow Notebook View, Jome View or both. Jome view is text only.</p>
@@ -45,7 +46,7 @@
               <div id="notebook-editor"></div>
             </div>
             <div id="output-view">
-              <div id="current_filename">torque_calculator.js</div>
+              <div id="current_filename"></div>
               <hr style="margin-bottom: 0;"/>
               <pre style="margin-top: 0;"><code id="output-editor" class="language-js"></code></pre>
             </div>
