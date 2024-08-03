@@ -1,4 +1,5 @@
 import mdToHtml from "@jome/md-to-html"
+import {LooseParser} from "acorn-loose"
 
 import {parseJs, BlockType} from './parse_js'
 
@@ -53,6 +54,10 @@ function renderJomeCode(raw, parts) {
   return ''
 }
 
+function evaluateCell(cell) {
+
+}
+
 function renderNotebookView(raw, parts) {
   let html = ''
   parts.forEach(p => {
@@ -61,7 +66,9 @@ function renderNotebookView(raw, parts) {
     } else if (p.type === BlockType.js) {
       html += `<pre><code>${highlight(p.value)}</code></pre>`
     } else if (p.type === BlockType.capture && p.tag === 'code') {
+      evaluateCell(p)
       html += `<pre><code>${highlight(p.nested.map(o => o.value).join(''))}</code></pre>`
+      html += `<div class="code_result">999 N·m</div>`
     } else if (p.type === BlockType.block && p.tag === 'html') {
       html += p.content
     } else if (p.type === BlockType.block && p.tag === 'svg') {
