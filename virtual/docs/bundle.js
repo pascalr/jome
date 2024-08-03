@@ -56557,8 +56557,6 @@
   let distance = 2;\r
 //~end\r
 \r
-//~! TODO: Create an image here. The editor should allow basic svg creation.\r
-\r
 /*~svg:\r
   <!-- Draw the rectangle (beam) -->\r
   <rect x="50" y="50" width="200" height="20" fill="steelblue" />\r
