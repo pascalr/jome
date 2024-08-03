@@ -25,12 +25,23 @@
 
           <div id="editor-views">
             <div id="notebook-view">
-              <div>Notebook view</div>
+              <div id="toolbar">
+                <div id="stop_button">
+                  <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                    <polygon points="3,2 13,8 3,14" />
+                  </svg>
+                </div>
+                <div id="stop_button">
+                  <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                    <rect x="3" y="3" width="10" height="10" />
+                  </svg>
+                </div>
+              </div>
               <hr style="margin-bottom: 0;"/>
               <div id="notebook-editor"></div>
             </div>
             <div id="output-view">
-              <div>Source view</div>
+              <div id="current_filename">torque_calculator.js</div>
               <hr style="margin-bottom: 0;"/>
               <pre style="margin-top: 0;"><code id="output-editor" class="language-js"></code></pre>
             </div>
