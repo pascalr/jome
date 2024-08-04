@@ -63428,45 +63428,50 @@
 
   // src/light_editor.js
   var import_parse_js = __toESM(require_parse_js());
-  function loadFile(filename, callback) {
+  var Document = class {
+    constructor(filename, content) {
+      this.filename = filename;
+      this.content = content;
+      this.extension = /(?:\.([^.]+))?$/.exec(filename)[1];
+    }
+  };
+  function loadFile(filename) {
     document.getElementById("current_filename").innerText = filename;
     fetch("/virtual/samples/" + filename).then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok " + response.statusText);
       }
       return response.text();
-    }).then((data2) => {
-      callback(data2);
+    }).then((src) => {
+      let doc = new Document(filename, src);
+      let parts = (0, import_parse_js.parseJs)(src);
+      console.log("parts", parts);
+      document.getElementById("output-editor").innerHTML = renderOutputCode(doc, parts);
+      document.getElementById("notebook-editor").innerHTML = renderNotebookView(doc, parts);
     }).catch((error) => {
     });
   }
-  function onFileLoad(src) {
-    let parts = (0, import_parse_js.parseJs)(src);
-    console.log("parts", parts);
-    document.getElementById("output-editor").innerHTML = renderOutputCode(src, parts);
-    document.getElementById("notebook-editor").innerHTML = renderNotebookView(src, parts);
-  }
   document.addEventListener("DOMContentLoaded", function() {
     let samples = ["torque_calculator.js", "jome.js", "paths.js", "tests.js", "tests.js"];
-    loadFile(samples[0], onFileLoad);
+    loadFile(samples[0]);
     const selectSampleElement = document.getElementById("sample_select");
     selectSampleElement.addEventListener("change", function(event) {
       console.log("HERE!!!!!!!!!!!!!!!!");
-      loadFile(event.target.value, onFileLoad);
+      loadFile(event.target.value);
     });
   });
   function evaluateCell(cell) {
   }
-  function renderNotebookView(raw, parts) {
+  function renderNotebookView(doc, parts) {
     let html = "";
     parts.forEach((p2) => {
       if (p2.type === import_parse_js.BlockType.md) {
         html += (0, import_md_to_html.default)(p2.content);
       } else if (p2.type === import_parse_js.BlockType.js) {
-        html += `<pre><code>${highlight(p2.value)}</code></pre>`;
+        html += `<pre><code>${highlight(doc, p2.value)}</code></pre>`;
       } else if (p2.type === import_parse_js.BlockType.capture && p2.tag === "code") {
         evaluateCell(p2);
-        html += `<pre><code>${highlight(p2.nested.map((o) => o.value).join(""))}</code></pre>`;
+        html += `<pre><code>${highlight(doc, p2.nested.map((o) => o.value).join(""))}</code></pre>`;
         html += `<div class="code_result">999 N\xB7m</div>`;
       } else if (p2.type === import_parse_js.BlockType.block && p2.tag === "html") {
         html += p2.content;
@@ -63491,11 +63496,11 @@
     });
     return html;
   }
-  function renderOutputCode(raw, parts) {
-    return highlight(raw);
+  function renderOutputCode(doc, parts) {
+    return highlight(doc, doc.content);
   }
-  function highlight(code) {
-    return hljs.highlight(code, { language: "js" }).value;
+  function highlight(doc, code) {
+    return hljs.highlight(code, { language: doc.extension }).value;
   }
 })();
 //# sourceMappingURL=bundle.js.map

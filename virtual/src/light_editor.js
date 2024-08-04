@@ -22,6 +22,14 @@ class MetaData {
   }
 }
 
+class Document {
+  constructor(filename, content) {
+    this.filename = filename
+    this.content = content
+    this.extension = /(?:\.([^.]+))?$/.exec(filename)[1];
+  }
+}
+
 function parseMetaDatas(metaDataComments) {
   const metaDatas = []
   metaDataComments.forEach(data => {
@@ -40,7 +48,7 @@ function parseMetaDatas(metaDataComments) {
   return metaDatas
 }
 
-function loadFile(filename, callback) {
+function loadFile(filename) {
   document.getElementById("current_filename").innerText = filename
   fetch('/virtual/samples/'+filename)
   .then(response => {
@@ -49,8 +57,12 @@ function loadFile(filename, callback) {
     }
     return response.text(); // Convert response to text
   })
-  .then(data => {
-    callback(data)
+  .then(src => {
+    let doc = new Document(filename, src)
+    let parts = parseJs(src)
+    console.log("parts", parts)
+    document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
+    document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)
   })
   .catch(error => {
     // TODO: handle error
@@ -58,21 +70,14 @@ function loadFile(filename, callback) {
   });
 }
 
-function onFileLoad(src) {
-  let parts = parseJs(src)
-  console.log("parts", parts)
-  document.getElementById('output-editor').innerHTML = renderOutputCode(src, parts)
-  document.getElementById('notebook-editor').innerHTML = renderNotebookView(src, parts)
-}
-
 document.addEventListener('DOMContentLoaded', function() {
   let samples = ["torque_calculator.js", "jome.js", "paths.js", "tests.js", "tests.js"]
-  loadFile(samples[0], onFileLoad)
+  loadFile(samples[0])
 
   const selectSampleElement = document.getElementById('sample_select');
   selectSampleElement.addEventListener('change', function (event) {
     console.log("HERE!!!!!!!!!!!!!!!!")
-    loadFile(event.target.value, onFileLoad)
+    loadFile(event.target.value)
   });
 });
 
@@ -84,16 +89,16 @@ function evaluateCell(cell) {
 
 }
 
-function renderNotebookView(raw, parts) {
+function renderNotebookView(doc, parts) {
   let html = ''
   parts.forEach(p => {
     if (p.type === BlockType.md) {
       html += mdToHtml(p.content)
     } else if (p.type === BlockType.js) {
-      html += `<pre><code>${highlight(p.value)}</code></pre>`
+      html += `<pre><code>${highlight(doc, p.value)}</code></pre>`
     } else if (p.type === BlockType.capture && p.tag === 'code') {
       evaluateCell(p)
-      html += `<pre><code>${highlight(p.nested.map(o => o.value).join(''))}</code></pre>`
+      html += `<pre><code>${highlight(doc, p.nested.map(o => o.value).join(''))}</code></pre>`
       html += `<div class="code_result">999 N·m</div>`
     } else if (p.type === BlockType.block && p.tag === 'html') {
       html += p.content
@@ -119,10 +124,10 @@ function renderNotebookView(raw, parts) {
   return html
 }
 
-function renderOutputCode(raw, parts) {
-  return highlight(raw)
+function renderOutputCode(doc, parts) {
+  return highlight(doc, doc.content)
 }
 
-function highlight(code) {
-  return hljs.highlight(code, {language: 'js'}).value
+function highlight(doc, code) {
+  return hljs.highlight(code, {language: doc.extension}).value
 }

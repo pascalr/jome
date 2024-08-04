@@ -2,7 +2,7 @@
 
 /*~ # Torque Calculator Example */
 
-//begin input(name: "force", unit: "N*", type: "number", defaultValue: "10", comment: "Newtons or equivalent", onSave: "setValue"}
+//~!begin input(name: "force", unit: "N*", type: "number", defaultValue: "10", comment: "Newtons or equivalent", onSave: "setValue"}
 //~begin input {"name": "force", "unit": "N*", "type": "number", "defaultValue": "10", "comment": "Newtons or equivalent", "onSave": "setValue"}
   let force = 10;
 //~end
@@ -10,7 +10,7 @@
   let distance = 2;
 //~end
 
-/* svg {
+/*~! svg {
   <!-- Draw the rectangle (beam) -->
   <rect x="50" y="50" width="200" height="20" fill="steelblue" />
   <!-- Draw the triangle (pivot point) -->
