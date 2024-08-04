@@ -56417,6 +56417,28 @@
   // src/parser.js
   var require_parser = __commonJS({
     "src/parser.js"(exports, module) {
+      var configs = {
+        js: {
+          inline: "//",
+          multiBegin: "/*",
+          multiEnd: "*/",
+          stringSingle: true,
+          stringDouble: true,
+          stringBacktick: true
+        },
+        html: {
+          multiBegin: "<!--",
+          multiEnd: "-->",
+          stringSingle: true,
+          stringDouble: true
+        },
+        css: {
+          multiBegin: "/*",
+          multiEnd: "*/",
+          stringSingle: true,
+          stringDouble: true
+        }
+      };
       var BlockType2 = {
         js: "js",
         block: "block",
@@ -56500,6 +56522,10 @@
         return reduced;
       }
       function parse6(doc) {
+        let config = configs[doc.extension];
+        if (!config) {
+          throw new Error("No configuration found to parse extension: ", doc.extension);
+        }
         let code = doc.content;
         let parts = [];
         let i = 0;
@@ -56507,12 +56533,12 @@
         let js = "";
         let str;
         while (i < length) {
-          if (code[i] === '"' || code[i] === "'") {
+          if (config.stringDouble && code[i] === '"' || config.stringSingle && code[i] === "'") {
             str = extractQuote(code.slice(i));
             js += str;
             i = i + (str.length || 1);
             continue;
-          } else if (code[i] === "/" && code[i + 1] === "/") {
+          } else if (config.inline && code.startsWith(config.inline, i)) {
             str = extractSingleLineComment(code.slice(i));
           } else if (code[i] === "/" && code[i + 1] === "*") {
             str = extractBlockComment(code.slice(i));

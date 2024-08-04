@@ -1,3 +1,26 @@
+const configs = {
+  js: {
+    inline: "//",
+    multiBegin: "/*",
+    multiEnd: "*/",
+    stringSingle: true,
+    stringDouble: true,
+    stringBacktick: true
+  },
+  html: {
+    multiBegin: "<!--",
+    multiEnd: "-->",
+    stringSingle: true,
+    stringDouble: true,
+  },
+  css: {
+    multiBegin: "/*",
+    multiEnd: "*/",
+    stringSingle: true,
+    stringDouble: true,
+  }
+}
+
 const BlockType = {
   js: 'js',
   block: 'block',
@@ -96,6 +119,8 @@ function reduceBlocks(blocks) {
 
 // Split the js code into blocks of different kinds like mardown, source code, data...
 function parse(doc) {
+  let config = configs[doc.extension]
+  if (!config) {throw new Error("No configuration found to parse extension: ", doc.extension)}
   let code = doc.content
   let parts = [] // {type: ..., value: ...}
 
@@ -107,13 +132,13 @@ function parse(doc) {
   while (i < length) {
     // TODO: Template literals
     // strings
-    if (code[i] === '"' || code[i] === "'") {
+    if ((config.stringDouble && code[i] === '"') || (config.stringSingle && code[i] === "'")) {
       str = extractQuote(code.slice(i))
       js += str;
       i = i + (str.length || 1);
       continue;
     // commments OR jome block
-    } else if (code[i] === '/' && code[i + 1] === '/') {
+    } else if (config.inline && code.startsWith(config.inline, i)) {
       str = extractSingleLineComment(code.slice(i))
     // comments or jome block
     } else if (code[i] === '/' && code[i + 1] === '*') {
