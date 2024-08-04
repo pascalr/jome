@@ -1,7 +1,7 @@
 import mdToHtml from "@jome/md-to-html"
 import {LooseParser} from "acorn-loose"
 
-import {parseJs, BlockType} from './parse_js'
+import {parse, BlockType} from './parser'
 
 // Create an instance of ESLint with the configuration passed to the function
 // function createESLintInstance(overrideConfig) {
@@ -59,7 +59,7 @@ function loadFile(filename) {
   })
   .then(src => {
     let doc = new Document(filename, src)
-    let parts = parseJs(src)
+    let parts = parse(doc)
     console.log("parts", parts)
     document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
     document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)

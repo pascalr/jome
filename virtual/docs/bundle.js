@@ -56414,9 +56414,9 @@
     }
   });
 
-  // src/parse_js.js
-  var require_parse_js = __commonJS({
-    "src/parse_js.js"(exports, module) {
+  // src/parser.js
+  var require_parser = __commonJS({
+    "src/parser.js"(exports, module) {
       var BlockType2 = {
         js: "js",
         block: "block",
@@ -56499,7 +56499,8 @@
         }
         return reduced;
       }
-      function parseJs2(code) {
+      function parse6(doc) {
+        let code = doc.content;
         let parts = [];
         let i = 0;
         let length = code.length;
@@ -56537,7 +56538,7 @@
         }
         return analyzeBlocks(reduceBlocks(parts));
       }
-      module.exports = { BlockType: BlockType2, parseJs: parseJs2 };
+      module.exports = { BlockType: BlockType2, parse: parse6 };
     }
   });
 
@@ -63427,7 +63428,7 @@
   defaultOptions.tabSize = 4;
 
   // src/light_editor.js
-  var import_parse_js = __toESM(require_parse_js());
+  var import_parser = __toESM(require_parser());
   var Document = class {
     constructor(filename, content) {
       this.filename = filename;
@@ -63444,7 +63445,7 @@
       return response.text();
     }).then((src) => {
       let doc = new Document(filename, src);
-      let parts = (0, import_parse_js.parseJs)(src);
+      let parts = (0, import_parser.parse)(doc);
       console.log("parts", parts);
       document.getElementById("output-editor").innerHTML = renderOutputCode(doc, parts);
       document.getElementById("notebook-editor").innerHTML = renderNotebookView(doc, parts);
@@ -63465,19 +63466,19 @@
   function renderNotebookView(doc, parts) {
     let html = "";
     parts.forEach((p2) => {
-      if (p2.type === import_parse_js.BlockType.md) {
+      if (p2.type === import_parser.BlockType.md) {
         html += (0, import_md_to_html.default)(p2.content);
-      } else if (p2.type === import_parse_js.BlockType.js) {
+      } else if (p2.type === import_parser.BlockType.js) {
         html += `<pre><code>${highlight(doc, p2.value)}</code></pre>`;
-      } else if (p2.type === import_parse_js.BlockType.capture && p2.tag === "code") {
+      } else if (p2.type === import_parser.BlockType.capture && p2.tag === "code") {
         evaluateCell(p2);
         html += `<pre><code>${highlight(doc, p2.nested.map((o) => o.value).join(""))}</code></pre>`;
         html += `<div class="code_result">999 N\xB7m</div>`;
-      } else if (p2.type === import_parse_js.BlockType.block && p2.tag === "html") {
+      } else if (p2.type === import_parser.BlockType.block && p2.tag === "html") {
         html += p2.content;
-      } else if (p2.type === import_parse_js.BlockType.block && p2.tag === "svg") {
+      } else if (p2.type === import_parser.BlockType.block && p2.tag === "svg") {
         html += "<svg>" + p2.content + "</svg>";
-      } else if (p2.type === import_parse_js.BlockType.capture && p2.tag === "input") {
+      } else if (p2.type === import_parser.BlockType.capture && p2.tag === "input") {
         let id = `"input_${p2.data.name}"`;
         let type = p2.data.type || "text";
         html += `<div>`;

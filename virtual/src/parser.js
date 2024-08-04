@@ -95,7 +95,8 @@ function reduceBlocks(blocks) {
 }
 
 // Split the js code into blocks of different kinds like mardown, source code, data...
-function parseJs(code) {
+function parse(doc) {
+  let code = doc.content
   let parts = [] // {type: ..., value: ...}
 
   let i = 0;
@@ -134,4 +135,4 @@ function parseJs(code) {
   return analyzeBlocks(reduceBlocks(parts))
 }
 
-module.exports = {BlockType, parseJs}
+module.exports = {BlockType, parse}
