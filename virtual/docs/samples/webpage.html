@@ -14,14 +14,14 @@ You can write code blocks to modify the static html.
     <title>Sample - webpage</title>
   </head>
   <body>
-    <!--~begin script
-    TODO: Here insert code that generates a dropdown with the values depending on the
-    files on disk.
-    -->
     <select name="sample" id=sample">
+      <!--~begin js {
+        let files = ls("samples/")
+        return files.map(f => `<option value="${f}">${titlecase(f)}</option>`)
+      }-->
       <option value="torque_calculator">Torque calculator</option>
+      <!--~end-->
     </select>
-    <!--~end-->
   </body>
 </HTML>
     
