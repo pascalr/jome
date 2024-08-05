@@ -56465,13 +56465,26 @@
         }
         return i < str.length ? result + ch : result;
       }
+      function pushCurrentCode(doc) {
+        if (doc._currCodeBlock) {
+          if (/^\s*$/.test(doc._currCodeBlock)) {
+            doc.parts.push({ type: BlockType2.whitespace, value: doc._currCodeBlock });
+          } else {
+            doc.parts.push({ type: BlockType2.code, value: doc._currCodeBlock });
+          }
+          doc._currCodeBlock = "";
+        }
+      }
       function pushComment2(doc, whole, inner) {
         if (inner[0] === "~") {
-          if (doc._currCodeBlock) {
-            doc.parts.push({ type: BlockType2.code, value: doc._currCodeBlock });
-            doc._currCodeBlock = "";
+          pushCurrentCode(doc);
+          if (inner[1] === "!") {
+            doc.parts.push({ type: BlockType2.comment, value: inner.slice(1) });
+          } else if (inner[1] === " ") {
+            doc.parts.push({ type: BlockType2.md, value: inner.slice(1) });
+          } else {
+            doc.parts.push({ type: BlockType2.block, value: inner.slice(1) });
           }
-          doc.parts.push({ type: BlockType2.block, value: inner.slice(1) });
         } else {
           doc._currCodeBlock += whole;
         }
@@ -56483,18 +56496,18 @@
         }
         doc.cursor++;
         let whole = doc.content.slice(start, doc.cursor);
-        let inner = whole.slice(doc.config.inlineComment);
+        let inner = whole.slice(doc.config.inlineComment.length);
         pushComment2(doc, whole, inner);
       }
       function analyzeBlocks(blocks) {
         return blocks.map((b) => {
           if (b.type === BlockType2.block) {
-            b.tag = b.value.slice(3).match(/\w+/)[0];
+            b.tag = b.value.match(/\w+/)[0];
             let s = b.value.trimEnd();
             b.content = s.substring(4 + b.tag.length, s.length - (b.value[1] === "*" ? 2 : 0));
           } else if (b.type === BlockType2.capture) {
-            b.tag = b.value.slice(9).match(/\w+/)[0];
-            let s = b.value.slice(9 + b.tag.length).trimStart().trimEnd();
+            b.tag = b.value.slice(6).match(/\w+/)[0];
+            let s = b.value.slice(6 + b.tag.length).trimStart().trimEnd();
             try {
               console.log(s);
               let o = JSON.parse(s);
@@ -56510,20 +56523,10 @@
         let reduced = [];
         for (let i = 0; i < blocks.length; i++) {
           p = blocks[i];
-          if (p.type === BlockType2.code && /^\s*$/.test(p.value)) {
-            reduced.push({ type: BlockType2.whitespace, value: p.value });
-          } else if (p.type === BlockType2.block && p.value.startsWith("/*~!")) {
-            reduced.push({ type: BlockType2.comment, value: p.value });
-          } else if (p.type === BlockType2.block && p.value.startsWith("//~!")) {
-            reduced.push({ type: BlockType2.comment, value: p.value });
-          } else if (p.type === BlockType2.block && p.value.startsWith("/*~ ")) {
-            reduced.push({ type: BlockType2.md, value: p.value, content: p.value.slice(4, -2) });
-          } else if (p.type === BlockType2.block && p.value.startsWith("//~ ")) {
-            reduced.push({ type: BlockType2.md, value: p.value, content: p.value.slice(4) });
-          } else if (p.type === BlockType2.block && p.value.slice(2, 8) === "~begin") {
+          if (p.type === BlockType2.block && p.value.slice(0, 5) === "begin") {
             let j = i + 1;
             for (; j < blocks.length; j++) {
-              if (blocks[j].value.slice(2, 6) === "~end") {
+              if (blocks[j].value.slice(0, 3) === "end") {
                 break;
               }
             }
@@ -56576,6 +56579,9 @@
           parts.push({ type: BlockType2.code, value: code });
           code = "";
         }
+        pushCurrentCode(doc);
+        doc.parts = analyzeBlocks(reduceBlocks(doc.parts));
+        return doc.parts;
         return analyzeBlocks(reduceBlocks(parts));
       }
       module.exports = { BlockType: BlockType2, parse: parse6 };

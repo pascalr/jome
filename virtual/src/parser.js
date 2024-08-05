@@ -48,14 +48,28 @@ function extractQuote(str) {
   return (i < str.length) ? result+ch : result
 }
 
+function pushCurrentCode(doc) {
+  if (doc._currCodeBlock) {
+    if (/^\s*$/.test(doc._currCodeBlock)) {
+      doc.parts.push({type: BlockType.whitespace, value: doc._currCodeBlock})
+    } else {
+      doc.parts.push({type: BlockType.code, value: doc._currCodeBlock})
+    }
+    doc._currCodeBlock = ""
+  }
+}
+
 function pushComment(doc, whole, inner) {
   // Check if the comment is a code comment or a Jome block.
   if (inner[0] === '~') {
-    if (doc._currCodeBlock) {
-      doc.parts.push({type: BlockType.code, value: doc._currCodeBlock});
-      doc._currCodeBlock = ""
+    pushCurrentCode(doc)
+    if (inner[1] === '!') { // comment
+      doc.parts.push({type: BlockType.comment, value: inner.slice(1)})
+    } else if (inner[1] === ' ') { // markdown
+      doc.parts.push({type: BlockType.md, value: inner.slice(1)})
+    } else { // block
+      doc.parts.push({type: BlockType.block, value: inner.slice(1)})
     }
-    doc.parts.push({type: BlockType.block, value: inner.slice(1)})
   } else {
     doc._currCodeBlock += whole;
   }
@@ -68,21 +82,21 @@ function extractSingleLineComment(doc) {
   }
   doc.cursor++; // Add the newline or go beyond EOF doesn't matter
   let whole = doc.content.slice(start, doc.cursor)
-  let inner = whole.slice(doc.config.inlineComment)
+  let inner = whole.slice(doc.config.inlineComment.length)
   pushComment(doc, whole, inner)
 }
 
 function analyzeBlocks(blocks) {
   return blocks.map(b => {
     if (b.type === BlockType.block) {
-      b.tag = b.value.slice(3).match(/\w+/)[0]
+      b.tag = b.value.match(/\w+/)[0]
       let s = b.value.trimEnd()
       // FIXME: This assumes always a space after tag name. Correct?
       // Remove */ if present
       b.content = s.substring(4+b.tag.length, s.length - (b.value[1] === '*' ? 2 : 0))
     } else if (b.type === BlockType.capture) {
-      b.tag = b.value.slice(9).match(/\w+/)[0]
-      let s = b.value.slice(9 + b.tag.length).trimStart().trimEnd()
+      b.tag = b.value.slice(6).match(/\w+/)[0]
+      let s = b.value.slice(6 + b.tag.length).trimStart().trimEnd()
       try {
         console.log(s)
         let o = JSON.parse(s)
@@ -100,27 +114,11 @@ function reduceBlocks(blocks) {
   for (let i = 0; i < blocks.length; i++) {
     p = blocks[i] 
 
-    // Converts matching blocks to type whitespace
-    if (p.type === BlockType.code && /^\s*$/.test(p.value)) {
-      reduced.push({type: BlockType.whitespace, value: p.value})
-
-    // Converts matching blocks to type comment
-    } else if (p.type === BlockType.block && p.value.startsWith("/*~!")) {
-      reduced.push({type: BlockType.comment, value: p.value})
-    } else if (p.type === BlockType.block && p.value.startsWith("//~!")) {
-      reduced.push({type: BlockType.comment, value: p.value})
-
-    // Converts matching blocks to type md
-    } else if (p.type === BlockType.block && p.value.startsWith("/*~ ")) {
-      reduced.push({type: BlockType.md, value: p.value, content: p.value.slice(4,-2)})
-    } else if (p.type === BlockType.block && p.value.startsWith("//~ ")) {
-      reduced.push({type: BlockType.md, value: p.value, content: p.value.slice(4)})
-    
     // Groups blocks between the ~begin and ~end into a capture block
-    } else if (p.type === BlockType.block && p.value.slice(2,8) === "~begin") {
+    if (p.type === BlockType.block && p.value.slice(0,5) === "begin") {
       let j = i + 1;
       for (; j < blocks.length; j++) {
-        if (blocks[j].value.slice(2,6) === "~end") {break;}
+        if (blocks[j].value.slice(0,3) === "end") {break;}
       }
       // FIXME: This does not work for double nested. Not sure if supported yet. We'll see.
       // TODO: Validate that the last is an end tag. This does not work otherwise (will skip the last block I believe)
@@ -173,6 +171,10 @@ function parse(doc) {
   }
   if (code.length) {parts.push({type: BlockType.code, value: code}); code = ""}
 
+  pushCurrentCode(doc)
+
+  doc.parts = analyzeBlocks(reduceBlocks(doc.parts))
+  return doc.parts
   return analyzeBlocks(reduceBlocks(parts))
 }
 
