@@ -56526,40 +56526,40 @@
         if (!config) {
           throw new Error("No configuration found to parse extension: ", doc.extension);
         }
-        let code = doc.content;
+        let src = doc.content;
         let parts = [];
-        let js = "";
+        let code = "";
         let str;
         while (doc.cursor < doc.length) {
           let i = doc.cursor;
-          if (config.stringDouble && code[i] === '"' || config.stringSingle && code[i] === "'") {
-            str = extractQuote(code.slice(i));
-            js += str;
+          if (config.stringDouble && src[i] === '"' || config.stringSingle && src[i] === "'") {
+            str = extractQuote(src.slice(i));
+            code += str;
             doc.cursor = i + (str.length || 1);
             continue;
-          } else if (config.inline && code.startsWith(config.inline, i)) {
-            str = extractSingleLineComment(code.slice(i));
-          } else if (config.multiBegin && code.startsWith(config.multiBegin, i)) {
-            str = extractBlockComment(code.slice(i), config.multiBegin, config.multiEnd);
+          } else if (config.inline && src.startsWith(config.inline, i)) {
+            str = extractSingleLineComment(src.slice(i));
+          } else if (config.multiBegin && src.startsWith(config.multiBegin, i)) {
+            str = extractBlockComment(src.slice(i), config.multiBegin, config.multiEnd);
           } else {
-            js += code[i];
+            code += src[i];
             doc.cursor++;
             continue;
           }
           if (str[2] === "~") {
-            if (js.length) {
-              parts.push({ type: BlockType2.code, value: js });
-              js = "";
+            if (code.length) {
+              parts.push({ type: BlockType2.code, value: code });
+              code = "";
             }
             parts.push({ type: BlockType2.block, value: str });
           } else {
-            js += str;
+            code += str;
           }
           doc.cursor = i + (str.length || 1);
         }
-        if (js.length) {
-          parts.push({ type: BlockType2.code, value: js });
-          js = "";
+        if (code.length) {
+          parts.push({ type: BlockType2.code, value: code });
+          code = "";
         }
         return analyzeBlocks(reduceBlocks(parts));
       }

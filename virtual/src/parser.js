@@ -121,40 +121,40 @@ function reduceBlocks(blocks) {
 function parse(doc) {
   let config = configs[doc.extension]
   if (!config) {throw new Error("No configuration found to parse extension: ", doc.extension)}
-  let code = doc.content
+  let src = doc.content
   let parts = [] // {type: ..., value: ...}
 
-  let js = ""
+  let code = ""
   let str;
 
   while (doc.cursor < doc.length) {
     let i = doc.cursor
     // TODO: Template literals
     // strings
-    if ((config.stringDouble && code[i] === '"') || (config.stringSingle && code[i] === "'")) {
-      str = extractQuote(code.slice(i))
-      js += str;
+    if ((config.stringDouble && src[i] === '"') || (config.stringSingle && src[i] === "'")) {
+      str = extractQuote(src.slice(i))
+      code += str;
       doc.cursor = i + (str.length || 1);
       continue;
     // commments OR jome block
-    } else if (config.inline && code.startsWith(config.inline, i)) {
-      str = extractSingleLineComment(code.slice(i))
+    } else if (config.inline && src.startsWith(config.inline, i)) {
+      str = extractSingleLineComment(src.slice(i))
     // comments or jome block
-    } else if (config.multiBegin && code.startsWith(config.multiBegin, i)) {
-      str = extractBlockComment(code.slice(i), config.multiBegin, config.multiEnd)
+    } else if (config.multiBegin && src.startsWith(config.multiBegin, i)) {
+      str = extractBlockComment(src.slice(i), config.multiBegin, config.multiEnd)
     } else {
-      js += code[i]; doc.cursor++; continue;
+      code += src[i]; doc.cursor++; continue;
     }
     // comments OR jome block only they execute this code
     if (str[2] === '~') {
-      if (js.length) {parts.push({type: BlockType.code, value: js}); js = ""}
+      if (code.length) {parts.push({type: BlockType.code, value: code}); code = ""}
       parts.push({type: BlockType.block, value: str})
     } else {
-      js += str;
+      code += str;
     }
     doc.cursor = i + (str.length || 1);
   }
-  if (js.length) {parts.push({type: BlockType.code, value: js}); js = ""}
+  if (code.length) {parts.push({type: BlockType.code, value: code}); code = ""}
 
   return analyzeBlocks(reduceBlocks(parts))
 }
