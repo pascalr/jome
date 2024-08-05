@@ -157,6 +157,7 @@ function parse(doc) {
   }
   pushCurrentCode(doc)
   doc.parts = analyzeBlocks(reduceBlocks(doc.parts))
+  return doc.parts
 }
 
 module.exports = {BlockType, parse}

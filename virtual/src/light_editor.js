@@ -86,7 +86,7 @@ function renderNotebookView(doc, parts) {
   let html = ''
   parts.forEach(p => {
     if (p.type === BlockType.md) {
-      html += mdToHtml(p.content)
+      html += mdToHtml(p.value)
     } else if (p.type === BlockType.js) {
       html += `<pre><code>${highlight(doc, p.value)}</code></pre>`
     } else if (p.type === BlockType.capture && p.tag === 'code') {
@@ -94,9 +94,9 @@ function renderNotebookView(doc, parts) {
       html += `<pre><code>${highlight(doc, p.nested.map(o => o.value).join(''))}</code></pre>`
       html += `<div class="code_result">999 N·m</div>`
     } else if (p.type === BlockType.block && p.tag === 'html') {
-      html += p.content
+      html += p.value
     } else if (p.type === BlockType.block && p.tag === 'svg') {
-      html += "<svg>"+p.content+"</svg>"
+      html += "<svg>"+p.value+"</svg>"
     } else if (p.type === BlockType.capture && p.tag === 'input') {
       let id = `"input_${p.data.name}"`
       let type = p.data.type||"text"

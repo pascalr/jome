@@ -56562,6 +56562,7 @@
         }
         pushCurrentCode(doc);
         doc.parts = analyzeBlocks(reduceBlocks(doc.parts));
+        return doc.parts;
       }
       module.exports = { BlockType: BlockType2, parse: parse6 };
     }
@@ -63500,7 +63501,7 @@
     let html = "";
     parts.forEach((p2) => {
       if (p2.type === import_parser.BlockType.md) {
-        html += (0, import_md_to_html.default)(p2.content);
+        html += (0, import_md_to_html.default)(p2.value);
       } else if (p2.type === import_parser.BlockType.js) {
         html += `<pre><code>${highlight(doc, p2.value)}</code></pre>`;
       } else if (p2.type === import_parser.BlockType.capture && p2.tag === "code") {
@@ -63508,9 +63509,9 @@
         html += `<pre><code>${highlight(doc, p2.nested.map((o) => o.value).join(""))}</code></pre>`;
         html += `<div class="code_result">999 N\xB7m</div>`;
       } else if (p2.type === import_parser.BlockType.block && p2.tag === "html") {
-        html += p2.content;
+        html += p2.value;
       } else if (p2.type === import_parser.BlockType.block && p2.tag === "svg") {
-        html += "<svg>" + p2.content + "</svg>";
+        html += "<svg>" + p2.value + "</svg>";
       } else if (p2.type === import_parser.BlockType.capture && p2.tag === "input") {
         let id = `"input_${p2.data.name}"`;
         let type = p2.data.type || "text";
