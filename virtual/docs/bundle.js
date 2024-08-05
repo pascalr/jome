@@ -56419,7 +56419,7 @@
     "src/parser.js"(exports, module) {
       var configs = {
         js: {
-          inline: "//",
+          inlineComment: "//",
           multiBegin: "/*",
           multiEnd: "*/",
           stringSingle: true,
@@ -56465,12 +56465,26 @@
         }
         return i < str.length ? result + ch : result;
       }
-      function extractSingleLineComment(str) {
-        let i, result = "";
-        for (i = 0; i < str.length && str[i] !== "\n"; i++) {
-          result += str[i];
+      function pushComment2(doc, whole, inner) {
+        if (inner[0] === "~") {
+          if (doc._currCodeBlock) {
+            doc.parts.push({ type: BlockType2.code, value: doc._currCodeBlock });
+            doc._currCodeBlock = "";
+          }
+          doc.parts.push({ type: BlockType2.block, value: inner.slice(1) });
+        } else {
+          doc._currCodeBlock += whole;
         }
-        return i < str.length ? result + "\n" : result;
+      }
+      function extractSingleLineComment(doc) {
+        let start = doc.cursor;
+        while (doc.cursor < doc.length && doc.content[doc.cursor] !== "\n") {
+          doc.cursor++;
+        }
+        doc.cursor++;
+        let whole = doc.content.slice(start, doc.cursor);
+        let inner = whole.slice(doc.config.inlineComment);
+        pushComment2(doc, whole, inner);
       }
       function analyzeBlocks(blocks) {
         return blocks.map((b) => {
@@ -56523,13 +56537,14 @@
       }
       function parse6(doc) {
         let config = configs[doc.extension];
+        doc.config = config;
         if (!config) {
           throw new Error("No configuration found to parse extension: ", doc.extension);
         }
         let src = doc.content;
         let parts = [];
         let code = "";
-        let str;
+        let str = "";
         while (doc.cursor < doc.length) {
           let i = doc.cursor;
           if (config.stringDouble && src[i] === '"' || config.stringSingle && src[i] === "'") {
@@ -56537,8 +56552,8 @@
             code += str;
             doc.cursor = i + (str.length || 1);
             continue;
-          } else if (config.inline && src.startsWith(config.inline, i)) {
-            str = extractSingleLineComment(src.slice(i));
+          } else if (config.inlineComment && src.startsWith(config.inlineComment, i)) {
+            extractSingleLineComment(doc);
           } else if (config.multiBegin && src.startsWith(config.multiBegin, i)) {
             str = extractBlockComment(src.slice(i), config.multiBegin, config.multiEnd);
           } else {
@@ -63463,6 +63478,8 @@
       this.extension = /(?:\.([^.]+))?$/.exec(filename)[1];
       this.cursor = 0;
       this.length = content.length;
+      this._currCodeBlock = "";
+      this.parts = [];
     }
   };
 
@@ -63480,7 +63497,6 @@
       console.log("parts", parts);
       document.getElementById("output-editor").innerHTML = renderOutputCode(doc, parts);
       document.getElementById("notebook-editor").innerHTML = renderNotebookView(doc, parts);
-    }).catch((error) => {
     });
   }
   document.addEventListener("DOMContentLoaded", function() {

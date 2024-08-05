@@ -9,7 +9,13 @@ export class Document {
         this.filename = filename
         this.content = content
         this.extension = /(?:\.([^.]+))?$/.exec(filename)[1];
-        this.cursor = 0 // For parsing
+
+        // For parsing
+        this.cursor = 0
         this.length = content.length
+        this._currCodeBlock = ""
+
+        // Result
+        this.parts = []
     }
 }

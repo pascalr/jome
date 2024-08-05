@@ -1,6 +1,6 @@
 const configs = {
   js: {
-    inline: "//",
+    inlineComment: "//",
     multiBegin: "/*",
     multiEnd: "*/",
     stringSingle: true,
@@ -48,12 +48,28 @@ function extractQuote(str) {
   return (i < str.length) ? result+ch : result
 }
 
-function extractSingleLineComment(str) {
-  let i, result = "";
-  for (i = 0; i < str.length && (str[i] !== '\n'); i++) {
-    result += str[i];
+function pushComment(doc, whole, inner) {
+  // Check if the comment is a code comment or a Jome block.
+  if (inner[0] === '~') {
+    if (doc._currCodeBlock) {
+      doc.parts.push({type: BlockType.code, value: doc._currCodeBlock});
+      doc._currCodeBlock = ""
+    }
+    doc.parts.push({type: BlockType.block, value: inner.slice(1)})
+  } else {
+    doc._currCodeBlock += whole;
   }
-  return (i < str.length) ? result+'\n' : result
+}
+
+function extractSingleLineComment(doc) {
+  let start = doc.cursor
+  while (doc.cursor < doc.length && (doc.content[doc.cursor] !== '\n')) {
+    doc.cursor++
+  }
+  doc.cursor++; // Add the newline or go beyond EOF doesn't matter
+  let whole = doc.content.slice(start, doc.cursor)
+  let inner = whole.slice(doc.config.inlineComment)
+  pushComment(doc, whole, inner)
 }
 
 function analyzeBlocks(blocks) {
@@ -120,12 +136,13 @@ function reduceBlocks(blocks) {
 // Split the js code into blocks of different kinds like mardown, source code, data...
 function parse(doc) {
   let config = configs[doc.extension]
+  doc.config = config
   if (!config) {throw new Error("No configuration found to parse extension: ", doc.extension)}
   let src = doc.content
   let parts = [] // {type: ..., value: ...}
 
   let code = ""
-  let str;
+  let str = "";
 
   while (doc.cursor < doc.length) {
     let i = doc.cursor
@@ -137,8 +154,8 @@ function parse(doc) {
       doc.cursor = i + (str.length || 1);
       continue;
     // commments OR jome block
-    } else if (config.inline && src.startsWith(config.inline, i)) {
-      str = extractSingleLineComment(src.slice(i))
+    } else if (config.inlineComment && src.startsWith(config.inlineComment, i)) {
+      extractSingleLineComment(doc)
     // comments or jome block
     } else if (config.multiBegin && src.startsWith(config.multiBegin, i)) {
       str = extractBlockComment(src.slice(i), config.multiBegin, config.multiEnd)

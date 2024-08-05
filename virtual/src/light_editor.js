@@ -57,10 +57,10 @@ function loadFile(filename) {
     document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
     document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)
   })
-  .catch(error => {
-    // TODO: handle error
-    // document.getElementById('file-content').textContent = 'Error: ' + error;
-  });
+  // .catch(error => {
+  //   // TODO: handle error
+  //   // document.getElementById('file-content').textContent = 'Error: ' + error;
+  // });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
