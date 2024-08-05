@@ -14,6 +14,7 @@ export class Document {
         this.cursor = 0
         this.length = content.length
         this._currCodeBlock = ""
+        this.config = null // the language config
 
         // Result
         this.parts = []

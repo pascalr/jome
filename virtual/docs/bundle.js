@@ -56447,15 +56447,15 @@
         whitespace: "whitespace",
         capture: "capture"
       };
-      function extractBlockComment(str, multiBegin, multiEnd) {
-        let i, result = multiBegin;
-        for (i = multiBegin.length; i < str.length && !str.startsWith(multiEnd, i); i++) {
-          result += str[i];
+      function extractBlockComment(doc) {
+        let start = doc.cursor;
+        while (doc.cursor < doc.length && !doc.content.startsWith(doc.config.multiEnd, doc.cursor)) {
+          doc.cursor++;
         }
-        if (str[i + 2] === "\n") {
-          return result + multiEnd + "\n";
-        }
-        return i < str.length ? result + multiEnd : result;
+        doc.cursor += doc.config.multiEnd.length;
+        let whole = doc.content.slice(start, doc.cursor);
+        let inner = whole.slice(doc.config.multiBegin.length, -doc.config.multiEnd.length);
+        pushComment2(doc, whole, inner);
       }
       function extractQuote(str) {
         let i, ch = str[0];
@@ -56545,44 +56545,23 @@
           throw new Error("No configuration found to parse extension: ", doc.extension);
         }
         let src = doc.content;
-        let parts = [];
-        let code = "";
-        let str = "";
         while (doc.cursor < doc.length) {
           let i = doc.cursor;
           if (config.stringDouble && src[i] === '"' || config.stringSingle && src[i] === "'") {
-            str = extractQuote(src.slice(i));
-            code += str;
+            let str = extractQuote(src.slice(i));
+            doc._currCodeBlock += str;
             doc.cursor = i + (str.length || 1);
-            continue;
           } else if (config.inlineComment && src.startsWith(config.inlineComment, i)) {
             extractSingleLineComment(doc);
           } else if (config.multiBegin && src.startsWith(config.multiBegin, i)) {
-            str = extractBlockComment(src.slice(i), config.multiBegin, config.multiEnd);
+            extractBlockComment(doc);
           } else {
-            code += src[i];
+            doc._currCodeBlock += src[i];
             doc.cursor++;
-            continue;
           }
-          if (str[2] === "~") {
-            if (code.length) {
-              parts.push({ type: BlockType2.code, value: code });
-              code = "";
-            }
-            parts.push({ type: BlockType2.block, value: str });
-          } else {
-            code += str;
-          }
-          doc.cursor = i + (str.length || 1);
-        }
-        if (code.length) {
-          parts.push({ type: BlockType2.code, value: code });
-          code = "";
         }
         pushCurrentCode(doc);
         doc.parts = analyzeBlocks(reduceBlocks(doc.parts));
-        return doc.parts;
-        return analyzeBlocks(reduceBlocks(parts));
       }
       module.exports = { BlockType: BlockType2, parse: parse6 };
     }
@@ -63485,6 +63464,7 @@
       this.cursor = 0;
       this.length = content.length;
       this._currCodeBlock = "";
+      this.config = null;
       this.parts = [];
     }
   };
