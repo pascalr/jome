@@ -56440,7 +56440,7 @@
         }
       };
       var BlockType2 = {
-        js: "js",
+        code: "code",
         block: "block",
         md: "md",
         comment: "comment",
@@ -56496,7 +56496,7 @@
         let reduced = [];
         for (let i = 0; i < blocks.length; i++) {
           p = blocks[i];
-          if (p.type === BlockType2.js && /^\s*$/.test(p.value)) {
+          if (p.type === BlockType2.code && /^\s*$/.test(p.value)) {
             reduced.push({ type: BlockType2.whitespace, value: p.value });
           } else if (p.type === BlockType2.block && p.value.startsWith("/*~!")) {
             reduced.push({ type: BlockType2.comment, value: p.value });
@@ -56549,7 +56549,7 @@
           }
           if (str[2] === "~") {
             if (js.length) {
-              parts.push({ type: BlockType2.js, value: js });
+              parts.push({ type: BlockType2.code, value: js });
               js = "";
             }
             parts.push({ type: BlockType2.block, value: str });
@@ -56559,7 +56559,7 @@
           i = i + (str.length || 1);
         }
         if (js.length) {
-          parts.push({ type: BlockType2.js, value: js });
+          parts.push({ type: BlockType2.code, value: js });
           js = "";
         }
         return analyzeBlocks(reduceBlocks(parts));

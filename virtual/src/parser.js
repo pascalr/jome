@@ -22,7 +22,7 @@ const configs = {
 }
 
 const BlockType = {
-  js: 'js',
+  code: 'code',
   block: 'block',
   md: "md",
   comment: "comment",
@@ -85,7 +85,7 @@ function reduceBlocks(blocks) {
     p = blocks[i] 
 
     // Converts matching blocks to type whitespace
-    if (p.type === BlockType.js && /^\s*$/.test(p.value)) {
+    if (p.type === BlockType.code && /^\s*$/.test(p.value)) {
       reduced.push({type: BlockType.whitespace, value: p.value})
 
     // Converts matching blocks to type comment
@@ -148,14 +148,14 @@ function parse(doc) {
     }
     // comments OR jome block only they execute this code
     if (str[2] === '~') {
-      if (js.length) {parts.push({type: BlockType.js, value: js}); js = ""}
+      if (js.length) {parts.push({type: BlockType.code, value: js}); js = ""}
       parts.push({type: BlockType.block, value: str})
     } else {
       js += str;
     }
     i = i + (str.length || 1);
   }
-  if (js.length) {parts.push({type: BlockType.js, value: js}); js = ""}
+  if (js.length) {parts.push({type: BlockType.code, value: js}); js = ""}
 
   return analyzeBlocks(reduceBlocks(parts))
 }
