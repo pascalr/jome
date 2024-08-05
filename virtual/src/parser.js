@@ -30,13 +30,13 @@ const BlockType = {
   capture: 'capture',
 }
 
-function extractBlockComment(str) {
-  let i, result = "/*";
-  for (i = 2; i < str.length && !(str[i] === '*' && str[i + 1] === '/'); i++) {
+function extractBlockComment(str, multiBegin, multiEnd) {
+  let i, result = multiBegin;
+  for (i = multiBegin.length; i < str.length && !(str.startsWith(multiEnd, i)); i++) {
     result += str[i];
   }
-  if (str[i+2] === '\n') {return result+'*/\n'}
-  return (i < str.length) ? result+'*/' : result
+  if (str[i+2] === '\n') {return result+multiEnd+'\n'}
+  return (i < str.length) ? result+multiEnd : result
 }
 
 function extractQuote(str) {
@@ -141,8 +141,8 @@ function parse(doc) {
     } else if (config.inline && code.startsWith(config.inline, i)) {
       str = extractSingleLineComment(code.slice(i))
     // comments or jome block
-    } else if (code[i] === '/' && code[i + 1] === '*') {
-      str = extractBlockComment(code.slice(i))
+    } else if (config.multiBegin && code.startsWith(config.multiBegin, i)) {
+      str = extractBlockComment(code.slice(i), config.multiBegin, config.multiEnd)
     } else {
       js += code[i]; i++; continue;
     }
