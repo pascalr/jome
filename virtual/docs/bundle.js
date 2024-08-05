@@ -63502,8 +63502,8 @@
     parts.forEach((p2) => {
       if (p2.type === import_parser.BlockType.md) {
         html += (0, import_md_to_html.default)(p2.value);
-      } else if (p2.type === import_parser.BlockType.js) {
-        html += `<pre><code>${highlight(doc, p2.value)}</code></pre>`;
+      } else if (p2.type === import_parser.BlockType.code) {
+        html += `<pre><code>${highlight(doc, p2.value.trim())}</code></pre>`;
       } else if (p2.type === import_parser.BlockType.capture && p2.tag === "code") {
         evaluateCell(p2);
         html += `<pre><code>${highlight(doc, p2.nested.map((o) => o.value).join(""))}</code></pre>`;
