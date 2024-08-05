@@ -56528,15 +56528,14 @@
         }
         let code = doc.content;
         let parts = [];
-        let i = 0;
-        let length = code.length;
         let js = "";
         let str;
-        while (i < length) {
+        while (doc.cursor < doc.length) {
+          let i = doc.cursor;
           if (config.stringDouble && code[i] === '"' || config.stringSingle && code[i] === "'") {
             str = extractQuote(code.slice(i));
             js += str;
-            i = i + (str.length || 1);
+            doc.cursor = i + (str.length || 1);
             continue;
           } else if (config.inline && code.startsWith(config.inline, i)) {
             str = extractSingleLineComment(code.slice(i));
@@ -56544,7 +56543,7 @@
             str = extractBlockComment(code.slice(i), config.multiBegin, config.multiEnd);
           } else {
             js += code[i];
-            i++;
+            doc.cursor++;
             continue;
           }
           if (str[2] === "~") {
@@ -56556,7 +56555,7 @@
           } else {
             js += str;
           }
-          i = i + (str.length || 1);
+          doc.cursor = i + (str.length || 1);
         }
         if (js.length) {
           parts.push({ type: BlockType2.code, value: js });
@@ -63455,13 +63454,19 @@
 
   // src/light_editor.js
   var import_parser = __toESM(require_parser());
+
+  // src/document.js
   var Document = class {
     constructor(filename, content) {
       this.filename = filename;
       this.content = content;
       this.extension = /(?:\.([^.]+))?$/.exec(filename)[1];
+      this.cursor = 0;
+      this.length = content.length;
     }
   };
+
+  // src/light_editor.js
   function loadFile(filename) {
     document.getElementById("current_filename").innerText = filename;
     fetch("/virtual/samples/" + filename).then((response) => {

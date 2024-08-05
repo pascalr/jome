@@ -124,18 +124,17 @@ function parse(doc) {
   let code = doc.content
   let parts = [] // {type: ..., value: ...}
 
-  let i = 0;
-  let length = code.length;
   let js = ""
   let str;
 
-  while (i < length) {
+  while (doc.cursor < doc.length) {
+    let i = doc.cursor
     // TODO: Template literals
     // strings
     if ((config.stringDouble && code[i] === '"') || (config.stringSingle && code[i] === "'")) {
       str = extractQuote(code.slice(i))
       js += str;
-      i = i + (str.length || 1);
+      doc.cursor = i + (str.length || 1);
       continue;
     // commments OR jome block
     } else if (config.inline && code.startsWith(config.inline, i)) {
@@ -144,7 +143,7 @@ function parse(doc) {
     } else if (config.multiBegin && code.startsWith(config.multiBegin, i)) {
       str = extractBlockComment(code.slice(i), config.multiBegin, config.multiEnd)
     } else {
-      js += code[i]; i++; continue;
+      js += code[i]; doc.cursor++; continue;
     }
     // comments OR jome block only they execute this code
     if (str[2] === '~') {
@@ -153,7 +152,7 @@ function parse(doc) {
     } else {
       js += str;
     }
-    i = i + (str.length || 1);
+    doc.cursor = i + (str.length || 1);
   }
   if (js.length) {parts.push({type: BlockType.code, value: js}); js = ""}
 

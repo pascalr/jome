@@ -2,6 +2,7 @@ import mdToHtml from "@jome/md-to-html"
 import {LooseParser} from "acorn-loose"
 
 import {parse, BlockType} from './parser'
+import {Document} from './document'
 
 // Create an instance of ESLint with the configuration passed to the function
 // function createESLintInstance(overrideConfig) {
@@ -19,14 +20,6 @@ class MetaData {
   constructor(type, value) {
     this.type = type // The main type of the meta data. Ex: unit, function, class, md, ...
     this.value = value // The text value of the meta data.
-  }
-}
-
-class Document {
-  constructor(filename, content) {
-    this.filename = filename
-    this.content = content
-    this.extension = /(?:\.([^.]+))?$/.exec(filename)[1];
   }
 }
 
