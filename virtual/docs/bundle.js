@@ -56480,7 +56480,7 @@
           pushCurrentCode(doc);
           if (inner[1] === "!") {
             doc.parts.push({ type: BlockType2.comment, value: inner.slice(1) });
-          } else if (inner[1] === " ") {
+          } else if (inner[1] === " " || inner[1] === "	" || inner[1] === "\n" || inner[1] === "\r" && inner[2] === "\n") {
             doc.parts.push({ type: BlockType2.md, value: inner.slice(1) });
           } else {
             doc.parts.push({ type: BlockType2.block, value: inner.slice(1) });
