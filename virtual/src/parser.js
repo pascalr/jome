@@ -18,6 +18,11 @@ const configs = {
     multiEnd: "*/",
     stringSingle: true,
     stringDouble: true,
+  },
+  md: {
+    multiBegin: "\n[//]: # (",
+    multiEnd: ")",
+    // FIXME: Don't consider a comment when inside a code block
   }
 }
 

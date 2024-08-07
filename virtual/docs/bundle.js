@@ -56437,6 +56437,11 @@
           multiEnd: "*/",
           stringSingle: true,
           stringDouble: true
+        },
+        md: {
+          multiBegin: "\n[//]: # (",
+          multiEnd: ")"
+          // FIXME: Don't consider a comment when inside a code block
         }
       };
       var BlockType2 = {
@@ -63487,11 +63492,9 @@
     });
   }
   document.addEventListener("DOMContentLoaded", function() {
-    let samples = ["torque_calculator.js", "jome.js", "paths.js", "tests.js", "tests.js"];
-    loadFile(samples[0]);
     const selectSampleElement = document.getElementById("sample_select");
+    loadFile(selectSampleElement.value);
     selectSampleElement.addEventListener("change", function(event) {
-      console.log("HERE!!!!!!!!!!!!!!!!");
       loadFile(event.target.value);
     });
   });

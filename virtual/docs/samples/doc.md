@@ -1,4 +1,14 @@
-/*~
+A jome file would be a file that is not bound to a specific language.
+
+It can include scripts from multiple languages.
+
+Not sure what the file format would be yet.
+
+Using md as the default format? Allows you to include scripts from many languages.
+
+You could use a comment to add for example a table of content, a folder listing, ...
+
+
 Par défaut, quand il n'y a pas du tag qui définit le commentaire, ça serait du markdown?
 Pour entre autres permettre de faire: //~# Titre 1
 
@@ -21,5 +31,3 @@ Links:
 [Header](#header_id)
 [File](file:///home/me/some_file.txt)
 [Function](function://package.function)
-
-*/
