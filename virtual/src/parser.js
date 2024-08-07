@@ -20,9 +20,13 @@ const configs = {
     stringDouble: true,
   },
   md: {
-    multiBegin: "\n[//]: # (",
-    multiEnd: ")",
+    // multiBegin: "\n[//]: # (",
+    // multiEnd: ")",
     // FIXME: Don't consider a comment when inside a code block
+    multiBegin: "<!--",
+    multiEnd: "-->",
+    stringSingle: true,
+    stringDouble: true,
   }
 }
 

@@ -85,7 +85,11 @@ function renderNotebookView(doc, parts) {
     if (p.type === BlockType.md) {
       html += mdToHtml(p.value)
     } else if (p.type === BlockType.code) {
-      html += `<pre><code>${highlight(doc, p.value.trim())}</code></pre>`
+      if (doc.extension === "md") {
+        html += mdToHtml(p.value)
+      } else {
+        html += `<pre><code>${highlight(doc, p.value.trim())}</code></pre>`
+      }
     } else if (p.type === BlockType.capture && p.tag === 'code') {
       evaluateCell(p)
       html += `<pre><code>${highlight(doc, p.nested.map(o => o.value).join(''))}</code></pre>`

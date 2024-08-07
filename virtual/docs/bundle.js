@@ -56439,9 +56439,13 @@
           stringDouble: true
         },
         md: {
-          multiBegin: "\n[//]: # (",
-          multiEnd: ")"
+          // multiBegin: "\n[//]: # (",
+          // multiEnd: ")",
           // FIXME: Don't consider a comment when inside a code block
+          multiBegin: "<!--",
+          multiEnd: "-->",
+          stringSingle: true,
+          stringDouble: true
         }
       };
       var BlockType2 = {
@@ -63506,7 +63510,11 @@
       if (p2.type === import_parser.BlockType.md) {
         html += (0, import_md_to_html.default)(p2.value);
       } else if (p2.type === import_parser.BlockType.code) {
-        html += `<pre><code>${highlight(doc, p2.value.trim())}</code></pre>`;
+        if (doc.extension === "md") {
+          html += (0, import_md_to_html.default)(p2.value);
+        } else {
+          html += `<pre><code>${highlight(doc, p2.value.trim())}</code></pre>`;
+        }
       } else if (p2.type === import_parser.BlockType.capture && p2.tag === "code") {
         evaluateCell(p2);
         html += `<pre><code>${highlight(doc, p2.nested.map((o) => o.value).join(""))}</code></pre>`;

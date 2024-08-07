@@ -22,9 +22,11 @@ Les types supportés:
 - 
 
 Nice:
-> :warning: **Warning:** Do not push the big red button.
-> :memo: **Note:** Sunrises are beautiful.
-> :bulb: **Tip:** Remember to appreciate the little things in life.
+> ⚠️ **Warning:** Do not push the big red button.
+
+> 📝 **Note:** Sunrises are beautiful.
+
+> 💡 **Tip:** Remember to appreciate the little things in life.
 
 Links:
 [Website](https://duckduckgo.com)
