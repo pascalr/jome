@@ -30,7 +30,7 @@
       "command": "node",
       "args": ["build.mjs"],
       "options": {
-        "cwd": "${workspaceFolder}/virtual"
+        "cwd": "${workspaceFolder}/editor"
       }
     }
   ]

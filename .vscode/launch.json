@@ -17,8 +17,8 @@
     {
       "type": "node-terminal",
       "request": "launch",
-      "name": "Build and run virtual server",
-      "cwd": "${workspaceFolder}/virtual",
+      "name": "Build and run editor server",
+      "cwd": "${workspaceFolder}/editor",
       "skipFiles": [
         "<node_internals>/**"
       ],
