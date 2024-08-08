@@ -63508,7 +63508,7 @@
     let html = "";
     parts.forEach((p2) => {
       if (p2.type === import_parser.BlockType.html) {
-        html += p2.value;
+        html += "<div>" + p2.value + "</div>";
       } else if (p2.type === import_parser.BlockType.code) {
         if (doc.extension === "md") {
           html += (0, import_md_to_html.default)(p2.value);

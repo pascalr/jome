@@ -83,7 +83,7 @@ function renderNotebookView(doc, parts) {
   let html = ''
   parts.forEach(p => {
     if (p.type === BlockType.html) {
-      html += p.value
+      html += "<div>"+p.value+"</div>"
     } else if (p.type === BlockType.code) {
       if (doc.extension === "md") {
         html += mdToHtml(p.value)
