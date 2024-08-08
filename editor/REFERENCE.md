@@ -39,8 +39,10 @@ https://gist.github.com/seanh/13a93686bf4c2cb16e658b3cf96807f2
 
 ## Spreadsheets
 
+## Theme
+
 ## Units
 
 ## Table of contents
 
-## Directory listing
+## Directory tree & Directory list
