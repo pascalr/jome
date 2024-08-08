@@ -1,6 +1,6 @@
 //~jome 0.0.1
 
-/*~ # Torque Calculator Example */
+/*~ <h1>Torque Calculator Example</h1> */
 
 //~!begin input(name: "force", unit: "N*", type: "number", defaultValue: "10", comment: "Newtons or equivalent", onSave: "setValue"}
 //~begin input {"name": "force", "unit": "N*", "type": "number", "defaultValue": "10", "comment": "Newtons or equivalent", "onSave": "setValue"}
