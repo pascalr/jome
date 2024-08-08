@@ -63482,7 +63482,7 @@
   // src/light_editor.js
   function loadFile(filename) {
     document.getElementById("current_filename").innerText = filename;
-    fetch("/virtual/samples/" + filename).then((response) => {
+    fetch("/editor/samples/" + filename).then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok " + response.statusText);
       }

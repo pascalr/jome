@@ -42,9 +42,10 @@ fs.writeFile('./docs/home.html', homeGenerator(), 'utf8', (err) => {});
 const port = 3000
 const app = express()
 
-app.use("/virtual", express.static("./docs"))
+app.use("/editor", express.static("./docs"))
+app.use("/self", express.static("."))
 
-app.get("/", (req, res) => res.redirect("/virtual"));
+app.get("/", (req, res) => res.redirect("/editor"));
 
 app.listen(port, function () {
   console.log(`Server listening on port ${port}`);
