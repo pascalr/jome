@@ -1,3 +1,6 @@
+TODO: A readme.md, a todo.md, a fixme.md, the readme.md should link to the other two, I should be able to
+see and edit them inside the editor, I'd like to be able to edit the editor itself as I am writing it.
+
 A jome file would be a file that is not bound to a specific language.
 
 It can include scripts from multiple languages.
