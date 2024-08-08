@@ -8,17 +8,17 @@ Jome uses the extension of the base language and is added in the shape of a comm
 <div style="white-space: pre;">
 
 ├─── 📁 [docs] — _The files rendered on the website_
-├─── 📁 [node_modules](node_modules)
-├─── 📁 [src](src) — _The js files with the code for the editor_
-├─── 📁 [.gitignore](.gitignore)
-├─── 📄 [build.mjs](build.mjs)
-├─── 📄 [dev.js](dev.js)
-├─── 📄 [FIXME.md](FIXME.md) — _List of known bugs_
-├─── 📄 [package-lock.json](package-lock.json)
-├─── 📄 [package.json](package.json)
-├─── 📄 [README.md](README.md)
-├─── 📄 [REFERENCE.md](REFERENCE.md) — _Jome format reference_
-└─── 📄 [TODO.md](TODO.md) — _List of missing features_
+├─── 📁 [node_modules]
+├─── 📁 [src] — _The js files with the code for the editor_
+├─── 📁 [.gitignore]
+├─── 📄 [build.mjs]
+├─── 📄 [dev.js]
+├─── 📄 [FIXME.md] — _List of known bugs_
+├─── 📄 [package-lock.json]
+├─── 📄 [package.json]
+├─── 📄 [README.md]
+├─── 📄 [REFERENCE.md] — _Jome format reference_
+└─── 📄 [TODO.md] — _List of missing features_
 
 </div>
 <!--~end-->
