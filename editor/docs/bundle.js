@@ -56451,7 +56451,7 @@
       var BlockType2 = {
         code: "code",
         block: "block",
-        md: "md",
+        html: "html",
         comment: "comment",
         whitespace: "whitespace",
         capture: "capture"
@@ -56490,7 +56490,7 @@
           if (inner[1] === "!") {
             doc.parts.push({ type: BlockType2.comment, value: inner.slice(1) });
           } else if (inner[1] === " " || inner[1] === "	" || inner[1] === "\n" || inner[1] === "\r" && inner[2] === "\n") {
-            doc.parts.push({ type: BlockType2.md, value: inner.slice(1) });
+            doc.parts.push({ type: BlockType2.html, value: inner.slice(1) });
           } else {
             doc.parts.push({ type: BlockType2.block, value: inner.slice(1) });
           }
@@ -63507,8 +63507,8 @@
   function renderNotebookView(doc, parts) {
     let html = "";
     parts.forEach((p2) => {
-      if (p2.type === import_parser.BlockType.md) {
-        html += (0, import_md_to_html.default)(p2.value);
+      if (p2.type === import_parser.BlockType.html) {
+        html += p2.value;
       } else if (p2.type === import_parser.BlockType.code) {
         if (doc.extension === "md") {
           html += (0, import_md_to_html.default)(p2.value);

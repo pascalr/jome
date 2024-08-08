@@ -33,7 +33,7 @@ const configs = {
 const BlockType = {
   code: 'code',
   block: 'block',
-  md: "md",
+  html: "html",
   comment: "comment",
   whitespace: 'whitespace',
   capture: 'capture',
@@ -77,7 +77,7 @@ function pushComment(doc, whole, inner) {
     if (inner[1] === '!') { // comment
       doc.parts.push({type: BlockType.comment, value: inner.slice(1)})
     } else if (inner[1] === ' ' || inner[1] === '\t' || inner[1] === '\n' || (inner[1] === '\r'&&inner[2] === '\n')) { // markdown
-      doc.parts.push({type: BlockType.md, value: inner.slice(1)})
+      doc.parts.push({type: BlockType.html, value: inner.slice(1)})
     } else { // block
       doc.parts.push({type: BlockType.block, value: inner.slice(1)})
     }
