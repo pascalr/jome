@@ -1,15 +1,12 @@
-TODO: A readme.md, a todo.md, a fixme.md, the readme.md should link to the other two, I should be able to
-see and edit them inside the editor, I'd like to be able to edit the editor itself as I am writing it.
+> I should be able to see and edit the editor itself as I am writing it.
 
-A jome file would be a file that is not bound to a specific language.
-
-It can include scripts from multiple languages.
-
-Not sure what the file format would be yet.
+> Try electron as a way to make a standalone editor. (vs only a vscode extension)
 
 Using md as the default format? Allows you to include scripts from many languages.
 
 You could use a comment to add for example a table of content, a folder listing, ...
+
+An html comment (no a link comment) because I want to put parentheses inside the comment.
 
 
 Par défaut, quand il n'y a pas du tag qui définit le commentaire, ça serait du markdown?
