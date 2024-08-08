@@ -8,6 +8,12 @@ You could use a comment to add for example a table of content, a folder listing,
 
 An html comment (no a link comment) because I want to put parentheses inside the comment.
 
+<div style="color: red;">This is red!</div>
+
+<div style="display: flex">
+  <div>Left</div>
+  <div>Right</div>
+</div>
 
 Par défaut, quand il n'y a pas du tag qui définit le commentaire, ça serait du markdown?
 Pour entre autres permettre de faire: //~# Titre 1
