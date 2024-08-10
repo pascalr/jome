@@ -4,6 +4,8 @@ import {LooseParser} from "acorn-loose"
 import {parse, BlockType} from './parser'
 import {Document} from './document'
 
+let file_list = []
+
 // Create an instance of ESLint with the configuration passed to the function
 // function createESLintInstance(overrideConfig) {
 //   return new ESLint({
@@ -41,15 +43,40 @@ function parseMetaDatas(metaDataComments) {
   return metaDatas
 }
 
+function extractFetchText(response) {
+  // TODO: Proper error message not an exception
+  if (!response.ok) {
+    throw new Error('Network response was not ok ' + response.statusText);
+  }
+  return response.text(); // Convert response to text
+  // .catch(error => {
+  //   // TODO: handle error
+  //   // document.getElementById('file-content').textContent = 'Error: ' + error;
+  // });
+}
+
+function extractFetchJSON(response) {
+  // TODO: Proper error message not an exception
+  if (!response.ok) {
+    throw new Error('Network response was not ok ' + response.statusText);
+  }
+  return response.json(); // Convert response to text
+  // .catch(error => {
+  //   // TODO: handle error
+  //   // document.getElementById('file-content').textContent = 'Error: ' + error;
+  // });
+}
+
+function loadFileList() {
+  fetch('/get_file_list')
+  .then(extractFetchJSON)
+  .then(list => {file_list = list})
+}
+
 function loadFile(filename) {
   document.getElementById("current_filename").innerText = filename
-  fetch('/editor/samples/'+filename)
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
-    }
-    return response.text(); // Convert response to text
-  })
+  fetch('/get_file/docs/samples/'+filename)
+  .then(extractFetchText)
   .then(src => {
     let doc = new Document(filename, src)
     let parts = parse(doc)
@@ -65,6 +92,7 @@ function loadFile(filename) {
 
 document.addEventListener('DOMContentLoaded', function() {
   const selectSampleElement = document.getElementById('sample_select');
+  loadFileList()
   loadFile(selectSampleElement.value)
   selectSampleElement.addEventListener('change', function (event) {
     loadFile(event.target.value)

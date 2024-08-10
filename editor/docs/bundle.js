@@ -63480,14 +63480,27 @@
   };
 
   // src/light_editor.js
+  var file_list = [];
+  function extractFetchText(response) {
+    if (!response.ok) {
+      throw new Error("Network response was not ok " + response.statusText);
+    }
+    return response.text();
+  }
+  function extractFetchJSON(response) {
+    if (!response.ok) {
+      throw new Error("Network response was not ok " + response.statusText);
+    }
+    return response.json();
+  }
+  function loadFileList() {
+    fetch("/get_file_list").then(extractFetchJSON).then((list) => {
+      file_list = list;
+    });
+  }
   function loadFile(filename) {
     document.getElementById("current_filename").innerText = filename;
-    fetch("/editor/samples/" + filename).then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText);
-      }
-      return response.text();
-    }).then((src) => {
+    fetch("/get_file/docs/samples/" + filename).then(extractFetchText).then((src) => {
       let doc = new Document(filename, src);
       let parts = (0, import_parser.parse)(doc);
       console.log("parts", parts);
@@ -63497,6 +63510,7 @@
   }
   document.addEventListener("DOMContentLoaded", function() {
     const selectSampleElement = document.getElementById("sample_select");
+    loadFileList();
     loadFile(selectSampleElement.value);
     selectSampleElement.addEventListener("change", function(event) {
       loadFile(event.target.value);
