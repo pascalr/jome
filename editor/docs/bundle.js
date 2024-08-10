@@ -56551,7 +56551,8 @@
         let config = configs[doc.extension];
         doc.config = config;
         if (!config) {
-          throw new Error("No configuration found to parse extension: ", doc.extension);
+          doc.parts.push({ type: BlockType2.code, value: doc.content });
+          return doc.parts;
         }
         let src = doc.content;
         while (doc.cursor < doc.length) {

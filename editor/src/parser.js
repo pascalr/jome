@@ -146,7 +146,11 @@ function reduceBlocks(blocks) {
 function parse(doc) {
   let config = configs[doc.extension]
   doc.config = config
-  if (!config) {throw new Error("No configuration found to parse extension: ", doc.extension)}
+  if (!config) {
+    // don't know how to detect comments for this file type, push a single code block
+    doc.parts.push({type: BlockType.code, value: doc.content})
+    return doc.parts
+  }
   let src = doc.content
 
   while (doc.cursor < doc.length) {
