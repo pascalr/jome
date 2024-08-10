@@ -63510,7 +63510,8 @@
     const selectSampleElement = document.getElementById("sample_select");
     loadFileList((list) => {
       selectSampleElement.innerHTML = list.map((path) => `<option value="${path}">${path}</option>`);
-      loadFile(selectSampleElement.value);
+      selectSampleElement.value = "README.md";
+      loadFile("README.md");
       selectSampleElement.addEventListener("change", function(event) {
         loadFile(event.target.value);
       });

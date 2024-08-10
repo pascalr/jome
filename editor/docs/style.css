@@ -35,7 +35,7 @@ pre code {
 #editor-views > div {
   flex: 1;
   border: 1px solid #fff;
-  height: 90vh;
+  min-height: 90vh;
   padding: 0.5em;
   width: 33.33333%;
 }
