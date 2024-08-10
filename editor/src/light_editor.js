@@ -4,8 +4,6 @@ import {LooseParser} from "acorn-loose"
 import {parse, BlockType} from './parser'
 import {Document} from './document'
 
-let file_list = []
-
 // Create an instance of ESLint with the configuration passed to the function
 // function createESLintInstance(overrideConfig) {
 //   return new ESLint({
@@ -67,15 +65,15 @@ function extractFetchJSON(response) {
   // });
 }
 
-function loadFileList() {
+function loadFileList(callback) {
   fetch('/get_file_list')
   .then(extractFetchJSON)
-  .then(list => {file_list = list})
+  .then(callback)
 }
 
 function loadFile(filename) {
   document.getElementById("current_filename").innerText = filename
-  fetch('/get_file/docs/samples/'+filename)
+  fetch('/get_file/'+filename)
   .then(extractFetchText)
   .then(src => {
     let doc = new Document(filename, src)
@@ -92,11 +90,15 @@ function loadFile(filename) {
 
 document.addEventListener('DOMContentLoaded', function() {
   const selectSampleElement = document.getElementById('sample_select');
-  loadFileList()
-  loadFile(selectSampleElement.value)
-  selectSampleElement.addEventListener('change', function (event) {
-    loadFile(event.target.value)
-  });
+  loadFileList(list => {
+    selectSampleElement.innerHTML = list.map(path => (
+      `<option value="${path}">${path}</option>`
+    ))
+    loadFile(selectSampleElement.value)
+    selectSampleElement.addEventListener('change', function (event) {
+      loadFile(event.target.value)
+    });
+  })
 });
 
 function renderJomeCode(raw, parts) {

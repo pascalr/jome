@@ -63480,7 +63480,6 @@
   };
 
   // src/light_editor.js
-  var file_list = [];
   function extractFetchText(response) {
     if (!response.ok) {
       throw new Error("Network response was not ok " + response.statusText);
@@ -63493,14 +63492,12 @@
     }
     return response.json();
   }
-  function loadFileList() {
-    fetch("/get_file_list").then(extractFetchJSON).then((list) => {
-      file_list = list;
-    });
+  function loadFileList(callback) {
+    fetch("/get_file_list").then(extractFetchJSON).then(callback);
   }
   function loadFile(filename) {
     document.getElementById("current_filename").innerText = filename;
-    fetch("/get_file/docs/samples/" + filename).then(extractFetchText).then((src) => {
+    fetch("/get_file/" + filename).then(extractFetchText).then((src) => {
       let doc = new Document(filename, src);
       let parts = (0, import_parser.parse)(doc);
       console.log("parts", parts);
@@ -63510,10 +63507,12 @@
   }
   document.addEventListener("DOMContentLoaded", function() {
     const selectSampleElement = document.getElementById("sample_select");
-    loadFileList();
-    loadFile(selectSampleElement.value);
-    selectSampleElement.addEventListener("change", function(event) {
-      loadFile(event.target.value);
+    loadFileList((list) => {
+      selectSampleElement.innerHTML = list.map((path) => `<option value="${path}">${path}</option>`);
+      loadFile(selectSampleElement.value);
+      selectSampleElement.addEventListener("change", function(event) {
+        loadFile(event.target.value);
+      });
     });
   });
   function evaluateCell(cell) {

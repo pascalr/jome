@@ -33,7 +33,7 @@ app.get(/\/f\/.*/, (req, res) => {
 
 app.get("/get_file_list", async (req, res) => {
   fs.readdir(".", { recursive: true }, (err, files) => {
-    res.send(files)
+    res.send(files.filter(f => !f.startsWith("node_modules")))
   });
 });
 
