@@ -111,38 +111,40 @@ function evaluateCell(cell) {
 
 function renderNotebookView(doc, parts) {
   let html = ''
-  parts.forEach(p => {
-    if (p.type === BlockType.html) {
-      html += "<div>"+p.value+"</div>"
-    } else if (p.type === BlockType.code) {
+  parts.forEach(part => {
+    if (part.type === BlockType.html) {
+      html += "<div>"+part.value+"</div>"
+    } else if (part.type === BlockType.code) {
       if (doc.extension === "md") {
-        html += mdToHtml(p.value)
+        html += mdToHtml(part.value)
       } else {
-        html += `<pre><code>${highlight(doc, p.value.trim())}</code></pre>`
+        html += `<pre><code>${highlight(doc, part.value.trim())}</code></pre>`
       }
-    } else if (p.type === BlockType.capture && p.tag === 'code') {
-      evaluateCell(p)
-      html += `<pre><code>${highlight(doc, p.nested.map(o => o.value).join(''))}</code></pre>`
+    } else if (part.type === BlockType.capture && part.tag === 'code') {
+      evaluateCell(part)
+      html += `<pre><code>${highlight(doc, part.nested.map(o => o.value).join(''))}</code></pre>`
       html += `<div class="code_result">999 N·m</div>`
-    } else if (p.type === BlockType.block && p.tag === 'html') {
-      html += p.value
-    } else if (p.type === BlockType.block && p.tag === 'svg') {
-      html += "<svg>"+p.value+"</svg>"
-    } else if (p.type === BlockType.capture && p.tag === 'input') {
-      let id = `"input_${p.data.name}"`
-      let type = p.data.type||"text"
+    } else if (part.type === BlockType.block && part.tag === 'html') {
+      html += part.value
+    } else if (part.type === BlockType.block && part.tag === 'svg') {
+      html += "<svg>"+part.value+"</svg>"
+    } else if (part.type === BlockType.capture && part.tag === 'input') {
+      let id = `"input_${part.data.name}"`
+      let type = part.data.type||"text"
       html += `<div>`
-      html += `<label for=${id}>${p.data.name}: </label>`
-      html += `<input id=${id} type="${type}"${p.data.defaultValue ? ` value="${p.data.defaultValue}"` : ''}>`
-      if (p.data.unit && p.data.unit.endsWith("*")) {
-        let u = p.data.unit.slice(0,-1)
+      html += `<label for=${id}>${part.data.name}: </label>`
+      html += `<input id=${id} type="${type}"${part.data.defaultValue ? ` value="${part.data.defaultValue}"` : ''}>`
+      if (part.data.unit && part.data.unit.endsWith("*")) {
+        let u = part.data.unit.slice(0,-1)
         html += `<select name="${id}_unit" id="${id}_unit">
         <option value="${u}">${u}</option>
       </select>`
-      } else if (p.data.unit) {
-        html += p.data.unit
+      } else if (part.data.unit) {
+        html += part.data.unit
       }
       html += `</div>`
+    } else if (part.type === BlockType.capture /* WIP not sure about global capture here */) {
+      html += part.nested.map(o => o.value).join('')
     }
   })
   return html

@@ -63520,38 +63520,40 @@
   }
   function renderNotebookView(doc, parts) {
     let html = "";
-    parts.forEach((p2) => {
-      if (p2.type === import_parser.BlockType.html) {
-        html += "<div>" + p2.value + "</div>";
-      } else if (p2.type === import_parser.BlockType.code) {
+    parts.forEach((part) => {
+      if (part.type === import_parser.BlockType.html) {
+        html += "<div>" + part.value + "</div>";
+      } else if (part.type === import_parser.BlockType.code) {
         if (doc.extension === "md") {
-          html += (0, import_md_to_html.default)(p2.value);
+          html += (0, import_md_to_html.default)(part.value);
         } else {
-          html += `<pre><code>${highlight(doc, p2.value.trim())}</code></pre>`;
+          html += `<pre><code>${highlight(doc, part.value.trim())}</code></pre>`;
         }
-      } else if (p2.type === import_parser.BlockType.capture && p2.tag === "code") {
-        evaluateCell(p2);
-        html += `<pre><code>${highlight(doc, p2.nested.map((o) => o.value).join(""))}</code></pre>`;
+      } else if (part.type === import_parser.BlockType.capture && part.tag === "code") {
+        evaluateCell(part);
+        html += `<pre><code>${highlight(doc, part.nested.map((o) => o.value).join(""))}</code></pre>`;
         html += `<div class="code_result">999 N\xB7m</div>`;
-      } else if (p2.type === import_parser.BlockType.block && p2.tag === "html") {
-        html += p2.value;
-      } else if (p2.type === import_parser.BlockType.block && p2.tag === "svg") {
-        html += "<svg>" + p2.value + "</svg>";
-      } else if (p2.type === import_parser.BlockType.capture && p2.tag === "input") {
-        let id = `"input_${p2.data.name}"`;
-        let type = p2.data.type || "text";
+      } else if (part.type === import_parser.BlockType.block && part.tag === "html") {
+        html += part.value;
+      } else if (part.type === import_parser.BlockType.block && part.tag === "svg") {
+        html += "<svg>" + part.value + "</svg>";
+      } else if (part.type === import_parser.BlockType.capture && part.tag === "input") {
+        let id = `"input_${part.data.name}"`;
+        let type = part.data.type || "text";
         html += `<div>`;
-        html += `<label for=${id}>${p2.data.name}: </label>`;
-        html += `<input id=${id} type="${type}"${p2.data.defaultValue ? ` value="${p2.data.defaultValue}"` : ""}>`;
-        if (p2.data.unit && p2.data.unit.endsWith("*")) {
-          let u = p2.data.unit.slice(0, -1);
+        html += `<label for=${id}>${part.data.name}: </label>`;
+        html += `<input id=${id} type="${type}"${part.data.defaultValue ? ` value="${part.data.defaultValue}"` : ""}>`;
+        if (part.data.unit && part.data.unit.endsWith("*")) {
+          let u = part.data.unit.slice(0, -1);
           html += `<select name="${id}_unit" id="${id}_unit">
         <option value="${u}">${u}</option>
       </select>`;
-        } else if (p2.data.unit) {
-          html += p2.data.unit;
+        } else if (part.data.unit) {
+          html += part.data.unit;
         }
         html += `</div>`;
+      } else if (part.type === import_parser.BlockType.capture) {
+        html += part.nested.map((o) => o.value).join("");
       }
     });
     return html;
