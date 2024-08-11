@@ -5,7 +5,8 @@ Jome is code that is inserted into other languages in order to add more informat
 Jome uses the extension of the base language and is added in the shape of a comment.
 
 <!--~begin dir_list(".", comments: {"REFERENCE.md": "Jome format reference"})-->
-<pre>
+<pre style="background-color: #242426; padding: 0.5em;">
+https://github.com/pascalr/jome/tree/main/editor
 ├─── 📁 <a href="./docs">docs</a> — <i>The files rendered on the website</i>
 ├─── 📁 <a href="./node_modules">node_modules</a>
 ├─── 📁 <a href="./src">src</a> — <i>The js files with the code for the editor</i>
