@@ -4,6 +4,8 @@ import {LooseParser} from "acorn-loose"
 import {parse, BlockType} from './parser'
 import {Document} from './document'
 
+import {initProseMirrorEditor} from './prosemirror_editor'
+
 // Create an instance of ESLint with the configuration passed to the function
 // function createESLintInstance(overrideConfig) {
 //   return new ESLint({
@@ -89,6 +91,7 @@ function loadFile(filename) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  initProseMirrorEditor('#prosemirror_editor')
   const selectSampleElement = document.getElementById('sample_select');
   loadFileList(list => {
     selectSampleElement.innerHTML = list.map(path => (
