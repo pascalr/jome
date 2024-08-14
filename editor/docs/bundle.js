@@ -76241,6 +76241,62 @@
       return state.tr.insertText(insert, start, end);
     };
   }
+  var MAX_MATCH = 500;
+  function inputRules({ rules }) {
+    let plugin = new Plugin({
+      state: {
+        init() {
+          return null;
+        },
+        apply(tr, prev) {
+          let stored = tr.getMeta(this);
+          if (stored)
+            return stored;
+          return tr.selectionSet || tr.docChanged ? null : prev;
+        }
+      },
+      props: {
+        handleTextInput(view, from2, to, text) {
+          return run(view, from2, to, text, rules, plugin);
+        },
+        handleDOMEvents: {
+          compositionend: (view) => {
+            setTimeout(() => {
+              let { $cursor } = view.state.selection;
+              if ($cursor)
+                run(view, $cursor.pos, $cursor.pos, "", rules, plugin);
+            });
+          }
+        }
+      },
+      isInputRules: true
+    });
+    return plugin;
+  }
+  function run(view, from2, to, text, rules, plugin) {
+    if (view.composing)
+      return false;
+    let state = view.state, $from = state.doc.resolve(from2);
+    let textBefore = $from.parent.textBetween(Math.max(0, $from.parentOffset - MAX_MATCH), $from.parentOffset, null, "\uFFFC") + text;
+    for (let i = 0; i < rules.length; i++) {
+      let rule = rules[i];
+      if ($from.parent.type.spec.code) {
+        if (!rule.inCode)
+          continue;
+      } else if (rule.inCode === "only") {
+        continue;
+      }
+      let match = rule.match.exec(textBefore);
+      let tr = match && rule.handler(state, match, from2 - (match[0].length - text.length), to);
+      if (!tr)
+        continue;
+      if (rule.undoable)
+        tr.setMeta(plugin, { transform: tr, from: from2, to, text });
+      view.dispatch(tr);
+      return true;
+    }
+    return false;
+  }
   var undoInputRule = (state, dispatch) => {
     let plugins = state.plugins;
     for (let i = 0; i < plugins.length; i++) {
@@ -76269,6 +76325,30 @@
   var closeDoubleQuote = new InputRule(/"$/, "\u201D");
   var openSingleQuote = new InputRule(/(?:^|[\s\{\[\(\<'"\u2018\u201C])(')$/, "\u2018");
   var closeSingleQuote = new InputRule(/'$/, "\u2019");
+  var smartQuotes = [openDoubleQuote, closeDoubleQuote, openSingleQuote, closeSingleQuote];
+  function wrappingInputRule(regexp, nodeType, getAttrs = null, joinPredicate) {
+    return new InputRule(regexp, (state, match, start, end) => {
+      let attrs = getAttrs instanceof Function ? getAttrs(match) : getAttrs;
+      let tr = state.tr.delete(start, end);
+      let $start = tr.doc.resolve(start), range = $start.blockRange(), wrapping = range && findWrapping(range, nodeType, attrs);
+      if (!wrapping)
+        return null;
+      tr.wrap(range, wrapping);
+      let before = tr.doc.resolve(start - 1).nodeBefore;
+      if (before && before.type == nodeType && canJoin(tr.doc, start - 1) && (!joinPredicate || joinPredicate(match, before)))
+        tr.join(start - 1);
+      return tr;
+    });
+  }
+  function textblockTypeInputRule(regexp, nodeType, getAttrs = null) {
+    return new InputRule(regexp, (state, match, start, end) => {
+      let $start = state.doc.resolve(start);
+      let attrs = getAttrs instanceof Function ? getAttrs(match) : getAttrs;
+      if (!$start.node(-1).canReplaceWith($start.index(-1), $start.indexAfter(-1), nodeType))
+        return null;
+      return state.tr.delete(start, end).setBlockType(start, start, nodeType, attrs);
+    });
+  }
 
   // src/prosemirror_keymap.js
   var mac5 = typeof navigator != "undefined" ? /Mac|iP(hone|[oa]d)/.test(navigator.platform) : false;
@@ -76331,6 +76411,41 @@
     return keys2;
   }
 
+  // src/prosemirror_inputrules.js
+  function blockQuoteRule(nodeType) {
+    return wrappingInputRule(/^\s*>\s$/, nodeType);
+  }
+  function orderedListRule(nodeType) {
+    return wrappingInputRule(
+      /^(\d+)\.\s$/,
+      nodeType,
+      (match) => ({ order: +match[1] }),
+      (match, node) => node.childCount + node.attrs.order == +match[1]
+    );
+  }
+  function bulletListRule(nodeType) {
+    return wrappingInputRule(/^\s*([-+*])\s$/, nodeType);
+  }
+  function codeBlockRule(nodeType) {
+    return textblockTypeInputRule(/^```$/, nodeType);
+  }
+  function headingRule(nodeType, maxLevel) {
+    return textblockTypeInputRule(
+      new RegExp("^(#{1," + maxLevel + "})\\s$"),
+      nodeType,
+      (match) => ({ level: match[1].length })
+    );
+  }
+  function buildInputRules(schema2) {
+    let rules = smartQuotes.concat(ellipsis, emDash), type;
+    if (type = schema2.nodes.blockquote) rules.push(blockQuoteRule(type));
+    if (type = schema2.nodes.ordered_list) rules.push(orderedListRule(type));
+    if (type = schema2.nodes.bullet_list) rules.push(bulletListRule(type));
+    if (type = schema2.nodes.code_block) rules.push(codeBlockRule(type));
+    if (type = schema2.nodes.heading) rules.push(headingRule(type, 6));
+    return inputRules({ rules });
+  }
+
   // src/prosemirror_editor.js
   var mySchema = new Schema({
     nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block"),
@@ -76341,6 +76456,7 @@
       schema: mySchema,
       plugins: [
         history(),
+        buildInputRules(mySchema),
         keymap(buildKeymap(mySchema)),
         keymap(baseKeymap)
         // handle enter key, delete, etc

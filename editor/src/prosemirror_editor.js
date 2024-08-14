@@ -8,7 +8,7 @@ import {keymap} from "prosemirror-keymap"
 import {baseKeymap} from "prosemirror-commands"
 
 import {buildKeymap} from "./prosemirror_keymap"
-// import {buildInputRules} from "./prosemirror_inputrules"
+import {buildInputRules} from "./prosemirror_inputrules"
 
 // Mix the nodes from prosemirror-schema-list into the basic schema to
 // create a schema with list support.
@@ -29,6 +29,7 @@ export function initProseMirrorEditor(selector) {
         schema: mySchema,
         plugins: [
             history(),
+            buildInputRules(mySchema),
             keymap(buildKeymap(mySchema)),
             keymap(baseKeymap) // handle enter key, delete, etc
           ]
