@@ -5,6 +5,9 @@
   var __getOwnPropNames = Object.getOwnPropertyNames;
   var __getProtoOf = Object.getPrototypeOf;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __esm = (fn, res) => function __init() {
+    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+  };
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
   };
@@ -56414,10 +56417,11 @@
     }
   });
 
-  // src/parser.js
-  var require_parser = __commonJS({
-    "src/parser.js"(exports, module) {
-      var configs = {
+  // src/file_formats.js
+  var FILE_FORMATS;
+  var init_file_formats = __esm({
+    "src/file_formats.js"() {
+      FILE_FORMATS = {
         js: {
           inlineComment: "//",
           multiBegin: "/*",
@@ -56448,6 +56452,13 @@
           stringDouble: true
         }
       };
+    }
+  });
+
+  // src/parser.js
+  var require_parser = __commonJS({
+    "src/parser.js"(exports, module) {
+      init_file_formats();
       var BlockType2 = {
         code: "code",
         block: "block",
@@ -56548,7 +56559,7 @@
         return reduced;
       }
       function parse6(doc3) {
-        let config = configs[doc3.extension];
+        let config = FILE_FORMATS[doc3.extension];
         doc3.config = config;
         if (!config) {
           doc3.parts.push({ type: BlockType2.code, value: doc3.content });

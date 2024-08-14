@@ -1,34 +1,4 @@
-const configs = {
-  js: {
-    inlineComment: "//",
-    multiBegin: "/*",
-    multiEnd: "*/",
-    stringSingle: true,
-    stringDouble: true,
-    stringBacktick: true
-  },
-  html: {
-    multiBegin: "<!--",
-    multiEnd: "-->",
-    stringSingle: true,
-    stringDouble: true,
-  },
-  css: {
-    multiBegin: "/*",
-    multiEnd: "*/",
-    stringSingle: true,
-    stringDouble: true,
-  },
-  md: {
-    // multiBegin: "\n[//]: # (",
-    // multiEnd: ")",
-    // FIXME: Don't consider a comment when inside a code block
-    multiBegin: "<!--",
-    multiEnd: "-->",
-    stringSingle: true,
-    stringDouble: true,
-  }
-}
+import { FILE_FORMATS } from "./file_formats"
 
 const BlockType = {
   code: 'code',
@@ -144,7 +114,7 @@ function reduceBlocks(blocks) {
 
 // Split the js code into blocks of different kinds like mardown, source code, data...
 function parse(doc) {
-  let config = configs[doc.extension]
+  let config = FILE_FORMATS[doc.extension]
   doc.config = config
   if (!config) {
     // don't know how to detect comments for this file type, push a single code block
