@@ -63477,8 +63477,8 @@
   // src/light_editor.js
   var import_parser = __toESM(require_parser());
 
-  // src/document.js
-  var Document = class {
+  // src/jome_document.js
+  var JomeDocument = class {
     constructor(filename, content) {
       this.filename = filename;
       this.content = content;
@@ -76501,7 +76501,7 @@
   function loadFile(filename) {
     document.getElementById("current_filename").innerText = filename;
     fetch("/get_file/" + filename).then(extractFetchText).then((src) => {
-      let doc3 = new Document(filename, src);
+      let doc3 = new JomeDocument(filename, src);
       let parts = (0, import_parser.parse)(doc3);
       console.log("parts", parts);
       document.getElementById("output-editor").innerHTML = renderOutputCode(doc3, parts);

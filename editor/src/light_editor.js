@@ -2,7 +2,7 @@ import mdToHtml from "@jome/md-to-html"
 import {LooseParser} from "acorn-loose"
 
 import {parse, BlockType} from './parser'
-import {Document} from './document'
+import {JomeDocument} from './jome_document'
 
 import {initProseMirrorEditor} from './prosemirror_editor'
 
@@ -78,7 +78,7 @@ function loadFile(filename) {
   fetch('/get_file/'+filename)
   .then(extractFetchText)
   .then(src => {
-    let doc = new Document(filename, src)
+    let doc = new JomeDocument(filename, src)
     let parts = parse(doc)
     console.log("parts", parts)
     document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
