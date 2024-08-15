@@ -25,8 +25,15 @@ const mySchema = new Schema({
 // ])
 
 export function initProseMirrorEditor(selector) {
+  // let doc = [{type: mySchema.topNodeType, attrs: null, content: [], marks: []}]
+  let doc = mySchema.node(mySchema.topNodeType, null, [
+    mySchema.node("paragraph", null, [mySchema.text("One.")]),
+    mySchema.node("horizontal_rule"),
+    mySchema.node("paragraph", null, [mySchema.text("Two!")])
+  ])
     let state = EditorState.create({
         schema: mySchema,
+        doc,
         plugins: [
             history(),
             buildInputRules(mySchema),

@@ -76463,8 +76463,14 @@
     marks: schema.spec.marks
   });
   function initProseMirrorEditor(selector) {
+    let doc3 = mySchema.node(mySchema.topNodeType, null, [
+      mySchema.node("paragraph", null, [mySchema.text("One.")]),
+      mySchema.node("horizontal_rule"),
+      mySchema.node("paragraph", null, [mySchema.text("Two!")])
+    ]);
     let state = EditorState.create({
       schema: mySchema,
+      doc: doc3,
       plugins: [
         history(),
         buildInputRules(mySchema),
