@@ -81,6 +81,7 @@ function loadFile(filename) {
     let doc = new JomeDocument(filename, src)
     let parts = parse(doc)
     console.log("parts", parts)
+    initProseMirrorEditor('#prosemirror_editor', doc)
     document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
     document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)
   })
@@ -91,7 +92,6 @@ function loadFile(filename) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  initProseMirrorEditor('#prosemirror_editor')
   const selectSampleElement = document.getElementById('sample_select');
   loadFileList(list => {
     selectSampleElement.innerHTML = list.map(path => (

@@ -9,6 +9,7 @@ import {baseKeymap} from "prosemirror-commands"
 
 import {buildKeymap} from "./prosemirror_keymap"
 import {buildInputRules} from "./prosemirror_inputrules"
+import { deserialize } from "./prosemirror_deserializer"
 
 // Mix the nodes from prosemirror-schema-list into the basic schema to
 // create a schema with list support.
@@ -24,22 +25,17 @@ const mySchema = new Schema({
 //     schema.node("paragraph", null, [schema.text("Two!")])
 // ])
 
-export function initProseMirrorEditor(selector) {
-  // let doc = [{type: mySchema.topNodeType, attrs: null, content: [], marks: []}]
-  let doc = mySchema.node(mySchema.topNodeType, null, [
-    mySchema.node("paragraph", null, [mySchema.text("One.")]),
-    mySchema.node("horizontal_rule"),
-    mySchema.node("paragraph", null, [mySchema.text("Two!")])
-  ])
-    let state = EditorState.create({
-        schema: mySchema,
-        doc,
-        plugins: [
-            history(),
-            buildInputRules(mySchema),
-            keymap(buildKeymap(mySchema)),
-            keymap(baseKeymap) // handle enter key, delete, etc
-          ]
-    })
-    let view = new EditorView(document.querySelector(selector), {state})
+export function initProseMirrorEditor(selector, jomeDoc) {
+  let doc = deserialize(mySchema, jomeDoc)
+  let state = EditorState.create({
+    schema: mySchema,
+    doc,
+    plugins: [
+      history(),
+      buildInputRules(mySchema),
+      keymap(buildKeymap(mySchema)),
+      keymap(baseKeymap) // handle enter key, delete, etc
+      ]
+  })
+  let view = new EditorView(document.querySelector(selector), {state})
 }

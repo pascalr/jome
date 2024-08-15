@@ -76457,17 +76457,23 @@
     return inputRules({ rules });
   }
 
+  // src/prosemirror_deserializer.js
+  function deserialize(schema2, jomeDoc) {
+    let doc3 = schema2.node(schema2.topNodeType, null, [
+      schema2.node("paragraph", null, [schema2.text("One.")]),
+      schema2.node("horizontal_rule"),
+      schema2.node("paragraph", null, [schema2.text("Two!")])
+    ]);
+    return doc3;
+  }
+
   // src/prosemirror_editor.js
   var mySchema = new Schema({
     nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block"),
     marks: schema.spec.marks
   });
-  function initProseMirrorEditor(selector) {
-    let doc3 = mySchema.node(mySchema.topNodeType, null, [
-      mySchema.node("paragraph", null, [mySchema.text("One.")]),
-      mySchema.node("horizontal_rule"),
-      mySchema.node("paragraph", null, [mySchema.text("Two!")])
-    ]);
+  function initProseMirrorEditor(selector, jomeDoc) {
+    let doc3 = deserialize(mySchema, jomeDoc);
     let state = EditorState.create({
       schema: mySchema,
       doc: doc3,
@@ -76504,12 +76510,12 @@
       let doc3 = new JomeDocument(filename, src);
       let parts = (0, import_parser.parse)(doc3);
       console.log("parts", parts);
+      initProseMirrorEditor("#prosemirror_editor", doc3);
       document.getElementById("output-editor").innerHTML = renderOutputCode(doc3, parts);
       document.getElementById("notebook-editor").innerHTML = renderNotebookView(doc3, parts);
     });
   }
   document.addEventListener("DOMContentLoaded", function() {
-    initProseMirrorEditor("#prosemirror_editor");
     const selectSampleElement = document.getElementById("sample_select");
     loadFileList((list) => {
       selectSampleElement.innerHTML = list.map((path) => `<option value="${path}">${path}</option>`);
