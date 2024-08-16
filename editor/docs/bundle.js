@@ -76460,14 +76460,19 @@
   // src/prosemirror_deserializer.js
   var import_parser = __toESM(require_parser());
   var import_md_to_html = __toESM(require_md_to_html());
+  function extractCode(part) {
+    if (part.type === import_parser.BlockType.code) {
+      return part.value;
+    }
+    if (part.nested) {
+      return part.nested.map((p2) => extractCode(p2)).join("");
+    }
+    return "";
+  }
   function deserialize(schema2, jomeDoc) {
     if (jomeDoc.extension === "md") {
-      let html = "";
-      jomeDoc.parts.forEach((part) => {
-        if (part.type === import_parser.BlockType.code) {
-          html += (0, import_md_to_html.default)(part.value);
-        }
-      });
+      let md = jomeDoc.parts.map((p2) => extractCode(p2)).join("");
+      let html = (0, import_md_to_html.default)(md);
       let el = document.createElement("div");
       el.innerHTML = html;
       let doc4 = DOMParser.fromSchema(schema2).parse(el);

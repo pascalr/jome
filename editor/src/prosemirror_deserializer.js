@@ -4,16 +4,22 @@ import {BlockType} from './parser'
 
 import mdToHtml from "@jome/md-to-html"
 
+function extractCode(part) {
+  if (part.type === BlockType.code) {
+    return part.value
+  }
+  if (part.nested) {
+    return part.nested.map(p => extractCode(p)).join("")
+  }
+  return ""
+}
+
 export function deserialize(schema, jomeDoc) {
 
   // Testing .md => html => DOM parser
   if (jomeDoc.extension === "md") {
-    let html = ""
-    jomeDoc.parts.forEach(part => {
-      if (part.type === BlockType.code) {
-        html += mdToHtml(part.value)
-      }
-    })
+    let md = jomeDoc.parts.map(p => extractCode(p)).join("")
+    let html = mdToHtml(md)
     let el = document.createElement("div")
     el.innerHTML = html
     let doc = DOMParser.fromSchema(schema).parse(el)
