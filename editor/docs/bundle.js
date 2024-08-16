@@ -56410,10 +56410,10 @@
           return "";
         }
       });
-      function mdToHtml2(str) {
+      function mdToHtml3(str) {
         return markdownIt.render(str);
       }
-      module.exports = mdToHtml2;
+      module.exports = mdToHtml3;
     }
   });
 
@@ -56459,7 +56459,7 @@
   var require_parser = __commonJS({
     "src/parser.js"(exports, module) {
       init_file_formats();
-      var BlockType2 = {
+      var BlockType3 = {
         code: "code",
         block: "block",
         html: "html",
@@ -56488,9 +56488,9 @@
       function pushCurrentCode(doc3) {
         if (doc3._currCodeBlock) {
           if (/^\s*$/.test(doc3._currCodeBlock)) {
-            doc3.parts.push({ type: BlockType2.whitespace, value: doc3._currCodeBlock });
+            doc3.parts.push({ type: BlockType3.whitespace, value: doc3._currCodeBlock });
           } else {
-            doc3.parts.push({ type: BlockType2.code, value: doc3._currCodeBlock });
+            doc3.parts.push({ type: BlockType3.code, value: doc3._currCodeBlock });
           }
           doc3._currCodeBlock = "";
         }
@@ -56499,11 +56499,11 @@
         if (inner[0] === "~") {
           pushCurrentCode(doc3);
           if (inner[1] === "!") {
-            doc3.parts.push({ type: BlockType2.comment, value: inner.slice(1) });
+            doc3.parts.push({ type: BlockType3.comment, value: inner.slice(1) });
           } else if (inner[1] === " " || inner[1] === "	" || inner[1] === "\n" || inner[1] === "\r" && inner[2] === "\n") {
-            doc3.parts.push({ type: BlockType2.html, value: inner.slice(1) });
+            doc3.parts.push({ type: BlockType3.html, value: inner.slice(1) });
           } else {
-            doc3.parts.push({ type: BlockType2.block, value: inner.slice(1) });
+            doc3.parts.push({ type: BlockType3.block, value: inner.slice(1) });
           }
         } else {
           doc3._currCodeBlock += whole;
@@ -56521,11 +56521,11 @@
       }
       function analyzeBlocks(blocks) {
         return blocks.map((b) => {
-          if (b.type === BlockType2.block) {
+          if (b.type === BlockType3.block) {
             b.tag = b.value.match(/\w+/)[0];
             let s = b.value.trimEnd();
             b.content = s.substring(4 + b.tag.length, s.length - (b.value[1] === "*" ? 2 : 0));
-          } else if (b.type === BlockType2.capture) {
+          } else if (b.type === BlockType3.capture) {
             b.tag = b.value.slice(6).match(/\w+/)[0];
             let s = b.value.slice(6 + b.tag.length).trimStart().trimEnd();
             try {
@@ -56543,14 +56543,14 @@
         let reduced = [];
         for (let i = 0; i < blocks.length; i++) {
           p = blocks[i];
-          if (p.type === BlockType2.block && p.value.slice(0, 5) === "begin") {
+          if (p.type === BlockType3.block && p.value.slice(0, 5) === "begin") {
             let j = i + 1;
             for (; j < blocks.length; j++) {
               if (blocks[j].value.slice(0, 3) === "end") {
                 break;
               }
             }
-            reduced.push({ type: BlockType2.capture, value: p.value, nested: reduceBlocks(blocks.slice(i + 1, j)) });
+            reduced.push({ type: BlockType3.capture, value: p.value, nested: reduceBlocks(blocks.slice(i + 1, j)) });
             i = j;
           } else {
             reduced.push(p);
@@ -56562,7 +56562,7 @@
         let config = FILE_FORMATS[doc3.extension];
         doc3.config = config;
         if (!config) {
-          doc3.parts.push({ type: BlockType2.code, value: doc3.content });
+          doc3.parts.push({ type: BlockType3.code, value: doc3.content });
           return doc3.parts;
         }
         let src = doc3.content;
@@ -56585,12 +56585,12 @@
         doc3.parts = analyzeBlocks(reduceBlocks(doc3.parts));
         return doc3.parts;
       }
-      module.exports = { BlockType: BlockType2, parse: parse6 };
+      module.exports = { BlockType: BlockType3, parse: parse6 };
     }
   });
 
   // src/light_editor.js
-  var import_md_to_html = __toESM(require_md_to_html());
+  var import_md_to_html2 = __toESM(require_md_to_html());
 
   // node_modules/acorn/dist/acorn.mjs
   var astralIdentifierCodes = [509, 0, 227, 0, 150, 4, 294, 9, 1368, 2, 2, 1, 6, 3, 41, 2, 5, 0, 166, 1, 574, 3, 9, 9, 370, 1, 81, 2, 71, 10, 50, 3, 123, 2, 54, 14, 32, 10, 3, 1, 11, 3, 46, 10, 8, 0, 46, 9, 7, 2, 37, 13, 2, 9, 6, 1, 45, 0, 13, 2, 49, 13, 9, 3, 2, 11, 83, 11, 7, 0, 3, 0, 158, 11, 6, 9, 7, 3, 56, 1, 2, 6, 3, 1, 3, 2, 10, 0, 11, 1, 3, 6, 4, 4, 193, 17, 10, 9, 5, 0, 82, 19, 13, 9, 214, 6, 3, 8, 28, 1, 83, 16, 16, 9, 82, 12, 9, 9, 84, 14, 5, 9, 243, 14, 166, 9, 71, 5, 2, 1, 3, 3, 2, 0, 2, 1, 13, 9, 120, 6, 3, 6, 4, 0, 29, 9, 41, 6, 2, 3, 9, 0, 10, 10, 47, 15, 406, 7, 2, 7, 17, 9, 57, 21, 2, 13, 123, 5, 4, 0, 2, 1, 2, 6, 2, 0, 9, 9, 49, 4, 2, 1, 2, 4, 9, 9, 330, 3, 10, 1, 2, 0, 49, 6, 4, 4, 14, 9, 5351, 0, 7, 14, 13835, 9, 87, 9, 39, 4, 60, 6, 26, 9, 1014, 0, 2, 54, 8, 3, 82, 0, 12, 1, 19628, 1, 4706, 45, 3, 22, 543, 4, 4, 5, 9, 7, 3, 6, 31, 3, 149, 2, 1418, 49, 513, 54, 5, 49, 9, 0, 15, 0, 23, 4, 2, 14, 1361, 6, 2, 16, 3, 6, 2, 1, 2, 4, 101, 0, 161, 6, 10, 9, 357, 0, 62, 13, 499, 13, 983, 6, 110, 6, 6, 9, 4759, 9, 787719, 239];
@@ -63475,7 +63475,7 @@
   defaultOptions.tabSize = 4;
 
   // src/light_editor.js
-  var import_parser = __toESM(require_parser());
+  var import_parser2 = __toESM(require_parser());
 
   // src/jome_document.js
   var JomeDocument = class {
@@ -76458,7 +76458,21 @@
   }
 
   // src/prosemirror_deserializer.js
+  var import_parser = __toESM(require_parser());
+  var import_md_to_html = __toESM(require_md_to_html());
   function deserialize(schema2, jomeDoc) {
+    if (jomeDoc.extension === "md") {
+      let html = "";
+      jomeDoc.parts.forEach((part) => {
+        if (part.type === import_parser.BlockType.code) {
+          html += (0, import_md_to_html.default)(part.value);
+        }
+      });
+      let el = document.createElement("div");
+      el.innerHTML = html;
+      let doc4 = DOMParser.fromSchema(schema2).parse(el);
+      return doc4;
+    }
     let doc3 = schema2.node(schema2.topNodeType, null, [
       schema2.node("paragraph", null, [schema2.text("One.")]),
       schema2.node("horizontal_rule"),
@@ -76508,7 +76522,7 @@
     document.getElementById("current_filename").innerText = filename;
     fetch("/get_file/" + filename).then(extractFetchText).then((src) => {
       let doc3 = new JomeDocument(filename, src);
-      let parts = (0, import_parser.parse)(doc3);
+      let parts = (0, import_parser2.parse)(doc3);
       console.log("parts", parts);
       initProseMirrorEditor("#prosemirror_editor", doc3);
       document.getElementById("output-editor").innerHTML = renderOutputCode(doc3, parts);
@@ -76531,23 +76545,23 @@
   function renderNotebookView(doc3, parts) {
     let html = "";
     parts.forEach((part) => {
-      if (part.type === import_parser.BlockType.html) {
+      if (part.type === import_parser2.BlockType.html) {
         html += "<div>" + part.value + "</div>";
-      } else if (part.type === import_parser.BlockType.code) {
+      } else if (part.type === import_parser2.BlockType.code) {
         if (doc3.extension === "md") {
-          html += (0, import_md_to_html.default)(part.value);
+          html += (0, import_md_to_html2.default)(part.value);
         } else {
           html += `<pre><code>${highlight(doc3, part.value.trim())}</code></pre>`;
         }
-      } else if (part.type === import_parser.BlockType.capture && part.tag === "code") {
+      } else if (part.type === import_parser2.BlockType.capture && part.tag === "code") {
         evaluateCell(part);
         html += `<pre><code>${highlight(doc3, part.nested.map((o) => o.value).join(""))}</code></pre>`;
         html += `<div class="code_result">999 N\xB7m</div>`;
-      } else if (part.type === import_parser.BlockType.block && part.tag === "html") {
+      } else if (part.type === import_parser2.BlockType.block && part.tag === "html") {
         html += part.value;
-      } else if (part.type === import_parser.BlockType.block && part.tag === "svg") {
+      } else if (part.type === import_parser2.BlockType.block && part.tag === "svg") {
         html += "<svg>" + part.value + "</svg>";
-      } else if (part.type === import_parser.BlockType.capture && part.tag === "input") {
+      } else if (part.type === import_parser2.BlockType.capture && part.tag === "input") {
         let id = `"input_${part.data.name}"`;
         let type = part.data.type || "text";
         html += `<div>`;
@@ -76562,7 +76576,7 @@
           html += part.data.unit;
         }
         html += `</div>`;
-      } else if (part.type === import_parser.BlockType.capture) {
+      } else if (part.type === import_parser2.BlockType.capture) {
         html += part.nested.map((o) => o.value).join("");
       }
     });
