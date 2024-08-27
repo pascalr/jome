@@ -33,3 +33,19 @@ https://github.com/pascalr/jome/tree/main/editor
 > If people complain that it sends html comments, well the could be processed to be minimized and stored or they could be compressed when sent to simply filter comments. This is much less operations than server side rendering anyway.
 
 > Instead of using markdown inside comments, why not simply only use HTML? This way I don't have to convert. It is more standard than markdown anyway. It does everything markdown does. Yesss, comments should be HTML.
+
+## How it works (TODO: Move this somewhere else REFERENCE.md?)
+
+1. Parsing: The source file is read and roughly parsed into a JomeDocument. This separates source code from presentation blocks.
+2. Deconstruction: The JomeDocument is then translated into a ProseMirror document.
+3. Modification: The user modifiers the ProseMirror document throught the editor.
+4. Construction: When the user saves, the ProseMirror document is converted back into a JomeDocument.
+5. Serializing: It is then written into the source language format.
+
+The steps 1 and 5 are handled by language format plugins.
+
+The steps 2 and 4 are handled by syntax plugins.
+
+The steps 3 handled by editor itself.
+
+How about the document format I use be compatible with ProseMirror document, this way I save a step? No.
