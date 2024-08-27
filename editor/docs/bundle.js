@@ -69645,7 +69645,7 @@
     let view = new EditorView(document.querySelector(selector), { state });
   }
 
-  // src/light_editor.js
+  // src/client.js
   function extractFetchText(response) {
     if (!response.ok) {
       throw new Error("Network response was not ok " + response.statusText);
@@ -69661,25 +69661,28 @@
   function loadFileList(callback) {
     fetch("/get_file_list").then(extractFetchJSON).then(callback);
   }
-  function loadFile(filename) {
+  function loadFile(filename, callback) {
     document.getElementById("current_filename").innerText = filename;
-    fetch("/get_file/" + filename).then(extractFetchText).then((src) => {
-      let doc3 = new JomeDocument(filename, src);
-      let parts = (0, import_parser2.parse)(doc3);
-      console.log("parts", parts);
-      initProseMirrorEditor("#prosemirror_editor", doc3);
-      document.getElementById("output-editor").innerHTML = renderOutputCode(doc3, parts);
-      document.getElementById("notebook-editor").innerHTML = renderNotebookView(doc3, parts);
-    });
+    fetch("/get_file/" + filename).then(extractFetchText).then((src) => callback(filename, src));
+  }
+
+  // src/light_editor.js
+  function handleFileLoaded(filename, src) {
+    let doc3 = new JomeDocument(filename, src);
+    let parts = (0, import_parser2.parse)(doc3);
+    console.log("parts", parts);
+    initProseMirrorEditor("#prosemirror_editor", doc3);
+    document.getElementById("output-editor").innerHTML = renderOutputCode(doc3, parts);
+    document.getElementById("notebook-editor").innerHTML = renderNotebookView(doc3, parts);
   }
   document.addEventListener("DOMContentLoaded", function() {
     const selectSampleElement = document.getElementById("sample_select");
     loadFileList((list) => {
       selectSampleElement.innerHTML = list.map((path) => `<option value="${path}">${path}</option>`);
       selectSampleElement.value = "README.md";
-      loadFile("README.md");
+      loadFile("README.md", handleFileLoaded);
       selectSampleElement.addEventListener("change", function(event) {
-        loadFile(event.target.value);
+        loadFile(event.target.value, handleFileLoaded);
       });
     });
   });

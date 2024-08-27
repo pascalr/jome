@@ -5,52 +5,15 @@ import {JomeDocument} from './jome_document'
 
 import {initProseMirrorEditor} from './prosemirror_editor'
 
-function extractFetchText(response) {
-  // TODO: Proper error message not an exception
-  if (!response.ok) {
-    throw new Error('Network response was not ok ' + response.statusText);
-  }
-  return response.text(); // Convert response to text
-  // .catch(error => {
-  //   // TODO: handle error
-  //   // document.getElementById('file-content').textContent = 'Error: ' + error;
-  // });
-}
+import { loadFile, loadFileList } from "./client"
 
-function extractFetchJSON(response) {
-  // TODO: Proper error message not an exception
-  if (!response.ok) {
-    throw new Error('Network response was not ok ' + response.statusText);
-  }
-  return response.json(); // Convert response to text
-  // .catch(error => {
-  //   // TODO: handle error
-  //   // document.getElementById('file-content').textContent = 'Error: ' + error;
-  // });
-}
-
-function loadFileList(callback) {
-  fetch('/get_file_list')
-  .then(extractFetchJSON)
-  .then(callback)
-}
-
-function loadFile(filename) {
-  document.getElementById("current_filename").innerText = filename
-  fetch('/get_file/'+filename)
-  .then(extractFetchText)
-  .then(src => {
-    let doc = new JomeDocument(filename, src)
-    let parts = parse(doc)
-    console.log("parts", parts)
-    initProseMirrorEditor('#prosemirror_editor', doc)
-    document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
-    document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)
-  })
-  // .catch(error => {
-  //   // TODO: handle error
-  //   // document.getElementById('file-content').textContent = 'Error: ' + error;
-  // });
+function handleFileLoaded(filename, src) {
+  let doc = new JomeDocument(filename, src)
+  let parts = parse(doc)
+  console.log("parts", parts)
+  initProseMirrorEditor('#prosemirror_editor', doc)
+  document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
+  document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -61,9 +24,9 @@ document.addEventListener('DOMContentLoaded', function() {
     ))
     selectSampleElement.value = "README.md"
     // loadFile(selectSampleElement.value)
-    loadFile("README.md")
+    loadFile("README.md", handleFileLoaded)
     selectSampleElement.addEventListener('change', function (event) {
-      loadFile(event.target.value)
+      loadFile(event.target.value, handleFileLoaded)
     });
   })
 });
