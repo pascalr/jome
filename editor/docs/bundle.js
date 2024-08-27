@@ -28,6 +28,178 @@
     mod
   ));
 
+  // src/formats/core.js
+  var CORE_FORMATS;
+  var init_core = __esm({
+    "src/formats/core.js"() {
+      CORE_FORMATS = {
+        js: {
+          inlineComment: "//",
+          multiBegin: "/*",
+          multiEnd: "*/",
+          stringSingle: true,
+          stringDouble: true,
+          stringBacktick: true
+        },
+        html: {
+          multiBegin: "<!--",
+          multiEnd: "-->",
+          stringSingle: true,
+          stringDouble: true
+        },
+        css: {
+          multiBegin: "/*",
+          multiEnd: "*/",
+          stringSingle: true,
+          stringDouble: true
+        },
+        md: {
+          // multiBegin: "\n[//]: # (",
+          // multiEnd: ")",
+          // FIXME: Don't consider a comment when inside a code block
+          multiBegin: "<!--",
+          multiEnd: "-->",
+          stringSingle: true,
+          stringDouble: true
+        }
+      };
+    }
+  });
+
+  // src/parser.js
+  var require_parser = __commonJS({
+    "src/parser.js"(exports, module) {
+      init_core();
+      var BlockType3 = {
+        code: "code",
+        block: "block",
+        html: "html",
+        comment: "comment",
+        whitespace: "whitespace",
+        capture: "capture"
+      };
+      function extractBlockComment(doc3) {
+        let start = doc3.cursor;
+        while (doc3.cursor < doc3.length && !doc3.content.startsWith(doc3.config.multiEnd, doc3.cursor)) {
+          doc3.cursor++;
+        }
+        doc3.cursor += doc3.config.multiEnd.length;
+        let whole = doc3.content.slice(start, doc3.cursor);
+        let inner = whole.slice(doc3.config.multiBegin.length, -doc3.config.multiEnd.length);
+        pushComment(doc3, whole, inner);
+      }
+      function extractQuote(str) {
+        let i, ch = str[0];
+        let result = ch;
+        for (i = 1; i < str.length && (str[i] !== ch || str[i - 1] === "\\"); i++) {
+          result += str[i];
+        }
+        return i < str.length ? result + ch : result;
+      }
+      function pushCurrentCode(doc3) {
+        if (doc3._currCodeBlock) {
+          if (/^\s*$/.test(doc3._currCodeBlock)) {
+            doc3.parts.push({ type: BlockType3.whitespace, value: doc3._currCodeBlock });
+          } else {
+            doc3.parts.push({ type: BlockType3.code, value: doc3._currCodeBlock });
+          }
+          doc3._currCodeBlock = "";
+        }
+      }
+      function pushComment(doc3, whole, inner) {
+        if (inner[0] === "~") {
+          pushCurrentCode(doc3);
+          if (inner[1] === "!") {
+            doc3.parts.push({ type: BlockType3.comment, value: inner.slice(1) });
+          } else if (inner[1] === " " || inner[1] === "	" || inner[1] === "\n" || inner[1] === "\r" && inner[2] === "\n") {
+            doc3.parts.push({ type: BlockType3.html, value: inner.slice(1) });
+          } else {
+            doc3.parts.push({ type: BlockType3.block, value: inner.slice(1) });
+          }
+        } else {
+          doc3._currCodeBlock += whole;
+        }
+      }
+      function extractSingleLineComment(doc3) {
+        let start = doc3.cursor;
+        while (doc3.cursor < doc3.length && doc3.content[doc3.cursor] !== "\n") {
+          doc3.cursor++;
+        }
+        doc3.cursor++;
+        let whole = doc3.content.slice(start, doc3.cursor);
+        let inner = whole.slice(doc3.config.inlineComment.length);
+        pushComment(doc3, whole, inner);
+      }
+      function analyzeBlocks(blocks) {
+        return blocks.map((b) => {
+          if (b.type === BlockType3.block) {
+            b.tag = b.value.match(/\w+/)[0];
+            let s = b.value.trimEnd();
+            b.content = s.substring(4 + b.tag.length, s.length - (b.value[1] === "*" ? 2 : 0));
+          } else if (b.type === BlockType3.capture) {
+            b.tag = b.value.slice(6).match(/\w+/)[0];
+            let s = b.value.slice(6 + b.tag.length).trimStart().trimEnd();
+            try {
+              console.log(s);
+              let o = JSON.parse(s);
+              b.data = o;
+            } catch (e) {
+              console.error(e);
+            }
+          }
+          return b;
+        });
+      }
+      function reduceBlocks(blocks) {
+        let reduced = [];
+        for (let i = 0; i < blocks.length; i++) {
+          p = blocks[i];
+          if (p.type === BlockType3.block && p.value.slice(0, 5) === "begin") {
+            let j = i + 1;
+            for (; j < blocks.length; j++) {
+              if (blocks[j].value.slice(0, 3) === "end") {
+                break;
+              }
+            }
+            reduced.push({ type: BlockType3.capture, value: p.value, nested: reduceBlocks(blocks.slice(i + 1, j)) });
+            i = j;
+          } else {
+            reduced.push(p);
+          }
+        }
+        return reduced;
+      }
+      function parse2(doc3) {
+        let config = CORE_FORMATS[doc3.extension];
+        doc3.config = config;
+        if (!config) {
+          doc3.parts.push({ type: BlockType3.code, value: doc3.content });
+          return doc3.parts;
+        }
+        let src = doc3.content;
+        while (doc3.cursor < doc3.length) {
+          let i = doc3.cursor;
+          if (config.stringDouble && src[i] === '"' || config.stringSingle && src[i] === "'") {
+            let str = extractQuote(src.slice(i));
+            doc3._currCodeBlock += str;
+            doc3.cursor = i + (str.length || 1);
+          } else if (config.inlineComment && src.startsWith(config.inlineComment, i)) {
+            extractSingleLineComment(doc3);
+          } else if (config.multiBegin && src.startsWith(config.multiBegin, i)) {
+            extractBlockComment(doc3);
+          } else {
+            doc3._currCodeBlock += src[i];
+            doc3.cursor++;
+          }
+        }
+        pushCurrentCode(doc3);
+        doc3.parts = analyzeBlocks(reduceBlocks(doc3.parts));
+        return doc3.parts;
+      }
+      module.exports = { BlockType: BlockType3, parse: parse2 };
+    }
+  });
+
   // node_modules/mdurl/build/index.cjs.js
   var require_index_cjs = __commonJS({
     "node_modules/mdurl/build/index.cjs.js"(exports) {
@@ -6326,7 +6498,7 @@
       var inherit = inherit$1;
       var NO_MATCH = Symbol("nomatch");
       var MAX_KEYWORD_HITS = 7;
-      var HLJS = function(hljs2) {
+      var HLJS = function(hljs) {
         const languages = /* @__PURE__ */ Object.create(null);
         const aliases = /* @__PURE__ */ Object.create(null);
         const plugins = [];
@@ -6362,7 +6534,7 @@
           }
           return classes.split(/\s+/).find((_class) => shouldNotHighlight(_class) || getLanguage(_class));
         }
-        function highlight3(codeOrLanguageName, optionsOrCode, ignoreIllegals) {
+        function highlight2(codeOrLanguageName, optionsOrCode, ignoreIllegals) {
           let code = "";
           let languageName = "";
           if (typeof optionsOrCode === "object") {
@@ -6783,7 +6955,7 @@
           }
           node = element;
           const text = node.textContent;
-          const result = language ? highlight3(text, { language, ignoreIllegals: true }) : highlightAuto(text);
+          const result = language ? highlight2(text, { language, ignoreIllegals: true }) : highlightAuto(text);
           element.innerHTML = result.value;
           element.dataset.highlighted = "yes";
           updateClassName(element, language, result.language);
@@ -6830,7 +7002,7 @@
         function registerLanguage(languageName, languageDefinition) {
           let lang = null;
           try {
-            lang = languageDefinition(hljs2);
+            lang = languageDefinition(hljs);
           } catch (error$1) {
             error("Language definition for '{}' could not be registered.".replace("{}", languageName));
             if (!SAFE_MODE) {
@@ -6842,7 +7014,7 @@
           }
           if (!lang.name) lang.name = languageName;
           languages[languageName] = lang;
-          lang.rawDefinition = languageDefinition.bind(null, hljs2);
+          lang.rawDefinition = languageDefinition.bind(null, hljs);
           if (lang.aliases) {
             registerAliases(lang.aliases, { languageName });
           }
@@ -6913,8 +7085,8 @@
           deprecated("10.7.0", "Please use highlightElement now.");
           return highlightElement(el);
         }
-        Object.assign(hljs2, {
-          highlight: highlight3,
+        Object.assign(hljs, {
+          highlight: highlight2,
           highlightAuto,
           highlightAll,
           highlightElement,
@@ -6933,14 +7105,14 @@
           addPlugin,
           removePlugin
         });
-        hljs2.debugMode = function() {
+        hljs.debugMode = function() {
           SAFE_MODE = false;
         };
-        hljs2.safeMode = function() {
+        hljs.safeMode = function() {
           SAFE_MODE = true;
         };
-        hljs2.versionString = version;
-        hljs2.regex = {
+        hljs.versionString = version;
+        hljs.regex = {
           concat,
           lookahead,
           either,
@@ -6952,21 +7124,21 @@
             deepFreeze(MODES[key]);
           }
         }
-        Object.assign(hljs2, MODES);
-        return hljs2;
+        Object.assign(hljs, MODES);
+        return hljs;
       };
-      var highlight2 = HLJS({});
-      highlight2.newInstance = () => HLJS({});
-      module.exports = highlight2;
-      highlight2.HighlightJS = highlight2;
-      highlight2.default = highlight2;
+      var highlight = HLJS({});
+      highlight.newInstance = () => HLJS({});
+      module.exports = highlight;
+      highlight.HighlightJS = highlight;
+      highlight.default = highlight;
     }
   });
 
   // node_modules/highlight.js/lib/languages/1c.js
   var require_c = __commonJS({
     "node_modules/highlight.js/lib/languages/1c.js"(exports, module) {
-      function _1c(hljs2) {
+      function _1c(hljs) {
         const UNDERSCORE_IDENT_RE = "[A-Za-z\u0410-\u042F\u0430-\u044F\u0451\u0401_][A-Za-z\u0410-\u042F\u0430-\u044F\u0451\u0401_0-9]+";
         const v7_keywords = "\u0434\u0430\u043B\u0435\u0435 ";
         const v8_keywords = "\u0432\u043E\u0437\u0432\u0440\u0430\u0442 \u0432\u044B\u0437\u0432\u0430\u0442\u044C\u0438\u0441\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u0435 \u0432\u044B\u043F\u043E\u043B\u043D\u0438\u0442\u044C \u0434\u043B\u044F \u0435\u0441\u043B\u0438 \u0438 \u0438\u0437 \u0438\u043B\u0438 \u0438\u043D\u0430\u0447\u0435 \u0438\u043D\u0430\u0447\u0435\u0435\u0441\u043B\u0438 \u0438\u0441\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u0435 \u043A\u0430\u0436\u0434\u043E\u0433\u043E \u043A\u043E\u043D\u0435\u0446\u0435\u0441\u043B\u0438 \u043A\u043E\u043D\u0435\u0446\u043F\u043E\u043F\u044B\u0442\u043A\u0438 \u043A\u043E\u043D\u0435\u0446\u0446\u0438\u043A\u043B\u0430 \u043D\u0435 \u043D\u043E\u0432\u044B\u0439 \u043F\u0435\u0440\u0435\u0439\u0442\u0438 \u043F\u0435\u0440\u0435\u043C \u043F\u043E \u043F\u043E\u043A\u0430 \u043F\u043E\u043F\u044B\u0442\u043A\u0430 \u043F\u0440\u0435\u0440\u0432\u0430\u0442\u044C \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u0442\u043E\u0433\u0434\u0430 \u0446\u0438\u043A\u043B \u044D\u043A\u0441\u043F\u043E\u0440\u0442 ";
@@ -7006,7 +7178,7 @@
         const v8_universal_collection = "comsafearray \u0434\u0435\u0440\u0435\u0432\u043E\u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0439 \u043C\u0430\u0441\u0441\u0438\u0432 \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u0441\u043F\u0438\u0441\u043E\u043A\u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0439 \u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0442\u0430\u0431\u043B\u0438\u0446\u0430\u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0439 \u0444\u0438\u043A\u0441\u0438\u0440\u043E\u0432\u0430\u043D\u043D\u0430\u044F\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0444\u0438\u043A\u0441\u0438\u0440\u043E\u0432\u0430\u043D\u043D\u043E\u0435\u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u0444\u0438\u043A\u0441\u0438\u0440\u043E\u0432\u0430\u043D\u043D\u044B\u0439\u043C\u0430\u0441\u0441\u0438\u0432 ";
         const TYPE = v8_shared_object + v8_universal_collection;
         const LITERAL = "null \u0438\u0441\u0442\u0438\u043D\u0430 \u043B\u043E\u0436\u044C \u043D\u0435\u043E\u043F\u0440\u0435\u0434\u0435\u043B\u0435\u043D\u043E";
-        const NUMBERS = hljs2.inherit(hljs2.NUMBER_MODE);
+        const NUMBERS = hljs.inherit(hljs.NUMBER_MODE);
         const STRINGS = {
           className: "string",
           begin: '"|\\|',
@@ -7030,7 +7202,7 @@
           className: "punctuation",
           relevance: 0
         };
-        const COMMENTS = hljs2.inherit(hljs2.C_LINE_COMMENT_MODE);
+        const COMMENTS = hljs.inherit(hljs.C_LINE_COMMENT_MODE);
         const META = {
           className: "meta",
           begin: "#|&",
@@ -7086,7 +7258,7 @@
                 COMMENTS
               ]
             },
-            hljs2.inherit(hljs2.TITLE_MODE, { begin: UNDERSCORE_IDENT_RE })
+            hljs.inherit(hljs.TITLE_MODE, { begin: UNDERSCORE_IDENT_RE })
           ]
         };
         return {
@@ -7119,8 +7291,8 @@
   // node_modules/highlight.js/lib/languages/abnf.js
   var require_abnf = __commonJS({
     "node_modules/highlight.js/lib/languages/abnf.js"(exports, module) {
-      function abnf(hljs2) {
-        const regex = hljs2.regex;
+      function abnf(hljs) {
+        const regex = hljs.regex;
         const IDENT = /^[a-zA-Z][a-zA-Z0-9-]*/;
         const KEYWORDS = [
           "ALPHA",
@@ -7140,7 +7312,7 @@
           "VCHAR",
           "WSP"
         ];
-        const COMMENT = hljs2.COMMENT(/;/, /$/);
+        const COMMENT = hljs.COMMENT(/;/, /$/);
         const TERMINAL_BINARY = {
           scope: "symbol",
           match: /%b[0-1]+(-[0-1]+|(\.[0-1]+)+)?/
@@ -7177,8 +7349,8 @@
             TERMINAL_DECIMAL,
             TERMINAL_HEXADECIMAL,
             CASE_SENSITIVITY,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.NUMBER_MODE
+            hljs.QUOTE_STRING_MODE,
+            hljs.NUMBER_MODE
           ]
         };
       }
@@ -7189,8 +7361,8 @@
   // node_modules/highlight.js/lib/languages/accesslog.js
   var require_accesslog = __commonJS({
     "node_modules/highlight.js/lib/languages/accesslog.js"(exports, module) {
-      function accesslog(hljs2) {
-        const regex = hljs2.regex;
+      function accesslog(hljs) {
+        const regex = hljs.regex;
         const HTTP_VERBS = [
           "GET",
           "POST",
@@ -7275,8 +7447,8 @@
   // node_modules/highlight.js/lib/languages/actionscript.js
   var require_actionscript = __commonJS({
     "node_modules/highlight.js/lib/languages/actionscript.js"(exports, module) {
-      function actionscript(hljs2) {
-        const regex = hljs2.regex;
+      function actionscript(hljs) {
+        const regex = hljs.regex;
         const IDENT_RE = /[a-zA-Z_$][a-zA-Z0-9_$]*/;
         const PKG_NAME_RE = regex.concat(
           IDENT_RE,
@@ -7355,11 +7527,11 @@
             literal: LITERALS
           },
           contains: [
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.C_NUMBER_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.C_NUMBER_MODE,
             {
               match: [
                 /\bpackage/,
@@ -7394,23 +7566,23 @@
               excludeEnd: true,
               illegal: /\S/,
               contains: [
-                hljs2.inherit(hljs2.TITLE_MODE, { className: "title.function" }),
+                hljs.inherit(hljs.TITLE_MODE, { className: "title.function" }),
                 {
                   className: "params",
                   begin: /\(/,
                   end: /\)/,
                   contains: [
-                    hljs2.APOS_STRING_MODE,
-                    hljs2.QUOTE_STRING_MODE,
-                    hljs2.C_LINE_COMMENT_MODE,
-                    hljs2.C_BLOCK_COMMENT_MODE,
+                    hljs.APOS_STRING_MODE,
+                    hljs.QUOTE_STRING_MODE,
+                    hljs.C_LINE_COMMENT_MODE,
+                    hljs.C_BLOCK_COMMENT_MODE,
                     AS3_REST_ARG_MODE
                   ]
                 },
                 { begin: regex.concat(/:\s*/, IDENT_FUNC_RETURN_TYPE_RE) }
               ]
             },
-            hljs2.METHOD_GUARD
+            hljs.METHOD_GUARD
           ],
           illegal: /#/
         };
@@ -7422,7 +7594,7 @@
   // node_modules/highlight.js/lib/languages/ada.js
   var require_ada = __commonJS({
     "node_modules/highlight.js/lib/languages/ada.js"(exports, module) {
-      function ada(hljs2) {
+      function ada(hljs) {
         const INTEGER_RE = "\\d(_|\\d)*";
         const EXPONENT_RE = "[eE][-+]?" + INTEGER_RE;
         const DECIMAL_LITERAL_RE = INTEGER_RE + "(\\." + INTEGER_RE + ")?(" + EXPONENT_RE + ")?";
@@ -7431,7 +7603,7 @@
         const NUMBER_RE = "\\b(" + BASED_LITERAL_RE + "|" + DECIMAL_LITERAL_RE + ")";
         const ID_REGEX = "[A-Za-z](_?[A-Za-z0-9.])*";
         const BAD_CHARS = `[]\\{\\}%#'"`;
-        const COMMENTS = hljs2.COMMENT("--", "$");
+        const COMMENTS = hljs.COMMENT("--", "$");
         const VAR_DECLS = {
           // TODO: These spaces are not required by the Ada syntax
           // however, I have yet to see handwritten Ada code where
@@ -7649,7 +7821,7 @@
   // node_modules/highlight.js/lib/languages/angelscript.js
   var require_angelscript = __commonJS({
     "node_modules/highlight.js/lib/languages/angelscript.js"(exports, module) {
-      function angelscript(hljs2) {
+      function angelscript(hljs) {
         const builtInTypeMode = {
           className: "built_in",
           begin: "\\b(void|bool|int8|int16|int32|int64|int|uint8|uint16|uint32|uint64|uint|string|ref|array|double|float|auto|dictionary)"
@@ -7730,7 +7902,7 @@
               begin: "'",
               end: "'",
               illegal: "\\n",
-              contains: [hljs2.BACKSLASH_ESCAPE],
+              contains: [hljs.BACKSLASH_ESCAPE],
               relevance: 0
             },
             // """heredoc strings"""
@@ -7745,12 +7917,12 @@
               begin: '"',
               end: '"',
               illegal: "\\n",
-              contains: [hljs2.BACKSLASH_ESCAPE],
+              contains: [hljs.BACKSLASH_ESCAPE],
               relevance: 0
             },
-            hljs2.C_LINE_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
             // single-line comments
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             // comment blocks
             {
               // metadata
@@ -7820,7 +7992,7 @@
   // node_modules/highlight.js/lib/languages/apache.js
   var require_apache = __commonJS({
     "node_modules/highlight.js/lib/languages/apache.js"(exports, module) {
-      function apache(hljs2) {
+      function apache(hljs) {
         const NUMBER_REF = {
           className: "number",
           begin: /[$%]\d+/
@@ -7842,7 +8014,7 @@
           aliases: ["apacheconf"],
           case_insensitive: true,
           contains: [
-            hljs2.HASH_COMMENT_MODE,
+            hljs.HASH_COMMENT_MODE,
             {
               className: "section",
               begin: /<\/?/,
@@ -7852,7 +8024,7 @@
                 PORT_NUMBER,
                 // low relevance prevents us from claming XML/HTML where this rule would
                 // match strings inside of XML tags
-                hljs2.inherit(hljs2.QUOTE_STRING_MODE, { relevance: 0 })
+                hljs.inherit(hljs.QUOTE_STRING_MODE, { relevance: 0 })
               ]
             },
             {
@@ -7900,7 +8072,7 @@
                   },
                   IP_ADDRESS,
                   NUMBER,
-                  hljs2.QUOTE_STRING_MODE
+                  hljs.QUOTE_STRING_MODE
                 ]
               }
             }
@@ -7915,10 +8087,10 @@
   // node_modules/highlight.js/lib/languages/applescript.js
   var require_applescript = __commonJS({
     "node_modules/highlight.js/lib/languages/applescript.js"(exports, module) {
-      function applescript(hljs2) {
-        const regex = hljs2.regex;
-        const STRING = hljs2.inherit(
-          hljs2.QUOTE_STRING_MODE,
+      function applescript(hljs) {
+        const regex = hljs.regex;
+        const STRING = hljs.inherit(
+          hljs.QUOTE_STRING_MODE,
           { illegal: null }
         );
         const PARAMS = {
@@ -7927,12 +8099,12 @@
           end: /\)/,
           contains: [
             "self",
-            hljs2.C_NUMBER_MODE,
+            hljs.C_NUMBER_MODE,
             STRING
           ]
         };
-        const COMMENT_MODE_1 = hljs2.COMMENT(/--/, /$/);
-        const COMMENT_MODE_2 = hljs2.COMMENT(
+        const COMMENT_MODE_1 = hljs.COMMENT(/--/, /$/);
+        const COMMENT_MODE_2 = hljs.COMMENT(
           /\(\*/,
           /\*\)/,
           { contains: [
@@ -7944,7 +8116,7 @@
         const COMMENTS = [
           COMMENT_MODE_1,
           COMMENT_MODE_2,
-          hljs2.HASH_COMMENT_MODE
+          hljs.HASH_COMMENT_MODE
         ];
         const KEYWORD_PATTERNS = [
           /apart from/,
@@ -7996,7 +8168,7 @@
           },
           contains: [
             STRING,
-            hljs2.C_NUMBER_MODE,
+            hljs.C_NUMBER_MODE,
             {
               className: "built_in",
               begin: regex.concat(
@@ -8025,7 +8197,7 @@
               beginKeywords: "on",
               illegal: /[${=;\n]/,
               contains: [
-                hljs2.UNDERSCORE_TITLE_MODE,
+                hljs.UNDERSCORE_TITLE_MODE,
                 PARAMS
               ]
             },
@@ -8041,8 +8213,8 @@
   // node_modules/highlight.js/lib/languages/arcade.js
   var require_arcade = __commonJS({
     "node_modules/highlight.js/lib/languages/arcade.js"(exports, module) {
-      function arcade(hljs2) {
-        const regex = hljs2.regex;
+      function arcade(hljs) {
+        const regex = hljs.regex;
         const IDENT_RE = "[A-Za-z_][0-9A-Za-z_]*";
         const KEYWORDS = {
           keyword: [
@@ -8327,7 +8499,7 @@
           variants: [
             { begin: "\\b(0[bB][01]+)" },
             { begin: "\\b(0[oO][0-7]+)" },
-            { begin: hljs2.C_NUMBER_RE }
+            { begin: hljs.C_NUMBER_RE }
           ],
           relevance: 0
         };
@@ -8344,31 +8516,31 @@
           begin: "`",
           end: "`",
           contains: [
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             SUBST
           ]
         };
         SUBST.contains = [
-          hljs2.APOS_STRING_MODE,
-          hljs2.QUOTE_STRING_MODE,
+          hljs.APOS_STRING_MODE,
+          hljs.QUOTE_STRING_MODE,
           TEMPLATE_STRING,
           NUMBER,
-          hljs2.REGEXP_MODE
+          hljs.REGEXP_MODE
         ];
         const PARAMS_CONTAINS = SUBST.contains.concat([
-          hljs2.C_BLOCK_COMMENT_MODE,
-          hljs2.C_LINE_COMMENT_MODE
+          hljs.C_BLOCK_COMMENT_MODE,
+          hljs.C_LINE_COMMENT_MODE
         ]);
         return {
           name: "ArcGIS Arcade",
           case_insensitive: true,
           keywords: KEYWORDS,
           contains: [
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             TEMPLATE_STRING,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             SYMBOL,
             NUMBER,
             {
@@ -8392,12 +8564,12 @@
             },
             {
               // "value" container
-              begin: "(" + hljs2.RE_STARTERS_RE + "|\\b(return)\\b)\\s*",
+              begin: "(" + hljs.RE_STARTERS_RE + "|\\b(return)\\b)\\s*",
               keywords: "return",
               contains: [
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE,
-                hljs2.REGEXP_MODE,
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE,
+                hljs.REGEXP_MODE,
                 {
                   className: "function",
                   begin: "(\\(.*?\\)|" + IDENT_RE + ")\\s*=>",
@@ -8429,7 +8601,7 @@
               end: /\{/,
               excludeEnd: true,
               contains: [
-                hljs2.inherit(hljs2.TITLE_MODE, {
+                hljs.inherit(hljs.TITLE_MODE, {
                   className: "title.function",
                   begin: IDENT_RE
                 }),
@@ -8456,9 +8628,9 @@
   // node_modules/highlight.js/lib/languages/arduino.js
   var require_arduino = __commonJS({
     "node_modules/highlight.js/lib/languages/arduino.js"(exports, module) {
-      function cPlusPlus(hljs2) {
-        const regex = hljs2.regex;
-        const C_LINE_COMMENT_MODE = hljs2.COMMENT("//", "$", { contains: [{ begin: /\\\n/ }] });
+      function cPlusPlus(hljs) {
+        const regex = hljs.regex;
+        const C_LINE_COMMENT_MODE = hljs.COMMENT("//", "$", { contains: [{ begin: /\\\n/ }] });
         const DECLTYPE_AUTO_RE = "decltype\\(auto\\)";
         const NAMESPACE_RE = "[a-zA-Z_]\\w*::";
         const TEMPLATE_ARGUMENT_RE = "<[^<>]+>";
@@ -8475,14 +8647,14 @@
               begin: '(u8?|U|L)?"',
               end: '"',
               illegal: "\\n",
-              contains: [hljs2.BACKSLASH_ESCAPE]
+              contains: [hljs.BACKSLASH_ESCAPE]
             },
             {
               begin: "(u8?|U|L)?'(" + CHARACTER_ESCAPES + "|.)",
               end: "'",
               illegal: "."
             },
-            hljs2.END_SAME_AS_BEGIN({
+            hljs.END_SAME_AS_BEGIN({
               begin: /(?:u8?|U|L)?R"([^()\\ ]{0,16})\(/,
               end: /\)([^()\\ ]{0,16})"/
             })
@@ -8514,21 +8686,21 @@
               begin: /\\\n/,
               relevance: 0
             },
-            hljs2.inherit(STRINGS, { className: "string" }),
+            hljs.inherit(STRINGS, { className: "string" }),
             {
               className: "string",
               begin: /<.*?>/
             },
             C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE
+            hljs.C_BLOCK_COMMENT_MODE
           ]
         };
         const TITLE_MODE = {
           className: "title",
-          begin: regex.optional(NAMESPACE_RE) + hljs2.IDENT_RE,
+          begin: regex.optional(NAMESPACE_RE) + hljs.IDENT_RE,
           relevance: 0
         };
-        const FUNCTION_TITLE = regex.optional(NAMESPACE_RE) + hljs2.IDENT_RE + "\\s*\\(";
+        const FUNCTION_TITLE = regex.optional(NAMESPACE_RE) + hljs.IDENT_RE + "\\s*\\(";
         const RESERVED_KEYWORDS = [
           "alignas",
           "alignof",
@@ -8824,7 +8996,7 @@
             /(?!for)/,
             /(?!switch)/,
             /(?!while)/,
-            hljs2.IDENT_RE,
+            hljs.IDENT_RE,
             regex.lookahead(/(<[^<>]+>|)\s*\(/)
           )
         };
@@ -8833,7 +9005,7 @@
           PREPROCESSOR,
           CPP_PRIMITIVE_TYPES,
           C_LINE_COMMENT_MODE,
-          hljs2.C_BLOCK_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
           NUMBERS,
           STRINGS
         ];
@@ -8917,7 +9089,7 @@
               relevance: 0,
               contains: [
                 C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE,
                 STRINGS,
                 NUMBERS,
                 CPP_PRIMITIVE_TYPES,
@@ -8930,7 +9102,7 @@
                   contains: [
                     "self",
                     C_LINE_COMMENT_MODE,
-                    hljs2.C_BLOCK_COMMENT_MODE,
+                    hljs.C_BLOCK_COMMENT_MODE,
                     STRINGS,
                     NUMBERS,
                     CPP_PRIMITIVE_TYPES
@@ -8940,7 +9112,7 @@
             },
             CPP_PRIMITIVE_TYPES,
             C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             PREPROCESSOR
           ]
         };
@@ -8976,7 +9148,7 @@
                 ]
               },
               {
-                begin: hljs2.IDENT_RE + "::",
+                begin: hljs.IDENT_RE + "::",
                 keywords: CPP_KEYWORDS
               },
               {
@@ -8995,7 +9167,7 @@
           )
         };
       }
-      function arduino(hljs2) {
+      function arduino(hljs) {
         const ARDUINO_KW = {
           type: [
             "boolean",
@@ -9362,7 +9534,7 @@
             "LOW"
           ]
         };
-        const ARDUINO = cPlusPlus(hljs2);
+        const ARDUINO = cPlusPlus(hljs);
         const kws = (
           /** @type {Record<string,any>} */
           ARDUINO.keywords
@@ -9392,22 +9564,22 @@
   // node_modules/highlight.js/lib/languages/armasm.js
   var require_armasm = __commonJS({
     "node_modules/highlight.js/lib/languages/armasm.js"(exports, module) {
-      function armasm(hljs2) {
+      function armasm(hljs) {
         const COMMENT = { variants: [
-          hljs2.COMMENT("^[ \\t]*(?=#)", "$", {
+          hljs.COMMENT("^[ \\t]*(?=#)", "$", {
             relevance: 0,
             excludeBegin: true
           }),
-          hljs2.COMMENT("[;@]", "$", { relevance: 0 }),
-          hljs2.C_LINE_COMMENT_MODE,
-          hljs2.C_BLOCK_COMMENT_MODE
+          hljs.COMMENT("[;@]", "$", { relevance: 0 }),
+          hljs.C_LINE_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE
         ] };
         return {
           name: "ARM Assembly",
           case_insensitive: true,
           aliases: ["arm"],
           keywords: {
-            $pattern: "\\.?" + hljs2.IDENT_RE,
+            $pattern: "\\.?" + hljs.IDENT_RE,
             meta: (
               // GNU preprocs
               ".2byte .4byte .align .ascii .asciz .balign .byte .code .data .else .end .endif .endm .endr .equ .err .exitm .extern .global .hword .if .ifdef .ifndef .include .irp .long .macro .rept .req .section .set .skip .space .text .word .arm .thumb .code16 .code32 .force_thumb .thumb_func .ltorg ALIAS ALIGN ARM AREA ASSERT ATTR CN CODE CODE16 CODE32 COMMON CP DATA DCB DCD DCDU DCDO DCFD DCFDU DCI DCQ DCQU DCW DCWU DN ELIF ELSE END ENDFUNC ENDIF ENDP ENTRY EQU EXPORT EXPORTAS EXTERN FIELD FILL FUNCTION GBLA GBLL GBLS GET GLOBAL IF IMPORT INCBIN INCLUDE INFO KEEP LCLA LCLL LCLS LTORG MACRO MAP MEND MEXIT NOFP OPT PRESERVE8 PROC QN READONLY RELOC REQUIRE REQUIRE8 RLIST FN ROUT SETA SETL SETS SN SPACE SUBT THUMB THUMBX TTL WHILE WEND "
@@ -9421,7 +9593,7 @@
               // followed by space
             },
             COMMENT,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             {
               className: "string",
               begin: "'",
@@ -9485,8 +9657,8 @@
   // node_modules/highlight.js/lib/languages/xml.js
   var require_xml = __commonJS({
     "node_modules/highlight.js/lib/languages/xml.js"(exports, module) {
-      function xml(hljs2) {
-        const regex = hljs2.regex;
+      function xml(hljs) {
+        const regex = hljs.regex;
         const TAG_NAME_RE = regex.concat(/[\p{L}_]/u, regex.optional(/[\p{L}0-9_.-]*:/u), /[\p{L}0-9_.-]*/u);
         const XML_IDENT_RE = /[\p{L}0-9._:-]+/u;
         const XML_ENTITIES = {
@@ -9503,12 +9675,12 @@
             }
           ]
         };
-        const XML_META_PAR_KEYWORDS = hljs2.inherit(XML_META_KEYWORDS, {
+        const XML_META_PAR_KEYWORDS = hljs.inherit(XML_META_KEYWORDS, {
           begin: /\(/,
           end: /\)/
         });
-        const APOS_META_STRING_MODE = hljs2.inherit(hljs2.APOS_STRING_MODE, { className: "string" });
-        const QUOTE_META_STRING_MODE = hljs2.inherit(hljs2.QUOTE_STRING_MODE, { className: "string" });
+        const APOS_META_STRING_MODE = hljs.inherit(hljs.APOS_STRING_MODE, { className: "string" });
+        const QUOTE_META_STRING_MODE = hljs.inherit(hljs.QUOTE_STRING_MODE, { className: "string" });
         const TAG_INTERNALS = {
           endsWithParent: true,
           illegal: /</,
@@ -9590,7 +9762,7 @@
                 }
               ]
             },
-            hljs2.COMMENT(
+            hljs.COMMENT(
               /<!--/,
               /-->/,
               { relevance: 10 }
@@ -9716,8 +9888,8 @@
   // node_modules/highlight.js/lib/languages/asciidoc.js
   var require_asciidoc = __commonJS({
     "node_modules/highlight.js/lib/languages/asciidoc.js"(exports, module) {
-      function asciidoc(hljs2) {
-        const regex = hljs2.regex;
+      function asciidoc(hljs) {
+        const regex = hljs.regex;
         const HORIZONTAL_RULE = {
           begin: "^'{3,}[ \\t]*$",
           relevance: 10
@@ -9824,7 +9996,7 @@
           aliases: ["adoc"],
           contains: [
             // block comment
-            hljs2.COMMENT(
+            hljs.COMMENT(
               "^/{4,}\\n",
               "\\n/{4,}$",
               // can also be done as...
@@ -9833,7 +10005,7 @@
               { relevance: 10 }
             ),
             // line comment
-            hljs2.COMMENT(
+            hljs.COMMENT(
               "^//",
               "$",
               { relevance: 0 }
@@ -9969,8 +10141,8 @@
   // node_modules/highlight.js/lib/languages/aspectj.js
   var require_aspectj = __commonJS({
     "node_modules/highlight.js/lib/languages/aspectj.js"(exports, module) {
-      function aspectj(hljs2) {
-        const regex = hljs2.regex;
+      function aspectj(hljs) {
+        const regex = hljs.regex;
         const KEYWORDS = [
           "false",
           "synchronized",
@@ -10058,7 +10230,7 @@
           keywords: KEYWORDS,
           illegal: /<\/|#/,
           contains: [
-            hljs2.COMMENT(
+            hljs.COMMENT(
               /\/\*\*/,
               /\*\//,
               {
@@ -10076,10 +10248,10 @@
                 ]
               }
             ),
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             {
               className: "class",
               beginKeywords: "aspect",
@@ -10088,7 +10260,7 @@
               illegal: /[:;"\[\]]/,
               contains: [
                 { beginKeywords: "extends implements pertypewithin perthis pertarget percflowbelow percflow issingleton" },
-                hljs2.UNDERSCORE_TITLE_MODE,
+                hljs.UNDERSCORE_TITLE_MODE,
                 {
                   begin: /\([^\)]*/,
                   end: /[)]+/,
@@ -10107,7 +10279,7 @@
               illegal: /[:"\[\]]/,
               contains: [
                 { beginKeywords: "extends implements" },
-                hljs2.UNDERSCORE_TITLE_MODE
+                hljs.UNDERSCORE_TITLE_MODE
               ]
             },
             {
@@ -10118,9 +10290,9 @@
               illegal: /["\[\]]/,
               contains: [
                 {
-                  begin: regex.concat(hljs2.UNDERSCORE_IDENT_RE, /\s*\(/),
+                  begin: regex.concat(hljs.UNDERSCORE_IDENT_RE, /\s*\(/),
                   returnBegin: true,
-                  contains: [hljs2.UNDERSCORE_TITLE_MODE]
+                  contains: [hljs.UNDERSCORE_TITLE_MODE]
                 }
               ]
             },
@@ -10134,11 +10306,11 @@
               illegal: /["\[\]]/,
               contains: [
                 {
-                  begin: regex.concat(hljs2.UNDERSCORE_IDENT_RE, /\s*\(/),
+                  begin: regex.concat(hljs.UNDERSCORE_IDENT_RE, /\s*\(/),
                   keywords: KEYWORDS.concat(SHORTKEYS),
                   relevance: 0
                 },
-                hljs2.QUOTE_STRING_MODE
+                hljs.QUOTE_STRING_MODE
               ]
             },
             {
@@ -10156,10 +10328,10 @@
               excludeEnd: true,
               contains: [
                 {
-                  begin: regex.concat(hljs2.UNDERSCORE_IDENT_RE, /\s*\(/),
+                  begin: regex.concat(hljs.UNDERSCORE_IDENT_RE, /\s*\(/),
                   returnBegin: true,
                   relevance: 0,
-                  contains: [hljs2.UNDERSCORE_TITLE_MODE]
+                  contains: [hljs.UNDERSCORE_TITLE_MODE]
                 },
                 {
                   className: "params",
@@ -10168,17 +10340,17 @@
                   relevance: 0,
                   keywords: KEYWORDS,
                   contains: [
-                    hljs2.APOS_STRING_MODE,
-                    hljs2.QUOTE_STRING_MODE,
-                    hljs2.C_NUMBER_MODE,
-                    hljs2.C_BLOCK_COMMENT_MODE
+                    hljs.APOS_STRING_MODE,
+                    hljs.QUOTE_STRING_MODE,
+                    hljs.C_NUMBER_MODE,
+                    hljs.C_BLOCK_COMMENT_MODE
                   ]
                 },
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE
               ]
             },
-            hljs2.C_NUMBER_MODE,
+            hljs.C_NUMBER_MODE,
             {
               // annotation is also used in this language
               className: "meta",
@@ -10194,7 +10366,7 @@
   // node_modules/highlight.js/lib/languages/autohotkey.js
   var require_autohotkey = __commonJS({
     "node_modules/highlight.js/lib/languages/autohotkey.js"(exports, module) {
-      function autohotkey(hljs2) {
+      function autohotkey(hljs) {
         const BACKTICK_ESCAPE = { begin: "`[\\s\\S]" };
         return {
           name: "AutoHotkey",
@@ -10207,12 +10379,12 @@
           },
           contains: [
             BACKTICK_ESCAPE,
-            hljs2.inherit(hljs2.QUOTE_STRING_MODE, { contains: [BACKTICK_ESCAPE] }),
-            hljs2.COMMENT(";", "$", { relevance: 0 }),
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.inherit(hljs.QUOTE_STRING_MODE, { contains: [BACKTICK_ESCAPE] }),
+            hljs.COMMENT(";", "$", { relevance: 0 }),
+            hljs.C_BLOCK_COMMENT_MODE,
             {
               className: "number",
-              begin: hljs2.NUMBER_RE,
+              begin: hljs.NUMBER_RE,
               relevance: 0
             },
             {
@@ -10266,7 +10438,7 @@
   // node_modules/highlight.js/lib/languages/autoit.js
   var require_autoit = __commonJS({
     "node_modules/highlight.js/lib/languages/autoit.js"(exports, module) {
-      function autoit(hljs2) {
+      function autoit(hljs) {
         const KEYWORDS = "ByRef Case Const ContinueCase ContinueLoop Dim Do Else ElseIf EndFunc EndIf EndSelect EndSwitch EndWith Enum Exit ExitLoop For Func Global If In Local Next ReDim Return Select Static Step Switch Then To Until Volatile WEnd While With";
         const DIRECTIVES = [
           "EndRegion",
@@ -10287,9 +10459,9 @@
         const LITERAL = "True False And Null Not Or Default";
         const BUILT_IN = "Abs ACos AdlibRegister AdlibUnRegister Asc AscW ASin Assign ATan AutoItSetOption AutoItWinGetTitle AutoItWinSetTitle Beep Binary BinaryLen BinaryMid BinaryToString BitAND BitNOT BitOR BitRotate BitShift BitXOR BlockInput Break Call CDTray Ceiling Chr ChrW ClipGet ClipPut ConsoleRead ConsoleWrite ConsoleWriteError ControlClick ControlCommand ControlDisable ControlEnable ControlFocus ControlGetFocus ControlGetHandle ControlGetPos ControlGetText ControlHide ControlListView ControlMove ControlSend ControlSetText ControlShow ControlTreeView Cos Dec DirCopy DirCreate DirGetSize DirMove DirRemove DllCall DllCallAddress DllCallbackFree DllCallbackGetPtr DllCallbackRegister DllClose DllOpen DllStructCreate DllStructGetData DllStructGetPtr DllStructGetSize DllStructSetData DriveGetDrive DriveGetFileSystem DriveGetLabel DriveGetSerial DriveGetType DriveMapAdd DriveMapDel DriveMapGet DriveSetLabel DriveSpaceFree DriveSpaceTotal DriveStatus EnvGet EnvSet EnvUpdate Eval Execute Exp FileChangeDir FileClose FileCopy FileCreateNTFSLink FileCreateShortcut FileDelete FileExists FileFindFirstFile FileFindNextFile FileFlush FileGetAttrib FileGetEncoding FileGetLongName FileGetPos FileGetShortcut FileGetShortName FileGetSize FileGetTime FileGetVersion FileInstall FileMove FileOpen FileOpenDialog FileRead FileReadLine FileReadToArray FileRecycle FileRecycleEmpty FileSaveDialog FileSelectFolder FileSetAttrib FileSetEnd FileSetPos FileSetTime FileWrite FileWriteLine Floor FtpSetProxy FuncName GUICreate GUICtrlCreateAvi GUICtrlCreateButton GUICtrlCreateCheckbox GUICtrlCreateCombo GUICtrlCreateContextMenu GUICtrlCreateDate GUICtrlCreateDummy GUICtrlCreateEdit GUICtrlCreateGraphic GUICtrlCreateGroup GUICtrlCreateIcon GUICtrlCreateInput GUICtrlCreateLabel GUICtrlCreateList GUICtrlCreateListView GUICtrlCreateListViewItem GUICtrlCreateMenu GUICtrlCreateMenuItem GUICtrlCreateMonthCal GUICtrlCreateObj GUICtrlCreatePic GUICtrlCreateProgress GUICtrlCreateRadio GUICtrlCreateSlider GUICtrlCreateTab GUICtrlCreateTabItem GUICtrlCreateTreeView GUICtrlCreateTreeViewItem GUICtrlCreateUpdown GUICtrlDelete GUICtrlGetHandle GUICtrlGetState GUICtrlRead GUICtrlRecvMsg GUICtrlRegisterListViewSort GUICtrlSendMsg GUICtrlSendToDummy GUICtrlSetBkColor GUICtrlSetColor GUICtrlSetCursor GUICtrlSetData GUICtrlSetDefBkColor GUICtrlSetDefColor GUICtrlSetFont GUICtrlSetGraphic GUICtrlSetImage GUICtrlSetLimit GUICtrlSetOnEvent GUICtrlSetPos GUICtrlSetResizing GUICtrlSetState GUICtrlSetStyle GUICtrlSetTip GUIDelete GUIGetCursorInfo GUIGetMsg GUIGetStyle GUIRegisterMsg GUISetAccelerators GUISetBkColor GUISetCoord GUISetCursor GUISetFont GUISetHelp GUISetIcon GUISetOnEvent GUISetState GUISetStyle GUIStartGroup GUISwitch Hex HotKeySet HttpSetProxy HttpSetUserAgent HWnd InetClose InetGet InetGetInfo InetGetSize InetRead IniDelete IniRead IniReadSection IniReadSectionNames IniRenameSection IniWrite IniWriteSection InputBox Int IsAdmin IsArray IsBinary IsBool IsDeclared IsDllStruct IsFloat IsFunc IsHWnd IsInt IsKeyword IsNumber IsObj IsPtr IsString Log MemGetStats Mod MouseClick MouseClickDrag MouseDown MouseGetCursor MouseGetPos MouseMove MouseUp MouseWheel MsgBox Number ObjCreate ObjCreateInterface ObjEvent ObjGet ObjName OnAutoItExitRegister OnAutoItExitUnRegister Ping PixelChecksum PixelGetColor PixelSearch ProcessClose ProcessExists ProcessGetStats ProcessList ProcessSetPriority ProcessWait ProcessWaitClose ProgressOff ProgressOn ProgressSet Ptr Random RegDelete RegEnumKey RegEnumVal RegRead RegWrite Round Run RunAs RunAsWait RunWait Send SendKeepActive SetError SetExtended ShellExecute ShellExecuteWait Shutdown Sin Sleep SoundPlay SoundSetWaveVolume SplashImageOn SplashOff SplashTextOn Sqrt SRandom StatusbarGetText StderrRead StdinWrite StdioClose StdoutRead String StringAddCR StringCompare StringFormat StringFromASCIIArray StringInStr StringIsAlNum StringIsAlpha StringIsASCII StringIsDigit StringIsFloat StringIsInt StringIsLower StringIsSpace StringIsUpper StringIsXDigit StringLeft StringLen StringLower StringMid StringRegExp StringRegExpReplace StringReplace StringReverse StringRight StringSplit StringStripCR StringStripWS StringToASCIIArray StringToBinary StringTrimLeft StringTrimRight StringUpper Tan TCPAccept TCPCloseSocket TCPConnect TCPListen TCPNameToIP TCPRecv TCPSend TCPShutdown, UDPShutdown TCPStartup, UDPStartup TimerDiff TimerInit ToolTip TrayCreateItem TrayCreateMenu TrayGetMsg TrayItemDelete TrayItemGetHandle TrayItemGetState TrayItemGetText TrayItemSetOnEvent TrayItemSetState TrayItemSetText TraySetClick TraySetIcon TraySetOnEvent TraySetPauseIcon TraySetState TraySetToolTip TrayTip UBound UDPBind UDPCloseSocket UDPOpen UDPRecv UDPSend VarGetType WinActivate WinActive WinClose WinExists WinFlash WinGetCaretPos WinGetClassList WinGetClientSize WinGetHandle WinGetPos WinGetProcess WinGetState WinGetText WinGetTitle WinKill WinList WinMenuSelectItem WinMinimizeAll WinMinimizeAllUndo WinMove WinSetOnTop WinSetState WinSetTitle WinSetTrans WinWait WinWaitActive WinWaitClose WinWaitNotActive";
         const COMMENT = { variants: [
-          hljs2.COMMENT(";", "$", { relevance: 0 }),
-          hljs2.COMMENT("#cs", "#ce"),
-          hljs2.COMMENT("#comments-start", "#comments-end")
+          hljs.COMMENT(";", "$", { relevance: 0 }),
+          hljs.COMMENT("#cs", "#ce"),
+          hljs.COMMENT("#comments-start", "#comments-end")
         ] };
         const VARIABLE = { begin: "\\$[A-z0-9_]+" };
         const STRING = {
@@ -10318,8 +10490,8 @@
           ]
         };
         const NUMBER = { variants: [
-          hljs2.BINARY_NUMBER_MODE,
-          hljs2.C_NUMBER_MODE
+          hljs.BINARY_NUMBER_MODE,
+          hljs.C_NUMBER_MODE
         ] };
         const PREPROCESSOR = {
           className: "meta",
@@ -10385,7 +10557,7 @@
           end: "$",
           illegal: "\\$|\\[|%",
           contains: [
-            hljs2.inherit(hljs2.UNDERSCORE_TITLE_MODE, { className: "title.function" }),
+            hljs.inherit(hljs.UNDERSCORE_TITLE_MODE, { className: "title.function" }),
             {
               className: "params",
               begin: "\\(",
@@ -10425,12 +10597,12 @@
   // node_modules/highlight.js/lib/languages/avrasm.js
   var require_avrasm = __commonJS({
     "node_modules/highlight.js/lib/languages/avrasm.js"(exports, module) {
-      function avrasm(hljs2) {
+      function avrasm(hljs) {
         return {
           name: "AVR Assembly",
           case_insensitive: true,
           keywords: {
-            $pattern: "\\.?" + hljs2.IDENT_RE,
+            $pattern: "\\.?" + hljs.IDENT_RE,
             keyword: (
               /* mnemonic */
               "adc add adiw and andi asr bclr bld brbc brbs brcc brcs break breq brge brhc brhs brid brie brlo brlt brmi brne brpl brsh brtc brts brvc brvs bset bst call cbi cbr clc clh cli cln clr cls clt clv clz com cp cpc cpi cpse dec eicall eijmp elpm eor fmul fmuls fmulsu icall ijmp in inc jmp ld ldd ldi lds lpm lsl lsr mov movw mul muls mulsu neg nop or ori out pop push rcall ret reti rjmp rol ror sbc sbr sbrc sbrs sec seh sbi sbci sbic sbis sbiw sei sen ser ses set sev sez sleep spm st std sts sub subi swap tst wdr"
@@ -10442,22 +10614,22 @@
             meta: ".byte .cseg .db .def .device .dseg .dw .endmacro .equ .eseg .exit .include .list .listmac .macro .nolist .org .set"
           },
           contains: [
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.COMMENT(
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.COMMENT(
               ";",
               "$",
               { relevance: 0 }
             ),
-            hljs2.C_NUMBER_MODE,
+            hljs.C_NUMBER_MODE,
             // 0x..., decimal, float
-            hljs2.BINARY_NUMBER_MODE,
+            hljs.BINARY_NUMBER_MODE,
             // 0b...
             {
               className: "number",
               begin: "\\b(\\$[a-zA-Z0-9]+|0o[0-7]+)"
               // $..., 0o...
             },
-            hljs2.QUOTE_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             {
               className: "string",
               begin: "'",
@@ -10488,7 +10660,7 @@
   // node_modules/highlight.js/lib/languages/awk.js
   var require_awk = __commonJS({
     "node_modules/highlight.js/lib/languages/awk.js"(exports, module) {
-      function awk(hljs2) {
+      function awk(hljs) {
         const VARIABLE = {
           className: "variable",
           variants: [
@@ -10499,7 +10671,7 @@
         const KEYWORDS = "BEGIN END if else while do for in break continue delete next nextfile function func exit|10";
         const STRING = {
           className: "string",
-          contains: [hljs2.BACKSLASH_ESCAPE],
+          contains: [hljs.BACKSLASH_ESCAPE],
           variants: [
             {
               begin: /(u|b)?r?'''/,
@@ -10529,8 +10701,8 @@
               begin: /(b|br)"/,
               end: /"/
             },
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE
           ]
         };
         return {
@@ -10539,9 +10711,9 @@
           contains: [
             VARIABLE,
             STRING,
-            hljs2.REGEXP_MODE,
-            hljs2.HASH_COMMENT_MODE,
-            hljs2.NUMBER_MODE
+            hljs.REGEXP_MODE,
+            hljs.HASH_COMMENT_MODE,
+            hljs.NUMBER_MODE
           ]
         };
       }
@@ -10552,8 +10724,8 @@
   // node_modules/highlight.js/lib/languages/axapta.js
   var require_axapta = __commonJS({
     "node_modules/highlight.js/lib/languages/axapta.js"(exports, module) {
-      function axapta(hljs2) {
-        const IDENT_RE = hljs2.UNDERSCORE_IDENT_RE;
+      function axapta(hljs) {
+        const IDENT_RE = hljs.UNDERSCORE_IDENT_RE;
         const BUILT_IN_KEYWORDS = [
           "anytype",
           "boolean",
@@ -10710,11 +10882,11 @@
           aliases: ["x++"],
           keywords: KEYWORDS,
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.C_NUMBER_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.C_NUMBER_MODE,
             {
               className: "meta",
               begin: "#",
@@ -10731,8 +10903,8 @@
   // node_modules/highlight.js/lib/languages/bash.js
   var require_bash = __commonJS({
     "node_modules/highlight.js/lib/languages/bash.js"(exports, module) {
-      function bash(hljs2) {
-        const regex = hljs2.regex;
+      function bash(hljs) {
+        const regex = hljs.regex;
         const VAR = {};
         const BRACED_VAR = {
           begin: /\$\{/,
@@ -10762,10 +10934,10 @@
           className: "subst",
           begin: /\$\(/,
           end: /\)/,
-          contains: [hljs2.BACKSLASH_ESCAPE]
+          contains: [hljs.BACKSLASH_ESCAPE]
         };
-        const COMMENT = hljs2.inherit(
-          hljs2.COMMENT(),
+        const COMMENT = hljs.inherit(
+          hljs.COMMENT(),
           {
             match: [
               /(^|\s)/,
@@ -10779,7 +10951,7 @@
         const HERE_DOC = {
           begin: /<<-?\s*(?=\w+)/,
           starts: { contains: [
-            hljs2.END_SAME_AS_BEGIN({
+            hljs.END_SAME_AS_BEGIN({
               begin: /(\w+)/,
               end: /(\w+)/,
               className: "string"
@@ -10791,7 +10963,7 @@
           begin: /"/,
           end: /"/,
           contains: [
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             VAR,
             SUBST
           ]
@@ -10816,7 +10988,7 @@
               begin: /\d+#[0-9a-f]+/,
               className: "number"
             },
-            hljs2.NUMBER_MODE,
+            hljs.NUMBER_MODE,
             VAR
           ]
         };
@@ -10831,7 +11003,7 @@
           "dash",
           "scsh"
         ];
-        const KNOWN_SHEBANG = hljs2.SHEBANG({
+        const KNOWN_SHEBANG = hljs.SHEBANG({
           binary: `(${SH_LIKE_SHELLS.join("|")})`,
           relevance: 10
         });
@@ -10839,7 +11011,7 @@
           className: "function",
           begin: /\w[\w\d_]*\s*\(\s*\)\s*\{/,
           returnBegin: true,
-          contains: [hljs2.inherit(hljs2.TITLE_MODE, { begin: /\w[\w\d_]*/ })],
+          contains: [hljs.inherit(hljs.TITLE_MODE, { begin: /\w[\w\d_]*/ })],
           relevance: 0
         };
         const KEYWORDS = [
@@ -11106,7 +11278,7 @@
           contains: [
             KNOWN_SHEBANG,
             // to catch known shells and boost relevancy
-            hljs2.SHEBANG(),
+            hljs.SHEBANG(),
             // to catch unknown shells but still highlight the shebang
             FUNCTION,
             ARITHMETIC,
@@ -11128,7 +11300,7 @@
   // node_modules/highlight.js/lib/languages/basic.js
   var require_basic = __commonJS({
     "node_modules/highlight.js/lib/languages/basic.js"(exports, module) {
-      function basic(hljs2) {
+      function basic(hljs) {
         const KEYWORDS = [
           "ABS",
           "ASC",
@@ -11318,9 +11490,9 @@
             keyword: KEYWORDS
           },
           contains: [
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.COMMENT("REM", "$", { relevance: 10 }),
-            hljs2.COMMENT("'", "$", { relevance: 0 }),
+            hljs.QUOTE_STRING_MODE,
+            hljs.COMMENT("REM", "$", { relevance: 10 }),
+            hljs.COMMENT("'", "$", { relevance: 0 }),
             {
               // Match line numbers
               className: "symbol",
@@ -11353,7 +11525,7 @@
   // node_modules/highlight.js/lib/languages/bnf.js
   var require_bnf = __commonJS({
     "node_modules/highlight.js/lib/languages/bnf.js"(exports, module) {
-      function bnf(hljs2) {
+      function bnf(hljs) {
         return {
           name: "Backus\u2013Naur Form",
           contains: [
@@ -11373,10 +11545,10 @@
                   end: />/
                 },
                 // Common
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE,
-                hljs2.APOS_STRING_MODE,
-                hljs2.QUOTE_STRING_MODE
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE,
+                hljs.APOS_STRING_MODE,
+                hljs.QUOTE_STRING_MODE
               ]
             }
           ]
@@ -11389,7 +11561,7 @@
   // node_modules/highlight.js/lib/languages/brainfuck.js
   var require_brainfuck = __commonJS({
     "node_modules/highlight.js/lib/languages/brainfuck.js"(exports, module) {
-      function brainfuck(hljs2) {
+      function brainfuck(hljs) {
         const LITERAL = {
           className: "literal",
           begin: /[+-]+/,
@@ -11399,7 +11571,7 @@
           name: "Brainfuck",
           aliases: ["bf"],
           contains: [
-            hljs2.COMMENT(
+            hljs.COMMENT(
               /[^\[\]\.,\+\-<> \r\n]/,
               /[\[\]\.,\+\-<> \r\n]/,
               {
@@ -11441,9 +11613,9 @@
   // node_modules/highlight.js/lib/languages/c.js
   var require_c2 = __commonJS({
     "node_modules/highlight.js/lib/languages/c.js"(exports, module) {
-      function c(hljs2) {
-        const regex = hljs2.regex;
-        const C_LINE_COMMENT_MODE = hljs2.COMMENT("//", "$", { contains: [{ begin: /\\\n/ }] });
+      function c(hljs) {
+        const regex = hljs.regex;
+        const C_LINE_COMMENT_MODE = hljs.COMMENT("//", "$", { contains: [{ begin: /\\\n/ }] });
         const DECLTYPE_AUTO_RE = "decltype\\(auto\\)";
         const NAMESPACE_RE = "[a-zA-Z_]\\w*::";
         const TEMPLATE_ARGUMENT_RE = "<[^<>]+>";
@@ -11463,14 +11635,14 @@
               begin: '(u8?|U|L)?"',
               end: '"',
               illegal: "\\n",
-              contains: [hljs2.BACKSLASH_ESCAPE]
+              contains: [hljs.BACKSLASH_ESCAPE]
             },
             {
               begin: "(u8?|U|L)?'(" + CHARACTER_ESCAPES + "|.)",
               end: "'",
               illegal: "."
             },
-            hljs2.END_SAME_AS_BEGIN({
+            hljs.END_SAME_AS_BEGIN({
               begin: /(?:u8?|U|L)?R"([^()\\ ]{0,16})\(/,
               end: /\)([^()\\ ]{0,16})"/
             })
@@ -11495,21 +11667,21 @@
               begin: /\\\n/,
               relevance: 0
             },
-            hljs2.inherit(STRINGS, { className: "string" }),
+            hljs.inherit(STRINGS, { className: "string" }),
             {
               className: "string",
               begin: /<.*?>/
             },
             C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE
+            hljs.C_BLOCK_COMMENT_MODE
           ]
         };
         const TITLE_MODE = {
           className: "title",
-          begin: regex.optional(NAMESPACE_RE) + hljs2.IDENT_RE,
+          begin: regex.optional(NAMESPACE_RE) + hljs.IDENT_RE,
           relevance: 0
         };
-        const FUNCTION_TITLE = regex.optional(NAMESPACE_RE) + hljs2.IDENT_RE + "\\s*\\(";
+        const FUNCTION_TITLE = regex.optional(NAMESPACE_RE) + hljs.IDENT_RE + "\\s*\\(";
         const C_KEYWORDS = [
           "asm",
           "auto",
@@ -11601,7 +11773,7 @@
           PREPROCESSOR,
           TYPES,
           C_LINE_COMMENT_MODE,
-          hljs2.C_BLOCK_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
           NUMBERS,
           STRINGS
         ];
@@ -11652,7 +11824,7 @@
             {
               begin: FUNCTION_TITLE,
               returnBegin: true,
-              contains: [hljs2.inherit(TITLE_MODE, { className: "title.function" })],
+              contains: [hljs.inherit(TITLE_MODE, { className: "title.function" })],
               relevance: 0
             },
             // allow for multiple declarations, e.g.:
@@ -11669,7 +11841,7 @@
               relevance: 0,
               contains: [
                 C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE,
                 STRINGS,
                 NUMBERS,
                 TYPES,
@@ -11682,7 +11854,7 @@
                   contains: [
                     "self",
                     C_LINE_COMMENT_MODE,
-                    hljs2.C_BLOCK_COMMENT_MODE,
+                    hljs.C_BLOCK_COMMENT_MODE,
                     STRINGS,
                     NUMBERS,
                     TYPES
@@ -11692,7 +11864,7 @@
             },
             TYPES,
             C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             PREPROCESSOR
           ]
         };
@@ -11711,7 +11883,7 @@
             [
               PREPROCESSOR,
               {
-                begin: hljs2.IDENT_RE + "::",
+                begin: hljs.IDENT_RE + "::",
                 keywords: KEYWORDS
               },
               {
@@ -11720,7 +11892,7 @@
                 end: /[{;:<>=]/,
                 contains: [
                   { beginKeywords: "final class struct" },
-                  hljs2.TITLE_MODE
+                  hljs.TITLE_MODE
                 ]
               }
             ]
@@ -11739,8 +11911,8 @@
   // node_modules/highlight.js/lib/languages/cal.js
   var require_cal = __commonJS({
     "node_modules/highlight.js/lib/languages/cal.js"(exports, module) {
-      function cal(hljs2) {
-        const regex = hljs2.regex;
+      function cal(hljs) {
+        const regex = hljs.regex;
         const KEYWORDS = [
           "div",
           "mod",
@@ -11771,13 +11943,13 @@
         ];
         const LITERALS = "false true";
         const COMMENT_MODES = [
-          hljs2.C_LINE_COMMENT_MODE,
-          hljs2.COMMENT(
+          hljs.C_LINE_COMMENT_MODE,
+          hljs.COMMENT(
             /\{/,
             /\}/,
             { relevance: 0 }
           ),
-          hljs2.COMMENT(
+          hljs.COMMENT(
             /\(\*/,
             /\*\)/,
             { relevance: 10 }
@@ -11824,7 +11996,7 @@
               contains: [
                 STRING,
                 CHAR_STRING,
-                hljs2.NUMBER_MODE
+                hljs.NUMBER_MODE
               ]
             },
             ...COMMENT_MODES
@@ -11879,7 +12051,7 @@
             CHAR_STRING,
             DATE,
             DBL_QUOTED_VARIABLE,
-            hljs2.NUMBER_MODE,
+            hljs.NUMBER_MODE,
             OBJECT,
             PROCEDURE
           ]
@@ -11892,7 +12064,7 @@
   // node_modules/highlight.js/lib/languages/capnproto.js
   var require_capnproto = __commonJS({
     "node_modules/highlight.js/lib/languages/capnproto.js"(exports, module) {
-      function capnproto(hljs2) {
+      function capnproto(hljs) {
         const KEYWORDS = [
           "struct",
           "enum",
@@ -11941,12 +12113,12 @@
             { match: [
               /(struct|enum|interface)/,
               /\s+/,
-              hljs2.IDENT_RE
+              hljs.IDENT_RE
             ] },
             { match: [
               /extends/,
               /\s*\(/,
-              hljs2.IDENT_RE,
+              hljs.IDENT_RE,
               /\s*\)/
             ] }
           ],
@@ -11964,9 +12136,9 @@
             literal: LITERALS
           },
           contains: [
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.NUMBER_MODE,
-            hljs2.HASH_COMMENT_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.NUMBER_MODE,
+            hljs.HASH_COMMENT_MODE,
             {
               className: "meta",
               begin: /@0x[\w\d]{16};/,
@@ -11987,7 +12159,7 @@
   // node_modules/highlight.js/lib/languages/ceylon.js
   var require_ceylon = __commonJS({
     "node_modules/highlight.js/lib/languages/ceylon.js"(exports, module) {
-      function ceylon(hljs2) {
+      function ceylon(hljs) {
         const KEYWORDS = [
           "assembly",
           "module",
@@ -12103,8 +12275,8 @@
           },
           illegal: "\\$[^01]|#[^0-9a-fA-F]",
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.COMMENT("/\\*", "\\*/", { contains: ["self"] }),
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.COMMENT("/\\*", "\\*/", { contains: ["self"] }),
             {
               // compiler annotation
               className: "meta",
@@ -12120,7 +12292,7 @@
   // node_modules/highlight.js/lib/languages/clean.js
   var require_clean = __commonJS({
     "node_modules/highlight.js/lib/languages/clean.js"(exports, module) {
-      function clean(hljs2) {
+      function clean(hljs) {
         const KEYWORDS = [
           "if",
           "let",
@@ -12165,11 +12337,11 @@
             literal: "True False"
           },
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.C_NUMBER_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.C_NUMBER_MODE,
             {
               // relevance booster
               begin: "->|<-[|:]?|#!?|>>=|\\{\\||\\|\\}|:==|=:|<>"
@@ -12184,7 +12356,7 @@
   // node_modules/highlight.js/lib/languages/clojure.js
   var require_clojure = __commonJS({
     "node_modules/highlight.js/lib/languages/clojure.js"(exports, module) {
-      function clojure(hljs2) {
+      function clojure(hljs) {
         const SYMBOLSTART = "a-zA-Z_\\-!.?+*=<>&'";
         const SYMBOL_RE = "[#]?[" + SYMBOLSTART + "][" + SYMBOLSTART + "0-9/;:$#]*";
         const globals = "def defonce defprotocol defstruct defmulti defmethod defn- defn defmacro deftype defrecord";
@@ -12237,15 +12409,15 @@
           scope: "regex",
           begin: /#"/,
           end: /"/,
-          contains: [hljs2.BACKSLASH_ESCAPE]
+          contains: [hljs.BACKSLASH_ESCAPE]
         };
-        const STRING = hljs2.inherit(hljs2.QUOTE_STRING_MODE, { illegal: null });
+        const STRING = hljs.inherit(hljs.QUOTE_STRING_MODE, { illegal: null });
         const COMMA = {
           scope: "punctuation",
           match: /,/,
           relevance: 0
         };
-        const COMMENT = hljs2.COMMENT(
+        const COMMENT = hljs.COMMENT(
           ";",
           "$",
           { relevance: 0 }
@@ -12344,7 +12516,7 @@
   // node_modules/highlight.js/lib/languages/clojure-repl.js
   var require_clojure_repl = __commonJS({
     "node_modules/highlight.js/lib/languages/clojure-repl.js"(exports, module) {
-      function clojureRepl(hljs2) {
+      function clojureRepl(hljs) {
         return {
           name: "Clojure REPL",
           contains: [
@@ -12366,7 +12538,7 @@
   // node_modules/highlight.js/lib/languages/cmake.js
   var require_cmake = __commonJS({
     "node_modules/highlight.js/lib/languages/cmake.js"(exports, module) {
-      function cmake(hljs2) {
+      function cmake(hljs) {
         return {
           name: "CMake",
           aliases: ["cmake.in"],
@@ -12381,10 +12553,10 @@
               begin: /\$\{/,
               end: /\}/
             },
-            hljs2.COMMENT(/#\[\[/, /]]/),
-            hljs2.HASH_COMMENT_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.NUMBER_MODE
+            hljs.COMMENT(/#\[\[/, /]]/),
+            hljs.HASH_COMMENT_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.NUMBER_MODE
           ]
         };
       }
@@ -12532,7 +12704,7 @@
         TYPES,
         ERROR_TYPES
       );
-      function coffeescript(hljs2) {
+      function coffeescript(hljs) {
         const COFFEE_BUILT_INS = [
           "npm",
           "print"
@@ -12577,8 +12749,8 @@
           keywords: KEYWORDS$1
         };
         const EXPRESSIONS = [
-          hljs2.BINARY_NUMBER_MODE,
-          hljs2.inherit(hljs2.C_NUMBER_MODE, { starts: {
+          hljs.BINARY_NUMBER_MODE,
+          hljs.inherit(hljs.C_NUMBER_MODE, { starts: {
             end: "(\\s*/)?",
             relevance: 0
           } }),
@@ -12589,18 +12761,18 @@
               {
                 begin: /'''/,
                 end: /'''/,
-                contains: [hljs2.BACKSLASH_ESCAPE]
+                contains: [hljs.BACKSLASH_ESCAPE]
               },
               {
                 begin: /'/,
                 end: /'/,
-                contains: [hljs2.BACKSLASH_ESCAPE]
+                contains: [hljs.BACKSLASH_ESCAPE]
               },
               {
                 begin: /"""/,
                 end: /"""/,
                 contains: [
-                  hljs2.BACKSLASH_ESCAPE,
+                  hljs.BACKSLASH_ESCAPE,
                   SUBST
                 ]
               },
@@ -12608,7 +12780,7 @@
                 begin: /"/,
                 end: /"/,
                 contains: [
-                  hljs2.BACKSLASH_ESCAPE,
+                  hljs.BACKSLASH_ESCAPE,
                   SUBST
                 ]
               }
@@ -12622,7 +12794,7 @@
                 end: "///",
                 contains: [
                   SUBST,
-                  hljs2.HASH_COMMENT_MODE
+                  hljs.HASH_COMMENT_MODE
                 ]
               },
               {
@@ -12657,7 +12829,7 @@
           }
         ];
         SUBST.contains = EXPRESSIONS;
-        const TITLE = hljs2.inherit(hljs2.TITLE_MODE, { begin: JS_IDENT_RE });
+        const TITLE = hljs.inherit(hljs.TITLE_MODE, { begin: JS_IDENT_RE });
         const POSSIBLE_PARAMS_RE = "(\\(.*\\)\\s*)?\\B[-=]>";
         const PARAMS = {
           className: "params",
@@ -12704,8 +12876,8 @@
           illegal: /\/\*/,
           contains: [
             ...EXPRESSIONS,
-            hljs2.COMMENT("###", "###"),
-            hljs2.HASH_COMMENT_MODE,
+            hljs.COMMENT("###", "###"),
+            hljs.HASH_COMMENT_MODE,
             {
               className: "function",
               begin: "^\\s*" + JS_IDENT_RE + "\\s*=\\s*" + POSSIBLE_PARAMS_RE,
@@ -12748,7 +12920,7 @@
   // node_modules/highlight.js/lib/languages/coq.js
   var require_coq = __commonJS({
     "node_modules/highlight.js/lib/languages/coq.js"(exports, module) {
-      function coq(hljs2) {
+      function coq(hljs) {
         const KEYWORDS = [
           "_|0",
           "as",
@@ -13169,9 +13341,9 @@
             built_in: BUILT_INS
           },
           contains: [
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.COMMENT("\\(\\*", "\\*\\)"),
-            hljs2.C_NUMBER_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.COMMENT("\\(\\*", "\\*\\)"),
+            hljs.C_NUMBER_MODE,
             {
               className: "type",
               excludeBegin: true,
@@ -13192,7 +13364,7 @@
   // node_modules/highlight.js/lib/languages/cos.js
   var require_cos = __commonJS({
     "node_modules/highlight.js/lib/languages/cos.js"(exports, module) {
-      function cos(hljs2) {
+      function cos(hljs) {
         const STRINGS = {
           className: "string",
           variants: [
@@ -13223,8 +13395,8 @@
           contains: [
             NUMBERS,
             STRINGS,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             {
               className: "comment",
               begin: /;/,
@@ -13288,9 +13460,9 @@
   // node_modules/highlight.js/lib/languages/cpp.js
   var require_cpp = __commonJS({
     "node_modules/highlight.js/lib/languages/cpp.js"(exports, module) {
-      function cpp(hljs2) {
-        const regex = hljs2.regex;
-        const C_LINE_COMMENT_MODE = hljs2.COMMENT("//", "$", { contains: [{ begin: /\\\n/ }] });
+      function cpp(hljs) {
+        const regex = hljs.regex;
+        const C_LINE_COMMENT_MODE = hljs.COMMENT("//", "$", { contains: [{ begin: /\\\n/ }] });
         const DECLTYPE_AUTO_RE = "decltype\\(auto\\)";
         const NAMESPACE_RE = "[a-zA-Z_]\\w*::";
         const TEMPLATE_ARGUMENT_RE = "<[^<>]+>";
@@ -13307,14 +13479,14 @@
               begin: '(u8?|U|L)?"',
               end: '"',
               illegal: "\\n",
-              contains: [hljs2.BACKSLASH_ESCAPE]
+              contains: [hljs.BACKSLASH_ESCAPE]
             },
             {
               begin: "(u8?|U|L)?'(" + CHARACTER_ESCAPES + "|.)",
               end: "'",
               illegal: "."
             },
-            hljs2.END_SAME_AS_BEGIN({
+            hljs.END_SAME_AS_BEGIN({
               begin: /(?:u8?|U|L)?R"([^()\\ ]{0,16})\(/,
               end: /\)([^()\\ ]{0,16})"/
             })
@@ -13346,21 +13518,21 @@
               begin: /\\\n/,
               relevance: 0
             },
-            hljs2.inherit(STRINGS, { className: "string" }),
+            hljs.inherit(STRINGS, { className: "string" }),
             {
               className: "string",
               begin: /<.*?>/
             },
             C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE
+            hljs.C_BLOCK_COMMENT_MODE
           ]
         };
         const TITLE_MODE = {
           className: "title",
-          begin: regex.optional(NAMESPACE_RE) + hljs2.IDENT_RE,
+          begin: regex.optional(NAMESPACE_RE) + hljs.IDENT_RE,
           relevance: 0
         };
-        const FUNCTION_TITLE = regex.optional(NAMESPACE_RE) + hljs2.IDENT_RE + "\\s*\\(";
+        const FUNCTION_TITLE = regex.optional(NAMESPACE_RE) + hljs.IDENT_RE + "\\s*\\(";
         const RESERVED_KEYWORDS = [
           "alignas",
           "alignof",
@@ -13656,7 +13828,7 @@
             /(?!for)/,
             /(?!switch)/,
             /(?!while)/,
-            hljs2.IDENT_RE,
+            hljs.IDENT_RE,
             regex.lookahead(/(<[^<>]+>|)\s*\(/)
           )
         };
@@ -13665,7 +13837,7 @@
           PREPROCESSOR,
           CPP_PRIMITIVE_TYPES,
           C_LINE_COMMENT_MODE,
-          hljs2.C_BLOCK_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
           NUMBERS,
           STRINGS
         ];
@@ -13749,7 +13921,7 @@
               relevance: 0,
               contains: [
                 C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE,
                 STRINGS,
                 NUMBERS,
                 CPP_PRIMITIVE_TYPES,
@@ -13762,7 +13934,7 @@
                   contains: [
                     "self",
                     C_LINE_COMMENT_MODE,
-                    hljs2.C_BLOCK_COMMENT_MODE,
+                    hljs.C_BLOCK_COMMENT_MODE,
                     STRINGS,
                     NUMBERS,
                     CPP_PRIMITIVE_TYPES
@@ -13772,7 +13944,7 @@
             },
             CPP_PRIMITIVE_TYPES,
             C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             PREPROCESSOR
           ]
         };
@@ -13808,7 +13980,7 @@
                 ]
               },
               {
-                begin: hljs2.IDENT_RE + "::",
+                begin: hljs.IDENT_RE + "::",
                 keywords: CPP_KEYWORDS
               },
               {
@@ -13834,7 +14006,7 @@
   // node_modules/highlight.js/lib/languages/crmsh.js
   var require_crmsh = __commonJS({
     "node_modules/highlight.js/lib/languages/crmsh.js"(exports, module) {
-      function crmsh(hljs2) {
+      function crmsh(hljs) {
         const RESOURCES = "primitive rsc_template";
         const COMMANDS = "group clone ms master location colocation order fencing_topology rsc_ticket acl_target acl_group user role tag xml";
         const PROPERTY_SETS = "property rsc_defaults op_defaults";
@@ -13854,7 +14026,7 @@
             literal: LITERALS
           },
           contains: [
-            hljs2.HASH_COMMENT_MODE,
+            hljs.HASH_COMMENT_MODE,
             {
               beginKeywords: "node",
               starts: {
@@ -13888,7 +14060,7 @@
                 end: "\\s*([\\w_-]+:)?"
               }
             },
-            hljs2.QUOTE_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             {
               className: "meta",
               begin: "(ocf|systemd|service|lsb):[\\w_:-]+",
@@ -13925,7 +14097,7 @@
   // node_modules/highlight.js/lib/languages/crystal.js
   var require_crystal = __commonJS({
     "node_modules/highlight.js/lib/languages/crystal.js"(exports, module) {
-      function crystal(hljs2) {
+      function crystal(hljs) {
         const INT_SUFFIX = "(_?[ui](8|16|32|64|128))?";
         const FLOAT_SUFFIX = "(_?f(32|64))?";
         const CRYSTAL_IDENT_RE = "[a-zA-Z_]\\w*[!?=]?";
@@ -13975,7 +14147,7 @@
         const STRING = {
           className: "string",
           contains: [
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             SUBST
           ],
           variants: [
@@ -14057,13 +14229,13 @@
           relevance: 0
         };
         const REGEXP = {
-          begin: "(?!%\\})(" + hljs2.RE_STARTERS_RE + "|\\n|\\b(case|if|select|unless|until|when|while)\\b)\\s*",
+          begin: "(?!%\\})(" + hljs.RE_STARTERS_RE + "|\\n|\\b(case|if|select|unless|until|when|while)\\b)\\s*",
           keywords: "case if select unless until when while",
           contains: [
             {
               className: "regexp",
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 SUBST
               ],
               variants: [
@@ -14083,7 +14255,7 @@
         const REGEXP2 = {
           className: "regexp",
           contains: [
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             SUBST
           ],
           variants: [
@@ -14118,7 +14290,7 @@
           className: "meta",
           begin: "@\\[",
           end: "\\]",
-          contains: [hljs2.inherit(hljs2.QUOTE_STRING_MODE, { className: "string" })]
+          contains: [hljs.inherit(hljs.QUOTE_STRING_MODE, { className: "string" })]
         };
         const CRYSTAL_DEFAULT_CONTAINS = [
           EXPANSION,
@@ -14128,15 +14300,15 @@
           REGEXP,
           ATTRIBUTE,
           VARIABLE,
-          hljs2.HASH_COMMENT_MODE,
+          hljs.HASH_COMMENT_MODE,
           {
             className: "class",
             beginKeywords: "class module struct",
             end: "$|;",
             illegal: /=/,
             contains: [
-              hljs2.HASH_COMMENT_MODE,
-              hljs2.inherit(hljs2.TITLE_MODE, { begin: CRYSTAL_PATH_RE }),
+              hljs.HASH_COMMENT_MODE,
+              hljs.inherit(hljs.TITLE_MODE, { begin: CRYSTAL_PATH_RE }),
               {
                 // relevance booster for inheritance
                 begin: "<"
@@ -14149,8 +14321,8 @@
             end: "$|;",
             illegal: /=/,
             contains: [
-              hljs2.HASH_COMMENT_MODE,
-              hljs2.inherit(hljs2.TITLE_MODE, { begin: CRYSTAL_PATH_RE })
+              hljs.HASH_COMMENT_MODE,
+              hljs.inherit(hljs.TITLE_MODE, { begin: CRYSTAL_PATH_RE })
             ]
           },
           {
@@ -14158,8 +14330,8 @@
             end: "$|;",
             illegal: /=/,
             contains: [
-              hljs2.HASH_COMMENT_MODE,
-              hljs2.inherit(hljs2.TITLE_MODE, { begin: CRYSTAL_PATH_RE })
+              hljs.HASH_COMMENT_MODE,
+              hljs.inherit(hljs.TITLE_MODE, { begin: CRYSTAL_PATH_RE })
             ],
             relevance: 2
           },
@@ -14168,7 +14340,7 @@
             beginKeywords: "def",
             end: /\B\b/,
             contains: [
-              hljs2.inherit(hljs2.TITLE_MODE, {
+              hljs.inherit(hljs.TITLE_MODE, {
                 begin: CRYSTAL_METHOD_RE,
                 endsParent: true
               })
@@ -14179,7 +14351,7 @@
             beginKeywords: "fun macro",
             end: /\B\b/,
             contains: [
-              hljs2.inherit(hljs2.TITLE_MODE, {
+              hljs.inherit(hljs.TITLE_MODE, {
                 begin: CRYSTAL_METHOD_RE,
                 endsParent: true
               })
@@ -14188,7 +14360,7 @@
           },
           {
             className: "symbol",
-            begin: hljs2.UNDERSCORE_IDENT_RE + "(!|\\?)?:",
+            begin: hljs.UNDERSCORE_IDENT_RE + "(!|\\?)?:",
             relevance: 0
           },
           {
@@ -14228,7 +14400,7 @@
   // node_modules/highlight.js/lib/languages/csharp.js
   var require_csharp = __commonJS({
     "node_modules/highlight.js/lib/languages/csharp.js"(exports, module) {
-      function csharp(hljs2) {
+      function csharp(hljs) {
         const BUILT_IN_KEYWORDS = [
           "bool",
           "byte",
@@ -14374,7 +14546,7 @@
           built_in: BUILT_IN_KEYWORDS,
           literal: LITERAL_KEYWORDS
         };
-        const TITLE_MODE = hljs2.inherit(hljs2.TITLE_MODE, { begin: "[a-zA-Z](\\.?\\w)*" });
+        const TITLE_MODE = hljs.inherit(hljs.TITLE_MODE, { begin: "[a-zA-Z](\\.?\\w)*" });
         const NUMBERS = {
           className: "number",
           variants: [
@@ -14395,14 +14567,14 @@
           end: '"',
           contains: [{ begin: '""' }]
         };
-        const VERBATIM_STRING_NO_LF = hljs2.inherit(VERBATIM_STRING, { illegal: /\n/ });
+        const VERBATIM_STRING_NO_LF = hljs.inherit(VERBATIM_STRING, { illegal: /\n/ });
         const SUBST = {
           className: "subst",
           begin: /\{/,
           end: /\}/,
           keywords: KEYWORDS
         };
-        const SUBST_NO_LF = hljs2.inherit(SUBST, { illegal: /\n/ });
+        const SUBST_NO_LF = hljs.inherit(SUBST, { illegal: /\n/ });
         const INTERPOLATED_STRING = {
           className: "string",
           begin: /\$"/,
@@ -14411,7 +14583,7 @@
           contains: [
             { begin: /\{\{/ },
             { begin: /\}\}/ },
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             SUBST_NO_LF
           ]
         };
@@ -14426,7 +14598,7 @@
             SUBST
           ]
         };
-        const INTERPOLATED_VERBATIM_STRING_NO_LF = hljs2.inherit(INTERPOLATED_VERBATIM_STRING, {
+        const INTERPOLATED_VERBATIM_STRING_NO_LF = hljs.inherit(INTERPOLATED_VERBATIM_STRING, {
           illegal: /\n/,
           contains: [
             { begin: /\{\{/ },
@@ -14439,27 +14611,27 @@
           INTERPOLATED_VERBATIM_STRING,
           INTERPOLATED_STRING,
           VERBATIM_STRING,
-          hljs2.APOS_STRING_MODE,
-          hljs2.QUOTE_STRING_MODE,
+          hljs.APOS_STRING_MODE,
+          hljs.QUOTE_STRING_MODE,
           NUMBERS,
-          hljs2.C_BLOCK_COMMENT_MODE
+          hljs.C_BLOCK_COMMENT_MODE
         ];
         SUBST_NO_LF.contains = [
           INTERPOLATED_VERBATIM_STRING_NO_LF,
           INTERPOLATED_STRING,
           VERBATIM_STRING_NO_LF,
-          hljs2.APOS_STRING_MODE,
-          hljs2.QUOTE_STRING_MODE,
+          hljs.APOS_STRING_MODE,
+          hljs.QUOTE_STRING_MODE,
           NUMBERS,
-          hljs2.inherit(hljs2.C_BLOCK_COMMENT_MODE, { illegal: /\n/ })
+          hljs.inherit(hljs.C_BLOCK_COMMENT_MODE, { illegal: /\n/ })
         ];
         const STRING = { variants: [
           RAW_STRING,
           INTERPOLATED_VERBATIM_STRING,
           INTERPOLATED_STRING,
           VERBATIM_STRING,
-          hljs2.APOS_STRING_MODE,
-          hljs2.QUOTE_STRING_MODE
+          hljs.APOS_STRING_MODE,
+          hljs.QUOTE_STRING_MODE
         ] };
         const GENERIC_MODIFIER = {
           begin: "<",
@@ -14469,11 +14641,11 @@
             TITLE_MODE
           ]
         };
-        const TYPE_IDENT_RE = hljs2.IDENT_RE + "(<" + hljs2.IDENT_RE + "(\\s*,\\s*" + hljs2.IDENT_RE + ")*>)?(\\[\\])?";
+        const TYPE_IDENT_RE = hljs.IDENT_RE + "(<" + hljs.IDENT_RE + "(\\s*,\\s*" + hljs.IDENT_RE + ")*>)?(\\[\\])?";
         const AT_IDENTIFIER = {
           // prevents expressions like `@class` from incorrect flagging
           // `class` as a keyword
-          begin: "@" + hljs2.IDENT_RE,
+          begin: "@" + hljs.IDENT_RE,
           relevance: 0
         };
         return {
@@ -14485,7 +14657,7 @@
           keywords: KEYWORDS,
           illegal: /::/,
           contains: [
-            hljs2.COMMENT(
+            hljs.COMMENT(
               "///",
               "$",
               {
@@ -14508,8 +14680,8 @@
                 ]
               }
             ),
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             {
               className: "meta",
               begin: "#",
@@ -14527,8 +14699,8 @@
                 { beginKeywords: "where class" },
                 TITLE_MODE,
                 GENERIC_MODIFIER,
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE
               ]
             },
             {
@@ -14538,8 +14710,8 @@
               illegal: /[^\s:]/,
               contains: [
                 TITLE_MODE,
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE
               ]
             },
             {
@@ -14550,8 +14722,8 @@
               contains: [
                 TITLE_MODE,
                 GENERIC_MODIFIER,
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE
               ]
             },
             {
@@ -14577,7 +14749,7 @@
             },
             {
               className: "function",
-              begin: "(" + TYPE_IDENT_RE + "\\s+)+" + hljs2.IDENT_RE + "\\s*(<[^=]+>\\s*)?\\(",
+              begin: "(" + TYPE_IDENT_RE + "\\s+)+" + hljs.IDENT_RE + "\\s*(<[^=]+>\\s*)?\\(",
               returnBegin: true,
               end: /\s*[{;=]/,
               excludeEnd: true,
@@ -14589,10 +14761,10 @@
                   relevance: 0
                 },
                 {
-                  begin: hljs2.IDENT_RE + "\\s*(<[^=]+>\\s*)?\\(",
+                  begin: hljs.IDENT_RE + "\\s*(<[^=]+>\\s*)?\\(",
                   returnBegin: true,
                   contains: [
-                    hljs2.TITLE_MODE,
+                    hljs.TITLE_MODE,
                     GENERIC_MODIFIER
                   ],
                   relevance: 0
@@ -14609,11 +14781,11 @@
                   contains: [
                     STRING,
                     NUMBERS,
-                    hljs2.C_BLOCK_COMMENT_MODE
+                    hljs.C_BLOCK_COMMENT_MODE
                   ]
                 },
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE
               ]
             },
             AT_IDENTIFIER
@@ -14627,7 +14799,7 @@
   // node_modules/highlight.js/lib/languages/csp.js
   var require_csp = __commonJS({
     "node_modules/highlight.js/lib/languages/csp.js"(exports, module) {
-      function csp(hljs2) {
+      function csp(hljs) {
         const KEYWORDS = [
           "base-uri",
           "child-src",
@@ -14679,13 +14851,13 @@
   // node_modules/highlight.js/lib/languages/css.js
   var require_css = __commonJS({
     "node_modules/highlight.js/lib/languages/css.js"(exports, module) {
-      var MODES = (hljs2) => {
+      var MODES = (hljs) => {
         return {
           IMPORTANT: {
             scope: "meta",
             begin: "!important"
           },
-          BLOCK_COMMENT: hljs2.C_BLOCK_COMMENT_MODE,
+          BLOCK_COMMENT: hljs.C_BLOCK_COMMENT_MODE,
           HEXCOLOR: {
             scope: "number",
             begin: /#(([0-9a-fA-F]{3,4})|(([0-9a-fA-F]{2}){3,4}))\b/
@@ -14700,13 +14872,13 @@
             end: /\]/,
             illegal: "$",
             contains: [
-              hljs2.APOS_STRING_MODE,
-              hljs2.QUOTE_STRING_MODE
+              hljs.APOS_STRING_MODE,
+              hljs.QUOTE_STRING_MODE
             ]
           },
           CSS_NUMBER_MODE: {
             scope: "number",
-            begin: hljs2.NUMBER_RE + "(%|em|ex|ch|rem|vw|vh|vmin|vmax|cm|mm|in|pt|pc|px|deg|grad|rad|turn|s|ms|Hz|kHz|dpi|dpcm|dppx)?",
+            begin: hljs.NUMBER_RE + "(%|em|ex|ch|rem|vw|vh|vmin|vmax|cm|mm|in|pt|pc|px|deg|grad|rad|turn|s|ms|Hz|kHz|dpi|dpcm|dppx)?",
             relevance: 0
           },
           CSS_VARIABLE: {
@@ -15390,16 +15562,16 @@
         "y",
         "z-index"
       ].sort().reverse();
-      function css(hljs2) {
-        const regex = hljs2.regex;
-        const modes = MODES(hljs2);
+      function css(hljs) {
+        const regex = hljs.regex;
+        const modes = MODES(hljs);
         const VENDOR_PREFIX = { begin: /-(webkit|moz|ms|o)-(?=[a-z])/ };
         const AT_MODIFIERS = "and or not only";
         const AT_PROPERTY_RE = /@-?\w[\w]*(-\w+)*/;
         const IDENT_RE = "[a-zA-Z-][a-zA-Z0-9_-]*";
         const STRINGS = [
-          hljs2.APOS_STRING_MODE,
-          hljs2.QUOTE_STRING_MODE
+          hljs.APOS_STRING_MODE,
+          hljs.QUOTE_STRING_MODE
         ];
         return {
           name: "CSS",
@@ -15526,9 +15698,9 @@
   // node_modules/highlight.js/lib/languages/d.js
   var require_d = __commonJS({
     "node_modules/highlight.js/lib/languages/d.js"(exports, module) {
-      function d(hljs2) {
+      function d(hljs) {
         const D_KEYWORDS = {
-          $pattern: hljs2.UNDERSCORE_IDENT_RE,
+          $pattern: hljs.UNDERSCORE_IDENT_RE,
           keyword: "abstract alias align asm assert auto body break byte case cast catch class const continue debug default delete deprecated do else enum export extern final finally for foreach foreach_reverse|10 goto if immutable import in inout int interface invariant is lazy macro mixin module new nothrow out override package pragma private protected public pure ref return scope shared static struct super switch synchronized template this throw try typedef typeid typeof union unittest version void volatile while with __FILE__ __LINE__ __gshared|10 __thread __traits __DATE__ __EOF__ __TIME__ __TIMESTAMP__ __VENDOR__ __VERSION__",
           built_in: "bool cdouble cent cfloat char creal dchar delegate double dstring float function idouble ifloat ireal long real short string ubyte ucent uint ulong ushort wchar wstring",
           literal: "false null true"
@@ -15607,7 +15779,7 @@
           className: "keyword",
           begin: "@[a-zA-Z_][a-zA-Z_\\d]*"
         };
-        const D_NESTING_COMMENT_MODE = hljs2.COMMENT(
+        const D_NESTING_COMMENT_MODE = hljs.COMMENT(
           "\\/\\+",
           "\\+\\/",
           {
@@ -15619,8 +15791,8 @@
           name: "D",
           keywords: D_KEYWORDS,
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             D_NESTING_COMMENT_MODE,
             D_HEX_STRING_MODE,
             D_STRING_MODE,
@@ -15643,8 +15815,8 @@
   // node_modules/highlight.js/lib/languages/markdown.js
   var require_markdown = __commonJS({
     "node_modules/highlight.js/lib/languages/markdown.js"(exports, module) {
-      function markdown(hljs2) {
-        const regex = hljs2.regex;
+      function markdown(hljs) {
+        const regex = hljs.regex;
         const INLINE_HTML = {
           begin: /<\/?[A-Za-z_]/,
           end: ">",
@@ -15802,8 +15974,8 @@
             }
           ]
         };
-        const BOLD_WITHOUT_ITALIC = hljs2.inherit(BOLD, { contains: [] });
-        const ITALIC_WITHOUT_BOLD = hljs2.inherit(ITALIC, { contains: [] });
+        const BOLD_WITHOUT_ITALIC = hljs.inherit(BOLD, { contains: [] });
+        const ITALIC_WITHOUT_BOLD = hljs.inherit(ITALIC, { contains: [] });
         BOLD.contains.push(ITALIC_WITHOUT_BOLD);
         ITALIC.contains.push(BOLD_WITHOUT_ITALIC);
         let CONTAINABLE = [
@@ -15880,7 +16052,7 @@
   // node_modules/highlight.js/lib/languages/dart.js
   var require_dart = __commonJS({
     "node_modules/highlight.js/lib/languages/dart.js"(exports, module) {
-      function dart(hljs2) {
+      function dart(hljs) {
         const SUBST = {
           className: "subst",
           variants: [{ begin: "\\$[A-Za-z0-9_]+" }]
@@ -15920,7 +16092,7 @@
               begin: "'''",
               end: "'''",
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 SUBST,
                 BRACED_SUBST
               ]
@@ -15929,7 +16101,7 @@
               begin: '"""',
               end: '"""',
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 SUBST,
                 BRACED_SUBST
               ]
@@ -15939,7 +16111,7 @@
               end: "'",
               illegal: "\\n",
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 SUBST,
                 BRACED_SUBST
               ]
@@ -15949,7 +16121,7 @@
               end: '"',
               illegal: "\\n",
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 SUBST,
                 BRACED_SUBST
               ]
@@ -15957,7 +16129,7 @@
           ]
         };
         BRACED_SUBST.contains = [
-          hljs2.C_NUMBER_MODE,
+          hljs.C_NUMBER_MODE,
           STRING
         ];
         const BUILT_IN_TYPES = [
@@ -16080,7 +16252,7 @@
           keywords: KEYWORDS,
           contains: [
             STRING,
-            hljs2.COMMENT(
+            hljs.COMMENT(
               /\/\*\*(?!\/)/,
               /\*\//,
               {
@@ -16088,7 +16260,7 @@
                 relevance: 0
               }
             ),
-            hljs2.COMMENT(
+            hljs.COMMENT(
               /\/{3,} ?/,
               /$/,
               { contains: [
@@ -16100,8 +16272,8 @@
                 }
               ] }
             ),
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             {
               className: "class",
               beginKeywords: "class interface",
@@ -16109,10 +16281,10 @@
               excludeEnd: true,
               contains: [
                 { beginKeywords: "extends implements" },
-                hljs2.UNDERSCORE_TITLE_MODE
+                hljs.UNDERSCORE_TITLE_MODE
               ]
             },
-            hljs2.C_NUMBER_MODE,
+            hljs.C_NUMBER_MODE,
             {
               className: "meta",
               begin: "@[A-Za-z]+"
@@ -16131,7 +16303,7 @@
   // node_modules/highlight.js/lib/languages/delphi.js
   var require_delphi = __commonJS({
     "node_modules/highlight.js/lib/languages/delphi.js"(exports, module) {
-      function delphi(hljs2) {
+      function delphi(hljs) {
         const KEYWORDS = [
           "exports",
           "register",
@@ -16262,9 +16434,9 @@
           "varargs"
         ];
         const COMMENT_MODES = [
-          hljs2.C_LINE_COMMENT_MODE,
-          hljs2.COMMENT(/\{/, /\}/, { relevance: 0 }),
-          hljs2.COMMENT(/\(\*/, /\*\)/, { relevance: 10 })
+          hljs.C_LINE_COMMENT_MODE,
+          hljs.COMMENT(/\{/, /\}/, { relevance: 0 }),
+          hljs.COMMENT(/\(\*/, /\*\)/, { relevance: 10 })
         ];
         const DIRECTIVE = {
           className: "meta",
@@ -16328,9 +16500,9 @@
           ]
         };
         const CLASS = {
-          begin: hljs2.IDENT_RE + "\\s*=\\s*class\\s*\\(",
+          begin: hljs.IDENT_RE + "\\s*=\\s*class\\s*\\(",
           returnBegin: true,
-          contains: [hljs2.TITLE_MODE]
+          contains: [hljs.TITLE_MODE]
         };
         const FUNCTION = {
           className: "function",
@@ -16338,7 +16510,7 @@
           end: /[:;]/,
           keywords: "function constructor|10 destructor|10 procedure|10",
           contains: [
-            hljs2.TITLE_MODE,
+            hljs.TITLE_MODE,
             {
               className: "params",
               begin: /\(/,
@@ -16381,8 +16553,8 @@
   // node_modules/highlight.js/lib/languages/diff.js
   var require_diff = __commonJS({
     "node_modules/highlight.js/lib/languages/diff.js"(exports, module) {
-      function diff(hljs2) {
-        const regex = hljs2.regex;
+      function diff(hljs) {
+        const regex = hljs.regex;
         return {
           name: "Diff",
           aliases: ["patch"],
@@ -16439,13 +16611,13 @@
   // node_modules/highlight.js/lib/languages/django.js
   var require_django = __commonJS({
     "node_modules/highlight.js/lib/languages/django.js"(exports, module) {
-      function django(hljs2) {
+      function django(hljs) {
         const FILTER = {
           begin: /\|[A-Za-z]+:?/,
           keywords: { name: "truncatewords removetags linebreaksbr yesno get_digit timesince random striptags filesizeformat escape linebreaks length_is ljust rjust cut urlize fix_ampersands title floatformat capfirst pprint divisibleby add make_list unordered_list urlencode timeuntil urlizetrunc wordcount stringformat linenumbers slice date dictsort dictsortreversed default_if_none pluralize lower join center default truncatewords_html upper length phone2numeric wordwrap time addslashes slugify first escapejs force_escape iriencode last safe safeseq truncatechars localize unlocalize localtime utc timezone" },
           contains: [
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.APOS_STRING_MODE
+            hljs.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE
           ]
         };
         return {
@@ -16454,8 +16626,8 @@
           case_insensitive: true,
           subLanguage: "xml",
           contains: [
-            hljs2.COMMENT(/\{%\s*comment\s*%\}/, /\{%\s*endcomment\s*%\}/),
-            hljs2.COMMENT(/\{#/, /#\}/),
+            hljs.COMMENT(/\{%\s*comment\s*%\}/, /\{%\s*endcomment\s*%\}/),
+            hljs.COMMENT(/\{#/, /#\}/),
             {
               className: "template-tag",
               begin: /\{%/,
@@ -16490,7 +16662,7 @@
   // node_modules/highlight.js/lib/languages/dns.js
   var require_dns = __commonJS({
     "node_modules/highlight.js/lib/languages/dns.js"(exports, module) {
-      function dns(hljs2) {
+      function dns(hljs) {
         const KEYWORDS = [
           "IN",
           "A",
@@ -16539,7 +16711,7 @@
           ],
           keywords: KEYWORDS,
           contains: [
-            hljs2.COMMENT(";", "$", { relevance: 0 }),
+            hljs.COMMENT(";", "$", { relevance: 0 }),
             {
               className: "meta",
               begin: /^\$(TTL|GENERATE|INCLUDE|ORIGIN)\b/
@@ -16554,7 +16726,7 @@
               className: "number",
               begin: "((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\b"
             },
-            hljs2.inherit(hljs2.NUMBER_MODE, { begin: /\b\d+[dhwm]?/ })
+            hljs.inherit(hljs.NUMBER_MODE, { begin: /\b\d+[dhwm]?/ })
           ]
         };
       }
@@ -16565,7 +16737,7 @@
   // node_modules/highlight.js/lib/languages/dockerfile.js
   var require_dockerfile = __commonJS({
     "node_modules/highlight.js/lib/languages/dockerfile.js"(exports, module) {
-      function dockerfile(hljs2) {
+      function dockerfile(hljs) {
         const KEYWORDS = [
           "from",
           "maintainer",
@@ -16582,10 +16754,10 @@
           case_insensitive: true,
           keywords: KEYWORDS,
           contains: [
-            hljs2.HASH_COMMENT_MODE,
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.NUMBER_MODE,
+            hljs.HASH_COMMENT_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.NUMBER_MODE,
             {
               beginKeywords: "run cmd entrypoint volume add copy workdir label healthcheck shell",
               starts: {
@@ -16604,8 +16776,8 @@
   // node_modules/highlight.js/lib/languages/dos.js
   var require_dos = __commonJS({
     "node_modules/highlight.js/lib/languages/dos.js"(exports, module) {
-      function dos(hljs2) {
-        const COMMENT = hljs2.COMMENT(
+      function dos(hljs) {
+        const COMMENT = hljs.COMMENT(
           /^\s*@?rem\b/,
           /$/,
           { relevance: 10 }
@@ -16748,7 +16920,7 @@
               begin: LABEL.begin,
               end: "goto:eof",
               contains: [
-                hljs2.inherit(hljs2.TITLE_MODE, { begin: "([_a-zA-Z]\\w*\\.)*([_a-zA-Z]\\w*:)?[_a-zA-Z]\\w*" }),
+                hljs.inherit(hljs.TITLE_MODE, { begin: "([_a-zA-Z]\\w*\\.)*([_a-zA-Z]\\w*:)?[_a-zA-Z]\\w*" }),
                 COMMENT
               ]
             },
@@ -16768,7 +16940,7 @@
   // node_modules/highlight.js/lib/languages/dsconfig.js
   var require_dsconfig = __commonJS({
     "node_modules/highlight.js/lib/languages/dsconfig.js"(exports, module) {
-      function dsconfig(hljs2) {
+      function dsconfig(hljs) {
         const QUOTED_PROPERTY = {
           className: "string",
           begin: /"/,
@@ -16819,7 +16991,7 @@
             APOS_PROPERTY,
             UNQUOTED_PROPERTY,
             VALUELESS_PROPERTY,
-            hljs2.HASH_COMMENT_MODE
+            hljs.HASH_COMMENT_MODE
           ]
         };
       }
@@ -16830,15 +17002,15 @@
   // node_modules/highlight.js/lib/languages/dts.js
   var require_dts = __commonJS({
     "node_modules/highlight.js/lib/languages/dts.js"(exports, module) {
-      function dts(hljs2) {
+      function dts(hljs) {
         const STRINGS = {
           className: "string",
           variants: [
-            hljs2.inherit(hljs2.QUOTE_STRING_MODE, { begin: '((u8?|U)|L)?"' }),
+            hljs.inherit(hljs.QUOTE_STRING_MODE, { begin: '((u8?|U)|L)?"' }),
             {
               begin: '(u8?|U)?R"',
               end: '"',
-              contains: [hljs2.BACKSLASH_ESCAPE]
+              contains: [hljs.BACKSLASH_ESCAPE]
             },
             {
               begin: "'\\\\?.",
@@ -16851,7 +17023,7 @@
           className: "number",
           variants: [
             { begin: "\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)" },
-            { begin: hljs2.C_NUMBER_RE }
+            { begin: hljs.C_NUMBER_RE }
           ],
           relevance: 0
         };
@@ -16870,7 +17042,7 @@
               end: "$",
               keywords: { keyword: "include" },
               contains: [
-                hljs2.inherit(STRINGS, { className: "string" }),
+                hljs.inherit(STRINGS, { className: "string" }),
                 {
                   className: "string",
                   begin: "<",
@@ -16880,8 +17052,8 @@
               ]
             },
             STRINGS,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE
           ]
         };
         const REFERENCE = {
@@ -16950,14 +17122,14 @@
             ATTR,
             ATTR_NO_VALUE,
             CELL_PROPERTY,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             NUMBERS,
             STRINGS,
             PREPROCESSOR,
             PUNC,
             {
-              begin: hljs2.IDENT_RE + "::",
+              begin: hljs.IDENT_RE + "::",
               keywords: ""
             }
           ]
@@ -16970,7 +17142,7 @@
   // node_modules/highlight.js/lib/languages/dust.js
   var require_dust = __commonJS({
     "node_modules/highlight.js/lib/languages/dust.js"(exports, module) {
-      function dust(hljs2) {
+      function dust(hljs) {
         const EXPRESSION_KEYWORDS = "if eq ne lt lte gt gte select default math sep";
         return {
           name: "Dust",
@@ -16990,7 +17162,7 @@
                   starts: {
                     endsWithParent: true,
                     relevance: 0,
-                    contains: [hljs2.QUOTE_STRING_MODE]
+                    contains: [hljs.QUOTE_STRING_MODE]
                   }
                 }
               ]
@@ -17012,8 +17184,8 @@
   // node_modules/highlight.js/lib/languages/ebnf.js
   var require_ebnf = __commonJS({
     "node_modules/highlight.js/lib/languages/ebnf.js"(exports, module) {
-      function ebnf(hljs2) {
-        const commentMode = hljs2.COMMENT(/\(\*/, /\*\)/);
+      function ebnf(hljs) {
+        const commentMode = hljs.COMMENT(/\(\*/, /\*\)/);
         const nonTerminalMode = {
           className: "attribute",
           begin: /^[ ]*[a-zA-Z]+([\s_-]+[a-zA-Z]+)*/
@@ -17032,8 +17204,8 @@
               // terminals
               className: "string",
               variants: [
-                hljs2.APOS_STRING_MODE,
-                hljs2.QUOTE_STRING_MODE,
+                hljs.APOS_STRING_MODE,
+                hljs.QUOTE_STRING_MODE,
                 {
                   begin: "`",
                   end: "`"
@@ -17059,8 +17231,8 @@
   // node_modules/highlight.js/lib/languages/elixir.js
   var require_elixir = __commonJS({
     "node_modules/highlight.js/lib/languages/elixir.js"(exports, module) {
-      function elixir(hljs2) {
-        const regex = hljs2.regex;
+      function elixir(hljs) {
+        const regex = hljs.regex;
         const ELIXIR_IDENT_RE = "[a-zA-Z_][a-zA-Z0-9_.]*(!|\\?)?";
         const ELIXIR_METHOD_RE = "[a-zA-Z_]\\w*[!?=]?|[-+~]@|<<|>>|=~|===?|<=>|[<>]=?|\\*\\*|[-/+%^&*~`|]|\\[\\]=?";
         const KEYWORDS = [
@@ -17168,7 +17340,7 @@
         const LOWERCASE_SIGIL = {
           className: "string",
           begin: "~[a-z](?=" + SIGIL_DELIMITERS + ")",
-          contains: SIGIL_DELIMITER_MODES.map((x) => hljs2.inherit(
+          contains: SIGIL_DELIMITER_MODES.map((x) => hljs.inherit(
             x,
             { contains: [
               escapeSigilEnd(x.end),
@@ -17180,7 +17352,7 @@
         const UPCASE_SIGIL = {
           className: "string",
           begin: "~[A-Z](?=" + SIGIL_DELIMITERS + ")",
-          contains: SIGIL_DELIMITER_MODES.map((x) => hljs2.inherit(
+          contains: SIGIL_DELIMITER_MODES.map((x) => hljs.inherit(
             x,
             { contains: [escapeSigilEnd(x.end)] }
           ))
@@ -17190,7 +17362,7 @@
           variants: [
             {
               begin: "~r(?=" + SIGIL_DELIMITERS + ")",
-              contains: SIGIL_DELIMITER_MODES.map((x) => hljs2.inherit(
+              contains: SIGIL_DELIMITER_MODES.map((x) => hljs.inherit(
                 x,
                 {
                   end: regex.concat(x.end, /[uismxfU]{0,7}/),
@@ -17205,7 +17377,7 @@
             {
               begin: "~R(?=" + SIGIL_DELIMITERS + ")",
               contains: SIGIL_DELIMITER_MODES.map(
-                (x) => hljs2.inherit(
+                (x) => hljs.inherit(
                   x,
                   {
                     end: regex.concat(x.end, /[uismxfU]{0,7}/),
@@ -17219,7 +17391,7 @@
         const STRING = {
           className: "string",
           contains: [
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             SUBST
           ],
           variants: [
@@ -17271,13 +17443,13 @@
           end: /\B\b/,
           // the mode is ended by the title
           contains: [
-            hljs2.inherit(hljs2.TITLE_MODE, {
+            hljs.inherit(hljs.TITLE_MODE, {
               begin: ELIXIR_IDENT_RE,
               endsParent: true
             })
           ]
         };
-        const CLASS = hljs2.inherit(FUNCTION, {
+        const CLASS = hljs.inherit(FUNCTION, {
           className: "class",
           beginKeywords: "defimpl defmodule defprotocol defrecord",
           end: /\bdo\b|$|;/
@@ -17287,7 +17459,7 @@
           REGEX_SIGIL,
           UPCASE_SIGIL,
           LOWERCASE_SIGIL,
-          hljs2.HASH_COMMENT_MODE,
+          hljs.HASH_COMMENT_MODE,
           CLASS,
           FUNCTION,
           { begin: "::" },
@@ -17336,10 +17508,10 @@
   // node_modules/highlight.js/lib/languages/elm.js
   var require_elm = __commonJS({
     "node_modules/highlight.js/lib/languages/elm.js"(exports, module) {
-      function elm(hljs2) {
+      function elm(hljs) {
         const COMMENT = { variants: [
-          hljs2.COMMENT("--", "$"),
-          hljs2.COMMENT(
+          hljs.COMMENT("--", "$"),
+          hljs.COMMENT(
             /\{-/,
             /-\}/,
             { contains: ["self"] }
@@ -17437,7 +17609,7 @@
               beginKeywords: "infix infixl infixr",
               end: "$",
               contains: [
-                hljs2.C_NUMBER_MODE,
+                hljs.C_NUMBER_MODE,
                 COMMENT
               ]
             },
@@ -17449,10 +17621,10 @@
             },
             // Literals and names.
             CHARACTER,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.C_NUMBER_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.C_NUMBER_MODE,
             CONSTRUCTOR,
-            hljs2.inherit(hljs2.TITLE_MODE, { begin: "^[_a-z][\\w']*" }),
+            hljs.inherit(hljs.TITLE_MODE, { begin: "^[_a-z][\\w']*" }),
             COMMENT,
             {
               // No markup, relevance booster
@@ -17469,8 +17641,8 @@
   // node_modules/highlight.js/lib/languages/ruby.js
   var require_ruby = __commonJS({
     "node_modules/highlight.js/lib/languages/ruby.js"(exports, module) {
-      function ruby(hljs2) {
-        const regex = hljs2.regex;
+      function ruby(hljs) {
+        const regex = hljs.regex;
         const RUBY_METHOD_RE = "([a-zA-Z_]\\w*[!?=]?|[-+~]@|<<|>>|=~|===?|<=>|[<>]=?|\\*\\*|[-/+%^&*~`|]|\\[\\]=?)";
         const CLASS_NAME_RE = regex.either(
           /\b([A-Z]+[a-z0-9]+)+/,
@@ -17559,12 +17731,12 @@
           end: ">"
         };
         const COMMENT_MODES = [
-          hljs2.COMMENT(
+          hljs.COMMENT(
             "#",
             "$",
             { contains: [YARDOCTAG] }
           ),
-          hljs2.COMMENT(
+          hljs.COMMENT(
             "^=begin",
             "^=end",
             {
@@ -17572,7 +17744,7 @@
               relevance: 10
             }
           ),
-          hljs2.COMMENT("^__END__", hljs2.MATCH_NOTHING_RE)
+          hljs.COMMENT("^__END__", hljs.MATCH_NOTHING_RE)
         ];
         const SUBST = {
           className: "subst",
@@ -17583,7 +17755,7 @@
         const STRING = {
           className: "string",
           contains: [
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             SUBST
           ],
           variants: [
@@ -17648,11 +17820,11 @@
                 regex.lookahead(/(\w+)(?=\W)[^\n]*\n(?:[^\n]*\n)*?\s*\1\b/)
               ),
               contains: [
-                hljs2.END_SAME_AS_BEGIN({
+                hljs.END_SAME_AS_BEGIN({
                   begin: /(\w+)/,
                   end: /(\w+)/,
                   contains: [
-                    hljs2.BACKSLASH_ESCAPE,
+                    hljs.BACKSLASH_ESCAPE,
                     SUBST
                   ]
                 })
@@ -17770,11 +17942,11 @@
           METHOD_DEFINITION,
           {
             // swallow namespace qualifiers before symbols
-            begin: hljs2.IDENT_RE + "::"
+            begin: hljs.IDENT_RE + "::"
           },
           {
             className: "symbol",
-            begin: hljs2.UNDERSCORE_IDENT_RE + "(!|\\?)?:",
+            begin: hljs.UNDERSCORE_IDENT_RE + "(!|\\?)?:",
             relevance: 0
           },
           {
@@ -17805,13 +17977,13 @@
           },
           {
             // regexp container
-            begin: "(" + hljs2.RE_STARTERS_RE + "|unless)\\s*",
+            begin: "(" + hljs.RE_STARTERS_RE + "|unless)\\s*",
             keywords: "unless",
             contains: [
               {
                 className: "regexp",
                 contains: [
-                  hljs2.BACKSLASH_ESCAPE,
+                  hljs.BACKSLASH_ESCAPE,
                   SUBST
                 ],
                 illegal: /\n/,
@@ -17877,7 +18049,7 @@
           ],
           keywords: RUBY_KEYWORDS,
           illegal: /\/\*/,
-          contains: [hljs2.SHEBANG({ binary: "ruby" })].concat(IRB_DEFAULT).concat(COMMENT_MODES).concat(RUBY_DEFAULT_CONTAINS)
+          contains: [hljs.SHEBANG({ binary: "ruby" })].concat(IRB_DEFAULT).concat(COMMENT_MODES).concat(RUBY_DEFAULT_CONTAINS)
         };
       }
       module.exports = ruby;
@@ -17887,12 +18059,12 @@
   // node_modules/highlight.js/lib/languages/erb.js
   var require_erb = __commonJS({
     "node_modules/highlight.js/lib/languages/erb.js"(exports, module) {
-      function erb(hljs2) {
+      function erb(hljs) {
         return {
           name: "ERB",
           subLanguage: "xml",
           contains: [
-            hljs2.COMMENT("<%#", "%>"),
+            hljs.COMMENT("<%#", "%>"),
             {
               begin: "<%[%=-]?",
               end: "[%-]?%>",
@@ -17910,8 +18082,8 @@
   // node_modules/highlight.js/lib/languages/erlang-repl.js
   var require_erlang_repl = __commonJS({
     "node_modules/highlight.js/lib/languages/erlang-repl.js"(exports, module) {
-      function erlangRepl(hljs2) {
-        const regex = hljs2.regex;
+      function erlangRepl(hljs) {
+        const regex = hljs.regex;
         return {
           name: "Erlang REPL",
           keywords: {
@@ -17924,14 +18096,14 @@
               begin: "^[0-9]+> ",
               relevance: 10
             },
-            hljs2.COMMENT("%", "$"),
+            hljs.COMMENT("%", "$"),
             {
               className: "number",
               begin: "\\b(\\d+(_\\d+)*#[a-fA-F0-9]+(_[a-fA-F0-9]+)*|\\d+(_\\d+)*(\\.\\d+(_\\d+)*)?([eE][-+]?\\d+)?)",
               relevance: 0
             },
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             { begin: regex.concat(
               /\?(::)?/,
               /([A-Z]\w*)/,
@@ -17960,14 +18132,14 @@
   // node_modules/highlight.js/lib/languages/erlang.js
   var require_erlang = __commonJS({
     "node_modules/highlight.js/lib/languages/erlang.js"(exports, module) {
-      function erlang(hljs2) {
+      function erlang(hljs) {
         const BASIC_ATOM_RE = "[a-z'][a-zA-Z0-9_']*";
         const FUNCTION_NAME_RE = "(" + BASIC_ATOM_RE + ":" + BASIC_ATOM_RE + "|" + BASIC_ATOM_RE + ")";
         const ERLANG_RESERVED = {
           keyword: "after and andalso|10 band begin bnot bor bsl bzr bxor case catch cond div end fun if let not of orelse|10 query receive rem try when xor",
           literal: "false true"
         };
-        const COMMENT = hljs2.COMMENT("%", "$");
+        const COMMENT = hljs.COMMENT("%", "$");
         const NUMBER = {
           className: "number",
           begin: "\\b(\\d+(_\\d+)*#[a-fA-F0-9]+(_[a-fA-F0-9]+)*|\\d+(_\\d+)*(\\.\\d+(_\\d+)*)?([eE][-+]?\\d+)?)",
@@ -18009,12 +18181,12 @@
           relevance: 0
         };
         const RECORD_ACCESS = {
-          begin: "#" + hljs2.UNDERSCORE_IDENT_RE,
+          begin: "#" + hljs.UNDERSCORE_IDENT_RE,
           relevance: 0,
           returnBegin: true,
           contains: [
             {
-              begin: "#" + hljs2.UNDERSCORE_IDENT_RE,
+              begin: "#" + hljs.UNDERSCORE_IDENT_RE,
               relevance: 0
             },
             {
@@ -18037,10 +18209,10 @@
         BLOCK_STATEMENTS.contains = [
           COMMENT,
           NAMED_FUN,
-          hljs2.inherit(hljs2.APOS_STRING_MODE, { className: "" }),
+          hljs.inherit(hljs.APOS_STRING_MODE, { className: "" }),
           BLOCK_STATEMENTS,
           FUNCTION_CALL,
-          hljs2.QUOTE_STRING_MODE,
+          hljs.QUOTE_STRING_MODE,
           NUMBER,
           TUPLE,
           VAR1,
@@ -18053,7 +18225,7 @@
           NAMED_FUN,
           BLOCK_STATEMENTS,
           FUNCTION_CALL,
-          hljs2.QUOTE_STRING_MODE,
+          hljs.QUOTE_STRING_MODE,
           NUMBER,
           TUPLE,
           VAR1,
@@ -18107,7 +18279,7 @@
               illegal: "\\(|#|//|/\\*|\\\\|:|;",
               contains: [
                 PARAMS,
-                hljs2.inherit(hljs2.TITLE_MODE, { begin: BASIC_ATOM_RE })
+                hljs.inherit(hljs.TITLE_MODE, { begin: BASIC_ATOM_RE })
               ],
               starts: {
                 end: ";|\\.",
@@ -18123,13 +18295,13 @@
               excludeEnd: true,
               returnBegin: true,
               keywords: {
-                $pattern: "-" + hljs2.IDENT_RE,
+                $pattern: "-" + hljs.IDENT_RE,
                 keyword: DIRECTIVES.map((x) => `${x}|1.5`).join(" ")
               },
               contains: [PARAMS]
             },
             NUMBER,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             RECORD_ACCESS,
             VAR1,
             VAR2,
@@ -18147,7 +18319,7 @@
   // node_modules/highlight.js/lib/languages/excel.js
   var require_excel = __commonJS({
     "node_modules/highlight.js/lib/languages/excel.js"(exports, module) {
-      function excel(hljs2) {
+      function excel(hljs) {
         const BUILT_INS = [
           "ABS",
           "ACCRINT",
@@ -18664,15 +18836,15 @@
               begin: /[A-Z]{0,2}\d*:[A-Z]{0,2}\d*/,
               relevance: 0
             },
-            hljs2.BACKSLASH_ESCAPE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.BACKSLASH_ESCAPE,
+            hljs.QUOTE_STRING_MODE,
             {
               className: "number",
-              begin: hljs2.NUMBER_RE + "(%)?",
+              begin: hljs.NUMBER_RE + "(%)?",
               relevance: 0
             },
             /* Excel formula comments are done by putting the comment in a function call to N() */
-            hljs2.COMMENT(
+            hljs.COMMENT(
               /\bN\(/,
               /\)/,
               {
@@ -18691,7 +18863,7 @@
   // node_modules/highlight.js/lib/languages/fix.js
   var require_fix = __commonJS({
     "node_modules/highlight.js/lib/languages/fix.js"(exports, module) {
-      function fix(hljs2) {
+      function fix(hljs) {
         return {
           name: "FIX",
           contains: [
@@ -18729,7 +18901,7 @@
   // node_modules/highlight.js/lib/languages/flix.js
   var require_flix = __commonJS({
     "node_modules/highlight.js/lib/languages/flix.js"(exports, module) {
-      function flix(hljs2) {
+      function flix(hljs) {
         const CHAR = {
           className: "string",
           begin: /'(.|\\[xXuU][a-zA-Z0-9]+)'/
@@ -18785,12 +18957,12 @@
             ]
           },
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             CHAR,
             STRING,
             METHOD,
-            hljs2.C_NUMBER_MODE
+            hljs.C_NUMBER_MODE
           ]
         };
       }
@@ -18801,18 +18973,18 @@
   // node_modules/highlight.js/lib/languages/fortran.js
   var require_fortran = __commonJS({
     "node_modules/highlight.js/lib/languages/fortran.js"(exports, module) {
-      function fortran(hljs2) {
-        const regex = hljs2.regex;
+      function fortran(hljs) {
+        const regex = hljs.regex;
         const PARAMS = {
           className: "params",
           begin: "\\(",
           end: "\\)"
         };
         const COMMENT = { variants: [
-          hljs2.COMMENT("!", "$", { relevance: 0 }),
+          hljs.COMMENT("!", "$", { relevance: 0 }),
           // allow FORTRAN 77 style comments
-          hljs2.COMMENT("^C[ ]", "$", { relevance: 0 }),
-          hljs2.COMMENT("^C$", "$", { relevance: 0 })
+          hljs.COMMENT("^C[ ]", "$", { relevance: 0 }),
+          hljs.COMMENT("^C$", "$", { relevance: 0 })
         ] };
         const OPTIONAL_NUMBER_SUFFIX = /(_[a-z_\d]+)?/;
         const OPTIONAL_NUMBER_EXP = /([de][+-]?\d+)?/;
@@ -18830,7 +19002,7 @@
           beginKeywords: "subroutine function program",
           illegal: "[${=\\n]",
           contains: [
-            hljs2.UNDERSCORE_TITLE_MODE,
+            hljs.UNDERSCORE_TITLE_MODE,
             PARAMS
           ]
         };
@@ -18838,8 +19010,8 @@
           className: "string",
           relevance: 0,
           variants: [
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE
           ]
         };
         const KEYWORDS = [
@@ -19395,7 +19567,7 @@
         const joined = "(" + (opts.capture ? "" : "?:") + args.map((x) => source(x)).join("|") + ")";
         return joined;
       }
-      function fsharp(hljs2) {
+      function fsharp(hljs) {
         const KEYWORDS = [
           "abstract",
           "and",
@@ -19588,13 +19760,13 @@
           built_in: BUILTINS,
           "variable.constant": SPECIAL_IDENTIFIERS
         };
-        const ML_COMMENT = hljs2.COMMENT(/\(\*(?!\))/, /\*\)/, {
+        const ML_COMMENT = hljs.COMMENT(/\(\*(?!\))/, /\*\)/, {
           contains: ["self"]
         });
         const COMMENT = {
           variants: [
             ML_COMMENT,
-            hljs2.C_LINE_COMMENT_MODE
+            hljs.C_LINE_COMMENT_MODE
           ]
         };
         const IDENTIFIER_RE = /[a-zA-Z_](\w|')*/;
@@ -19610,7 +19782,7 @@
             // the type name is a quoted identifier:
             { match: concat(BEGIN_GENERIC_TYPE_SYMBOL_RE, /``.*?``/) },
             // the type name is a normal identifier (we don't use IDENTIFIER_RE because there cannot be another apostrophe here):
-            { match: concat(BEGIN_GENERIC_TYPE_SYMBOL_RE, hljs2.UNDERSCORE_IDENT_RE) }
+            { match: concat(BEGIN_GENERIC_TYPE_SYMBOL_RE, hljs.UNDERSCORE_IDENT_RE) }
           ],
           relevance: 0
         };
@@ -19697,11 +19869,11 @@
             ),
             relevance: 0,
             // we need the known types, and we need the type constraint keywords and literals. e.g.: when 'a : null
-            keywords: hljs2.inherit(ALL_KEYWORDS, { type: KNOWN_TYPES }),
+            keywords: hljs.inherit(ALL_KEYWORDS, { type: KNOWN_TYPES }),
             contains: [
               COMMENT,
               GENERIC_TYPE_SYMBOL,
-              hljs2.inherit(QUOTED_IDENTIFIER, { scope: null }),
+              hljs.inherit(QUOTED_IDENTIFIER, { scope: null }),
               // match to avoid strange patterns inside that may break the parsing
               OPERATOR_WITHOUT_EQUAL
             ]
@@ -19726,7 +19898,7 @@
           // match keywords in type constraints. e.g.: when 'a : null
           contains: [
             COMMENT,
-            hljs2.inherit(QUOTED_IDENTIFIER, { scope: null }),
+            hljs.inherit(QUOTED_IDENTIFIER, { scope: null }),
             // match to avoid strange patterns inside that may break the parsing
             GENERIC_TYPE_SYMBOL,
             {
@@ -19756,8 +19928,8 @@
         };
         const NUMBER = {
           variants: [
-            hljs2.BINARY_NUMBER_MODE,
-            hljs2.C_NUMBER_MODE
+            hljs.BINARY_NUMBER_MODE,
+            hljs.C_NUMBER_MODE
           ]
         };
         const QUOTED_STRING = {
@@ -19765,7 +19937,7 @@
           begin: /"/,
           end: /"/,
           contains: [
-            hljs2.BACKSLASH_ESCAPE
+            hljs.BACKSLASH_ESCAPE
           ]
         };
         const VERBATIM_STRING = {
@@ -19777,7 +19949,7 @@
               match: /""/
               // escaped "
             },
-            hljs2.BACKSLASH_ESCAPE
+            hljs.BACKSLASH_ESCAPE
           ]
         };
         const TRIPLE_QUOTED_STRING = {
@@ -19805,7 +19977,7 @@
               match: /\}\}/
               // escaped }
             },
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             SUBST
           ]
         };
@@ -19825,7 +19997,7 @@
             {
               match: /""/
             },
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             SUBST
           ]
         };
@@ -19937,8 +20109,8 @@
   // node_modules/highlight.js/lib/languages/gams.js
   var require_gams = __commonJS({
     "node_modules/highlight.js/lib/languages/gams.js"(exports, module) {
-      function gams(hljs2) {
-        const regex = hljs2.regex;
+      function gams(hljs) {
+        const regex = hljs.regex;
         const KEYWORDS = {
           keyword: "abort acronym acronyms alias all and assign binary card diag display else eq file files for free ge gt if integer le loop lt maximizing minimizing model models ne negative no not option options or ord positive prod put putpage puttl repeat sameas semicont semiint smax smin solve sos1 sos2 sum system table then until using while xor yes",
           literal: "eps inf na",
@@ -19972,7 +20144,7 @@
             }
           ],
           illegal: "\\n",
-          contains: [hljs2.BACKSLASH_ESCAPE]
+          contains: [hljs.BACKSLASH_ESCAPE]
         };
         const ASSIGNMENT = {
           begin: "/",
@@ -19980,11 +20152,11 @@
           keywords: KEYWORDS,
           contains: [
             QSTR,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.APOS_STRING_MODE,
-            hljs2.C_NUMBER_MODE
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.C_NUMBER_MODE
           ]
         };
         const COMMENT_WORD = /[a-z0-9&#*=?@\\><:,()$[\]_.{}!+%^-]+/;
@@ -20015,7 +20187,7 @@
           case_insensitive: true,
           keywords: KEYWORDS,
           contains: [
-            hljs2.COMMENT(/^\$ontext/, /^\$offtext/),
+            hljs.COMMENT(/^\$ontext/, /^\$offtext/),
             {
               className: "meta",
               begin: "^\\$[a-z0-9]+",
@@ -20028,21 +20200,21 @@
                 }
               ]
             },
-            hljs2.COMMENT("^\\*", "$"),
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.APOS_STRING_MODE,
+            hljs.COMMENT("^\\*", "$"),
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE,
             // Declarations
             {
               beginKeywords: "set sets parameter parameters variable variables scalar scalars equation equations",
               end: ";",
               contains: [
-                hljs2.COMMENT("^\\*", "$"),
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE,
-                hljs2.QUOTE_STRING_MODE,
-                hljs2.APOS_STRING_MODE,
+                hljs.COMMENT("^\\*", "$"),
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE,
+                hljs.QUOTE_STRING_MODE,
+                hljs.APOS_STRING_MODE,
                 ASSIGNMENT,
                 DESCTEXT
               ]
@@ -20059,12 +20231,12 @@
                   end: "$",
                   contains: [DESCTEXT]
                 },
-                hljs2.COMMENT("^\\*", "$"),
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE,
-                hljs2.QUOTE_STRING_MODE,
-                hljs2.APOS_STRING_MODE,
-                hljs2.C_NUMBER_MODE
+                hljs.COMMENT("^\\*", "$"),
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE,
+                hljs.QUOTE_STRING_MODE,
+                hljs.APOS_STRING_MODE,
+                hljs.C_NUMBER_MODE
                 // Table does not contain DESCTEXT or ASSIGNMENT
               ]
             },
@@ -20083,7 +20255,7 @@
                 SYMBOLS
               ]
             },
-            hljs2.C_NUMBER_MODE,
+            hljs.C_NUMBER_MODE,
             SYMBOLS
           ]
         };
@@ -20095,13 +20267,13 @@
   // node_modules/highlight.js/lib/languages/gauss.js
   var require_gauss = __commonJS({
     "node_modules/highlight.js/lib/languages/gauss.js"(exports, module) {
-      function gauss(hljs2) {
+      function gauss(hljs) {
         const KEYWORDS = {
           keyword: "bool break call callexe checkinterrupt clear clearg closeall cls comlog compile continue create debug declare delete disable dlibrary dllcall do dos ed edit else elseif enable end endfor endif endp endo errorlog errorlogat expr external fn for format goto gosub graph if keyword let lib library line load loadarray loadexe loadf loadk loadm loadp loads loadx local locate loopnextindex lprint lpwidth lshow matrix msym ndpclex new open output outwidth plot plotsym pop prcsn print printdos proc push retp return rndcon rndmod rndmult rndseed run save saveall screen scroll setarray show sparse stop string struct system trace trap threadfor threadendfor threadbegin threadjoin threadstat threadend until use while winprint ne ge le gt lt and xor or not eq eqv",
           built_in: "abs acf aconcat aeye amax amean AmericanBinomCall AmericanBinomCall_Greeks AmericanBinomCall_ImpVol AmericanBinomPut AmericanBinomPut_Greeks AmericanBinomPut_ImpVol AmericanBSCall AmericanBSCall_Greeks AmericanBSCall_ImpVol AmericanBSPut AmericanBSPut_Greeks AmericanBSPut_ImpVol amin amult annotationGetDefaults annotationSetBkd annotationSetFont annotationSetLineColor annotationSetLineStyle annotationSetLineThickness annualTradingDays arccos arcsin areshape arrayalloc arrayindex arrayinit arraytomat asciiload asclabel astd astds asum atan atan2 atranspose axmargin balance band bandchol bandcholsol bandltsol bandrv bandsolpd bar base10 begwind besselj bessely beta box boxcox cdfBeta cdfBetaInv cdfBinomial cdfBinomialInv cdfBvn cdfBvn2 cdfBvn2e cdfCauchy cdfCauchyInv cdfChic cdfChii cdfChinc cdfChincInv cdfExp cdfExpInv cdfFc cdfFnc cdfFncInv cdfGam cdfGenPareto cdfHyperGeo cdfLaplace cdfLaplaceInv cdfLogistic cdfLogisticInv cdfmControlCreate cdfMvn cdfMvn2e cdfMvnce cdfMvne cdfMvt2e cdfMvtce cdfMvte cdfN cdfN2 cdfNc cdfNegBinomial cdfNegBinomialInv cdfNi cdfPoisson cdfPoissonInv cdfRayleigh cdfRayleighInv cdfTc cdfTci cdfTnc cdfTvn cdfWeibull cdfWeibullInv cdir ceil ChangeDir chdir chiBarSquare chol choldn cholsol cholup chrs close code cols colsf combinate combinated complex con cond conj cons ConScore contour conv convertsatostr convertstrtosa corrm corrms corrvc corrx corrxs cos cosh counts countwts crossprd crout croutp csrcol csrlin csvReadM csvReadSA cumprodc cumsumc curve cvtos datacreate datacreatecomplex datalist dataload dataloop dataopen datasave date datestr datestring datestrymd dayinyr dayofweek dbAddDatabase dbClose dbCommit dbCreateQuery dbExecQuery dbGetConnectOptions dbGetDatabaseName dbGetDriverName dbGetDrivers dbGetHostName dbGetLastErrorNum dbGetLastErrorText dbGetNumericalPrecPolicy dbGetPassword dbGetPort dbGetTableHeaders dbGetTables dbGetUserName dbHasFeature dbIsDriverAvailable dbIsOpen dbIsOpenError dbOpen dbQueryBindValue dbQueryClear dbQueryCols dbQueryExecPrepared dbQueryFetchAllM dbQueryFetchAllSA dbQueryFetchOneM dbQueryFetchOneSA dbQueryFinish dbQueryGetBoundValue dbQueryGetBoundValues dbQueryGetField dbQueryGetLastErrorNum dbQueryGetLastErrorText dbQueryGetLastInsertID dbQueryGetLastQuery dbQueryGetPosition dbQueryIsActive dbQueryIsForwardOnly dbQueryIsNull dbQueryIsSelect dbQueryIsValid dbQueryPrepare dbQueryRows dbQuerySeek dbQuerySeekFirst dbQuerySeekLast dbQuerySeekNext dbQuerySeekPrevious dbQuerySetForwardOnly dbRemoveDatabase dbRollback dbSetConnectOptions dbSetDatabaseName dbSetHostName dbSetNumericalPrecPolicy dbSetPort dbSetUserName dbTransaction DeleteFile delif delrows denseToSp denseToSpRE denToZero design det detl dfft dffti diag diagrv digamma doswin DOSWinCloseall DOSWinOpen dotfeq dotfeqmt dotfge dotfgemt dotfgt dotfgtmt dotfle dotflemt dotflt dotfltmt dotfne dotfnemt draw drop dsCreate dstat dstatmt dstatmtControlCreate dtdate dtday dttime dttodtv dttostr dttoutc dtvnormal dtvtodt dtvtoutc dummy dummybr dummydn eig eigh eighv eigv elapsedTradingDays endwind envget eof eqSolve eqSolvemt eqSolvemtControlCreate eqSolvemtOutCreate eqSolveset erf erfc erfccplx erfcplx error etdays ethsec etstr EuropeanBinomCall EuropeanBinomCall_Greeks EuropeanBinomCall_ImpVol EuropeanBinomPut EuropeanBinomPut_Greeks EuropeanBinomPut_ImpVol EuropeanBSCall EuropeanBSCall_Greeks EuropeanBSCall_ImpVol EuropeanBSPut EuropeanBSPut_Greeks EuropeanBSPut_ImpVol exctsmpl exec execbg exp extern eye fcheckerr fclearerr feq feqmt fflush fft ffti fftm fftmi fftn fge fgemt fgets fgetsa fgetsat fgetst fgt fgtmt fileinfo filesa fle flemt floor flt fltmt fmod fne fnemt fonts fopen formatcv formatnv fputs fputst fseek fstrerror ftell ftocv ftos ftostrC gamma gammacplx gammaii gausset gdaAppend gdaCreate gdaDStat gdaDStatMat gdaGetIndex gdaGetName gdaGetNames gdaGetOrders gdaGetType gdaGetTypes gdaGetVarInfo gdaIsCplx gdaLoad gdaPack gdaRead gdaReadByIndex gdaReadSome gdaReadSparse gdaReadStruct gdaReportVarInfo gdaSave gdaUpdate gdaUpdateAndPack gdaVars gdaWrite gdaWrite32 gdaWriteSome getarray getdims getf getGAUSShome getmatrix getmatrix4D getname getnamef getNextTradingDay getNextWeekDay getnr getorders getpath getPreviousTradingDay getPreviousWeekDay getRow getscalar3D getscalar4D getTrRow getwind glm gradcplx gradMT gradMTm gradMTT gradMTTm gradp graphprt graphset hasimag header headermt hess hessMT hessMTg hessMTgw hessMTm hessMTmw hessMTT hessMTTg hessMTTgw hessMTTm hessMTw hessp hist histf histp hsec imag indcv indexcat indices indices2 indicesf indicesfn indnv indsav integrate1d integrateControlCreate intgrat2 intgrat3 inthp1 inthp2 inthp3 inthp4 inthpControlCreate intquad1 intquad2 intquad3 intrleav intrleavsa intrsect intsimp inv invpd invswp iscplx iscplxf isden isinfnanmiss ismiss key keyav keyw lag lag1 lagn lapEighb lapEighi lapEighvb lapEighvi lapgEig lapgEigh lapgEighv lapgEigv lapgSchur lapgSvdcst lapgSvds lapgSvdst lapSvdcusv lapSvds lapSvdusv ldlp ldlsol linSolve listwise ln lncdfbvn lncdfbvn2 lncdfmvn lncdfn lncdfn2 lncdfnc lnfact lngammacplx lnpdfmvn lnpdfmvt lnpdfn lnpdft loadd loadstruct loadwind loess loessmt loessmtControlCreate log loglog logx logy lower lowmat lowmat1 ltrisol lu lusol machEpsilon make makevars makewind margin matalloc matinit mattoarray maxbytes maxc maxindc maxv maxvec mbesselei mbesselei0 mbesselei1 mbesseli mbesseli0 mbesseli1 meanc median mergeby mergevar minc minindc minv miss missex missrv moment momentd movingave movingaveExpwgt movingaveWgt nextindex nextn nextnevn nextwind ntos null null1 numCombinations ols olsmt olsmtControlCreate olsqr olsqr2 olsqrmt ones optn optnevn orth outtyp pacf packedToSp packr parse pause pdfCauchy pdfChi pdfExp pdfGenPareto pdfHyperGeo pdfLaplace pdfLogistic pdfn pdfPoisson pdfRayleigh pdfWeibull pi pinv pinvmt plotAddArrow plotAddBar plotAddBox plotAddHist plotAddHistF plotAddHistP plotAddPolar plotAddScatter plotAddShape plotAddTextbox plotAddTS plotAddXY plotArea plotBar plotBox plotClearLayout plotContour plotCustomLayout plotGetDefaults plotHist plotHistF plotHistP plotLayout plotLogLog plotLogX plotLogY plotOpenWindow plotPolar plotSave plotScatter plotSetAxesPen plotSetBar plotSetBarFill plotSetBarStacked plotSetBkdColor plotSetFill plotSetGrid plotSetLegend plotSetLineColor plotSetLineStyle plotSetLineSymbol plotSetLineThickness plotSetNewWindow plotSetTitle plotSetWhichYAxis plotSetXAxisShow plotSetXLabel plotSetXRange plotSetXTicInterval plotSetXTicLabel plotSetYAxisShow plotSetYLabel plotSetYRange plotSetZAxisShow plotSetZLabel plotSurface plotTS plotXY polar polychar polyeval polygamma polyint polymake polymat polymroot polymult polyroot pqgwin previousindex princomp printfm printfmt prodc psi putarray putf putvals pvCreate pvGetIndex pvGetParNames pvGetParVector pvLength pvList pvPack pvPacki pvPackm pvPackmi pvPacks pvPacksi pvPacksm pvPacksmi pvPutParVector pvTest pvUnpack QNewton QNewtonmt QNewtonmtControlCreate QNewtonmtOutCreate QNewtonSet QProg QProgmt QProgmtInCreate qqr qqre qqrep qr qre qrep qrsol qrtsol qtyr qtyre qtyrep quantile quantiled qyr qyre qyrep qz rank rankindx readr real reclassify reclassifyCuts recode recserar recsercp recserrc rerun rescale reshape rets rev rfft rffti rfftip rfftn rfftnp rfftp rndBernoulli rndBeta rndBinomial rndCauchy rndChiSquare rndCon rndCreateState rndExp rndGamma rndGeo rndGumbel rndHyperGeo rndi rndKMbeta rndKMgam rndKMi rndKMn rndKMnb rndKMp rndKMu rndKMvm rndLaplace rndLCbeta rndLCgam rndLCi rndLCn rndLCnb rndLCp rndLCu rndLCvm rndLogNorm rndMTu rndMVn rndMVt rndn rndnb rndNegBinomial rndp rndPoisson rndRayleigh rndStateSkip rndu rndvm rndWeibull rndWishart rotater round rows rowsf rref sampleData satostrC saved saveStruct savewind scale scale3d scalerr scalinfnanmiss scalmiss schtoc schur searchsourcepath seekr select selif seqa seqm setdif setdifsa setvars setvwrmode setwind shell shiftr sin singleindex sinh sleep solpd sortc sortcc sortd sorthc sorthcc sortind sortindc sortmc sortr sortrc spBiconjGradSol spChol spConjGradSol spCreate spDenseSubmat spDiagRvMat spEigv spEye spLDL spline spLU spNumNZE spOnes spreadSheetReadM spreadSheetReadSA spreadSheetWrite spScale spSubmat spToDense spTrTDense spTScalar spZeros sqpSolve sqpSolveMT sqpSolveMTControlCreate sqpSolveMTlagrangeCreate sqpSolveMToutCreate sqpSolveSet sqrt statements stdc stdsc stocv stof strcombine strindx strlen strput strrindx strsect strsplit strsplitPad strtodt strtof strtofcplx strtriml strtrimr strtrunc strtruncl strtruncpad strtruncr submat subscat substute subvec sumc sumr surface svd svd1 svd2 svdcusv svds svdusv sysstate tab tan tanh tempname time timedt timestr timeutc title tkf2eps tkf2ps tocart todaydt toeplitz token topolar trapchk trigamma trimr trunc type typecv typef union unionsa uniqindx uniqindxsa unique uniquesa upmat upmat1 upper utctodt utctodtv utrisol vals varCovMS varCovXS varget vargetl varmall varmares varput varputl vartypef vcm vcms vcx vcxs vec vech vecr vector vget view viewxyz vlist vnamecv volume vput vread vtypecv wait waitc walkindex where window writer xlabel xlsGetSheetCount xlsGetSheetSize xlsGetSheetTypes xlsMakeRange xlsReadM xlsReadSA xlsWrite xlsWriteM xlsWriteSA xpnd xtics xy xyz ylabel ytics zeros zeta zlabel ztics cdfEmpirical dot h5create h5open h5read h5readAttribute h5write h5writeAttribute ldl plotAddErrorBar plotAddSurface plotCDFEmpirical plotSetColormap plotSetContourLabels plotSetLegendFont plotSetTextInterpreter plotSetXTicCount plotSetYTicCount plotSetZLevels powerm strjoin sylvester strtrim",
           literal: "DB_AFTER_LAST_ROW DB_ALL_TABLES DB_BATCH_OPERATIONS DB_BEFORE_FIRST_ROW DB_BLOB DB_EVENT_NOTIFICATIONS DB_FINISH_QUERY DB_HIGH_PRECISION DB_LAST_INSERT_ID DB_LOW_PRECISION_DOUBLE DB_LOW_PRECISION_INT32 DB_LOW_PRECISION_INT64 DB_LOW_PRECISION_NUMBERS DB_MULTIPLE_RESULT_SETS DB_NAMED_PLACEHOLDERS DB_POSITIONAL_PLACEHOLDERS DB_PREPARED_QUERIES DB_QUERY_SIZE DB_SIMPLE_LOCKING DB_SYSTEM_TABLES DB_TABLES DB_TRANSACTIONS DB_UNICODE DB_VIEWS __STDIN __STDOUT __STDERR __FILE_DIR"
         };
-        const AT_COMMENT_MODE = hljs2.COMMENT("@", "@");
+        const AT_COMMENT_MODE = hljs.COMMENT("@", "@");
         const PREPROCESSOR = {
           className: "meta",
           begin: "#",
@@ -20125,8 +20297,8 @@
                 }
               ]
             },
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             AT_COMMENT_MODE
           ]
         };
@@ -20137,7 +20309,7 @@
           contains: [
             {
               className: "type",
-              begin: hljs2.UNDERSCORE_IDENT_RE,
+              begin: hljs.UNDERSCORE_IDENT_RE,
               relevance: 0
             }
           ]
@@ -20157,8 +20329,8 @@
                 className: "literal",
                 begin: /\.\.\./
               },
-              hljs2.C_NUMBER_MODE,
-              hljs2.C_BLOCK_COMMENT_MODE,
+              hljs.C_NUMBER_MODE,
+              hljs.C_BLOCK_COMMENT_MODE,
               AT_COMMENT_MODE,
               STRUCT_TYPE
             ]
@@ -20166,11 +20338,11 @@
         ];
         const FUNCTION_DEF = {
           className: "title",
-          begin: hljs2.UNDERSCORE_IDENT_RE,
+          begin: hljs.UNDERSCORE_IDENT_RE,
           relevance: 0
         };
         const DEFINITION = function(beginKeywords, end, inherits) {
-          const mode = hljs2.inherit(
+          const mode = hljs.inherit(
             {
               className: "function",
               beginKeywords,
@@ -20181,8 +20353,8 @@
             {}
           );
           mode.contains.push(FUNCTION_DEF);
-          mode.contains.push(hljs2.C_NUMBER_MODE);
-          mode.contains.push(hljs2.C_BLOCK_COMMENT_MODE);
+          mode.contains.push(hljs.C_NUMBER_MODE);
+          mode.contains.push(hljs.C_BLOCK_COMMENT_MODE);
           mode.contains.push(AT_COMMENT_MODE);
           return mode;
         };
@@ -20195,12 +20367,12 @@
           className: "string",
           begin: '"',
           end: '"',
-          contains: [hljs2.BACKSLASH_ESCAPE],
+          contains: [hljs.BACKSLASH_ESCAPE],
           relevance: 0
         };
         const FUNCTION_REF = {
           // className: "fn_ref",
-          begin: hljs2.UNDERSCORE_IDENT_RE + "\\s*\\(",
+          begin: hljs.UNDERSCORE_IDENT_RE + "\\s*\\(",
           returnBegin: true,
           keywords: KEYWORDS,
           relevance: 0,
@@ -20210,7 +20382,7 @@
             {
               // ambiguously named function calls get a relevance of 0
               className: "built_in",
-              begin: hljs2.UNDERSCORE_IDENT_RE,
+              begin: hljs.UNDERSCORE_IDENT_RE,
               relevance: 0
             }
           ]
@@ -20225,8 +20397,8 @@
             literal: KEYWORDS.literal
           },
           contains: [
-            hljs2.C_NUMBER_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_NUMBER_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             AT_COMMENT_MODE,
             BUILT_IN_REF,
             FUNCTION_REF,
@@ -20243,9 +20415,9 @@
           keywords: KEYWORDS,
           illegal: /(\{[%#]|[%#]\}| <- )/,
           contains: [
-            hljs2.C_NUMBER_MODE,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_NUMBER_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             AT_COMMENT_MODE,
             STRING_REF,
             PREPROCESSOR,
@@ -20261,7 +20433,7 @@
               // end: /\(/,
               relevance: 0,
               contains: [
-                hljs2.C_BLOCK_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE,
                 AT_COMMENT_MODE,
                 FUNCTION_REF_PARAMS
               ]
@@ -20270,8 +20442,8 @@
               // custom method guard
               // excludes method names from keyword processing
               variants: [
-                { begin: hljs2.UNDERSCORE_IDENT_RE + "\\." + hljs2.UNDERSCORE_IDENT_RE },
-                { begin: hljs2.UNDERSCORE_IDENT_RE + "\\s*=" }
+                { begin: hljs.UNDERSCORE_IDENT_RE + "\\." + hljs.UNDERSCORE_IDENT_RE },
+                { begin: hljs.UNDERSCORE_IDENT_RE + "\\s*=" }
               ],
               relevance: 0
             },
@@ -20287,7 +20459,7 @@
   // node_modules/highlight.js/lib/languages/gcode.js
   var require_gcode = __commonJS({
     "node_modules/highlight.js/lib/languages/gcode.js"(exports, module) {
-      function gcode(hljs2) {
+      function gcode(hljs) {
         const GCODE_IDENT_RE = "[A-Z_][A-Z0-9_.]*";
         const GCODE_CLOSE_RE = "%";
         const GCODE_KEYWORDS = {
@@ -20298,14 +20470,14 @@
           className: "meta",
           begin: "([O])([0-9]+)"
         };
-        const NUMBER = hljs2.inherit(hljs2.C_NUMBER_MODE, { begin: "([-+]?((\\.\\d+)|(\\d+)(\\.\\d*)?))|" + hljs2.C_NUMBER_RE });
+        const NUMBER = hljs.inherit(hljs.C_NUMBER_MODE, { begin: "([-+]?((\\.\\d+)|(\\d+)(\\.\\d*)?))|" + hljs.C_NUMBER_RE });
         const GCODE_CODE = [
-          hljs2.C_LINE_COMMENT_MODE,
-          hljs2.C_BLOCK_COMMENT_MODE,
-          hljs2.COMMENT(/\(/, /\)/),
+          hljs.C_LINE_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
+          hljs.COMMENT(/\(/, /\)/),
           NUMBER,
-          hljs2.inherit(hljs2.APOS_STRING_MODE, { illegal: null }),
-          hljs2.inherit(hljs2.QUOTE_STRING_MODE, { illegal: null }),
+          hljs.inherit(hljs.APOS_STRING_MODE, { illegal: null }),
+          hljs.inherit(hljs.QUOTE_STRING_MODE, { illegal: null }),
           {
             className: "name",
             begin: "([G])([0-9]+\\.?[0-9]?)"
@@ -20363,7 +20535,7 @@
   // node_modules/highlight.js/lib/languages/gherkin.js
   var require_gherkin = __commonJS({
     "node_modules/highlight.js/lib/languages/gherkin.js"(exports, module) {
-      function gherkin(hljs2) {
+      function gherkin(hljs) {
         return {
           name: "Gherkin",
           aliases: ["feature"],
@@ -20393,13 +20565,13 @@
               begin: "<",
               end: ">"
             },
-            hljs2.HASH_COMMENT_MODE,
+            hljs.HASH_COMMENT_MODE,
             {
               className: "string",
               begin: '"""',
               end: '"""'
             },
-            hljs2.QUOTE_STRING_MODE
+            hljs.QUOTE_STRING_MODE
           ]
         };
       }
@@ -20410,7 +20582,7 @@
   // node_modules/highlight.js/lib/languages/glsl.js
   var require_glsl = __commonJS({
     "node_modules/highlight.js/lib/languages/glsl.js"(exports, module) {
-      function glsl(hljs2) {
+      function glsl(hljs) {
         return {
           name: "GLSL",
           keywords: {
@@ -20427,9 +20599,9 @@
           },
           illegal: '"',
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.C_NUMBER_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.C_NUMBER_MODE,
             {
               className: "meta",
               begin: "#",
@@ -20445,7 +20617,7 @@
   // node_modules/highlight.js/lib/languages/gml.js
   var require_gml = __commonJS({
     "node_modules/highlight.js/lib/languages/gml.js"(exports, module) {
-      function gml(hljs2) {
+      function gml(hljs) {
         const KEYWORDS = [
           "#endregion",
           "#macro",
@@ -23558,11 +23730,11 @@
             "variable.language": LANGUAGE_VARIABLES
           },
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.C_NUMBER_MODE
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.C_NUMBER_MODE
           ]
         };
       }
@@ -23573,7 +23745,7 @@
   // node_modules/highlight.js/lib/languages/go.js
   var require_go = __commonJS({
     "node_modules/highlight.js/lib/languages/go.js"(exports, module) {
-      function go(hljs2) {
+      function go(hljs) {
         const LITERALS = [
           "true",
           "false",
@@ -23658,13 +23830,13 @@
           keywords: KEYWORDS,
           illegal: "</",
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             {
               className: "string",
               variants: [
-                hljs2.QUOTE_STRING_MODE,
-                hljs2.APOS_STRING_MODE,
+                hljs.QUOTE_STRING_MODE,
+                hljs.APOS_STRING_MODE,
                 {
                   begin: "`",
                   end: "`"
@@ -23711,7 +23883,7 @@
               end: "\\s*(\\{|$)",
               excludeEnd: true,
               contains: [
-                hljs2.TITLE_MODE,
+                hljs.TITLE_MODE,
                 {
                   className: "params",
                   begin: /\(/,
@@ -23732,7 +23904,7 @@
   // node_modules/highlight.js/lib/languages/golo.js
   var require_golo = __commonJS({
     "node_modules/highlight.js/lib/languages/golo.js"(exports, module) {
-      function golo(hljs2) {
+      function golo(hljs) {
         const KEYWORDS = [
           "println",
           "readln",
@@ -23792,9 +23964,9 @@
             ]
           },
           contains: [
-            hljs2.HASH_COMMENT_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.C_NUMBER_MODE,
+            hljs.HASH_COMMENT_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.C_NUMBER_MODE,
             {
               className: "meta",
               begin: "@[A-Za-z]+"
@@ -23809,7 +23981,7 @@
   // node_modules/highlight.js/lib/languages/gradle.js
   var require_gradle = __commonJS({
     "node_modules/highlight.js/lib/languages/gradle.js"(exports, module) {
-      function gradle(hljs2) {
+      function gradle(hljs) {
         const KEYWORDS = [
           "task",
           "project",
@@ -23979,12 +24151,12 @@
           case_insensitive: true,
           keywords: KEYWORDS,
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.NUMBER_MODE,
-            hljs2.REGEXP_MODE
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.NUMBER_MODE,
+            hljs.REGEXP_MODE
           ]
         };
       }
@@ -23995,8 +24167,8 @@
   // node_modules/highlight.js/lib/languages/graphql.js
   var require_graphql = __commonJS({
     "node_modules/highlight.js/lib/languages/graphql.js"(exports, module) {
-      function graphql(hljs2) {
-        const regex = hljs2.regex;
+      function graphql(hljs) {
+        const regex = hljs.regex;
         const GQL_NAME = /[_A-Za-z][_0-9A-Za-z]*/;
         return {
           name: "GraphQL",
@@ -24026,9 +24198,9 @@
             ]
           },
           contains: [
-            hljs2.HASH_COMMENT_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.NUMBER_MODE,
+            hljs.HASH_COMMENT_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.NUMBER_MODE,
             {
               scope: "punctuation",
               match: /[.]{3}/,
@@ -24074,13 +24246,13 @@
         obj.variants = variants2;
         return obj;
       }
-      function groovy(hljs2) {
-        const regex = hljs2.regex;
+      function groovy(hljs) {
+        const regex = hljs.regex;
         const IDENT_RE = "[A-Za-z0-9_$]+";
         const COMMENT = variants([
-          hljs2.C_LINE_COMMENT_MODE,
-          hljs2.C_BLOCK_COMMENT_MODE,
-          hljs2.COMMENT(
+          hljs.C_LINE_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
+          hljs.COMMENT(
             "/\\*\\*",
             "\\*/",
             {
@@ -24102,11 +24274,11 @@
         const REGEXP = {
           className: "regexp",
           begin: /~?\/[^\/\n]+\//,
-          contains: [hljs2.BACKSLASH_ESCAPE]
+          contains: [hljs.BACKSLASH_ESCAPE]
         };
         const NUMBER = variants([
-          hljs2.BINARY_NUMBER_MODE,
-          hljs2.C_NUMBER_MODE
+          hljs.BINARY_NUMBER_MODE,
+          hljs.C_NUMBER_MODE
         ]);
         const STRING = variants(
           [
@@ -24123,8 +24295,8 @@
               end: "/\\$",
               relevance: 10
             },
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE
           ],
           { className: "string" }
         );
@@ -24132,7 +24304,7 @@
           match: [
             /(class|interface|trait|enum|record|extends|implements)/,
             /\s+/,
-            hljs2.UNDERSCORE_IDENT_RE
+            hljs.UNDERSCORE_IDENT_RE
           ],
           scope: {
             1: "keyword",
@@ -24202,7 +24374,7 @@
             keyword: KEYWORDS
           },
           contains: [
-            hljs2.SHEBANG({
+            hljs.SHEBANG({
               binary: "groovy",
               relevance: 10
             }),
@@ -24255,7 +24427,7 @@
   // node_modules/highlight.js/lib/languages/haml.js
   var require_haml = __commonJS({
     "node_modules/highlight.js/lib/languages/haml.js"(exports, module) {
-      function haml(hljs2) {
+      function haml(hljs) {
         return {
           name: "HAML",
           case_insensitive: true,
@@ -24266,7 +24438,7 @@
               relevance: 10
             },
             // FIXME these comments should be allowed to span indented lines
-            hljs2.COMMENT(
+            hljs.COMMENT(
               "^\\s*(!=#|=#|-#|/).*$",
               null,
               { relevance: 0 }
@@ -24308,8 +24480,8 @@
                           className: "attr",
                           begin: ":\\w+"
                         },
-                        hljs2.APOS_STRING_MODE,
-                        hljs2.QUOTE_STRING_MODE,
+                        hljs.APOS_STRING_MODE,
+                        hljs.QUOTE_STRING_MODE,
                         {
                           begin: "\\w+",
                           relevance: 0
@@ -24334,8 +24506,8 @@
                           begin: "\\w+",
                           relevance: 0
                         },
-                        hljs2.APOS_STRING_MODE,
-                        hljs2.QUOTE_STRING_MODE,
+                        hljs.APOS_STRING_MODE,
+                        hljs.QUOTE_STRING_MODE,
                         {
                           begin: "\\w+",
                           relevance: 0
@@ -24364,8 +24536,8 @@
   // node_modules/highlight.js/lib/languages/handlebars.js
   var require_handlebars = __commonJS({
     "node_modules/highlight.js/lib/languages/handlebars.js"(exports, module) {
-      function handlebars(hljs2) {
-        const regex = hljs2.regex;
+      function handlebars(hljs) {
+        const regex = hljs.regex;
         const BUILT_INS = {
           $pattern: /[\w.\/]+/,
           built_in: [
@@ -24437,7 +24609,7 @@
           ")(?==)"
         );
         const HELPER_NAME_OR_PATH_EXPRESSION = { begin: IDENTIFIER_REGEX };
-        const HELPER_PARAMETER = hljs2.inherit(HELPER_NAME_OR_PATH_EXPRESSION, { keywords: LITERALS });
+        const HELPER_PARAMETER = hljs.inherit(HELPER_NAME_OR_PATH_EXPRESSION, { keywords: LITERALS });
         const SUB_EXPRESSION = {
           begin: /\(/,
           end: /\)/
@@ -24452,9 +24624,9 @@
             begin: /=/,
             end: /=/,
             starts: { contains: [
-              hljs2.NUMBER_MODE,
-              hljs2.QUOTE_STRING_MODE,
-              hljs2.APOS_STRING_MODE,
+              hljs.NUMBER_MODE,
+              hljs.QUOTE_STRING_MODE,
+              hljs.APOS_STRING_MODE,
               HELPER_PARAMETER,
               SUB_EXPRESSION
             ] }
@@ -24474,9 +24646,9 @@
         };
         const HELPER_PARAMETERS = {
           contains: [
-            hljs2.NUMBER_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.APOS_STRING_MODE,
+            hljs.NUMBER_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE,
             BLOCK_PARAMS,
             HASH,
             HELPER_PARAMETER,
@@ -24487,25 +24659,25 @@
           // on the surrounding mode, but "endsWithParent" does not work here (i.e. it includes the
           // end-token of the surrounding mode)
         };
-        const SUB_EXPRESSION_CONTENTS = hljs2.inherit(HELPER_NAME_OR_PATH_EXPRESSION, {
+        const SUB_EXPRESSION_CONTENTS = hljs.inherit(HELPER_NAME_OR_PATH_EXPRESSION, {
           className: "name",
           keywords: BUILT_INS,
-          starts: hljs2.inherit(HELPER_PARAMETERS, { end: /\)/ })
+          starts: hljs.inherit(HELPER_PARAMETERS, { end: /\)/ })
         });
         SUB_EXPRESSION.contains = [SUB_EXPRESSION_CONTENTS];
-        const OPENING_BLOCK_MUSTACHE_CONTENTS = hljs2.inherit(HELPER_NAME_OR_PATH_EXPRESSION, {
+        const OPENING_BLOCK_MUSTACHE_CONTENTS = hljs.inherit(HELPER_NAME_OR_PATH_EXPRESSION, {
           keywords: BUILT_INS,
           className: "name",
-          starts: hljs2.inherit(HELPER_PARAMETERS, { end: /\}\}/ })
+          starts: hljs.inherit(HELPER_PARAMETERS, { end: /\}\}/ })
         });
-        const CLOSING_BLOCK_MUSTACHE_CONTENTS = hljs2.inherit(HELPER_NAME_OR_PATH_EXPRESSION, {
+        const CLOSING_BLOCK_MUSTACHE_CONTENTS = hljs.inherit(HELPER_NAME_OR_PATH_EXPRESSION, {
           keywords: BUILT_INS,
           className: "name"
         });
-        const BASIC_MUSTACHE_CONTENTS = hljs2.inherit(HELPER_NAME_OR_PATH_EXPRESSION, {
+        const BASIC_MUSTACHE_CONTENTS = hljs.inherit(HELPER_NAME_OR_PATH_EXPRESSION, {
           className: "name",
           keywords: BUILT_INS,
-          starts: hljs2.inherit(HELPER_PARAMETERS, { end: /\}\}/ })
+          starts: hljs.inherit(HELPER_PARAMETERS, { end: /\}\}/ })
         });
         const ESCAPE_MUSTACHE_WITH_PRECEEDING_BACKSLASH = {
           begin: /\\\{\{/,
@@ -24528,8 +24700,8 @@
           contains: [
             ESCAPE_MUSTACHE_WITH_PRECEEDING_BACKSLASH,
             PREVENT_ESCAPE_WITH_ANOTHER_PRECEEDING_BACKSLASH,
-            hljs2.COMMENT(/\{\{!--/, /--\}\}/),
-            hljs2.COMMENT(/\{\{!/, /\}\}/),
+            hljs.COMMENT(/\{\{!--/, /--\}\}/),
+            hljs.COMMENT(/\{\{!/, /\}\}/),
             {
               // open raw block "{{{{raw}}}} content not evaluated {{{{/raw}}}}"
               className: "template-tag",
@@ -24599,7 +24771,7 @@
   // node_modules/highlight.js/lib/languages/haskell.js
   var require_haskell = __commonJS({
     "node_modules/highlight.js/lib/languages/haskell.js"(exports, module) {
-      function haskell(hljs2) {
+      function haskell(hljs) {
         const decimalDigits = "([0-9]_*)+";
         const hexDigits = "([0-9a-fA-F]_*)+";
         const binaryDigits = "([01]_*)+";
@@ -24617,8 +24789,8 @@
           // > hljs.COMMENT(`(?<!${symbol})--+(?!${symbol})`, '$'),
           // So instead, we'll add a no-markup rule before the COMMENT rule in the rules list
           // to match the problematic infix operators that contain double dash.
-          hljs2.COMMENT("--+", "$"),
-          hljs2.COMMENT(
+          hljs.COMMENT("--+", "$"),
+          hljs.COMMENT(
             /\{-/,
             /-\}/,
             { contains: ["self"] }
@@ -24651,7 +24823,7 @@
               className: "type",
               begin: "\\b[A-Z][\\w]*(\\((\\.\\.|,|\\w+)\\))?"
             },
-            hljs2.inherit(hljs2.TITLE_MODE, { begin: "[_a-z][\\w']*" }),
+            hljs.inherit(hljs.TITLE_MODE, { begin: "[_a-z][\\w']*" }),
             COMMENT
           ]
         };
@@ -24738,7 +24910,7 @@
               beginKeywords: "infix infixl infixr",
               end: "$",
               contains: [
-                hljs2.C_NUMBER_MODE,
+                hljs.C_NUMBER_MODE,
                 COMMENT
               ]
             },
@@ -24748,7 +24920,7 @@
               keywords: "foreign import export ccall stdcall cplusplus jvm dotnet safe unsafe",
               contains: [
                 CONSTRUCTOR,
-                hljs2.QUOTE_STRING_MODE,
+                hljs.QUOTE_STRING_MODE,
                 COMMENT
               ]
             },
@@ -24773,10 +24945,10 @@
                 }
               ]
             },
-            hljs2.QUOTE_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             NUMBER,
             CONSTRUCTOR,
-            hljs2.inherit(hljs2.TITLE_MODE, { begin: "^[_a-z][\\w']*" }),
+            hljs.inherit(hljs.TITLE_MODE, { begin: "^[_a-z][\\w']*" }),
             // No markup, prevents infix operators from being recognized as comments.
             { begin: `(?!-)${symbol}--+|--+(?!-)${symbol}` },
             COMMENT,
@@ -24794,7 +24966,7 @@
   // node_modules/highlight.js/lib/languages/haxe.js
   var require_haxe = __commonJS({
     "node_modules/highlight.js/lib/languages/haxe.js"(exports, module) {
-      function haxe(hljs2) {
+      function haxe(hljs) {
         const IDENT_RE = "[a-zA-Z_$][a-zA-Z0-9_$]*";
         const HAXE_NUMBER_RE = /(-?)(\b0[xX][a-fA-F0-9_]+|(\b\d+(\.[\d_]*)?|\.[\d_]+)(([eE][-+]?\d+)|i32|u32|i64|f64)?)/;
         const HAXE_BASIC_TYPES = "Int Float String Bool Dynamic Void Array ";
@@ -24813,7 +24985,7 @@
               begin: "'",
               end: "'",
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 {
                   className: "subst",
                   // interpolation
@@ -24828,9 +25000,9 @@
                 }
               ]
             },
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             {
               className: "number",
               begin: HAXE_NUMBER_RE,
@@ -24884,12 +25056,12 @@
               // enums
               beginKeywords: "enum",
               end: /\{/,
-              contains: [hljs2.TITLE_MODE]
+              contains: [hljs.TITLE_MODE]
             },
             {
               className: "title.class",
               // abstracts
-              begin: "\\babstract\\b(?=\\s*" + hljs2.IDENT_RE + "\\s*\\()",
+              begin: "\\babstract\\b(?=\\s*" + hljs.IDENT_RE + "\\s*\\()",
               end: /[\{$]/,
               contains: [
                 {
@@ -24913,7 +25085,7 @@
                   excludeBegin: true,
                   excludeEnd: true
                 },
-                hljs2.TITLE_MODE
+                hljs.TITLE_MODE
               ],
               keywords: { keyword: "abstract from to" }
             },
@@ -24932,12 +25104,12 @@
                   contains: [
                     {
                       className: "type",
-                      begin: hljs2.IDENT_RE,
+                      begin: hljs.IDENT_RE,
                       relevance: 0
                     }
                   ]
                 },
-                hljs2.TITLE_MODE
+                hljs.TITLE_MODE
               ]
             },
             {
@@ -24946,7 +25118,7 @@
               end: /\(/,
               excludeEnd: true,
               illegal: /\S/,
-              contains: [hljs2.TITLE_MODE]
+              contains: [hljs.TITLE_MODE]
             }
           ],
           illegal: /<\//
@@ -24959,7 +25131,7 @@
   // node_modules/highlight.js/lib/languages/hsp.js
   var require_hsp = __commonJS({
     "node_modules/highlight.js/lib/languages/hsp.js"(exports, module) {
-      function hsp(hljs2) {
+      function hsp(hljs) {
         return {
           name: "HSP",
           case_insensitive: true,
@@ -24968,18 +25140,18 @@
             keyword: "goto gosub return break repeat loop continue wait await dim sdim foreach dimtype dup dupptr end stop newmod delmod mref run exgoto on mcall assert logmes newlab resume yield onexit onerror onkey onclick oncmd exist delete mkdir chdir dirlist bload bsave bcopy memfile if else poke wpoke lpoke getstr chdpm memexpand memcpy memset notesel noteadd notedel noteload notesave randomize noteunsel noteget split strrep setease button chgdisp exec dialog mmload mmplay mmstop mci pset pget syscolor mes print title pos circle cls font sysfont objsize picload color palcolor palette redraw width gsel gcopy gzoom gmode bmpsave hsvcolor getkey listbox chkbox combox input mesbox buffer screen bgscr mouse objsel groll line clrobj boxf objprm objmode stick grect grotate gsquare gradf objimage objskip objenable celload celdiv celput newcom querycom delcom cnvstow comres axobj winobj sendmsg comevent comevarg sarrayconv callfunc cnvwtos comevdisp libptr system hspstat hspver stat cnt err strsize looplev sublev iparam wparam lparam refstr refdval int rnd strlen length length2 length3 length4 vartype gettime peek wpeek lpeek varptr varuse noteinfo instr abs limit getease str strmid strf getpath strtrim sin cos tan atan sqrt double absf expf logf limitf powf geteasef mousex mousey mousew hwnd hinstance hdc ginfo objinfo dirinfo sysinfo thismod __hspver__ __hsp30__ __date__ __time__ __line__ __file__ _debug __hspdef__ and or xor not screen_normal screen_palette screen_hide screen_fixedsize screen_tool screen_frame gmode_gdi gmode_mem gmode_rgb0 gmode_alpha gmode_rgb0alpha gmode_add gmode_sub gmode_pixela ginfo_mx ginfo_my ginfo_act ginfo_sel ginfo_wx1 ginfo_wy1 ginfo_wx2 ginfo_wy2 ginfo_vx ginfo_vy ginfo_sizex ginfo_sizey ginfo_winx ginfo_winy ginfo_mesx ginfo_mesy ginfo_r ginfo_g ginfo_b ginfo_paluse ginfo_dispx ginfo_dispy ginfo_cx ginfo_cy ginfo_intid ginfo_newid ginfo_sx ginfo_sy objinfo_mode objinfo_bmscr objinfo_hwnd notemax notesize dir_cur dir_exe dir_win dir_sys dir_cmdline dir_desktop dir_mydoc dir_tv font_normal font_bold font_italic font_underline font_strikeout font_antialias objmode_normal objmode_guifont objmode_usefont gsquare_grad msgothic msmincho do until while wend for next _break _continue switch case default swbreak swend ddim ldim alloc m_pi rad2deg deg2rad ease_linear ease_quad_in ease_quad_out ease_quad_inout ease_cubic_in ease_cubic_out ease_cubic_inout ease_quartic_in ease_quartic_out ease_quartic_inout ease_bounce_in ease_bounce_out ease_bounce_inout ease_shake_in ease_shake_out ease_shake_inout ease_loop"
           },
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.APOS_STRING_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE,
             {
               // multi-line string
               className: "string",
               begin: /\{"/,
               end: /"\}/,
-              contains: [hljs2.BACKSLASH_ESCAPE]
+              contains: [hljs.BACKSLASH_ESCAPE]
             },
-            hljs2.COMMENT(";", "$", { relevance: 0 }),
+            hljs.COMMENT(";", "$", { relevance: 0 }),
             {
               // pre-processor
               className: "meta",
@@ -24987,11 +25159,11 @@
               end: "$",
               keywords: { keyword: "addion cfunc cmd cmpopt comfunc const defcfunc deffunc define else endif enum epack func global if ifdef ifndef include modcfunc modfunc modinit modterm module pack packopt regcmd runtime undef usecom uselib" },
               contains: [
-                hljs2.inherit(hljs2.QUOTE_STRING_MODE, { className: "string" }),
-                hljs2.NUMBER_MODE,
-                hljs2.C_NUMBER_MODE,
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE
+                hljs.inherit(hljs.QUOTE_STRING_MODE, { className: "string" }),
+                hljs.NUMBER_MODE,
+                hljs.C_NUMBER_MODE,
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE
               ]
             },
             {
@@ -24999,8 +25171,8 @@
               className: "symbol",
               begin: "^\\*(\\w+|@)"
             },
-            hljs2.NUMBER_MODE,
-            hljs2.C_NUMBER_MODE
+            hljs.NUMBER_MODE,
+            hljs.C_NUMBER_MODE
           ]
         };
       }
@@ -25011,8 +25183,8 @@
   // node_modules/highlight.js/lib/languages/http.js
   var require_http = __commonJS({
     "node_modules/highlight.js/lib/languages/http.js"(exports, module) {
-      function http(hljs2) {
-        const regex = hljs2.regex;
+      function http(hljs) {
+        const regex = hljs.regex;
         const VERSION = "HTTP/([32]|1\\.[01])";
         const HEADER_NAME = /[A-Za-z][A-Za-z0-9-]*/;
         const HEADER = {
@@ -25093,7 +25265,7 @@
               }
             },
             // to allow headers to work even without a preamble
-            hljs2.inherit(HEADER, { relevance: 0 })
+            hljs.inherit(HEADER, { relevance: 0 })
           ]
         };
       }
@@ -25104,7 +25276,7 @@
   // node_modules/highlight.js/lib/languages/hy.js
   var require_hy = __commonJS({
     "node_modules/highlight.js/lib/languages/hy.js"(exports, module) {
-      function hy(hljs2) {
+      function hy(hljs) {
         const SYMBOLSTART = "a-zA-Z_\\-!.?+*=<>&#'";
         const SYMBOL_RE = "[" + SYMBOLSTART + "][" + SYMBOLSTART + "0-9/;:]*";
         const keywords = {
@@ -25124,8 +25296,8 @@
           begin: SIMPLE_NUMBER_RE,
           relevance: 0
         };
-        const STRING = hljs2.inherit(hljs2.QUOTE_STRING_MODE, { illegal: null });
-        const COMMENT = hljs2.COMMENT(
+        const STRING = hljs.inherit(hljs.QUOTE_STRING_MODE, { illegal: null });
+        const COMMENT = hljs.COMMENT(
           ";",
           "$",
           { relevance: 0 }
@@ -25143,7 +25315,7 @@
           className: "comment",
           begin: "\\^" + SYMBOL_RE
         };
-        const HINT_COL = hljs2.COMMENT("\\^\\{", "\\}");
+        const HINT_COL = hljs.COMMENT("\\^\\{", "\\}");
         const KEY = {
           className: "symbol",
           begin: "[:]{1,2}" + SYMBOL_RE
@@ -25176,7 +25348,7 @@
           SYMBOL
         ];
         LIST.contains = [
-          hljs2.COMMENT("comment", ""),
+          hljs.COMMENT("comment", ""),
           NAME,
           BODY
         ];
@@ -25187,7 +25359,7 @@
           aliases: ["hylang"],
           illegal: /\S/,
           contains: [
-            hljs2.SHEBANG(),
+            hljs.SHEBANG(),
             LIST,
             STRING,
             HINT,
@@ -25207,7 +25379,7 @@
   // node_modules/highlight.js/lib/languages/inform7.js
   var require_inform7 = __commonJS({
     "node_modules/highlight.js/lib/languages/inform7.js"(exports, module) {
-      function inform7(hljs2) {
+      function inform7(hljs) {
         const START_BRACKET = "\\[";
         const END_BRACKET = "\\]";
         return {
@@ -25269,17 +25441,17 @@
   // node_modules/highlight.js/lib/languages/ini.js
   var require_ini = __commonJS({
     "node_modules/highlight.js/lib/languages/ini.js"(exports, module) {
-      function ini(hljs2) {
-        const regex = hljs2.regex;
+      function ini(hljs) {
+        const regex = hljs.regex;
         const NUMBERS = {
           className: "number",
           relevance: 0,
           variants: [
             { begin: /([+-]+)?[\d]+_[\d_]+/ },
-            { begin: hljs2.NUMBER_RE }
+            { begin: hljs.NUMBER_RE }
           ]
         };
-        const COMMENTS = hljs2.COMMENT();
+        const COMMENTS = hljs.COMMENT();
         COMMENTS.variants = [
           {
             begin: /;/,
@@ -25303,7 +25475,7 @@
         };
         const STRINGS = {
           className: "string",
-          contains: [hljs2.BACKSLASH_ESCAPE],
+          contains: [hljs.BACKSLASH_ESCAPE],
           variants: [
             {
               begin: "'''",
@@ -25390,8 +25562,8 @@
   // node_modules/highlight.js/lib/languages/irpf90.js
   var require_irpf90 = __commonJS({
     "node_modules/highlight.js/lib/languages/irpf90.js"(exports, module) {
-      function irpf90(hljs2) {
-        const regex = hljs2.regex;
+      function irpf90(hljs) {
+        const regex = hljs.regex;
         const PARAMS = {
           className: "params",
           begin: "\\(",
@@ -25419,11 +25591,11 @@
           keywords: F_KEYWORDS,
           illegal: /\/\*/,
           contains: [
-            hljs2.inherit(hljs2.APOS_STRING_MODE, {
+            hljs.inherit(hljs.APOS_STRING_MODE, {
               className: "string",
               relevance: 0
             }),
-            hljs2.inherit(hljs2.QUOTE_STRING_MODE, {
+            hljs.inherit(hljs.QUOTE_STRING_MODE, {
               className: "string",
               relevance: 0
             }),
@@ -25432,12 +25604,12 @@
               beginKeywords: "subroutine function program",
               illegal: "[${=\\n]",
               contains: [
-                hljs2.UNDERSCORE_TITLE_MODE,
+                hljs.UNDERSCORE_TITLE_MODE,
                 PARAMS
               ]
             },
-            hljs2.COMMENT("!", "$", { relevance: 0 }),
-            hljs2.COMMENT("begin_doc", "end_doc", { relevance: 10 }),
+            hljs.COMMENT("!", "$", { relevance: 0 }),
+            hljs.COMMENT("begin_doc", "end_doc", { relevance: 10 }),
             NUMBER
           ]
         };
@@ -25449,7 +25621,7 @@
   // node_modules/highlight.js/lib/languages/isbl.js
   var require_isbl = __commonJS({
     "node_modules/highlight.js/lib/languages/isbl.js"(exports, module) {
-      function isbl(hljs2) {
+      function isbl(hljs) {
         const UNDERSCORE_IDENT_RE = "[A-Za-z\u0410-\u042F\u0430-\u044F\u0451\u0401_!][A-Za-z\u0410-\u042F\u0430-\u044F\u0451\u0401_0-9]*";
         const FUNCTION_NAME_IDENT_RE = "[A-Za-z\u0410-\u042F\u0430-\u044F\u0451\u0401_][A-Za-z\u0410-\u042F\u0430-\u044F\u0451\u0401_0-9]*";
         const KEYWORD = "and \u0438 else \u0438\u043D\u0430\u0447\u0435 endexcept endfinally endforeach \u043A\u043E\u043D\u0435\u0446\u0432\u0441\u0435 endif \u043A\u043E\u043D\u0435\u0446\u0435\u0441\u043B\u0438 endwhile \u043A\u043E\u043D\u0435\u0446\u043F\u043E\u043A\u0430 except exitfor finally foreach \u0432\u0441\u0435 if \u0435\u0441\u043B\u0438 in \u0432 not \u043D\u0435 or \u0438\u043B\u0438 try while \u043F\u043E\u043A\u0430 ";
@@ -25587,7 +25759,7 @@
         const LITERAL = "null true false nil ";
         const NUMBERS = {
           className: "number",
-          begin: hljs2.NUMBER_RE,
+          begin: hljs.NUMBER_RE,
           relevance: 0
         };
         const STRINGS = {
@@ -25614,7 +25786,7 @@
           end: "$",
           relevance: 0,
           contains: [
-            hljs2.PHRASAL_WORDS_MODE,
+            hljs.PHRASAL_WORDS_MODE,
             DOCTAGS
           ]
         };
@@ -25624,7 +25796,7 @@
           end: "\\*/",
           relevance: 0,
           contains: [
-            hljs2.PHRASAL_WORDS_MODE,
+            hljs.PHRASAL_WORDS_MODE,
             DOCTAGS
           ]
         };
@@ -25640,7 +25812,7 @@
           literal: LITERAL
         };
         const METHODS = {
-          begin: "\\.\\s*" + hljs2.UNDERSCORE_IDENT_RE,
+          begin: "\\.\\s*" + hljs.UNDERSCORE_IDENT_RE,
           keywords: KEYWORDS,
           relevance: 0
         };
@@ -25743,8 +25915,8 @@
           return recurRegex(re, substitution, depth - 1);
         });
       }
-      function java(hljs2) {
-        const regex = hljs2.regex;
+      function java(hljs) {
+        const regex = hljs.regex;
         const JAVA_IDENT_RE = "[\xC0-\u02B8a-zA-Z_$][\xC0-\u02B8a-zA-Z_$0-9]*";
         const GENERIC_IDENT_RE = JAVA_IDENT_RE + recurRegex("(?:<" + JAVA_IDENT_RE + "~~~(?:\\s*,\\s*" + JAVA_IDENT_RE + "~~~)*>)?", /~~~/g, 2);
         const MAIN_KEYWORDS = [
@@ -25835,7 +26007,7 @@
           end: /\)/,
           keywords: KEYWORDS,
           relevance: 0,
-          contains: [hljs2.C_BLOCK_COMMENT_MODE],
+          contains: [hljs.C_BLOCK_COMMENT_MODE],
           endsParent: true
         };
         return {
@@ -25844,7 +26016,7 @@
           keywords: KEYWORDS,
           illegal: /<\/|#/,
           contains: [
-            hljs2.COMMENT(
+            hljs.COMMENT(
               "/\\*\\*",
               "\\*/",
               {
@@ -25868,16 +26040,16 @@
               keywords: "import",
               relevance: 2
             },
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             {
               begin: /"""/,
               end: /"""/,
               className: "string",
-              contains: [hljs2.BACKSLASH_ESCAPE]
+              contains: [hljs.BACKSLASH_ESCAPE]
             },
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             {
               match: [
                 /\b(?:class|interface|enum|extends|implements|new)/,
@@ -25920,8 +26092,8 @@
               },
               contains: [
                 PARAMS,
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE
               ]
             },
             {
@@ -25933,7 +26105,7 @@
             {
               begin: [
                 "(?:" + GENERIC_IDENT_RE + "\\s+)",
-                hljs2.UNDERSCORE_IDENT_RE,
+                hljs.UNDERSCORE_IDENT_RE,
                 /\s*(?=\()/
               ],
               className: { 2: "title.function" },
@@ -25947,14 +26119,14 @@
                   relevance: 0,
                   contains: [
                     ANNOTATION,
-                    hljs2.APOS_STRING_MODE,
-                    hljs2.QUOTE_STRING_MODE,
+                    hljs.APOS_STRING_MODE,
+                    hljs.QUOTE_STRING_MODE,
                     NUMERIC,
-                    hljs2.C_BLOCK_COMMENT_MODE
+                    hljs.C_BLOCK_COMMENT_MODE
                   ]
                 },
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE
               ]
             },
             NUMERIC,
@@ -26120,8 +26292,8 @@
         TYPES,
         ERROR_TYPES
       );
-      function javascript(hljs2) {
-        const regex = hljs2.regex;
+      function javascript(hljs) {
+        const regex = hljs.regex;
         const hasClosingTag = (match, { after }) => {
           const tag = "</" + match[0].slice(1);
           const pos = match.input.indexOf(tag, after);
@@ -26216,7 +26388,7 @@
             end: "`",
             returnEnd: false,
             contains: [
-              hljs2.BACKSLASH_ESCAPE,
+              hljs.BACKSLASH_ESCAPE,
               SUBST
             ],
             subLanguage: "xml"
@@ -26229,7 +26401,7 @@
             end: "`",
             returnEnd: false,
             contains: [
-              hljs2.BACKSLASH_ESCAPE,
+              hljs.BACKSLASH_ESCAPE,
               SUBST
             ],
             subLanguage: "css"
@@ -26242,7 +26414,7 @@
             end: "`",
             returnEnd: false,
             contains: [
-              hljs2.BACKSLASH_ESCAPE,
+              hljs.BACKSLASH_ESCAPE,
               SUBST
             ],
             subLanguage: "graphql"
@@ -26253,11 +26425,11 @@
           begin: "`",
           end: "`",
           contains: [
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             SUBST
           ]
         };
-        const JSDOC_COMMENT = hljs2.COMMENT(
+        const JSDOC_COMMENT = hljs.COMMENT(
           /\/\*\*(?!\/)/,
           "\\*/",
           {
@@ -26300,13 +26472,13 @@
           className: "comment",
           variants: [
             JSDOC_COMMENT,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.C_LINE_COMMENT_MODE
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE
           ]
         };
         const SUBST_INTERNALS = [
-          hljs2.APOS_STRING_MODE,
-          hljs2.QUOTE_STRING_MODE,
+          hljs.APOS_STRING_MODE,
+          hljs.QUOTE_STRING_MODE,
           HTML_TEMPLATE,
           CSS_TEMPLATE,
           GRAPHQL_TEMPLATE,
@@ -26491,7 +26663,7 @@
             PARAMS
           ]
         };
-        const FUNC_LEAD_IN_RE = "(\\([^()]*(\\([^()]*(\\([^()]*\\)[^()]*)*\\)[^()]*)*\\)|" + hljs2.UNDERSCORE_IDENT_RE + ")\\s*=>";
+        const FUNC_LEAD_IN_RE = "(\\([^()]*(\\([^()]*(\\([^()]*\\)[^()]*)*\\)[^()]*)*\\)|" + hljs.UNDERSCORE_IDENT_RE + ")\\s*=>";
         const FUNCTION_VARIABLE = {
           match: [
             /const|var|let/,
@@ -26520,14 +26692,14 @@
           exports: { PARAMS_CONTAINS, CLASS_REFERENCE },
           illegal: /#(?![$_A-z])/,
           contains: [
-            hljs2.SHEBANG({
+            hljs.SHEBANG({
               label: "shebang",
               binary: "node",
               relevance: 5
             }),
             USE_STRICT,
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             HTML_TEMPLATE,
             CSS_TEMPLATE,
             GRAPHQL_TEMPLATE,
@@ -26545,12 +26717,12 @@
             FUNCTION_VARIABLE,
             {
               // "value" container
-              begin: "(" + hljs2.RE_STARTERS_RE + "|\\b(case|return|throw)\\b)\\s*",
+              begin: "(" + hljs.RE_STARTERS_RE + "|\\b(case|return|throw)\\b)\\s*",
               keywords: "return throw case",
               relevance: 0,
               contains: [
                 COMMENT,
-                hljs2.REGEXP_MODE,
+                hljs.REGEXP_MODE,
                 {
                   className: "function",
                   // we have to count the parens to make sure we actually have the
@@ -26564,7 +26736,7 @@
                       className: "params",
                       variants: [
                         {
-                          begin: hljs2.UNDERSCORE_IDENT_RE,
+                          begin: hljs.UNDERSCORE_IDENT_RE,
                           relevance: 0
                         },
                         {
@@ -26628,13 +26800,13 @@
               // we have to count the parens to make sure we actually have the correct
               // bounding ( ).  There could be any number of sub-expressions inside
               // also surrounded by parens.
-              begin: "\\b(?!function)" + hljs2.UNDERSCORE_IDENT_RE + "\\([^()]*(\\([^()]*(\\([^()]*\\)[^()]*)*\\)[^()]*)*\\)\\s*\\{",
+              begin: "\\b(?!function)" + hljs.UNDERSCORE_IDENT_RE + "\\([^()]*(\\([^()]*(\\([^()]*\\)[^()]*)*\\)[^()]*)*\\)\\s*\\{",
               // end parens
               returnBegin: true,
               label: "func.def",
               contains: [
                 PARAMS,
-                hljs2.inherit(hljs2.TITLE_MODE, { begin: IDENT_RE$1, className: "title.function" })
+                hljs.inherit(hljs.TITLE_MODE, { begin: IDENT_RE$1, className: "title.function" })
               ]
             },
             // catch ... so it won't trigger the property rule below
@@ -26673,7 +26845,7 @@
   // node_modules/highlight.js/lib/languages/jboss-cli.js
   var require_jboss_cli = __commonJS({
     "node_modules/highlight.js/lib/languages/jboss-cli.js"(exports, module) {
-      function jbossCli(hljs2) {
+      function jbossCli(hljs) {
         const PARAM = {
           begin: /[\w-]+ *=/,
           returnBegin: true,
@@ -26715,8 +26887,8 @@
             literal: "true false"
           },
           contains: [
-            hljs2.HASH_COMMENT_MODE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.HASH_COMMENT_MODE,
+            hljs.QUOTE_STRING_MODE,
             COMMAND_PARAMS,
             OPERATION,
             PATH,
@@ -26731,7 +26903,7 @@
   // node_modules/highlight.js/lib/languages/json.js
   var require_json = __commonJS({
     "node_modules/highlight.js/lib/languages/json.js"(exports, module) {
-      function json(hljs2) {
+      function json(hljs) {
         const ATTRIBUTE = {
           className: "attr",
           begin: /"(\\.|[^\\"\r\n])*"(?=\s*:)/,
@@ -26760,11 +26932,11 @@
           contains: [
             ATTRIBUTE,
             PUNCTUATION,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             LITERALS_MODE,
-            hljs2.C_NUMBER_MODE,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE
+            hljs.C_NUMBER_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE
           ],
           illegal: "\\S"
         };
@@ -26776,7 +26948,7 @@
   // node_modules/highlight.js/lib/languages/julia.js
   var require_julia = __commonJS({
     "node_modules/highlight.js/lib/languages/julia.js"(exports, module) {
-      function julia(hljs2) {
+      function julia(hljs) {
         const VARIABLE_NAME_RE = "[A-Za-z_\\u00A1-\\uFFFF][A-Za-z_0-9\\u00A1-\\uFFFF]*";
         const KEYWORD_LIST = [
           "baremodule",
@@ -27080,7 +27252,7 @@
         const STRING = {
           className: "string",
           contains: [
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             INTERPOLATION,
             INTERPOLATED_VARIABLE
           ],
@@ -27099,7 +27271,7 @@
         const COMMAND = {
           className: "string",
           contains: [
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             INTERPOLATION,
             INTERPOLATED_VARIABLE
           ],
@@ -27132,7 +27304,7 @@
           COMMAND,
           MACROCALL,
           COMMENT,
-          hljs2.HASH_COMMENT_MODE,
+          hljs.HASH_COMMENT_MODE,
           {
             className: "keyword",
             begin: "\\b(((abstract|primitive)\\s+)type|(mutable\\s+)?struct)\\b"
@@ -27150,7 +27322,7 @@
   // node_modules/highlight.js/lib/languages/julia-repl.js
   var require_julia_repl = __commonJS({
     "node_modules/highlight.js/lib/languages/julia-repl.js"(exports, module) {
-      function juliaRepl(hljs2) {
+      function juliaRepl(hljs) {
         return {
           name: "Julia REPL",
           contains: [
@@ -27207,7 +27379,7 @@
         ],
         relevance: 0
       };
-      function kotlin(hljs2) {
+      function kotlin(hljs) {
         const KEYWORDS = {
           keyword: "abstract as val var vararg get set class object open private protected public noinline crossinline dynamic final enum if else do while for when throw try catch finally import package is in fun override companion reified inline lateinit init interface annotation data sealed internal infix operator out by constructor super tailrec where const inner suspend typealias external expect actual",
           built_in: "Byte Short Char Int Long Boolean Float Double Void Unit Nothing",
@@ -27225,17 +27397,17 @@
         };
         const LABEL = {
           className: "symbol",
-          begin: hljs2.UNDERSCORE_IDENT_RE + "@"
+          begin: hljs.UNDERSCORE_IDENT_RE + "@"
         };
         const SUBST = {
           className: "subst",
           begin: /\$\{/,
           end: /\}/,
-          contains: [hljs2.C_NUMBER_MODE]
+          contains: [hljs.C_NUMBER_MODE]
         };
         const VARIABLE = {
           className: "variable",
-          begin: "\\$" + hljs2.UNDERSCORE_IDENT_RE
+          begin: "\\$" + hljs.UNDERSCORE_IDENT_RE
         };
         const STRING = {
           className: "string",
@@ -27255,14 +27427,14 @@
               begin: "'",
               end: "'",
               illegal: /\n/,
-              contains: [hljs2.BACKSLASH_ESCAPE]
+              contains: [hljs.BACKSLASH_ESCAPE]
             },
             {
               begin: '"',
               end: '"',
               illegal: /\n/,
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 VARIABLE,
                 SUBST
               ]
@@ -27272,32 +27444,32 @@
         SUBST.contains.push(STRING);
         const ANNOTATION_USE_SITE = {
           className: "meta",
-          begin: "@(?:file|property|field|get|set|receiver|param|setparam|delegate)\\s*:(?:\\s*" + hljs2.UNDERSCORE_IDENT_RE + ")?"
+          begin: "@(?:file|property|field|get|set|receiver|param|setparam|delegate)\\s*:(?:\\s*" + hljs.UNDERSCORE_IDENT_RE + ")?"
         };
         const ANNOTATION = {
           className: "meta",
-          begin: "@" + hljs2.UNDERSCORE_IDENT_RE,
+          begin: "@" + hljs.UNDERSCORE_IDENT_RE,
           contains: [
             {
               begin: /\(/,
               end: /\)/,
               contains: [
-                hljs2.inherit(STRING, { className: "string" }),
+                hljs.inherit(STRING, { className: "string" }),
                 "self"
               ]
             }
           ]
         };
         const KOTLIN_NUMBER_MODE = NUMERIC;
-        const KOTLIN_NESTED_COMMENT = hljs2.COMMENT(
+        const KOTLIN_NESTED_COMMENT = hljs.COMMENT(
           "/\\*",
           "\\*/",
-          { contains: [hljs2.C_BLOCK_COMMENT_MODE] }
+          { contains: [hljs.C_BLOCK_COMMENT_MODE] }
         );
         const KOTLIN_PAREN_TYPE = { variants: [
           {
             className: "type",
-            begin: hljs2.UNDERSCORE_IDENT_RE
+            begin: hljs.UNDERSCORE_IDENT_RE
           },
           {
             begin: /\(/,
@@ -27317,7 +27489,7 @@
           ],
           keywords: KEYWORDS,
           contains: [
-            hljs2.COMMENT(
+            hljs.COMMENT(
               "/\\*\\*",
               "\\*/",
               {
@@ -27330,7 +27502,7 @@
                 ]
               }
             ),
-            hljs2.C_LINE_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
             KOTLIN_NESTED_COMMENT,
             KEYWORDS_WITH_LABEL,
             LABEL,
@@ -27346,10 +27518,10 @@
               relevance: 5,
               contains: [
                 {
-                  begin: hljs2.UNDERSCORE_IDENT_RE + "\\s*\\(",
+                  begin: hljs.UNDERSCORE_IDENT_RE + "\\s*\\(",
                   returnBegin: true,
                   relevance: 0,
-                  contains: [hljs2.UNDERSCORE_TITLE_MODE]
+                  contains: [hljs.UNDERSCORE_TITLE_MODE]
                 },
                 {
                   className: "type",
@@ -27372,17 +27544,17 @@
                       endsWithParent: true,
                       contains: [
                         KOTLIN_PAREN_TYPE,
-                        hljs2.C_LINE_COMMENT_MODE,
+                        hljs.C_LINE_COMMENT_MODE,
                         KOTLIN_NESTED_COMMENT
                       ],
                       relevance: 0
                     },
-                    hljs2.C_LINE_COMMENT_MODE,
+                    hljs.C_LINE_COMMENT_MODE,
                     KOTLIN_NESTED_COMMENT,
                     ANNOTATION_USE_SITE,
                     ANNOTATION,
                     STRING,
-                    hljs2.C_NUMBER_MODE
+                    hljs.C_NUMBER_MODE
                   ]
                 },
                 KOTLIN_NESTED_COMMENT
@@ -27392,7 +27564,7 @@
               begin: [
                 /class|interface|trait/,
                 /\s+/,
-                hljs2.UNDERSCORE_IDENT_RE
+                hljs.UNDERSCORE_IDENT_RE
               ],
               beginScope: {
                 3: "title.class"
@@ -27403,7 +27575,7 @@
               illegal: "extends implements",
               contains: [
                 { beginKeywords: "public protected internal private constructor" },
-                hljs2.UNDERSCORE_TITLE_MODE,
+                hljs.UNDERSCORE_TITLE_MODE,
                 {
                   className: "type",
                   begin: /</,
@@ -27441,7 +27613,7 @@
   // node_modules/highlight.js/lib/languages/lasso.js
   var require_lasso = __commonJS({
     "node_modules/highlight.js/lib/languages/lasso.js"(exports, module) {
-      function lasso(hljs2) {
+      function lasso(hljs) {
         const LASSO_IDENT_RE = "[a-zA-Z_][\\w.]*";
         const LASSO_ANGLE_RE = "<\\?(lasso(script)?|=)";
         const LASSO_CLOSE_RE = "\\]|\\?>";
@@ -27451,7 +27623,7 @@
           built_in: "array date decimal duration integer map pair string tag xml null boolean bytes keyword list locale queue set stack staticarray local var variable global data self inherited currentcapture givenblock",
           keyword: "cache database_names database_schemanames database_tablenames define_tag define_type email_batch encode_set html_comment handle handle_error header if inline iterate ljax_target link link_currentaction link_currentgroup link_currentrecord link_detail link_firstgroup link_firstrecord link_lastgroup link_lastrecord link_nextgroup link_nextrecord link_prevgroup link_prevrecord log loop namespace_using output_none portal private protect records referer referrer repeating resultset rows search_args search_arguments select sort_args sort_arguments thread_atomic value_list while abort case else fail_if fail_ifnot fail if_empty if_false if_null if_true loop_abort loop_continue loop_count params params_up return return_value run_children soap_definetag soap_lastrequest soap_lastresponse tag_name ascending average by define descending do equals frozen group handle_failure import in into join let match max min on order parent protected provide public require returnhome skip split_thread sum take thread to trait type where with yield yieldhome"
         };
-        const HTML_COMMENT = hljs2.COMMENT(
+        const HTML_COMMENT = hljs.COMMENT(
           "<!--",
           "-->",
           { relevance: 0 }
@@ -27474,11 +27646,11 @@
           begin: "'" + LASSO_IDENT_RE + "'"
         };
         const LASSO_CODE = [
-          hljs2.C_LINE_COMMENT_MODE,
-          hljs2.C_BLOCK_COMMENT_MODE,
-          hljs2.inherit(hljs2.C_NUMBER_MODE, { begin: hljs2.C_NUMBER_RE + "|(-?infinity|NaN)\\b" }),
-          hljs2.inherit(hljs2.APOS_STRING_MODE, { illegal: null }),
-          hljs2.inherit(hljs2.QUOTE_STRING_MODE, { illegal: null }),
+          hljs.C_LINE_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
+          hljs.inherit(hljs.C_NUMBER_MODE, { begin: hljs.C_NUMBER_RE + "|(-?infinity|NaN)\\b" }),
+          hljs.inherit(hljs.APOS_STRING_MODE, { illegal: null }),
+          hljs.inherit(hljs.QUOTE_STRING_MODE, { illegal: null }),
           {
             className: "string",
             begin: "`",
@@ -27521,7 +27693,7 @@
             beginKeywords: "define",
             returnEnd: true,
             end: "\\(|=>",
-            contains: [hljs2.inherit(hljs2.TITLE_MODE, { begin: LASSO_IDENT_RE + "(=(?!>))?|[-+*/%](?!>)" })]
+            contains: [hljs.inherit(hljs.TITLE_MODE, { begin: LASSO_IDENT_RE + "(=(?!>))?|[-+*/%](?!>)" })]
           }
         ];
         return {
@@ -27591,8 +27763,8 @@
   // node_modules/highlight.js/lib/languages/latex.js
   var require_latex = __commonJS({
     "node_modules/highlight.js/lib/languages/latex.js"(exports, module) {
-      function latex(hljs2) {
-        const regex = hljs2.regex;
+      function latex(hljs) {
+        const regex = hljs.regex;
         const KNOWN_CONTROL_WORDS = regex.either(...[
           "(?:NeedsTeXFormat|RequirePackage|GetIdInfo)",
           "Provides(?:Expl)?(?:Package|Class|File)",
@@ -27695,7 +27867,7 @@
           end: "$",
           relevance: 10
         };
-        const COMMENT = hljs2.COMMENT(
+        const COMMENT = hljs.COMMENT(
           "%",
           "$",
           { relevance: 0 }
@@ -27717,7 +27889,7 @@
             ...EVERYTHING_BUT_VERBATIM
           ]
         };
-        const ARGUMENT_BRACES = hljs2.inherit(
+        const ARGUMENT_BRACES = hljs.inherit(
           BRACE_GROUP_NO_VERBATIM,
           {
             relevance: 0,
@@ -27767,7 +27939,7 @@
           };
         };
         const BEGIN_ENV = function(envname, starts_mode) {
-          return hljs2.inherit(
+          return hljs.inherit(
             {
               begin: "\\\\begin(?=[ 	]*(\\r?\\n[ 	]*)?\\{" + envname + "\\})",
               keywords: {
@@ -27780,7 +27952,7 @@
           );
         };
         const VERBATIM_DELIMITED_EQUAL = (innerName = "string") => {
-          return hljs2.END_SAME_AS_BEGIN({
+          return hljs.END_SAME_AS_BEGIN({
             className: innerName,
             begin: /(.|\r?\n)/,
             end: /(.|\r?\n)/,
@@ -27867,7 +28039,7 @@
   // node_modules/highlight.js/lib/languages/ldif.js
   var require_ldif = __commonJS({
     "node_modules/highlight.js/lib/languages/ldif.js"(exports, module) {
-      function ldif(hljs2) {
+      function ldif(hljs) {
         return {
           name: "LDIF",
           contains: [
@@ -27884,7 +28056,7 @@
               className: "literal",
               match: "^-"
             },
-            hljs2.HASH_COMMENT_MODE
+            hljs.HASH_COMMENT_MODE
           ]
         };
       }
@@ -27895,7 +28067,7 @@
   // node_modules/highlight.js/lib/languages/leaf.js
   var require_leaf = __commonJS({
     "node_modules/highlight.js/lib/languages/leaf.js"(exports, module) {
-      function leaf(hljs2) {
+      function leaf(hljs) {
         const IDENT = /([A-Za-z_][A-Za-z_0-9]*)?/;
         const LITERALS = [
           "true",
@@ -27990,13 +28162,13 @@
   // node_modules/highlight.js/lib/languages/less.js
   var require_less = __commonJS({
     "node_modules/highlight.js/lib/languages/less.js"(exports, module) {
-      var MODES = (hljs2) => {
+      var MODES = (hljs) => {
         return {
           IMPORTANT: {
             scope: "meta",
             begin: "!important"
           },
-          BLOCK_COMMENT: hljs2.C_BLOCK_COMMENT_MODE,
+          BLOCK_COMMENT: hljs.C_BLOCK_COMMENT_MODE,
           HEXCOLOR: {
             scope: "number",
             begin: /#(([0-9a-fA-F]{3,4})|(([0-9a-fA-F]{2}){3,4}))\b/
@@ -28011,13 +28183,13 @@
             end: /\]/,
             illegal: "$",
             contains: [
-              hljs2.APOS_STRING_MODE,
-              hljs2.QUOTE_STRING_MODE
+              hljs.APOS_STRING_MODE,
+              hljs.QUOTE_STRING_MODE
             ]
           },
           CSS_NUMBER_MODE: {
             scope: "number",
-            begin: hljs2.NUMBER_RE + "(%|em|ex|ch|rem|vw|vh|vmin|vmax|cm|mm|in|pt|pc|px|deg|grad|rad|turn|s|ms|Hz|kHz|dpi|dpcm|dppx)?",
+            begin: hljs.NUMBER_RE + "(%|em|ex|ch|rem|vw|vh|vmin|vmax|cm|mm|in|pt|pc|px|deg|grad|rad|turn|s|ms|Hz|kHz|dpi|dpcm|dppx)?",
             relevance: 0
           },
           CSS_VARIABLE: {
@@ -28702,8 +28874,8 @@
         "z-index"
       ].sort().reverse();
       var PSEUDO_SELECTORS = PSEUDO_CLASSES.concat(PSEUDO_ELEMENTS).sort().reverse();
-      function less(hljs2) {
-        const modes = MODES(hljs2);
+      function less(hljs) {
+        const modes = MODES(hljs);
         const PSEUDO_SELECTORS$1 = PSEUDO_SELECTORS;
         const AT_MODIFIERS = "and or not only";
         const IDENT_RE = "[\\w-]+";
@@ -28738,8 +28910,8 @@
           relevance: 0
         };
         VALUE_MODES.push(
-          hljs2.C_LINE_COMMENT_MODE,
-          hljs2.C_BLOCK_COMMENT_MODE,
+          hljs.C_LINE_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
           STRING_MODE("'"),
           STRING_MODE('"'),
           modes.CSS_NUMBER_MODE,
@@ -28852,8 +29024,8 @@
           illegal: `[<='$"]`,
           relevance: 0,
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             MIXIN_GUARD_MODE,
             IDENT_MODE("keyword", "all\\b"),
             IDENT_MODE("variable", "@\\{" + IDENT_RE + "\\}"),
@@ -28894,8 +29066,8 @@
           contains: [SELECTOR_MODE]
         };
         RULES.push(
-          hljs2.C_LINE_COMMENT_MODE,
-          hljs2.C_BLOCK_COMMENT_MODE,
+          hljs.C_LINE_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
           AT_RULE_MODE,
           VAR_RULE_MODE,
           PSEUDO_SELECTOR_MODE,
@@ -28918,7 +29090,7 @@
   // node_modules/highlight.js/lib/languages/lisp.js
   var require_lisp = __commonJS({
     "node_modules/highlight.js/lib/languages/lisp.js"(exports, module) {
-      function lisp(hljs2) {
+      function lisp(hljs) {
         const LISP_IDENT_RE = "[a-zA-Z_\\-+\\*\\/<=>&#][a-zA-Z0-9_\\-+*\\/<=>&#!]*";
         const MEC_RE = "\\|[^]*?\\|";
         const LISP_SIMPLE_NUMBER_RE = "(-|\\+)?\\d+(\\.\\d+|\\/\\d+)?((d|e|f|l|s|D|E|F|L|S)(\\+|-)?\\d+)?";
@@ -28942,8 +29114,8 @@
             }
           ]
         };
-        const STRING = hljs2.inherit(hljs2.QUOTE_STRING_MODE, { illegal: null });
-        const COMMENT = hljs2.COMMENT(
+        const STRING = hljs.inherit(hljs.QUOTE_STRING_MODE, { illegal: null });
+        const COMMENT = hljs.COMMENT(
           ";",
           "$",
           { relevance: 0 }
@@ -29037,7 +29209,7 @@
           illegal: /\S/,
           contains: [
             NUMBER,
-            hljs2.SHEBANG(),
+            hljs.SHEBANG(),
             LITERAL,
             STRING,
             COMMENT,
@@ -29055,7 +29227,7 @@
   // node_modules/highlight.js/lib/languages/livecodeserver.js
   var require_livecodeserver = __commonJS({
     "node_modules/highlight.js/lib/languages/livecodeserver.js"(exports, module) {
-      function livecodeserver(hljs2) {
+      function livecodeserver(hljs) {
         const VARIABLE = {
           className: "variable",
           variants: [
@@ -29065,16 +29237,16 @@
           relevance: 0
         };
         const COMMENT_MODES = [
-          hljs2.C_BLOCK_COMMENT_MODE,
-          hljs2.HASH_COMMENT_MODE,
-          hljs2.COMMENT("--", "$"),
-          hljs2.COMMENT("[^:]//", "$")
+          hljs.C_BLOCK_COMMENT_MODE,
+          hljs.HASH_COMMENT_MODE,
+          hljs.COMMENT("--", "$"),
+          hljs.COMMENT("[^:]//", "$")
         ];
-        const TITLE1 = hljs2.inherit(hljs2.TITLE_MODE, { variants: [
+        const TITLE1 = hljs.inherit(hljs.TITLE_MODE, { variants: [
           { begin: "\\b_*rig[A-Z][A-Za-z0-9_\\-]*" },
           { begin: "\\b_[a-z0-9\\-]+" }
         ] });
-        const TITLE2 = hljs2.inherit(hljs2.TITLE_MODE, { begin: "\\b([A-Za-z0-9_\\-]+)\\b" });
+        const TITLE2 = hljs.inherit(hljs.TITLE_MODE, { begin: "\\b([A-Za-z0-9_\\-]+)\\b" });
         return {
           name: "LiveCode",
           case_insensitive: false,
@@ -29096,10 +29268,10 @@
               contains: [
                 VARIABLE,
                 TITLE2,
-                hljs2.APOS_STRING_MODE,
-                hljs2.QUOTE_STRING_MODE,
-                hljs2.BINARY_NUMBER_MODE,
-                hljs2.C_NUMBER_MODE,
+                hljs.APOS_STRING_MODE,
+                hljs.QUOTE_STRING_MODE,
+                hljs.BINARY_NUMBER_MODE,
+                hljs.C_NUMBER_MODE,
                 TITLE1
               ]
             },
@@ -29120,10 +29292,10 @@
               contains: [
                 VARIABLE,
                 TITLE2,
-                hljs2.APOS_STRING_MODE,
-                hljs2.QUOTE_STRING_MODE,
-                hljs2.BINARY_NUMBER_MODE,
-                hljs2.C_NUMBER_MODE,
+                hljs.APOS_STRING_MODE,
+                hljs.QUOTE_STRING_MODE,
+                hljs.BINARY_NUMBER_MODE,
+                hljs.C_NUMBER_MODE,
                 TITLE1
               ]
             },
@@ -29138,10 +29310,10 @@
                 { begin: "\\?>" }
               ]
             },
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.BINARY_NUMBER_MODE,
-            hljs2.C_NUMBER_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.BINARY_NUMBER_MODE,
+            hljs.C_NUMBER_MODE,
             TITLE1
           ].concat(COMMENT_MODES),
           illegal: ";$|^\\[|^=|&|\\{"
@@ -29291,7 +29463,7 @@
         TYPES,
         ERROR_TYPES
       );
-      function livescript(hljs2) {
+      function livescript(hljs) {
         const LIVESCRIPT_BUILT_INS = [
           "npm",
           "print"
@@ -29342,7 +29514,7 @@
           built_in: BUILT_INS.concat(LIVESCRIPT_BUILT_INS)
         };
         const JS_IDENT_RE = "[A-Za-z$_](?:-[0-9A-Za-z$_]|[0-9A-Za-z$_])*";
-        const TITLE = hljs2.inherit(hljs2.TITLE_MODE, { begin: JS_IDENT_RE });
+        const TITLE = hljs.inherit(hljs.TITLE_MODE, { begin: JS_IDENT_RE });
         const SUBST = {
           className: "subst",
           begin: /#\{/,
@@ -29356,7 +29528,7 @@
           keywords: KEYWORDS$1
         };
         const EXPRESSIONS = [
-          hljs2.BINARY_NUMBER_MODE,
+          hljs.BINARY_NUMBER_MODE,
           {
             className: "number",
             begin: "(\\b0[xX][a-fA-F0-9_]+)|(\\b\\d(\\d|_\\d)*(\\.(\\d(\\d|_\\d)*)?)?(_*[eE]([-+]\\d(_\\d|\\d)*)?)?[_a-z]*)",
@@ -29373,18 +29545,18 @@
               {
                 begin: /'''/,
                 end: /'''/,
-                contains: [hljs2.BACKSLASH_ESCAPE]
+                contains: [hljs.BACKSLASH_ESCAPE]
               },
               {
                 begin: /'/,
                 end: /'/,
-                contains: [hljs2.BACKSLASH_ESCAPE]
+                contains: [hljs.BACKSLASH_ESCAPE]
               },
               {
                 begin: /"""/,
                 end: /"""/,
                 contains: [
-                  hljs2.BACKSLASH_ESCAPE,
+                  hljs.BACKSLASH_ESCAPE,
                   SUBST,
                   SUBST_SIMPLE
                 ]
@@ -29393,7 +29565,7 @@
                 begin: /"/,
                 end: /"/,
                 contains: [
-                  hljs2.BACKSLASH_ESCAPE,
+                  hljs.BACKSLASH_ESCAPE,
                   SUBST,
                   SUBST_SIMPLE
                 ]
@@ -29413,7 +29585,7 @@
                 end: "//[gim]*",
                 contains: [
                   SUBST,
-                  hljs2.HASH_COMMENT_MODE
+                  hljs.HASH_COMMENT_MODE
                 ]
               },
               {
@@ -29474,8 +29646,8 @@
           keywords: KEYWORDS$1,
           illegal: /\/\*/,
           contains: EXPRESSIONS.concat([
-            hljs2.COMMENT("\\/\\*", "\\*\\/"),
-            hljs2.HASH_COMMENT_MODE,
+            hljs.COMMENT("\\/\\*", "\\*\\/"),
+            hljs.HASH_COMMENT_MODE,
             SYMBOLS,
             // relevance booster
             {
@@ -29518,8 +29690,8 @@
   // node_modules/highlight.js/lib/languages/llvm.js
   var require_llvm = __commonJS({
     "node_modules/highlight.js/lib/languages/llvm.js"(exports, module) {
-      function llvm(hljs2) {
-        const regex = hljs2.regex;
+      function llvm(hljs) {
+        const regex = hljs.regex;
         const IDENT_RE = /([-a-zA-Z$._][\w$.-]*)/;
         const TYPE = {
           className: "type",
@@ -29583,8 +29755,8 @@
             // this matches "empty comments"...
             // ...because it's far more likely this is a statement terminator in
             // another language than an actual comment
-            hljs2.COMMENT(/;\s*$/, null, { relevance: 0 }),
-            hljs2.COMMENT(/;/, /$/),
+            hljs.COMMENT(/;\s*$/, null, { relevance: 0 }),
+            hljs.COMMENT(/;/, /$/),
             {
               className: "string",
               begin: /"/,
@@ -29612,7 +29784,7 @@
   // node_modules/highlight.js/lib/languages/lsl.js
   var require_lsl = __commonJS({
     "node_modules/highlight.js/lib/languages/lsl.js"(exports, module) {
-      function lsl(hljs2) {
+      function lsl(hljs) {
         const LSL_STRING_ESCAPE_CHARS = {
           className: "subst",
           begin: /\\[tn"\\]/
@@ -29626,7 +29798,7 @@
         const LSL_NUMBERS = {
           className: "number",
           relevance: 0,
-          begin: hljs2.C_NUMBER_RE
+          begin: hljs.C_NUMBER_RE
         };
         const LSL_CONSTANTS = {
           className: "literal",
@@ -29651,8 +29823,8 @@
             {
               className: "comment",
               variants: [
-                hljs2.COMMENT("//", "$"),
-                hljs2.COMMENT("/\\*", "\\*/")
+                hljs.COMMENT("//", "$"),
+                hljs.COMMENT("/\\*", "\\*/")
               ],
               relevance: 0
             },
@@ -29680,7 +29852,7 @@
   // node_modules/highlight.js/lib/languages/lua.js
   var require_lua = __commonJS({
     "node_modules/highlight.js/lib/languages/lua.js"(exports, module) {
-      function lua(hljs2) {
+      function lua(hljs) {
         const OPENING_LONG_BRACKET = "\\[=*\\[";
         const CLOSING_LONG_BRACKET = "\\]=*\\]";
         const LONG_BRACKETS = {
@@ -29689,8 +29861,8 @@
           contains: ["self"]
         };
         const COMMENTS = [
-          hljs2.COMMENT("--(?!" + OPENING_LONG_BRACKET + ")", "$"),
-          hljs2.COMMENT(
+          hljs.COMMENT("--(?!" + OPENING_LONG_BRACKET + ")", "$"),
+          hljs.COMMENT(
             "--" + OPENING_LONG_BRACKET,
             CLOSING_LONG_BRACKET,
             {
@@ -29702,7 +29874,7 @@
         return {
           name: "Lua",
           keywords: {
-            $pattern: hljs2.UNDERSCORE_IDENT_RE,
+            $pattern: hljs.UNDERSCORE_IDENT_RE,
             literal: "true false nil",
             keyword: "and break do else elseif end for goto if in local not or repeat return then until while",
             built_in: (
@@ -29716,7 +29888,7 @@
               beginKeywords: "function",
               end: "\\)",
               contains: [
-                hljs2.inherit(hljs2.TITLE_MODE, { begin: "([_a-zA-Z]\\w*\\.)*([_a-zA-Z]\\w*:)?[_a-zA-Z]\\w*" }),
+                hljs.inherit(hljs.TITLE_MODE, { begin: "([_a-zA-Z]\\w*\\.)*([_a-zA-Z]\\w*:)?[_a-zA-Z]\\w*" }),
                 {
                   className: "params",
                   begin: "\\(",
@@ -29725,9 +29897,9 @@
                 }
               ].concat(COMMENTS)
             },
-            hljs2.C_NUMBER_MODE,
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.C_NUMBER_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             {
               className: "string",
               begin: OPENING_LONG_BRACKET,
@@ -29745,13 +29917,13 @@
   // node_modules/highlight.js/lib/languages/makefile.js
   var require_makefile = __commonJS({
     "node_modules/highlight.js/lib/languages/makefile.js"(exports, module) {
-      function makefile(hljs2) {
+      function makefile(hljs) {
         const VARIABLE = {
           className: "variable",
           variants: [
             {
-              begin: "\\$\\(" + hljs2.UNDERSCORE_IDENT_RE + "\\)",
-              contains: [hljs2.BACKSLASH_ESCAPE]
+              begin: "\\$\\(" + hljs.UNDERSCORE_IDENT_RE + "\\)",
+              contains: [hljs.BACKSLASH_ESCAPE]
             },
             { begin: /\$[@%<?\^\+\*]/ }
           ]
@@ -29761,7 +29933,7 @@
           begin: /"/,
           end: /"/,
           contains: [
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             VARIABLE
           ]
         };
@@ -29772,7 +29944,7 @@
           keywords: { built_in: "subst patsubst strip findstring filter filter-out sort word wordlist firstword lastword dir notdir suffix basename addsuffix addprefix join wildcard realpath abspath error warning shell origin flavor foreach if or and call eval file value" },
           contains: [VARIABLE]
         };
-        const ASSIGNMENT = { begin: "^" + hljs2.UNDERSCORE_IDENT_RE + "\\s*(?=[:+?]?=)" };
+        const ASSIGNMENT = { begin: "^" + hljs.UNDERSCORE_IDENT_RE + "\\s*(?=[:+?]?=)" };
         const META = {
           className: "meta",
           begin: /^\.PHONY:/,
@@ -29800,7 +29972,7 @@
             keyword: "define endef undefine ifdef ifndef ifeq ifneq else endif include -include sinclude override export unexport private vpath"
           },
           contains: [
-            hljs2.HASH_COMMENT_MODE,
+            hljs.HASH_COMMENT_MODE,
             VARIABLE,
             QUOTE_STRING,
             FUNC,
@@ -37052,8 +37224,8 @@
         "$WolframID",
         "$WolframUUID"
       ];
-      function mathematica(hljs2) {
-        const regex = hljs2.regex;
+      function mathematica(hljs) {
+        const regex = hljs.regex;
         const BASE_RE = /([2-9]|[1-2]\d|[3][0-5])\^\^/;
         const BASE_DIGITS_RE = /(\w*\.\w+|\w+\.\w*|\w+)/;
         const NUMBER_RE = /(\d*\.\d+|\d+\.\d*|\d+)/;
@@ -37134,13 +37306,13 @@
             "message-name": "string"
           },
           contains: [
-            hljs2.COMMENT(/\(\*/, /\*\)/, { contains: ["self"] }),
+            hljs.COMMENT(/\(\*/, /\*\)/, { contains: ["self"] }),
             PATTERNS,
             SLOTS,
             MESSAGES,
             SYMBOLS,
             NAMED_CHARACTER,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             NUMBERS,
             OPERATORS,
             BRACES
@@ -37154,7 +37326,7 @@
   // node_modules/highlight.js/lib/languages/matlab.js
   var require_matlab = __commonJS({
     "node_modules/highlight.js/lib/languages/matlab.js"(exports, module) {
-      function matlab(hljs2) {
+      function matlab(hljs) {
         const TRANSPOSE_RE = "('|\\.')+";
         const TRANSPOSE = {
           relevance: 0,
@@ -37173,7 +37345,7 @@
               beginKeywords: "function",
               end: "$",
               contains: [
-                hljs2.UNDERSCORE_TITLE_MODE,
+                hljs.UNDERSCORE_TITLE_MODE,
                 {
                   className: "params",
                   variants: [
@@ -37201,7 +37373,7 @@
             },
             {
               className: "number",
-              begin: hljs2.C_NUMBER_RE,
+              begin: hljs.C_NUMBER_RE,
               relevance: 0,
               starts: TRANSPOSE
             },
@@ -37223,8 +37395,8 @@
               contains: [{ begin: '""' }],
               starts: TRANSPOSE
             },
-            hljs2.COMMENT("^\\s*%\\{\\s*$", "^\\s*%\\}\\s*$"),
-            hljs2.COMMENT("%", "$")
+            hljs.COMMENT("^\\s*%\\{\\s*$", "^\\s*%\\}\\s*$"),
+            hljs.COMMENT("%", "$")
           ]
         };
       }
@@ -37235,7 +37407,7 @@
   // node_modules/highlight.js/lib/languages/maxima.js
   var require_maxima = __commonJS({
     "node_modules/highlight.js/lib/languages/maxima.js"(exports, module) {
-      function maxima(hljs2) {
+      function maxima(hljs) {
         const KEYWORDS = "if then else elseif for thru do while unless step in and or not";
         const LITERALS = "true false unknown inf minf ind und %e %i %pi %phi %gamma";
         const BUILTIN_FUNCTIONS = " abasep abs absint absolute_real_time acos acosh acot acoth acsc acsch activate addcol add_edge add_edges addmatrices addrow add_vertex add_vertices adjacency_matrix adjoin adjoint af agd airy airy_ai airy_bi airy_dai airy_dbi algsys alg_type alias allroots alphacharp alphanumericp amortization %and annuity_fv annuity_pv antid antidiff AntiDifference append appendfile apply apply1 apply2 applyb1 apropos args arit_amortization arithmetic arithsum array arrayapply arrayinfo arraymake arraysetapply ascii asec asech asin asinh askinteger asksign assoc assoc_legendre_p assoc_legendre_q assume assume_external_byte_order asympa at atan atan2 atanh atensimp atom atvalue augcoefmatrix augmented_lagrangian_method av average_degree backtrace bars barsplot barsplot_description base64 base64_decode bashindices batch batchload bc2 bdvac belln benefit_cost bern bernpoly bernstein_approx bernstein_expand bernstein_poly bessel bessel_i bessel_j bessel_k bessel_simplify bessel_y beta beta_incomplete beta_incomplete_generalized beta_incomplete_regularized bezout bfallroots bffac bf_find_root bf_fmin_cobyla bfhzeta bfloat bfloatp bfpsi bfpsi0 bfzeta biconnected_components bimetric binomial bipartition block blockmatrixp bode_gain bode_phase bothcoef box boxplot boxplot_description break bug_report build_info|10 buildq build_sample burn cabs canform canten cardinality carg cartan cartesian_product catch cauchy_matrix cbffac cdf_bernoulli cdf_beta cdf_binomial cdf_cauchy cdf_chi2 cdf_continuous_uniform cdf_discrete_uniform cdf_exp cdf_f cdf_gamma cdf_general_finite_discrete cdf_geometric cdf_gumbel cdf_hypergeometric cdf_laplace cdf_logistic cdf_lognormal cdf_negative_binomial cdf_noncentral_chi2 cdf_noncentral_student_t cdf_normal cdf_pareto cdf_poisson cdf_rank_sum cdf_rayleigh cdf_signed_rank cdf_student_t cdf_weibull cdisplay ceiling central_moment cequal cequalignore cf cfdisrep cfexpand cgeodesic cgreaterp cgreaterpignore changename changevar chaosgame charat charfun charfun2 charlist charp charpoly chdir chebyshev_t chebyshev_u checkdiv check_overlaps chinese cholesky christof chromatic_index chromatic_number cint circulant_graph clear_edge_weight clear_rules clear_vertex_label clebsch_gordan clebsch_graph clessp clesspignore close closefile cmetric coeff coefmatrix cograd col collapse collectterms columnop columnspace columnswap columnvector combination combine comp2pui compare compfile compile compile_file complement_graph complete_bipartite_graph complete_graph complex_number_p components compose_functions concan concat conjugate conmetderiv connected_components connect_vertices cons constant constantp constituent constvalue cont2part content continuous_freq contortion contour_plot contract contract_edge contragrad contrib_ode convert coord copy copy_file copy_graph copylist copymatrix cor cos cosh cot coth cov cov1 covdiff covect covers crc24sum create_graph create_list csc csch csetup cspline ctaylor ct_coordsys ctransform ctranspose cube_graph cuboctahedron_graph cunlisp cv cycle_digraph cycle_graph cylindrical days360 dblint deactivate declare declare_constvalue declare_dimensions declare_fundamental_dimensions declare_fundamental_units declare_qty declare_translated declare_unit_conversion declare_units declare_weights decsym defcon define define_alt_display define_variable defint defmatch defrule defstruct deftaylor degree_sequence del delete deleten delta demo demoivre denom depends derivdegree derivlist describe desolve determinant dfloat dgauss_a dgauss_b dgeev dgemm dgeqrf dgesv dgesvd diag diagmatrix diag_matrix diagmatrixp diameter diff digitcharp dimacs_export dimacs_import dimension dimensionless dimensions dimensions_as_list direct directory discrete_freq disjoin disjointp disolate disp dispcon dispform dispfun dispJordan display disprule dispterms distrib divide divisors divsum dkummer_m dkummer_u dlange dodecahedron_graph dotproduct dotsimp dpart draw draw2d draw3d drawdf draw_file draw_graph dscalar echelon edge_coloring edge_connectivity edges eigens_by_jacobi eigenvalues eigenvectors eighth einstein eivals eivects elapsed_real_time elapsed_run_time ele2comp ele2polynome ele2pui elem elementp elevation_grid elim elim_allbut eliminate eliminate_using ellipse elliptic_e elliptic_ec elliptic_eu elliptic_f elliptic_kc elliptic_pi ematrix empty_graph emptyp endcons entermatrix entertensor entier equal equalp equiv_classes erf erfc erf_generalized erfi errcatch error errormsg errors euler ev eval_string evenp every evolution evolution2d evundiff example exp expand expandwrt expandwrt_factored expint expintegral_chi expintegral_ci expintegral_e expintegral_e1 expintegral_ei expintegral_e_simplify expintegral_li expintegral_shi expintegral_si explicit explose exponentialize express expt exsec extdiff extract_linear_equations extremal_subset ezgcd %f f90 facsum factcomb factor factorfacsum factorial factorout factorsum facts fast_central_elements fast_linsolve fasttimes featurep fernfale fft fib fibtophi fifth filename_merge file_search file_type fillarray findde find_root find_root_abs find_root_error find_root_rel first fix flatten flength float floatnump floor flower_snark flush flush1deriv flushd flushnd flush_output fmin_cobyla forget fortran fourcos fourexpand fourier fourier_elim fourint fourintcos fourintsin foursimp foursin fourth fposition frame_bracket freeof freshline fresnel_c fresnel_s from_adjacency_matrix frucht_graph full_listify fullmap fullmapl fullratsimp fullratsubst fullsetify funcsolve fundamental_dimensions fundamental_units fundef funmake funp fv g0 g1 gamma gamma_greek gamma_incomplete gamma_incomplete_generalized gamma_incomplete_regularized gauss gauss_a gauss_b gaussprob gcd gcdex gcdivide gcfac gcfactor gd generalized_lambert_w genfact gen_laguerre genmatrix gensym geo_amortization geo_annuity_fv geo_annuity_pv geomap geometric geometric_mean geosum get getcurrentdirectory get_edge_weight getenv get_lu_factors get_output_stream_string get_pixel get_plot_option get_tex_environment get_tex_environment_default get_vertex_label gfactor gfactorsum ggf girth global_variances gn gnuplot_close gnuplot_replot gnuplot_reset gnuplot_restart gnuplot_start go Gosper GosperSum gr2d gr3d gradef gramschmidt graph6_decode graph6_encode graph6_export graph6_import graph_center graph_charpoly graph_eigenvalues graph_flow graph_order graph_periphery graph_product graph_size graph_union great_rhombicosidodecahedron_graph great_rhombicuboctahedron_graph grid_graph grind grobner_basis grotzch_graph hamilton_cycle hamilton_path hankel hankel_1 hankel_2 harmonic harmonic_mean hav heawood_graph hermite hessian hgfred hilbertmap hilbert_matrix hipow histogram histogram_description hodge horner hypergeometric i0 i1 %ibes ic1 ic2 ic_convert ichr1 ichr2 icosahedron_graph icosidodecahedron_graph icurvature ident identfor identity idiff idim idummy ieqn %if ifactors iframes ifs igcdex igeodesic_coords ilt image imagpart imetric implicit implicit_derivative implicit_plot indexed_tensor indices induced_subgraph inferencep inference_result infix info_display init_atensor init_ctensor in_neighbors innerproduct inpart inprod inrt integerp integer_partitions integrate intersect intersection intervalp intopois intosum invariant1 invariant2 inverse_fft inverse_jacobi_cd inverse_jacobi_cn inverse_jacobi_cs inverse_jacobi_dc inverse_jacobi_dn inverse_jacobi_ds inverse_jacobi_nc inverse_jacobi_nd inverse_jacobi_ns inverse_jacobi_sc inverse_jacobi_sd inverse_jacobi_sn invert invert_by_adjoint invert_by_lu inv_mod irr is is_biconnected is_bipartite is_connected is_digraph is_edge_in_graph is_graph is_graph_or_digraph ishow is_isomorphic isolate isomorphism is_planar isqrt isreal_p is_sconnected is_tree is_vertex_in_graph items_inference %j j0 j1 jacobi jacobian jacobi_cd jacobi_cn jacobi_cs jacobi_dc jacobi_dn jacobi_ds jacobi_nc jacobi_nd jacobi_ns jacobi_p jacobi_sc jacobi_sd jacobi_sn JF jn join jordan julia julia_set julia_sin %k kdels kdelta kill killcontext kostka kron_delta kronecker_product kummer_m kummer_u kurtosis kurtosis_bernoulli kurtosis_beta kurtosis_binomial kurtosis_chi2 kurtosis_continuous_uniform kurtosis_discrete_uniform kurtosis_exp kurtosis_f kurtosis_gamma kurtosis_general_finite_discrete kurtosis_geometric kurtosis_gumbel kurtosis_hypergeometric kurtosis_laplace kurtosis_logistic kurtosis_lognormal kurtosis_negative_binomial kurtosis_noncentral_chi2 kurtosis_noncentral_student_t kurtosis_normal kurtosis_pareto kurtosis_poisson kurtosis_rayleigh kurtosis_student_t kurtosis_weibull label labels lagrange laguerre lambda lambert_w laplace laplacian_matrix last lbfgs lc2kdt lcharp lc_l lcm lc_u ldefint ldisp ldisplay legendre_p legendre_q leinstein length let letrules letsimp levi_civita lfreeof lgtreillis lhs li liediff limit Lindstedt linear linearinterpol linear_program linear_regression line_graph linsolve listarray list_correlations listify list_matrix_entries list_nc_monomials listoftens listofvars listp lmax lmin load loadfile local locate_matrix_entry log logcontract log_gamma lopow lorentz_gauge lowercasep lpart lratsubst lreduce lriemann lsquares_estimates lsquares_estimates_approximate lsquares_estimates_exact lsquares_mse lsquares_residual_mse lsquares_residuals lsum ltreillis lu_backsub lucas lu_factor %m macroexpand macroexpand1 make_array makebox makefact makegamma make_graph make_level_picture makelist makeOrders make_poly_continent make_poly_country make_polygon make_random_state make_rgb_picture makeset make_string_input_stream make_string_output_stream make_transform mandelbrot mandelbrot_set map mapatom maplist matchdeclare matchfix mat_cond mat_fullunblocker mat_function mathml_display mat_norm matrix matrixmap matrixp matrix_size mattrace mat_trace mat_unblocker max max_clique max_degree max_flow maximize_lp max_independent_set max_matching maybe md5sum mean mean_bernoulli mean_beta mean_binomial mean_chi2 mean_continuous_uniform mean_deviation mean_discrete_uniform mean_exp mean_f mean_gamma mean_general_finite_discrete mean_geometric mean_gumbel mean_hypergeometric mean_laplace mean_logistic mean_lognormal mean_negative_binomial mean_noncentral_chi2 mean_noncentral_student_t mean_normal mean_pareto mean_poisson mean_rayleigh mean_student_t mean_weibull median median_deviation member mesh metricexpandall mgf1_sha1 min min_degree min_edge_cut minfactorial minimalPoly minimize_lp minimum_spanning_tree minor minpack_lsquares minpack_solve min_vertex_cover min_vertex_cut mkdir mnewton mod mode_declare mode_identity ModeMatrix moebius mon2schur mono monomial_dimensions multibernstein_poly multi_display_for_texinfo multi_elem multinomial multinomial_coeff multi_orbit multiplot_mode multi_pui multsym multthru mycielski_graph nary natural_unit nc_degree ncexpt ncharpoly negative_picture neighbors new newcontext newdet new_graph newline newton new_variable next_prime nicedummies niceindices ninth nofix nonarray noncentral_moment nonmetricity nonnegintegerp nonscalarp nonzeroandfreeof notequal nounify nptetrad npv nroots nterms ntermst nthroot nullity nullspace num numbered_boundaries numberp number_to_octets num_distinct_partitions numerval numfactor num_partitions nusum nzeta nzetai nzetar octets_to_number octets_to_oid odd_girth oddp ode2 ode_check odelin oid_to_octets op opena opena_binary openr openr_binary openw openw_binary operatorp opsubst optimize %or orbit orbits ordergreat ordergreatp orderless orderlessp orthogonal_complement orthopoly_recur orthopoly_weight outermap out_neighbors outofpois pade parabolic_cylinder_d parametric parametric_surface parg parGosper parse_string parse_timedate part part2cont partfrac partition partition_set partpol path_digraph path_graph pathname_directory pathname_name pathname_type pdf_bernoulli pdf_beta pdf_binomial pdf_cauchy pdf_chi2 pdf_continuous_uniform pdf_discrete_uniform pdf_exp pdf_f pdf_gamma pdf_general_finite_discrete pdf_geometric pdf_gumbel pdf_hypergeometric pdf_laplace pdf_logistic pdf_lognormal pdf_negative_binomial pdf_noncentral_chi2 pdf_noncentral_student_t pdf_normal pdf_pareto pdf_poisson pdf_rank_sum pdf_rayleigh pdf_signed_rank pdf_student_t pdf_weibull pearson_skewness permanent permut permutation permutations petersen_graph petrov pickapart picture_equalp picturep piechart piechart_description planar_embedding playback plog plot2d plot3d plotdf ploteq plsquares pochhammer points poisdiff poisexpt poisint poismap poisplus poissimp poissubst poistimes poistrim polar polarform polartorect polar_to_xy poly_add poly_buchberger poly_buchberger_criterion poly_colon_ideal poly_content polydecomp poly_depends_p poly_elimination_ideal poly_exact_divide poly_expand poly_expt poly_gcd polygon poly_grobner poly_grobner_equal poly_grobner_member poly_grobner_subsetp poly_ideal_intersection poly_ideal_polysaturation poly_ideal_polysaturation1 poly_ideal_saturation poly_ideal_saturation1 poly_lcm poly_minimization polymod poly_multiply polynome2ele polynomialp poly_normal_form poly_normalize poly_normalize_list poly_polysaturation_extension poly_primitive_part poly_pseudo_divide poly_reduced_grobner poly_reduction poly_saturation_extension poly_s_polynomial poly_subtract polytocompanion pop postfix potential power_mod powerseries powerset prefix prev_prime primep primes principal_components print printf printfile print_graph printpois printprops prodrac product properties propvars psi psubst ptriangularize pui pui2comp pui2ele pui2polynome pui_direct puireduc push put pv qput qrange qty quad_control quad_qag quad_qagi quad_qagp quad_qags quad_qawc quad_qawf quad_qawo quad_qaws quadrilateral quantile quantile_bernoulli quantile_beta quantile_binomial quantile_cauchy quantile_chi2 quantile_continuous_uniform quantile_discrete_uniform quantile_exp quantile_f quantile_gamma quantile_general_finite_discrete quantile_geometric quantile_gumbel quantile_hypergeometric quantile_laplace quantile_logistic quantile_lognormal quantile_negative_binomial quantile_noncentral_chi2 quantile_noncentral_student_t quantile_normal quantile_pareto quantile_poisson quantile_rayleigh quantile_student_t quantile_weibull quartile_skewness quit qunit quotient racah_v racah_w radcan radius random random_bernoulli random_beta random_binomial random_bipartite_graph random_cauchy random_chi2 random_continuous_uniform random_digraph random_discrete_uniform random_exp random_f random_gamma random_general_finite_discrete random_geometric random_graph random_graph1 random_gumbel random_hypergeometric random_laplace random_logistic random_lognormal random_negative_binomial random_network random_noncentral_chi2 random_noncentral_student_t random_normal random_pareto random_permutation random_poisson random_rayleigh random_regular_graph random_student_t random_tournament random_tree random_weibull range rank rat ratcoef ratdenom ratdiff ratdisrep ratexpand ratinterpol rational rationalize ratnumer ratnump ratp ratsimp ratsubst ratvars ratweight read read_array read_binary_array read_binary_list read_binary_matrix readbyte readchar read_hashed_array readline read_list read_matrix read_nested_list readonly read_xpm real_imagpart_to_conjugate realpart realroots rearray rectangle rectform rectform_log_if_constant recttopolar rediff reduce_consts reduce_order region region_boundaries region_boundaries_plus rem remainder remarray rembox remcomps remcon remcoord remfun remfunction remlet remove remove_constvalue remove_dimensions remove_edge remove_fundamental_dimensions remove_fundamental_units remove_plot_option remove_vertex rempart remrule remsym remvalue rename rename_file reset reset_displays residue resolvante resolvante_alternee1 resolvante_bipartite resolvante_diedrale resolvante_klein resolvante_klein3 resolvante_produit_sym resolvante_unitaire resolvante_vierer rest resultant return reveal reverse revert revert2 rgb2level rhs ricci riemann rinvariant risch rk rmdir rncombine romberg room rootscontract round row rowop rowswap rreduce run_testsuite %s save saving scalarp scaled_bessel_i scaled_bessel_i0 scaled_bessel_i1 scalefactors scanmap scatterplot scatterplot_description scene schur2comp sconcat scopy scsimp scurvature sdowncase sec sech second sequal sequalignore set_alt_display setdifference set_draw_defaults set_edge_weight setelmx setequalp setify setp set_partitions set_plot_option set_prompt set_random_state set_tex_environment set_tex_environment_default setunits setup_autoload set_up_dot_simplifications set_vertex_label seventh sexplode sf sha1sum sha256sum shortest_path shortest_weighted_path show showcomps showratvars sierpinskiale sierpinskimap sign signum similaritytransform simp_inequality simplify_sum simplode simpmetderiv simtran sin sinh sinsert sinvertcase sixth skewness skewness_bernoulli skewness_beta skewness_binomial skewness_chi2 skewness_continuous_uniform skewness_discrete_uniform skewness_exp skewness_f skewness_gamma skewness_general_finite_discrete skewness_geometric skewness_gumbel skewness_hypergeometric skewness_laplace skewness_logistic skewness_lognormal skewness_negative_binomial skewness_noncentral_chi2 skewness_noncentral_student_t skewness_normal skewness_pareto skewness_poisson skewness_rayleigh skewness_student_t skewness_weibull slength smake small_rhombicosidodecahedron_graph small_rhombicuboctahedron_graph smax smin smismatch snowmap snub_cube_graph snub_dodecahedron_graph solve solve_rec solve_rec_rat some somrac sort sparse6_decode sparse6_encode sparse6_export sparse6_import specint spherical spherical_bessel_j spherical_bessel_y spherical_hankel1 spherical_hankel2 spherical_harmonic spherical_to_xyz splice split sposition sprint sqfr sqrt sqrtdenest sremove sremovefirst sreverse ssearch ssort sstatus ssubst ssubstfirst staircase standardize standardize_inverse_trig starplot starplot_description status std std1 std_bernoulli std_beta std_binomial std_chi2 std_continuous_uniform std_discrete_uniform std_exp std_f std_gamma std_general_finite_discrete std_geometric std_gumbel std_hypergeometric std_laplace std_logistic std_lognormal std_negative_binomial std_noncentral_chi2 std_noncentral_student_t std_normal std_pareto std_poisson std_rayleigh std_student_t std_weibull stemplot stirling stirling1 stirling2 strim striml strimr string stringout stringp strong_components struve_h struve_l sublis sublist sublist_indices submatrix subsample subset subsetp subst substinpart subst_parallel substpart substring subvar subvarp sum sumcontract summand_to_rec supcase supcontext symbolp symmdifference symmetricp system take_channel take_inference tan tanh taylor taylorinfo taylorp taylor_simplifier taytorat tcl_output tcontract tellrat tellsimp tellsimpafter tentex tenth test_mean test_means_difference test_normality test_proportion test_proportions_difference test_rank_sum test_sign test_signed_rank test_variance test_variance_ratio tex tex1 tex_display texput %th third throw time timedate timer timer_info tldefint tlimit todd_coxeter toeplitz tokens to_lisp topological_sort to_poly to_poly_solve totaldisrep totalfourier totient tpartpol trace tracematrix trace_options transform_sample translate translate_file transpose treefale tree_reduce treillis treinat triangle triangularize trigexpand trigrat trigreduce trigsimp trunc truncate truncated_cube_graph truncated_dodecahedron_graph truncated_icosahedron_graph truncated_tetrahedron_graph tr_warnings_get tube tutte_graph ueivects uforget ultraspherical underlying_graph undiff union unique uniteigenvectors unitp units unit_step unitvector unorder unsum untellrat untimer untrace uppercasep uricci uriemann uvect vandermonde_matrix var var1 var_bernoulli var_beta var_binomial var_chi2 var_continuous_uniform var_discrete_uniform var_exp var_f var_gamma var_general_finite_discrete var_geometric var_gumbel var_hypergeometric var_laplace var_logistic var_lognormal var_negative_binomial var_noncentral_chi2 var_noncentral_student_t var_normal var_pareto var_poisson var_rayleigh var_student_t var_weibull vector vectorpotential vectorsimp verbify vers vertex_coloring vertex_connectivity vertex_degree vertex_distance vertex_eccentricity vertex_in_degree vertex_out_degree vertices vertices_to_cycle vertices_to_path %w weyl wheel_graph wiener_index wigner_3j wigner_6j wigner_9j with_stdout write_binary_data writebyte write_data writefile wronskian xreduce xthru %y Zeilberger zeroequiv zerofor zeromatrix zeromatrixp zeta zgeev zheev zlange zn_add_table zn_carmichael_lambda zn_characteristic_factors zn_determinant zn_factor_generators zn_invert_by_lu zn_log zn_mult_table absboxchar activecontexts adapt_depth additive adim aform algebraic algepsilon algexact aliases allbut all_dotsimp_denoms allocation allsym alphabetic animation antisymmetric arrays askexp assume_pos assume_pos_pred assumescalar asymbol atomgrad atrig1 axes axis_3d axis_bottom axis_left axis_right axis_top azimuth background background_color backsubst berlefact bernstein_explicit besselexpand beta_args_sum_to_integer beta_expand bftorat bftrunc bindtest border boundaries_array box boxchar breakup %c capping cauchysum cbrange cbtics center cflength cframe_flag cnonmet_flag color color_bar color_bar_tics colorbox columns commutative complex cone context contexts contour contour_levels cosnpiflag ctaypov ctaypt ctayswitch ctayvar ct_coords ctorsion_flag ctrgsimp cube current_let_rule_package cylinder data_file_name debugmode decreasing default_let_rule_package delay dependencies derivabbrev derivsubst detout diagmetric diff dim dimensions dispflag display2d|10 display_format_internal distribute_over doallmxops domain domxexpt domxmxops domxnctimes dontfactor doscmxops doscmxplus dot0nscsimp dot0simp dot1simp dotassoc dotconstrules dotdistrib dotexptsimp dotident dotscrules draw_graph_program draw_realpart edge_color edge_coloring edge_partition edge_type edge_width %edispflag elevation %emode endphi endtheta engineering_format_floats enhanced3d %enumer epsilon_lp erfflag erf_representation errormsg error_size error_syms error_type %e_to_numlog eval even evenfun evflag evfun ev_point expandwrt_denom expintexpand expintrep expon expop exptdispflag exptisolate exptsubst facexpand facsum_combine factlim factorflag factorial_expand factors_only fb feature features file_name file_output_append file_search_demo file_search_lisp file_search_maxima|10 file_search_tests file_search_usage file_type_lisp file_type_maxima|10 fill_color fill_density filled_func fixed_vertices flipflag float2bf font font_size fortindent fortspaces fpprec fpprintprec functions gamma_expand gammalim gdet genindex gensumnum GGFCFMAX GGFINFINITY globalsolve gnuplot_command gnuplot_curve_styles gnuplot_curve_titles gnuplot_default_term_command gnuplot_dumb_term_command gnuplot_file_args gnuplot_file_name gnuplot_out_file gnuplot_pdf_term_command gnuplot_pm3d gnuplot_png_term_command gnuplot_postamble gnuplot_preamble gnuplot_ps_term_command gnuplot_svg_term_command gnuplot_term gnuplot_view_args Gosper_in_Zeilberger gradefs grid grid2d grind halfangles head_angle head_both head_length head_type height hypergeometric_representation %iargs ibase icc1 icc2 icounter idummyx ieqnprint ifb ifc1 ifc2 ifg ifgi ifr iframe_bracket_form ifri igeowedge_flag ikt1 ikt2 imaginary inchar increasing infeval infinity inflag infolists inm inmc1 inmc2 intanalysis integer integervalued integrate_use_rootsof integration_constant integration_constant_counter interpolate_color intfaclim ip_grid ip_grid_in irrational isolate_wrt_times iterations itr julia_parameter %k1 %k2 keepfloat key key_pos kinvariant kt label label_alignment label_orientation labels lassociative lbfgs_ncorrections lbfgs_nfeval_max leftjust legend letrat let_rule_packages lfg lg lhospitallim limsubst linear linear_solver linechar linel|10 linenum line_type linewidth line_width linsolve_params linsolvewarn lispdisp listarith listconstvars listdummyvars lmxchar load_pathname loadprint logabs logarc logcb logconcoeffp logexpand lognegint logsimp logx logx_secondary logy logy_secondary logz lriem m1pbranch macroexpansion macros mainvar manual_demo maperror mapprint matrix_element_add matrix_element_mult matrix_element_transpose maxapplydepth maxapplyheight maxima_tempdir|10 maxima_userdir|10 maxnegex MAX_ORD maxposex maxpsifracdenom maxpsifracnum maxpsinegint maxpsiposint maxtayorder mesh_lines_color method mod_big_prime mode_check_errorp mode_checkp mode_check_warnp mod_test mod_threshold modular_linear_solver modulus multiplicative multiplicities myoptions nary negdistrib negsumdispflag newline newtonepsilon newtonmaxiter nextlayerfactor niceindicespref nm nmc noeval nolabels nonegative_lp noninteger nonscalar noun noundisp nouns np npi nticks ntrig numer numer_pbranch obase odd oddfun opacity opproperties opsubst optimprefix optionset orientation origin orthopoly_returns_intervals outative outchar packagefile palette partswitch pdf_file pfeformat phiresolution %piargs piece pivot_count_sx pivot_max_sx plot_format plot_options plot_realpart png_file pochhammer_max_index points pointsize point_size points_joined point_type poislim poisson poly_coefficient_ring poly_elimination_order polyfactor poly_grobner_algorithm poly_grobner_debug poly_monomial_order poly_primary_elimination_order poly_return_term_list poly_secondary_elimination_order poly_top_reduction_only posfun position powerdisp pred prederror primep_number_of_tests product_use_gamma program programmode promote_float_to_bigfloat prompt proportional_axes props psexpand ps_file radexpand radius radsubstflag rassociative ratalgdenom ratchristof ratdenomdivide rateinstein ratepsilon ratfac rational ratmx ratprint ratriemann ratsimpexpons ratvarswitch ratweights ratweyl ratwtlvl real realonly redraw refcheck resolution restart resultant ric riem rmxchar %rnum_list rombergabs rombergit rombergmin rombergtol rootsconmode rootsepsilon run_viewer same_xy same_xyz savedef savefactors scalar scalarmatrixp scale scale_lp setcheck setcheckbreak setval show_edge_color show_edges show_edge_type show_edge_width show_id show_label showtime show_vertex_color show_vertex_size show_vertex_type show_vertices show_weight simp simplified_output simplify_products simpproduct simpsum sinnpiflag solvedecomposes solveexplicit solvefactors solvenullwarn solveradcan solvetrigwarn space sparse sphere spring_embedding_depth sqrtdispflag stardisp startphi starttheta stats_numer stringdisp structures style sublis_apply_lambda subnumsimp sumexpand sumsplitfact surface surface_hide svg_file symmetric tab taylordepth taylor_logexpand taylor_order_coefficients taylor_truncate_polynomials tensorkill terminal testsuite_files thetaresolution timer_devalue title tlimswitch tr track transcompile transform transform_xy translate_fast_arrays transparent transrun tr_array_as_ref tr_bound_function_applyp tr_file_tty_messagesp tr_float_can_branch_complex tr_function_call_default trigexpandplus trigexpandtimes triginverses trigsign trivial_solutions tr_numer tr_optimize_max_loop tr_semicompile tr_state_vars tr_warn_bad_function_calls tr_warn_fexpr tr_warn_meval tr_warn_mode tr_warn_undeclared tr_warn_undefined_variable tstep ttyoff tube_extremes ufg ug %unitexpand unit_vectors uric uriem use_fast_arrays user_preamble usersetunits values vect_cross verbose vertex_color vertex_coloring vertex_partition vertex_size vertex_type view warnings weyl width windowname windowtitle wired_surface wireframe xaxis xaxis_color xaxis_secondary xaxis_type xaxis_width xlabel xlabel_secondary xlength xrange xrange_secondary xtics xtics_axis xtics_rotate xtics_rotate_secondary xtics_secondary xtics_secondary_axis xu_grid x_voxel xy_file xyplane xy_scale yaxis yaxis_color yaxis_secondary yaxis_type yaxis_width ylabel ylabel_secondary ylength yrange yrange_secondary ytics ytics_axis ytics_rotate ytics_rotate_secondary ytics_secondary ytics_secondary_axis yv_grid y_voxel yx_ratio zaxis zaxis_color zaxis_type zaxis_width zeroa zerob zerobern zeta%pi zlabel zlabel_rotate zlength zmin zn_primroot_limit zn_primroot_pretest";
@@ -37256,7 +37428,7 @@
               end: "\\*/",
               contains: ["self"]
             },
-            hljs2.QUOTE_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             {
               className: "number",
               relevance: 0,
@@ -37294,27 +37466,27 @@
   // node_modules/highlight.js/lib/languages/mel.js
   var require_mel = __commonJS({
     "node_modules/highlight.js/lib/languages/mel.js"(exports, module) {
-      function mel(hljs2) {
+      function mel(hljs) {
         return {
           name: "MEL",
           keywords: "int float string vector matrix if else switch case default while do for in break continue global proc return about abs addAttr addAttributeEditorNodeHelp addDynamic addNewShelfTab addPP addPanelCategory addPrefixToName advanceToNextDrivenKey affectedNet affects aimConstraint air alias aliasAttr align alignCtx alignCurve alignSurface allViewFit ambientLight angle angleBetween animCone animCurveEditor animDisplay animView annotate appendStringArray applicationName applyAttrPreset applyTake arcLenDimContext arcLengthDimension arclen arrayMapper art3dPaintCtx artAttrCtx artAttrPaintVertexCtx artAttrSkinPaintCtx artAttrTool artBuildPaintMenu artFluidAttrCtx artPuttyCtx artSelectCtx artSetPaintCtx artUserPaintCtx assignCommand assignInputDevice assignViewportFactories attachCurve attachDeviceAttr attachSurface attrColorSliderGrp attrCompatibility attrControlGrp attrEnumOptionMenu attrEnumOptionMenuGrp attrFieldGrp attrFieldSliderGrp attrNavigationControlGrp attrPresetEditWin attributeExists attributeInfo attributeMenu attributeQuery autoKeyframe autoPlace bakeClip bakeFluidShading bakePartialHistory bakeResults bakeSimulation basename basenameEx batchRender bessel bevel bevelPlus binMembership bindSkin blend2 blendShape blendShapeEditor blendShapePanel blendTwoAttr blindDataType boneLattice boundary boxDollyCtx boxZoomCtx bufferCurve buildBookmarkMenu buildKeyframeMenu button buttonManip CBG cacheFile cacheFileCombine cacheFileMerge cacheFileTrack camera cameraView canCreateManip canvas capitalizeString catch catchQuiet ceil changeSubdivComponentDisplayLevel changeSubdivRegion channelBox character characterMap characterOutlineEditor characterize chdir checkBox checkBoxGrp checkDefaultRenderGlobals choice circle circularFillet clamp clear clearCache clip clipEditor clipEditorCurrentTimeCtx clipSchedule clipSchedulerOutliner clipTrimBefore closeCurve closeSurface cluster cmdFileOutput cmdScrollFieldExecuter cmdScrollFieldReporter cmdShell coarsenSubdivSelectionList collision color colorAtPoint colorEditor colorIndex colorIndexSliderGrp colorSliderButtonGrp colorSliderGrp columnLayout commandEcho commandLine commandPort compactHairSystem componentEditor compositingInterop computePolysetVolume condition cone confirmDialog connectAttr connectControl connectDynamic connectJoint connectionInfo constrain constrainValue constructionHistory container containsMultibyte contextInfo control convertFromOldLayers convertIffToPsd convertLightmap convertSolidTx convertTessellation convertUnit copyArray copyFlexor copyKey copySkinWeights cos cpButton cpCache cpClothSet cpCollision cpConstraint cpConvClothToMesh cpForces cpGetSolverAttr cpPanel cpProperty cpRigidCollisionFilter cpSeam cpSetEdit cpSetSolverAttr cpSolver cpSolverTypes cpTool cpUpdateClothUVs createDisplayLayer createDrawCtx createEditor createLayeredPsdFile createMotionField createNewShelf createNode createRenderLayer createSubdivRegion cross crossProduct ctxAbort ctxCompletion ctxEditMode ctxTraverse currentCtx currentTime currentTimeCtx currentUnit curve curveAddPtCtx curveCVCtx curveEPCtx curveEditorCtx curveIntersect curveMoveEPCtx curveOnSurface curveSketchCtx cutKey cycleCheck cylinder dagPose date defaultLightListCheckBox defaultNavigation defineDataServer defineVirtualDevice deformer deg_to_rad delete deleteAttr deleteShadingGroupsAndMaterials deleteShelfTab deleteUI deleteUnusedBrushes delrandstr detachCurve detachDeviceAttr detachSurface deviceEditor devicePanel dgInfo dgdirty dgeval dgtimer dimWhen directKeyCtx directionalLight dirmap dirname disable disconnectAttr disconnectJoint diskCache displacementToPoly displayAffected displayColor displayCull displayLevelOfDetail displayPref displayRGBColor displaySmoothness displayStats displayString displaySurface distanceDimContext distanceDimension doBlur dolly dollyCtx dopeSheetEditor dot dotProduct doubleProfileBirailSurface drag dragAttrContext draggerContext dropoffLocator duplicate duplicateCurve duplicateSurface dynCache dynControl dynExport dynExpression dynGlobals dynPaintEditor dynParticleCtx dynPref dynRelEdPanel dynRelEditor dynamicLoad editAttrLimits editDisplayLayerGlobals editDisplayLayerMembers editRenderLayerAdjustment editRenderLayerGlobals editRenderLayerMembers editor editorTemplate effector emit emitter enableDevice encodeString endString endsWith env equivalent equivalentTol erf error eval evalDeferred evalEcho event exactWorldBoundingBox exclusiveLightCheckBox exec executeForEachObject exists exp expression expressionEditorListen extendCurve extendSurface extrude fcheck fclose feof fflush fgetline fgetword file fileBrowserDialog fileDialog fileExtension fileInfo filetest filletCurve filter filterCurve filterExpand filterStudioImport findAllIntersections findAnimCurves findKeyframe findMenuItem findRelatedSkinCluster finder firstParentOf fitBspline flexor floatEq floatField floatFieldGrp floatScrollBar floatSlider floatSlider2 floatSliderButtonGrp floatSliderGrp floor flow fluidCacheInfo fluidEmitter fluidVoxelInfo flushUndo fmod fontDialog fopen formLayout format fprint frameLayout fread freeFormFillet frewind fromNativePath fwrite gamma gauss geometryConstraint getApplicationVersionAsFloat getAttr getClassification getDefaultBrush getFileList getFluidAttr getInputDeviceRange getMayaPanelTypes getModifiers getPanel getParticleAttr getPluginResource getenv getpid glRender glRenderEditor globalStitch gmatch goal gotoBindPose grabColor gradientControl gradientControlNoAttr graphDollyCtx graphSelectContext graphTrackCtx gravity grid gridLayout group groupObjectsByName HfAddAttractorToAS HfAssignAS HfBuildEqualMap HfBuildFurFiles HfBuildFurImages HfCancelAFR HfConnectASToHF HfCreateAttractor HfDeleteAS HfEditAS HfPerformCreateAS HfRemoveAttractorFromAS HfSelectAttached HfSelectAttractors HfUnAssignAS hardenPointCurve hardware hardwareRenderPanel headsUpDisplay headsUpMessage help helpLine hermite hide hilite hitTest hotBox hotkey hotkeyCheck hsv_to_rgb hudButton hudSlider hudSliderButton hwReflectionMap hwRender hwRenderLoad hyperGraph hyperPanel hyperShade hypot iconTextButton iconTextCheckBox iconTextRadioButton iconTextRadioCollection iconTextScrollList iconTextStaticLabel ikHandle ikHandleCtx ikHandleDisplayScale ikSolver ikSplineHandleCtx ikSystem ikSystemInfo ikfkDisplayMethod illustratorCurves image imfPlugins inheritTransform insertJoint insertJointCtx insertKeyCtx insertKnotCurve insertKnotSurface instance instanceable instancer intField intFieldGrp intScrollBar intSlider intSliderGrp interToUI internalVar intersect iprEngine isAnimCurve isConnected isDirty isParentOf isSameObject isTrue isValidObjectName isValidString isValidUiName isolateSelect itemFilter itemFilterAttr itemFilterRender itemFilterType joint jointCluster jointCtx jointDisplayScale jointLattice keyTangent keyframe keyframeOutliner keyframeRegionCurrentTimeCtx keyframeRegionDirectKeyCtx keyframeRegionDollyCtx keyframeRegionInsertKeyCtx keyframeRegionMoveKeyCtx keyframeRegionScaleKeyCtx keyframeRegionSelectKeyCtx keyframeRegionSetKeyCtx keyframeRegionTrackCtx keyframeStats lassoContext lattice latticeDeformKeyCtx launch launchImageEditor layerButton layeredShaderPort layeredTexturePort layout layoutDialog lightList lightListEditor lightListPanel lightlink lineIntersection linearPrecision linstep listAnimatable listAttr listCameras listConnections listDeviceAttachments listHistory listInputDeviceAxes listInputDeviceButtons listInputDevices listMenuAnnotation listNodeTypes listPanelCategories listRelatives listSets listTransforms listUnselected listerEditor loadFluid loadNewShelf loadPlugin loadPluginLanguageResources loadPrefObjects localizedPanelLabel lockNode loft log longNameOf lookThru ls lsThroughFilter lsType lsUI Mayatomr mag makeIdentity makeLive makePaintable makeRoll makeSingleSurface makeTubeOn makebot manipMoveContext manipMoveLimitsCtx manipOptions manipRotateContext manipRotateLimitsCtx manipScaleContext manipScaleLimitsCtx marker match max memory menu menuBarLayout menuEditor menuItem menuItemToShelf menuSet menuSetPref messageLine min minimizeApp mirrorJoint modelCurrentTimeCtx modelEditor modelPanel mouse movIn movOut move moveIKtoFK moveKeyCtx moveVertexAlongDirection multiProfileBirailSurface mute nParticle nameCommand nameField namespace namespaceInfo newPanelItems newton nodeCast nodeIconButton nodeOutliner nodePreset nodeType noise nonLinear normalConstraint normalize nurbsBoolean nurbsCopyUVSet nurbsCube nurbsEditUV nurbsPlane nurbsSelect nurbsSquare nurbsToPoly nurbsToPolygonsPref nurbsToSubdiv nurbsToSubdivPref nurbsUVSet nurbsViewDirectionVector objExists objectCenter objectLayer objectType objectTypeUI obsoleteProc oceanNurbsPreviewPlane offsetCurve offsetCurveOnSurface offsetSurface openGLExtension openMayaPref optionMenu optionMenuGrp optionVar orbit orbitCtx orientConstraint outlinerEditor outlinerPanel overrideModifier paintEffectsDisplay pairBlend palettePort paneLayout panel panelConfiguration panelHistory paramDimContext paramDimension paramLocator parent parentConstraint particle particleExists particleInstancer particleRenderInfo partition pasteKey pathAnimation pause pclose percent performanceOptions pfxstrokes pickWalk picture pixelMove planarSrf plane play playbackOptions playblast plugAttr plugNode pluginInfo pluginResourceUtil pointConstraint pointCurveConstraint pointLight pointMatrixMult pointOnCurve pointOnSurface pointPosition poleVectorConstraint polyAppend polyAppendFacetCtx polyAppendVertex polyAutoProjection polyAverageNormal polyAverageVertex polyBevel polyBlendColor polyBlindData polyBoolOp polyBridgeEdge polyCacheMonitor polyCheck polyChipOff polyClipboard polyCloseBorder polyCollapseEdge polyCollapseFacet polyColorBlindData polyColorDel polyColorPerVertex polyColorSet polyCompare polyCone polyCopyUV polyCrease polyCreaseCtx polyCreateFacet polyCreateFacetCtx polyCube polyCut polyCutCtx polyCylinder polyCylindricalProjection polyDelEdge polyDelFacet polyDelVertex polyDuplicateAndConnect polyDuplicateEdge polyEditUV polyEditUVShell polyEvaluate polyExtrudeEdge polyExtrudeFacet polyExtrudeVertex polyFlipEdge polyFlipUV polyForceUV polyGeoSampler polyHelix polyInfo polyInstallAction polyLayoutUV polyListComponentConversion polyMapCut polyMapDel polyMapSew polyMapSewMove polyMergeEdge polyMergeEdgeCtx polyMergeFacet polyMergeFacetCtx polyMergeUV polyMergeVertex polyMirrorFace polyMoveEdge polyMoveFacet polyMoveFacetUV polyMoveUV polyMoveVertex polyNormal polyNormalPerVertex polyNormalizeUV polyOptUvs polyOptions polyOutput polyPipe polyPlanarProjection polyPlane polyPlatonicSolid polyPoke polyPrimitive polyPrism polyProjection polyPyramid polyQuad polyQueryBlindData polyReduce polySelect polySelectConstraint polySelectConstraintMonitor polySelectCtx polySelectEditCtx polySeparate polySetToFaceNormal polySewEdge polyShortestPathCtx polySmooth polySoftEdge polySphere polySphericalProjection polySplit polySplitCtx polySplitEdge polySplitRing polySplitVertex polyStraightenUVBorder polySubdivideEdge polySubdivideFacet polyToSubdiv polyTorus polyTransfer polyTriangulate polyUVSet polyUnite polyWedgeFace popen popupMenu pose pow preloadRefEd print progressBar progressWindow projFileViewer projectCurve projectTangent projectionContext projectionManip promptDialog propModCtx propMove psdChannelOutliner psdEditTextureFile psdExport psdTextureFile putenv pwd python querySubdiv quit rad_to_deg radial radioButton radioButtonGrp radioCollection radioMenuItemCollection rampColorPort rand randomizeFollicles randstate rangeControl readTake rebuildCurve rebuildSurface recordAttr recordDevice redo reference referenceEdit referenceQuery refineSubdivSelectionList refresh refreshAE registerPluginResource rehash reloadImage removeJoint removeMultiInstance removePanelCategory rename renameAttr renameSelectionList renameUI render renderGlobalsNode renderInfo renderLayerButton renderLayerParent renderLayerPostProcess renderLayerUnparent renderManip renderPartition renderQualityNode renderSettings renderThumbnailUpdate renderWindowEditor renderWindowSelectContext renderer reorder reorderDeformers requires reroot resampleFluid resetAE resetPfxToPolyCamera resetTool resolutionNode retarget reverseCurve reverseSurface revolve rgb_to_hsv rigidBody rigidSolver roll rollCtx rootOf rot rotate rotationInterpolation roundConstantRadius rowColumnLayout rowLayout runTimeCommand runup sampleImage saveAllShelves saveAttrPreset saveFluid saveImage saveInitialState saveMenu savePrefObjects savePrefs saveShelf saveToolSettings scale scaleBrushBrightness scaleComponents scaleConstraint scaleKey scaleKeyCtx sceneEditor sceneUIReplacement scmh scriptCtx scriptEditorInfo scriptJob scriptNode scriptTable scriptToShelf scriptedPanel scriptedPanelType scrollField scrollLayout sculpt searchPathArray seed selLoadSettings select selectContext selectCurveCV selectKey selectKeyCtx selectKeyframeRegionCtx selectMode selectPref selectPriority selectType selectedNodes selectionConnection separator setAttr setAttrEnumResource setAttrMapping setAttrNiceNameResource setConstraintRestPosition setDefaultShadingGroup setDrivenKeyframe setDynamic setEditCtx setEditor setFluidAttr setFocus setInfinity setInputDeviceMapping setKeyCtx setKeyPath setKeyframe setKeyframeBlendshapeTargetWts setMenuMode setNodeNiceNameResource setNodeTypeFlag setParent setParticleAttr setPfxToPolyCamera setPluginResource setProject setStampDensity setStartupMessage setState setToolTo setUITemplate setXformManip sets shadingConnection shadingGeometryRelCtx shadingLightRelCtx shadingNetworkCompare shadingNode shapeCompare shelfButton shelfLayout shelfTabLayout shellField shortNameOf showHelp showHidden showManipCtx showSelectionInTitle showShadingGroupAttrEditor showWindow sign simplify sin singleProfileBirailSurface size sizeBytes skinCluster skinPercent smoothCurve smoothTangentSurface smoothstep snap2to2 snapKey snapMode snapTogetherCtx snapshot soft softMod softModCtx sort sound soundControl source spaceLocator sphere sphrand spotLight spotLightPreviewPort spreadSheetEditor spring sqrt squareSurface srtContext stackTrace startString startsWith stitchAndExplodeShell stitchSurface stitchSurfacePoints strcmp stringArrayCatenate stringArrayContains stringArrayCount stringArrayInsertAtIndex stringArrayIntersector stringArrayRemove stringArrayRemoveAtIndex stringArrayRemoveDuplicates stringArrayRemoveExact stringArrayToString stringToStringArray strip stripPrefixFromName stroke subdAutoProjection subdCleanTopology subdCollapse subdDuplicateAndConnect subdEditUV subdListComponentConversion subdMapCut subdMapSewMove subdMatchTopology subdMirror subdToBlind subdToPoly subdTransferUVsToCache subdiv subdivCrease subdivDisplaySmoothness substitute substituteAllString substituteGeometry substring surface surfaceSampler surfaceShaderList swatchDisplayPort switchTable symbolButton symbolCheckBox sysFile system tabLayout tan tangentConstraint texLatticeDeformContext texManipContext texMoveContext texMoveUVShellContext texRotateContext texScaleContext texSelectContext texSelectShortestPathCtx texSmudgeUVContext texWinToolCtx text textCurves textField textFieldButtonGrp textFieldGrp textManip textScrollList textToShelf textureDisplacePlane textureHairColor texturePlacementContext textureWindow threadCount threePointArcCtx timeControl timePort timerX toNativePath toggle toggleAxis toggleWindowVisibility tokenize tokenizeList tolerance tolower toolButton toolCollection toolDropped toolHasOptions toolPropertyWindow torus toupper trace track trackCtx transferAttributes transformCompare transformLimits translator trim trunc truncateFluidCache truncateHairCache tumble tumbleCtx turbulence twoPointArcCtx uiRes uiTemplate unassignInputDevice undo undoInfo ungroup uniform unit unloadPlugin untangleUV untitledFileName untrim upAxis updateAE userCtx uvLink uvSnapshot validateShelfName vectorize view2dToolCtx viewCamera viewClipPlane viewFit viewHeadOn viewLookAt viewManip viewPlace viewSet visor volumeAxis vortex waitCursor warning webBrowser webBrowserPrefs whatIs window windowPref wire wireContext workspace wrinkle wrinkleContext writeTake xbmLangPathList xform",
           illegal: "</",
           contains: [
-            hljs2.C_NUMBER_MODE,
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.C_NUMBER_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             {
               className: "string",
               begin: "`",
               end: "`",
-              contains: [hljs2.BACKSLASH_ESCAPE]
+              contains: [hljs.BACKSLASH_ESCAPE]
             },
             {
               // eats variables
               begin: /[$%@](\^\w\b|#\w+|[^\s\w{]|\{\w+\}|\w+)/
             },
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE
           ]
         };
       }
@@ -37325,7 +37497,7 @@
   // node_modules/highlight.js/lib/languages/mercury.js
   var require_mercury = __commonJS({
     "node_modules/highlight.js/lib/languages/mercury.js"(exports, module) {
-      function mercury(hljs2) {
+      function mercury(hljs) {
         const KEYWORDS = {
           keyword: "module use_module import_module include_module end_module initialise mutable initialize finalize finalise interface implementation pred mode func type inst solver any_pred any_func is semidet det nondet multi erroneous failure cc_nondet cc_multi typeclass instance where pragma promise external trace atomic or_else require_complete_switch require_det require_semidet require_multi require_nondet require_cc_multi require_cc_nondet require_erroneous require_failure",
           meta: (
@@ -37334,13 +37506,13 @@
           ),
           built_in: "some all not if then else true fail false try catch catch_any semidet_true semidet_false semidet_fail impure_true impure semipure"
         };
-        const COMMENT = hljs2.COMMENT("%", "$");
+        const COMMENT = hljs.COMMENT("%", "$");
         const NUMCODE = {
           className: "number",
           begin: "0'.\\|0[box][0-9a-fA-F]*"
         };
-        const ATOM = hljs2.inherit(hljs2.APOS_STRING_MODE, { relevance: 0 });
-        const STRING = hljs2.inherit(hljs2.QUOTE_STRING_MODE, { relevance: 0 });
+        const ATOM = hljs.inherit(hljs.APOS_STRING_MODE, { relevance: 0 });
+        const STRING = hljs.inherit(hljs.QUOTE_STRING_MODE, { relevance: 0 });
         const STRING_FMT = {
           className: "subst",
           begin: "\\\\[abfnrtv]\\|\\\\x[0-9a-fA-F]*\\\\\\|%[-+# *.0-9]*[dioxXucsfeEgGp]",
@@ -37385,9 +37557,9 @@
             IMPLICATION,
             HEAD_BODY_CONJUNCTION,
             COMMENT,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             NUMCODE,
-            hljs2.NUMBER_MODE,
+            hljs.NUMBER_MODE,
             ATOM,
             STRING,
             {
@@ -37408,13 +37580,13 @@
   // node_modules/highlight.js/lib/languages/mipsasm.js
   var require_mipsasm = __commonJS({
     "node_modules/highlight.js/lib/languages/mipsasm.js"(exports, module) {
-      function mipsasm(hljs2) {
+      function mipsasm(hljs) {
         return {
           name: "MIPS Assembly",
           case_insensitive: true,
           aliases: ["mips"],
           keywords: {
-            $pattern: "\\.?" + hljs2.IDENT_RE,
+            $pattern: "\\.?" + hljs.IDENT_RE,
             meta: (
               // GNU preprocs
               ".2byte .4byte .align .ascii .asciz .balign .byte .code .data .else .end .endif .endm .endr .equ .err .exitm .extern .global .hword .if .ifdef .ifndef .include .irp .long .macro .rept .req .section .set .skip .space .text .word .ltorg "
@@ -37429,9 +37601,9 @@
               end: "\\s"
             },
             // lines ending with ; or # aren't really comments, probably auto-detect fail
-            hljs2.COMMENT("[;#](?!\\s*$)", "$"),
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.COMMENT("[;#](?!\\s*$)", "$"),
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.QUOTE_STRING_MODE,
             {
               className: "string",
               begin: "'",
@@ -37489,11 +37661,11 @@
   // node_modules/highlight.js/lib/languages/mizar.js
   var require_mizar = __commonJS({
     "node_modules/highlight.js/lib/languages/mizar.js"(exports, module) {
-      function mizar(hljs2) {
+      function mizar(hljs) {
         return {
           name: "Mizar",
           keywords: "environ vocabularies notations constructors definitions registrations theorems schemes requirements begin end definition registration cluster existence pred func defpred deffunc theorem proof let take assume then thus hence ex for st holds consider reconsider such that and in provided of as from be being by means equals implies iff redefine define now not or attr is mode suppose per cases set thesis contradiction scheme reserve struct correctness compatibility coherence symmetry assymetry reflexivity irreflexivity connectedness uniqueness commutativity idempotence involutiveness projectivity",
-          contains: [hljs2.COMMENT("::", "$")]
+          contains: [hljs.COMMENT("::", "$")]
         };
       }
       module.exports = mizar;
@@ -37503,8 +37675,8 @@
   // node_modules/highlight.js/lib/languages/perl.js
   var require_perl = __commonJS({
     "node_modules/highlight.js/lib/languages/perl.js"(exports, module) {
-      function perl(hljs2) {
-        const regex = hljs2.regex;
+      function perl(hljs) {
+        const regex = hljs.regex;
         const KEYWORDS = [
           "abs",
           "accept",
@@ -37797,7 +37969,7 @@
           relevance: 0
         };
         const STRING_CONTAINS = [
-          hljs2.BACKSLASH_ESCAPE,
+          hljs.BACKSLASH_ESCAPE,
           SUBST,
           VAR
         ];
@@ -37835,8 +38007,8 @@
         };
         const PERL_DEFAULT_CONTAINS = [
           VAR,
-          hljs2.HASH_COMMENT_MODE,
-          hljs2.COMMENT(
+          hljs.HASH_COMMENT_MODE,
+          hljs.COMMENT(
             /^=\w/,
             /=cut/,
             { endsWithParent: true }
@@ -37879,7 +38051,7 @@
               {
                 begin: "'",
                 end: "'",
-                contains: [hljs2.BACKSLASH_ESCAPE]
+                contains: [hljs.BACKSLASH_ESCAPE]
               },
               {
                 begin: '"',
@@ -37888,7 +38060,7 @@
               {
                 begin: "`",
                 end: "`",
-                contains: [hljs2.BACKSLASH_ESCAPE]
+                contains: [hljs.BACKSLASH_ESCAPE]
               },
               {
                 begin: /\{\w+\}/,
@@ -37903,11 +38075,11 @@
           NUMBER,
           {
             // regexp container
-            begin: "(\\/\\/|" + hljs2.RE_STARTERS_RE + "|\\b(split|return|print|reverse|grep)\\b)\\s*",
+            begin: "(\\/\\/|" + hljs.RE_STARTERS_RE + "|\\b(split|return|print|reverse|grep)\\b)\\s*",
             keywords: "split return print reverse grep",
             relevance: 0,
             contains: [
-              hljs2.HASH_COMMENT_MODE,
+              hljs.HASH_COMMENT_MODE,
               {
                 className: "regexp",
                 variants: [
@@ -37947,7 +38119,7 @@
             end: "(\\s*\\(.*?\\))?[;{]",
             excludeEnd: true,
             relevance: 5,
-            contains: [hljs2.TITLE_MODE, ATTR]
+            contains: [hljs.TITLE_MODE, ATTR]
           },
           {
             className: "class",
@@ -37955,7 +38127,7 @@
             end: "[;{]",
             excludeEnd: true,
             relevance: 5,
-            contains: [hljs2.TITLE_MODE, ATTR, NUMBER]
+            contains: [hljs.TITLE_MODE, ATTR, NUMBER]
           },
           {
             begin: "-\\w\\b",
@@ -37993,7 +38165,7 @@
   // node_modules/highlight.js/lib/languages/mojolicious.js
   var require_mojolicious = __commonJS({
     "node_modules/highlight.js/lib/languages/mojolicious.js"(exports, module) {
-      function mojolicious(hljs2) {
+      function mojolicious(hljs) {
         return {
           name: "Mojolicious",
           subLanguage: "xml",
@@ -38026,13 +38198,13 @@
   // node_modules/highlight.js/lib/languages/monkey.js
   var require_monkey = __commonJS({
     "node_modules/highlight.js/lib/languages/monkey.js"(exports, module) {
-      function monkey(hljs2) {
+      function monkey(hljs) {
         const NUMBER = {
           className: "number",
           relevance: 0,
           variants: [
             { begin: "[$][a-fA-F0-9]+" },
-            hljs2.NUMBER_MODE
+            hljs.NUMBER_MODE
           ]
         };
         const FUNC_DEFINITION = {
@@ -38040,7 +38212,7 @@
             { match: [
               /(function|method)/,
               /\s+/,
-              hljs2.UNDERSCORE_IDENT_RE
+              hljs.UNDERSCORE_IDENT_RE
             ] }
           ],
           scope: {
@@ -38053,7 +38225,7 @@
             { match: [
               /(class|interface|extends|implements)/,
               /\s+/,
-              hljs2.UNDERSCORE_IDENT_RE
+              hljs.UNDERSCORE_IDENT_RE
             ] }
           ],
           scope: {
@@ -38164,8 +38336,8 @@
           },
           illegal: /\/\*/,
           contains: [
-            hljs2.COMMENT("#rem", "#end"),
-            hljs2.COMMENT(
+            hljs.COMMENT("#rem", "#end"),
+            hljs.COMMENT(
               "'",
               "$",
               { relevance: 0 }
@@ -38192,9 +38364,9 @@
             {
               beginKeywords: "alias",
               end: "=",
-              contains: [hljs2.UNDERSCORE_TITLE_MODE]
+              contains: [hljs.UNDERSCORE_TITLE_MODE]
             },
-            hljs2.QUOTE_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             NUMBER
           ]
         };
@@ -38206,7 +38378,7 @@
   // node_modules/highlight.js/lib/languages/moonscript.js
   var require_moonscript = __commonJS({
     "node_modules/highlight.js/lib/languages/moonscript.js"(exports, module) {
-      function moonscript(hljs2) {
+      function moonscript(hljs) {
         const KEYWORDS = {
           keyword: (
             // Moonscript keywords
@@ -38223,8 +38395,8 @@
           keywords: KEYWORDS
         };
         const EXPRESSIONS = [
-          hljs2.inherit(
-            hljs2.C_NUMBER_MODE,
+          hljs.inherit(
+            hljs.C_NUMBER_MODE,
             { starts: {
               end: "(\\s*/)?",
               relevance: 0
@@ -38237,13 +38409,13 @@
               {
                 begin: /'/,
                 end: /'/,
-                contains: [hljs2.BACKSLASH_ESCAPE]
+                contains: [hljs.BACKSLASH_ESCAPE]
               },
               {
                 begin: /"/,
                 end: /"/,
                 contains: [
-                  hljs2.BACKSLASH_ESCAPE,
+                  hljs.BACKSLASH_ESCAPE,
                   SUBST
                 ]
               }
@@ -38251,19 +38423,19 @@
           },
           {
             className: "built_in",
-            begin: "@__" + hljs2.IDENT_RE
+            begin: "@__" + hljs.IDENT_RE
           },
           {
-            begin: "@" + hljs2.IDENT_RE
+            begin: "@" + hljs.IDENT_RE
             // relevance booster on par with CoffeeScript
           },
           {
-            begin: hljs2.IDENT_RE + "\\\\" + hljs2.IDENT_RE
+            begin: hljs.IDENT_RE + "\\\\" + hljs.IDENT_RE
             // inst\method
           }
         ];
         SUBST.contains = EXPRESSIONS;
-        const TITLE = hljs2.inherit(hljs2.TITLE_MODE, { begin: JS_IDENT_RE });
+        const TITLE = hljs.inherit(hljs.TITLE_MODE, { begin: JS_IDENT_RE });
         const POSSIBLE_PARAMS_RE = "(\\(.*\\)\\s*)?\\B[-=]>";
         const PARAMS = {
           className: "params",
@@ -38286,7 +38458,7 @@
           keywords: KEYWORDS,
           illegal: /\/\*/,
           contains: EXPRESSIONS.concat([
-            hljs2.COMMENT("--", "$"),
+            hljs.COMMENT("--", "$"),
             {
               className: "function",
               // function: -> =>
@@ -38346,7 +38518,7 @@
   // node_modules/highlight.js/lib/languages/n1ql.js
   var require_n1ql = __commonJS({
     "node_modules/highlight.js/lib/languages/n1ql.js"(exports, module) {
-      function n1ql(hljs2) {
+      function n1ql(hljs) {
         const KEYWORDS = [
           "all",
           "alter",
@@ -38673,25 +38845,25 @@
                   className: "string",
                   begin: "'",
                   end: "'",
-                  contains: [hljs2.BACKSLASH_ESCAPE]
+                  contains: [hljs.BACKSLASH_ESCAPE]
                 },
                 {
                   className: "string",
                   begin: '"',
                   end: '"',
-                  contains: [hljs2.BACKSLASH_ESCAPE]
+                  contains: [hljs.BACKSLASH_ESCAPE]
                 },
                 {
                   className: "symbol",
                   begin: "`",
                   end: "`",
-                  contains: [hljs2.BACKSLASH_ESCAPE]
+                  contains: [hljs.BACKSLASH_ESCAPE]
                 },
-                hljs2.C_NUMBER_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE
+                hljs.C_NUMBER_MODE,
+                hljs.C_BLOCK_COMMENT_MODE
               ]
             },
-            hljs2.C_BLOCK_COMMENT_MODE
+            hljs.C_BLOCK_COMMENT_MODE
           ]
         };
       }
@@ -38702,7 +38874,7 @@
   // node_modules/highlight.js/lib/languages/nestedtext.js
   var require_nestedtext = __commonJS({
     "node_modules/highlight.js/lib/languages/nestedtext.js"(exports, module) {
-      function nestedtext(hljs2) {
+      function nestedtext(hljs) {
         const NESTED = {
           match: [
             /^\s*(?=\S)/,
@@ -38765,7 +38937,7 @@
           name: "Nested Text",
           aliases: ["nt"],
           contains: [
-            hljs2.inherit(hljs2.HASH_COMMENT_MODE, {
+            hljs.inherit(hljs.HASH_COMMENT_MODE, {
               begin: /^\s*(?=#)/,
               excludeBegin: true
             }),
@@ -38783,14 +38955,14 @@
   // node_modules/highlight.js/lib/languages/nginx.js
   var require_nginx = __commonJS({
     "node_modules/highlight.js/lib/languages/nginx.js"(exports, module) {
-      function nginx(hljs2) {
-        const regex = hljs2.regex;
+      function nginx(hljs) {
+        const regex = hljs.regex;
         const VAR = {
           className: "variable",
           variants: [
             { begin: /\$\d+/ },
             { begin: /\$\{\w+\}/ },
-            { begin: regex.concat(/[$@]/, hljs2.UNDERSCORE_IDENT_RE) }
+            { begin: regex.concat(/[$@]/, hljs.UNDERSCORE_IDENT_RE) }
           ]
         };
         const LITERALS = [
@@ -38828,11 +39000,11 @@
           relevance: 0,
           illegal: "=>",
           contains: [
-            hljs2.HASH_COMMENT_MODE,
+            hljs.HASH_COMMENT_MODE,
             {
               className: "string",
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 VAR
               ],
               variants: [
@@ -38857,7 +39029,7 @@
             {
               className: "regexp",
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 VAR
               ],
               variants: [
@@ -38896,7 +39068,7 @@
           name: "Nginx config",
           aliases: ["nginxconf"],
           contains: [
-            hljs2.HASH_COMMENT_MODE,
+            hljs.HASH_COMMENT_MODE,
             {
               beginKeywords: "upstream location",
               end: /;|\{/,
@@ -38905,16 +39077,16 @@
             },
             {
               className: "section",
-              begin: regex.concat(hljs2.UNDERSCORE_IDENT_RE + regex.lookahead(/\s+\{/)),
+              begin: regex.concat(hljs.UNDERSCORE_IDENT_RE + regex.lookahead(/\s+\{/)),
               relevance: 0
             },
             {
-              begin: regex.lookahead(hljs2.UNDERSCORE_IDENT_RE + "\\s"),
+              begin: regex.lookahead(hljs.UNDERSCORE_IDENT_RE + "\\s"),
               end: ";|\\{",
               contains: [
                 {
                   className: "attribute",
-                  begin: hljs2.UNDERSCORE_IDENT_RE,
+                  begin: hljs.UNDERSCORE_IDENT_RE,
                   starts: DEFAULT
                 }
               ],
@@ -38931,7 +39103,7 @@
   // node_modules/highlight.js/lib/languages/nim.js
   var require_nim = __commonJS({
     "node_modules/highlight.js/lib/languages/nim.js"(exports, module) {
-      function nim(hljs2) {
+      function nim(hljs) {
         const TYPES = [
           "int",
           "int8",
@@ -39088,7 +39260,7 @@
               begin: /([a-zA-Z]\w*)?"""/,
               end: /"""/
             },
-            hljs2.QUOTE_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             {
               className: "type",
               begin: /\b[A-Z]\w+\b/,
@@ -39104,7 +39276,7 @@
                 { begin: /\b(\d[_\d]*)('?[iIuUfF](8|16|32|64))?/ }
               ]
             },
-            hljs2.HASH_COMMENT_MODE
+            hljs.HASH_COMMENT_MODE
           ]
         };
       }
@@ -39115,7 +39287,7 @@
   // node_modules/highlight.js/lib/languages/nix.js
   var require_nix = __commonJS({
     "node_modules/highlight.js/lib/languages/nix.js"(exports, module) {
-      function nix(hljs2) {
+      function nix(hljs) {
         const KEYWORDS = {
           keyword: [
             "rec",
@@ -39186,9 +39358,9 @@
           ]
         };
         const EXPRESSIONS = [
-          hljs2.NUMBER_MODE,
-          hljs2.HASH_COMMENT_MODE,
-          hljs2.C_BLOCK_COMMENT_MODE,
+          hljs.NUMBER_MODE,
+          hljs.HASH_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
           STRING,
           ATTRS
         ];
@@ -39207,7 +39379,7 @@
   // node_modules/highlight.js/lib/languages/node-repl.js
   var require_node_repl = __commonJS({
     "node_modules/highlight.js/lib/languages/node-repl.js"(exports, module) {
-      function nodeRepl(hljs2) {
+      function nodeRepl(hljs) {
         return {
           name: "Node REPL",
           contains: [
@@ -39237,8 +39409,8 @@
   // node_modules/highlight.js/lib/languages/nsis.js
   var require_nsis = __commonJS({
     "node_modules/highlight.js/lib/languages/nsis.js"(exports, module) {
-      function nsis(hljs2) {
-        const regex = hljs2.regex;
+      function nsis(hljs) {
+        const regex = hljs.regex;
         const LANGUAGE_CONSTANTS = [
           "ADMINTOOLS",
           "APPDATA",
@@ -39715,7 +39887,7 @@
           match: [
             /Function/,
             /\s+/,
-            regex.concat(/(\.)?/, hljs2.IDENT_RE)
+            regex.concat(/(\.)?/, hljs.IDENT_RE)
           ],
           scope: {
             1: "keyword",
@@ -39744,9 +39916,9 @@
             literal: LITERALS
           },
           contains: [
-            hljs2.HASH_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.COMMENT(
+            hljs.HASH_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.COMMENT(
               ";",
               "$",
               { relevance: 0 }
@@ -39761,7 +39933,7 @@
             LANGUAGES,
             PARAMETERS,
             PLUGINS,
-            hljs2.NUMBER_MODE
+            hljs.NUMBER_MODE
           ]
         };
       }
@@ -39772,7 +39944,7 @@
   // node_modules/highlight.js/lib/languages/objectivec.js
   var require_objectivec = __commonJS({
     "node_modules/highlight.js/lib/languages/objectivec.js"(exports, module) {
-      function objectivec(hljs2) {
+      function objectivec(hljs) {
         const API_CLASS = {
           className: "built_in",
           begin: "\\b(AV|CA|CF|CG|CI|CL|CM|CN|CT|MK|MP|MTK|MTL|NS|SCN|SK|UI|WK|XC)\\w+"
@@ -39961,11 +40133,11 @@
           illegal: "</",
           contains: [
             API_CLASS,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.C_NUMBER_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.APOS_STRING_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.C_NUMBER_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE,
             {
               className: "string",
               variants: [
@@ -39973,7 +40145,7 @@
                   begin: '@"',
                   end: '"',
                   illegal: "\\n",
-                  contains: [hljs2.BACKSLASH_ESCAPE]
+                  contains: [hljs.BACKSLASH_ESCAPE]
                 }
               ]
             },
@@ -39987,15 +40159,15 @@
                   begin: /\\\n/,
                   relevance: 0
                 },
-                hljs2.inherit(hljs2.QUOTE_STRING_MODE, { className: "string" }),
+                hljs.inherit(hljs.QUOTE_STRING_MODE, { className: "string" }),
                 {
                   className: "string",
                   begin: /<.*?>/,
                   end: /$/,
                   illegal: "\\n"
                 },
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE
               ]
             },
             {
@@ -40004,10 +40176,10 @@
               end: /(\{|$)/,
               excludeEnd: true,
               keywords: CLASS_KEYWORDS,
-              contains: [hljs2.UNDERSCORE_TITLE_MODE]
+              contains: [hljs.UNDERSCORE_TITLE_MODE]
             },
             {
-              begin: "\\." + hljs2.UNDERSCORE_IDENT_RE,
+              begin: "\\." + hljs.UNDERSCORE_IDENT_RE,
               relevance: 0
             }
           ]
@@ -40020,7 +40192,7 @@
   // node_modules/highlight.js/lib/languages/ocaml.js
   var require_ocaml = __commonJS({
     "node_modules/highlight.js/lib/languages/ocaml.js"(exports, module) {
-      function ocaml(hljs2) {
+      function ocaml(hljs) {
         return {
           name: "OCaml",
           aliases: ["ml"],
@@ -40040,7 +40212,7 @@
               begin: "\\[(\\|\\|)?\\]|\\(\\)",
               relevance: 0
             },
-            hljs2.COMMENT(
+            hljs.COMMENT(
               "\\(\\*",
               "\\*\\)",
               { contains: ["self"] }
@@ -40067,11 +40239,11 @@
               begin: "[a-z_]\\w*'[\\w']*",
               relevance: 0
             },
-            hljs2.inherit(hljs2.APOS_STRING_MODE, {
+            hljs.inherit(hljs.APOS_STRING_MODE, {
               className: "string",
               relevance: 0
             }),
-            hljs2.inherit(hljs2.QUOTE_STRING_MODE, { illegal: null }),
+            hljs.inherit(hljs.QUOTE_STRING_MODE, { illegal: null }),
             {
               className: "number",
               begin: "\\b(0[xX][a-fA-F0-9_]+[Lln]?|0[oO][0-7_]+[Lln]?|0[bB][01_]+[Lln]?|[0-9][0-9_]*([Lln]|(\\.[0-9_]*)?([eE][-+]?[0-9_]+)?)?)",
@@ -40091,7 +40263,7 @@
   // node_modules/highlight.js/lib/languages/openscad.js
   var require_openscad = __commonJS({
     "node_modules/highlight.js/lib/languages/openscad.js"(exports, module) {
-      function openscad(hljs2) {
+      function openscad(hljs) {
         const SPECIAL_VARS = {
           className: "keyword",
           begin: "\\$(f[asn]|t|vp[rtd]|children)"
@@ -40106,7 +40278,7 @@
           // adds 1e5, 1e-10
           relevance: 0
         };
-        const STRING = hljs2.inherit(hljs2.QUOTE_STRING_MODE, { illegal: null });
+        const STRING = hljs.inherit(hljs.QUOTE_STRING_MODE, { illegal: null });
         const PREPRO = {
           className: "meta",
           keywords: { keyword: "include use" },
@@ -40135,7 +40307,7 @@
           end: /=|\{/,
           contains: [
             PARAMS,
-            hljs2.UNDERSCORE_TITLE_MODE
+            hljs.UNDERSCORE_TITLE_MODE
           ]
         };
         return {
@@ -40147,8 +40319,8 @@
             built_in: "circle square polygon text sphere cube cylinder polyhedron translate rotate scale resize mirror multmatrix color offset hull minkowski union difference intersection abs sign sin cos tan acos asin atan atan2 floor round ceil ln log pow sqrt exp rands min max concat lookup str chr search version version_num norm cross parent_module echo import import_dxf dxf_linear_extrude linear_extrude rotate_extrude surface projection render children dxf_cross dxf_dim let assign"
           },
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             NUMBERS,
             PREPRO,
             STRING,
@@ -40165,17 +40337,17 @@
   // node_modules/highlight.js/lib/languages/oxygene.js
   var require_oxygene = __commonJS({
     "node_modules/highlight.js/lib/languages/oxygene.js"(exports, module) {
-      function oxygene(hljs2) {
+      function oxygene(hljs) {
         const OXYGENE_KEYWORDS = {
           $pattern: /\.?\w+/,
           keyword: "abstract add and array as asc aspect assembly async begin break block by case class concat const copy constructor continue create default delegate desc distinct div do downto dynamic each else empty end ensure enum equals event except exit extension external false final finalize finalizer finally flags for forward from function future global group has if implementation implements implies in index inherited inline interface into invariants is iterator join locked locking loop matching method mod module namespace nested new nil not notify nullable of old on operator or order out override parallel params partial pinned private procedure property protected public queryable raise read readonly record reintroduce remove repeat require result reverse sealed select self sequence set shl shr skip static step soft take then to true try tuple type union unit unsafe until uses using var virtual raises volatile where while with write xor yield await mapped deprecated stdcall cdecl pascal register safecall overload library platform reference packed strict published autoreleasepool selector strong weak unretained"
         };
-        const CURLY_COMMENT = hljs2.COMMENT(
+        const CURLY_COMMENT = hljs.COMMENT(
           /\{/,
           /\}/,
           { relevance: 0 }
         );
-        const PAREN_COMMENT = hljs2.COMMENT(
+        const PAREN_COMMENT = hljs.COMMENT(
           "\\(\\*",
           "\\*\\)",
           { relevance: 10 }
@@ -40195,7 +40367,7 @@
           end: "[:;]",
           keywords: "function constructor|10 destructor|10 procedure|10 method|10",
           contains: [
-            hljs2.inherit(hljs2.TITLE_MODE, { scope: "title.function" }),
+            hljs.inherit(hljs.TITLE_MODE, { scope: "title.function" }),
             {
               className: "params",
               begin: "\\(",
@@ -40223,10 +40395,10 @@
           contains: [
             CURLY_COMMENT,
             PAREN_COMMENT,
-            hljs2.C_LINE_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
             STRING,
             CHAR_STRING,
-            hljs2.NUMBER_MODE,
+            hljs.NUMBER_MODE,
             FUNCTION,
             SEMICOLON
           ]
@@ -40239,8 +40411,8 @@
   // node_modules/highlight.js/lib/languages/parser3.js
   var require_parser3 = __commonJS({
     "node_modules/highlight.js/lib/languages/parser3.js"(exports, module) {
-      function parser3(hljs2) {
-        const CURLY_SUBCOMMENT = hljs2.COMMENT(
+      function parser3(hljs) {
+        const CURLY_SUBCOMMENT = hljs.COMMENT(
           /\{/,
           /\}/,
           { contains: ["self"] }
@@ -40250,8 +40422,8 @@
           subLanguage: "xml",
           relevance: 0,
           contains: [
-            hljs2.COMMENT("^#", "$"),
-            hljs2.COMMENT(
+            hljs.COMMENT("^#", "$"),
+            hljs.COMMENT(
               /\^rem\{/,
               /\}/,
               {
@@ -40280,7 +40452,7 @@
               className: "number",
               begin: "\\^#[0-9a-fA-F]+"
             },
-            hljs2.C_NUMBER_MODE
+            hljs.C_NUMBER_MODE
           ]
         };
       }
@@ -40291,7 +40463,7 @@
   // node_modules/highlight.js/lib/languages/pf.js
   var require_pf = __commonJS({
     "node_modules/highlight.js/lib/languages/pf.js"(exports, module) {
-      function pf(hljs2) {
+      function pf(hljs) {
         const MACRO = {
           className: "variable",
           begin: /\$[\w\d#@][\w\d_]*/,
@@ -40317,9 +40489,9 @@
             literal: "all any no-route self urpf-failed egress|5 unknown"
           },
           contains: [
-            hljs2.HASH_COMMENT_MODE,
-            hljs2.NUMBER_MODE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.HASH_COMMENT_MODE,
+            hljs.NUMBER_MODE,
+            hljs.QUOTE_STRING_MODE,
             MACRO,
             TABLE
           ]
@@ -40332,8 +40504,8 @@
   // node_modules/highlight.js/lib/languages/pgsql.js
   var require_pgsql = __commonJS({
     "node_modules/highlight.js/lib/languages/pgsql.js"(exports, module) {
-      function pgsql(hljs2) {
-        const COMMENT_MODE = hljs2.COMMENT("--", "$");
+      function pgsql(hljs) {
+        const COMMENT_MODE = hljs.COMMENT("--", "$");
         const UNQUOTED_IDENT = "[a-zA-Z_][a-zA-Z_0-9$]*";
         const DOLLAR_STRING = "\\$([a-zA-Z_]?|[a-zA-Z_][a-zA-Z_0-9]*)\\$";
         const LABEL = "<<\\s*" + UNQUOTED_IDENT + "\\s*>>";
@@ -40484,7 +40656,7 @@
             // in 'avrasm' autodetection test...
             {
               beginKeywords: "CACHE INCREMENT MAXVALUE MINVALUE",
-              end: hljs2.C_NUMBER_RE,
+              end: hljs.C_NUMBER_RE,
               returnEnd: true,
               keywords: "BY CACHE INCREMENT MAXVALUE MINVALUE"
             },
@@ -40543,7 +40715,7 @@
               contains: [{ begin: "\\\\." }],
               relevance: 10
             },
-            hljs2.END_SAME_AS_BEGIN({
+            hljs.END_SAME_AS_BEGIN({
               begin: DOLLAR_STRING,
               end: DOLLAR_STRING,
               contains: [
@@ -40576,9 +40748,9 @@
               contains: [{ begin: '""' }]
             },
             // numbers
-            hljs2.C_NUMBER_MODE,
+            hljs.C_NUMBER_MODE,
             // comments
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             COMMENT_MODE,
             // PL/pgSQL staff
             // %ROWTYPE, %TYPE, $n
@@ -40617,8 +40789,8 @@
   // node_modules/highlight.js/lib/languages/php.js
   var require_php = __commonJS({
     "node_modules/highlight.js/lib/languages/php.js"(exports, module) {
-      function php(hljs2) {
-        const regex = hljs2.regex;
+      function php(hljs) {
+        const regex = hljs.regex;
         const NOT_PERL_ETC = /(?![A-Za-z0-9])(?![$])/;
         const IDENT_RE = regex.concat(
           /[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/,
@@ -40654,15 +40826,15 @@
             }
           ]
         };
-        const SINGLE_QUOTED = hljs2.inherit(hljs2.APOS_STRING_MODE, { illegal: null });
-        const DOUBLE_QUOTED = hljs2.inherit(hljs2.QUOTE_STRING_MODE, {
+        const SINGLE_QUOTED = hljs.inherit(hljs.APOS_STRING_MODE, { illegal: null });
+        const DOUBLE_QUOTED = hljs.inherit(hljs.QUOTE_STRING_MODE, {
           illegal: null,
-          contains: hljs2.QUOTE_STRING_MODE.contains.concat(SUBST)
+          contains: hljs.QUOTE_STRING_MODE.contains.concat(SUBST)
         });
         const HEREDOC = {
           begin: /<<<[ \t]*(?:(\w+)|"(\w+)")\n/,
           end: /[ \t]*(\w+)\b/,
-          contains: hljs2.QUOTE_STRING_MODE.contains.concat(SUBST),
+          contains: hljs.QUOTE_STRING_MODE.contains.concat(SUBST),
           "on:begin": (m, resp) => {
             resp.data._beginMatch = m[1] || m[2];
           },
@@ -40670,7 +40842,7 @@
             if (resp.data._beginMatch !== m[1]) resp.ignoreMatch();
           }
         };
-        const NOWDOC = hljs2.END_SAME_AS_BEGIN({
+        const NOWDOC = hljs.END_SAME_AS_BEGIN({
           begin: /<<<[ \t]*'(\w+)'\n/,
           end: /[ \t]*(\w+)\b/
         });
@@ -41005,7 +41177,7 @@
             NAMED_ARGUMENT,
             VARIABLE,
             LEFT_AND_RIGHT_SIDE_OF_DOUBLE_COLON,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             STRING,
             NUMBER,
             CONSTRUCTOR_CALL
@@ -41028,7 +41200,7 @@
         const ATTRIBUTE_CONTAINS = [
           NAMED_ARGUMENT,
           LEFT_AND_RIGHT_SIDE_OF_DOUBLE_COLON,
-          hljs2.C_BLOCK_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
           STRING,
           NUMBER,
           CONSTRUCTOR_CALL
@@ -41073,9 +41245,9 @@
           keywords: KEYWORDS,
           contains: [
             ATTRIBUTES,
-            hljs2.HASH_COMMENT_MODE,
-            hljs2.COMMENT("//", "$"),
-            hljs2.COMMENT(
+            hljs.HASH_COMMENT_MODE,
+            hljs.COMMENT("//", "$"),
+            hljs.COMMENT(
               "/\\*",
               "\\*/",
               { contains: [
@@ -41090,7 +41262,7 @@
               keywords: "__halt_compiler",
               starts: {
                 scope: "comment",
-                end: hljs2.MATCH_NOTHING_RE,
+                end: hljs.MATCH_NOTHING_RE,
                 contains: [
                   {
                     match: /\?>/,
@@ -41129,7 +41301,7 @@
               illegal: "[$%\\[]",
               contains: [
                 { beginKeywords: "use" },
-                hljs2.UNDERSCORE_TITLE_MODE,
+                hljs.UNDERSCORE_TITLE_MODE,
                 {
                   begin: "=>",
                   // No markup, just a relevance booster
@@ -41146,7 +41318,7 @@
                     "self",
                     VARIABLE,
                     LEFT_AND_RIGHT_SIDE_OF_DOUBLE_COLON,
-                    hljs2.C_BLOCK_COMMENT_MODE,
+                    hljs.C_BLOCK_COMMENT_MODE,
                     STRING,
                     NUMBER
                   ]
@@ -41170,7 +41342,7 @@
               excludeEnd: true,
               contains: [
                 { beginKeywords: "extends implements" },
-                hljs2.UNDERSCORE_TITLE_MODE
+                hljs.UNDERSCORE_TITLE_MODE
               ]
             },
             // both use and namespace still use "old style" rules (vs multi-match)
@@ -41181,7 +41353,7 @@
               relevance: 0,
               end: ";",
               illegal: /[.']/,
-              contains: [hljs2.inherit(hljs2.UNDERSCORE_TITLE_MODE, { scope: "title.class" })]
+              contains: [hljs.inherit(hljs.UNDERSCORE_TITLE_MODE, { scope: "title.class" })]
             },
             {
               beginKeywords: "use",
@@ -41194,7 +41366,7 @@
                   scope: "keyword"
                 },
                 // TODO: could be title.class or title.function
-                hljs2.UNDERSCORE_TITLE_MODE
+                hljs.UNDERSCORE_TITLE_MODE
               ]
             },
             STRING,
@@ -41209,7 +41381,7 @@
   // node_modules/highlight.js/lib/languages/php-template.js
   var require_php_template = __commonJS({
     "node_modules/highlight.js/lib/languages/php-template.js"(exports, module) {
-      function phpTemplate(hljs2) {
+      function phpTemplate(hljs) {
         return {
           name: "PHP template",
           subLanguage: "xml",
@@ -41236,13 +41408,13 @@
                   end: "'",
                   skip: true
                 },
-                hljs2.inherit(hljs2.APOS_STRING_MODE, {
+                hljs.inherit(hljs.APOS_STRING_MODE, {
                   illegal: null,
                   className: null,
                   contains: null,
                   skip: true
                 }),
-                hljs2.inherit(hljs2.QUOTE_STRING_MODE, {
+                hljs.inherit(hljs.QUOTE_STRING_MODE, {
                   illegal: null,
                   className: null,
                   contains: null,
@@ -41260,7 +41432,7 @@
   // node_modules/highlight.js/lib/languages/plaintext.js
   var require_plaintext = __commonJS({
     "node_modules/highlight.js/lib/languages/plaintext.js"(exports, module) {
-      function plaintext(hljs2) {
+      function plaintext(hljs) {
         return {
           name: "Plain text",
           aliases: [
@@ -41277,7 +41449,7 @@
   // node_modules/highlight.js/lib/languages/pony.js
   var require_pony = __commonJS({
     "node_modules/highlight.js/lib/languages/pony.js"(exports, module) {
-      function pony(hljs2) {
+      function pony(hljs) {
         const KEYWORDS = {
           keyword: "actor addressof and as be break class compile_error compile_intrinsic consume continue delegate digestof do else elseif embed end error for fun if ifdef in interface is isnt lambda let match new not object or primitive recover repeat return struct then trait try type until use var where while with xor",
           meta: "iso val tag trn box ref",
@@ -41293,13 +41465,13 @@
           className: "string",
           begin: '"',
           end: '"',
-          contains: [hljs2.BACKSLASH_ESCAPE]
+          contains: [hljs.BACKSLASH_ESCAPE]
         };
         const SINGLE_QUOTE_CHAR_MODE = {
           className: "string",
           begin: "'",
           end: "'",
-          contains: [hljs2.BACKSLASH_ESCAPE],
+          contains: [hljs.BACKSLASH_ESCAPE],
           relevance: 0
         };
         const TYPE_NAME = {
@@ -41308,7 +41480,7 @@
           relevance: 0
         };
         const PRIMED_NAME = {
-          begin: hljs2.IDENT_RE + "'",
+          begin: hljs.IDENT_RE + "'",
           relevance: 0
         };
         const NUMBER_MODE = {
@@ -41326,8 +41498,8 @@
             SINGLE_QUOTE_CHAR_MODE,
             PRIMED_NAME,
             NUMBER_MODE,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE
           ]
         };
       }
@@ -41338,7 +41510,7 @@
   // node_modules/highlight.js/lib/languages/powershell.js
   var require_powershell = __commonJS({
     "node_modules/highlight.js/lib/languages/powershell.js"(exports, module) {
-      function powershell(hljs2) {
+      function powershell(hljs) {
         const TYPES = [
           "string",
           "char",
@@ -41428,8 +41600,8 @@
             { begin: /\.(parameter|forwardhelptargetname|forwardhelpcategory|remotehelprunspace|externalhelp)\s+\S+/ }
           ]
         };
-        const PS_COMMENT = hljs2.inherit(
-          hljs2.COMMENT(null, null),
+        const PS_COMMENT = hljs.inherit(
+          hljs.COMMENT(null, null),
           {
             variants: [
               /* single-line comment */
@@ -41456,7 +41628,7 @@
           end: /\s*[{]/,
           excludeEnd: true,
           relevance: 0,
-          contains: [hljs2.TITLE_MODE]
+          contains: [hljs.TITLE_MODE]
         };
         const PS_FUNCTION = {
           className: "function",
@@ -41535,7 +41707,7 @@
               endsParent: true,
               relevance: 0
             },
-            hljs2.inherit(hljs2.TITLE_MODE, { endsParent: true })
+            hljs.inherit(hljs.TITLE_MODE, { endsParent: true })
           ]
         };
         const GENTLEMANS_SET = [
@@ -41543,7 +41715,7 @@
           PS_METHODS,
           PS_COMMENT,
           BACKTICK_ESCAPE,
-          hljs2.NUMBER_MODE,
+          hljs.NUMBER_MODE,
           QUOTE_STRING,
           APOS_STRING,
           // PS_NEW_OBJECT_TYPE,
@@ -41599,8 +41771,8 @@
   // node_modules/highlight.js/lib/languages/processing.js
   var require_processing = __commonJS({
     "node_modules/highlight.js/lib/languages/processing.js"(exports, module) {
-      function processing(hljs2) {
-        const regex = hljs2.regex;
+      function processing(hljs) {
+        const regex = hljs.regex;
         const BUILT_INS = [
           "displayHeight",
           "displayWidth",
@@ -41864,7 +42036,7 @@
           "randomGaussian",
           "randomSeed"
         ];
-        const IDENT = hljs2.IDENT_RE;
+        const IDENT = hljs.IDENT_RE;
         const FUNC_NAME = { variants: [
           {
             match: regex.concat(regex.either(...BUILT_INS), regex.lookahead(/\s*\(/)),
@@ -42015,11 +42187,11 @@
             NEW_CLASS,
             FUNC_NAME,
             PROPERTY,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.C_NUMBER_MODE
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.C_NUMBER_MODE
           ]
         };
       }
@@ -42030,11 +42202,11 @@
   // node_modules/highlight.js/lib/languages/profile.js
   var require_profile = __commonJS({
     "node_modules/highlight.js/lib/languages/profile.js"(exports, module) {
-      function profile(hljs2) {
+      function profile(hljs) {
         return {
           name: "Python profiler",
           contains: [
-            hljs2.C_NUMBER_MODE,
+            hljs.C_NUMBER_MODE,
             {
               begin: "[a-zA-Z_][\\da-zA-Z_]+\\.[\\da-zA-Z_]{1,3}",
               end: ":",
@@ -42049,11 +42221,11 @@
             {
               begin: "function calls",
               end: "$",
-              contains: [hljs2.C_NUMBER_MODE],
+              contains: [hljs.C_NUMBER_MODE],
               relevance: 10
             },
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             {
               className: "string",
               begin: "\\(",
@@ -42072,7 +42244,7 @@
   // node_modules/highlight.js/lib/languages/prolog.js
   var require_prolog = __commonJS({
     "node_modules/highlight.js/lib/languages/prolog.js"(exports, module) {
-      function prolog(hljs2) {
+      function prolog(hljs) {
         const ATOM = {
           begin: /[a-z][A-Za-z0-9_]*/,
           relevance: 0
@@ -42098,13 +42270,13 @@
           className: "comment",
           begin: /%/,
           end: /$/,
-          contains: [hljs2.PHRASAL_WORDS_MODE]
+          contains: [hljs.PHRASAL_WORDS_MODE]
         };
         const BACKTICK_STRING = {
           className: "string",
           begin: /`/,
           end: /`/,
-          contains: [hljs2.BACKSLASH_ESCAPE]
+          contains: [hljs.BACKSLASH_ESCAPE]
         };
         const CHAR_CODE = {
           className: "string",
@@ -42127,13 +42299,13 @@
           PRED_OP,
           LIST,
           LINE_COMMENT,
-          hljs2.C_BLOCK_COMMENT_MODE,
-          hljs2.QUOTE_STRING_MODE,
-          hljs2.APOS_STRING_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
+          hljs.QUOTE_STRING_MODE,
+          hljs.APOS_STRING_MODE,
           BACKTICK_STRING,
           CHAR_CODE,
           SPACE_CODE,
-          hljs2.C_NUMBER_MODE
+          hljs.C_NUMBER_MODE
         ];
         PARENTED.contains = inner;
         LIST.contains = inner;
@@ -42154,7 +42326,7 @@
   // node_modules/highlight.js/lib/languages/properties.js
   var require_properties = __commonJS({
     "node_modules/highlight.js/lib/languages/properties.js"(exports, module) {
-      function properties(hljs2) {
+      function properties(hljs) {
         const WS0 = "[ \\t\\f]*";
         const WS1 = "[ \\t\\f]+";
         const EQUAL_DELIM = WS0 + "[:=]" + WS0;
@@ -42182,7 +42354,7 @@
           case_insensitive: true,
           illegal: /\S/,
           contains: [
-            hljs2.COMMENT("^\\s*[!#]", "$"),
+            hljs.COMMENT("^\\s*[!#]", "$"),
             // key: everything until whitespace or = or : (taking into account backslashes)
             // case of a key-value pair
             {
@@ -42215,7 +42387,7 @@
   // node_modules/highlight.js/lib/languages/protobuf.js
   var require_protobuf = __commonJS({
     "node_modules/highlight.js/lib/languages/protobuf.js"(exports, module) {
-      function protobuf(hljs2) {
+      function protobuf(hljs) {
         const KEYWORDS = [
           "package",
           "import",
@@ -42246,7 +42418,7 @@
         const CLASS_DEFINITION = {
           match: [
             /(message|enum|service)\s+/,
-            hljs2.IDENT_RE
+            hljs.IDENT_RE
           ],
           scope: {
             1: "keyword",
@@ -42265,10 +42437,10 @@
             ]
           },
           contains: [
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.NUMBER_MODE,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.NUMBER_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             CLASS_DEFINITION,
             {
               className: "function",
@@ -42292,7 +42464,7 @@
   // node_modules/highlight.js/lib/languages/puppet.js
   var require_puppet = __commonJS({
     "node_modules/highlight.js/lib/languages/puppet.js"(exports, module) {
-      function puppet(hljs2) {
+      function puppet(hljs) {
         const PUPPET_KEYWORDS = {
           keyword: (
             /* language keywords */
@@ -42307,9 +42479,9 @@
             "architecture augeasversion blockdevices boardmanufacturer boardproductname boardserialnumber cfkey dhcp_servers domain ec2_ ec2_userdata facterversion filesystems ldom fqdn gid hardwareisa hardwaremodel hostname id|0 interfaces ipaddress ipaddress_ ipaddress6 ipaddress6_ iphostnumber is_virtual kernel kernelmajversion kernelrelease kernelversion kernelrelease kernelversion lsbdistcodename lsbdistdescription lsbdistid lsbdistrelease lsbmajdistrelease lsbminordistrelease lsbrelease macaddress macaddress_ macosx_buildversion macosx_productname macosx_productversion macosx_productverson_major macosx_productversion_minor manufacturer memoryfree memorysize netmask metmask_ network_ operatingsystem operatingsystemmajrelease operatingsystemrelease osfamily partitions path physicalprocessorcount processor processorcount productname ps puppetversion rubysitedir rubyversion selinux selinux_config_mode selinux_config_policy selinux_current_mode selinux_current_mode selinux_enforced selinux_policyversion serialnumber sp_ sshdsakey sshecdsakey sshrsakey swapencrypted swapfree swapsize timezone type uniqueid uptime uptime_days uptime_hours uptime_seconds uuid virtual vlans xendomains zfs_version zonenae zones zpool_version"
           )
         };
-        const COMMENT = hljs2.COMMENT("#", "$");
+        const COMMENT = hljs.COMMENT("#", "$");
         const IDENT_RE = "([A-Za-z_]|::)(\\w|::)*";
-        const TITLE = hljs2.inherit(hljs2.TITLE_MODE, { begin: IDENT_RE });
+        const TITLE = hljs.inherit(hljs.TITLE_MODE, { begin: IDENT_RE });
         const VARIABLE = {
           className: "variable",
           begin: "\\$" + IDENT_RE
@@ -42317,7 +42489,7 @@
         const STRING = {
           className: "string",
           contains: [
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             VARIABLE
           ],
           variants: [
@@ -42353,19 +42525,19 @@
               contains: [
                 {
                   className: "section",
-                  begin: hljs2.IDENT_RE,
+                  begin: hljs.IDENT_RE,
                   endsParent: true
                 }
               ]
             },
             {
-              begin: hljs2.IDENT_RE + "\\s+\\{",
+              begin: hljs.IDENT_RE + "\\s+\\{",
               returnBegin: true,
               end: /\S/,
               contains: [
                 {
                   className: "keyword",
-                  begin: hljs2.IDENT_RE,
+                  begin: hljs.IDENT_RE,
                   relevance: 0.2
                 },
                 {
@@ -42383,7 +42555,7 @@
                       contains: [
                         {
                           className: "attr",
-                          begin: hljs2.IDENT_RE
+                          begin: hljs.IDENT_RE
                         }
                       ]
                     },
@@ -42408,7 +42580,7 @@
   // node_modules/highlight.js/lib/languages/purebasic.js
   var require_purebasic = __commonJS({
     "node_modules/highlight.js/lib/languages/purebasic.js"(exports, module) {
-      function purebasic(hljs2) {
+      function purebasic(hljs) {
         const STRINGS = {
           // PB IDE color: #0080FF (Azure Radiance)
           className: "string",
@@ -42435,7 +42607,7 @@
           ),
           contains: [
             // COMMENTS | PB IDE color: #00AAAA (Persian Green)
-            hljs2.COMMENT(";", "$", { relevance: 0 }),
+            hljs.COMMENT(";", "$", { relevance: 0 }),
             {
               // PROCEDURES DEFINITIONS
               className: "function",
@@ -42456,7 +42628,7 @@
                   begin: "\\.\\w*"
                   // end: ' ',
                 },
-                hljs2.UNDERSCORE_TITLE_MODE
+                hljs.UNDERSCORE_TITLE_MODE
                 // PROCEDURE NAME | PB IDE color: #006666 (Blue Stone)
               ]
             },
@@ -42472,8 +42644,8 @@
   // node_modules/highlight.js/lib/languages/python.js
   var require_python = __commonJS({
     "node_modules/highlight.js/lib/languages/python.js"(exports, module) {
-      function python(hljs2) {
-        const regex = hljs2.regex;
+      function python(hljs) {
+        const regex = hljs.regex;
         const IDENT_RE = /[\p{XID_Start}_]\p{XID_Continue}*/u;
         const RESERVED_WORDS = [
           "and",
@@ -42629,13 +42801,13 @@
         };
         const STRING = {
           className: "string",
-          contains: [hljs2.BACKSLASH_ESCAPE],
+          contains: [hljs.BACKSLASH_ESCAPE],
           variants: [
             {
               begin: /([uU]|[bB]|[rR]|[bB][rR]|[rR][bB])?'''/,
               end: /'''/,
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 PROMPT
               ],
               relevance: 10
@@ -42644,7 +42816,7 @@
               begin: /([uU]|[bB]|[rR]|[bB][rR]|[rR][bB])?"""/,
               end: /"""/,
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 PROMPT
               ],
               relevance: 10
@@ -42653,7 +42825,7 @@
               begin: /([fF][rR]|[rR][fF]|[fF])'''/,
               end: /'''/,
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 PROMPT,
                 LITERAL_BRACKET,
                 SUBST
@@ -42663,7 +42835,7 @@
               begin: /([fF][rR]|[rR][fF]|[fF])"""/,
               end: /"""/,
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 PROMPT,
                 LITERAL_BRACKET,
                 SUBST
@@ -42691,7 +42863,7 @@
               begin: /([fF][rR]|[rR][fF]|[fF])'/,
               end: /'/,
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 LITERAL_BRACKET,
                 SUBST
               ]
@@ -42700,13 +42872,13 @@
               begin: /([fF][rR]|[rR][fF]|[fF])"/,
               end: /"/,
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 LITERAL_BRACKET,
                 SUBST
               ]
             },
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE
           ]
         };
         const digitpart = "[0-9](_?[0-9])*";
@@ -42795,7 +42967,7 @@
                 PROMPT,
                 NUMBER,
                 STRING,
-                hljs2.HASH_COMMENT_MODE
+                hljs.HASH_COMMENT_MODE
               ]
             }
           ]
@@ -42832,7 +43004,7 @@
             { match: /\bor\b/, scope: "keyword" },
             STRING,
             COMMENT_TYPE,
-            hljs2.HASH_COMMENT_MODE,
+            hljs.HASH_COMMENT_MODE,
             {
               match: [
                 /\bdef/,
@@ -42892,7 +43064,7 @@
   // node_modules/highlight.js/lib/languages/python-repl.js
   var require_python_repl = __commonJS({
     "node_modules/highlight.js/lib/languages/python-repl.js"(exports, module) {
-      function pythonRepl(hljs2) {
+      function pythonRepl(hljs) {
         return {
           aliases: ["pycon"],
           contains: [
@@ -42922,7 +43094,7 @@
   // node_modules/highlight.js/lib/languages/q.js
   var require_q = __commonJS({
     "node_modules/highlight.js/lib/languages/q.js"(exports, module) {
-      function q(hljs2) {
+      function q(hljs) {
         const KEYWORDS = {
           $pattern: /(`?)[A-Za-z0-9_]+\b/,
           keyword: "do while select delete by update from",
@@ -42938,9 +43110,9 @@
           ],
           keywords: KEYWORDS,
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.C_NUMBER_MODE
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.C_NUMBER_MODE
           ]
         };
       }
@@ -42951,8 +43123,8 @@
   // node_modules/highlight.js/lib/languages/qml.js
   var require_qml = __commonJS({
     "node_modules/highlight.js/lib/languages/qml.js"(exports, module) {
-      function qml(hljs2) {
-        const regex = hljs2.regex;
+      function qml(hljs) {
+        const regex = hljs.regex;
         const KEYWORDS = {
           keyword: "in of on if for while finally var new function do return void else break catch instanceof with throw case default try this switch continue typeof delete let yield const export super debugger as async await import",
           literal: "true false null undefined NaN Infinity",
@@ -43005,7 +43177,7 @@
           end: /\{/,
           returnBegin: true,
           relevance: 0,
-          contains: [hljs2.inherit(hljs2.TITLE_MODE, { begin: QML_IDENT_RE })]
+          contains: [hljs.inherit(hljs.TITLE_MODE, { begin: QML_IDENT_RE })]
         };
         return {
           name: "QML",
@@ -43017,15 +43189,15 @@
               className: "meta",
               begin: /^\s*['"]use (strict|asm)['"]/
             },
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             {
               // template string
               className: "string",
               begin: "`",
               end: "`",
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 {
                   className: "subst",
                   begin: "\\$\\{",
@@ -43033,25 +43205,25 @@
                 }
               ]
             },
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             {
               className: "number",
               variants: [
                 { begin: "\\b(0[bB][01]+)" },
                 { begin: "\\b(0[oO][0-7]+)" },
-                { begin: hljs2.C_NUMBER_RE }
+                { begin: hljs.C_NUMBER_RE }
               ],
               relevance: 0
             },
             {
               // "value" container
-              begin: "(" + hljs2.RE_STARTERS_RE + "|\\b(case|return|throw)\\b)\\s*",
+              begin: "(" + hljs.RE_STARTERS_RE + "|\\b(case|return|throw)\\b)\\s*",
               keywords: "return throw case",
               contains: [
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE,
-                hljs2.REGEXP_MODE,
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE,
+                hljs.REGEXP_MODE,
                 {
                   // E4X / JSX
                   begin: /</,
@@ -43070,7 +43242,7 @@
               end: /\{/,
               excludeEnd: true,
               contains: [
-                hljs2.inherit(hljs2.TITLE_MODE, { begin: /[A-Za-z$_][0-9A-Za-z$_]*/ }),
+                hljs.inherit(hljs.TITLE_MODE, { begin: /[A-Za-z$_][0-9A-Za-z$_]*/ }),
                 {
                   className: "params",
                   begin: /\(/,
@@ -43078,8 +43250,8 @@
                   excludeBegin: true,
                   excludeEnd: true,
                   contains: [
-                    hljs2.C_LINE_COMMENT_MODE,
-                    hljs2.C_BLOCK_COMMENT_MODE
+                    hljs.C_LINE_COMMENT_MODE,
+                    hljs.C_BLOCK_COMMENT_MODE
                   ]
                 }
               ],
@@ -43087,7 +43259,7 @@
             },
             {
               // hack: prevents detection of keywords after dots
-              begin: "\\." + hljs2.IDENT_RE,
+              begin: "\\." + hljs.IDENT_RE,
               relevance: 0
             },
             ID_ID,
@@ -43104,8 +43276,8 @@
   // node_modules/highlight.js/lib/languages/r.js
   var require_r = __commonJS({
     "node_modules/highlight.js/lib/languages/r.js"(exports, module) {
-      function r(hljs2) {
-        const regex = hljs2.regex;
+      function r(hljs) {
+        const regex = hljs.regex;
         const IDENT_RE = /(?:(?:[a-zA-Z]|\.[._a-zA-Z])[._a-zA-Z0-9]*)|\.(?!\d)/;
         const NUMBER_TYPES_RE = regex.either(
           // Special case: only hexadecimal binary powers can contain fractions
@@ -43137,7 +43309,7 @@
           },
           contains: [
             // Roxygen comments
-            hljs2.COMMENT(
+            hljs.COMMENT(
               /#'/,
               /$/,
               { contains: [
@@ -43186,32 +43358,32 @@
                 }
               ] }
             ),
-            hljs2.HASH_COMMENT_MODE,
+            hljs.HASH_COMMENT_MODE,
             {
               scope: "string",
-              contains: [hljs2.BACKSLASH_ESCAPE],
+              contains: [hljs.BACKSLASH_ESCAPE],
               variants: [
-                hljs2.END_SAME_AS_BEGIN({
+                hljs.END_SAME_AS_BEGIN({
                   begin: /[rR]"(-*)\(/,
                   end: /\)(-*)"/
                 }),
-                hljs2.END_SAME_AS_BEGIN({
+                hljs.END_SAME_AS_BEGIN({
                   begin: /[rR]"(-*)\{/,
                   end: /\}(-*)"/
                 }),
-                hljs2.END_SAME_AS_BEGIN({
+                hljs.END_SAME_AS_BEGIN({
                   begin: /[rR]"(-*)\[/,
                   end: /\](-*)"/
                 }),
-                hljs2.END_SAME_AS_BEGIN({
+                hljs.END_SAME_AS_BEGIN({
                   begin: /[rR]'(-*)\(/,
                   end: /\)(-*)'/
                 }),
-                hljs2.END_SAME_AS_BEGIN({
+                hljs.END_SAME_AS_BEGIN({
                   begin: /[rR]'(-*)\{/,
                   end: /\}(-*)'/
                 }),
-                hljs2.END_SAME_AS_BEGIN({
+                hljs.END_SAME_AS_BEGIN({
                   begin: /[rR]'(-*)\[/,
                   end: /\](-*)'/
                 }),
@@ -43319,7 +43491,7 @@
   // node_modules/highlight.js/lib/languages/reasonml.js
   var require_reasonml = __commonJS({
     "node_modules/highlight.js/lib/languages/reasonml.js"(exports, module) {
-      function reasonml(hljs2) {
+      function reasonml(hljs) {
         const BUILT_IN_TYPES = [
           "array",
           "bool",
@@ -43409,8 +43581,8 @@
               match: /\[(\|\|)?\]|\(\)/,
               relevance: 0
             },
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.COMMENT(/\/\*/, /\*\//, { illegal: /^(#,\/\/)/ }),
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.COMMENT(/\/\*/, /\*\//, { illegal: /^(#,\/\/)/ }),
             {
               /* type variable */
               scope: "symbol",
@@ -43438,11 +43610,11 @@
               match: /\s+(\|\||\+[\+\.]?|\*[\*\/\.]?|\/[\.]?|\.\.\.|\|>|&&|===?)\s+/,
               relevance: 0
             },
-            hljs2.inherit(hljs2.APOS_STRING_MODE, {
+            hljs.inherit(hljs.APOS_STRING_MODE, {
               scope: "string",
               relevance: 0
             }),
-            hljs2.inherit(hljs2.QUOTE_STRING_MODE, { illegal: null }),
+            hljs.inherit(hljs.QUOTE_STRING_MODE, { illegal: null }),
             {
               scope: "number",
               variants: [
@@ -43463,16 +43635,16 @@
   // node_modules/highlight.js/lib/languages/rib.js
   var require_rib = __commonJS({
     "node_modules/highlight.js/lib/languages/rib.js"(exports, module) {
-      function rib(hljs2) {
+      function rib(hljs) {
         return {
           name: "RenderMan RIB",
           keywords: "ArchiveRecord AreaLightSource Atmosphere Attribute AttributeBegin AttributeEnd Basis Begin Blobby Bound Clipping ClippingPlane Color ColorSamples ConcatTransform Cone CoordinateSystem CoordSysTransform CropWindow Curves Cylinder DepthOfField Detail DetailRange Disk Displacement Display End ErrorHandler Exposure Exterior Format FrameAspectRatio FrameBegin FrameEnd GeneralPolygon GeometricApproximation Geometry Hider Hyperboloid Identity Illuminate Imager Interior LightSource MakeCubeFaceEnvironment MakeLatLongEnvironment MakeShadow MakeTexture Matte MotionBegin MotionEnd NuPatch ObjectBegin ObjectEnd ObjectInstance Opacity Option Orientation Paraboloid Patch PatchMesh Perspective PixelFilter PixelSamples PixelVariance Points PointsGeneralPolygons PointsPolygons Polygon Procedural Projection Quantize ReadArchive RelativeDetail ReverseOrientation Rotate Scale ScreenWindow ShadingInterpolation ShadingRate Shutter Sides Skew SolidBegin SolidEnd Sphere SubdivisionMesh Surface TextureCoordinates Torus Transform TransformBegin TransformEnd TransformPoints Translate TrimCurve WorldBegin WorldEnd",
           illegal: "</",
           contains: [
-            hljs2.HASH_COMMENT_MODE,
-            hljs2.C_NUMBER_MODE,
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE
+            hljs.HASH_COMMENT_MODE,
+            hljs.C_NUMBER_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE
           ]
         };
       }
@@ -43483,7 +43655,7 @@
   // node_modules/highlight.js/lib/languages/roboconf.js
   var require_roboconf = __commonJS({
     "node_modules/highlight.js/lib/languages/roboconf.js"(exports, module) {
-      function roboconf(hljs2) {
+      function roboconf(hljs) {
         const IDENTIFIER = "[a-zA-Z-_][^\\n{]+\\{";
         const PROPERTY = {
           className: "attribute",
@@ -43521,7 +43693,7 @@
               keywords: "facet",
               contains: [
                 PROPERTY,
-                hljs2.HASH_COMMENT_MODE
+                hljs.HASH_COMMENT_MODE
               ]
             },
             // Instance sections
@@ -43533,7 +43705,7 @@
               contains: [
                 "self",
                 PROPERTY,
-                hljs2.HASH_COMMENT_MODE
+                hljs.HASH_COMMENT_MODE
               ]
             },
             // Component sections
@@ -43542,11 +43714,11 @@
               end: /\}/,
               contains: [
                 PROPERTY,
-                hljs2.HASH_COMMENT_MODE
+                hljs.HASH_COMMENT_MODE
               ]
             },
             // Comments
-            hljs2.HASH_COMMENT_MODE
+            hljs.HASH_COMMENT_MODE
           ]
         };
       }
@@ -43557,7 +43729,7 @@
   // node_modules/highlight.js/lib/languages/routeros.js
   var require_routeros = __commonJS({
     "node_modules/highlight.js/lib/languages/routeros.js"(exports, module) {
-      function routeros(hljs2) {
+      function routeros(hljs) {
         const STATEMENTS = "foreach do while for if from to step else on-error and or not in";
         const GLOBAL_COMMANDS = "global local beep delay put len typeof pick log time set find environment terminal error execute parse resolve toarray tobool toid toip toip6 tonum tostr totime";
         const COMMON_COMMANDS = "add remove enable disable set get print export edit find run debug error info warning";
@@ -43575,13 +43747,13 @@
           begin: /"/,
           end: /"/,
           contains: [
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             VAR,
             {
               className: "variable",
               begin: /\$\(/,
               end: /\)/,
-              contains: [hljs2.BACKSLASH_ESCAPE]
+              contains: [hljs.BACKSLASH_ESCAPE]
             }
           ]
         };
@@ -43621,7 +43793,7 @@
               ],
               illegal: /./
             },
-            hljs2.COMMENT("^#", "$"),
+            hljs.COMMENT("^#", "$"),
             QUOTE_STRING,
             APOS_STRING,
             VAR,
@@ -43708,7 +43880,7 @@
   // node_modules/highlight.js/lib/languages/rsl.js
   var require_rsl = __commonJS({
     "node_modules/highlight.js/lib/languages/rsl.js"(exports, module) {
-      function rsl(hljs2) {
+      function rsl(hljs) {
         const BUILT_INS = [
           "abs",
           "acos",
@@ -43809,7 +43981,7 @@
           match: [
             /(surface|displacement|light|volume|imager)/,
             /\s+/,
-            hljs2.IDENT_RE
+            hljs.IDENT_RE
           ],
           scope: {
             1: "keyword",
@@ -43825,11 +43997,11 @@
           },
           illegal: "</",
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.APOS_STRING_MODE,
-            hljs2.C_NUMBER_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.C_NUMBER_MODE,
             {
               className: "meta",
               begin: "#",
@@ -43850,7 +44022,7 @@
   // node_modules/highlight.js/lib/languages/ruleslanguage.js
   var require_ruleslanguage = __commonJS({
     "node_modules/highlight.js/lib/languages/ruleslanguage.js"(exports, module) {
-      function ruleslanguage(hljs2) {
+      function ruleslanguage(hljs) {
         return {
           name: "Oracle Rules Language",
           keywords: {
@@ -43858,11 +44030,11 @@
             built_in: "IDENTIFIER OPTIONS XML_ELEMENT XML_OP XML_ELEMENT_OF DOMDOCCREATE DOMDOCLOADFILE DOMDOCLOADXML DOMDOCSAVEFILE DOMDOCGETROOT DOMDOCADDPI DOMNODEGETNAME DOMNODEGETTYPE DOMNODEGETVALUE DOMNODEGETCHILDCT DOMNODEGETFIRSTCHILD DOMNODEGETSIBLING DOMNODECREATECHILDELEMENT DOMNODESETATTRIBUTE DOMNODEGETCHILDELEMENTCT DOMNODEGETFIRSTCHILDELEMENT DOMNODEGETSIBLINGELEMENT DOMNODEGETATTRIBUTECT DOMNODEGETATTRIBUTEI DOMNODEGETATTRIBUTEBYNAME DOMNODEGETBYNAME"
           },
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.C_NUMBER_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.C_NUMBER_MODE,
             {
               className: "literal",
               variants: [
@@ -43884,11 +44056,11 @@
   // node_modules/highlight.js/lib/languages/rust.js
   var require_rust = __commonJS({
     "node_modules/highlight.js/lib/languages/rust.js"(exports, module) {
-      function rust(hljs2) {
-        const regex = hljs2.regex;
+      function rust(hljs) {
+        const regex = hljs.regex;
         const RAW_IDENTIFIER = /(r#)?/;
-        const UNDERSCORE_IDENT_RE = regex.concat(RAW_IDENTIFIER, hljs2.UNDERSCORE_IDENT_RE);
-        const IDENT_RE = regex.concat(RAW_IDENTIFIER, hljs2.IDENT_RE);
+        const UNDERSCORE_IDENT_RE = regex.concat(RAW_IDENTIFIER, hljs.UNDERSCORE_IDENT_RE);
+        const IDENT_RE = regex.concat(RAW_IDENTIFIER, hljs.IDENT_RE);
         const FUNCTION_INVOKE = {
           className: "title.function.invoke",
           relevance: 0,
@@ -44058,7 +44230,7 @@
           name: "Rust",
           aliases: ["rs"],
           keywords: {
-            $pattern: hljs2.IDENT_RE + "!?",
+            $pattern: hljs.IDENT_RE + "!?",
             type: TYPES,
             keyword: KEYWORDS,
             literal: LITERALS,
@@ -44066,9 +44238,9 @@
           },
           illegal: "</",
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.COMMENT("/\\*", "\\*/", { contains: ["self"] }),
-            hljs2.inherit(hljs2.QUOTE_STRING_MODE, {
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.COMMENT("/\\*", "\\*/", { contains: ["self"] }),
+            hljs.inherit(hljs.QUOTE_STRING_MODE, {
               begin: /b?"/,
               illegal: null
             }),
@@ -44114,7 +44286,7 @@
                   begin: /"/,
                   end: /"/,
                   contains: [
-                    hljs2.BACKSLASH_ESCAPE
+                    hljs.BACKSLASH_ESCAPE
                   ]
                 }
               ]
@@ -44170,7 +44342,7 @@
               }
             },
             {
-              begin: hljs2.IDENT_RE + "::",
+              begin: hljs.IDENT_RE + "::",
               keywords: {
                 keyword: "Self",
                 built_in: BUILTINS,
@@ -44192,8 +44364,8 @@
   // node_modules/highlight.js/lib/languages/sas.js
   var require_sas = __commonJS({
     "node_modules/highlight.js/lib/languages/sas.js"(exports, module) {
-      function sas(hljs2) {
-        const regex = hljs2.regex;
+      function sas(hljs) {
+        const regex = hljs.regex;
         const SAS_KEYWORDS = [
           "do",
           "if",
@@ -44724,12 +44896,12 @@
             {
               className: "string",
               variants: [
-                hljs2.APOS_STRING_MODE,
-                hljs2.QUOTE_STRING_MODE
+                hljs.APOS_STRING_MODE,
+                hljs.QUOTE_STRING_MODE
               ]
             },
-            hljs2.COMMENT("\\*", ";"),
-            hljs2.C_BLOCK_COMMENT_MODE
+            hljs.COMMENT("\\*", ";"),
+            hljs.C_BLOCK_COMMENT_MODE
           ]
         };
       }
@@ -44740,8 +44912,8 @@
   // node_modules/highlight.js/lib/languages/scala.js
   var require_scala = __commonJS({
     "node_modules/highlight.js/lib/languages/scala.js"(exports, module) {
-      function scala(hljs2) {
-        const regex = hljs2.regex;
+      function scala(hljs) {
+        const regex = hljs.regex;
         const ANNOTATION = {
           className: "meta",
           begin: "@[A-Za-z]+"
@@ -44767,14 +44939,14 @@
               begin: '"',
               end: '"',
               illegal: "\\n",
-              contains: [hljs2.BACKSLASH_ESCAPE]
+              contains: [hljs.BACKSLASH_ESCAPE]
             },
             {
               begin: '[a-z]+"',
               end: '"',
               illegal: "\\n",
               contains: [
-                hljs2.BACKSLASH_ESCAPE,
+                hljs.BACKSLASH_ESCAPE,
                 SUBST
               ]
             },
@@ -44803,8 +44975,8 @@
           end: /[:={\[\n;]/,
           excludeEnd: true,
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             {
               beginKeywords: "extends with",
               relevance: 10
@@ -44817,8 +44989,8 @@
               relevance: 0,
               contains: [
                 TYPE,
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE
               ]
             },
             {
@@ -44830,8 +45002,8 @@
               relevance: 0,
               contains: [
                 TYPE,
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.C_BLOCK_COMMENT_MODE
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.C_BLOCK_COMMENT_MODE
               ]
             },
             NAME
@@ -44914,13 +45086,13 @@
           },
           contains: [
             USING_DIRECTIVE,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             STRING,
             TYPE,
             METHOD,
             CLASS,
-            hljs2.C_NUMBER_MODE,
+            hljs.C_NUMBER_MODE,
             EXTENSION,
             END,
             ...INLINE_MODES,
@@ -44936,7 +45108,7 @@
   // node_modules/highlight.js/lib/languages/scheme.js
   var require_scheme = __commonJS({
     "node_modules/highlight.js/lib/languages/scheme.js"(exports, module) {
-      function scheme(hljs2) {
+      function scheme(hljs) {
         const SCHEME_IDENT_RE = "[^\\(\\)\\[\\]\\{\\}\",'`;#|\\\\\\s]+";
         const SCHEME_SIMPLE_NUMBER_RE = "(-|\\+)?\\d+([./]\\d+)?";
         const SCHEME_COMPLEX_NUMBER_RE = SCHEME_SIMPLE_NUMBER_RE + "[+\\-]" + SCHEME_SIMPLE_NUMBER_RE + "i";
@@ -44964,14 +45136,14 @@
             { begin: "#x[0-9a-f]+(/[0-9a-f]+)?" }
           ]
         };
-        const STRING = hljs2.QUOTE_STRING_MODE;
+        const STRING = hljs.QUOTE_STRING_MODE;
         const COMMENT_MODES = [
-          hljs2.COMMENT(
+          hljs.COMMENT(
             ";",
             "$",
             { relevance: 0 }
           ),
-          hljs2.COMMENT("#\\|", "\\|#")
+          hljs.COMMENT("#\\|", "\\|#")
         ];
         const IDENT = {
           begin: SCHEME_IDENT_RE,
@@ -45064,7 +45236,7 @@
           aliases: ["scm"],
           illegal: /\S/,
           contains: [
-            hljs2.SHEBANG(),
+            hljs.SHEBANG(),
             NUMBER,
             STRING,
             QUOTED_IDENT,
@@ -45080,15 +45252,15 @@
   // node_modules/highlight.js/lib/languages/scilab.js
   var require_scilab = __commonJS({
     "node_modules/highlight.js/lib/languages/scilab.js"(exports, module) {
-      function scilab(hljs2) {
+      function scilab(hljs) {
         const COMMON_CONTAINS = [
-          hljs2.C_NUMBER_MODE,
+          hljs.C_NUMBER_MODE,
           {
             className: "string",
             begin: `'|"`,
             end: `'|"`,
             contains: [
-              hljs2.BACKSLASH_ESCAPE,
+              hljs.BACKSLASH_ESCAPE,
               { begin: "''" }
             ]
           }
@@ -45112,7 +45284,7 @@
               beginKeywords: "function",
               end: "$",
               contains: [
-                hljs2.UNDERSCORE_TITLE_MODE,
+                hljs.UNDERSCORE_TITLE_MODE,
                 {
                   className: "params",
                   begin: "\\(",
@@ -45132,7 +45304,7 @@
               relevance: 0,
               contains: COMMON_CONTAINS
             },
-            hljs2.COMMENT("//", "$")
+            hljs.COMMENT("//", "$")
           ].concat(COMMON_CONTAINS)
         };
       }
@@ -45143,13 +45315,13 @@
   // node_modules/highlight.js/lib/languages/scss.js
   var require_scss = __commonJS({
     "node_modules/highlight.js/lib/languages/scss.js"(exports, module) {
-      var MODES = (hljs2) => {
+      var MODES = (hljs) => {
         return {
           IMPORTANT: {
             scope: "meta",
             begin: "!important"
           },
-          BLOCK_COMMENT: hljs2.C_BLOCK_COMMENT_MODE,
+          BLOCK_COMMENT: hljs.C_BLOCK_COMMENT_MODE,
           HEXCOLOR: {
             scope: "number",
             begin: /#(([0-9a-fA-F]{3,4})|(([0-9a-fA-F]{2}){3,4}))\b/
@@ -45164,13 +45336,13 @@
             end: /\]/,
             illegal: "$",
             contains: [
-              hljs2.APOS_STRING_MODE,
-              hljs2.QUOTE_STRING_MODE
+              hljs.APOS_STRING_MODE,
+              hljs.QUOTE_STRING_MODE
             ]
           },
           CSS_NUMBER_MODE: {
             scope: "number",
-            begin: hljs2.NUMBER_RE + "(%|em|ex|ch|rem|vw|vh|vmin|vmax|cm|mm|in|pt|pc|px|deg|grad|rad|turn|s|ms|Hz|kHz|dpi|dpcm|dppx)?",
+            begin: hljs.NUMBER_RE + "(%|em|ex|ch|rem|vw|vh|vmin|vmax|cm|mm|in|pt|pc|px|deg|grad|rad|turn|s|ms|Hz|kHz|dpi|dpcm|dppx)?",
             relevance: 0
           },
           CSS_VARIABLE: {
@@ -45854,8 +46026,8 @@
         "y",
         "z-index"
       ].sort().reverse();
-      function scss(hljs2) {
-        const modes = MODES(hljs2);
+      function scss(hljs) {
+        const modes = MODES(hljs);
         const PSEUDO_ELEMENTS$1 = PSEUDO_ELEMENTS;
         const PSEUDO_CLASSES$1 = PSEUDO_CLASSES;
         const AT_IDENTIFIER = "@[a-z-]+";
@@ -45871,8 +46043,8 @@
           case_insensitive: true,
           illegal: "[=/|']",
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             // to recognize keyframe 40% etc which are outside the scope of our
             // attribute value mode
             modes.CSS_NUMBER_MODE,
@@ -45923,8 +46095,8 @@
                 VARIABLE,
                 modes.HEXCOLOR,
                 modes.CSS_NUMBER_MODE,
-                hljs2.QUOTE_STRING_MODE,
-                hljs2.APOS_STRING_MODE,
+                hljs.QUOTE_STRING_MODE,
+                hljs.APOS_STRING_MODE,
                 modes.IMPORTANT,
                 modes.FUNCTION_DISPATCH
               ]
@@ -45958,8 +46130,8 @@
                   className: "attribute"
                 },
                 VARIABLE,
-                hljs2.QUOTE_STRING_MODE,
-                hljs2.APOS_STRING_MODE,
+                hljs.QUOTE_STRING_MODE,
+                hljs.APOS_STRING_MODE,
                 modes.HEXCOLOR,
                 modes.CSS_NUMBER_MODE
               ]
@@ -45975,7 +46147,7 @@
   // node_modules/highlight.js/lib/languages/shell.js
   var require_shell = __commonJS({
     "node_modules/highlight.js/lib/languages/shell.js"(exports, module) {
-      function shell(hljs2) {
+      function shell(hljs) {
         return {
           name: "Shell Session",
           aliases: [
@@ -46004,7 +46176,7 @@
   // node_modules/highlight.js/lib/languages/smali.js
   var require_smali = __commonJS({
     "node_modules/highlight.js/lib/languages/smali.js"(exports, module) {
-      function smali(hljs2) {
+      function smali(hljs) {
         const smali_instr_low_prio = [
           "add",
           "and",
@@ -46077,7 +46249,7 @@
               end: '"',
               relevance: 0
             },
-            hljs2.COMMENT(
+            hljs.COMMENT(
               "#",
               "$",
               { relevance: 0 }
@@ -46127,7 +46299,7 @@
   // node_modules/highlight.js/lib/languages/smalltalk.js
   var require_smalltalk = __commonJS({
     "node_modules/highlight.js/lib/languages/smalltalk.js"(exports, module) {
-      function smalltalk(hljs2) {
+      function smalltalk(hljs) {
         const VAR_IDENT_RE = "[a-z][a-zA-Z0-9_]*";
         const CHAR = {
           className: "string",
@@ -46135,7 +46307,7 @@
         };
         const SYMBOL = {
           className: "symbol",
-          begin: "#" + hljs2.UNDERSCORE_IDENT_RE
+          begin: "#" + hljs.UNDERSCORE_IDENT_RE
         };
         return {
           name: "Smalltalk",
@@ -46149,8 +46321,8 @@
             "thisContext"
           ],
           contains: [
-            hljs2.COMMENT('"', '"'),
-            hljs2.APOS_STRING_MODE,
+            hljs.COMMENT('"', '"'),
+            hljs.APOS_STRING_MODE,
             {
               className: "type",
               begin: "\\b[A-Z][A-Za-z0-9_]*",
@@ -46160,7 +46332,7 @@
               begin: VAR_IDENT_RE + ":",
               relevance: 0
             },
-            hljs2.C_NUMBER_MODE,
+            hljs.C_NUMBER_MODE,
             SYMBOL,
             CHAR,
             {
@@ -46177,9 +46349,9 @@
               begin: "#\\(",
               end: "\\)",
               contains: [
-                hljs2.APOS_STRING_MODE,
+                hljs.APOS_STRING_MODE,
                 CHAR,
-                hljs2.C_NUMBER_MODE,
+                hljs.C_NUMBER_MODE,
                 SYMBOL
               ]
             }
@@ -46193,7 +46365,7 @@
   // node_modules/highlight.js/lib/languages/sml.js
   var require_sml = __commonJS({
     "node_modules/highlight.js/lib/languages/sml.js"(exports, module) {
-      function sml(hljs2) {
+      function sml(hljs) {
         return {
           name: "SML (Standard ML)",
           aliases: ["ml"],
@@ -46216,7 +46388,7 @@
               begin: /\[(\|\|)?\]|\(\)/,
               relevance: 0
             },
-            hljs2.COMMENT(
+            hljs.COMMENT(
               "\\(\\*",
               "\\*\\)",
               { contains: ["self"] }
@@ -46242,11 +46414,11 @@
               /* don't color identifiers, but safely catch all identifiers with ' */
               begin: "[a-z_]\\w*'[\\w']*"
             },
-            hljs2.inherit(hljs2.APOS_STRING_MODE, {
+            hljs.inherit(hljs.APOS_STRING_MODE, {
               className: "string",
               relevance: 0
             }),
-            hljs2.inherit(hljs2.QUOTE_STRING_MODE, { illegal: null }),
+            hljs.inherit(hljs.QUOTE_STRING_MODE, { illegal: null }),
             {
               className: "number",
               begin: "\\b(0[xX][a-fA-F0-9_]+[Lln]?|0[oO][0-7_]+[Lln]?|0[bB][01_]+[Lln]?|[0-9][0-9_]*([Lln]|(\\.[0-9_]*)?([eE][-+]?[0-9_]+)?)?)",
@@ -46266,7 +46438,7 @@
   // node_modules/highlight.js/lib/languages/sqf.js
   var require_sqf = __commonJS({
     "node_modules/highlight.js/lib/languages/sqf.js"(exports, module) {
-      function sqf(hljs2) {
+      function sqf(hljs) {
         const VARIABLE = {
           className: "variable",
           begin: /\b_+[a-zA-Z]\w*/
@@ -48830,14 +49002,14 @@
               begin: /\\\n/,
               relevance: 0
             },
-            hljs2.inherit(STRINGS, { className: "string" }),
+            hljs.inherit(STRINGS, { className: "string" }),
             {
               begin: /<[^\n>]*>/,
               end: /$/,
               illegal: "\\n"
             },
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE
           ]
         };
         return {
@@ -48849,9 +49021,9 @@
             literal: LITERAL
           },
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.NUMBER_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.NUMBER_MODE,
             VARIABLE,
             FUNCTION,
             STRINGS,
@@ -48881,9 +49053,9 @@
   // node_modules/highlight.js/lib/languages/sql.js
   var require_sql = __commonJS({
     "node_modules/highlight.js/lib/languages/sql.js"(exports, module) {
-      function sql(hljs2) {
-        const regex = hljs2.regex;
-        const COMMENT_MODE = hljs2.COMMENT("--", "$");
+      function sql(hljs) {
+        const regex = hljs.regex;
+        const COMMENT_MODE = hljs.COMMENT("--", "$");
         const STRING = {
           className: "string",
           variants: [
@@ -49510,8 +49682,8 @@
             VARIABLE,
             STRING,
             QUOTED_IDENTIFIER,
-            hljs2.C_NUMBER_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_NUMBER_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             COMMENT_MODE,
             OPERATOR
           ]
@@ -49524,8 +49696,8 @@
   // node_modules/highlight.js/lib/languages/stan.js
   var require_stan = __commonJS({
     "node_modules/highlight.js/lib/languages/stan.js"(exports, module) {
-      function stan(hljs2) {
-        const regex = hljs2.regex;
+      function stan(hljs) {
+        const regex = hljs.regex;
         const BLOCKS = [
           "functions",
           "model",
@@ -49892,7 +50064,7 @@
           "wishart",
           "wishart_cholesky"
         ];
-        const BLOCK_COMMENT = hljs2.COMMENT(
+        const BLOCK_COMMENT = hljs.COMMENT(
           /\/\*/,
           /\*\//,
           {
@@ -49914,7 +50086,7 @@
               match: /[a-z][a-z-._]+/,
               scope: "string"
             },
-            hljs2.C_LINE_COMMENT_MODE
+            hljs.C_LINE_COMMENT_MODE
           ]
         };
         const RANGE_CONSTRAINTS = [
@@ -49927,16 +50099,16 @@
           name: "Stan",
           aliases: ["stanfuncs"],
           keywords: {
-            $pattern: hljs2.IDENT_RE,
+            $pattern: hljs.IDENT_RE,
             title: BLOCKS,
             type: TYPES,
             keyword: STATEMENTS,
             built_in: FUNCTIONS
           },
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
             INCLUDE,
-            hljs2.HASH_COMMENT_MODE,
+            hljs.HASH_COMMENT_MODE,
             BLOCK_COMMENT,
             {
               scope: "built_in",
@@ -50024,7 +50196,7 @@
   // node_modules/highlight.js/lib/languages/stata.js
   var require_stata = __commonJS({
     "node_modules/highlight.js/lib/languages/stata.js"(exports, module) {
-      function stata(hljs2) {
+      function stata(hljs) {
         return {
           name: "Stata",
           aliases: [
@@ -50054,9 +50226,9 @@
               className: "built_in",
               variants: [{ begin: "\\b(abs|acos|asin|atan|atan2|atanh|ceil|cloglog|comb|cos|digamma|exp|floor|invcloglog|invlogit|ln|lnfact|lnfactorial|lngamma|log|log10|max|min|mod|reldif|round|sign|sin|sqrt|sum|tan|tanh|trigamma|trunc|betaden|Binomial|binorm|binormal|chi2|chi2tail|dgammapda|dgammapdada|dgammapdadx|dgammapdx|dgammapdxdx|F|Fden|Ftail|gammaden|gammap|ibeta|invbinomial|invchi2|invchi2tail|invF|invFtail|invgammap|invibeta|invnchi2|invnFtail|invnibeta|invnorm|invnormal|invttail|nbetaden|nchi2|nFden|nFtail|nibeta|norm|normal|normalden|normd|npnchi2|tden|ttail|uniform|abbrev|char|index|indexnot|length|lower|ltrim|match|plural|proper|real|regexm|regexr|regexs|reverse|rtrim|string|strlen|strlower|strltrim|strmatch|strofreal|strpos|strproper|strreverse|strrtrim|strtrim|strupper|subinstr|subinword|substr|trim|upper|word|wordcount|_caller|autocode|byteorder|chop|clip|cond|e|epsdouble|epsfloat|group|inlist|inrange|irecode|matrix|maxbyte|maxdouble|maxfloat|maxint|maxlong|mi|minbyte|mindouble|minfloat|minint|minlong|missing|r|recode|replay|return|s|scalar|d|date|day|dow|doy|halfyear|mdy|month|quarter|week|year|d|daily|dofd|dofh|dofm|dofq|dofw|dofy|h|halfyearly|hofd|m|mofd|monthly|q|qofd|quarterly|tin|twithin|w|weekly|wofd|y|yearly|yh|ym|yofd|yq|yw|cholesky|colnumb|colsof|corr|det|diag|diag0cnt|el|get|hadamard|I|inv|invsym|issym|issymmetric|J|matmissing|matuniform|mreldif|nullmat|rownumb|rowsof|sweep|syminv|trace|vec|vecdiag)(?=\\()" }]
             },
-            hljs2.COMMENT("^[ 	]*\\*.*$", false),
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE
+            hljs.COMMENT("^[ 	]*\\*.*$", false),
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE
           ]
         };
       }
@@ -50067,7 +50239,7 @@
   // node_modules/highlight.js/lib/languages/step21.js
   var require_step21 = __commonJS({
     "node_modules/highlight.js/lib/languages/step21.js"(exports, module) {
-      function step21(hljs2) {
+      function step21(hljs) {
         const STEP21_IDENT_RE = "[A-Z_][A-Z0-9_.]*";
         const STEP21_KEYWORDS = {
           $pattern: STEP21_IDENT_RE,
@@ -50100,12 +50272,12 @@
           contains: [
             STEP21_START,
             STEP21_CLOSE,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.COMMENT("/\\*\\*!", "\\*/"),
-            hljs2.C_NUMBER_MODE,
-            hljs2.inherit(hljs2.APOS_STRING_MODE, { illegal: null }),
-            hljs2.inherit(hljs2.QUOTE_STRING_MODE, { illegal: null }),
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.COMMENT("/\\*\\*!", "\\*/"),
+            hljs.C_NUMBER_MODE,
+            hljs.inherit(hljs.APOS_STRING_MODE, { illegal: null }),
+            hljs.inherit(hljs.QUOTE_STRING_MODE, { illegal: null }),
             {
               className: "string",
               begin: "'",
@@ -50131,13 +50303,13 @@
   // node_modules/highlight.js/lib/languages/stylus.js
   var require_stylus = __commonJS({
     "node_modules/highlight.js/lib/languages/stylus.js"(exports, module) {
-      var MODES = (hljs2) => {
+      var MODES = (hljs) => {
         return {
           IMPORTANT: {
             scope: "meta",
             begin: "!important"
           },
-          BLOCK_COMMENT: hljs2.C_BLOCK_COMMENT_MODE,
+          BLOCK_COMMENT: hljs.C_BLOCK_COMMENT_MODE,
           HEXCOLOR: {
             scope: "number",
             begin: /#(([0-9a-fA-F]{3,4})|(([0-9a-fA-F]{2}){3,4}))\b/
@@ -50152,13 +50324,13 @@
             end: /\]/,
             illegal: "$",
             contains: [
-              hljs2.APOS_STRING_MODE,
-              hljs2.QUOTE_STRING_MODE
+              hljs.APOS_STRING_MODE,
+              hljs.QUOTE_STRING_MODE
             ]
           },
           CSS_NUMBER_MODE: {
             scope: "number",
-            begin: hljs2.NUMBER_RE + "(%|em|ex|ch|rem|vw|vh|vmin|vmax|cm|mm|in|pt|pc|px|deg|grad|rad|turn|s|ms|Hz|kHz|dpi|dpcm|dppx)?",
+            begin: hljs.NUMBER_RE + "(%|em|ex|ch|rem|vw|vh|vmin|vmax|cm|mm|in|pt|pc|px|deg|grad|rad|turn|s|ms|Hz|kHz|dpi|dpcm|dppx)?",
             relevance: 0
           },
           CSS_VARIABLE: {
@@ -50842,12 +51014,12 @@
         "y",
         "z-index"
       ].sort().reverse();
-      function stylus(hljs2) {
-        const modes = MODES(hljs2);
+      function stylus(hljs) {
+        const modes = MODES(hljs);
         const AT_MODIFIERS = "and or not only";
         const VARIABLE = {
           className: "variable",
-          begin: "\\$" + hljs2.IDENT_RE
+          begin: "\\$" + hljs.IDENT_RE
         };
         const AT_KEYWORDS = [
           "charset",
@@ -50896,11 +51068,11 @@
           illegal: "(" + ILLEGAL.join("|") + ")",
           contains: [
             // strings
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE,
             // comments
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             // hex colors
             modes.HEXCOLOR,
             // class tag
@@ -50969,9 +51141,9 @@
                   contains: [
                     modes.HEXCOLOR,
                     VARIABLE,
-                    hljs2.APOS_STRING_MODE,
+                    hljs.APOS_STRING_MODE,
                     modes.CSS_NUMBER_MODE,
-                    hljs2.QUOTE_STRING_MODE
+                    hljs.QUOTE_STRING_MODE
                   ]
                 }
               ]
@@ -50990,10 +51162,10 @@
                 contains: [
                   modes.HEXCOLOR,
                   VARIABLE,
-                  hljs2.APOS_STRING_MODE,
-                  hljs2.QUOTE_STRING_MODE,
+                  hljs.APOS_STRING_MODE,
+                  hljs.QUOTE_STRING_MODE,
                   modes.CSS_NUMBER_MODE,
-                  hljs2.C_BLOCK_COMMENT_MODE,
+                  hljs.C_BLOCK_COMMENT_MODE,
                   modes.IMPORTANT,
                   modes.FUNCTION_DISPATCH
                 ],
@@ -51012,7 +51184,7 @@
   // node_modules/highlight.js/lib/languages/subunit.js
   var require_subunit = __commonJS({
     "node_modules/highlight.js/lib/languages/subunit.js"(exports, module) {
-      function subunit(hljs2) {
+      function subunit(hljs) {
         const DETAILS = {
           className: "string",
           begin: "\\[\n(multipart)?",
@@ -51413,18 +51585,18 @@
         "tvOSApplicationExtension",
         "swift"
       ];
-      function swift(hljs2) {
+      function swift(hljs) {
         const WHITESPACE = {
           match: /\s+/,
           relevance: 0
         };
-        const BLOCK_COMMENT = hljs2.COMMENT(
+        const BLOCK_COMMENT = hljs.COMMENT(
           "/\\*",
           "\\*/",
           { contains: ["self"] }
         );
         const COMMENTS = [
-          hljs2.C_LINE_COMMENT_MODE,
+          hljs.C_LINE_COMMENT_MODE,
           BLOCK_COMMENT
         ];
         const DOT_KEYWORD = {
@@ -51561,12 +51733,12 @@
           ]
         };
         const REGEXP_CONTENTS = [
-          hljs2.BACKSLASH_ESCAPE,
+          hljs.BACKSLASH_ESCAPE,
           {
             begin: /\[/,
             end: /\]/,
             relevance: 0,
-            contains: [hljs2.BACKSLASH_ESCAPE]
+            contains: [hljs.BACKSLASH_ESCAPE]
           }
         ];
         const BARE_REGEXP_LITERAL = {
@@ -51907,7 +52079,7 @@
   // node_modules/highlight.js/lib/languages/taggerscript.js
   var require_taggerscript = __commonJS({
     "node_modules/highlight.js/lib/languages/taggerscript.js"(exports, module) {
-      function taggerscript(hljs2) {
+      function taggerscript(hljs) {
         const NOOP = {
           className: "comment",
           begin: /\$noop\(/,
@@ -51959,7 +52131,7 @@
   // node_modules/highlight.js/lib/languages/yaml.js
   var require_yaml = __commonJS({
     "node_modules/highlight.js/lib/languages/yaml.js"(exports, module) {
-      function yaml(hljs2) {
+      function yaml(hljs) {
         const LITERALS = "true false yes no null";
         const URI_CHARACTERS = "[\\w#;/?:@&=+$,.~*'()[\\]]+";
         const KEY = {
@@ -52007,11 +52179,11 @@
             { begin: /\S+/ }
           ],
           contains: [
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             TEMPLATE_VARIABLES
           ]
         };
-        const CONTAINER_STRING = hljs2.inherit(STRING, { variants: [
+        const CONTAINER_STRING = hljs.inherit(STRING, { variants: [
           {
             begin: /'/,
             end: /'/
@@ -52100,12 +52272,12 @@
           {
             // fragment id &ref
             className: "meta",
-            begin: "&" + hljs2.UNDERSCORE_IDENT_RE + "$"
+            begin: "&" + hljs.UNDERSCORE_IDENT_RE + "$"
           },
           {
             // fragment reference *ref
             className: "meta",
-            begin: "\\*" + hljs2.UNDERSCORE_IDENT_RE + "$"
+            begin: "\\*" + hljs.UNDERSCORE_IDENT_RE + "$"
           },
           {
             // array listing
@@ -52114,7 +52286,7 @@
             begin: "-(?=[ ]|$)",
             relevance: 0
           },
-          hljs2.HASH_COMMENT_MODE,
+          hljs.HASH_COMMENT_MODE,
           {
             beginKeywords: LITERALS,
             keywords: { literal: LITERALS }
@@ -52124,7 +52296,7 @@
           // sit isolated from other words
           {
             className: "number",
-            begin: hljs2.C_NUMBER_RE + "\\b",
+            begin: hljs.C_NUMBER_RE + "\\b",
             relevance: 0
           },
           OBJECT,
@@ -52149,12 +52321,12 @@
   // node_modules/highlight.js/lib/languages/tap.js
   var require_tap = __commonJS({
     "node_modules/highlight.js/lib/languages/tap.js"(exports, module) {
-      function tap(hljs2) {
+      function tap(hljs) {
         return {
           name: "Test Anything Protocol",
           case_insensitive: true,
           contains: [
-            hljs2.HASH_COMMENT_MODE,
+            hljs.HASH_COMMENT_MODE,
             // version of format and total amount of testcases
             {
               className: "meta",
@@ -52193,14 +52365,14 @@
   // node_modules/highlight.js/lib/languages/tcl.js
   var require_tcl = __commonJS({
     "node_modules/highlight.js/lib/languages/tcl.js"(exports, module) {
-      function tcl(hljs2) {
-        const regex = hljs2.regex;
+      function tcl(hljs) {
+        const regex = hljs.regex;
         const TCL_IDENT = /[a-zA-Z_][a-zA-Z0-9_]*/;
         const NUMBER = {
           className: "number",
           variants: [
-            hljs2.BINARY_NUMBER_MODE,
-            hljs2.C_NUMBER_MODE
+            hljs.BINARY_NUMBER_MODE,
+            hljs.C_NUMBER_MODE
           ]
         };
         const KEYWORDS = [
@@ -52328,8 +52500,8 @@
           aliases: ["tk"],
           keywords: KEYWORDS,
           contains: [
-            hljs2.COMMENT(";[ \\t]*#", "$"),
-            hljs2.COMMENT("^[ \\t]*#", "$"),
+            hljs.COMMENT(";[ \\t]*#", "$"),
+            hljs.COMMENT("^[ \\t]*#", "$"),
             {
               beginKeywords: "proc",
               end: "[\\{]",
@@ -52364,8 +52536,8 @@
             },
             {
               className: "string",
-              contains: [hljs2.BACKSLASH_ESCAPE],
-              variants: [hljs2.inherit(hljs2.QUOTE_STRING_MODE, { illegal: null })]
+              contains: [hljs.BACKSLASH_ESCAPE],
+              variants: [hljs.inherit(hljs.QUOTE_STRING_MODE, { illegal: null })]
             },
             NUMBER
           ]
@@ -52378,7 +52550,7 @@
   // node_modules/highlight.js/lib/languages/thrift.js
   var require_thrift = __commonJS({
     "node_modules/highlight.js/lib/languages/thrift.js"(exports, module) {
-      function thrift(hljs2) {
+      function thrift(hljs) {
         const TYPES = [
           "bool",
           "byte",
@@ -52413,17 +52585,17 @@
             literal: "true false"
           },
           contains: [
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.NUMBER_MODE,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.NUMBER_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             {
               className: "class",
               beginKeywords: "struct enum service exception",
               end: /\{/,
               illegal: /\n/,
               contains: [
-                hljs2.inherit(hljs2.TITLE_MODE, {
+                hljs.inherit(hljs.TITLE_MODE, {
                   // hack: eating everything after the first title
                   starts: {
                     endsWithParent: true,
@@ -52453,7 +52625,7 @@
   // node_modules/highlight.js/lib/languages/tp.js
   var require_tp = __commonJS({
     "node_modules/highlight.js/lib/languages/tp.js"(exports, module) {
-      function tp(hljs2) {
+      function tp(hljs) {
         const TPID = {
           className: "number",
           begin: "[1-9][0-9]*",
@@ -52481,7 +52653,7 @@
           contains: [
             "self",
             TPID,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             /* for pos section at bottom */
             TPLABEL
           ]
@@ -52598,16 +52770,16 @@
               begin: "\\d+(sec|msec|mm/sec|cm/min|inch/min|deg/sec|mm|in|cm)?\\b",
               relevance: 0
             },
-            hljs2.COMMENT("//", "[;$]"),
-            hljs2.COMMENT("!", "[;$]"),
-            hljs2.COMMENT("--eg:", "$"),
-            hljs2.QUOTE_STRING_MODE,
+            hljs.COMMENT("//", "[;$]"),
+            hljs.COMMENT("!", "[;$]"),
+            hljs.COMMENT("--eg:", "$"),
+            hljs.QUOTE_STRING_MODE,
             {
               className: "string",
               begin: "'",
               end: "'"
             },
-            hljs2.C_NUMBER_MODE,
+            hljs.C_NUMBER_MODE,
             {
               className: "variable",
               begin: "\\$[A-Za-z0-9_]+"
@@ -52622,8 +52794,8 @@
   // node_modules/highlight.js/lib/languages/twig.js
   var require_twig = __commonJS({
     "node_modules/highlight.js/lib/languages/twig.js"(exports, module) {
-      function twig(hljs2) {
-        const regex = hljs2.regex;
+      function twig(hljs) {
+        const regex = hljs.regex;
         const FUNCTION_NAMES = [
           "absolute_url",
           "asset|0",
@@ -52841,7 +53013,7 @@
           case_insensitive: true,
           subLanguage: "xml",
           contains: [
-            hljs2.COMMENT(/\{#/, /#\}/),
+            hljs.COMMENT(/\{#/, /#\}/),
             TAG,
             CUSTOM_TAG,
             {
@@ -53017,8 +53189,8 @@
         TYPES,
         ERROR_TYPES
       );
-      function javascript(hljs2) {
-        const regex = hljs2.regex;
+      function javascript(hljs) {
+        const regex = hljs.regex;
         const hasClosingTag = (match, { after }) => {
           const tag = "</" + match[0].slice(1);
           const pos = match.input.indexOf(tag, after);
@@ -53113,7 +53285,7 @@
             end: "`",
             returnEnd: false,
             contains: [
-              hljs2.BACKSLASH_ESCAPE,
+              hljs.BACKSLASH_ESCAPE,
               SUBST
             ],
             subLanguage: "xml"
@@ -53126,7 +53298,7 @@
             end: "`",
             returnEnd: false,
             contains: [
-              hljs2.BACKSLASH_ESCAPE,
+              hljs.BACKSLASH_ESCAPE,
               SUBST
             ],
             subLanguage: "css"
@@ -53139,7 +53311,7 @@
             end: "`",
             returnEnd: false,
             contains: [
-              hljs2.BACKSLASH_ESCAPE,
+              hljs.BACKSLASH_ESCAPE,
               SUBST
             ],
             subLanguage: "graphql"
@@ -53150,11 +53322,11 @@
           begin: "`",
           end: "`",
           contains: [
-            hljs2.BACKSLASH_ESCAPE,
+            hljs.BACKSLASH_ESCAPE,
             SUBST
           ]
         };
-        const JSDOC_COMMENT = hljs2.COMMENT(
+        const JSDOC_COMMENT = hljs.COMMENT(
           /\/\*\*(?!\/)/,
           "\\*/",
           {
@@ -53197,13 +53369,13 @@
           className: "comment",
           variants: [
             JSDOC_COMMENT,
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.C_LINE_COMMENT_MODE
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE
           ]
         };
         const SUBST_INTERNALS = [
-          hljs2.APOS_STRING_MODE,
-          hljs2.QUOTE_STRING_MODE,
+          hljs.APOS_STRING_MODE,
+          hljs.QUOTE_STRING_MODE,
           HTML_TEMPLATE,
           CSS_TEMPLATE,
           GRAPHQL_TEMPLATE,
@@ -53388,7 +53560,7 @@
             PARAMS
           ]
         };
-        const FUNC_LEAD_IN_RE = "(\\([^()]*(\\([^()]*(\\([^()]*\\)[^()]*)*\\)[^()]*)*\\)|" + hljs2.UNDERSCORE_IDENT_RE + ")\\s*=>";
+        const FUNC_LEAD_IN_RE = "(\\([^()]*(\\([^()]*(\\([^()]*\\)[^()]*)*\\)[^()]*)*\\)|" + hljs.UNDERSCORE_IDENT_RE + ")\\s*=>";
         const FUNCTION_VARIABLE = {
           match: [
             /const|var|let/,
@@ -53417,14 +53589,14 @@
           exports: { PARAMS_CONTAINS, CLASS_REFERENCE },
           illegal: /#(?![$_A-z])/,
           contains: [
-            hljs2.SHEBANG({
+            hljs.SHEBANG({
               label: "shebang",
               binary: "node",
               relevance: 5
             }),
             USE_STRICT,
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             HTML_TEMPLATE,
             CSS_TEMPLATE,
             GRAPHQL_TEMPLATE,
@@ -53442,12 +53614,12 @@
             FUNCTION_VARIABLE,
             {
               // "value" container
-              begin: "(" + hljs2.RE_STARTERS_RE + "|\\b(case|return|throw)\\b)\\s*",
+              begin: "(" + hljs.RE_STARTERS_RE + "|\\b(case|return|throw)\\b)\\s*",
               keywords: "return throw case",
               relevance: 0,
               contains: [
                 COMMENT,
-                hljs2.REGEXP_MODE,
+                hljs.REGEXP_MODE,
                 {
                   className: "function",
                   // we have to count the parens to make sure we actually have the
@@ -53461,7 +53633,7 @@
                       className: "params",
                       variants: [
                         {
-                          begin: hljs2.UNDERSCORE_IDENT_RE,
+                          begin: hljs.UNDERSCORE_IDENT_RE,
                           relevance: 0
                         },
                         {
@@ -53525,13 +53697,13 @@
               // we have to count the parens to make sure we actually have the correct
               // bounding ( ).  There could be any number of sub-expressions inside
               // also surrounded by parens.
-              begin: "\\b(?!function)" + hljs2.UNDERSCORE_IDENT_RE + "\\([^()]*(\\([^()]*(\\([^()]*\\)[^()]*)*\\)[^()]*)*\\)\\s*\\{",
+              begin: "\\b(?!function)" + hljs.UNDERSCORE_IDENT_RE + "\\([^()]*(\\([^()]*(\\([^()]*\\)[^()]*)*\\)[^()]*)*\\)\\s*\\{",
               // end parens
               returnBegin: true,
               label: "func.def",
               contains: [
                 PARAMS,
-                hljs2.inherit(hljs2.TITLE_MODE, { begin: IDENT_RE$1, className: "title.function" })
+                hljs.inherit(hljs.TITLE_MODE, { begin: IDENT_RE$1, className: "title.function" })
               ]
             },
             // catch ... so it won't trigger the property rule below
@@ -53563,8 +53735,8 @@
           ]
         };
       }
-      function typescript(hljs2) {
-        const tsLanguage = javascript(hljs2);
+      function typescript(hljs) {
+        const tsLanguage = javascript(hljs);
         const IDENT_RE$1 = IDENT_RE;
         const TYPES2 = [
           "any",
@@ -53582,7 +53754,7 @@
           begin: [
             /namespace/,
             /\s+/,
-            hljs2.IDENT_RE
+            hljs.IDENT_RE
           ],
           beginScope: {
             1: "keyword",
@@ -53651,7 +53823,7 @@
           NAMESPACE,
           INTERFACE
         ]);
-        swapMode(tsLanguage, "shebang", hljs2.SHEBANG());
+        swapMode(tsLanguage, "shebang", hljs.SHEBANG());
         swapMode(tsLanguage, "use_strict", USE_STRICT);
         const functionDeclaration = tsLanguage.contains.find((m) => m.label === "func.def");
         functionDeclaration.relevance = 0;
@@ -53673,7 +53845,7 @@
   // node_modules/highlight.js/lib/languages/vala.js
   var require_vala = __commonJS({
     "node_modules/highlight.js/lib/languages/vala.js"(exports, module) {
-      function vala(hljs2) {
+      function vala(hljs) {
         return {
           name: "Vala",
           keywords: {
@@ -53691,19 +53863,19 @@
               end: /\{/,
               excludeEnd: true,
               illegal: "[^,:\\n\\s\\.]",
-              contains: [hljs2.UNDERSCORE_TITLE_MODE]
+              contains: [hljs.UNDERSCORE_TITLE_MODE]
             },
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             {
               className: "string",
               begin: '"""',
               end: '"""',
               relevance: 5
             },
-            hljs2.APOS_STRING_MODE,
-            hljs2.QUOTE_STRING_MODE,
-            hljs2.C_NUMBER_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.C_NUMBER_MODE,
             {
               className: "meta",
               begin: "^#",
@@ -53719,8 +53891,8 @@
   // node_modules/highlight.js/lib/languages/vbnet.js
   var require_vbnet = __commonJS({
     "node_modules/highlight.js/lib/languages/vbnet.js"(exports, module) {
-      function vbnet(hljs2) {
-        const regex = hljs2.regex;
+      function vbnet(hljs) {
+        const regex = hljs.regex;
         const CHARACTER = {
           className: "string",
           begin: /"(""|[^/n])"C\b/
@@ -53798,14 +53970,14 @@
           className: "label",
           begin: /^\w+:/
         };
-        const DOC_COMMENT = hljs2.COMMENT(/'''/, /$/, { contains: [
+        const DOC_COMMENT = hljs.COMMENT(/'''/, /$/, { contains: [
           {
             className: "doctag",
             begin: /<\/?/,
             end: />/
           }
         ] });
-        const COMMENT = hljs2.COMMENT(null, /$/, { variants: [
+        const COMMENT = hljs.COMMENT(null, /$/, { variants: [
           { begin: /'/ },
           {
             // TODO: Use multi-class for leading spaces
@@ -53857,8 +54029,8 @@
   // node_modules/highlight.js/lib/languages/vbscript.js
   var require_vbscript = __commonJS({
     "node_modules/highlight.js/lib/languages/vbscript.js"(exports, module) {
-      function vbscript(hljs2) {
-        const regex = hljs2.regex;
+      function vbscript(hljs) {
+        const regex = hljs.regex;
         const BUILT_IN_FUNCTIONS = [
           "lcase",
           "month",
@@ -54051,13 +54223,13 @@
           illegal: "//",
           contains: [
             BUILT_IN_CALL,
-            hljs2.inherit(hljs2.QUOTE_STRING_MODE, { contains: [{ begin: '""' }] }),
-            hljs2.COMMENT(
+            hljs.inherit(hljs.QUOTE_STRING_MODE, { contains: [{ begin: '""' }] }),
+            hljs.COMMENT(
               /'/,
               /$/,
               { relevance: 0 }
             ),
-            hljs2.C_NUMBER_MODE
+            hljs.C_NUMBER_MODE
           ]
         };
       }
@@ -54068,7 +54240,7 @@
   // node_modules/highlight.js/lib/languages/vbscript-html.js
   var require_vbscript_html = __commonJS({
     "node_modules/highlight.js/lib/languages/vbscript-html.js"(exports, module) {
-      function vbscriptHtml(hljs2) {
+      function vbscriptHtml(hljs) {
         return {
           name: "VBScript in HTML",
           subLanguage: "xml",
@@ -54088,8 +54260,8 @@
   // node_modules/highlight.js/lib/languages/verilog.js
   var require_verilog = __commonJS({
     "node_modules/highlight.js/lib/languages/verilog.js"(exports, module) {
-      function verilog(hljs2) {
-        const regex = hljs2.regex;
+      function verilog(hljs) {
+        const regex = hljs.regex;
         const KEYWORDS = {
           $pattern: /\$?[\w]+(\$[\w]+)*/,
           keyword: [
@@ -54586,12 +54758,12 @@
           case_insensitive: false,
           keywords: KEYWORDS,
           contains: [
-            hljs2.C_BLOCK_COMMENT_MODE,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.QUOTE_STRING_MODE,
             {
               scope: "number",
-              contains: [hljs2.BACKSLASH_ESCAPE],
+              contains: [hljs.BACKSLASH_ESCAPE],
               variants: [
                 { begin: /\b((\d+'([bhodBHOD]))[0-9xzXZa-fA-F_]+)/ },
                 { begin: /\B(('([bhodBHOD]))[0-9xzXZa-fA-F_]+)/ },
@@ -54634,7 +54806,7 @@
   // node_modules/highlight.js/lib/languages/vhdl.js
   var require_vhdl = __commonJS({
     "node_modules/highlight.js/lib/languages/vhdl.js"(exports, module) {
-      function vhdl(hljs2) {
+      function vhdl(hljs) {
         const INTEGER_RE = "\\d(_|\\d)*";
         const EXPONENT_RE = "[eE][-+]?" + INTEGER_RE;
         const DECIMAL_LITERAL_RE = INTEGER_RE + "(\\." + INTEGER_RE + ")?(" + EXPONENT_RE + ")?";
@@ -54811,10 +54983,10 @@
           },
           illegal: /\{/,
           contains: [
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             // VHDL-2008 block commenting.
-            hljs2.COMMENT("--", "$"),
-            hljs2.QUOTE_STRING_MODE,
+            hljs.COMMENT("--", "$"),
+            hljs.QUOTE_STRING_MODE,
             {
               className: "number",
               begin: NUMBER_RE,
@@ -54823,12 +54995,12 @@
             {
               className: "string",
               begin: "'(U|X|0|1|Z|W|L|H|-)'",
-              contains: [hljs2.BACKSLASH_ESCAPE]
+              contains: [hljs.BACKSLASH_ESCAPE]
             },
             {
               className: "symbol",
               begin: "'[A-Za-z](_?[A-Za-z0-9])*",
-              contains: [hljs2.BACKSLASH_ESCAPE]
+              contains: [hljs.BACKSLASH_ESCAPE]
             }
           ]
         };
@@ -54840,7 +55012,7 @@
   // node_modules/highlight.js/lib/languages/vim.js
   var require_vim = __commonJS({
     "node_modules/highlight.js/lib/languages/vim.js"(exports, module) {
-      function vim(hljs2) {
+      function vim(hljs) {
         return {
           name: "Vim Script",
           keywords: {
@@ -54856,7 +55028,7 @@
           },
           illegal: /;/,
           contains: [
-            hljs2.NUMBER_MODE,
+            hljs.NUMBER_MODE,
             {
               className: "string",
               begin: "'",
@@ -54877,7 +55049,7 @@
               className: "string",
               begin: /"(\\"|\n\\|[^"\n])*"/
             },
-            hljs2.COMMENT('"', "$"),
+            hljs.COMMENT('"', "$"),
             {
               className: "variable",
               begin: /[bwtglsav]:[\w\d_]+/
@@ -54886,7 +55058,7 @@
               begin: [
                 /\b(?:function|function!)/,
                 /\s+/,
-                hljs2.IDENT_RE
+                hljs.IDENT_RE
               ],
               className: {
                 1: "keyword",
@@ -54916,11 +55088,11 @@
   // node_modules/highlight.js/lib/languages/wasm.js
   var require_wasm = __commonJS({
     "node_modules/highlight.js/lib/languages/wasm.js"(exports, module) {
-      function wasm(hljs2) {
-        hljs2.regex;
-        const BLOCK_COMMENT = hljs2.COMMENT(/\(;/, /;\)/);
+      function wasm(hljs) {
+        hljs.regex;
+        const BLOCK_COMMENT = hljs.COMMENT(/\(;/, /;\)/);
         BLOCK_COMMENT.contains.push("self");
-        const LINE_COMMENT = hljs2.COMMENT(/;;/, /$/);
+        const LINE_COMMENT = hljs.COMMENT(/;;/, /$/);
         const KWS = [
           "anyfunc",
           "block",
@@ -55028,7 +55200,7 @@
             ARGUMENT,
             PARENS,
             FUNCTION_REFERENCE,
-            hljs2.QUOTE_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             TYPE,
             MATH_OPERATIONS,
             NUMBER
@@ -55042,8 +55214,8 @@
   // node_modules/highlight.js/lib/languages/wren.js
   var require_wren = __commonJS({
     "node_modules/highlight.js/lib/languages/wren.js"(exports, module) {
-      function wren(hljs2) {
-        const regex = hljs2.regex;
+      function wren(hljs) {
+        const regex = hljs.regex;
         const IDENT_RE = /[a-zA-Z]\w*/;
         const KEYWORDS = [
           "as",
@@ -55188,7 +55360,7 @@
           scope: "title.class",
           keywords: { _: CORE_CLASSES }
         };
-        const NUMBER = hljs2.C_NUMBER_MODE;
+        const NUMBER = hljs.C_NUMBER_MODE;
         const SETTER = {
           match: [
             IDENT_RE,
@@ -55205,7 +55377,7 @@
             6: "params"
           }
         };
-        const COMMENT_DOCS = hljs2.COMMENT(
+        const COMMENT_DOCS = hljs.COMMENT(
           /\/\*\*/,
           /\*\//,
           { contains: [
@@ -55305,8 +55477,8 @@
             STRING,
             TRIPLE_STRING,
             COMMENT_DOCS,
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             CLASS_REFERENCE,
             CLASS_DEFINITION,
             SETTER,
@@ -55326,12 +55498,12 @@
   // node_modules/highlight.js/lib/languages/x86asm.js
   var require_x86asm = __commonJS({
     "node_modules/highlight.js/lib/languages/x86asm.js"(exports, module) {
-      function x86asm(hljs2) {
+      function x86asm(hljs) {
         return {
           name: "Intel x86 Assembly",
           case_insensitive: true,
           keywords: {
-            $pattern: "[.%]?" + hljs2.IDENT_RE,
+            $pattern: "[.%]?" + hljs.IDENT_RE,
             keyword: "lock rep repe repz repne repnz xaquire xrelease bnd nobnd aaa aad aam aas adc add and arpl bb0_reset bb1_reset bound bsf bsr bswap bt btc btr bts call cbw cdq cdqe clc cld cli clts cmc cmp cmpsb cmpsd cmpsq cmpsw cmpxchg cmpxchg486 cmpxchg8b cmpxchg16b cpuid cpu_read cpu_write cqo cwd cwde daa das dec div dmint emms enter equ f2xm1 fabs fadd faddp fbld fbstp fchs fclex fcmovb fcmovbe fcmove fcmovnb fcmovnbe fcmovne fcmovnu fcmovu fcom fcomi fcomip fcomp fcompp fcos fdecstp fdisi fdiv fdivp fdivr fdivrp femms feni ffree ffreep fiadd ficom ficomp fidiv fidivr fild fimul fincstp finit fist fistp fisttp fisub fisubr fld fld1 fldcw fldenv fldl2e fldl2t fldlg2 fldln2 fldpi fldz fmul fmulp fnclex fndisi fneni fninit fnop fnsave fnstcw fnstenv fnstsw fpatan fprem fprem1 fptan frndint frstor fsave fscale fsetpm fsin fsincos fsqrt fst fstcw fstenv fstp fstsw fsub fsubp fsubr fsubrp ftst fucom fucomi fucomip fucomp fucompp fxam fxch fxtract fyl2x fyl2xp1 hlt ibts icebp idiv imul in inc incbin insb insd insw int int01 int1 int03 int3 into invd invpcid invlpg invlpga iret iretd iretq iretw jcxz jecxz jrcxz jmp jmpe lahf lar lds lea leave les lfence lfs lgdt lgs lidt lldt lmsw loadall loadall286 lodsb lodsd lodsq lodsw loop loope loopne loopnz loopz lsl lss ltr mfence monitor mov movd movq movsb movsd movsq movsw movsx movsxd movzx mul mwait neg nop not or out outsb outsd outsw packssdw packsswb packuswb paddb paddd paddsb paddsiw paddsw paddusb paddusw paddw pand pandn pause paveb pavgusb pcmpeqb pcmpeqd pcmpeqw pcmpgtb pcmpgtd pcmpgtw pdistib pf2id pfacc pfadd pfcmpeq pfcmpge pfcmpgt pfmax pfmin pfmul pfrcp pfrcpit1 pfrcpit2 pfrsqit1 pfrsqrt pfsub pfsubr pi2fd pmachriw pmaddwd pmagw pmulhriw pmulhrwa pmulhrwc pmulhw pmullw pmvgezb pmvlzb pmvnzb pmvzb pop popa popad popaw popf popfd popfq popfw por prefetch prefetchw pslld psllq psllw psrad psraw psrld psrlq psrlw psubb psubd psubsb psubsiw psubsw psubusb psubusw psubw punpckhbw punpckhdq punpckhwd punpcklbw punpckldq punpcklwd push pusha pushad pushaw pushf pushfd pushfq pushfw pxor rcl rcr rdshr rdmsr rdpmc rdtsc rdtscp ret retf retn rol ror rdm rsdc rsldt rsm rsts sahf sal salc sar sbb scasb scasd scasq scasw sfence sgdt shl shld shr shrd sidt sldt skinit smi smint smintold smsw stc std sti stosb stosd stosq stosw str sub svdc svldt svts swapgs syscall sysenter sysexit sysret test ud0 ud1 ud2b ud2 ud2a umov verr verw fwait wbinvd wrshr wrmsr xadd xbts xchg xlatb xlat xor cmove cmovz cmovne cmovnz cmova cmovnbe cmovae cmovnb cmovb cmovnae cmovbe cmovna cmovg cmovnle cmovge cmovnl cmovl cmovnge cmovle cmovng cmovc cmovnc cmovo cmovno cmovs cmovns cmovp cmovpe cmovnp cmovpo je jz jne jnz ja jnbe jae jnb jb jnae jbe jna jg jnle jge jnl jl jnge jle jng jc jnc jo jno js jns jpo jnp jpe jp sete setz setne setnz seta setnbe setae setnb setnc setb setnae setcset setbe setna setg setnle setge setnl setl setnge setle setng sets setns seto setno setpe setp setpo setnp addps addss andnps andps cmpeqps cmpeqss cmpleps cmpless cmpltps cmpltss cmpneqps cmpneqss cmpnleps cmpnless cmpnltps cmpnltss cmpordps cmpordss cmpunordps cmpunordss cmpps cmpss comiss cvtpi2ps cvtps2pi cvtsi2ss cvtss2si cvttps2pi cvttss2si divps divss ldmxcsr maxps maxss minps minss movaps movhps movlhps movlps movhlps movmskps movntps movss movups mulps mulss orps rcpps rcpss rsqrtps rsqrtss shufps sqrtps sqrtss stmxcsr subps subss ucomiss unpckhps unpcklps xorps fxrstor fxrstor64 fxsave fxsave64 xgetbv xsetbv xsave xsave64 xsaveopt xsaveopt64 xrstor xrstor64 prefetchnta prefetcht0 prefetcht1 prefetcht2 maskmovq movntq pavgb pavgw pextrw pinsrw pmaxsw pmaxub pminsw pminub pmovmskb pmulhuw psadbw pshufw pf2iw pfnacc pfpnacc pi2fw pswapd maskmovdqu clflush movntdq movnti movntpd movdqa movdqu movdq2q movq2dq paddq pmuludq pshufd pshufhw pshuflw pslldq psrldq psubq punpckhqdq punpcklqdq addpd addsd andnpd andpd cmpeqpd cmpeqsd cmplepd cmplesd cmpltpd cmpltsd cmpneqpd cmpneqsd cmpnlepd cmpnlesd cmpnltpd cmpnltsd cmpordpd cmpordsd cmpunordpd cmpunordsd cmppd comisd cvtdq2pd cvtdq2ps cvtpd2dq cvtpd2pi cvtpd2ps cvtpi2pd cvtps2dq cvtps2pd cvtsd2si cvtsd2ss cvtsi2sd cvtss2sd cvttpd2pi cvttpd2dq cvttps2dq cvttsd2si divpd divsd maxpd maxsd minpd minsd movapd movhpd movlpd movmskpd movupd mulpd mulsd orpd shufpd sqrtpd sqrtsd subpd subsd ucomisd unpckhpd unpcklpd xorpd addsubpd addsubps haddpd haddps hsubpd hsubps lddqu movddup movshdup movsldup clgi stgi vmcall vmclear vmfunc vmlaunch vmload vmmcall vmptrld vmptrst vmread vmresume vmrun vmsave vmwrite vmxoff vmxon invept invvpid pabsb pabsw pabsd palignr phaddw phaddd phaddsw phsubw phsubd phsubsw pmaddubsw pmulhrsw pshufb psignb psignw psignd extrq insertq movntsd movntss lzcnt blendpd blendps blendvpd blendvps dppd dpps extractps insertps movntdqa mpsadbw packusdw pblendvb pblendw pcmpeqq pextrb pextrd pextrq phminposuw pinsrb pinsrd pinsrq pmaxsb pmaxsd pmaxud pmaxuw pminsb pminsd pminud pminuw pmovsxbw pmovsxbd pmovsxbq pmovsxwd pmovsxwq pmovsxdq pmovzxbw pmovzxbd pmovzxbq pmovzxwd pmovzxwq pmovzxdq pmuldq pmulld ptest roundpd roundps roundsd roundss crc32 pcmpestri pcmpestrm pcmpistri pcmpistrm pcmpgtq popcnt getsec pfrcpv pfrsqrtv movbe aesenc aesenclast aesdec aesdeclast aesimc aeskeygenassist vaesenc vaesenclast vaesdec vaesdeclast vaesimc vaeskeygenassist vaddpd vaddps vaddsd vaddss vaddsubpd vaddsubps vandpd vandps vandnpd vandnps vblendpd vblendps vblendvpd vblendvps vbroadcastss vbroadcastsd vbroadcastf128 vcmpeq_ospd vcmpeqpd vcmplt_ospd vcmpltpd vcmple_ospd vcmplepd vcmpunord_qpd vcmpunordpd vcmpneq_uqpd vcmpneqpd vcmpnlt_uspd vcmpnltpd vcmpnle_uspd vcmpnlepd vcmpord_qpd vcmpordpd vcmpeq_uqpd vcmpnge_uspd vcmpngepd vcmpngt_uspd vcmpngtpd vcmpfalse_oqpd vcmpfalsepd vcmpneq_oqpd vcmpge_ospd vcmpgepd vcmpgt_ospd vcmpgtpd vcmptrue_uqpd vcmptruepd vcmplt_oqpd vcmple_oqpd vcmpunord_spd vcmpneq_uspd vcmpnlt_uqpd vcmpnle_uqpd vcmpord_spd vcmpeq_uspd vcmpnge_uqpd vcmpngt_uqpd vcmpfalse_ospd vcmpneq_ospd vcmpge_oqpd vcmpgt_oqpd vcmptrue_uspd vcmppd vcmpeq_osps vcmpeqps vcmplt_osps vcmpltps vcmple_osps vcmpleps vcmpunord_qps vcmpunordps vcmpneq_uqps vcmpneqps vcmpnlt_usps vcmpnltps vcmpnle_usps vcmpnleps vcmpord_qps vcmpordps vcmpeq_uqps vcmpnge_usps vcmpngeps vcmpngt_usps vcmpngtps vcmpfalse_oqps vcmpfalseps vcmpneq_oqps vcmpge_osps vcmpgeps vcmpgt_osps vcmpgtps vcmptrue_uqps vcmptrueps vcmplt_oqps vcmple_oqps vcmpunord_sps vcmpneq_usps vcmpnlt_uqps vcmpnle_uqps vcmpord_sps vcmpeq_usps vcmpnge_uqps vcmpngt_uqps vcmpfalse_osps vcmpneq_osps vcmpge_oqps vcmpgt_oqps vcmptrue_usps vcmpps vcmpeq_ossd vcmpeqsd vcmplt_ossd vcmpltsd vcmple_ossd vcmplesd vcmpunord_qsd vcmpunordsd vcmpneq_uqsd vcmpneqsd vcmpnlt_ussd vcmpnltsd vcmpnle_ussd vcmpnlesd vcmpord_qsd vcmpordsd vcmpeq_uqsd vcmpnge_ussd vcmpngesd vcmpngt_ussd vcmpngtsd vcmpfalse_oqsd vcmpfalsesd vcmpneq_oqsd vcmpge_ossd vcmpgesd vcmpgt_ossd vcmpgtsd vcmptrue_uqsd vcmptruesd vcmplt_oqsd vcmple_oqsd vcmpunord_ssd vcmpneq_ussd vcmpnlt_uqsd vcmpnle_uqsd vcmpord_ssd vcmpeq_ussd vcmpnge_uqsd vcmpngt_uqsd vcmpfalse_ossd vcmpneq_ossd vcmpge_oqsd vcmpgt_oqsd vcmptrue_ussd vcmpsd vcmpeq_osss vcmpeqss vcmplt_osss vcmpltss vcmple_osss vcmpless vcmpunord_qss vcmpunordss vcmpneq_uqss vcmpneqss vcmpnlt_usss vcmpnltss vcmpnle_usss vcmpnless vcmpord_qss vcmpordss vcmpeq_uqss vcmpnge_usss vcmpngess vcmpngt_usss vcmpngtss vcmpfalse_oqss vcmpfalsess vcmpneq_oqss vcmpge_osss vcmpgess vcmpgt_osss vcmpgtss vcmptrue_uqss vcmptruess vcmplt_oqss vcmple_oqss vcmpunord_sss vcmpneq_usss vcmpnlt_uqss vcmpnle_uqss vcmpord_sss vcmpeq_usss vcmpnge_uqss vcmpngt_uqss vcmpfalse_osss vcmpneq_osss vcmpge_oqss vcmpgt_oqss vcmptrue_usss vcmpss vcomisd vcomiss vcvtdq2pd vcvtdq2ps vcvtpd2dq vcvtpd2ps vcvtps2dq vcvtps2pd vcvtsd2si vcvtsd2ss vcvtsi2sd vcvtsi2ss vcvtss2sd vcvtss2si vcvttpd2dq vcvttps2dq vcvttsd2si vcvttss2si vdivpd vdivps vdivsd vdivss vdppd vdpps vextractf128 vextractps vhaddpd vhaddps vhsubpd vhsubps vinsertf128 vinsertps vlddqu vldqqu vldmxcsr vmaskmovdqu vmaskmovps vmaskmovpd vmaxpd vmaxps vmaxsd vmaxss vminpd vminps vminsd vminss vmovapd vmovaps vmovd vmovq vmovddup vmovdqa vmovqqa vmovdqu vmovqqu vmovhlps vmovhpd vmovhps vmovlhps vmovlpd vmovlps vmovmskpd vmovmskps vmovntdq vmovntqq vmovntdqa vmovntpd vmovntps vmovsd vmovshdup vmovsldup vmovss vmovupd vmovups vmpsadbw vmulpd vmulps vmulsd vmulss vorpd vorps vpabsb vpabsw vpabsd vpacksswb vpackssdw vpackuswb vpackusdw vpaddb vpaddw vpaddd vpaddq vpaddsb vpaddsw vpaddusb vpaddusw vpalignr vpand vpandn vpavgb vpavgw vpblendvb vpblendw vpcmpestri vpcmpestrm vpcmpistri vpcmpistrm vpcmpeqb vpcmpeqw vpcmpeqd vpcmpeqq vpcmpgtb vpcmpgtw vpcmpgtd vpcmpgtq vpermilpd vpermilps vperm2f128 vpextrb vpextrw vpextrd vpextrq vphaddw vphaddd vphaddsw vphminposuw vphsubw vphsubd vphsubsw vpinsrb vpinsrw vpinsrd vpinsrq vpmaddwd vpmaddubsw vpmaxsb vpmaxsw vpmaxsd vpmaxub vpmaxuw vpmaxud vpminsb vpminsw vpminsd vpminub vpminuw vpminud vpmovmskb vpmovsxbw vpmovsxbd vpmovsxbq vpmovsxwd vpmovsxwq vpmovsxdq vpmovzxbw vpmovzxbd vpmovzxbq vpmovzxwd vpmovzxwq vpmovzxdq vpmulhuw vpmulhrsw vpmulhw vpmullw vpmulld vpmuludq vpmuldq vpor vpsadbw vpshufb vpshufd vpshufhw vpshuflw vpsignb vpsignw vpsignd vpslldq vpsrldq vpsllw vpslld vpsllq vpsraw vpsrad vpsrlw vpsrld vpsrlq vptest vpsubb vpsubw vpsubd vpsubq vpsubsb vpsubsw vpsubusb vpsubusw vpunpckhbw vpunpckhwd vpunpckhdq vpunpckhqdq vpunpcklbw vpunpcklwd vpunpckldq vpunpcklqdq vpxor vrcpps vrcpss vrsqrtps vrsqrtss vroundpd vroundps vroundsd vroundss vshufpd vshufps vsqrtpd vsqrtps vsqrtsd vsqrtss vstmxcsr vsubpd vsubps vsubsd vsubss vtestps vtestpd vucomisd vucomiss vunpckhpd vunpckhps vunpcklpd vunpcklps vxorpd vxorps vzeroall vzeroupper pclmullqlqdq pclmulhqlqdq pclmullqhqdq pclmulhqhqdq pclmulqdq vpclmullqlqdq vpclmulhqlqdq vpclmullqhqdq vpclmulhqhqdq vpclmulqdq vfmadd132ps vfmadd132pd vfmadd312ps vfmadd312pd vfmadd213ps vfmadd213pd vfmadd123ps vfmadd123pd vfmadd231ps vfmadd231pd vfmadd321ps vfmadd321pd vfmaddsub132ps vfmaddsub132pd vfmaddsub312ps vfmaddsub312pd vfmaddsub213ps vfmaddsub213pd vfmaddsub123ps vfmaddsub123pd vfmaddsub231ps vfmaddsub231pd vfmaddsub321ps vfmaddsub321pd vfmsub132ps vfmsub132pd vfmsub312ps vfmsub312pd vfmsub213ps vfmsub213pd vfmsub123ps vfmsub123pd vfmsub231ps vfmsub231pd vfmsub321ps vfmsub321pd vfmsubadd132ps vfmsubadd132pd vfmsubadd312ps vfmsubadd312pd vfmsubadd213ps vfmsubadd213pd vfmsubadd123ps vfmsubadd123pd vfmsubadd231ps vfmsubadd231pd vfmsubadd321ps vfmsubadd321pd vfnmadd132ps vfnmadd132pd vfnmadd312ps vfnmadd312pd vfnmadd213ps vfnmadd213pd vfnmadd123ps vfnmadd123pd vfnmadd231ps vfnmadd231pd vfnmadd321ps vfnmadd321pd vfnmsub132ps vfnmsub132pd vfnmsub312ps vfnmsub312pd vfnmsub213ps vfnmsub213pd vfnmsub123ps vfnmsub123pd vfnmsub231ps vfnmsub231pd vfnmsub321ps vfnmsub321pd vfmadd132ss vfmadd132sd vfmadd312ss vfmadd312sd vfmadd213ss vfmadd213sd vfmadd123ss vfmadd123sd vfmadd231ss vfmadd231sd vfmadd321ss vfmadd321sd vfmsub132ss vfmsub132sd vfmsub312ss vfmsub312sd vfmsub213ss vfmsub213sd vfmsub123ss vfmsub123sd vfmsub231ss vfmsub231sd vfmsub321ss vfmsub321sd vfnmadd132ss vfnmadd132sd vfnmadd312ss vfnmadd312sd vfnmadd213ss vfnmadd213sd vfnmadd123ss vfnmadd123sd vfnmadd231ss vfnmadd231sd vfnmadd321ss vfnmadd321sd vfnmsub132ss vfnmsub132sd vfnmsub312ss vfnmsub312sd vfnmsub213ss vfnmsub213sd vfnmsub123ss vfnmsub123sd vfnmsub231ss vfnmsub231sd vfnmsub321ss vfnmsub321sd rdfsbase rdgsbase rdrand wrfsbase wrgsbase vcvtph2ps vcvtps2ph adcx adox rdseed clac stac xstore xcryptecb xcryptcbc xcryptctr xcryptcfb xcryptofb montmul xsha1 xsha256 llwpcb slwpcb lwpval lwpins vfmaddpd vfmaddps vfmaddsd vfmaddss vfmaddsubpd vfmaddsubps vfmsubaddpd vfmsubaddps vfmsubpd vfmsubps vfmsubsd vfmsubss vfnmaddpd vfnmaddps vfnmaddsd vfnmaddss vfnmsubpd vfnmsubps vfnmsubsd vfnmsubss vfrczpd vfrczps vfrczsd vfrczss vpcmov vpcomb vpcomd vpcomq vpcomub vpcomud vpcomuq vpcomuw vpcomw vphaddbd vphaddbq vphaddbw vphadddq vphaddubd vphaddubq vphaddubw vphaddudq vphadduwd vphadduwq vphaddwd vphaddwq vphsubbw vphsubdq vphsubwd vpmacsdd vpmacsdqh vpmacsdql vpmacssdd vpmacssdqh vpmacssdql vpmacsswd vpmacssww vpmacswd vpmacsww vpmadcsswd vpmadcswd vpperm vprotb vprotd vprotq vprotw vpshab vpshad vpshaq vpshaw vpshlb vpshld vpshlq vpshlw vbroadcasti128 vpblendd vpbroadcastb vpbroadcastw vpbroadcastd vpbroadcastq vpermd vpermpd vpermps vpermq vperm2i128 vextracti128 vinserti128 vpmaskmovd vpmaskmovq vpsllvd vpsllvq vpsravd vpsrlvd vpsrlvq vgatherdpd vgatherqpd vgatherdps vgatherqps vpgatherdd vpgatherqd vpgatherdq vpgatherqq xabort xbegin xend xtest andn bextr blci blcic blsi blsic blcfill blsfill blcmsk blsmsk blsr blcs bzhi mulx pdep pext rorx sarx shlx shrx tzcnt tzmsk t1mskc valignd valignq vblendmpd vblendmps vbroadcastf32x4 vbroadcastf64x4 vbroadcasti32x4 vbroadcasti64x4 vcompresspd vcompressps vcvtpd2udq vcvtps2udq vcvtsd2usi vcvtss2usi vcvttpd2udq vcvttps2udq vcvttsd2usi vcvttss2usi vcvtudq2pd vcvtudq2ps vcvtusi2sd vcvtusi2ss vexpandpd vexpandps vextractf32x4 vextractf64x4 vextracti32x4 vextracti64x4 vfixupimmpd vfixupimmps vfixupimmsd vfixupimmss vgetexppd vgetexpps vgetexpsd vgetexpss vgetmantpd vgetmantps vgetmantsd vgetmantss vinsertf32x4 vinsertf64x4 vinserti32x4 vinserti64x4 vmovdqa32 vmovdqa64 vmovdqu32 vmovdqu64 vpabsq vpandd vpandnd vpandnq vpandq vpblendmd vpblendmq vpcmpltd vpcmpled vpcmpneqd vpcmpnltd vpcmpnled vpcmpd vpcmpltq vpcmpleq vpcmpneqq vpcmpnltq vpcmpnleq vpcmpq vpcmpequd vpcmpltud vpcmpleud vpcmpnequd vpcmpnltud vpcmpnleud vpcmpud vpcmpequq vpcmpltuq vpcmpleuq vpcmpnequq vpcmpnltuq vpcmpnleuq vpcmpuq vpcompressd vpcompressq vpermi2d vpermi2pd vpermi2ps vpermi2q vpermt2d vpermt2pd vpermt2ps vpermt2q vpexpandd vpexpandq vpmaxsq vpmaxuq vpminsq vpminuq vpmovdb vpmovdw vpmovqb vpmovqd vpmovqw vpmovsdb vpmovsdw vpmovsqb vpmovsqd vpmovsqw vpmovusdb vpmovusdw vpmovusqb vpmovusqd vpmovusqw vpord vporq vprold vprolq vprolvd vprolvq vprord vprorq vprorvd vprorvq vpscatterdd vpscatterdq vpscatterqd vpscatterqq vpsraq vpsravq vpternlogd vpternlogq vptestmd vptestmq vptestnmd vptestnmq vpxord vpxorq vrcp14pd vrcp14ps vrcp14sd vrcp14ss vrndscalepd vrndscaleps vrndscalesd vrndscaless vrsqrt14pd vrsqrt14ps vrsqrt14sd vrsqrt14ss vscalefpd vscalefps vscalefsd vscalefss vscatterdpd vscatterdps vscatterqpd vscatterqps vshuff32x4 vshuff64x2 vshufi32x4 vshufi64x2 kandnw kandw kmovw knotw kortestw korw kshiftlw kshiftrw kunpckbw kxnorw kxorw vpbroadcastmb2q vpbroadcastmw2d vpconflictd vpconflictq vplzcntd vplzcntq vexp2pd vexp2ps vrcp28pd vrcp28ps vrcp28sd vrcp28ss vrsqrt28pd vrsqrt28ps vrsqrt28sd vrsqrt28ss vgatherpf0dpd vgatherpf0dps vgatherpf0qpd vgatherpf0qps vgatherpf1dpd vgatherpf1dps vgatherpf1qpd vgatherpf1qps vscatterpf0dpd vscatterpf0dps vscatterpf0qpd vscatterpf0qps vscatterpf1dpd vscatterpf1dps vscatterpf1qpd vscatterpf1qps prefetchwt1 bndmk bndcl bndcu bndcn bndmov bndldx bndstx sha1rnds4 sha1nexte sha1msg1 sha1msg2 sha256rnds2 sha256msg1 sha256msg2 hint_nop0 hint_nop1 hint_nop2 hint_nop3 hint_nop4 hint_nop5 hint_nop6 hint_nop7 hint_nop8 hint_nop9 hint_nop10 hint_nop11 hint_nop12 hint_nop13 hint_nop14 hint_nop15 hint_nop16 hint_nop17 hint_nop18 hint_nop19 hint_nop20 hint_nop21 hint_nop22 hint_nop23 hint_nop24 hint_nop25 hint_nop26 hint_nop27 hint_nop28 hint_nop29 hint_nop30 hint_nop31 hint_nop32 hint_nop33 hint_nop34 hint_nop35 hint_nop36 hint_nop37 hint_nop38 hint_nop39 hint_nop40 hint_nop41 hint_nop42 hint_nop43 hint_nop44 hint_nop45 hint_nop46 hint_nop47 hint_nop48 hint_nop49 hint_nop50 hint_nop51 hint_nop52 hint_nop53 hint_nop54 hint_nop55 hint_nop56 hint_nop57 hint_nop58 hint_nop59 hint_nop60 hint_nop61 hint_nop62 hint_nop63",
             built_in: (
               // Instruction pointer
@@ -55340,7 +55512,7 @@
             meta: "%define %xdefine %+ %undef %defstr %deftok %assign %strcat %strlen %substr %rotate %elif %else %endif %if %ifmacro %ifctx %ifidn %ifidni %ifid %ifnum %ifstr %iftoken %ifempty %ifenv %error %warning %fatal %rep %endrep %include %push %pop %repl %pathsearch %depend %use %arg %stacksize %local %line %comment %endcomment .nolist __FILE__ __LINE__ __SECT__  __BITS__ __OUTPUT_FORMAT__ __DATE__ __TIME__ __DATE_NUM__ __TIME_NUM__ __UTC_DATE__ __UTC_TIME__ __UTC_DATE_NUM__ __UTC_TIME_NUM__  __PASS__ struc endstruc istruc at iend align alignb sectalign daz nodaz up down zero default option assume public bits use16 use32 use64 default section segment absolute extern global common cpu float __utf16__ __utf16le__ __utf16be__ __utf32__ __utf32le__ __utf32be__ __float8__ __float16__ __float32__ __float64__ __float80m__ __float80e__ __float128l__ __float128h__ __Infinity__ __QNaN__ __SNaN__ Inf NaN QNaN SNaN float8 float16 float32 float64 float80m float80e float128l float128h __FLOAT_DAZ__ __FLOAT_ROUND__ __FLOAT__"
           },
           contains: [
-            hljs2.COMMENT(
+            hljs.COMMENT(
               ";",
               "$",
               { relevance: 0 }
@@ -55365,7 +55537,7 @@
               ]
             },
             // Double quote string
-            hljs2.QUOTE_STRING_MODE,
+            hljs.QUOTE_STRING_MODE,
             {
               className: "string",
               variants: [
@@ -55418,7 +55590,7 @@
   // node_modules/highlight.js/lib/languages/xl.js
   var require_xl = __commonJS({
     "node_modules/highlight.js/lib/languages/xl.js"(exports, module) {
-      function xl(hljs2) {
+      function xl(hljs) {
         const KWS = [
           "if",
           "then",
@@ -55590,7 +55762,7 @@
           returnBegin: true,
           end: /->/,
           contains: [
-            hljs2.inherit(hljs2.TITLE_MODE, { starts: {
+            hljs.inherit(hljs.TITLE_MODE, { starts: {
               endsWithParent: true,
               keywords: KEYWORDS
             } })
@@ -55601,15 +55773,15 @@
           aliases: ["tao"],
           keywords: KEYWORDS,
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.C_BLOCK_COMMENT_MODE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
             DOUBLE_QUOTE_TEXT,
             SINGLE_QUOTE_TEXT,
             LONG_TEXT,
             FUNCTION_DEFINITION,
             IMPORT,
             BASED_NUMBER,
-            hljs2.NUMBER_MODE
+            hljs.NUMBER_MODE
           ]
         };
       }
@@ -55952,19 +56124,19 @@
   // node_modules/highlight.js/lib/languages/zephir.js
   var require_zephir = __commonJS({
     "node_modules/highlight.js/lib/languages/zephir.js"(exports, module) {
-      function zephir(hljs2) {
+      function zephir(hljs) {
         const STRING = {
           className: "string",
-          contains: [hljs2.BACKSLASH_ESCAPE],
+          contains: [hljs.BACKSLASH_ESCAPE],
           variants: [
-            hljs2.inherit(hljs2.APOS_STRING_MODE, { illegal: null }),
-            hljs2.inherit(hljs2.QUOTE_STRING_MODE, { illegal: null })
+            hljs.inherit(hljs.APOS_STRING_MODE, { illegal: null }),
+            hljs.inherit(hljs.QUOTE_STRING_MODE, { illegal: null })
           ]
         };
-        const TITLE_MODE = hljs2.UNDERSCORE_TITLE_MODE;
+        const TITLE_MODE = hljs.UNDERSCORE_TITLE_MODE;
         const NUMBER = { variants: [
-          hljs2.BINARY_NUMBER_MODE,
-          hljs2.C_NUMBER_MODE
+          hljs.BINARY_NUMBER_MODE,
+          hljs.C_NUMBER_MODE
         ] };
         const KEYWORDS = (
           // classes and objects
@@ -55975,8 +56147,8 @@
           aliases: ["zep"],
           keywords: KEYWORDS,
           contains: [
-            hljs2.C_LINE_COMMENT_MODE,
-            hljs2.COMMENT(
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.COMMENT(
               /\/\*/,
               /\*\//,
               { contains: [
@@ -55990,7 +56162,7 @@
               className: "string",
               begin: /<<<['"]?\w+['"]?$/,
               end: /^\w+;/,
-              contains: [hljs2.BACKSLASH_ESCAPE]
+              contains: [hljs.BACKSLASH_ESCAPE]
             },
             {
               // swallow composed identifiers to avoid parsing them as keywords
@@ -56011,7 +56183,7 @@
                   keywords: KEYWORDS,
                   contains: [
                     "self",
-                    hljs2.C_BLOCK_COMMENT_MODE,
+                    hljs.C_BLOCK_COMMENT_MODE,
                     STRING,
                     NUMBER
                   ]
@@ -56056,202 +56228,202 @@
   // node_modules/highlight.js/lib/index.js
   var require_lib2 = __commonJS({
     "node_modules/highlight.js/lib/index.js"(exports, module) {
-      var hljs2 = require_core();
-      hljs2.registerLanguage("1c", require_c());
-      hljs2.registerLanguage("abnf", require_abnf());
-      hljs2.registerLanguage("accesslog", require_accesslog());
-      hljs2.registerLanguage("actionscript", require_actionscript());
-      hljs2.registerLanguage("ada", require_ada());
-      hljs2.registerLanguage("angelscript", require_angelscript());
-      hljs2.registerLanguage("apache", require_apache());
-      hljs2.registerLanguage("applescript", require_applescript());
-      hljs2.registerLanguage("arcade", require_arcade());
-      hljs2.registerLanguage("arduino", require_arduino());
-      hljs2.registerLanguage("armasm", require_armasm());
-      hljs2.registerLanguage("xml", require_xml());
-      hljs2.registerLanguage("asciidoc", require_asciidoc());
-      hljs2.registerLanguage("aspectj", require_aspectj());
-      hljs2.registerLanguage("autohotkey", require_autohotkey());
-      hljs2.registerLanguage("autoit", require_autoit());
-      hljs2.registerLanguage("avrasm", require_avrasm());
-      hljs2.registerLanguage("awk", require_awk());
-      hljs2.registerLanguage("axapta", require_axapta());
-      hljs2.registerLanguage("bash", require_bash());
-      hljs2.registerLanguage("basic", require_basic());
-      hljs2.registerLanguage("bnf", require_bnf());
-      hljs2.registerLanguage("brainfuck", require_brainfuck());
-      hljs2.registerLanguage("c", require_c2());
-      hljs2.registerLanguage("cal", require_cal());
-      hljs2.registerLanguage("capnproto", require_capnproto());
-      hljs2.registerLanguage("ceylon", require_ceylon());
-      hljs2.registerLanguage("clean", require_clean());
-      hljs2.registerLanguage("clojure", require_clojure());
-      hljs2.registerLanguage("clojure-repl", require_clojure_repl());
-      hljs2.registerLanguage("cmake", require_cmake());
-      hljs2.registerLanguage("coffeescript", require_coffeescript());
-      hljs2.registerLanguage("coq", require_coq());
-      hljs2.registerLanguage("cos", require_cos());
-      hljs2.registerLanguage("cpp", require_cpp());
-      hljs2.registerLanguage("crmsh", require_crmsh());
-      hljs2.registerLanguage("crystal", require_crystal());
-      hljs2.registerLanguage("csharp", require_csharp());
-      hljs2.registerLanguage("csp", require_csp());
-      hljs2.registerLanguage("css", require_css());
-      hljs2.registerLanguage("d", require_d());
-      hljs2.registerLanguage("markdown", require_markdown());
-      hljs2.registerLanguage("dart", require_dart());
-      hljs2.registerLanguage("delphi", require_delphi());
-      hljs2.registerLanguage("diff", require_diff());
-      hljs2.registerLanguage("django", require_django());
-      hljs2.registerLanguage("dns", require_dns());
-      hljs2.registerLanguage("dockerfile", require_dockerfile());
-      hljs2.registerLanguage("dos", require_dos());
-      hljs2.registerLanguage("dsconfig", require_dsconfig());
-      hljs2.registerLanguage("dts", require_dts());
-      hljs2.registerLanguage("dust", require_dust());
-      hljs2.registerLanguage("ebnf", require_ebnf());
-      hljs2.registerLanguage("elixir", require_elixir());
-      hljs2.registerLanguage("elm", require_elm());
-      hljs2.registerLanguage("ruby", require_ruby());
-      hljs2.registerLanguage("erb", require_erb());
-      hljs2.registerLanguage("erlang-repl", require_erlang_repl());
-      hljs2.registerLanguage("erlang", require_erlang());
-      hljs2.registerLanguage("excel", require_excel());
-      hljs2.registerLanguage("fix", require_fix());
-      hljs2.registerLanguage("flix", require_flix());
-      hljs2.registerLanguage("fortran", require_fortran());
-      hljs2.registerLanguage("fsharp", require_fsharp());
-      hljs2.registerLanguage("gams", require_gams());
-      hljs2.registerLanguage("gauss", require_gauss());
-      hljs2.registerLanguage("gcode", require_gcode());
-      hljs2.registerLanguage("gherkin", require_gherkin());
-      hljs2.registerLanguage("glsl", require_glsl());
-      hljs2.registerLanguage("gml", require_gml());
-      hljs2.registerLanguage("go", require_go());
-      hljs2.registerLanguage("golo", require_golo());
-      hljs2.registerLanguage("gradle", require_gradle());
-      hljs2.registerLanguage("graphql", require_graphql());
-      hljs2.registerLanguage("groovy", require_groovy());
-      hljs2.registerLanguage("haml", require_haml());
-      hljs2.registerLanguage("handlebars", require_handlebars());
-      hljs2.registerLanguage("haskell", require_haskell());
-      hljs2.registerLanguage("haxe", require_haxe());
-      hljs2.registerLanguage("hsp", require_hsp());
-      hljs2.registerLanguage("http", require_http());
-      hljs2.registerLanguage("hy", require_hy());
-      hljs2.registerLanguage("inform7", require_inform7());
-      hljs2.registerLanguage("ini", require_ini());
-      hljs2.registerLanguage("irpf90", require_irpf90());
-      hljs2.registerLanguage("isbl", require_isbl());
-      hljs2.registerLanguage("java", require_java());
-      hljs2.registerLanguage("javascript", require_javascript());
-      hljs2.registerLanguage("jboss-cli", require_jboss_cli());
-      hljs2.registerLanguage("json", require_json());
-      hljs2.registerLanguage("julia", require_julia());
-      hljs2.registerLanguage("julia-repl", require_julia_repl());
-      hljs2.registerLanguage("kotlin", require_kotlin());
-      hljs2.registerLanguage("lasso", require_lasso());
-      hljs2.registerLanguage("latex", require_latex());
-      hljs2.registerLanguage("ldif", require_ldif());
-      hljs2.registerLanguage("leaf", require_leaf());
-      hljs2.registerLanguage("less", require_less());
-      hljs2.registerLanguage("lisp", require_lisp());
-      hljs2.registerLanguage("livecodeserver", require_livecodeserver());
-      hljs2.registerLanguage("livescript", require_livescript());
-      hljs2.registerLanguage("llvm", require_llvm());
-      hljs2.registerLanguage("lsl", require_lsl());
-      hljs2.registerLanguage("lua", require_lua());
-      hljs2.registerLanguage("makefile", require_makefile());
-      hljs2.registerLanguage("mathematica", require_mathematica());
-      hljs2.registerLanguage("matlab", require_matlab());
-      hljs2.registerLanguage("maxima", require_maxima());
-      hljs2.registerLanguage("mel", require_mel());
-      hljs2.registerLanguage("mercury", require_mercury());
-      hljs2.registerLanguage("mipsasm", require_mipsasm());
-      hljs2.registerLanguage("mizar", require_mizar());
-      hljs2.registerLanguage("perl", require_perl());
-      hljs2.registerLanguage("mojolicious", require_mojolicious());
-      hljs2.registerLanguage("monkey", require_monkey());
-      hljs2.registerLanguage("moonscript", require_moonscript());
-      hljs2.registerLanguage("n1ql", require_n1ql());
-      hljs2.registerLanguage("nestedtext", require_nestedtext());
-      hljs2.registerLanguage("nginx", require_nginx());
-      hljs2.registerLanguage("nim", require_nim());
-      hljs2.registerLanguage("nix", require_nix());
-      hljs2.registerLanguage("node-repl", require_node_repl());
-      hljs2.registerLanguage("nsis", require_nsis());
-      hljs2.registerLanguage("objectivec", require_objectivec());
-      hljs2.registerLanguage("ocaml", require_ocaml());
-      hljs2.registerLanguage("openscad", require_openscad());
-      hljs2.registerLanguage("oxygene", require_oxygene());
-      hljs2.registerLanguage("parser3", require_parser3());
-      hljs2.registerLanguage("pf", require_pf());
-      hljs2.registerLanguage("pgsql", require_pgsql());
-      hljs2.registerLanguage("php", require_php());
-      hljs2.registerLanguage("php-template", require_php_template());
-      hljs2.registerLanguage("plaintext", require_plaintext());
-      hljs2.registerLanguage("pony", require_pony());
-      hljs2.registerLanguage("powershell", require_powershell());
-      hljs2.registerLanguage("processing", require_processing());
-      hljs2.registerLanguage("profile", require_profile());
-      hljs2.registerLanguage("prolog", require_prolog());
-      hljs2.registerLanguage("properties", require_properties());
-      hljs2.registerLanguage("protobuf", require_protobuf());
-      hljs2.registerLanguage("puppet", require_puppet());
-      hljs2.registerLanguage("purebasic", require_purebasic());
-      hljs2.registerLanguage("python", require_python());
-      hljs2.registerLanguage("python-repl", require_python_repl());
-      hljs2.registerLanguage("q", require_q());
-      hljs2.registerLanguage("qml", require_qml());
-      hljs2.registerLanguage("r", require_r());
-      hljs2.registerLanguage("reasonml", require_reasonml());
-      hljs2.registerLanguage("rib", require_rib());
-      hljs2.registerLanguage("roboconf", require_roboconf());
-      hljs2.registerLanguage("routeros", require_routeros());
-      hljs2.registerLanguage("rsl", require_rsl());
-      hljs2.registerLanguage("ruleslanguage", require_ruleslanguage());
-      hljs2.registerLanguage("rust", require_rust());
-      hljs2.registerLanguage("sas", require_sas());
-      hljs2.registerLanguage("scala", require_scala());
-      hljs2.registerLanguage("scheme", require_scheme());
-      hljs2.registerLanguage("scilab", require_scilab());
-      hljs2.registerLanguage("scss", require_scss());
-      hljs2.registerLanguage("shell", require_shell());
-      hljs2.registerLanguage("smali", require_smali());
-      hljs2.registerLanguage("smalltalk", require_smalltalk());
-      hljs2.registerLanguage("sml", require_sml());
-      hljs2.registerLanguage("sqf", require_sqf());
-      hljs2.registerLanguage("sql", require_sql());
-      hljs2.registerLanguage("stan", require_stan());
-      hljs2.registerLanguage("stata", require_stata());
-      hljs2.registerLanguage("step21", require_step21());
-      hljs2.registerLanguage("stylus", require_stylus());
-      hljs2.registerLanguage("subunit", require_subunit());
-      hljs2.registerLanguage("swift", require_swift());
-      hljs2.registerLanguage("taggerscript", require_taggerscript());
-      hljs2.registerLanguage("yaml", require_yaml());
-      hljs2.registerLanguage("tap", require_tap());
-      hljs2.registerLanguage("tcl", require_tcl());
-      hljs2.registerLanguage("thrift", require_thrift());
-      hljs2.registerLanguage("tp", require_tp());
-      hljs2.registerLanguage("twig", require_twig());
-      hljs2.registerLanguage("typescript", require_typescript());
-      hljs2.registerLanguage("vala", require_vala());
-      hljs2.registerLanguage("vbnet", require_vbnet());
-      hljs2.registerLanguage("vbscript", require_vbscript());
-      hljs2.registerLanguage("vbscript-html", require_vbscript_html());
-      hljs2.registerLanguage("verilog", require_verilog());
-      hljs2.registerLanguage("vhdl", require_vhdl());
-      hljs2.registerLanguage("vim", require_vim());
-      hljs2.registerLanguage("wasm", require_wasm());
-      hljs2.registerLanguage("wren", require_wren());
-      hljs2.registerLanguage("x86asm", require_x86asm());
-      hljs2.registerLanguage("xl", require_xl());
-      hljs2.registerLanguage("xquery", require_xquery());
-      hljs2.registerLanguage("zephir", require_zephir());
-      hljs2.HighlightJS = hljs2;
-      hljs2.default = hljs2;
-      module.exports = hljs2;
+      var hljs = require_core();
+      hljs.registerLanguage("1c", require_c());
+      hljs.registerLanguage("abnf", require_abnf());
+      hljs.registerLanguage("accesslog", require_accesslog());
+      hljs.registerLanguage("actionscript", require_actionscript());
+      hljs.registerLanguage("ada", require_ada());
+      hljs.registerLanguage("angelscript", require_angelscript());
+      hljs.registerLanguage("apache", require_apache());
+      hljs.registerLanguage("applescript", require_applescript());
+      hljs.registerLanguage("arcade", require_arcade());
+      hljs.registerLanguage("arduino", require_arduino());
+      hljs.registerLanguage("armasm", require_armasm());
+      hljs.registerLanguage("xml", require_xml());
+      hljs.registerLanguage("asciidoc", require_asciidoc());
+      hljs.registerLanguage("aspectj", require_aspectj());
+      hljs.registerLanguage("autohotkey", require_autohotkey());
+      hljs.registerLanguage("autoit", require_autoit());
+      hljs.registerLanguage("avrasm", require_avrasm());
+      hljs.registerLanguage("awk", require_awk());
+      hljs.registerLanguage("axapta", require_axapta());
+      hljs.registerLanguage("bash", require_bash());
+      hljs.registerLanguage("basic", require_basic());
+      hljs.registerLanguage("bnf", require_bnf());
+      hljs.registerLanguage("brainfuck", require_brainfuck());
+      hljs.registerLanguage("c", require_c2());
+      hljs.registerLanguage("cal", require_cal());
+      hljs.registerLanguage("capnproto", require_capnproto());
+      hljs.registerLanguage("ceylon", require_ceylon());
+      hljs.registerLanguage("clean", require_clean());
+      hljs.registerLanguage("clojure", require_clojure());
+      hljs.registerLanguage("clojure-repl", require_clojure_repl());
+      hljs.registerLanguage("cmake", require_cmake());
+      hljs.registerLanguage("coffeescript", require_coffeescript());
+      hljs.registerLanguage("coq", require_coq());
+      hljs.registerLanguage("cos", require_cos());
+      hljs.registerLanguage("cpp", require_cpp());
+      hljs.registerLanguage("crmsh", require_crmsh());
+      hljs.registerLanguage("crystal", require_crystal());
+      hljs.registerLanguage("csharp", require_csharp());
+      hljs.registerLanguage("csp", require_csp());
+      hljs.registerLanguage("css", require_css());
+      hljs.registerLanguage("d", require_d());
+      hljs.registerLanguage("markdown", require_markdown());
+      hljs.registerLanguage("dart", require_dart());
+      hljs.registerLanguage("delphi", require_delphi());
+      hljs.registerLanguage("diff", require_diff());
+      hljs.registerLanguage("django", require_django());
+      hljs.registerLanguage("dns", require_dns());
+      hljs.registerLanguage("dockerfile", require_dockerfile());
+      hljs.registerLanguage("dos", require_dos());
+      hljs.registerLanguage("dsconfig", require_dsconfig());
+      hljs.registerLanguage("dts", require_dts());
+      hljs.registerLanguage("dust", require_dust());
+      hljs.registerLanguage("ebnf", require_ebnf());
+      hljs.registerLanguage("elixir", require_elixir());
+      hljs.registerLanguage("elm", require_elm());
+      hljs.registerLanguage("ruby", require_ruby());
+      hljs.registerLanguage("erb", require_erb());
+      hljs.registerLanguage("erlang-repl", require_erlang_repl());
+      hljs.registerLanguage("erlang", require_erlang());
+      hljs.registerLanguage("excel", require_excel());
+      hljs.registerLanguage("fix", require_fix());
+      hljs.registerLanguage("flix", require_flix());
+      hljs.registerLanguage("fortran", require_fortran());
+      hljs.registerLanguage("fsharp", require_fsharp());
+      hljs.registerLanguage("gams", require_gams());
+      hljs.registerLanguage("gauss", require_gauss());
+      hljs.registerLanguage("gcode", require_gcode());
+      hljs.registerLanguage("gherkin", require_gherkin());
+      hljs.registerLanguage("glsl", require_glsl());
+      hljs.registerLanguage("gml", require_gml());
+      hljs.registerLanguage("go", require_go());
+      hljs.registerLanguage("golo", require_golo());
+      hljs.registerLanguage("gradle", require_gradle());
+      hljs.registerLanguage("graphql", require_graphql());
+      hljs.registerLanguage("groovy", require_groovy());
+      hljs.registerLanguage("haml", require_haml());
+      hljs.registerLanguage("handlebars", require_handlebars());
+      hljs.registerLanguage("haskell", require_haskell());
+      hljs.registerLanguage("haxe", require_haxe());
+      hljs.registerLanguage("hsp", require_hsp());
+      hljs.registerLanguage("http", require_http());
+      hljs.registerLanguage("hy", require_hy());
+      hljs.registerLanguage("inform7", require_inform7());
+      hljs.registerLanguage("ini", require_ini());
+      hljs.registerLanguage("irpf90", require_irpf90());
+      hljs.registerLanguage("isbl", require_isbl());
+      hljs.registerLanguage("java", require_java());
+      hljs.registerLanguage("javascript", require_javascript());
+      hljs.registerLanguage("jboss-cli", require_jboss_cli());
+      hljs.registerLanguage("json", require_json());
+      hljs.registerLanguage("julia", require_julia());
+      hljs.registerLanguage("julia-repl", require_julia_repl());
+      hljs.registerLanguage("kotlin", require_kotlin());
+      hljs.registerLanguage("lasso", require_lasso());
+      hljs.registerLanguage("latex", require_latex());
+      hljs.registerLanguage("ldif", require_ldif());
+      hljs.registerLanguage("leaf", require_leaf());
+      hljs.registerLanguage("less", require_less());
+      hljs.registerLanguage("lisp", require_lisp());
+      hljs.registerLanguage("livecodeserver", require_livecodeserver());
+      hljs.registerLanguage("livescript", require_livescript());
+      hljs.registerLanguage("llvm", require_llvm());
+      hljs.registerLanguage("lsl", require_lsl());
+      hljs.registerLanguage("lua", require_lua());
+      hljs.registerLanguage("makefile", require_makefile());
+      hljs.registerLanguage("mathematica", require_mathematica());
+      hljs.registerLanguage("matlab", require_matlab());
+      hljs.registerLanguage("maxima", require_maxima());
+      hljs.registerLanguage("mel", require_mel());
+      hljs.registerLanguage("mercury", require_mercury());
+      hljs.registerLanguage("mipsasm", require_mipsasm());
+      hljs.registerLanguage("mizar", require_mizar());
+      hljs.registerLanguage("perl", require_perl());
+      hljs.registerLanguage("mojolicious", require_mojolicious());
+      hljs.registerLanguage("monkey", require_monkey());
+      hljs.registerLanguage("moonscript", require_moonscript());
+      hljs.registerLanguage("n1ql", require_n1ql());
+      hljs.registerLanguage("nestedtext", require_nestedtext());
+      hljs.registerLanguage("nginx", require_nginx());
+      hljs.registerLanguage("nim", require_nim());
+      hljs.registerLanguage("nix", require_nix());
+      hljs.registerLanguage("node-repl", require_node_repl());
+      hljs.registerLanguage("nsis", require_nsis());
+      hljs.registerLanguage("objectivec", require_objectivec());
+      hljs.registerLanguage("ocaml", require_ocaml());
+      hljs.registerLanguage("openscad", require_openscad());
+      hljs.registerLanguage("oxygene", require_oxygene());
+      hljs.registerLanguage("parser3", require_parser3());
+      hljs.registerLanguage("pf", require_pf());
+      hljs.registerLanguage("pgsql", require_pgsql());
+      hljs.registerLanguage("php", require_php());
+      hljs.registerLanguage("php-template", require_php_template());
+      hljs.registerLanguage("plaintext", require_plaintext());
+      hljs.registerLanguage("pony", require_pony());
+      hljs.registerLanguage("powershell", require_powershell());
+      hljs.registerLanguage("processing", require_processing());
+      hljs.registerLanguage("profile", require_profile());
+      hljs.registerLanguage("prolog", require_prolog());
+      hljs.registerLanguage("properties", require_properties());
+      hljs.registerLanguage("protobuf", require_protobuf());
+      hljs.registerLanguage("puppet", require_puppet());
+      hljs.registerLanguage("purebasic", require_purebasic());
+      hljs.registerLanguage("python", require_python());
+      hljs.registerLanguage("python-repl", require_python_repl());
+      hljs.registerLanguage("q", require_q());
+      hljs.registerLanguage("qml", require_qml());
+      hljs.registerLanguage("r", require_r());
+      hljs.registerLanguage("reasonml", require_reasonml());
+      hljs.registerLanguage("rib", require_rib());
+      hljs.registerLanguage("roboconf", require_roboconf());
+      hljs.registerLanguage("routeros", require_routeros());
+      hljs.registerLanguage("rsl", require_rsl());
+      hljs.registerLanguage("ruleslanguage", require_ruleslanguage());
+      hljs.registerLanguage("rust", require_rust());
+      hljs.registerLanguage("sas", require_sas());
+      hljs.registerLanguage("scala", require_scala());
+      hljs.registerLanguage("scheme", require_scheme());
+      hljs.registerLanguage("scilab", require_scilab());
+      hljs.registerLanguage("scss", require_scss());
+      hljs.registerLanguage("shell", require_shell());
+      hljs.registerLanguage("smali", require_smali());
+      hljs.registerLanguage("smalltalk", require_smalltalk());
+      hljs.registerLanguage("sml", require_sml());
+      hljs.registerLanguage("sqf", require_sqf());
+      hljs.registerLanguage("sql", require_sql());
+      hljs.registerLanguage("stan", require_stan());
+      hljs.registerLanguage("stata", require_stata());
+      hljs.registerLanguage("step21", require_step21());
+      hljs.registerLanguage("stylus", require_stylus());
+      hljs.registerLanguage("subunit", require_subunit());
+      hljs.registerLanguage("swift", require_swift());
+      hljs.registerLanguage("taggerscript", require_taggerscript());
+      hljs.registerLanguage("yaml", require_yaml());
+      hljs.registerLanguage("tap", require_tap());
+      hljs.registerLanguage("tcl", require_tcl());
+      hljs.registerLanguage("thrift", require_thrift());
+      hljs.registerLanguage("tp", require_tp());
+      hljs.registerLanguage("twig", require_twig());
+      hljs.registerLanguage("typescript", require_typescript());
+      hljs.registerLanguage("vala", require_vala());
+      hljs.registerLanguage("vbnet", require_vbnet());
+      hljs.registerLanguage("vbscript", require_vbscript());
+      hljs.registerLanguage("vbscript-html", require_vbscript_html());
+      hljs.registerLanguage("verilog", require_verilog());
+      hljs.registerLanguage("vhdl", require_vhdl());
+      hljs.registerLanguage("vim", require_vim());
+      hljs.registerLanguage("wasm", require_wasm());
+      hljs.registerLanguage("wren", require_wren());
+      hljs.registerLanguage("x86asm", require_x86asm());
+      hljs.registerLanguage("xl", require_xl());
+      hljs.registerLanguage("xquery", require_xquery());
+      hljs.registerLanguage("zephir", require_zephir());
+      hljs.HighlightJS = hljs;
+      hljs.default = hljs;
+      module.exports = hljs;
     }
   });
 
@@ -56272,7 +56444,7 @@
           end
         };
       }
-      var highlighter = function(hljs2) {
+      var highlighter = function(hljs) {
         const decimalDigits = "[0-9](_?[0-9])*";
         const frac = `\\.(${decimalDigits})`;
         const decimalInteger = `0|[1-9](_?[0-9])*|0[0-7]*[89][0-9]*`;
@@ -56355,9 +56527,9 @@
               scope: "comment",
               variants: [
                 // JSDOC_COMMENT,
-                hljs2.C_BLOCK_COMMENT_MODE,
-                hljs2.C_LINE_COMMENT_MODE,
-                hljs2.COMMENT("# ", "$")
+                hljs.C_BLOCK_COMMENT_MODE,
+                hljs.C_LINE_COMMENT_MODE,
+                hljs.COMMENT("# ", "$")
               ]
             },
             TYPES,
@@ -56386,10 +56558,10 @@
   // node_modules/highlightjs-jome/index.js
   var require_highlightjs_jome = __commonJS({
     "node_modules/highlightjs-jome/index.js"(exports, module) {
-      var hljs2 = require_lib2();
+      var hljs = require_lib2();
       var jomeHljs = require_jome_hljs();
-      hljs2.registerLanguage("jome", jomeHljs);
-      module.exports = hljs2;
+      hljs.registerLanguage("jome", jomeHljs);
+      module.exports = hljs;
     }
   });
 
@@ -56397,200 +56569,27 @@
   var require_md_to_html = __commonJS({
     "node_modules/@jome/md-to-html/index.js"(exports, module) {
       var MarkdownIt = require_index_cjs4();
-      var hljs2 = require_highlightjs_jome();
+      var hljs = require_highlightjs_jome();
       var markdownIt = new MarkdownIt({
         html: true,
         highlight: function(str, lang) {
-          if (lang && hljs2.getLanguage(lang)) {
+          if (lang && hljs.getLanguage(lang)) {
             try {
-              return hljs2.highlight(str, { language: lang }).value;
+              return hljs.highlight(str, { language: lang }).value;
             } catch (__) {
             }
           }
           return "";
         }
       });
-      function mdToHtml3(str) {
+      function mdToHtml2(str) {
         return markdownIt.render(str);
       }
-      module.exports = mdToHtml3;
-    }
-  });
-
-  // src/formats/core.js
-  var CORE_FORMATS;
-  var init_core = __esm({
-    "src/formats/core.js"() {
-      CORE_FORMATS = {
-        js: {
-          inlineComment: "//",
-          multiBegin: "/*",
-          multiEnd: "*/",
-          stringSingle: true,
-          stringDouble: true,
-          stringBacktick: true
-        },
-        html: {
-          multiBegin: "<!--",
-          multiEnd: "-->",
-          stringSingle: true,
-          stringDouble: true
-        },
-        css: {
-          multiBegin: "/*",
-          multiEnd: "*/",
-          stringSingle: true,
-          stringDouble: true
-        },
-        md: {
-          // multiBegin: "\n[//]: # (",
-          // multiEnd: ")",
-          // FIXME: Don't consider a comment when inside a code block
-          multiBegin: "<!--",
-          multiEnd: "-->",
-          stringSingle: true,
-          stringDouble: true
-        }
-      };
-    }
-  });
-
-  // src/parser.js
-  var require_parser = __commonJS({
-    "src/parser.js"(exports, module) {
-      init_core();
-      var BlockType3 = {
-        code: "code",
-        block: "block",
-        html: "html",
-        comment: "comment",
-        whitespace: "whitespace",
-        capture: "capture"
-      };
-      function extractBlockComment(doc3) {
-        let start = doc3.cursor;
-        while (doc3.cursor < doc3.length && !doc3.content.startsWith(doc3.config.multiEnd, doc3.cursor)) {
-          doc3.cursor++;
-        }
-        doc3.cursor += doc3.config.multiEnd.length;
-        let whole = doc3.content.slice(start, doc3.cursor);
-        let inner = whole.slice(doc3.config.multiBegin.length, -doc3.config.multiEnd.length);
-        pushComment(doc3, whole, inner);
-      }
-      function extractQuote(str) {
-        let i, ch = str[0];
-        let result = ch;
-        for (i = 1; i < str.length && (str[i] !== ch || str[i - 1] === "\\"); i++) {
-          result += str[i];
-        }
-        return i < str.length ? result + ch : result;
-      }
-      function pushCurrentCode(doc3) {
-        if (doc3._currCodeBlock) {
-          if (/^\s*$/.test(doc3._currCodeBlock)) {
-            doc3.parts.push({ type: BlockType3.whitespace, value: doc3._currCodeBlock });
-          } else {
-            doc3.parts.push({ type: BlockType3.code, value: doc3._currCodeBlock });
-          }
-          doc3._currCodeBlock = "";
-        }
-      }
-      function pushComment(doc3, whole, inner) {
-        if (inner[0] === "~") {
-          pushCurrentCode(doc3);
-          if (inner[1] === "!") {
-            doc3.parts.push({ type: BlockType3.comment, value: inner.slice(1) });
-          } else if (inner[1] === " " || inner[1] === "	" || inner[1] === "\n" || inner[1] === "\r" && inner[2] === "\n") {
-            doc3.parts.push({ type: BlockType3.html, value: inner.slice(1) });
-          } else {
-            doc3.parts.push({ type: BlockType3.block, value: inner.slice(1) });
-          }
-        } else {
-          doc3._currCodeBlock += whole;
-        }
-      }
-      function extractSingleLineComment(doc3) {
-        let start = doc3.cursor;
-        while (doc3.cursor < doc3.length && doc3.content[doc3.cursor] !== "\n") {
-          doc3.cursor++;
-        }
-        doc3.cursor++;
-        let whole = doc3.content.slice(start, doc3.cursor);
-        let inner = whole.slice(doc3.config.inlineComment.length);
-        pushComment(doc3, whole, inner);
-      }
-      function analyzeBlocks(blocks) {
-        return blocks.map((b) => {
-          if (b.type === BlockType3.block) {
-            b.tag = b.value.match(/\w+/)[0];
-            let s = b.value.trimEnd();
-            b.content = s.substring(4 + b.tag.length, s.length - (b.value[1] === "*" ? 2 : 0));
-          } else if (b.type === BlockType3.capture) {
-            b.tag = b.value.slice(6).match(/\w+/)[0];
-            let s = b.value.slice(6 + b.tag.length).trimStart().trimEnd();
-            try {
-              console.log(s);
-              let o = JSON.parse(s);
-              b.data = o;
-            } catch (e) {
-              console.error(e);
-            }
-          }
-          return b;
-        });
-      }
-      function reduceBlocks(blocks) {
-        let reduced = [];
-        for (let i = 0; i < blocks.length; i++) {
-          p = blocks[i];
-          if (p.type === BlockType3.block && p.value.slice(0, 5) === "begin") {
-            let j = i + 1;
-            for (; j < blocks.length; j++) {
-              if (blocks[j].value.slice(0, 3) === "end") {
-                break;
-              }
-            }
-            reduced.push({ type: BlockType3.capture, value: p.value, nested: reduceBlocks(blocks.slice(i + 1, j)) });
-            i = j;
-          } else {
-            reduced.push(p);
-          }
-        }
-        return reduced;
-      }
-      function parse2(doc3) {
-        let config = CORE_FORMATS[doc3.extension];
-        doc3.config = config;
-        if (!config) {
-          doc3.parts.push({ type: BlockType3.code, value: doc3.content });
-          return doc3.parts;
-        }
-        let src = doc3.content;
-        while (doc3.cursor < doc3.length) {
-          let i = doc3.cursor;
-          if (config.stringDouble && src[i] === '"' || config.stringSingle && src[i] === "'") {
-            let str = extractQuote(src.slice(i));
-            doc3._currCodeBlock += str;
-            doc3.cursor = i + (str.length || 1);
-          } else if (config.inlineComment && src.startsWith(config.inlineComment, i)) {
-            extractSingleLineComment(doc3);
-          } else if (config.multiBegin && src.startsWith(config.multiBegin, i)) {
-            extractBlockComment(doc3);
-          } else {
-            doc3._currCodeBlock += src[i];
-            doc3.cursor++;
-          }
-        }
-        pushCurrentCode(doc3);
-        doc3.parts = analyzeBlocks(reduceBlocks(doc3.parts));
-        return doc3.parts;
-      }
-      module.exports = { BlockType: BlockType3, parse: parse2 };
+      module.exports = mdToHtml2;
     }
   });
 
   // src/light_editor.js
-  var import_md_to_html2 = __toESM(require_md_to_html());
   var import_parser2 = __toESM(require_parser());
 
   // src/jome_document.js
@@ -69662,7 +69661,6 @@
     fetch("/get_file_list").then(extractFetchJSON).then(callback);
   }
   function loadFile(filename, callback) {
-    document.getElementById("current_filename").innerText = filename;
     fetch("/get_file/" + filename).then(extractFetchText).then((src) => callback(filename, src));
   }
 
@@ -69672,8 +69670,6 @@
     let parts = (0, import_parser2.parse)(doc3);
     console.log("parts", parts);
     initProseMirrorEditor("#prosemirror_editor", doc3);
-    document.getElementById("output-editor").innerHTML = renderOutputCode(doc3, parts);
-    document.getElementById("notebook-editor").innerHTML = renderNotebookView(doc3, parts);
   }
   document.addEventListener("DOMContentLoaded", function() {
     const selectSampleElement = document.getElementById("sample_select");
@@ -69686,53 +69682,5 @@
       });
     });
   });
-  function evaluateCell(cell) {
-  }
-  function renderNotebookView(doc3, parts) {
-    let html = "";
-    parts.forEach((part) => {
-      if (part.type === import_parser2.BlockType.html) {
-        html += "<div>" + part.value + "</div>";
-      } else if (part.type === import_parser2.BlockType.code) {
-        if (doc3.extension === "md") {
-          html += (0, import_md_to_html2.default)(part.value);
-        } else {
-          html += `<pre><code>${highlight(doc3, part.value.trim())}</code></pre>`;
-        }
-      } else if (part.type === import_parser2.BlockType.capture && part.tag === "code") {
-        evaluateCell(part);
-        html += `<pre><code>${highlight(doc3, part.nested.map((o) => o.value).join(""))}</code></pre>`;
-        html += `<div class="code_result">999 N\xB7m</div>`;
-      } else if (part.type === import_parser2.BlockType.block && part.tag === "html") {
-        html += part.value;
-      } else if (part.type === import_parser2.BlockType.block && part.tag === "svg") {
-        html += "<svg>" + part.value + "</svg>";
-      } else if (part.type === import_parser2.BlockType.capture && part.tag === "input") {
-        let id = `"input_${part.data.name}"`;
-        let type = part.data.type || "text";
-        html += `<div>`;
-        html += `<label for=${id}>${part.data.name}: </label>`;
-        html += `<input id=${id} type="${type}"${part.data.defaultValue ? ` value="${part.data.defaultValue}"` : ""}>`;
-        if (part.data.unit && part.data.unit.endsWith("*")) {
-          let u = part.data.unit.slice(0, -1);
-          html += `<select name="${id}_unit" id="${id}_unit">
-        <option value="${u}">${u}</option>
-      </select>`;
-        } else if (part.data.unit) {
-          html += part.data.unit;
-        }
-        html += `</div>`;
-      } else if (part.type === import_parser2.BlockType.capture) {
-        html += part.nested.map((o) => o.value).join("");
-      }
-    });
-    return html;
-  }
-  function renderOutputCode(doc3, parts) {
-    return highlight(doc3, doc3.content);
-  }
-  function highlight(doc3, code) {
-    return hljs.highlight(code, { language: doc3.extension }).value;
-  }
 })();
 //# sourceMappingURL=bundle.js.map

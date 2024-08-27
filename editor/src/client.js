@@ -30,7 +30,6 @@ export function loadFileList(callback) {
 }
 
 export function loadFile(filename, callback) {
-  document.getElementById("current_filename").innerText = filename
   fetch('/get_file/'+filename)
   .then(extractFetchText)
   .then(src => callback(filename, src))
