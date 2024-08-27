@@ -56417,11 +56417,11 @@
     }
   });
 
-  // src/file_formats.js
-  var FILE_FORMATS;
-  var init_file_formats = __esm({
-    "src/file_formats.js"() {
-      FILE_FORMATS = {
+  // src/formats/core.js
+  var CORE_FORMATS;
+  var init_core = __esm({
+    "src/formats/core.js"() {
+      CORE_FORMATS = {
         js: {
           inlineComment: "//",
           multiBegin: "/*",
@@ -56458,7 +56458,7 @@
   // src/parser.js
   var require_parser = __commonJS({
     "src/parser.js"(exports, module) {
-      init_file_formats();
+      init_core();
       var BlockType3 = {
         code: "code",
         block: "block",
@@ -56559,7 +56559,7 @@
         return reduced;
       }
       function parse6(doc3) {
-        let config = FILE_FORMATS[doc3.extension];
+        let config = CORE_FORMATS[doc3.extension];
         doc3.config = config;
         if (!config) {
           doc3.parts.push({ type: BlockType3.code, value: doc3.content });

@@ -1,4 +1,4 @@
-import { FILE_FORMATS } from "./file_formats"
+import { CORE_FORMATS } from "./formats/core"
 
 const BlockType = {
   code: 'code',
@@ -114,7 +114,7 @@ function reduceBlocks(blocks) {
 
 // Split the js code into blocks of different kinds like mardown, source code, data...
 function parse(doc) {
-  let config = FILE_FORMATS[doc.extension]
+  let config = CORE_FORMATS[doc.extension]
   doc.config = config
   if (!config) {
     // don't know how to detect comments for this file type, push a single code block
