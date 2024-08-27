@@ -31,6 +31,8 @@ blockquote {
 
 #toolbar {
   display: flex;
+  align-items: center;
+  border: 1px solid white;
 }
 
 #toolbar > div {
@@ -57,4 +59,5 @@ blockquote {
 
 #prosemirror_editor {
   border: 1px solid white;
+  padding: 0.8em;
 }
