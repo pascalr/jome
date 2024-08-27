@@ -63491,7 +63491,7 @@
     }
   };
 
-  // ../node_modules/orderedmap/dist/index.js
+  // node_modules/orderedmap/dist/index.js
   function OrderedMap(content) {
     this.content = content;
   }
@@ -63610,7 +63610,7 @@
   };
   var dist_default = OrderedMap;
 
-  // ../node_modules/prosemirror-model/dist/index.js
+  // node_modules/prosemirror-model/dist/index.js
   function findDiffStart(a, b, pos) {
     for (let i = 0; ; i++) {
       if (i == a.childCount || i == b.childCount)
@@ -66784,7 +66784,7 @@
     return { dom, contentDOM };
   }
 
-  // ../node_modules/prosemirror-transform/dist/index.js
+  // node_modules/prosemirror-transform/dist/index.js
   var lower16 = 65535;
   var factor16 = Math.pow(2, 16);
   function makeRecover(index, offset2) {
@@ -67682,7 +67682,8 @@
       throw new RangeError("Type given to setBlockType should be a textblock");
     let mapFrom = tr.steps.length;
     tr.doc.nodesBetween(from2, to, (node, pos) => {
-      if (node.isTextblock && !node.hasMarkup(type, attrs) && canChangeType(tr.doc, tr.mapping.slice(mapFrom).map(pos), type)) {
+      let attrsHere = typeof attrs == "function" ? attrs(node) : attrs;
+      if (node.isTextblock && !node.hasMarkup(type, attrsHere) && canChangeType(tr.doc, tr.mapping.slice(mapFrom).map(pos), type)) {
         let convertNewlines = null;
         if (type.schema.linebreakReplacement) {
           let pre = type.whitespace == "pre", supportLinebreak = !!type.contentMatch.matchType(type.schema.linebreakReplacement);
@@ -67696,7 +67697,7 @@
         clearIncompatible(tr, tr.mapping.slice(mapFrom).map(pos, 1), type, void 0, convertNewlines === null);
         let mapping = tr.mapping.slice(mapFrom);
         let startM = mapping.map(pos, 1), endM = mapping.map(pos + node.nodeSize, 1);
-        tr.step(new ReplaceAroundStep(startM, endM, startM + 1, endM - 1, new Slice(Fragment.from(type.create(attrs, null, node.marks)), 0, 0), 1, true));
+        tr.step(new ReplaceAroundStep(startM, endM, startM + 1, endM - 1, new Slice(Fragment.from(type.create(attrsHere, null, node.marks)), 0, 0), 1, true));
         if (convertNewlines === true)
           replaceNewlines(tr, node, pos, mapFrom);
         return false;
@@ -68547,7 +68548,7 @@
     }
   };
 
-  // ../node_modules/prosemirror-state/dist/index.js
+  // node_modules/prosemirror-state/dist/index.js
   var classesById = /* @__PURE__ */ Object.create(null);
   var Selection = class {
     /**
@@ -69474,7 +69475,7 @@
     }
   };
 
-  // ../node_modules/prosemirror-view/dist/index.js
+  // node_modules/prosemirror-view/dist/index.js
   var domIndex = function(node) {
     for (var index = 0; ; index++) {
       node = node.previousSibling;
@@ -70058,6 +70059,8 @@
       return false;
     let offset2 = $head.parentOffset, atStart = !offset2, atEnd = offset2 == $head.parent.content.size;
     let sel = view.domSelection();
+    if (!sel)
+      return $head.pos == $head.start() || $head.pos == $head.end();
     if (!maybeRTL.test($head.parent.textContent) || !sel.modify)
       return dir == "left" || dir == "backward" ? atStart : atEnd;
     return withFlushedState(view, state, () => {
@@ -71524,12 +71527,14 @@
   }
   function selectCursorWrapper(view) {
     let domSel = view.domSelection(), range = document.createRange();
+    if (!domSel)
+      return;
     let node = view.cursorWrapper.dom, img = node.nodeName == "IMG";
     if (img)
-      range.setEnd(node.parentNode, domIndex(node) + 1);
+      range.setStart(node.parentNode, domIndex(node) + 1);
     else
-      range.setEnd(node, 0);
-    range.collapse(false);
+      range.setStart(node, 0);
+    range.collapse(true);
     domSel.removeAllRanges();
     domSel.addRange(range);
     if (!img && !view.state.selection.visible && ie && ie_version <= 11) {
@@ -71775,6 +71780,8 @@
       }
     }
     let sel = view.domSelection();
+    if (!sel)
+      return;
     if (selectionCollapsed(sel)) {
       let range = document.createRange();
       range.setEnd(node, offset2);
@@ -72279,6 +72286,8 @@
   function updateSelection(view, selection, origin) {
     if (!view.focused)
       view.focus();
+    if (view.state.selection.eq(selection))
+      return;
     let tr = view.state.tr.setSelection(selection);
     if (origin == "pointer")
       tr.setMeta("pointer", true);
@@ -72502,13 +72511,13 @@
   editHandlers.compositionstart = editHandlers.compositionupdate = (view) => {
     if (!view.composing) {
       view.domObserver.flush();
-      let { state } = view, $pos = state.selection.$from;
-      if (state.selection.empty && (state.storedMarks || !$pos.textOffset && $pos.parentOffset && $pos.nodeBefore.marks.some((m) => m.type.spec.inclusive === false))) {
+      let { state } = view, $pos = state.selection.$to;
+      if (state.selection instanceof TextSelection && (state.storedMarks || !$pos.textOffset && $pos.parentOffset && $pos.nodeBefore.marks.some((m) => m.type.spec.inclusive === false))) {
         view.markCursor = view.state.storedMarks || $pos.marks();
         endComposition(view, true);
         view.markCursor = null;
       } else {
-        endComposition(view);
+        endComposition(view, !state.selection.empty);
         if (gecko && state.selection.empty && $pos.parentOffset && !$pos.textOffset && $pos.nodeBefore.marks.length) {
           let sel = view.domSelectionRange();
           for (let node = sel.focusNode, offset2 = sel.focusOffset; node && node.nodeType == 1 && offset2 != 0; ) {
@@ -72516,7 +72525,9 @@
             if (!before)
               break;
             if (before.nodeType == 3) {
-              view.domSelection().collapse(before, before.nodeValue.length);
+              let sel2 = view.domSelection();
+              if (sel2)
+                sel2.collapse(before, before.nodeValue.length);
               break;
             } else {
               node = before;
@@ -72579,15 +72590,17 @@
     event.initEvent("event", true, true);
     return event.timeStamp;
   }
-  function endComposition(view, forceUpdate = false) {
+  function endComposition(view, restarting = false) {
     if (android && view.domObserver.flushingSoon >= 0)
       return;
     view.domObserver.forceFlush();
     clearComposition(view);
-    if (forceUpdate || view.docView && view.docView.dirty) {
+    if (restarting || view.docView && view.docView.dirty) {
       let sel = selectionFromDOM(view);
       if (sel && !sel.eq(view.state.selection))
         view.dispatch(view.state.tr.setSelection(sel));
+      else if ((view.markCursor || restarting) && !view.state.selection.empty)
+        view.dispatch(view.state.tr.deleteSelection());
       else
         view.updateState(view.state);
       return true;
@@ -73195,6 +73208,9 @@
       }
       return result;
     }
+    forEachSet(f) {
+      f(this);
+    }
   };
   DecorationSet.empty = new DecorationSet([], []);
   DecorationSet.removeOverlap = removeOverlap;
@@ -73260,6 +73276,10 @@
         default:
           return new _DecorationGroup(members.every((m) => m instanceof DecorationSet) ? members : members.reduce((r, m) => r.concat(m instanceof DecorationSet ? m : m.members), []));
       }
+    }
+    forEachSet(f) {
+      for (let i = 0; i < this.members.length; i++)
+        this.members[i].forEachSet(f);
     }
   };
   function mapChildren(oldChildren, newLocal, mapping, node, offset2, oldOffset, options) {
@@ -74466,6 +74486,8 @@
     */
     domSelectionRange() {
       let sel = this.domSelection();
+      if (!sel)
+        return { focusNode: null, focusOffset: 0, anchorNode: null, anchorOffset: 0 };
       return safari && this.root.nodeType === 11 && deepActiveElement(this.dom.ownerDocument) == this.dom && safariShadowSelectionRange(this, sel) || sel;
     }
     /**
@@ -74502,7 +74524,7 @@
       dom.className = "ProseMirror-separator";
       dom.setAttribute("mark-placeholder", "true");
       dom.setAttribute("alt", "");
-      view.cursorWrapper = { dom, deco: Decoration.widget(view.state.selection.head, dom, { raw: true, marks: view.markCursor }) };
+      view.cursorWrapper = { dom, deco: Decoration.widget(view.state.selection.from, dom, { raw: true, marks: view.markCursor }) };
     } else {
       view.cursorWrapper = null;
     }
@@ -74541,7 +74563,7 @@
       throw new RangeError("Plugins passed directly to the view must not have a state component");
   }
 
-  // ../node_modules/prosemirror-schema-basic/dist/index.js
+  // node_modules/prosemirror-schema-basic/dist/index.js
   var pDOM = ["p", 0];
   var blockquoteDOM = ["blockquote", 0];
   var hrDOM = ["hr"];
@@ -74739,7 +74761,7 @@
   };
   var schema = new Schema({ nodes, marks });
 
-  // ../node_modules/prosemirror-schema-list/dist/index.js
+  // node_modules/prosemirror-schema-list/dist/index.js
   var olDOM = ["ol", 0];
   var ulDOM = ["ul", 0];
   var liDOM = ["li", 0];
@@ -74937,7 +74959,7 @@
     };
   }
 
-  // ../node_modules/rope-sequence/dist/index.js
+  // node_modules/rope-sequence/dist/index.js
   var GOOD_LEAF_SIZE = 200;
   var RopeSequence = function RopeSequence2() {
   };
@@ -75120,7 +75142,7 @@
   }(RopeSequence);
   var dist_default2 = RopeSequence;
 
-  // ../node_modules/prosemirror-history/dist/index.js
+  // node_modules/prosemirror-history/dist/index.js
   var max_empty_items = 500;
   var Branch = class _Branch {
     constructor(items, eventCount) {
@@ -75473,7 +75495,7 @@
   var undoNoScroll = buildCommand(false, false);
   var redoNoScroll = buildCommand(true, false);
 
-  // ../node_modules/w3c-keyname/index.js
+  // node_modules/w3c-keyname/index.js
   var base = {
     8: "Backspace",
     9: "Tab",
@@ -75579,7 +75601,7 @@
     return name;
   }
 
-  // ../node_modules/prosemirror-keymap/dist/index.js
+  // node_modules/prosemirror-keymap/dist/index.js
   var mac3 = typeof navigator != "undefined" ? /Mac|iP(hone|[oa]d)/.test(navigator.platform) : false;
   function normalizeKeyName(name) {
     let parts = name.split(/-(?!$)/), result = parts[parts.length - 1];
@@ -75656,7 +75678,7 @@
     };
   }
 
-  // ../node_modules/prosemirror-commands/dist/index.js
+  // node_modules/prosemirror-commands/dist/index.js
   var deleteSelection = (state, dispatch) => {
     if (state.selection.empty)
       return false;
@@ -76209,7 +76231,7 @@
   var mac4 = typeof navigator != "undefined" ? /Mac|iP(hone|[oa]d)/.test(navigator.platform) : typeof os != "undefined" && os.platform ? os.platform() == "darwin" : false;
   var baseKeymap = mac4 ? macBaseKeymap : pcBaseKeymap;
 
-  // ../node_modules/prosemirror-inputrules/dist/index.js
+  // node_modules/prosemirror-inputrules/dist/index.js
   var InputRule = class {
     // :: (RegExp, union<string, (state: EditorState, match: [string], start: number, end: number) → ?Transaction>)
     /**

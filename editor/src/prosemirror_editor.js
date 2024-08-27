@@ -1,3 +1,11 @@
+/*~
+L'éditeur prosemirror est modulaire et est composé de plusieurs parties.
+
+Le modèle définie le schéma, c'est-à-dire la structure permise du document.
+
+
+*/
+
 import {EditorState} from "prosemirror-state"
 import {EditorView} from "prosemirror-view"
 import {Schema} from "prosemirror-model"
