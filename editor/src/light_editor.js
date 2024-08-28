@@ -8,6 +8,7 @@ import {initProseMirrorEditor} from './prosemirror_editor'
 import { loadFile, loadFileList, loadFileTree } from "./client"
 
 import Split from 'split.js'
+import renderHtmlTree from './lib/renderHtmlTree'
 
 function handleFileLoaded(filename, src) {
   var els = document.getElementsByClassName('filename');
@@ -31,11 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const explorerList = document.getElementById('explorer-tree')
   loadFileTree(tree => {
-    let html = ""
-    tree.children.forEach(c => {
-      html += (c.type === "file" ? "📄 " : "📁 ") + c.name + "<br>"
-    })
-    explorerList.innerHTML = html
+    explorerList.innerHTML = renderHtmlTree(tree)
   })
 
   const selectSampleElement = document.getElementById('sample_select');

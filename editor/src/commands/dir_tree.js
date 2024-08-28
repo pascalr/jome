@@ -1,5 +1,7 @@
 // TODO: https://iamkate.com/code/tree-views/
 
+// TODO: Use lib/renderHtmlTree
+
 // <ul class="tree">
 //   <li>
 //     <details open>

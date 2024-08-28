@@ -70143,6 +70143,25 @@
   };
   var split_es_default = Split;
 
+  // src/lib/renderHtmlTree.js
+  function renderHtmlTree(tree, root = true) {
+    let html = root ? "<ul class='tree'>" : "<ul>";
+    tree.children.forEach((c) => {
+      html += "<li>";
+      if (c.type === "file") {
+        html += `\u{1F4C4} ${c.name}<br>`;
+      } else {
+        html += "<details>";
+        html += `<summary>\u{1F4C1} ${c.name}</summary>`;
+        html += renderHtmlTree(c, false);
+        html += "</details>";
+      }
+      html += "</li>";
+    });
+    html += "</ul>";
+    return html;
+  }
+
   // src/light_editor.js
   function handleFileLoaded(filename, src) {
     var els = document.getElementsByClassName("filename");
@@ -70161,11 +70180,7 @@
     });
     const explorerList = document.getElementById("explorer-tree");
     loadFileTree((tree) => {
-      let html = "";
-      tree.children.forEach((c) => {
-        html += (c.type === "file" ? "\u{1F4C4} " : "\u{1F4C1} ") + c.name + "<br>";
-      });
-      explorerList.innerHTML = html;
+      explorerList.innerHTML = renderHtmlTree(tree);
     });
     const selectSampleElement = document.getElementById("sample_select");
     loadFileList((list) => {
