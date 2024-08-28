@@ -15,7 +15,8 @@
     "prosemirror-keymap": "^1.2.2",
     "prosemirror-schema-basic": "^1.2.3",
     "prosemirror-schema-list": "^1.4.1",
-    "prosemirror-state": "^1.4.3"
+    "prosemirror-state": "^1.4.3",
+    "split.js": "^1.6.5"
   },
   "devDependencies": {
     "esbuild": "0.23.0"

@@ -7,6 +7,8 @@ import {initProseMirrorEditor} from './prosemirror_editor'
 
 import { loadFile, loadFileList } from "./client"
 
+import Split from 'split.js'
+
 function handleFileLoaded(filename, src) {
   let doc = new JomeDocument(filename, src)
   let parts = parse(doc)
@@ -17,6 +19,12 @@ function handleFileLoaded(filename, src) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+
+  Split(['#split-0', '#split-1', '#split-2'], {
+    gutterSize: 4,
+    sizes: [20, 60, 20]
+  })
+
   const selectSampleElement = document.getElementById('sample_select');
   loadFileList(list => {
     selectSampleElement.innerHTML = list.map(path => (

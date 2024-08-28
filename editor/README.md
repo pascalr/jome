@@ -49,3 +49,20 @@ The steps 2 and 4 are handled by syntax plugins.
 The steps 3 handled by editor itself.
 
 How about the document format I use be compatible with ProseMirror document, this way I save a step? No.
+
+## On jase
+
+Je n'ai jamais tant aimé les menus standard, File, Edit, Selection, View, Help, ... c'est souvent pénible trouver ce que je veux.
+
+Mon idée serait de ne pas mettre ça. À la place, utiliser en grande majorité le panneau de droite qui sert à modifier la sélection actuel. Quand tu cliques sur la fenêtre, ben tu verrais des paramètres générique du programme, du projet...
+
+Quand tu cliques sur une page, tu vois le fichier ouvert et ses détails.
+
+Quand tu sélectionnes du texte, tu vois ce que tu peux faire avec.
+
+J'aime mieux parce que tu n'as pas toutes les options à passer aux travers, seulement celles qui te servent.
+
+## Apparence
+
+Titre centré en haut: « Nom du fichier présentement ouvert » - « nom du projet » - « Nom du programme »
+
