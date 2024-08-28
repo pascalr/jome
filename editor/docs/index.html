@@ -61,6 +61,8 @@
           </div>
           <div class="context_content">
             <div class="panel-header">Explorer</div>
+            <div id="explorer-tree"></div>
+            <div><select name="sample" id="sample_select"></select></div>
           </div>
         </div>
         <div id="split-1" class="main_panel">
@@ -260,33 +262,7 @@
         </div>
       </div>
     </div>
-
-    <div class="d-flex flex-column" style="min-height: 100vh;">
     
-    <div style="flex-grow: 1; height: calc(100vh - 50px);">
-      <div class="d-flex" style="height: 100%;">
-      <div class="scrollable" style="width: 100%;">
-        <div class="main">
-          
-          <h1>Jome editor</h1>
-
-          <div id="toolbar">
-            <div id="play_button">
-              <svg width="20" height="20" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                <polygon points="3,2 13,8 3,14" />
-              </svg>
-            </div>
-            <div id="stop_button">
-              <svg width="20" height="20" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                <rect x="3" y="3" width="10" height="10" />
-              </svg>
-            </div>
-          </div>
-
-          <div><select name="sample" id="sample_select"></select></div>
-
-      </div>
-    </div>
     <script src="/editor/highlight.min.js"></script>
     <script src="/editor/bundle.js" defer></script>
   </body>

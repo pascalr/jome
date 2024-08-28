@@ -29,6 +29,12 @@ export function loadFileList(callback) {
   .then(callback)
 }
 
+export function loadFileTree(callback) {
+  fetch('/get_file_tree')
+  .then(extractFetchJSON)
+  .then(callback)
+}
+
 export function loadFile(filename, callback) {
   fetch('/get_file/'+filename)
   .then(extractFetchText)

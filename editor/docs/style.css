@@ -108,7 +108,10 @@ blockquote {
 
 
 
-
+#explorer-tree {
+  padding: 0.5em;
+  font-size: 0.9em;
+}
 
 .tool-buttons {
   padding: 0.5em;

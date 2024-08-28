@@ -69660,6 +69660,9 @@
   function loadFileList(callback) {
     fetch("/get_file_list").then(extractFetchJSON).then(callback);
   }
+  function loadFileTree(callback) {
+    fetch("/get_file_tree").then(extractFetchJSON).then(callback);
+  }
   function loadFile(filename, callback) {
     fetch("/get_file/" + filename).then(extractFetchText).then((src) => callback(filename, src));
   }
@@ -70155,6 +70158,14 @@
     split_es_default(["#split-0", "#split-1", "#split-2"], {
       gutterSize: 4,
       sizes: [20, 60, 20]
+    });
+    const explorerList = document.getElementById("explorer-tree");
+    loadFileTree((tree) => {
+      let html = "";
+      tree.children.forEach((c) => {
+        html += (c.type === "file" ? "\u{1F4C4} " : "\u{1F4C1} ") + c.name + "<br>";
+      });
+      explorerList.innerHTML = html;
     });
     const selectSampleElement = document.getElementById("sample_select");
     loadFileList((list) => {

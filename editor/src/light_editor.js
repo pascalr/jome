@@ -5,7 +5,7 @@ import {JomeDocument} from './jome_document'
 
 import {initProseMirrorEditor} from './prosemirror_editor'
 
-import { loadFile, loadFileList } from "./client"
+import { loadFile, loadFileList, loadFileTree } from "./client"
 
 import Split from 'split.js'
 
@@ -27,6 +27,15 @@ document.addEventListener('DOMContentLoaded', function() {
   Split(['#split-0', '#split-1', '#split-2'], {
     gutterSize: 4,
     sizes: [20, 60, 20]
+  })
+
+  const explorerList = document.getElementById('explorer-tree')
+  loadFileTree(tree => {
+    let html = ""
+    tree.children.forEach(c => {
+      html += (c.type === "file" ? "📄 " : "📁 ") + c.name + "<br>"
+    })
+    explorerList.innerHTML = html
   })
 
   const selectSampleElement = document.getElementById('sample_select');

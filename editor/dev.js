@@ -31,6 +31,30 @@ app.get(/\/f\/.*/, (req, res) => {
 //   }
 // });
 
+function getDirectoryTree(dirPath, options) {
+  
+  if (options && options.exclude && options.exclude.includes(dirPath)) {return null}
+
+  const stats = fs.lstatSync(dirPath);
+  const tree = {
+      name: path.basename(dirPath),
+      path: dirPath,
+      type: stats.isDirectory() ? 'directory' : 'file',
+  };
+
+  if (stats.isDirectory()) {
+      tree.children = fs.readdirSync(dirPath).map(child => {
+          return getDirectoryTree(path.join(dirPath, child), options);
+      }).filter(f => f);
+  }
+
+  return tree;
+}
+
+app.get("/get_file_tree", async (req, res) => {
+  res.send(getDirectoryTree(".", {exclude: ["node_modules"]}))
+});
+
 app.get("/get_file_list", async (req, res) => {
   fs.readdir(".", { recursive: true }, (err, files) => {
     res.send(files.filter(f => !f.startsWith("node_modules") && !f.startsWith(".")))
