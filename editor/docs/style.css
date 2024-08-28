@@ -67,6 +67,22 @@ blockquote {
 
 
 
+.context_panel {
+  display: flex;
+}
+.context_buttons {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #222121;
+}
+.context_buttons > svg {
+  padding: 0.5em;
+}
+
+
+
+
+
 
 
 .tab-buttons {
@@ -103,7 +119,7 @@ blockquote {
 }
 
 .split-content {
-  height: 100%;
+  height: calc(100% - 1.7em);
   display: flex;
   flex-direction: row;
 }
