@@ -10,6 +10,10 @@ import { loadFile, loadFileList } from "./client"
 import Split from 'split.js'
 
 function handleFileLoaded(filename, src) {
+  var els = document.getElementsByClassName('filename');
+  for (var i = 0; i < els.length; i++) {
+    els[i].innerText = filename; 
+  }
   let doc = new JomeDocument(filename, src)
   let parts = parse(doc)
   console.log("parts", parts)

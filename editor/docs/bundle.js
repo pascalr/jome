@@ -70142,6 +70142,10 @@
 
   // src/light_editor.js
   function handleFileLoaded(filename, src) {
+    var els = document.getElementsByClassName("filename");
+    for (var i = 0; i < els.length; i++) {
+      els[i].innerText = filename;
+    }
     let doc3 = new JomeDocument(filename, src);
     let parts = (0, import_parser2.parse)(doc3);
     console.log("parts", parts);
