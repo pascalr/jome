@@ -70162,13 +70162,33 @@
     return html;
   }
 
-  // src/light_editor.js
-  function handleFileLoaded(filename, src) {
-    var els = document.getElementsByClassName("filename");
-    for (var i = 0; i < els.length; i++) {
-      els[i].innerText = filename;
+  // src/utils.js
+  function forEach2(list, callback) {
+    for (let i = 0; i < list.length; i++) {
+      callback(list[i]);
     }
-    let doc3 = new JomeDocument(filename, src);
+  }
+
+  // src/light_editor.js
+  var _active_filename = null;
+  var _opened_files = [];
+  function openFile(filename, content) {
+    _opened_files[filename] = content;
+    _active_filename = filename;
+    let filesTabs = document.getElementById("files_tabs");
+    forEach2(filesTabs.children, (c) => {
+      if (c.classList.contains("active")) {
+        c.classList.remove("active");
+      }
+    });
+    let btn = document.createElement("button");
+    btn.className = "tab-button active";
+    btn.innerText = filename;
+    filesTabs.prepend(btn);
+    forEach2(document.getElementsByClassName("active_filename"), (el) => {
+      el.innerText = filename;
+    });
+    let doc3 = new JomeDocument(filename, content);
     let parts = (0, import_parser2.parse)(doc3);
     console.log("parts", parts);
     initProseMirrorEditor("#prosemirror_editor", doc3);
@@ -70186,9 +70206,9 @@
     loadFileList((list) => {
       selectSampleElement.innerHTML = list.map((path) => `<option value="${path}">${path}</option>`);
       selectSampleElement.value = "README.md";
-      loadFile("README.md", handleFileLoaded);
+      loadFile("README.md", openFile);
       selectSampleElement.addEventListener("change", function(event) {
-        loadFile(event.target.value, handleFileLoaded);
+        loadFile(event.target.value, openFile);
       });
     });
   });

@@ -14,7 +14,7 @@
 
     <div class="window">
       <div class="window_bar">
-        <span class="filename"></span> - <span class="project_name">Jome</span> - Jome editor
+        <span class="active_filename"></span> - <span class="project_name">Jome</span> - Jome editor
       </div>
       <div class="bookmark_bar_empty_by_default_allow_you_to_put_commonly_used_tools_or_buttons_or_shortcuts_here">
       </div>
@@ -66,9 +66,7 @@
           </div>
         </div>
         <div id="split-1" class="main_panel">
-          <div class="tab-buttons">
-            <button class="tab-button active">Filename.ext</button>
-            <button class="tab-button">+</button>
+          <div id="files_tabs" class="tab-buttons">
           </div>
           <div id="prosemirror_editor"></div>
         </div>
@@ -171,7 +169,7 @@
               </div>
             </div>
           </div>
-          <div class="panel-main-header">File • <span class="filename"></span> </div>
+          <div class="panel-main-header">File • <span class="active_filename"></span> </div>
           <div class="tool-section">
             <div class="panel-header">Modify</div>
             <div class="tool-buttons">

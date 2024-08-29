@@ -10,18 +10,52 @@ import { loadFile, loadFileList, loadFileTree } from "./client"
 import Split from 'split.js'
 import renderHtmlTree from './lib/renderHtmlTree'
 
-function handleFileLoaded(filename, src) {
-  var els = document.getElementsByClassName('filename');
-  for (var i = 0; i < els.length; i++) {
-    els[i].innerText = filename; 
-  }
-  let doc = new JomeDocument(filename, src)
+import { forEach } from './utils'
+
+
+
+
+
+
+
+let _active_filename = null
+let _opened_files = []
+function openFile(filename, content) {
+  // update state
+  _opened_files[filename] = content
+  _active_filename = filename
+
+  // update files tabs
+  let filesTabs = document.getElementById("files_tabs")
+  forEach(filesTabs.children, c => {
+    if (c.classList.contains("active")) {c.classList.remove("active")}
+  })
+  let btn = document.createElement('button')
+  btn.className = "tab-button active"
+  btn.innerText = filename
+  filesTabs.prepend(btn)
+
+  // update active filename
+  forEach(document.getElementsByClassName('active_filename'), el => {
+    el.innerText = filename; 
+  });
+
+  // update the main source view
+  let doc = new JomeDocument(filename, content)
   let parts = parse(doc)
   console.log("parts", parts)
   initProseMirrorEditor('#prosemirror_editor', doc)
   // document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
   // document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)
 }
+
+
+
+
+
+
+
+
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -42,9 +76,9 @@ document.addEventListener('DOMContentLoaded', function() {
     ))
     selectSampleElement.value = "README.md"
     // loadFile(selectSampleElement.value)
-    loadFile("README.md", handleFileLoaded)
+    loadFile("README.md", openFile)
     selectSampleElement.addEventListener('change', function (event) {
-      loadFile(event.target.value, handleFileLoaded)
+      loadFile(event.target.value, openFile)
     });
   })
 });
