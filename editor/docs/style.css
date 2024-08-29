@@ -185,6 +185,26 @@ body {
 
 
 
+/* WIP not working */
+.linear-tree details div, .linear-tree details details summary  {
+  position: relative;
+  padding-left: 4rem;
+}
+.linear-tree details div::before, .linear-tree details details summary::before  {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 2em;
+  background: repeating-linear-gradient(
+    to right, #999, #999 2px, transparent 2px, transparent calc(2px + 0.6rem)
+  );
+}
+
+
+
+
 
 
 
@@ -200,15 +220,12 @@ body {
 
 .tree li {
   display: block;
-  position: relative;
-  padding-left: calc(2 * var(--spacing));
+  padding: 0.12em 0 0.12em calc(2 * var(--spacing));
   margin-top: 0;
-  padding-top: 0.25em;
   margin-left: 3px;
 }
 
 .tree ul {
-  margin-left: calc(var(--radius) - var(--spacing));
   padding-left: 0;
 }
 

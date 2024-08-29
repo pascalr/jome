@@ -70154,7 +70154,7 @@
   var split_es_default = Split;
 
   // src/lib/renderHtmlTree.js
-  function renderHtmlTree(tree, root = true) {
+  function renderHtmlTreeUl(tree, root = true) {
     let html = root ? "<ul class='tree'>" : "<ul>";
     tree.children.forEach((c) => {
       html += "<li>";
@@ -70163,7 +70163,7 @@
       } else {
         html += "<details>";
         html += `<summary>\u{1F4C1} ${c.name}</summary>`;
-        html += renderHtmlTree(c, false);
+        html += renderHtmlTreeUl(c, false);
         html += "</details>";
       }
       html += "</li>";
@@ -70199,7 +70199,7 @@
     });
     const explorerList = document.getElementById("explorer-tree");
     loadFileTree((tree) => {
-      explorerList.innerHTML = renderHtmlTree(tree);
+      explorerList.innerHTML = renderHtmlTreeUl(tree);
     });
     const selectSampleElement = document.getElementById("sample_select");
     loadFileList((list) => {
