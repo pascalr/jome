@@ -70159,7 +70159,7 @@
     tree.children.forEach((c) => {
       html += "<li>";
       if (c.type === "file") {
-        html += `<div class="leaf" data-path="${c.path}" selected>\u{1F4C4}&nbsp;${c.name}</div>`;
+        html += `<div class="leaf" data-path="${c.path}">\u{1F4C4}&nbsp;${c.name}</div>`;
       } else {
         html += "<details>";
         html += `<summary class="leaf" data-path="${c.path}">\u{1F4C1}&nbsp;${c.name}</summary>`;
@@ -70184,6 +70184,11 @@
     btn.className = "tab-button active";
     btn.innerText = file.name;
     filesTabs.prepend(btn);
+    forEach2(document.querySelectorAll("#explorer-tree .leaf[selected]"), (el) => {
+      el.removeAttribute("selected");
+    });
+    const leaf = document.querySelector(`#explorer-tree .leaf[data-path="${file.path}"]`);
+    leaf.setAttribute("selected", "");
     forEach2(document.getElementsByClassName("active_filename"), (el) => {
       el.innerText = file.name;
     });

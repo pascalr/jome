@@ -37,10 +37,13 @@ function openFile(file) {
   filesTabs.prepend(btn)
 
   // update active in explorer tree
-  //forAll(document.querySelectorAll("#explorer-tree li.active"), el => {
-  //  el.classList.remove("active")
-  //})
-  //let tree = document.getElementById("explorer-tree")
+  // FIXME: DON'T DO THIS HERE. THE SELCTION SHOULD BE HANDLED ELSEWHERE AND IT IS THE SELECTION THAT SHOULD CALL openFile when needed
+  forEach(document.querySelectorAll("#explorer-tree .leaf[selected]"), el => {
+    el.removeAttribute('selected')
+    // el.classList.remove("active")
+  })
+  const leaf = document.querySelector(`#explorer-tree .leaf[data-path="${file.path}"]`);
+  leaf.setAttribute('selected', "")
 
   // update active filename
   forEach(document.getElementsByClassName('active_filename'), el => {

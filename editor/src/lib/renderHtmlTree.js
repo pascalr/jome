@@ -3,7 +3,7 @@ export default function renderHtmlTreePath(tree, root=true) {
   tree.children.forEach(c => {
     html += "<li>"
     if (c.type === "file") {
-      html += `<div class="leaf" data-path="${c.path}" selected>📄&nbsp;${c.name}</div>`
+      html += `<div class="leaf" data-path="${c.path}">📄&nbsp;${c.name}</div>`
     } else {
       html += "<details>"
       html += `<summary class="leaf" data-path="${c.path}">📁&nbsp;${c.name}</summary>`
