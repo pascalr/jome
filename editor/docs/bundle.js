@@ -70154,16 +70154,16 @@
   var split_es_default = Split;
 
   // src/lib/renderHtmlTree.js
-  function renderHtmlTreeUl(tree, root = true) {
+  function renderHtmlTreePath(tree, root = true) {
     let html = root ? "<ul class='tree'>" : "<ul>";
     tree.children.forEach((c) => {
       html += "<li>";
       if (c.type === "file") {
-        html += `\u{1F4C4} ${c.name}<br>`;
+        html += `<div class="leaf" data-path="${c.path}" selected>\u{1F4C4}&nbsp;${c.name}</div>`;
       } else {
         html += "<details>";
-        html += `<summary>\u{1F4C1} ${c.name}</summary>`;
-        html += renderHtmlTreeUl(c, false);
+        html += `<summary class="leaf" data-path="${c.path}">\u{1F4C1}&nbsp;${c.name}</summary>`;
+        html += renderHtmlTreePath(c, false);
         html += "</details>";
       }
       html += "</li>";
@@ -70199,7 +70199,7 @@
     });
     const explorerList = document.getElementById("explorer-tree");
     loadFileTree((tree) => {
-      explorerList.innerHTML = renderHtmlTreeUl(tree);
+      explorerList.innerHTML = renderHtmlTreePath(tree);
     });
     const selectSampleElement = document.getElementById("sample_select");
     loadFileList((list) => {
