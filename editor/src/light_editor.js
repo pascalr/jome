@@ -19,12 +19,12 @@ import { forEach } from './utils'
 
 
 
-let _active_filepath = null
-let _opened_files = []
-function openFile(filepath, content) {
+//let _active_filepath = null
+//let _opened_files = []
+function openFile(file) {
   // update state
-  _opened_files[filepath] = content
-  _active_filepath = filepath
+  //_opened_files[file.path] = file.content
+  //_active_filepath = file.path
 
   // update files tabs
   let filesTabs = document.getElementById("files_tabs")
@@ -33,7 +33,7 @@ function openFile(filepath, content) {
   })
   let btn = document.createElement('button')
   btn.className = "tab-button active"
-  btn.innerText = filepath
+  btn.innerText = file.name
   filesTabs.prepend(btn)
 
   // update active in explorer tree
@@ -44,11 +44,11 @@ function openFile(filepath, content) {
 
   // update active filename
   forEach(document.getElementsByClassName('active_filename'), el => {
-    el.innerText = filepath; 
+    el.innerText = file.name; 
   });
 
   // update the main source view
-  let doc = new JomeDocument(filepath, content)
+  let doc = new JomeDocument(file.path, file.content)
   let parts = parse(doc)
   console.log("parts", parts)
   initProseMirrorEditor('#prosemirror_editor', doc)

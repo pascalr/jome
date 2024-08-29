@@ -1,3 +1,4 @@
+import { getFilenameFromPath } from "./utils";
 
 function extractFetchText(response) {
   // TODO: Proper error message not an exception
@@ -24,23 +25,15 @@ function extractFetchJSON(response) {
 }
 
 export function loadFileList(callback) {
-  fetch('/get_file_list')
-  .then(extractFetchJSON)
-  .then(callback)
+  fetch('/get_file_list').then(extractFetchJSON).then(callback)
 }
 
 export function loadFileTree(callback) {
-  fetch('/get_file_tree')
-  .then(extractFetchJSON)
-  .then(callback)
+  fetch('/get_file_tree').then(extractFetchJSON).then(callback)
 }
 
-export function loadFile(filename, callback) {
-  fetch('/get_file/'+filename)
+export function loadFile(filepath, callback) {
+  fetch('/get_file/'+filepath)
   .then(extractFetchText)
-  .then(src => callback(filename, src))
-  // .catch(error => {
-  //   // TODO: handle error
-  //   // document.getElementById('file-content').textContent = 'Error: ' + error;
-  // });
+  .then(content => callback({name: getFilenameFromPath(filepath), path: filepath, content}))
 }

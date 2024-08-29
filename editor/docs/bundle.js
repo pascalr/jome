@@ -69644,6 +69644,16 @@
     let view = new EditorView(document.querySelector(selector), { state });
   }
 
+  // src/utils.js
+  function forEach2(list, callback) {
+    for (let i = 0; i < list.length; i++) {
+      callback(list[i]);
+    }
+  }
+  function getFilenameFromPath(path) {
+    return path.split("\\").pop().split("/").pop();
+  }
+
   // src/client.js
   function extractFetchText(response) {
     if (!response.ok) {
@@ -69663,8 +69673,8 @@
   function loadFileTree(callback) {
     fetch("/get_file_tree").then(extractFetchJSON).then(callback);
   }
-  function loadFile(filename, callback) {
-    fetch("/get_file/" + filename).then(extractFetchText).then((src) => callback(filename, src));
+  function loadFile(filepath, callback) {
+    fetch("/get_file/" + filepath).then(extractFetchText).then((content) => callback({ name: getFilenameFromPath(filepath), path: filepath, content }));
   }
 
   // node_modules/split.js/dist/split.es.js
@@ -70162,19 +70172,8 @@
     return html;
   }
 
-  // src/utils.js
-  function forEach2(list, callback) {
-    for (let i = 0; i < list.length; i++) {
-      callback(list[i]);
-    }
-  }
-
   // src/light_editor.js
-  var _active_filepath = null;
-  var _opened_files = [];
-  function openFile(filepath, content) {
-    _opened_files[filepath] = content;
-    _active_filepath = filepath;
+  function openFile(file) {
     let filesTabs = document.getElementById("files_tabs");
     forEach2(filesTabs.children, (c) => {
       if (c.classList.contains("active")) {
@@ -70183,12 +70182,12 @@
     });
     let btn = document.createElement("button");
     btn.className = "tab-button active";
-    btn.innerText = filepath;
+    btn.innerText = file.name;
     filesTabs.prepend(btn);
     forEach2(document.getElementsByClassName("active_filename"), (el) => {
-      el.innerText = filepath;
+      el.innerText = file.name;
     });
-    let doc3 = new JomeDocument(filepath, content);
+    let doc3 = new JomeDocument(file.path, file.content);
     let parts = (0, import_parser2.parse)(doc3);
     console.log("parts", parts);
     initProseMirrorEditor("#prosemirror_editor", doc3);
