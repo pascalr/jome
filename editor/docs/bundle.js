@@ -70170,11 +70170,11 @@
   }
 
   // src/light_editor.js
-  var _active_filename = null;
+  var _active_filepath = null;
   var _opened_files = [];
-  function openFile(filename, content) {
-    _opened_files[filename] = content;
-    _active_filename = filename;
+  function openFile(filepath, content) {
+    _opened_files[filepath] = content;
+    _active_filepath = filepath;
     let filesTabs = document.getElementById("files_tabs");
     forEach2(filesTabs.children, (c) => {
       if (c.classList.contains("active")) {
@@ -70183,12 +70183,12 @@
     });
     let btn = document.createElement("button");
     btn.className = "tab-button active";
-    btn.innerText = filename;
+    btn.innerText = filepath;
     filesTabs.prepend(btn);
     forEach2(document.getElementsByClassName("active_filename"), (el) => {
-      el.innerText = filename;
+      el.innerText = filepath;
     });
-    let doc3 = new JomeDocument(filename, content);
+    let doc3 = new JomeDocument(filepath, content);
     let parts = (0, import_parser2.parse)(doc3);
     console.log("parts", parts);
     initProseMirrorEditor("#prosemirror_editor", doc3);
