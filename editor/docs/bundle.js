@@ -70166,15 +70166,15 @@
   var split_es_default = Split;
 
   // src/lib/renderHtmlTree.js
-  function createHtmlTree(tree, root = true) {
+  function createHtmlTree(tree, transformLeaf = () => ({}), root = true) {
     let el = e("ul", root ? { className: "tree" } : {}, tree.children.map((c) => {
       let cs = [];
       if (c.type === "file") {
-        cs = [e("div", { className: "leaf", "data-path": c.path, innerText: `\u{1F4C4}\xA0${c.name}` })];
+        cs = [e("div", { ...transformLeaf(c), innerText: `\u{1F4C4}\xA0${c.name}` })];
       } else {
         cs = [e("details", {}, [
-          e("summary", { className: "leaf", "data-path": c.path, innerText: `\u{1F4C1}\xA0${c.name}` }),
-          createHtmlTree(c, false)
+          e("summary", { ...transformLeaf(c), innerText: `\u{1F4C1}\xA0${c.name}` }),
+          createHtmlTree(c, transformLeaf, false)
         ])];
       }
       return e("li", {}, cs);
@@ -70214,7 +70214,9 @@
     });
     const explorerList = document.getElementById("explorer-tree");
     loadFileTree((tree) => {
-      explorerList.replaceChildren(createHtmlTree(tree));
+      explorerList.replaceChildren(createHtmlTree(tree, (leaf) => {
+        return { className: "leaf", "data-path": leaf.path };
+      }));
     });
     const selectSampleElement = document.getElementById("sample_select");
     loadFileList((list) => {

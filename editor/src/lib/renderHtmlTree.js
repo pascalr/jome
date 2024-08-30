@@ -1,5 +1,6 @@
 import { e } from "../utils"
 
+// DEPRECATED
 export default function renderHtmlTreePath(tree, root=true) {
   let html = root ? "<ul class='tree'>" : "<ul>"
   tree.children.forEach(c => {
@@ -18,15 +19,15 @@ export default function renderHtmlTreePath(tree, root=true) {
   return html
 }
 
-export function createHtmlTree(tree, root=true) {
+export function createHtmlTree(tree, transformLeaf=()=>({}), root=true) {
   let el = e('ul', root ? {className: 'tree'} : {}, tree.children.map(c => {
     let cs = []
     if (c.type === "file") {
-      cs = [e('div', {className: "leaf", "data-path": c.path, innerText: `📄 ${c.name}`})]
+      cs = [e('div', {...transformLeaf(c), innerText: `📄 ${c.name}`})]
     } else {
       cs = [e('details', {}, [
-        e('summary', {className: "leaf", "data-path": c.path, innerText: `📁 ${c.name}`}),
-        createHtmlTree(c, false)
+        e('summary', {...transformLeaf(c), innerText: `📁 ${c.name}`}),
+        createHtmlTree(c, transformLeaf, false)
       ])]
     }
     return e('li', {}, cs)
@@ -34,6 +35,11 @@ export function createHtmlTree(tree, root=true) {
   return el
 }
 
+function renderPlainHtmlTree(tree) {
+  return createHtmlTree(tree).outerHTML
+}
+
+// DEPRECATED
 function renderHtmlTreeUl(tree, root=true) {
   let html = root ? "<ul class='tree'>" : "<ul>"
   tree.children.forEach(c => {
@@ -52,6 +58,7 @@ function renderHtmlTreeUl(tree, root=true) {
   return html
 }
 
+// DEPRECATED
 function renderHtmlTreeDiv(tree, root=true) {
   let html = root ? "<div class='linear-tree'>" : ""
   tree.children.forEach(c => {

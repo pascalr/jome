@@ -75,7 +75,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const explorerList = document.getElementById('explorer-tree')
   loadFileTree(tree => {
     // explorerList.innerHTML = renderHtmlTree(tree)
-    explorerList.replaceChildren(createHtmlTree(tree))
+    explorerList.replaceChildren(createHtmlTree(tree, leaf => {
+      return {className: "leaf", "data-path": leaf.path}
+    }))
   })
 
   const selectSampleElement = document.getElementById('sample_select');
