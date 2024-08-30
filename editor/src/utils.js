@@ -9,3 +9,22 @@ export function forEach(list, callback) {
 export function getFilenameFromPath(path) {
   return path.split('\\').pop().split('/').pop()
 }
+
+/**
+ * Shorthand to create an HTML element.
+ * Attrs:
+ * id, className, innerText, data-*
+ * onClick
+ **/ 
+export function e(kind, attrs = {}, children = []) {
+  let el = document.createElement(kind)
+  Object.keys(attrs||{}).forEach(key => {
+    if (key.startsWith("data-")) {
+      el.setAttribute(key, attrs[key])
+    } else {
+      el[key] = attrs[key]
+    }
+  });
+  (children||[]).forEach(c => el.appendChild(c))
+  return el
+}

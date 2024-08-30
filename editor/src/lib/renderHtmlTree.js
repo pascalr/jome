@@ -1,3 +1,5 @@
+import { e } from "../utils"
+
 export default function renderHtmlTreePath(tree, root=true) {
   let html = root ? "<ul class='tree'>" : "<ul>"
   tree.children.forEach(c => {
@@ -14,6 +16,22 @@ export default function renderHtmlTreePath(tree, root=true) {
   })
   html += "</ul>"
   return html
+}
+
+export function createHtmlTree(tree, root=true) {
+  let el = e('ul', root ? {className: 'tree'} : {}, tree.children.map(c => {
+    let cs = []
+    if (c.type === "file") {
+      cs = [e('div', {className: "leaf", "data-path": c.path, innerText: `📄 ${c.name}`})]
+    } else {
+      cs = [e('details', {}, [
+        e('summary', {className: "leaf", "data-path": c.path, innerText: `📁 ${c.name}`}),
+        createHtmlTree(c, false)
+      ])]
+    }
+    return e('li', {}, cs)
+  }))
+  return el
 }
 
 function renderHtmlTreeUl(tree, root=true) {

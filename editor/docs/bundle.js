@@ -143,8 +143,8 @@
               console.log(s);
               let o = JSON.parse(s);
               b.data = o;
-            } catch (e) {
-              console.error(e);
+            } catch (e2) {
+              console.error(e2);
             }
           }
           return b;
@@ -1936,22 +1936,22 @@
       var entities = require_lib();
       var LinkifyIt = require_index_cjs3();
       var punycode = require_punycode();
-      function _interopNamespaceDefault(e) {
+      function _interopNamespaceDefault(e2) {
         var n = /* @__PURE__ */ Object.create(null);
-        if (e) {
-          Object.keys(e).forEach(function(k) {
+        if (e2) {
+          Object.keys(e2).forEach(function(k) {
             if (k !== "default") {
-              var d = Object.getOwnPropertyDescriptor(e, k);
+              var d = Object.getOwnPropertyDescriptor(e2, k);
               Object.defineProperty(n, k, d.get ? d : {
                 enumerable: true,
                 get: function() {
-                  return e[k];
+                  return e2[k];
                 }
               });
             }
           });
         }
-        n.default = e;
+        n.default = e2;
         return Object.freeze(n);
       }
       var mdurl__namespace = /* @__PURE__ */ _interopNamespaceDefault(mdurl);
@@ -16162,7 +16162,7 @@
           "Element",
           "ElementList"
         ];
-        const NULLABLE_BUILT_IN_TYPES = BUILT_IN_TYPES.map((e) => `${e}?`);
+        const NULLABLE_BUILT_IN_TYPES = BUILT_IN_TYPES.map((e2) => `${e2}?`);
         const BASIC_KEYWORDS = [
           "abstract",
           "as",
@@ -60248,10 +60248,10 @@
     static fromReplace(doc3, from2, to, slice2) {
       try {
         return _StepResult.ok(doc3.replace(from2, to, slice2));
-      } catch (e) {
-        if (e instanceof ReplaceError)
-          return _StepResult.fail(e.message);
-        throw e;
+      } catch (e2) {
+        if (e2 instanceof ReplaceError)
+          return _StepResult.fail(e2.message);
+        throw e2;
       }
     }
   };
@@ -60878,7 +60878,7 @@
   }
   function split(tr, pos, depth = 1, typesAfter) {
     let $pos = tr.doc.resolve(pos), before = Fragment.empty, after = Fragment.empty;
-    for (let d = $pos.depth, e = $pos.depth - depth, i = depth - 1; d > e; d--, i--) {
+    for (let d = $pos.depth, e2 = $pos.depth - depth, i = depth - 1; d > e2; d--, i--) {
       before = Fragment.from($pos.node(d).copy(before));
       let typeAfter = typesAfter && typesAfter[i];
       after = Fragment.from(typeAfter ? typeAfter.type.create(typeAfter.attrs, after) : $pos.node(d).copy(after));
@@ -64216,7 +64216,7 @@
       if (index >= this.preMatch.index && (targetDesc = this.preMatch.matches[index - this.preMatch.index]).parent == this.top && targetDesc.matchesNode(node, outerDeco, innerDeco)) {
         found2 = this.top.children.indexOf(targetDesc, this.index);
       } else {
-        for (let i = this.index, e = Math.min(this.top.children.length, i + 5); i < e; i++) {
+        for (let i = this.index, e2 = Math.min(this.top.children.length, i + 5); i < e2; i++) {
           let child = this.top.children[i];
           if (child.matchesNode(node, outerDeco, innerDeco) && !this.preMatch.matched.has(child)) {
             found2 = i;
@@ -65242,7 +65242,7 @@
     let schema2 = slice2.content.firstChild.type.schema, array;
     try {
       array = JSON.parse(context);
-    } catch (e) {
+    } catch (e2) {
       return slice2;
     }
     let { content, openStart, openEnd } = slice2;
@@ -65853,7 +65853,7 @@
         view.dragging = null;
     }, 50);
   };
-  editHandlers.dragover = editHandlers.dragenter = (_, e) => e.preventDefault();
+  editHandlers.dragover = editHandlers.dragenter = (_, e2) => e2.preventDefault();
   editHandlers.drop = (view, _event) => {
     let event = _event;
     let dragging = view.dragging;
@@ -66629,8 +66629,8 @@
           this.flush();
       });
       if (useCharData) {
-        this.onCharData = (e) => {
-          this.queue.push({ target: e.target, type: "characterData", oldValue: e.prevValue });
+        this.onCharData = (e2) => {
+          this.queue.push({ target: e2.target, type: "characterData", oldValue: e2.prevValue });
           this.flushSoon();
         };
       }
@@ -67951,7 +67951,7 @@
         found2 = i + 1;
     let splitDepth = wrappers.length - found2;
     let splitPos = range.start + wrappers.length - (joinBefore ? 2 : 0), parent = range.parent;
-    for (let i = range.startIndex, e = range.endIndex, first = true; i < e; i++, first = false) {
+    for (let i = range.startIndex, e2 = range.endIndex, first = true; i < e2; i++, first = false) {
       if (!first && canSplit(tr.doc, splitPos, splitDepth)) {
         tr.split(splitPos, splitDepth);
         splitPos += 2 * splitDepth;
@@ -68035,7 +68035,7 @@
   }
   function liftOutOfList(state, dispatch, range) {
     let tr = state.tr, list = range.parent;
-    for (let pos = range.end, i = range.endIndex - 1, e = range.startIndex; i > e; i--) {
+    for (let pos = range.end, i = range.endIndex - 1, e2 = range.startIndex; i > e2; i--) {
       pos -= list.child(i).nodeSize;
       tr.delete(pos - 1, pos + 1);
     }
@@ -68580,12 +68580,12 @@
       config,
       props: {
         handleDOMEvents: {
-          beforeinput(view, e) {
-            let inputType = e.inputType;
+          beforeinput(view, e2) {
+            let inputType = e2.inputType;
             let command = inputType == "historyUndo" ? undo : inputType == "historyRedo" ? redo : null;
             if (!command)
               return false;
-            e.preventDefault();
+            e2.preventDefault();
             return command(view.state, view.dispatch);
           }
         }
@@ -69653,6 +69653,18 @@
   function getFilenameFromPath(path) {
     return path.split("\\").pop().split("/").pop();
   }
+  function e(kind, attrs = {}, children = []) {
+    let el = document.createElement(kind);
+    Object.keys(attrs || {}).forEach((key) => {
+      if (key.startsWith("data-")) {
+        el.setAttribute(key, attrs[key]);
+      } else {
+        el[key] = attrs[key];
+      }
+    });
+    (children || []).forEach((c) => el.appendChild(c));
+    return el;
+  }
 
   // src/client.js
   function extractFetchText(response) {
@@ -69833,11 +69845,11 @@
         return element.size;
       });
     }
-    function getMousePosition(e) {
-      if ("touches" in e) {
-        return e.touches[0][clientAxis];
+    function getMousePosition(e2) {
+      if ("touches" in e2) {
+        return e2.touches[0][clientAxis];
       }
-      return e[clientAxis];
+      return e2[clientAxis];
     }
     function adjust(offset) {
       var a = elements[this.a];
@@ -69848,14 +69860,14 @@
       setElementSize(a.element, a.size, this[aGutterSize], a.i);
       setElementSize(b.element, b.size, this[bGutterSize], b.i);
     }
-    function drag(e) {
+    function drag(e2) {
       var offset;
       var a = elements[this.a];
       var b = elements[this.b];
       if (!this.dragging) {
         return;
       }
-      offset = getMousePosition(e) - this.start + (this[aGutterSize] - this.dragOffset);
+      offset = getMousePosition(e2) - this.start + (this[aGutterSize] - this.dragOffset);
       if (dragInterval > 1) {
         offset = Math.round(offset / dragInterval) * dragInterval;
       }
@@ -69976,8 +69988,8 @@
       self.parent.style.cursor = "";
       document2.body.style.cursor = "";
     }
-    function startDragging(e) {
-      if ("button" in e && e.button !== 0) {
+    function startDragging(e2) {
+      if ("button" in e2 && e2.button !== 0) {
         return;
       }
       var self = this;
@@ -69986,7 +69998,7 @@
       if (!self.dragging) {
         getOption(options, "onDragStart", NOOP)(getSizes());
       }
-      e.preventDefault();
+      e2.preventDefault();
       self.dragging = true;
       self.move = drag.bind(self);
       self.stop = stopDragging.bind(self);
@@ -70011,7 +70023,7 @@
       self.parent.style.cursor = cursor;
       document2.body.style.cursor = cursor;
       calculateSizes.call(self);
-      self.dragOffset = getMousePosition(e) - self.end;
+      self.dragOffset = getMousePosition(e2) - self.end;
     }
     sizes = trimToMin(sizes);
     var pairs = [];
@@ -70154,22 +70166,20 @@
   var split_es_default = Split;
 
   // src/lib/renderHtmlTree.js
-  function renderHtmlTreePath(tree, root = true) {
-    let html = root ? "<ul class='tree'>" : "<ul>";
-    tree.children.forEach((c) => {
-      html += "<li>";
+  function createHtmlTree(tree, root = true) {
+    let el = e("ul", root ? { className: "tree" } : {}, tree.children.map((c) => {
+      let cs = [];
       if (c.type === "file") {
-        html += `<div class="leaf" data-path="${c.path}">\u{1F4C4}&nbsp;${c.name}</div>`;
+        cs = [e("div", { className: "leaf", "data-path": c.path, innerText: `\u{1F4C4}\xA0${c.name}` })];
       } else {
-        html += "<details>";
-        html += `<summary class="leaf" data-path="${c.path}">\u{1F4C1}&nbsp;${c.name}</summary>`;
-        html += renderHtmlTreePath(c, false);
-        html += "</details>";
+        cs = [e("details", {}, [
+          e("summary", { className: "leaf", "data-path": c.path, innerText: `\u{1F4C1}\xA0${c.name}` }),
+          createHtmlTree(c, false)
+        ])];
       }
-      html += "</li>";
-    });
-    html += "</ul>";
-    return html;
+      return e("li", {}, cs);
+    }));
+    return el;
   }
 
   // src/light_editor.js
@@ -70204,7 +70214,7 @@
     });
     const explorerList = document.getElementById("explorer-tree");
     loadFileTree((tree) => {
-      explorerList.innerHTML = renderHtmlTreePath(tree);
+      explorerList.replaceChildren(createHtmlTree(tree));
     });
     const selectSampleElement = document.getElementById("sample_select");
     loadFileList((list) => {
