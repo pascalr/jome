@@ -14,7 +14,7 @@ export function getFilenameFromPath(path) {
  * Shorthand to create an HTML element.
  * Attrs:
  * id, className, innerText, data-*
- * onClick
+ * onclick
  **/ 
 export function e(kind, attrs = {}, children = []) {
   let el = document.createElement(kind)

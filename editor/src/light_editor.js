@@ -76,7 +76,9 @@ document.addEventListener('DOMContentLoaded', function() {
   loadFileTree(tree => {
     // explorerList.innerHTML = renderHtmlTree(tree)
     explorerList.replaceChildren(createHtmlTree(tree, leaf => {
-      return {className: "leaf", "data-path": leaf.path}
+      return {id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
+        console.log("TODO: Open file "+leaf.path)
+      }}
     }))
   })
 
