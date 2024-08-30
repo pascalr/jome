@@ -55,11 +55,11 @@ app.get("/get_file_tree", async (req, res) => {
   res.send(getDirectoryTree(".", {exclude: ["node_modules"]}))
 });
 
-app.get("/get_file_list", async (req, res) => {
-  fs.readdir(".", { recursive: true }, (err, files) => {
-    res.send(files.filter(f => !f.startsWith("node_modules") && !f.startsWith(".")))
-  });
-});
+// app.get("/get_file_list", async (req, res) => {
+//   fs.readdir(".", { recursive: true }, (err, files) => {
+//     res.send(files.filter(f => !f.startsWith("node_modules") && !f.startsWith(".")))
+//   });
+// });
 
 app.listen(port, function () {
   console.log(`Server listening on port ${port}`);

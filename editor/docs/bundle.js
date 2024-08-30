@@ -69679,9 +69679,6 @@
     }
     return response.json();
   }
-  function loadFileList(callback) {
-    fetch("/get_file_list").then(extractFetchJSON).then(callback);
-  }
   function loadFileTree(callback) {
     fetch("/get_file_tree").then(extractFetchJSON).then(callback);
   }
@@ -70221,15 +70218,6 @@
           openFile(leaf.path);
         } };
       }));
-    });
-    const selectSampleElement = document.getElementById("sample_select");
-    loadFileList((list) => {
-      selectSampleElement.innerHTML = list.map((path) => `<option value="${path}">${path}</option>`);
-      selectSampleElement.value = "README.md";
-      openFile("README.md");
-      selectSampleElement.addEventListener("change", function(event) {
-        openFile(event.target.value);
-      });
     });
   });
 })();

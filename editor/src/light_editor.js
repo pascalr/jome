@@ -5,7 +5,7 @@ import {JomeDocument} from './jome_document'
 
 import {initProseMirrorEditor} from './prosemirror_editor'
 
-import { loadFile, loadFileList, loadFileTree } from "./client"
+import { loadFile, loadFileTree } from "./client"
 
 import Split from 'split.js'
 import renderHtmlTree, {createHtmlTree} from './lib/renderHtmlTree'
@@ -82,19 +82,6 @@ document.addEventListener('DOMContentLoaded', function() {
         openFile(leaf.path)
       }}
     }))
-  })
-
-  const selectSampleElement = document.getElementById('sample_select');
-  loadFileList(list => {
-    selectSampleElement.innerHTML = list.map(path => (
-      `<option value="${path}">${path}</option>`
-    ))
-    selectSampleElement.value = "README.md"
-    // loadFile(selectSampleElement.value)
-    openFile("README.md")
-    selectSampleElement.addEventListener('change', function (event) {
-      openFile(event.target.value)
-    });
   })
 });
 

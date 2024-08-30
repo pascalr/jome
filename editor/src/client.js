@@ -24,10 +24,6 @@ function extractFetchJSON(response) {
   // });
 }
 
-export function loadFileList(callback) {
-  fetch('/get_file_list').then(extractFetchJSON).then(callback)
-}
-
 export function loadFileTree(callback) {
   fetch('/get_file_tree').then(extractFetchJSON).then(callback)
 }
