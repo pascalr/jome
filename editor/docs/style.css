@@ -243,3 +243,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+#explorer-tree .leaf {
+  cursor: pointer;
+}

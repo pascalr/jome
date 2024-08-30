@@ -70183,29 +70183,31 @@
   }
 
   // src/light_editor.js
-  function openFile(file) {
-    let filesTabs = document.getElementById("files_tabs");
-    forEach2(filesTabs.children, (c) => {
-      if (c.classList.contains("active")) {
-        c.classList.remove("active");
-      }
+  function openFile(filepath) {
+    loadFile(filepath, (file) => {
+      let filesTabs = document.getElementById("files_tabs");
+      forEach2(filesTabs.children, (c) => {
+        if (c.classList.contains("active")) {
+          c.classList.remove("active");
+        }
+      });
+      let btn = document.createElement("button");
+      btn.className = "tab-button active";
+      btn.innerText = file.name;
+      filesTabs.prepend(btn);
+      forEach2(document.querySelectorAll("#explorer-tree .leaf[selected]"), (el) => {
+        el.removeAttribute("selected");
+      });
+      const leaf = document.querySelector(`#explorer-tree .leaf[data-path="${filepath}"]`);
+      leaf.setAttribute("selected", "");
+      forEach2(document.getElementsByClassName("active_filename"), (el) => {
+        el.innerText = file.name;
+      });
+      let doc3 = new JomeDocument(filepath, file.content);
+      let parts = (0, import_parser2.parse)(doc3);
+      console.log("parts", parts);
+      initProseMirrorEditor("#prosemirror_editor", doc3);
     });
-    let btn = document.createElement("button");
-    btn.className = "tab-button active";
-    btn.innerText = file.name;
-    filesTabs.prepend(btn);
-    forEach2(document.querySelectorAll("#explorer-tree .leaf[selected]"), (el) => {
-      el.removeAttribute("selected");
-    });
-    const leaf = document.querySelector(`#explorer-tree .leaf[data-path="${file.path}"]`);
-    leaf.setAttribute("selected", "");
-    forEach2(document.getElementsByClassName("active_filename"), (el) => {
-      el.innerText = file.name;
-    });
-    let doc3 = new JomeDocument(file.path, file.content);
-    let parts = (0, import_parser2.parse)(doc3);
-    console.log("parts", parts);
-    initProseMirrorEditor("#prosemirror_editor", doc3);
   }
   document.addEventListener("DOMContentLoaded", function() {
     split_es_default(["#split-0", "#split-1", "#split-2"], {
@@ -70216,7 +70218,7 @@
     loadFileTree((tree) => {
       explorerList.replaceChildren(createHtmlTree(tree, (leaf) => {
         return { id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
-          console.log("TODO: Open file " + leaf.path);
+          openFile(leaf.path);
         } };
       }));
     });
@@ -70224,9 +70226,9 @@
     loadFileList((list) => {
       selectSampleElement.innerHTML = list.map((path) => `<option value="${path}">${path}</option>`);
       selectSampleElement.value = "README.md";
-      loadFile("README.md", openFile);
+      openFile("README.md");
       selectSampleElement.addEventListener("change", function(event) {
-        loadFile(event.target.value, openFile);
+        openFile(event.target.value);
       });
     });
   });
