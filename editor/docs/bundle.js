@@ -69628,7 +69628,8 @@
     nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block"),
     marks: schema.spec.marks
   });
-  function initProseMirrorEditor(selector, jomeDoc) {
+  var editorView = null;
+  function createState(jomeDoc) {
     let doc3 = deserialize(mySchema, jomeDoc);
     let state = EditorState.create({
       schema: mySchema,
@@ -69641,7 +69642,15 @@
         // handle enter key, delete, etc
       ]
     });
-    let view = new EditorView(document.querySelector(selector), { state });
+    return state;
+  }
+  function loadFileProseMirrorEditor(selector, jomeDoc) {
+    let state = createState(jomeDoc);
+    if (editorView) {
+      editorView.updateState(state);
+    } else {
+      editorView = new EditorView(document.querySelector(selector), { state });
+    }
   }
 
   // src/utils.js
@@ -70203,7 +70212,7 @@
       let doc3 = new JomeDocument(filepath, file.content);
       let parts = (0, import_parser2.parse)(doc3);
       console.log("parts", parts);
-      initProseMirrorEditor("#prosemirror_editor", doc3);
+      loadFileProseMirrorEditor("#prosemirror_editor", doc3);
     });
   }
   document.addEventListener("DOMContentLoaded", function() {

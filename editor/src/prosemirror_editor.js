@@ -26,6 +26,8 @@ const mySchema = new Schema({
   marks: schema.spec.marks
 })
 
+let editorView = null
+
 // (The null arguments are where you can specify attributes, if necessary.)
 // let doc = schema.node("doc", null, [
 //     schema.node("paragraph", null, [schema.text("One.")]),
@@ -33,7 +35,7 @@ const mySchema = new Schema({
 //     schema.node("paragraph", null, [schema.text("Two!")])
 // ])
 
-export function initProseMirrorEditor(selector, jomeDoc) {
+function createState(jomeDoc) {
   let doc = deserialize(mySchema, jomeDoc)
   let state = EditorState.create({
     schema: mySchema,
@@ -45,5 +47,14 @@ export function initProseMirrorEditor(selector, jomeDoc) {
       keymap(baseKeymap) // handle enter key, delete, etc
       ]
   })
-  let view = new EditorView(document.querySelector(selector), {state})
+  return state
+}
+
+export function loadFileProseMirrorEditor(selector, jomeDoc) {
+  let state = createState(jomeDoc)
+  if (editorView) {
+    editorView.updateState(state)
+  } else {
+    editorView = new EditorView(document.querySelector(selector), {state})
+  }
 }

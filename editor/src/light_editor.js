@@ -3,7 +3,7 @@
 import {parse, BlockType} from './parser'
 import {JomeDocument} from './jome_document'
 
-import {initProseMirrorEditor} from './prosemirror_editor'
+import {loadFileProseMirrorEditor} from './prosemirror_editor'
 
 import { loadFile, loadFileTree } from "./client"
 
@@ -55,7 +55,7 @@ function openFile(filepath) {
     let doc = new JomeDocument(filepath, file.content)
     let parts = parse(doc)
     console.log("parts", parts)
-    initProseMirrorEditor('#prosemirror_editor', doc)
+    loadFileProseMirrorEditor('#prosemirror_editor', doc)
     // document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
     // document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)
   })
