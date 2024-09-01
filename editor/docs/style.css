@@ -233,10 +233,6 @@ body {
   border-left: 2px solid #999;
 }
 
-.tree [selected] {
-  background-color: #3e312b;
-}
-
 .tree .leaf {
   padding: 0.12em 0;
   /* FIXME: Ellipsis not working yet with split.js */
@@ -244,6 +240,14 @@ body {
   text-overflow: ellipsis;
 }
 
+.tree [selected] {
+  background-color: #3e312b !important;
+}
+
 #explorer-tree .leaf {
   cursor: pointer;
+}
+
+#explorer-tree .leaf:hover {
+  background-color: #27211e;
 }
