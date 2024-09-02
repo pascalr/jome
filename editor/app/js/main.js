@@ -45,7 +45,7 @@ function setTray() {
 
     // Define tray menu items
     let tray = {
-        icon: "/resources/icons/favicon-16x16.png",
+        icon: "/app/icons/favicon-16x16.png",
         menuItems: [
             {id: "VERSION", text: "Get version"},
             {id: "SEP", text: "-"},
