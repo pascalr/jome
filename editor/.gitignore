@@ -1,2 +1,4 @@
 ./node_modules
 *.swp
+./app/neutralinojs.log
+./app/.tmp
