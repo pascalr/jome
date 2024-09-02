@@ -69653,6 +69653,14 @@
     }
   }
 
+  // src/modal.js
+  function showErrorModal(errorMsg) {
+    const modal = document.getElementById("errorModal");
+    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent = errorMsg;
+    modal.style.display = "flex";
+  }
+
   // src/utils.js
   function forEach2(list, callback) {
     for (let i = 0; i < list.length; i++) {
@@ -69676,23 +69684,31 @@
   }
 
   // src/client.js
-  function extractFetchText(response) {
-    if (!response.ok) {
-      throw new Error("Network response was not ok " + response.statusText);
-    }
-    return response.text();
+  function handleError(error) {
+    console.error(error);
+    showErrorModal("Error communicating with the server.");
   }
-  function extractFetchJSON(response) {
-    if (!response.ok) {
-      throw new Error("Network response was not ok " + response.statusText);
-    }
-    return response.json();
+  function fetchJSON(url, callback) {
+    fetch(url).then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+      return response.json();
+    }).then(callback).catch(handleError);
+  }
+  function fetchText(url, callback) {
+    fetch(url).then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+      return response.text();
+    }).then(callback).catch(handleError);
   }
   function loadFileTree(callback) {
-    fetch("/get_file_tree").then(extractFetchJSON).then(callback);
+    fetchJSON("/get_file_tree", callback);
   }
   function loadFile(filepath, callback) {
-    fetch("/get_file/" + filepath).then(extractFetchText).then((content) => callback({ name: getFilenameFromPath(filepath), path: filepath, content }));
+    fetchText("/get_file/" + filepath, (content) => callback({ name: getFilenameFromPath(filepath), path: filepath, content }));
   }
 
   // node_modules/split.js/dist/split.es.js

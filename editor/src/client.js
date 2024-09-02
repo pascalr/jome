@@ -1,35 +1,39 @@
+import { showErrorModal } from "./modal";
 import { getFilenameFromPath } from "./utils";
 
-function extractFetchText(response) {
-  // TODO: Proper error message not an exception
-  if (!response.ok) {
-    throw new Error('Network response was not ok ' + response.statusText);
-  }
-  return response.text(); // Convert response to text
-  // .catch(error => {
-  //   // TODO: handle error
-  //   // document.getElementById('file-content').textContent = 'Error: ' + error;
-  // });
+function handleError(error) {
+  console.error(error)
+  showErrorModal("Error communicating with the server.")
 }
 
-function extractFetchJSON(response) {
-  // TODO: Proper error message not an exception
-  if (!response.ok) {
-    throw new Error('Network response was not ok ' + response.statusText);
-  }
-  return response.json(); // Convert response to text
-  // .catch(error => {
-  //   // TODO: handle error
-  //   // document.getElementById('file-content').textContent = 'Error: ' + error;
-  // });
+function fetchJSON(url, callback) {
+  fetch(url)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.json(); // Convert response to text
+  })
+  .then(callback)
+  .catch(handleError);
+}
+
+function fetchText(url, callback) {
+  fetch(url)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.text(); // Convert response to text
+  })
+  .then(callback)
+  .catch(handleError);
 }
 
 export function loadFileTree(callback) {
-  fetch('/get_file_tree').then(extractFetchJSON).then(callback)
+  fetchJSON('/get_file_tree', callback)
 }
 
 export function loadFile(filepath, callback) {
-  fetch('/get_file/'+filepath)
-  .then(extractFetchText)
-  .then(content => callback({name: getFilenameFromPath(filepath), path: filepath, content}))
+  fetchText('/get_file/'+filepath, content => callback({name: getFilenameFromPath(filepath), path: filepath, content}))
 }
