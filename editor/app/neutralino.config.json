@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/neutralinojs/neutralinojs/main/schemas/neutralino.config.schema.json",
-  "applicationId": "js.neutralino.sample",
-  "version": "1.0.0",
+  "applicationId": "js.jome.editor",
+  "version": "0.0.1",
   "defaultMode": "window",
   "port": 0,
   "documentRoot": "/resources/",
@@ -40,7 +40,7 @@
       "center": true,
       "fullScreen": false,
       "alwaysOnTop": false,
-      "icon": "/resources/icons/appIcon.png",
+      "icon": "/resources/icons/favicon-200x200.png",
       "enableInspector": true,
       "borderless": false,
       "maximize": false,
