@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "defaultMode": "window",
   "port": 0,
-  "documentRoot": "/resources/",
+  "documentRoot": "/app/",
   "url": "/",
   "enableServer": true,
   "enableNativeAPI": true,
@@ -40,7 +40,7 @@
       "center": true,
       "fullScreen": false,
       "alwaysOnTop": false,
-      "icon": "/resources/icons/favicon-200x200.png",
+      "icon": "/app/icons/favicon-200x200.png",
       "enableInspector": true,
       "borderless": false,
       "maximize": false,
@@ -57,7 +57,7 @@
       ]
     },
     "cloud": {
-      "url": "/resources/#cloud",
+      "url": "/app/#cloud",
       "nativeAllowList": [
         "app.*"
       ]
@@ -74,9 +74,9 @@
   },
   "cli": {
     "binaryName": "JomeEditor",
-    "resourcesPath": "/resources/",
+    "resourcesPath": "/app/",
     "extensionsPath": "/extensions/",
-    "clientLibrary": "/resources/js/neutralino.js",
+    "clientLibrary": "/app/js/neutralino.js",
     "binaryVersion": "5.3.0",
     "clientVersion": "5.3.0"
   }
