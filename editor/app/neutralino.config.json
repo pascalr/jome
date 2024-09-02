@@ -1,10 +1,10 @@
 {
   "$schema": "https://raw.githubusercontent.com/neutralinojs/neutralinojs/main/schemas/neutralino.config.schema.json",
-  "applicationId": "js.jome.editor",
-  "version": "0.0.1",
+  "applicationId": "js.neutralino.sample",
+  "version": "1.0.0",
   "defaultMode": "window",
   "port": 0,
-  "documentRoot": "../docs/",
+  "documentRoot": "/resources/",
   "url": "/",
   "enableServer": true,
   "enableNativeAPI": true,
@@ -73,8 +73,8 @@
     }
   },
   "cli": {
-    "binaryName": "JomeEditor",
-    "resourcesPath": "../docs/",
+    "binaryName": "testneu",
+    "resourcesPath": "/resources/",
     "extensionsPath": "/extensions/",
     "clientLibrary": "/resources/js/neutralino.js",
     "binaryVersion": "5.3.0",
