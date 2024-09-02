@@ -7,6 +7,16 @@
     {
       "type": "node-terminal",
       "request": "launch",
+      "name": "Run editor",
+      "cwd": "${workspaceFolder}/editor/app",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "command": "neu run"
+    },
+    {
+      "type": "node-terminal",
+      "request": "launch",
       "name": "Run web server",
       "cwd": "${workspaceFolder}/website",
       "skipFiles": [
