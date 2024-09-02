@@ -1,2 +1,20 @@
 ./node_modules
 *.swp
+
+
+
+
+# Developer tools' files
+.lite_workspace.lua
+
+# Neutralinojs binaries and builds
+app/bin
+app/dist
+
+# Neutralinojs client (minified)
+neutralino.js
+
+# Neutralinojs related files
+.storage
+.tmp
+*.log
