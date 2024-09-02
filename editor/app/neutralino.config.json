@@ -73,7 +73,7 @@
     }
   },
   "cli": {
-    "binaryName": "testneu",
+    "binaryName": "JomeEditor",
     "resourcesPath": "/resources/",
     "extensionsPath": "/extensions/",
     "clientLibrary": "/resources/js/neutralino.js",
