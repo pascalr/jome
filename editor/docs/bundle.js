@@ -69653,64 +69653,6 @@
     }
   }
 
-  // src/modal.js
-  function showErrorModal(errorMsg) {
-    const modal = document.getElementById("errorModal");
-    const errorMessage = document.getElementById("errorMessage");
-    errorMessage.textContent = errorMsg;
-    modal.style.display = "flex";
-  }
-
-  // src/utils.js
-  function forEach2(list, callback) {
-    for (let i = 0; i < list.length; i++) {
-      callback(list[i]);
-    }
-  }
-  function getFilenameFromPath(path) {
-    return path.split("\\").pop().split("/").pop();
-  }
-  function e(kind, attrs = {}, children = []) {
-    let el = document.createElement(kind);
-    Object.keys(attrs || {}).forEach((key) => {
-      if (key.startsWith("data-")) {
-        el.setAttribute(key, attrs[key]);
-      } else {
-        el[key] = attrs[key];
-      }
-    });
-    (children || []).forEach((c) => el.appendChild(c));
-    return el;
-  }
-
-  // src/client.js
-  function handleError(error) {
-    console.error(error);
-    showErrorModal("Error communicating with the server.");
-  }
-  function fetchJSON(url, callback) {
-    fetch(url).then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText);
-      }
-      return response.json();
-    }).then(callback).catch(handleError);
-  }
-  function fetchText(url, callback) {
-    fetch(url).then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText);
-      }
-      return response.text();
-    }).then(callback).catch(handleError);
-  }
-  function loadFileTree(callback) {
-    fetchJSON("/get_file_tree", callback);
-  }
-  function loadFile(filepath, callback) {
-    fetchText("/get_file/" + filepath, (content) => callback({ name: getFilenameFromPath(filepath), path: filepath, content }));
-  }
-
   // node_modules/split.js/dist/split.es.js
   var global = typeof window !== "undefined" ? window : null;
   var ssr = global === null;
@@ -70187,6 +70129,25 @@
   };
   var split_es_default = Split;
 
+  // src/utils.js
+  function forEach2(list, callback) {
+    for (let i = 0; i < list.length; i++) {
+      callback(list[i]);
+    }
+  }
+  function e(kind, attrs = {}, children = []) {
+    let el = document.createElement(kind);
+    Object.keys(attrs || {}).forEach((key) => {
+      if (key.startsWith("data-")) {
+        el.setAttribute(key, attrs[key]);
+      } else {
+        el[key] = attrs[key];
+      }
+    });
+    (children || []).forEach((c) => el.appendChild(c));
+    return el;
+  }
+
   // src/lib/renderHtmlTree.js
   function createHtmlTree(tree, transformLeaf = () => ({}), root = true) {
     let el = e("ul", root ? { className: "tree" } : {}, tree.children.map((c) => {
@@ -70205,6 +70166,10 @@
   }
 
   // src/light_editor.js
+  function loadFile(filepath, callback) {
+  }
+  function loadFileTree(callback) {
+  }
   function openFile(filepath) {
     loadFile(filepath, (file) => {
       let filesTabs = document.getElementById("files_tabs");

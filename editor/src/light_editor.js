@@ -5,14 +5,18 @@ import {JomeDocument} from './jome_document'
 
 import {loadFileProseMirrorEditor} from './prosemirror_editor'
 
-import { loadFile, loadFileTree } from "./client"
-
 import Split from 'split.js'
 import renderHtmlTree, {createHtmlTree} from './lib/renderHtmlTree'
 
 import { forEach } from './utils'
 
+function loadFile(filepath, callback) {
+  // TODO: Use Neutralino API
+}
 
+function loadFileTree(callback) {
+  // TODO: Use Neutralino API
+}
 
 
 

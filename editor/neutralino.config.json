@@ -41,7 +41,7 @@
       "fullScreen": false,
       "alwaysOnTop": false,
       "icon": "/app/icons/favicon-200x200.png",
-      "enableInspector": true,
+      "enableInspector": false,
       "borderless": false,
       "maximize": false,
       "hidden": false,

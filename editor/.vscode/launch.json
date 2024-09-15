@@ -1,0 +1,30 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node-terminal",
+      "request": "launch",
+      "name": "Run editor",
+      "cwd": "${workspaceFolder}/",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "command": "neu run",
+      "preLaunchTask": "BuildEditor"
+    },
+    {
+      "type": "node-terminal",
+      "request": "launch",
+      "name": "Debug editor",
+      "cwd": "${workspaceFolder}/",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "command": "neu run -- --window-enable-inspector=true",
+      "preLaunchTask": "BuildEditor"
+    },
+  ]
+}
