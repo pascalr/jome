@@ -1,0 +1,3 @@
+INFO 2024-09-14 21:10:17,157 Auth info was exported to ./.tmp/auth_info.json api/debug/debug.cpp:17 pascalr@unknown-host
+ERROR 2024-09-14 21:10:18,571 NE_RS_UNBLDRE: Unable to load application resource file /docs/res/neutralino.js api/debug/debug.cpp:20 pascalr@unknown-host
+ERROR 2024-09-14 21:10:18,572 NE_RS_UNBLDRE: Unable to load application resource file /docs/res/main.js api/debug/debug.cpp:20 pascalr@unknown-host
