@@ -11,7 +11,13 @@
   <body>
     <p>Hello world!</p>
 
-    <script src="./res/neutralino.js"></script>
-    <script src="./res/main.js"></script>
+    <script src="/res/neutralino.js"></script>
+    <script src="/res/desktop.js"></script>
+    <script>
+      /*if (typeof NL_MODE && NL_MODE !== 'browser') {
+        document.write('<script src="./res/neutralino.js"><'+'/script>')
+        document.write('<script src="./res/desktop.js"><'+'/script>')
+      }*/
+    </script>
   </body>
 </HTML>

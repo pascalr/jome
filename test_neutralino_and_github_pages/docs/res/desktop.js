@@ -4,20 +4,6 @@
 // See more details: https://neutralino.js.org/docs/how-to/use-a-frontend-library
 
 /*
-    Function to display information about the Neutralino app.
-    This function updates the content of the 'info' element in the HTML
-    with details regarding the running Neutralino application, including
-    its ID, port, operating system, and version information.
-*/
-function showInfo() {
-  document.getElementById('info').innerHTML = `
-      ${NL_APPID} is running on port ${NL_PORT} inside ${NL_OS}
-      <br/><br/>
-      <span>server: v${NL_VERSION} . client: v${NL_CVERSION}</span>
-      `;
-}
-
-/*
   Function to open the official Neutralino documentation in the default web browser.
 */
 function openDocs() {
@@ -94,6 +80,3 @@ Neutralino.events.on("windowClose", onWindowClose);
 if(NL_OS != "Darwin") { // TODO: Fix https://github.com/neutralinojs/neutralinojs/issues/615
   setTray();
 }
-
-// Display app information
-showInfo();
