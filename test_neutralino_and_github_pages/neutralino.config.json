@@ -74,9 +74,9 @@
   },
   "cli": {
     "binaryName": "JomeEditor",
-    "resourcesPath": "/docs/res/",
+    "resourcesPath": "/docs/",
     "extensionsPath": "/extensions/",
-    "clientLibrary": "/docs/res/neutralino.js",
+    "clientLibrary": "/docs/neutralino.js",
     "binaryVersion": "5.3.0",
     "clientVersion": "5.3.0"
   }
