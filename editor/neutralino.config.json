@@ -3,7 +3,7 @@
   "applicationId": "js.jome.editor",
   "version": "0.0.1",
   "defaultMode": "window",
-  "port": 0,
+  "port": 5006,
   "documentRoot": "/docs/",
   "url": "/",
   "enableServer": true,
@@ -41,7 +41,7 @@
       "center": true,
       "fullScreen": false,
       "alwaysOnTop": false,
-      "icon": "/app/icons/favicon-200x200.png",
+      "icon": "/docs/favicon-200x200.png",
       "enableInspector": false,
       "borderless": false,
       "maximize": false,
@@ -52,10 +52,7 @@
     "browser": {
       "globalVariables": {
         "TEST": "Test value browser"
-      },
-      "nativeBlockList": [
-        "filesystem.*"
-      ]
+      }
     },
     "cloud": {
       "url": "/app/#cloud",

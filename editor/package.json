@@ -18,6 +18,9 @@
     "prosemirror-state": "^1.4.3",
     "split.js": "^1.6.5"
   },
+  "scripts": {
+    "build": "node build.mjs && neu build"
+  },
   "devDependencies": {
     "esbuild": "0.23.0"
   }

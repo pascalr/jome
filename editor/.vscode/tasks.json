@@ -8,6 +8,21 @@
       "options": {
         "cwd": "${workspaceFolder}/"
       }
+    },
+    {
+      "type": "npm",
+      "script": "build",
+      "group": "build",
+      "problemMatcher": [],
+      "label": "build",
+      "isBackground": false
+    },
+    {
+        "type": "shell",
+        "command": "./dist/JomeEditor/JomeEditor-linux_x64",
+        "label": "debug",
+        "dependsOn": "build",
+        "isBackground": true
     }
   ]
 }

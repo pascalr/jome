@@ -23,8 +23,21 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "command": "neu run -- --window-enable-inspector=true",
+      "command": "neu run -- --window-enable-inspector=true --mode=browser",
       "preLaunchTask": "BuildEditor"
     },
+    {
+      "type": "chrome",
+      "request": "attach",
+      "name": "Attach to Chrome",
+      "port": 5006,
+      "webRoot": "${workspaceFolder}",
+      "skipFiles": [
+          "<node_internals>/**"
+      ],
+      "preLaunchTask": "debug",
+      "sourceMaps": true,
+      "smartStep": true,
+    }
   ]
 }
