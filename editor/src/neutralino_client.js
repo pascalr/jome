@@ -1,19 +1,19 @@
+import { getFilenameFromPath } from "./utils"
+
 function logError(error) {
   console.error(error)
 }
 
 export function loadFile(filepath, callback) {
-  Neutralino.filesystem.readFile(filepath).then(callback).catch(logError)
+  Neutralino.filesystem.readFile(filepath).then(content => {
+    callback({name: getFilenameFromPath(filepath), path: filepath, content})
+  }).catch(logError)
 }
 
 function joinPaths(path1, path2) {
   // FIXME: On windows it's not /, path.join not working here because not bundling for node
   // TODO: Get info from the system to know what to use
   return path1+'/'+path2
-}
-
-function pathBasename(path) {
-  return path.split(/[\\/]/).pop()
 }
 
 function entryToBranch(entry) {

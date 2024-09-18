@@ -70135,6 +70135,9 @@
       callback(list[i]);
     }
   }
+  function getFilenameFromPath(path) {
+    return path.split("\\").pop().split("/").pop();
+  }
   function e(kind, attrs = {}, children = []) {
     let el = document.createElement(kind);
     Object.keys(attrs || {}).forEach((key) => {
@@ -70170,7 +70173,9 @@
     console.error(error);
   }
   function loadFile(filepath, callback) {
-    Neutralino.filesystem.readFile(filepath).then(callback).catch(logError);
+    Neutralino.filesystem.readFile(filepath).then((content) => {
+      callback({ name: getFilenameFromPath(filepath), path: filepath, content });
+    }).catch(logError);
   }
   function entryToBranch(entry) {
     return { name: entry.entry, path: entry.path, type: entry.type === "DIRECTORY" ? "directory" : "file", children: [] };
@@ -70199,6 +70204,7 @@
   // src/light_editor.js
   function openFile(filepath) {
     loadFile(filepath, (file) => {
+      console.log("file", file);
       let filesTabs = document.getElementById("files_tabs");
       forEach2(filesTabs.children, (c) => {
         if (c.classList.contains("active")) {
@@ -70230,7 +70236,6 @@
     });
     const explorerList = document.getElementById("explorer-tree");
     loadFileTree((tree) => {
-      console.log("here!", tree);
       explorerList.replaceChildren(createHtmlTree(tree, (leaf) => {
         return { id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
           openFile(leaf.path);

@@ -16,6 +16,7 @@ import {loadFile, loadFileTree} from './neutralino_client'
 //let _opened_files = []
 function openFile(filepath) {
   loadFile(filepath, (file) => {
+    console.log('file', file)
     // update state
     //_opened_files[filepath] = file.content
     //_active_filepath = filepath
@@ -70,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const explorerList = document.getElementById('explorer-tree')
   loadFileTree(tree => {
     // explorerList.innerHTML = renderHtmlTree(tree)
-    console.log('here!', tree)
     explorerList.replaceChildren(createHtmlTree(tree, leaf => {
       return {id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
         openFile(leaf.path)
