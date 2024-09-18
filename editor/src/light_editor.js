@@ -10,18 +10,7 @@ import renderHtmlTree, {createHtmlTree} from './lib/renderHtmlTree'
 
 import { forEach } from './utils'
 
-function loadFile(filepath, callback) {
-  // TODO: Use Neutralino API
-}
-
-function loadFileTree(callback) {
-  // TODO: Use Neutralino API
-}
-
-
-
-
-
+import {loadFile, loadFileTree} from './neutralino_client'
 
 //let _active_filepath = null
 //let _opened_files = []
@@ -81,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const explorerList = document.getElementById('explorer-tree')
   loadFileTree(tree => {
     // explorerList.innerHTML = renderHtmlTree(tree)
+    console.log('here!')
     explorerList.replaceChildren(createHtmlTree(tree, leaf => {
       return {id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
         openFile(leaf.path)

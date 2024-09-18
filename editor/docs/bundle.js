@@ -70165,11 +70165,18 @@
     return el;
   }
 
-  // src/light_editor.js
+  // src/neutralino_client.js
+  function logError(error) {
+    console.error(error);
+  }
   function loadFile(filepath, callback) {
+    Neutralino.filesystem.readFile(filepath).then(callback).catch(logError);
   }
   function loadFileTree(callback) {
+    Neutralino.filesystem.readDirectory(".", { recursive: true }).then(callback).catch(logError);
   }
+
+  // src/light_editor.js
   function openFile(filepath) {
     loadFile(filepath, (file) => {
       let filesTabs = document.getElementById("files_tabs");
@@ -70203,6 +70210,7 @@
     });
     const explorerList = document.getElementById("explorer-tree");
     loadFileTree((tree) => {
+      console.log("here!");
       explorerList.replaceChildren(createHtmlTree(tree, (leaf) => {
         return { id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
           openFile(leaf.path);
