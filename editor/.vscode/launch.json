@@ -7,12 +7,23 @@
     {
       "type": "node-terminal",
       "request": "launch",
-      "name": "Run editor",
+      "name": "Run editor app",
       "cwd": "${workspaceFolder}/",
       "skipFiles": [
         "<node_internals>/**"
       ],
       "command": "neu run",
+      "preLaunchTask": "BuildEditor"
+    },
+    {
+      "type": "node-terminal",
+      "request": "launch",
+      "name": "Run editor in browser",
+      "cwd": "${workspaceFolder}/",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "command": "neu run -- --mode=browser",
       "preLaunchTask": "BuildEditor"
     },
     {

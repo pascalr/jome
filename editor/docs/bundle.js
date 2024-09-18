@@ -70172,34 +70172,28 @@
   function loadFile(filepath, callback) {
     Neutralino.filesystem.readFile(filepath).then(callback).catch(logError);
   }
-  function joinPaths(path1, path2) {
-    return path1 + "/" + path2;
+  function entryToBranch(entry) {
+    return { name: entry.entry, path: entry.path, type: entry.type === "DIRECTORY" ? "directory" : "file", children: [] };
   }
-  function pathBasename(path) {
-    return path.split(/[\\/]/).pop();
-  }
-  async function getDirectoryTree(dirPath, options) {
-    if (options && options.exclude && options.exclude.includes(dirPath)) {
-      return null;
-    }
-    const stats = await Neutralino.filesystem.getStats(dirPath);
-    console.log("stats", stats);
-    const tree = {
-      name: pathBasename(dirPath),
+  async function getDirectoryTreeWIP(dirPath) {
+    let subs = await Neutralino.filesystem.readDirectory(dirPath);
+    let sorted = subs.sort((a, b) => {
+      if (a.type === b.type) {
+        return a.entry.localeCompare(b.entry);
+      }
+      return a.type === "FILE";
+    });
+    console.log("subs", subs);
+    console.log("sorted", sorted);
+    return {
+      name: "WIP",
       path: dirPath,
-      type: stats.isDirectory ? "directory" : "file"
+      type: "directory",
+      children: sorted.map((s) => entryToBranch(s))
     };
-    if (stats.isDirectory) {
-      let subs = await Neutralino.filesystem.readDirectory(dirPath);
-      let entries = subs.map((d) => d.entry);
-      tree.children = entries.map((child) => {
-        return getDirectoryTree(joinPaths(dirPath, child), options);
-      }).filter((f) => f);
-    }
-    return tree;
   }
   function loadFileTree(callback) {
-    return getDirectoryTree(".").then(callback).catch(logError);
+    return getDirectoryTreeWIP(".").then(callback).catch(logError);
   }
 
   // src/light_editor.js
