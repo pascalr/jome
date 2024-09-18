@@ -70172,8 +70172,34 @@
   function loadFile(filepath, callback) {
     Neutralino.filesystem.readFile(filepath).then(callback).catch(logError);
   }
+  function joinPaths(path1, path2) {
+    return path1 + "/" + path2;
+  }
+  function pathBasename(path) {
+    return path.split(/[\\/]/).pop();
+  }
+  async function getDirectoryTree(dirPath, options) {
+    if (options && options.exclude && options.exclude.includes(dirPath)) {
+      return null;
+    }
+    const stats = await Neutralino.filesystem.getStats(dirPath);
+    console.log("stats", stats);
+    const tree = {
+      name: pathBasename(dirPath),
+      path: dirPath,
+      type: stats.isDirectory ? "directory" : "file"
+    };
+    if (stats.isDirectory) {
+      let subs = await Neutralino.filesystem.readDirectory(dirPath);
+      let entries = subs.map((d) => d.entry);
+      tree.children = entries.map((child) => {
+        return getDirectoryTree(joinPaths(dirPath, child), options);
+      }).filter((f) => f);
+    }
+    return tree;
+  }
   function loadFileTree(callback) {
-    Neutralino.filesystem.readDirectory(".", { recursive: true }).then(callback).catch(logError);
+    return getDirectoryTree(".").then(callback).catch(logError);
   }
 
   // src/light_editor.js
@@ -70210,7 +70236,7 @@
     });
     const explorerList = document.getElementById("explorer-tree");
     loadFileTree((tree) => {
-      console.log("here!");
+      console.log("here!", tree);
       explorerList.replaceChildren(createHtmlTree(tree, (leaf) => {
         return { id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
           openFile(leaf.path);

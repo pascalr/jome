@@ -23,7 +23,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "command": "neu run -- --window-enable-inspector=true --mode=browser",
+      "command": "neu run -- --window-enable-inspector=true",
       "preLaunchTask": "BuildEditor"
     },
     {

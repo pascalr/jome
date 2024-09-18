@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const explorerList = document.getElementById('explorer-tree')
   loadFileTree(tree => {
     // explorerList.innerHTML = renderHtmlTree(tree)
-    console.log('here!')
+    console.log('here!', tree)
     explorerList.replaceChildren(createHtmlTree(tree, leaf => {
       return {id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
         openFile(leaf.path)
