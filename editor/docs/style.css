@@ -286,3 +286,21 @@ body {
   margin: auto;
   border: 2px solid white;
 }
+
+
+
+
+
+
+.homepage-btns > button {
+  background-color: #080e14;
+  color: #fff;
+  border: 2px solid #333942;
+  font-size: 1em;
+  padding: 0.2em 0.6em;
+}
+
+#main-panel {
+  background-color: #252728;
+  height: 100%;
+}
