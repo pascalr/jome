@@ -17,6 +17,7 @@
     "app.*",
     "os.*",
     "filesystem.*",
+    "storage.*",
     "debug.log"
   ],
   "globalVariables": {

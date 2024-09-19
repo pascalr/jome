@@ -61,9 +61,15 @@ function openFile(filepath) {
 
 
 
-function setupApp() {
+async function setupApp() {
 
   let app = new NeutralinoApp()
+
+  await app.load()
+
+  let path = app.getData('PROJECT_PATH')
+
+  console.log('PROJECT_PATH', path)
 
   let mainPanel = document.getElementById('main-panel')
   let homepage = createHomepage(app)

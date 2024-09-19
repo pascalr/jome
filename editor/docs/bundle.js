@@ -70219,13 +70219,34 @@
 
   // src/neutralino_app.js
   var NeutralinoApp = class {
+    constructor() {
+      this.data = {};
+    }
+    async load() {
+      let keys2 = await Neutralino.storage.getKeys();
+      keys2.forEach(async (key) => {
+        this.data[key] = await Neutralino.storage.getData(key);
+      });
+    }
+    getData(key) {
+      return this.data[key];
+    }
+    setData(key, data) {
+      console.log("Calling Neutralino.storage.setData", key, data);
+      Neutralino.storage.setData(key, data).then().catch(this.handleError);
+      this.data[key] = data;
+    }
     handleError(error) {
       console.error(error);
     }
     // Returns entries, a list of paths
     showOpenDialog() {
       Neutralino.os.showOpenDialog().then((entries) => {
-        console.log("open dialog entries", entries);
+        let path = entries[0];
+        if (path) {
+          this.setData("PROJECT_PATH", path);
+          console.log("open dialog entries", entries);
+        }
       }).catch(this.handleError);
     }
   };
@@ -70258,8 +70279,11 @@
       loadFileProseMirrorEditor("#prosemirror_editor", doc3);
     });
   }
-  function setupApp() {
+  async function setupApp() {
     let app = new NeutralinoApp();
+    await app.load();
+    let path = app.getData("PROJECT_PATH");
+    console.log("PROJECT_PATH", path);
     let mainPanel = document.getElementById("main-panel");
     let homepage = createHomepage(app);
     mainPanel.replaceChildren(homepage);
