@@ -111,6 +111,8 @@ function openFile(filepath) {
 
 
 
+
+
 export class NeutralinoApp {
 
   constructor() {
@@ -120,7 +122,7 @@ export class NeutralinoApp {
      * PROJECT_PATH
      * CURRENT_FILE
      * FILES_OPENED
-     * NAV_TREE_FOLDERS_OPENED
+     * DIR_LISTING // Used to know what's under a folder and to know if a folder is opened or not (remove the key when closing the folder, maybe sometimes a little less efficient, but simpler)
      */
     this.data = {}
 
@@ -143,6 +145,7 @@ export class NeutralinoApp {
 
     // Load the navigation tree
     if (this.data['PROJECT_PATH']) {
+      await this.listDirectory(this.data['PROJECT_PATH'])
       loadFileTree(tree => {
         // explorerList.innerHTML = renderHtmlTree(tree)
         this.refs.explorerTree.replaceChildren(createHtmlTree(tree, leaf => {
@@ -152,6 +155,20 @@ export class NeutralinoApp {
         }))
       })
     }
+  }
+
+  async listDirectory(path) {
+    let subs = await Neutralino.filesystem.readDirectory(path)
+    let sorted = subs.sort((a,b) => {
+      if (a.type === b.type) {
+        return a.entry.localeCompare(b.entry)
+      }
+      return a.type === 'FILE'
+    })
+
+    this.data['DIR_LISTING'] = this.data['DIR_LISTING'] || {}
+    this.data['DIR_LISTING'][path] = sorted
+    this.saveToStorage() // OPTIMIZE: Probably not good to do this here
   }
 
   async loadFromStorage() {
@@ -164,7 +181,7 @@ export class NeutralinoApp {
   }
 
   saveToStorage() {
-    Neutralino.storage.setData(STORAGE_KEY, JSON.stringify(this.data)).then().catch(this.handleError)
+    Neutralino.storage.setData(STORAGE_KEY, JSON.stringify(this.data, null, 2)).then().catch(this.handleError)
   }
 
   getData(key) {

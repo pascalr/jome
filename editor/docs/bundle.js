@@ -70258,6 +70258,7 @@
         this.refs.mainPanel.replaceChildren(createHomepage(this));
       }
       if (this.data["PROJECT_PATH"]) {
+        await this.listDirectory(this.data["PROJECT_PATH"]);
         loadFileTree((tree) => {
           this.refs.explorerTree.replaceChildren(createHtmlTree(tree, (leaf) => {
             return { id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
@@ -70266,6 +70267,18 @@
           }));
         });
       }
+    }
+    async listDirectory(path) {
+      let subs = await Neutralino.filesystem.readDirectory(path);
+      let sorted = subs.sort((a, b) => {
+        if (a.type === b.type) {
+          return a.entry.localeCompare(b.entry);
+        }
+        return a.type === "FILE";
+      });
+      this.data["DIR_LISTING"] = this.data["DIR_LISTING"] || {};
+      this.data["DIR_LISTING"][path] = sorted;
+      this.saveToStorage();
     }
     async loadFromStorage() {
       try {
@@ -70276,7 +70289,7 @@
       }
     }
     saveToStorage() {
-      Neutralino.storage.setData(STORAGE_KEY, JSON.stringify(this.data)).then().catch(this.handleError);
+      Neutralino.storage.setData(STORAGE_KEY, JSON.stringify(this.data, null, 2)).then().catch(this.handleError);
     }
     getData(key) {
       return this.data[key];
