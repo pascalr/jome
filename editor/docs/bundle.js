@@ -57121,39 +57121,6 @@
     return el;
   }
 
-  // src/neutralino_client.js
-  function logError(error) {
-    console.error(error);
-  }
-  function loadFile(filepath, callback) {
-    Neutralino.filesystem.readFile(filepath).then((content) => {
-      callback({ name: getFilenameFromPath(filepath), path: filepath, content });
-    }).catch(logError);
-  }
-  function entryToBranch(entry) {
-    return { name: entry.entry, path: entry.path, type: entry.type === "DIRECTORY" ? "directory" : "file", children: [] };
-  }
-  async function getDirectoryTreeWIP(dirPath) {
-    let subs = await Neutralino.filesystem.readDirectory(dirPath);
-    let sorted = subs.sort((a, b) => {
-      if (a.type === b.type) {
-        return a.entry.localeCompare(b.entry);
-      }
-      return a.type === "FILE";
-    });
-    console.log("subs", subs);
-    console.log("sorted", sorted);
-    return {
-      name: "WIP",
-      path: dirPath,
-      type: "directory",
-      children: sorted.map((s) => entryToBranch(s))
-    };
-  }
-  function loadFileTree(callback) {
-    return getDirectoryTreeWIP(".").then(callback).catch(logError);
-  }
-
   // src/partials/homepage.js
   function createHomepage(app) {
     return e("div", {}, [
@@ -70219,6 +70186,37 @@
 
   // src/neutralino_app.js
   var STORAGE_KEY = "APP";
+  function logError(error) {
+    console.error(error);
+  }
+  function loadFile(filepath, callback) {
+    Neutralino.filesystem.readFile(filepath).then((content) => {
+      callback({ name: getFilenameFromPath(filepath), path: filepath, content });
+    }).catch(logError);
+  }
+  function entryToBranch(entry) {
+    return { name: entry.entry, path: entry.path, type: entry.type === "DIRECTORY" ? "directory" : "file", children: [] };
+  }
+  async function getDirectoryTreeWIP(dirPath) {
+    let subs = await Neutralino.filesystem.readDirectory(dirPath);
+    let sorted = subs.sort((a, b) => {
+      if (a.type === b.type) {
+        return a.entry.localeCompare(b.entry);
+      }
+      return a.type === "FILE";
+    });
+    console.log("subs", subs);
+    console.log("sorted", sorted);
+    return {
+      name: "WIP",
+      path: dirPath,
+      type: "directory",
+      children: sorted.map((s) => entryToBranch(s))
+    };
+  }
+  function loadFileTree(callback) {
+    return getDirectoryTreeWIP(".").then(callback).catch(logError);
+  }
   function openFile(filepath) {
     loadFile(filepath, (file) => {
       console.log("file", file);
