@@ -1,5 +1,7 @@
 import { createHomepage } from "./partials/homepage"
 
+const STORAGE_KEY = 'APP'
+
 export class NeutralinoApp {
 
   constructor() {
@@ -22,7 +24,7 @@ export class NeutralinoApp {
   }
 
   async setup() {
-    await this.loadStorage()
+    await this.loadFromStorage()
 
     if (!this.data['CURRENT_FILE']) {
       this.refs.mainPanel.replaceChildren(createHomepage(this))
@@ -35,11 +37,17 @@ export class NeutralinoApp {
     }
   }
 
-  async loadStorage() {
-    let keys = await Neutralino.storage.getKeys()
-    keys.forEach(async key => {
-      this.data[key] = await Neutralino.storage.getData(key)
-    })
+  async loadFromStorage() {
+    try {
+      let dataStr = await Neutralino.storage.getData(STORAGE_KEY)
+      this.data = JSON.parse(dataStr)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  saveToStorage() {
+    Neutralino.storage.setData(STORAGE_KEY, JSON.stringify(this.data)).then().catch(this.handleError)
   }
 
   getData(key) {
@@ -47,9 +55,8 @@ export class NeutralinoApp {
   }
 
   setData(key, data) {
-    console.log('Calling Neutralino.storage.setData', key, data)
-    Neutralino.storage.setData(key, data).then().catch(this.handleError)
     this.data[key] = data
+    this.saveToStorage()
   }
 
   handleError(error) {
