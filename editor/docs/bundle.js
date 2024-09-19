@@ -70201,6 +70201,23 @@
     return getDirectoryTreeWIP(".").then(callback).catch(logError);
   }
 
+  // src/partials/homepage.js
+  function createHomepage() {
+    return e("div", {}, [
+      e("div", { className: "homepage-btns" }, [
+        e("button", { innerText: "New", onclick: () => {
+        } }),
+        e("button", { innerText: "Open", onclick: () => {
+        } })
+      ]),
+      e("h2", { innerText: "Previously opened:" }),
+      e("p", { innerText: "No folder previously opened." }),
+      e("h2", { innerText: "Templates:" }),
+      e("p", { innerText: "No template found." }),
+      e("a", { innerText: "Add templates" })
+    ]);
+  }
+
   // src/light_editor.js
   function openFile(filepath) {
     loadFile(filepath, (file) => {
@@ -70229,7 +70246,13 @@
       loadFileProseMirrorEditor("#prosemirror_editor", doc3);
     });
   }
+  function setupApp() {
+    let mainPanel = document.getElementById("main-panel");
+    let homepage = createHomepage();
+    mainPanel.replaceChildren(homepage);
+  }
   document.addEventListener("DOMContentLoaded", function() {
+    setupApp();
     split_es_default(["#split-0", "#split-1", "#split-2"], {
       gutterSize: 4,
       sizes: [20, 60, 20]

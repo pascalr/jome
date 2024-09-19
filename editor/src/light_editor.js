@@ -11,6 +11,7 @@ import renderHtmlTree, {createHtmlTree} from './lib/renderHtmlTree'
 import { forEach } from './utils'
 
 import {loadFile, loadFileTree} from './neutralino_client'
+import { createHomepage } from './partials/homepage'
 
 //let _active_filepath = null
 //let _opened_files = []
@@ -59,9 +60,15 @@ function openFile(filepath) {
 
 
 
-
+function setupApp() {
+  let mainPanel = document.getElementById('main-panel')
+  let homepage = createHomepage()
+  mainPanel.replaceChildren(homepage)
+}
 
 document.addEventListener('DOMContentLoaded', function() {
+
+  setupApp()
 
   Split(['#split-0', '#split-1', '#split-2'], {
     gutterSize: 4,
