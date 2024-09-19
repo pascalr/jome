@@ -70202,13 +70202,12 @@
   }
 
   // src/partials/homepage.js
-  function createHomepage() {
+  function createHomepage(app) {
     return e("div", {}, [
       e("div", { className: "homepage-btns" }, [
         e("button", { innerText: "New", onclick: () => {
         } }),
-        e("button", { innerText: "Open", onclick: () => {
-        } })
+        e("button", { innerText: "Open", onclick: () => app.showOpenDialog() })
       ]),
       e("h2", { innerText: "Previously opened:" }),
       e("p", { innerText: "No folder previously opened." }),
@@ -70217,6 +70216,19 @@
       e("a", { innerText: "Add templates" })
     ]);
   }
+
+  // src/neutralino_app.js
+  var NeutralinoApp = class {
+    handleError(error) {
+      console.error(error);
+    }
+    // Returns entries, a list of paths
+    showOpenDialog() {
+      Neutralino.os.showOpenDialog().then((entries) => {
+        console.log("open dialog entries", entries);
+      }).catch(this.handleError);
+    }
+  };
 
   // src/light_editor.js
   function openFile(filepath) {
@@ -70247,8 +70259,9 @@
     });
   }
   function setupApp() {
+    let app = new NeutralinoApp();
     let mainPanel = document.getElementById("main-panel");
-    let homepage = createHomepage();
+    let homepage = createHomepage(app);
     mainPanel.replaceChildren(homepage);
   }
   document.addEventListener("DOMContentLoaded", function() {

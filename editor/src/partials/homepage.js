@@ -1,10 +1,10 @@
 import {e} from '../utils'
 
-export function createHomepage() {
+export function createHomepage(app) {
   return e('div', {}, [
     e('div', {className: "homepage-btns"}, [
       e('button', {innerText: "New", onclick: () => {}}),
-      e('button', {innerText: "Open", onclick: () => {}}),
+      e('button', {innerText: "Open", onclick: () => app.showOpenDialog()}),
     ]),
     e('h2', {innerText: "Previously opened:"}),
     e('p', {innerText: "No folder previously opened."}),
