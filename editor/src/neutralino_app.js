@@ -1,10 +1,41 @@
+import { createHomepage } from "./partials/homepage"
+
 export class NeutralinoApp {
 
   constructor() {
+    /**
+     * Data that is kept when the program is closed.
+     * 
+     * PROJECT_PATH
+     * CURRENT_FILE
+     * FILES_OPENED
+     */
     this.data = {}
+
+    /**
+     * DOM References to the main parts of the applications.
+     */
+    this.refs = {
+      mainPanel: document.getElementById('main-panel')
+    }
+    // Should validate that all refs exists?
   }
 
-  async load() {
+  async setup() {
+    await this.loadStorage()
+
+    if (!this.data['CURRENT_FILE']) {
+      this.refs.mainPanel.replaceChildren(createHomepage(this))
+    }
+
+    if (this.data['PROJECT_PATH']) {
+
+    } else {
+
+    }
+  }
+
+  async loadStorage() {
     let keys = await Neutralino.storage.getKeys()
     keys.forEach(async key => {
       this.data[key] = await Neutralino.storage.getData(key)
@@ -23,6 +54,10 @@ export class NeutralinoApp {
 
   handleError(error) {
     console.error(error)
+  }
+
+  openProject() {
+
   }
 
   // Returns entries, a list of paths

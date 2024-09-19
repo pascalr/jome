@@ -11,7 +11,6 @@ import renderHtmlTree, {createHtmlTree} from './lib/renderHtmlTree'
 import { forEach } from './utils'
 
 import {loadFile, loadFileTree} from './neutralino_client'
-import { createHomepage } from './partials/homepage'
 import { NeutralinoApp } from './neutralino_app'
 
 //let _active_filepath = null
@@ -65,15 +64,7 @@ async function setupApp() {
 
   let app = new NeutralinoApp()
 
-  await app.load()
-
-  let path = app.getData('PROJECT_PATH')
-
-  console.log('PROJECT_PATH', path)
-
-  let mainPanel = document.getElementById('main-panel')
-  let homepage = createHomepage(app)
-  mainPanel.replaceChildren(homepage)
+  await app.setup()
 }
 
 document.addEventListener('DOMContentLoaded', function() {

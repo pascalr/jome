@@ -70221,8 +70221,20 @@
   var NeutralinoApp = class {
     constructor() {
       this.data = {};
+      this.refs = {
+        mainPanel: document.getElementById("main-panel")
+      };
     }
-    async load() {
+    async setup() {
+      await this.loadStorage();
+      if (!this.data["CURRENT_FILE"]) {
+        this.refs.mainPanel.replaceChildren(createHomepage(this));
+      }
+      if (this.data["PROJECT_PATH"]) {
+      } else {
+      }
+    }
+    async loadStorage() {
       let keys2 = await Neutralino.storage.getKeys();
       keys2.forEach(async (key) => {
         this.data[key] = await Neutralino.storage.getData(key);
@@ -70238,6 +70250,8 @@
     }
     handleError(error) {
       console.error(error);
+    }
+    openProject() {
     }
     // Returns entries, a list of paths
     showOpenDialog() {
@@ -70281,12 +70295,7 @@
   }
   async function setupApp() {
     let app = new NeutralinoApp();
-    await app.load();
-    let path = app.getData("PROJECT_PATH");
-    console.log("PROJECT_PATH", path);
-    let mainPanel = document.getElementById("main-panel");
-    let homepage = createHomepage(app);
-    mainPanel.replaceChildren(homepage);
+    await app.setup();
   }
   document.addEventListener("DOMContentLoaded", function() {
     setupApp();
