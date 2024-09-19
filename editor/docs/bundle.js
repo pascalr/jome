@@ -70,7 +70,7 @@
   var require_parser = __commonJS({
     "src/parser.js"(exports, module) {
       init_core();
-      var BlockType3 = {
+      var BlockType2 = {
         code: "code",
         block: "block",
         html: "html",
@@ -99,9 +99,9 @@
       function pushCurrentCode(doc3) {
         if (doc3._currCodeBlock) {
           if (/^\s*$/.test(doc3._currCodeBlock)) {
-            doc3.parts.push({ type: BlockType3.whitespace, value: doc3._currCodeBlock });
+            doc3.parts.push({ type: BlockType2.whitespace, value: doc3._currCodeBlock });
           } else {
-            doc3.parts.push({ type: BlockType3.code, value: doc3._currCodeBlock });
+            doc3.parts.push({ type: BlockType2.code, value: doc3._currCodeBlock });
           }
           doc3._currCodeBlock = "";
         }
@@ -110,11 +110,11 @@
         if (inner[0] === "~") {
           pushCurrentCode(doc3);
           if (inner[1] === "!") {
-            doc3.parts.push({ type: BlockType3.comment, value: inner.slice(1) });
+            doc3.parts.push({ type: BlockType2.comment, value: inner.slice(1) });
           } else if (inner[1] === " " || inner[1] === "	" || inner[1] === "\n" || inner[1] === "\r" && inner[2] === "\n") {
-            doc3.parts.push({ type: BlockType3.html, value: inner.slice(1) });
+            doc3.parts.push({ type: BlockType2.html, value: inner.slice(1) });
           } else {
-            doc3.parts.push({ type: BlockType3.block, value: inner.slice(1) });
+            doc3.parts.push({ type: BlockType2.block, value: inner.slice(1) });
           }
         } else {
           doc3._currCodeBlock += whole;
@@ -132,11 +132,11 @@
       }
       function analyzeBlocks(blocks) {
         return blocks.map((b) => {
-          if (b.type === BlockType3.block) {
+          if (b.type === BlockType2.block) {
             b.tag = b.value.match(/\w+/)[0];
             let s = b.value.trimEnd();
             b.content = s.substring(4 + b.tag.length, s.length - (b.value[1] === "*" ? 2 : 0));
-          } else if (b.type === BlockType3.capture) {
+          } else if (b.type === BlockType2.capture) {
             b.tag = b.value.slice(6).match(/\w+/)[0];
             let s = b.value.slice(6 + b.tag.length).trimStart().trimEnd();
             try {
@@ -154,14 +154,14 @@
         let reduced = [];
         for (let i = 0; i < blocks.length; i++) {
           p = blocks[i];
-          if (p.type === BlockType3.block && p.value.slice(0, 5) === "begin") {
+          if (p.type === BlockType2.block && p.value.slice(0, 5) === "begin") {
             let j = i + 1;
             for (; j < blocks.length; j++) {
               if (blocks[j].value.slice(0, 3) === "end") {
                 break;
               }
             }
-            reduced.push({ type: BlockType3.capture, value: p.value, nested: reduceBlocks(blocks.slice(i + 1, j)) });
+            reduced.push({ type: BlockType2.capture, value: p.value, nested: reduceBlocks(blocks.slice(i + 1, j)) });
             i = j;
           } else {
             reduced.push(p);
@@ -173,7 +173,7 @@
         let config = CORE_FORMATS[doc3.extension];
         doc3.config = config;
         if (!config) {
-          doc3.parts.push({ type: BlockType3.code, value: doc3.content });
+          doc3.parts.push({ type: BlockType2.code, value: doc3.content });
           return doc3.parts;
         }
         let src = doc3.content;
@@ -196,7 +196,7 @@
         doc3.parts = analyzeBlocks(reduceBlocks(doc3.parts));
         return doc3.parts;
       }
-      module.exports = { BlockType: BlockType3, parse: parse2 };
+      module.exports = { BlockType: BlockType2, parse: parse2 };
     }
   });
 
@@ -56589,7 +56589,483 @@
     }
   });
 
-  // src/light_editor.js
+  // node_modules/split.js/dist/split.es.js
+  var global = typeof window !== "undefined" ? window : null;
+  var ssr = global === null;
+  var document2 = !ssr ? global.document : void 0;
+  var addEventListener = "addEventListener";
+  var removeEventListener = "removeEventListener";
+  var getBoundingClientRect = "getBoundingClientRect";
+  var gutterStartDragging = "_a";
+  var aGutterSize = "_b";
+  var bGutterSize = "_c";
+  var HORIZONTAL = "horizontal";
+  var NOOP = function() {
+    return false;
+  };
+  var calc = ssr ? "calc" : ["", "-webkit-", "-moz-", "-o-"].filter(function(prefix) {
+    var el = document2.createElement("div");
+    el.style.cssText = "width:" + prefix + "calc(9px)";
+    return !!el.style.length;
+  }).shift() + "calc";
+  var isString = function(v) {
+    return typeof v === "string" || v instanceof String;
+  };
+  var elementOrSelector = function(el) {
+    if (isString(el)) {
+      var ele = document2.querySelector(el);
+      if (!ele) {
+        throw new Error("Selector " + el + " did not match a DOM element");
+      }
+      return ele;
+    }
+    return el;
+  };
+  var getOption = function(options, propName, def) {
+    var value = options[propName];
+    if (value !== void 0) {
+      return value;
+    }
+    return def;
+  };
+  var getGutterSize = function(gutterSize, isFirst, isLast, gutterAlign) {
+    if (isFirst) {
+      if (gutterAlign === "end") {
+        return 0;
+      }
+      if (gutterAlign === "center") {
+        return gutterSize / 2;
+      }
+    } else if (isLast) {
+      if (gutterAlign === "start") {
+        return 0;
+      }
+      if (gutterAlign === "center") {
+        return gutterSize / 2;
+      }
+    }
+    return gutterSize;
+  };
+  var defaultGutterFn = function(i, gutterDirection) {
+    var gut = document2.createElement("div");
+    gut.className = "gutter gutter-" + gutterDirection;
+    return gut;
+  };
+  var defaultElementStyleFn = function(dim, size, gutSize) {
+    var style = {};
+    if (!isString(size)) {
+      style[dim] = calc + "(" + size + "% - " + gutSize + "px)";
+    } else {
+      style[dim] = size;
+    }
+    return style;
+  };
+  var defaultGutterStyleFn = function(dim, gutSize) {
+    var obj;
+    return obj = {}, obj[dim] = gutSize + "px", obj;
+  };
+  var Split = function(idsOption, options) {
+    if (options === void 0) options = {};
+    if (ssr) {
+      return {};
+    }
+    var ids = idsOption;
+    var dimension;
+    var clientAxis;
+    var position;
+    var positionEnd;
+    var clientSize;
+    var elements;
+    if (Array.from) {
+      ids = Array.from(ids);
+    }
+    var firstElement = elementOrSelector(ids[0]);
+    var parent = firstElement.parentNode;
+    var parentStyle = getComputedStyle ? getComputedStyle(parent) : null;
+    var parentFlexDirection = parentStyle ? parentStyle.flexDirection : null;
+    var sizes = getOption(options, "sizes") || ids.map(function() {
+      return 100 / ids.length;
+    });
+    var minSize = getOption(options, "minSize", 100);
+    var minSizes = Array.isArray(minSize) ? minSize : ids.map(function() {
+      return minSize;
+    });
+    var maxSize = getOption(options, "maxSize", Infinity);
+    var maxSizes = Array.isArray(maxSize) ? maxSize : ids.map(function() {
+      return maxSize;
+    });
+    var expandToMin = getOption(options, "expandToMin", false);
+    var gutterSize = getOption(options, "gutterSize", 10);
+    var gutterAlign = getOption(options, "gutterAlign", "center");
+    var snapOffset = getOption(options, "snapOffset", 30);
+    var snapOffsets = Array.isArray(snapOffset) ? snapOffset : ids.map(function() {
+      return snapOffset;
+    });
+    var dragInterval = getOption(options, "dragInterval", 1);
+    var direction = getOption(options, "direction", HORIZONTAL);
+    var cursor = getOption(
+      options,
+      "cursor",
+      direction === HORIZONTAL ? "col-resize" : "row-resize"
+    );
+    var gutter = getOption(options, "gutter", defaultGutterFn);
+    var elementStyle = getOption(
+      options,
+      "elementStyle",
+      defaultElementStyleFn
+    );
+    var gutterStyle = getOption(options, "gutterStyle", defaultGutterStyleFn);
+    if (direction === HORIZONTAL) {
+      dimension = "width";
+      clientAxis = "clientX";
+      position = "left";
+      positionEnd = "right";
+      clientSize = "clientWidth";
+    } else if (direction === "vertical") {
+      dimension = "height";
+      clientAxis = "clientY";
+      position = "top";
+      positionEnd = "bottom";
+      clientSize = "clientHeight";
+    }
+    function setElementSize(el, size, gutSize, i) {
+      var style = elementStyle(dimension, size, gutSize, i);
+      Object.keys(style).forEach(function(prop) {
+        el.style[prop] = style[prop];
+      });
+    }
+    function setGutterSize(gutterElement, gutSize, i) {
+      var style = gutterStyle(dimension, gutSize, i);
+      Object.keys(style).forEach(function(prop) {
+        gutterElement.style[prop] = style[prop];
+      });
+    }
+    function getSizes() {
+      return elements.map(function(element) {
+        return element.size;
+      });
+    }
+    function getMousePosition(e2) {
+      if ("touches" in e2) {
+        return e2.touches[0][clientAxis];
+      }
+      return e2[clientAxis];
+    }
+    function adjust(offset) {
+      var a = elements[this.a];
+      var b = elements[this.b];
+      var percentage = a.size + b.size;
+      a.size = offset / this.size * percentage;
+      b.size = percentage - offset / this.size * percentage;
+      setElementSize(a.element, a.size, this[aGutterSize], a.i);
+      setElementSize(b.element, b.size, this[bGutterSize], b.i);
+    }
+    function drag(e2) {
+      var offset;
+      var a = elements[this.a];
+      var b = elements[this.b];
+      if (!this.dragging) {
+        return;
+      }
+      offset = getMousePosition(e2) - this.start + (this[aGutterSize] - this.dragOffset);
+      if (dragInterval > 1) {
+        offset = Math.round(offset / dragInterval) * dragInterval;
+      }
+      if (offset <= a.minSize + a.snapOffset + this[aGutterSize]) {
+        offset = a.minSize + this[aGutterSize];
+      } else if (offset >= this.size - (b.minSize + b.snapOffset + this[bGutterSize])) {
+        offset = this.size - (b.minSize + this[bGutterSize]);
+      }
+      if (offset >= a.maxSize - a.snapOffset + this[aGutterSize]) {
+        offset = a.maxSize + this[aGutterSize];
+      } else if (offset <= this.size - (b.maxSize - b.snapOffset + this[bGutterSize])) {
+        offset = this.size - (b.maxSize + this[bGutterSize]);
+      }
+      adjust.call(this, offset);
+      getOption(options, "onDrag", NOOP)(getSizes());
+    }
+    function calculateSizes() {
+      var a = elements[this.a].element;
+      var b = elements[this.b].element;
+      var aBounds = a[getBoundingClientRect]();
+      var bBounds = b[getBoundingClientRect]();
+      this.size = aBounds[dimension] + bBounds[dimension] + this[aGutterSize] + this[bGutterSize];
+      this.start = aBounds[position];
+      this.end = aBounds[positionEnd];
+    }
+    function innerSize(element) {
+      if (!getComputedStyle) {
+        return null;
+      }
+      var computedStyle = getComputedStyle(element);
+      if (!computedStyle) {
+        return null;
+      }
+      var size = element[clientSize];
+      if (size === 0) {
+        return null;
+      }
+      if (direction === HORIZONTAL) {
+        size -= parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight);
+      } else {
+        size -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
+      }
+      return size;
+    }
+    function trimToMin(sizesToTrim) {
+      var parentSize = innerSize(parent);
+      if (parentSize === null) {
+        return sizesToTrim;
+      }
+      if (minSizes.reduce(function(a, b) {
+        return a + b;
+      }, 0) > parentSize) {
+        return sizesToTrim;
+      }
+      var excessPixels = 0;
+      var toSpare = [];
+      var pixelSizes = sizesToTrim.map(function(size, i) {
+        var pixelSize = parentSize * size / 100;
+        var elementGutterSize = getGutterSize(
+          gutterSize,
+          i === 0,
+          i === sizesToTrim.length - 1,
+          gutterAlign
+        );
+        var elementMinSize = minSizes[i] + elementGutterSize;
+        if (pixelSize < elementMinSize) {
+          excessPixels += elementMinSize - pixelSize;
+          toSpare.push(0);
+          return elementMinSize;
+        }
+        toSpare.push(pixelSize - elementMinSize);
+        return pixelSize;
+      });
+      if (excessPixels === 0) {
+        return sizesToTrim;
+      }
+      return pixelSizes.map(function(pixelSize, i) {
+        var newPixelSize = pixelSize;
+        if (excessPixels > 0 && toSpare[i] - excessPixels > 0) {
+          var takenPixels = Math.min(
+            excessPixels,
+            toSpare[i] - excessPixels
+          );
+          excessPixels -= takenPixels;
+          newPixelSize = pixelSize - takenPixels;
+        }
+        return newPixelSize / parentSize * 100;
+      });
+    }
+    function stopDragging() {
+      var self = this;
+      var a = elements[self.a].element;
+      var b = elements[self.b].element;
+      if (self.dragging) {
+        getOption(options, "onDragEnd", NOOP)(getSizes());
+      }
+      self.dragging = false;
+      global[removeEventListener]("mouseup", self.stop);
+      global[removeEventListener]("touchend", self.stop);
+      global[removeEventListener]("touchcancel", self.stop);
+      global[removeEventListener]("mousemove", self.move);
+      global[removeEventListener]("touchmove", self.move);
+      self.stop = null;
+      self.move = null;
+      a[removeEventListener]("selectstart", NOOP);
+      a[removeEventListener]("dragstart", NOOP);
+      b[removeEventListener]("selectstart", NOOP);
+      b[removeEventListener]("dragstart", NOOP);
+      a.style.userSelect = "";
+      a.style.webkitUserSelect = "";
+      a.style.MozUserSelect = "";
+      a.style.pointerEvents = "";
+      b.style.userSelect = "";
+      b.style.webkitUserSelect = "";
+      b.style.MozUserSelect = "";
+      b.style.pointerEvents = "";
+      self.gutter.style.cursor = "";
+      self.parent.style.cursor = "";
+      document2.body.style.cursor = "";
+    }
+    function startDragging(e2) {
+      if ("button" in e2 && e2.button !== 0) {
+        return;
+      }
+      var self = this;
+      var a = elements[self.a].element;
+      var b = elements[self.b].element;
+      if (!self.dragging) {
+        getOption(options, "onDragStart", NOOP)(getSizes());
+      }
+      e2.preventDefault();
+      self.dragging = true;
+      self.move = drag.bind(self);
+      self.stop = stopDragging.bind(self);
+      global[addEventListener]("mouseup", self.stop);
+      global[addEventListener]("touchend", self.stop);
+      global[addEventListener]("touchcancel", self.stop);
+      global[addEventListener]("mousemove", self.move);
+      global[addEventListener]("touchmove", self.move);
+      a[addEventListener]("selectstart", NOOP);
+      a[addEventListener]("dragstart", NOOP);
+      b[addEventListener]("selectstart", NOOP);
+      b[addEventListener]("dragstart", NOOP);
+      a.style.userSelect = "none";
+      a.style.webkitUserSelect = "none";
+      a.style.MozUserSelect = "none";
+      a.style.pointerEvents = "none";
+      b.style.userSelect = "none";
+      b.style.webkitUserSelect = "none";
+      b.style.MozUserSelect = "none";
+      b.style.pointerEvents = "none";
+      self.gutter.style.cursor = cursor;
+      self.parent.style.cursor = cursor;
+      document2.body.style.cursor = cursor;
+      calculateSizes.call(self);
+      self.dragOffset = getMousePosition(e2) - self.end;
+    }
+    sizes = trimToMin(sizes);
+    var pairs = [];
+    elements = ids.map(function(id, i) {
+      var element = {
+        element: elementOrSelector(id),
+        size: sizes[i],
+        minSize: minSizes[i],
+        maxSize: maxSizes[i],
+        snapOffset: snapOffsets[i],
+        i
+      };
+      var pair;
+      if (i > 0) {
+        pair = {
+          a: i - 1,
+          b: i,
+          dragging: false,
+          direction,
+          parent
+        };
+        pair[aGutterSize] = getGutterSize(
+          gutterSize,
+          i - 1 === 0,
+          false,
+          gutterAlign
+        );
+        pair[bGutterSize] = getGutterSize(
+          gutterSize,
+          false,
+          i === ids.length - 1,
+          gutterAlign
+        );
+        if (parentFlexDirection === "row-reverse" || parentFlexDirection === "column-reverse") {
+          var temp = pair.a;
+          pair.a = pair.b;
+          pair.b = temp;
+        }
+      }
+      if (i > 0) {
+        var gutterElement = gutter(i, direction, element.element);
+        setGutterSize(gutterElement, gutterSize, i);
+        pair[gutterStartDragging] = startDragging.bind(pair);
+        gutterElement[addEventListener](
+          "mousedown",
+          pair[gutterStartDragging]
+        );
+        gutterElement[addEventListener](
+          "touchstart",
+          pair[gutterStartDragging]
+        );
+        parent.insertBefore(gutterElement, element.element);
+        pair.gutter = gutterElement;
+      }
+      setElementSize(
+        element.element,
+        element.size,
+        getGutterSize(
+          gutterSize,
+          i === 0,
+          i === ids.length - 1,
+          gutterAlign
+        ),
+        i
+      );
+      if (i > 0) {
+        pairs.push(pair);
+      }
+      return element;
+    });
+    function adjustToMin(element) {
+      var isLast = element.i === pairs.length;
+      var pair = isLast ? pairs[element.i - 1] : pairs[element.i];
+      calculateSizes.call(pair);
+      var size = isLast ? pair.size - element.minSize - pair[bGutterSize] : element.minSize + pair[aGutterSize];
+      adjust.call(pair, size);
+    }
+    elements.forEach(function(element) {
+      var computedSize = element.element[getBoundingClientRect]()[dimension];
+      if (computedSize < element.minSize) {
+        if (expandToMin) {
+          adjustToMin(element);
+        } else {
+          element.minSize = computedSize;
+        }
+      }
+    });
+    function setSizes(newSizes) {
+      var trimmed = trimToMin(newSizes);
+      trimmed.forEach(function(newSize, i) {
+        if (i > 0) {
+          var pair = pairs[i - 1];
+          var a = elements[pair.a];
+          var b = elements[pair.b];
+          a.size = trimmed[i - 1];
+          b.size = newSize;
+          setElementSize(a.element, a.size, pair[aGutterSize], a.i);
+          setElementSize(b.element, b.size, pair[bGutterSize], b.i);
+        }
+      });
+    }
+    function destroy(preserveStyles, preserveGutter) {
+      pairs.forEach(function(pair) {
+        if (preserveGutter !== true) {
+          pair.parent.removeChild(pair.gutter);
+        } else {
+          pair.gutter[removeEventListener](
+            "mousedown",
+            pair[gutterStartDragging]
+          );
+          pair.gutter[removeEventListener](
+            "touchstart",
+            pair[gutterStartDragging]
+          );
+        }
+        if (preserveStyles !== true) {
+          var style = elementStyle(
+            dimension,
+            pair.a.size,
+            pair[aGutterSize]
+          );
+          Object.keys(style).forEach(function(prop) {
+            elements[pair.a].element.style[prop] = "";
+            elements[pair.b].element.style[prop] = "";
+          });
+        }
+      });
+    }
+    return {
+      setSizes,
+      getSizes,
+      collapse: function collapse(i) {
+        adjustToMin(elements[i]);
+      },
+      destroy,
+      parent,
+      pairs
+    };
+  };
+  var split_es_default = Split;
+
+  // src/neutralino_app.js
   var import_parser2 = __toESM(require_parser());
 
   // src/jome_document.js
@@ -56605,6 +57081,94 @@
       this.parts = [];
     }
   };
+
+  // src/utils.js
+  function forEach(list, callback) {
+    for (let i = 0; i < list.length; i++) {
+      callback(list[i]);
+    }
+  }
+  function getFilenameFromPath(path) {
+    return path.split("\\").pop().split("/").pop();
+  }
+  function e(kind, attrs = {}, children = []) {
+    let el = document.createElement(kind);
+    Object.keys(attrs || {}).forEach((key) => {
+      if (key.startsWith("data-")) {
+        el.setAttribute(key, attrs[key]);
+      } else {
+        el[key] = attrs[key];
+      }
+    });
+    (children || []).forEach((c) => el.appendChild(c));
+    return el;
+  }
+
+  // src/lib/renderHtmlTree.js
+  function createHtmlTree(tree, transformLeaf = () => ({}), root = true) {
+    let el = e("ul", root ? { className: "tree" } : {}, tree.children.map((c) => {
+      let cs = [];
+      if (c.type === "file") {
+        cs = [e("div", { ...transformLeaf(c), innerText: `\u{1F4C4}\xA0${c.name}` })];
+      } else {
+        cs = [e("details", {}, [
+          e("summary", { ...transformLeaf(c), innerText: `\u{1F4C1}\xA0${c.name}` }),
+          createHtmlTree(c, transformLeaf, false)
+        ])];
+      }
+      return e("li", {}, cs);
+    }));
+    return el;
+  }
+
+  // src/neutralino_client.js
+  function logError(error) {
+    console.error(error);
+  }
+  function loadFile(filepath, callback) {
+    Neutralino.filesystem.readFile(filepath).then((content) => {
+      callback({ name: getFilenameFromPath(filepath), path: filepath, content });
+    }).catch(logError);
+  }
+  function entryToBranch(entry) {
+    return { name: entry.entry, path: entry.path, type: entry.type === "DIRECTORY" ? "directory" : "file", children: [] };
+  }
+  async function getDirectoryTreeWIP(dirPath) {
+    let subs = await Neutralino.filesystem.readDirectory(dirPath);
+    let sorted = subs.sort((a, b) => {
+      if (a.type === b.type) {
+        return a.entry.localeCompare(b.entry);
+      }
+      return a.type === "FILE";
+    });
+    console.log("subs", subs);
+    console.log("sorted", sorted);
+    return {
+      name: "WIP",
+      path: dirPath,
+      type: "directory",
+      children: sorted.map((s) => entryToBranch(s))
+    };
+  }
+  function loadFileTree(callback) {
+    return getDirectoryTreeWIP(".").then(callback).catch(logError);
+  }
+
+  // src/partials/homepage.js
+  function createHomepage(app) {
+    return e("div", {}, [
+      e("div", { className: "homepage-btns" }, [
+        e("button", { innerText: "New", onclick: () => {
+        } }),
+        e("button", { innerText: "Open", onclick: () => app.showOpenDialog() })
+      ]),
+      e("h2", { innerText: "Previously opened:" }),
+      e("p", { innerText: "No folder previously opened." }),
+      e("h2", { innerText: "Templates:" }),
+      e("p", { innerText: "No template found." }),
+      e("a", { innerText: "Add templates" })
+    ]);
+  }
 
   // node_modules/orderedmap/dist/index.js
   function OrderedMap(content) {
@@ -68108,7 +68672,7 @@
     }
     return this.getInner(i);
   };
-  RopeSequence.prototype.forEach = function forEach(f, from2, to) {
+  RopeSequence.prototype.forEach = function forEach2(f, from2, to) {
     if (from2 === void 0) from2 = 0;
     if (to === void 0) to = this.length;
     if (from2 <= to) {
@@ -69653,577 +70217,41 @@
     }
   }
 
-  // node_modules/split.js/dist/split.es.js
-  var global = typeof window !== "undefined" ? window : null;
-  var ssr = global === null;
-  var document2 = !ssr ? global.document : void 0;
-  var addEventListener = "addEventListener";
-  var removeEventListener = "removeEventListener";
-  var getBoundingClientRect = "getBoundingClientRect";
-  var gutterStartDragging = "_a";
-  var aGutterSize = "_b";
-  var bGutterSize = "_c";
-  var HORIZONTAL = "horizontal";
-  var NOOP = function() {
-    return false;
-  };
-  var calc = ssr ? "calc" : ["", "-webkit-", "-moz-", "-o-"].filter(function(prefix) {
-    var el = document2.createElement("div");
-    el.style.cssText = "width:" + prefix + "calc(9px)";
-    return !!el.style.length;
-  }).shift() + "calc";
-  var isString = function(v) {
-    return typeof v === "string" || v instanceof String;
-  };
-  var elementOrSelector = function(el) {
-    if (isString(el)) {
-      var ele = document2.querySelector(el);
-      if (!ele) {
-        throw new Error("Selector " + el + " did not match a DOM element");
-      }
-      return ele;
-    }
-    return el;
-  };
-  var getOption = function(options, propName, def) {
-    var value = options[propName];
-    if (value !== void 0) {
-      return value;
-    }
-    return def;
-  };
-  var getGutterSize = function(gutterSize, isFirst, isLast, gutterAlign) {
-    if (isFirst) {
-      if (gutterAlign === "end") {
-        return 0;
-      }
-      if (gutterAlign === "center") {
-        return gutterSize / 2;
-      }
-    } else if (isLast) {
-      if (gutterAlign === "start") {
-        return 0;
-      }
-      if (gutterAlign === "center") {
-        return gutterSize / 2;
-      }
-    }
-    return gutterSize;
-  };
-  var defaultGutterFn = function(i, gutterDirection) {
-    var gut = document2.createElement("div");
-    gut.className = "gutter gutter-" + gutterDirection;
-    return gut;
-  };
-  var defaultElementStyleFn = function(dim, size, gutSize) {
-    var style = {};
-    if (!isString(size)) {
-      style[dim] = calc + "(" + size + "% - " + gutSize + "px)";
-    } else {
-      style[dim] = size;
-    }
-    return style;
-  };
-  var defaultGutterStyleFn = function(dim, gutSize) {
-    var obj;
-    return obj = {}, obj[dim] = gutSize + "px", obj;
-  };
-  var Split = function(idsOption, options) {
-    if (options === void 0) options = {};
-    if (ssr) {
-      return {};
-    }
-    var ids = idsOption;
-    var dimension;
-    var clientAxis;
-    var position;
-    var positionEnd;
-    var clientSize;
-    var elements;
-    if (Array.from) {
-      ids = Array.from(ids);
-    }
-    var firstElement = elementOrSelector(ids[0]);
-    var parent = firstElement.parentNode;
-    var parentStyle = getComputedStyle ? getComputedStyle(parent) : null;
-    var parentFlexDirection = parentStyle ? parentStyle.flexDirection : null;
-    var sizes = getOption(options, "sizes") || ids.map(function() {
-      return 100 / ids.length;
-    });
-    var minSize = getOption(options, "minSize", 100);
-    var minSizes = Array.isArray(minSize) ? minSize : ids.map(function() {
-      return minSize;
-    });
-    var maxSize = getOption(options, "maxSize", Infinity);
-    var maxSizes = Array.isArray(maxSize) ? maxSize : ids.map(function() {
-      return maxSize;
-    });
-    var expandToMin = getOption(options, "expandToMin", false);
-    var gutterSize = getOption(options, "gutterSize", 10);
-    var gutterAlign = getOption(options, "gutterAlign", "center");
-    var snapOffset = getOption(options, "snapOffset", 30);
-    var snapOffsets = Array.isArray(snapOffset) ? snapOffset : ids.map(function() {
-      return snapOffset;
-    });
-    var dragInterval = getOption(options, "dragInterval", 1);
-    var direction = getOption(options, "direction", HORIZONTAL);
-    var cursor = getOption(
-      options,
-      "cursor",
-      direction === HORIZONTAL ? "col-resize" : "row-resize"
-    );
-    var gutter = getOption(options, "gutter", defaultGutterFn);
-    var elementStyle = getOption(
-      options,
-      "elementStyle",
-      defaultElementStyleFn
-    );
-    var gutterStyle = getOption(options, "gutterStyle", defaultGutterStyleFn);
-    if (direction === HORIZONTAL) {
-      dimension = "width";
-      clientAxis = "clientX";
-      position = "left";
-      positionEnd = "right";
-      clientSize = "clientWidth";
-    } else if (direction === "vertical") {
-      dimension = "height";
-      clientAxis = "clientY";
-      position = "top";
-      positionEnd = "bottom";
-      clientSize = "clientHeight";
-    }
-    function setElementSize(el, size, gutSize, i) {
-      var style = elementStyle(dimension, size, gutSize, i);
-      Object.keys(style).forEach(function(prop) {
-        el.style[prop] = style[prop];
-      });
-    }
-    function setGutterSize(gutterElement, gutSize, i) {
-      var style = gutterStyle(dimension, gutSize, i);
-      Object.keys(style).forEach(function(prop) {
-        gutterElement.style[prop] = style[prop];
-      });
-    }
-    function getSizes() {
-      return elements.map(function(element) {
-        return element.size;
-      });
-    }
-    function getMousePosition(e2) {
-      if ("touches" in e2) {
-        return e2.touches[0][clientAxis];
-      }
-      return e2[clientAxis];
-    }
-    function adjust(offset) {
-      var a = elements[this.a];
-      var b = elements[this.b];
-      var percentage = a.size + b.size;
-      a.size = offset / this.size * percentage;
-      b.size = percentage - offset / this.size * percentage;
-      setElementSize(a.element, a.size, this[aGutterSize], a.i);
-      setElementSize(b.element, b.size, this[bGutterSize], b.i);
-    }
-    function drag(e2) {
-      var offset;
-      var a = elements[this.a];
-      var b = elements[this.b];
-      if (!this.dragging) {
-        return;
-      }
-      offset = getMousePosition(e2) - this.start + (this[aGutterSize] - this.dragOffset);
-      if (dragInterval > 1) {
-        offset = Math.round(offset / dragInterval) * dragInterval;
-      }
-      if (offset <= a.minSize + a.snapOffset + this[aGutterSize]) {
-        offset = a.minSize + this[aGutterSize];
-      } else if (offset >= this.size - (b.minSize + b.snapOffset + this[bGutterSize])) {
-        offset = this.size - (b.minSize + this[bGutterSize]);
-      }
-      if (offset >= a.maxSize - a.snapOffset + this[aGutterSize]) {
-        offset = a.maxSize + this[aGutterSize];
-      } else if (offset <= this.size - (b.maxSize - b.snapOffset + this[bGutterSize])) {
-        offset = this.size - (b.maxSize + this[bGutterSize]);
-      }
-      adjust.call(this, offset);
-      getOption(options, "onDrag", NOOP)(getSizes());
-    }
-    function calculateSizes() {
-      var a = elements[this.a].element;
-      var b = elements[this.b].element;
-      var aBounds = a[getBoundingClientRect]();
-      var bBounds = b[getBoundingClientRect]();
-      this.size = aBounds[dimension] + bBounds[dimension] + this[aGutterSize] + this[bGutterSize];
-      this.start = aBounds[position];
-      this.end = aBounds[positionEnd];
-    }
-    function innerSize(element) {
-      if (!getComputedStyle) {
-        return null;
-      }
-      var computedStyle = getComputedStyle(element);
-      if (!computedStyle) {
-        return null;
-      }
-      var size = element[clientSize];
-      if (size === 0) {
-        return null;
-      }
-      if (direction === HORIZONTAL) {
-        size -= parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight);
-      } else {
-        size -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
-      }
-      return size;
-    }
-    function trimToMin(sizesToTrim) {
-      var parentSize = innerSize(parent);
-      if (parentSize === null) {
-        return sizesToTrim;
-      }
-      if (minSizes.reduce(function(a, b) {
-        return a + b;
-      }, 0) > parentSize) {
-        return sizesToTrim;
-      }
-      var excessPixels = 0;
-      var toSpare = [];
-      var pixelSizes = sizesToTrim.map(function(size, i) {
-        var pixelSize = parentSize * size / 100;
-        var elementGutterSize = getGutterSize(
-          gutterSize,
-          i === 0,
-          i === sizesToTrim.length - 1,
-          gutterAlign
-        );
-        var elementMinSize = minSizes[i] + elementGutterSize;
-        if (pixelSize < elementMinSize) {
-          excessPixels += elementMinSize - pixelSize;
-          toSpare.push(0);
-          return elementMinSize;
-        }
-        toSpare.push(pixelSize - elementMinSize);
-        return pixelSize;
-      });
-      if (excessPixels === 0) {
-        return sizesToTrim;
-      }
-      return pixelSizes.map(function(pixelSize, i) {
-        var newPixelSize = pixelSize;
-        if (excessPixels > 0 && toSpare[i] - excessPixels > 0) {
-          var takenPixels = Math.min(
-            excessPixels,
-            toSpare[i] - excessPixels
-          );
-          excessPixels -= takenPixels;
-          newPixelSize = pixelSize - takenPixels;
-        }
-        return newPixelSize / parentSize * 100;
-      });
-    }
-    function stopDragging() {
-      var self = this;
-      var a = elements[self.a].element;
-      var b = elements[self.b].element;
-      if (self.dragging) {
-        getOption(options, "onDragEnd", NOOP)(getSizes());
-      }
-      self.dragging = false;
-      global[removeEventListener]("mouseup", self.stop);
-      global[removeEventListener]("touchend", self.stop);
-      global[removeEventListener]("touchcancel", self.stop);
-      global[removeEventListener]("mousemove", self.move);
-      global[removeEventListener]("touchmove", self.move);
-      self.stop = null;
-      self.move = null;
-      a[removeEventListener]("selectstart", NOOP);
-      a[removeEventListener]("dragstart", NOOP);
-      b[removeEventListener]("selectstart", NOOP);
-      b[removeEventListener]("dragstart", NOOP);
-      a.style.userSelect = "";
-      a.style.webkitUserSelect = "";
-      a.style.MozUserSelect = "";
-      a.style.pointerEvents = "";
-      b.style.userSelect = "";
-      b.style.webkitUserSelect = "";
-      b.style.MozUserSelect = "";
-      b.style.pointerEvents = "";
-      self.gutter.style.cursor = "";
-      self.parent.style.cursor = "";
-      document2.body.style.cursor = "";
-    }
-    function startDragging(e2) {
-      if ("button" in e2 && e2.button !== 0) {
-        return;
-      }
-      var self = this;
-      var a = elements[self.a].element;
-      var b = elements[self.b].element;
-      if (!self.dragging) {
-        getOption(options, "onDragStart", NOOP)(getSizes());
-      }
-      e2.preventDefault();
-      self.dragging = true;
-      self.move = drag.bind(self);
-      self.stop = stopDragging.bind(self);
-      global[addEventListener]("mouseup", self.stop);
-      global[addEventListener]("touchend", self.stop);
-      global[addEventListener]("touchcancel", self.stop);
-      global[addEventListener]("mousemove", self.move);
-      global[addEventListener]("touchmove", self.move);
-      a[addEventListener]("selectstart", NOOP);
-      a[addEventListener]("dragstart", NOOP);
-      b[addEventListener]("selectstart", NOOP);
-      b[addEventListener]("dragstart", NOOP);
-      a.style.userSelect = "none";
-      a.style.webkitUserSelect = "none";
-      a.style.MozUserSelect = "none";
-      a.style.pointerEvents = "none";
-      b.style.userSelect = "none";
-      b.style.webkitUserSelect = "none";
-      b.style.MozUserSelect = "none";
-      b.style.pointerEvents = "none";
-      self.gutter.style.cursor = cursor;
-      self.parent.style.cursor = cursor;
-      document2.body.style.cursor = cursor;
-      calculateSizes.call(self);
-      self.dragOffset = getMousePosition(e2) - self.end;
-    }
-    sizes = trimToMin(sizes);
-    var pairs = [];
-    elements = ids.map(function(id, i) {
-      var element = {
-        element: elementOrSelector(id),
-        size: sizes[i],
-        minSize: minSizes[i],
-        maxSize: maxSizes[i],
-        snapOffset: snapOffsets[i],
-        i
-      };
-      var pair;
-      if (i > 0) {
-        pair = {
-          a: i - 1,
-          b: i,
-          dragging: false,
-          direction,
-          parent
-        };
-        pair[aGutterSize] = getGutterSize(
-          gutterSize,
-          i - 1 === 0,
-          false,
-          gutterAlign
-        );
-        pair[bGutterSize] = getGutterSize(
-          gutterSize,
-          false,
-          i === ids.length - 1,
-          gutterAlign
-        );
-        if (parentFlexDirection === "row-reverse" || parentFlexDirection === "column-reverse") {
-          var temp = pair.a;
-          pair.a = pair.b;
-          pair.b = temp;
-        }
-      }
-      if (i > 0) {
-        var gutterElement = gutter(i, direction, element.element);
-        setGutterSize(gutterElement, gutterSize, i);
-        pair[gutterStartDragging] = startDragging.bind(pair);
-        gutterElement[addEventListener](
-          "mousedown",
-          pair[gutterStartDragging]
-        );
-        gutterElement[addEventListener](
-          "touchstart",
-          pair[gutterStartDragging]
-        );
-        parent.insertBefore(gutterElement, element.element);
-        pair.gutter = gutterElement;
-      }
-      setElementSize(
-        element.element,
-        element.size,
-        getGutterSize(
-          gutterSize,
-          i === 0,
-          i === ids.length - 1,
-          gutterAlign
-        ),
-        i
-      );
-      if (i > 0) {
-        pairs.push(pair);
-      }
-      return element;
-    });
-    function adjustToMin(element) {
-      var isLast = element.i === pairs.length;
-      var pair = isLast ? pairs[element.i - 1] : pairs[element.i];
-      calculateSizes.call(pair);
-      var size = isLast ? pair.size - element.minSize - pair[bGutterSize] : element.minSize + pair[aGutterSize];
-      adjust.call(pair, size);
-    }
-    elements.forEach(function(element) {
-      var computedSize = element.element[getBoundingClientRect]()[dimension];
-      if (computedSize < element.minSize) {
-        if (expandToMin) {
-          adjustToMin(element);
-        } else {
-          element.minSize = computedSize;
-        }
-      }
-    });
-    function setSizes(newSizes) {
-      var trimmed = trimToMin(newSizes);
-      trimmed.forEach(function(newSize, i) {
-        if (i > 0) {
-          var pair = pairs[i - 1];
-          var a = elements[pair.a];
-          var b = elements[pair.b];
-          a.size = trimmed[i - 1];
-          b.size = newSize;
-          setElementSize(a.element, a.size, pair[aGutterSize], a.i);
-          setElementSize(b.element, b.size, pair[bGutterSize], b.i);
-        }
-      });
-    }
-    function destroy(preserveStyles, preserveGutter) {
-      pairs.forEach(function(pair) {
-        if (preserveGutter !== true) {
-          pair.parent.removeChild(pair.gutter);
-        } else {
-          pair.gutter[removeEventListener](
-            "mousedown",
-            pair[gutterStartDragging]
-          );
-          pair.gutter[removeEventListener](
-            "touchstart",
-            pair[gutterStartDragging]
-          );
-        }
-        if (preserveStyles !== true) {
-          var style = elementStyle(
-            dimension,
-            pair.a.size,
-            pair[aGutterSize]
-          );
-          Object.keys(style).forEach(function(prop) {
-            elements[pair.a].element.style[prop] = "";
-            elements[pair.b].element.style[prop] = "";
-          });
-        }
-      });
-    }
-    return {
-      setSizes,
-      getSizes,
-      collapse: function collapse(i) {
-        adjustToMin(elements[i]);
-      },
-      destroy,
-      parent,
-      pairs
-    };
-  };
-  var split_es_default = Split;
-
-  // src/utils.js
-  function forEach2(list, callback) {
-    for (let i = 0; i < list.length; i++) {
-      callback(list[i]);
-    }
-  }
-  function getFilenameFromPath(path) {
-    return path.split("\\").pop().split("/").pop();
-  }
-  function e(kind, attrs = {}, children = []) {
-    let el = document.createElement(kind);
-    Object.keys(attrs || {}).forEach((key) => {
-      if (key.startsWith("data-")) {
-        el.setAttribute(key, attrs[key]);
-      } else {
-        el[key] = attrs[key];
-      }
-    });
-    (children || []).forEach((c) => el.appendChild(c));
-    return el;
-  }
-
-  // src/lib/renderHtmlTree.js
-  function createHtmlTree(tree, transformLeaf = () => ({}), root = true) {
-    let el = e("ul", root ? { className: "tree" } : {}, tree.children.map((c) => {
-      let cs = [];
-      if (c.type === "file") {
-        cs = [e("div", { ...transformLeaf(c), innerText: `\u{1F4C4}\xA0${c.name}` })];
-      } else {
-        cs = [e("details", {}, [
-          e("summary", { ...transformLeaf(c), innerText: `\u{1F4C1}\xA0${c.name}` }),
-          createHtmlTree(c, transformLeaf, false)
-        ])];
-      }
-      return e("li", {}, cs);
-    }));
-    return el;
-  }
-
-  // src/neutralino_client.js
-  function logError(error) {
-    console.error(error);
-  }
-  function loadFile(filepath, callback) {
-    Neutralino.filesystem.readFile(filepath).then((content) => {
-      callback({ name: getFilenameFromPath(filepath), path: filepath, content });
-    }).catch(logError);
-  }
-  function entryToBranch(entry) {
-    return { name: entry.entry, path: entry.path, type: entry.type === "DIRECTORY" ? "directory" : "file", children: [] };
-  }
-  async function getDirectoryTreeWIP(dirPath) {
-    let subs = await Neutralino.filesystem.readDirectory(dirPath);
-    let sorted = subs.sort((a, b) => {
-      if (a.type === b.type) {
-        return a.entry.localeCompare(b.entry);
-      }
-      return a.type === "FILE";
-    });
-    console.log("subs", subs);
-    console.log("sorted", sorted);
-    return {
-      name: "WIP",
-      path: dirPath,
-      type: "directory",
-      children: sorted.map((s) => entryToBranch(s))
-    };
-  }
-  function loadFileTree(callback) {
-    return getDirectoryTreeWIP(".").then(callback).catch(logError);
-  }
-
-  // src/partials/homepage.js
-  function createHomepage(app) {
-    return e("div", {}, [
-      e("div", { className: "homepage-btns" }, [
-        e("button", { innerText: "New", onclick: () => {
-        } }),
-        e("button", { innerText: "Open", onclick: () => app.showOpenDialog() })
-      ]),
-      e("h2", { innerText: "Previously opened:" }),
-      e("p", { innerText: "No folder previously opened." }),
-      e("h2", { innerText: "Templates:" }),
-      e("p", { innerText: "No template found." }),
-      e("a", { innerText: "Add templates" })
-    ]);
-  }
-
   // src/neutralino_app.js
   var STORAGE_KEY = "APP";
+  function openFile(filepath) {
+    loadFile(filepath, (file) => {
+      console.log("file", file);
+      let filesTabs = document.getElementById("files_tabs");
+      forEach(filesTabs.children, (c) => {
+        if (c.classList.contains("active")) {
+          c.classList.remove("active");
+        }
+      });
+      let btn = document.createElement("button");
+      btn.className = "tab-button active";
+      btn.innerText = file.name;
+      filesTabs.prepend(btn);
+      forEach(document.querySelectorAll("#explorer-tree .leaf[selected]"), (el) => {
+        el.removeAttribute("selected");
+      });
+      const leaf = document.querySelector(`#explorer-tree .leaf[data-path="${filepath}"]`);
+      leaf.setAttribute("selected", "");
+      forEach(document.getElementsByClassName("active_filename"), (el) => {
+        el.innerText = file.name;
+      });
+      let doc3 = new JomeDocument(filepath, file.content);
+      let parts = (0, import_parser2.parse)(doc3);
+      console.log("parts", parts);
+      loadFileProseMirrorEditor("#prosemirror_editor", doc3);
+    });
+  }
   var NeutralinoApp = class {
     constructor() {
       this.data = {};
       this.refs = {
-        mainPanel: document.getElementById("main-panel")
+        mainPanel: document.getElementById("main-panel"),
+        explorerTree: document.getElementById("explorer-tree")
       };
     }
     async setup() {
@@ -70232,7 +70260,13 @@
         this.refs.mainPanel.replaceChildren(createHomepage(this));
       }
       if (this.data["PROJECT_PATH"]) {
-      } else {
+        loadFileTree((tree) => {
+          this.refs.explorerTree.replaceChildren(createHtmlTree(tree, (leaf) => {
+            return { id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
+              openFile(leaf.path);
+            } };
+          }));
+        });
       }
     }
     async loadFromStorage() {
@@ -70271,51 +70305,13 @@
   };
 
   // src/light_editor.js
-  function openFile(filepath) {
-    loadFile(filepath, (file) => {
-      console.log("file", file);
-      let filesTabs = document.getElementById("files_tabs");
-      forEach2(filesTabs.children, (c) => {
-        if (c.classList.contains("active")) {
-          c.classList.remove("active");
-        }
-      });
-      let btn = document.createElement("button");
-      btn.className = "tab-button active";
-      btn.innerText = file.name;
-      filesTabs.prepend(btn);
-      forEach2(document.querySelectorAll("#explorer-tree .leaf[selected]"), (el) => {
-        el.removeAttribute("selected");
-      });
-      const leaf = document.querySelector(`#explorer-tree .leaf[data-path="${filepath}"]`);
-      leaf.setAttribute("selected", "");
-      forEach2(document.getElementsByClassName("active_filename"), (el) => {
-        el.innerText = file.name;
-      });
-      let doc3 = new JomeDocument(filepath, file.content);
-      let parts = (0, import_parser2.parse)(doc3);
-      console.log("parts", parts);
-      loadFileProseMirrorEditor("#prosemirror_editor", doc3);
-    });
-  }
-  async function setupApp() {
-    let app = new NeutralinoApp();
-    await app.setup();
-  }
-  document.addEventListener("DOMContentLoaded", function() {
-    setupApp();
+  document.addEventListener("DOMContentLoaded", async () => {
     split_es_default(["#split-0", "#split-1", "#split-2"], {
       gutterSize: 4,
       sizes: [20, 60, 20]
     });
-    const explorerList = document.getElementById("explorer-tree");
-    loadFileTree((tree) => {
-      explorerList.replaceChildren(createHtmlTree(tree, (leaf) => {
-        return { id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
-          openFile(leaf.path);
-        } };
-      }));
-    });
+    let app = new NeutralinoApp();
+    await app.setup();
   });
 })();
 //# sourceMappingURL=bundle.js.map
