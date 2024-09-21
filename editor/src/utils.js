@@ -25,6 +25,8 @@ export function e(kind, attrs = {}, children = []) {
       el[key] = attrs[key]
     }
   });
-  (children||[]).forEach(c => el.appendChild(c))
+  (children||[]).forEach(c => {
+    el.appendChild(typeof c === 'string' ? document.createTextNode(c) : c)
+  })
   return el
 }

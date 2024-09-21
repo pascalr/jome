@@ -5,7 +5,6 @@ import {e} from '../utils'
 // A list of latest files opened.
 // A list of templates.
 function createHomepageList(app, msg) {
-  // TODO: Read the history from storage
   return e('div', {}, [
     e('ul', {}, [
       createHomepageItem(app),
@@ -17,7 +16,6 @@ function createHomepageList(app, msg) {
 }
 
 function createHomepageItem(app) {
-  // TODO: Read the history from storage
   return e('li', {innerText: "WIP"})
 }
 
@@ -33,23 +31,24 @@ I like that.
 // The page you see when there is no file opened.
 export function createHomepage(app) {
 
+  // TODO: Read the history from storage
   let fileList = []
   let projectList = []
 
   return e('div', {style: "max-width: 800px; margin: auto;"}, [
-    e('h1', {innerText: "Jome Editor - v0.0.1"}),
+    e('h1', {}, ["Jome Editor - v0.0.1"]),
     e('div', {style: "display: flex; align-items: center;"}, [
-      e('h2', {innerText: "Recent projects", style: "margin-right: 0.5em;"}),
-      e('div', {}, [e('button', {innerText: "Open", className: "title-side-button", onclick: () => app.showOpenFolderDialog()})]),
+      e('h2', {style: "margin-right: 0.5em;"}, ["Recent projects"]),
+      e('div', {}, [e('button', {className: "title-side-button", onclick: () => app.showOpenFolderDialog()}, ["Open"])]),
     ]),
-    projectList.length ? createHomepageList(app, projectList) : e('p', {innerText: "No recent projects opened."}),
+    projectList.length ? createHomepageList(app, projectList) : e('p', {}, ["No recent projects opened."]),
     e('div', {style: "display: flex; align-items: center;"}, [
-      e('h2', {innerText: "Recent files", style: "margin-right: 0.5em;"}),
-      e('div', {}, [e('button', {innerText: "Open", className: "title-side-button", onclick: () => app.showOpenFileDialog()})]),
+      e('h2', {style: "margin-right: 0.5em;"}, ["Recent files"]),
+      e('div', {}, [e('button', {className: "title-side-button", onclick: () => app.showOpenFileDialog()}, ["Open"])]),
     ]),
-    fileList.length ? createHomepageList(app, fileList, e1) : e('p', {innerText: "No recent files opened."}),
-    e('h2', {innerText: "Create project from template"}),
-    e('p', {innerText: "No template implemented yet"}),
+    fileList.length ? createHomepageList(app, fileList, e1) : e('p', {}, ["No recent files opened."]),
+    e('h2', {}, ["Create project from template"]),
+    e('p', {}, ["No template implemented yet"]),
   ])
 }
 

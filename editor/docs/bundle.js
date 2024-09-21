@@ -57100,7 +57100,9 @@
         el[key] = attrs[key];
       }
     });
-    (children || []).forEach((c) => el.appendChild(c));
+    (children || []).forEach((c) => {
+      el.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
+    });
     return el;
   }
 
@@ -70202,19 +70204,19 @@
     let fileList = [];
     let projectList = [];
     return e("div", { style: "max-width: 800px; margin: auto;" }, [
-      e("h1", { innerText: "Jome Editor - v0.0.1" }),
+      e("h1", {}, ["Jome Editor - v0.0.1"]),
       e("div", { style: "display: flex; align-items: center;" }, [
-        e("h2", { innerText: "Recent projects", style: "margin-right: 0.5em;" }),
-        e("div", {}, [e("button", { innerText: "Open", className: "title-side-button", onclick: () => app.showOpenFolderDialog() })])
+        e("h2", { style: "margin-right: 0.5em;" }, ["Recent projects"]),
+        e("div", {}, [e("button", { className: "title-side-button", onclick: () => app.showOpenFolderDialog() }, ["Open"])])
       ]),
-      projectList.length ? createHomepageList(app, projectList) : e("p", { innerText: "No recent projects opened." }),
+      projectList.length ? createHomepageList(app, projectList) : e("p", {}, ["No recent projects opened."]),
       e("div", { style: "display: flex; align-items: center;" }, [
-        e("h2", { innerText: "Recent files", style: "margin-right: 0.5em;" }),
-        e("div", {}, [e("button", { innerText: "Open", className: "title-side-button", onclick: () => app.showOpenFileDialog() })])
+        e("h2", { style: "margin-right: 0.5em;" }, ["Recent files"]),
+        e("div", {}, [e("button", { className: "title-side-button", onclick: () => app.showOpenFileDialog() }, ["Open"])])
       ]),
-      fileList.length ? createHomepageList(app, fileList, e1) : e("p", { innerText: "No recent files opened." }),
-      e("h2", { innerText: "Create project from template" }),
-      e("p", { innerText: "No template implemented yet" })
+      fileList.length ? createHomepageList(app, fileList, e1) : e("p", {}, ["No recent files opened."]),
+      e("h2", {}, ["Create project from template"]),
+      e("p", {}, ["No template implemented yet"])
     ]);
   }
 
