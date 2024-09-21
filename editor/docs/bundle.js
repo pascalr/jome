@@ -70185,7 +70185,7 @@
   }
 
   // src/pages/homepage.js
-  function createHomepageList(app) {
+  function createHomepageList(app, msg) {
     return e("div", {}, [
       e("ul", {}, [
         createHomepageItem(app),
@@ -70199,18 +70199,20 @@
     return e("li", { innerText: "WIP" });
   }
   function createHomepage(app) {
+    let fileList = [];
+    let projectList = [];
     return e("div", { style: "max-width: 800px; margin: auto;" }, [
       e("h1", { innerText: "Jome Editor - v0.0.1" }),
       e("div", { style: "display: flex; align-items: center;" }, [
         e("h2", { innerText: "Recent projects", style: "margin-right: 0.5em;" }),
         e("div", {}, [e("button", { innerText: "Open", className: "title-side-button", onclick: () => app.showOpenFolderDialog() })])
       ]),
-      createHomepageList(app),
+      projectList.length ? createHomepageList(app, projectList) : e("p", { innerText: "No recent projects opened." }),
       e("div", { style: "display: flex; align-items: center;" }, [
         e("h2", { innerText: "Recent files", style: "margin-right: 0.5em;" }),
         e("div", {}, [e("button", { innerText: "Open", className: "title-side-button", onclick: () => app.showOpenFileDialog() })])
       ]),
-      createHomepageList(app),
+      fileList.length ? createHomepageList(app, fileList, e1) : e("p", { innerText: "No recent files opened." }),
       e("h2", { innerText: "Create project from template" }),
       e("p", { innerText: "No template implemented yet" })
     ]);
