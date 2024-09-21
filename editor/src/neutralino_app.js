@@ -15,6 +15,7 @@ const STORAGE_KEY = 'APP'
 
 import { getFilenameFromPath } from "./utils"
 import { createHomepage } from './pages/homepage'
+import { createWindowBar } from './partials/window_bar'
 
 function logError(error) {
   console.error(error)
@@ -111,8 +112,18 @@ function openFile(filepath) {
 
 
 
-
-
+// TODO: I want to show the open menu every time the editor is opened, and you click on the latest project if you want to get back into it.
+// So don't persist which project is currently opened.
+// Only persist the history so it is showned in the latest.
+// It would be nice to keep the history of files opened per project.
+// This way, when you reopen a project, it reopens the files.
+// Let's check out if Godot does that. No it does not. I guess it only opens the primary file. Do something similar?
+// I would like that people specify a primary file, maybe README.md by default, and this is what is opened first.
+// I am not so sure about all of that. Maybe do like vscode and when you reopen the program, it reopens the same way as you left it.
+const EPHEMERAL_DATA_KEYS = {
+  PROJECT_NAME,
+  PROJECT_PATH,
+}
 
 export class NeutralinoApp {
 
@@ -120,8 +131,9 @@ export class NeutralinoApp {
     /**
      * Data that is kept when the program is closed.
      * 
+     * PROJECT_NAME
      * PROJECT_PATH
-     * CURRENT_FILE
+     * CURRENT_FILENAME
      * FILES_OPENED
      * DIR_LISTING // Used to know what's under a folder and to know if a folder is opened or not (remove the key when closing the folder, maybe sometimes a little less efficient, but simpler)
      */
@@ -140,11 +152,19 @@ export class NeutralinoApp {
   async setup() {
     await this.loadFromStorage()
 
-    document.body.replaceChildren(createHomepage(this))
+    // TODO: A window bar only in the browser. In the app, the window bar is done with Neutralino.
+
+    let pageEls = []
+    if (NL_MODE === 'browser') {
+      pageEls.push(createWindowBar(this))
+    }
+    pageEls.push(createHomepage(this))
+
+    document.body.replaceChildren(...pageEls)
 
     return;
 
-    if (!this.data['CURRENT_FILE']) {
+    if (!this.data['CURRENT_FILENAME']) {
       this.refs.mainPanel.replaceChildren(createNoPageOpened(this))
     }
 
@@ -206,8 +226,8 @@ export class NeutralinoApp {
 
   }
 
-  // Returns entries, a list of paths
   showOpenFileDialog() {
+    // Returns entries, a list of paths
     Neutralino.os.showOpenDialog().then(entries => {
       let path = entries[0]
       if (path) {
@@ -217,16 +237,16 @@ export class NeutralinoApp {
     }).catch(this.handleError)
   }
 
-  // Returns entries, a list of paths
-  showOpenFolderDialog() {
+  showOpenProjectDialog() {
     Neutralino.os.showFolderDialog().then(path => {
       if (path) {
+        let name = getFilenameFromPath(path)
+        this.setData('PROJECT_NAME', name)
         this.setData('PROJECT_PATH', path)
       }
     }).catch(this.handleError)
   }
 
-  // Returns entries, a list of paths
   showSaveDialog() {
     Neutralino.os.showSaveDialog().then(entry => {
       console.log('TODO save: ', entry)

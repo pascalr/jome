@@ -70207,7 +70207,7 @@
       e("h1", {}, ["Jome Editor - v0.0.1"]),
       e("div", { style: "display: flex; align-items: center;" }, [
         e("h2", { style: "margin-right: 0.5em;" }, ["Recent projects"]),
-        e("div", {}, [e("button", { className: "title-side-button", onclick: () => app.showOpenFolderDialog() }, ["Open"])])
+        e("div", {}, [e("button", { className: "title-side-button", onclick: () => app.showOpenProjectDialog() }, ["Open"])])
       ]),
       projectList.length ? createHomepageList(app, projectList) : e("p", {}, ["No recent projects opened."]),
       e("div", { style: "display: flex; align-items: center;" }, [
@@ -70217,6 +70217,13 @@
       fileList.length ? createHomepageList(app, fileList, e1) : e("p", {}, ["No recent files opened."]),
       e("h2", {}, ["Create project from template"]),
       e("p", {}, ["No template implemented yet"])
+    ]);
+  }
+
+  // src/partials/window_bar.js
+  function createWindowBar(app) {
+    return e("div", { className: "window_bar" }, [
+      (app.getData("CURRENT_FILENAME") ? `${app.getData("CURRENT_FILENAME")} - ` : "") + (app.getData("PROJECT_NAME") ? `${app.getData("PROJECT_NAME")} - ` : "") + "Jome Editor"
     ]);
   }
 
@@ -70290,9 +70297,14 @@
     }
     async setup() {
       await this.loadFromStorage();
-      document.body.replaceChildren(createHomepage(this));
+      let pageEls = [];
+      if (NL_MODE === "browser") {
+        pageEls.push(createWindowBar(this));
+      }
+      pageEls.push(createHomepage(this));
+      document.body.replaceChildren(...pageEls);
       return;
-      if (!this.data["CURRENT_FILE"]) {
+      if (!this.data["CURRENT_FILENAME"]) {
         this.refs.mainPanel.replaceChildren(createNoPageOpened(this));
       }
       if (this.data["PROJECT_PATH"]) {
@@ -70341,7 +70353,6 @@
     }
     openProject() {
     }
-    // Returns entries, a list of paths
     showOpenFileDialog() {
       Neutralino.os.showOpenDialog().then((entries) => {
         let path = entries[0];
@@ -70351,15 +70362,15 @@
         }
       }).catch(this.handleError);
     }
-    // Returns entries, a list of paths
-    showOpenFolderDialog() {
+    showOpenProjectDialog() {
       Neutralino.os.showFolderDialog().then((path) => {
         if (path) {
+          let name = getFilenameFromPath(path);
+          this.setData("PROJECT_NAME", name);
           this.setData("PROJECT_PATH", path);
         }
       }).catch(this.handleError);
     }
-    // Returns entries, a list of paths
     showSaveDialog() {
       Neutralino.os.showSaveDialog().then((entry) => {
         console.log("TODO save: ", entry);

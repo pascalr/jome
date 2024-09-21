@@ -1,12 +1,12 @@
 import {e} from '../utils'
 
-// TODO: A window bar only in the browser. In the app, the window bar is done with Neutralino.
-
+// For use in browser only
 export function createWindowBar(app) {
 
   return e('div', {className: "window_bar"}, [
-    e('span', {className: "active_filename"}), // " - "
-    e('span', {className: "project_name", innerText: "WIP"})  // " - Jome Editor"
+    (app.getData('CURRENT_FILENAME') ? `${app.getData('CURRENT_FILENAME')} - ` : "") + 
+    (app.getData('PROJECT_NAME') ? `${app.getData('PROJECT_NAME')} - ` : "") + 
+    "Jome Editor"
   ])
   
 }

@@ -39,7 +39,7 @@ export function createHomepage(app) {
     e('h1', {}, ["Jome Editor - v0.0.1"]),
     e('div', {style: "display: flex; align-items: center;"}, [
       e('h2', {style: "margin-right: 0.5em;"}, ["Recent projects"]),
-      e('div', {}, [e('button', {className: "title-side-button", onclick: () => app.showOpenFolderDialog()}, ["Open"])]),
+      e('div', {}, [e('button', {className: "title-side-button", onclick: () => app.showOpenProjectDialog()}, ["Open"])]),
     ]),
     projectList.length ? createHomepageList(app, projectList) : e('p', {}, ["No recent projects opened."]),
     e('div', {style: "display: flex; align-items: center;"}, [
