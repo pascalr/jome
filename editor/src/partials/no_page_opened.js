@@ -1,6 +1,7 @@
 import {e} from '../utils'
 
-export function createHomepage(app) {
+// The page you see when there is no file opened.
+export function createNoPageOpened(app) {
   return e('div', {}, [
     e('div', {className: "homepage-btns"}, [
       e('button', {innerText: "New", onclick: () => app.showSaveDialog()}),

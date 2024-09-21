@@ -57121,8 +57121,8 @@
     return el;
   }
 
-  // src/partials/homepage.js
-  function createHomepage(app) {
+  // src/partials/no_page_opened.js
+  function createNoPageOpened(app) {
     return e("div", {}, [
       e("div", { className: "homepage-btns" }, [
         e("button", { innerText: "New", onclick: () => app.showSaveDialog() }),
@@ -70255,7 +70255,7 @@
     async setup() {
       await this.loadFromStorage();
       if (!this.data["CURRENT_FILE"]) {
-        this.refs.mainPanel.replaceChildren(createHomepage(this));
+        this.refs.mainPanel.replaceChildren(createNoPageOpened(this));
       }
       if (this.data["PROJECT_PATH"]) {
         await this.listDirectory(this.data["PROJECT_PATH"]);

@@ -66,3 +66,15 @@ J'aime mieux parce que tu n'as pas toutes les options à passer aux travers, seu
 
 Titre centré en haut: « Nom du fichier présentement ouvert » - « nom du projet » - « Nom du programme »
 
+
+
+
+## UI
+
+J'ai en tête un bouton Home (petite maison) en haut à gauche. Quand tu cliques dessus, ça va à la page de départ.
+
+La part de départ que je préfère, c'est comme Godot. Faire une belle page simple avec une liste de projet précédemment ouvert.
+Ne pas me casser la tête et simplement reproduire le UI pour l'instant.
+
+Mais j'aimerais faire mieux en proposant des templates un jour.
+

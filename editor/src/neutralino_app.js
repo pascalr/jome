@@ -1,7 +1,7 @@
 import { parse } from './parser'
 import { JomeDocument } from "./jome_document"
 import { createHtmlTree } from "./lib/renderHtmlTree"
-import { createHomepage } from "./partials/homepage"
+import { createNoPageOpened } from "./partials/no_page_opened"
 import { forEach } from "./utils"
 import { loadFileProseMirrorEditor } from './prosemirror_editor'
 
@@ -140,7 +140,7 @@ export class NeutralinoApp {
     await this.loadFromStorage()
 
     if (!this.data['CURRENT_FILE']) {
-      this.refs.mainPanel.replaceChildren(createHomepage(this))
+      this.refs.mainPanel.replaceChildren(createNoPageOpened(this))
     }
 
     // Load the navigation tree
