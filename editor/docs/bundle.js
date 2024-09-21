@@ -57125,9 +57125,9 @@
   function createHomepage(app) {
     return e("div", {}, [
       e("div", { className: "homepage-btns" }, [
-        e("button", { innerText: "New", onclick: () => {
-        } }),
-        e("button", { innerText: "Open", onclick: () => app.showOpenDialog() })
+        e("button", { innerText: "New", onclick: () => app.showSaveDialog() }),
+        e("button", { innerText: "Open File", onclick: () => app.showOpenFileDialog() }),
+        e("button", { innerText: "Open Folder", onclick: () => app.showOpenFolderDialog() })
       ]),
       e("h2", { innerText: "Previously opened:" }),
       e("p", { innerText: "No folder previously opened." }),
@@ -70304,13 +70304,27 @@
     openProject() {
     }
     // Returns entries, a list of paths
-    showOpenDialog() {
+    showOpenFileDialog() {
       Neutralino.os.showOpenDialog().then((entries) => {
         let path = entries[0];
         if (path) {
           this.setData("PROJECT_PATH", path);
           console.log("open dialog entries", entries);
         }
+      }).catch(this.handleError);
+    }
+    // Returns entries, a list of paths
+    showOpenFolderDialog() {
+      Neutralino.os.showFolderDialog().then((path) => {
+        if (path) {
+          this.setData("PROJECT_PATH", path);
+        }
+      }).catch(this.handleError);
+    }
+    // Returns entries, a list of paths
+    showSaveDialog() {
+      Neutralino.os.showSaveDialog().then((entry) => {
+        console.log("TODO save: ", entry);
       }).catch(this.handleError);
     }
   };

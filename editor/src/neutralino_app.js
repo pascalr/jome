@@ -202,13 +202,29 @@ export class NeutralinoApp {
   }
 
   // Returns entries, a list of paths
-  showOpenDialog() {
+  showOpenFileDialog() {
     Neutralino.os.showOpenDialog().then(entries => {
       let path = entries[0]
       if (path) {
         this.setData('PROJECT_PATH', path)
         console.log('open dialog entries', entries)
       }
+    }).catch(this.handleError)
+  }
+
+  // Returns entries, a list of paths
+  showOpenFolderDialog() {
+    Neutralino.os.showFolderDialog().then(path => {
+      if (path) {
+        this.setData('PROJECT_PATH', path)
+      }
+    }).catch(this.handleError)
+  }
+
+  // Returns entries, a list of paths
+  showSaveDialog() {
+    Neutralino.os.showSaveDialog().then(entry => {
+      console.log('TODO save: ', entry)
     }).catch(this.handleError)
   }
 
