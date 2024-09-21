@@ -32,7 +32,8 @@ I like that.
 
 // The page you see when there is no file opened.
 export function createHomepage(app) {
-  return e('div', {id: "homepage"}, [
+  return e('div', {style: "max-width: 800px; margin: auto;"}, [
+    e('h1', {innerText: "Jome Editor - v0.0.1"}),
     e('h2', {innerText: "Recent projects"}), // The last folders previously opened, show 2-3 and a show more button.
     createHomepageList(app),
     e('h2', {innerText: "Recent files"}),
