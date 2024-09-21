@@ -34,9 +34,15 @@ I like that.
 export function createHomepage(app) {
   return e('div', {style: "max-width: 800px; margin: auto;"}, [
     e('h1', {innerText: "Jome Editor - v0.0.1"}),
-    e('h2', {innerText: "Recent projects"}), // The last folders previously opened, show 2-3 and a show more button.
+    e('div', {style: "display: flex; align-items: center;"}, [
+      e('h2', {innerText: "Recent projects", style: "margin-right: 0.5em;"}),
+      e('div', {}, [e('button', {innerText: "Open", className: "title-side-button", onclick: () => app.showOpenFolderDialog()})]),
+    ]),
     createHomepageList(app),
-    e('h2', {innerText: "Recent files"}),
+    e('div', {style: "display: flex; align-items: center;"}, [
+      e('h2', {innerText: "Recent files", style: "margin-right: 0.5em;"}),
+      e('div', {}, [e('button', {innerText: "Open", className: "title-side-button", onclick: () => app.showOpenFileDialog()})]),
+    ]),
     createHomepageList(app),
     e('h2', {innerText: "Create project from template"}),
     e('p', {innerText: "No template implemented yet"}),
