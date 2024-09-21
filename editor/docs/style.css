@@ -304,3 +304,13 @@ body {
   background-color: #252728;
   height: 100%;
 }
+
+
+
+
+
+
+#homepage {
+  max-width: 800px;
+  margin: auto;
+}

@@ -70184,6 +70184,32 @@
     }
   }
 
+  // src/pages/homepage.js
+  function createHomepageList(app) {
+    return e("div", {}, [
+      e("ul", {}, [
+        createHomepageItem(app),
+        createHomepageItem(app),
+        createHomepageItem(app)
+      ]),
+      e("a", { innerText: "Show more..." })
+    ]);
+  }
+  function createHomepageItem(app) {
+    return e("li", { innerText: "WIP" });
+  }
+  function createHomepage(app) {
+    return e("div", { id: "homepage" }, [
+      e("h2", { innerText: "Recent projects" }),
+      // The last folders previously opened, show 2-3 and a show more button.
+      createHomepageList(app),
+      e("h2", { innerText: "Recent files" }),
+      createHomepageList(app),
+      e("h2", { innerText: "Create project from template" }),
+      e("p", { innerText: "No template implemented yet" })
+    ]);
+  }
+
   // src/neutralino_app.js
   var STORAGE_KEY = "APP";
   function logError(error) {
@@ -70254,6 +70280,8 @@
     }
     async setup() {
       await this.loadFromStorage();
+      document.body.replaceChildren(createHomepage(this));
+      return;
       if (!this.data["CURRENT_FILE"]) {
         this.refs.mainPanel.replaceChildren(createNoPageOpened(this));
       }

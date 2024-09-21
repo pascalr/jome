@@ -14,6 +14,7 @@ const STORAGE_KEY = 'APP'
 
 
 import { getFilenameFromPath } from "./utils"
+import { createHomepage } from './pages/homepage'
 
 function logError(error) {
   console.error(error)
@@ -138,6 +139,10 @@ export class NeutralinoApp {
 
   async setup() {
     await this.loadFromStorage()
+
+    document.body.replaceChildren(createHomepage(this))
+
+    return;
 
     if (!this.data['CURRENT_FILE']) {
       this.refs.mainPanel.replaceChildren(createNoPageOpened(this))
