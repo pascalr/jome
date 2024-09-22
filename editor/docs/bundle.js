@@ -70220,13 +70220,6 @@
     ]);
   }
 
-  // src/partials/window_bar.js
-  function createWindowBar(app) {
-    return e("div", { className: "window_bar" }, [
-      (app.getData("CURRENT_FILENAME") ? `${app.getData("CURRENT_FILENAME")} - ` : "") + (app.getData("PROJECT_NAME") ? `${app.getData("PROJECT_NAME")} - ` : "") + "Jome Editor"
-    ]);
-  }
-
   // src/neutralino_app.js
   var STORAGE_KEY = "APP";
   function logError(error) {
@@ -70299,10 +70292,11 @@
       await this.loadFromStorage();
       let pageEls = [];
       if (NL_MODE === "browser") {
-        pageEls.push(createWindowBar(this));
+        pageEls.push(e("div", { id: "window_bar" }));
       }
       pageEls.push(createHomepage(this));
       document.body.replaceChildren(...pageEls);
+      this.updateWindowBar();
       return;
       if (!this.data["CURRENT_FILENAME"]) {
         this.refs.mainPanel.replaceChildren(createNoPageOpened(this));
@@ -70316,6 +70310,15 @@
             } };
           }));
         });
+      }
+    }
+    updateWindowBar() {
+      let txt = (this.getData("CURRENT_FILENAME") ? `${this.getData("CURRENT_FILENAME")} - ` : "") + (this.getData("PROJECT_NAME") ? `${this.getData("PROJECT_NAME")} - ` : "") + "Jome Editor";
+      if (NL_MODE === "window") {
+        Neutralino.window.setTitle(txt);
+      } else {
+        let el = document.getElementById("window_bar");
+        el.innerText = txt;
       }
     }
     async listDirectory(path) {

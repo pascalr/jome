@@ -5,17 +5,10 @@ import { createNoPageOpened } from "./partials/no_page_opened"
 import { forEach } from "./utils"
 import { loadFileProseMirrorEditor } from './prosemirror_editor'
 
-const STORAGE_KEY = 'APP'
-
-
-
-
-
-
-
-import { getFilenameFromPath } from "./utils"
+import { getFilenameFromPath, e } from "./utils"
 import { createHomepage } from './pages/homepage'
-import { createWindowBar } from './partials/window_bar'
+
+const STORAGE_KEY = 'APP'
 
 function logError(error) {
   console.error(error)
@@ -137,7 +130,7 @@ export class NeutralinoApp {
      */
     this.refs = {
       mainPanel: document.getElementById('main-panel'),
-      explorerTree: document.getElementById('explorer-tree')
+      explorerTree: document.getElementById('explorer-tree'),
     }
     // Should validate that all refs exists?
   }
@@ -149,11 +142,13 @@ export class NeutralinoApp {
 
     let pageEls = []
     if (NL_MODE === 'browser') {
-      pageEls.push(createWindowBar(this))
+      pageEls.push(e('div', {id: "window_bar"}))
     }
     pageEls.push(createHomepage(this))
 
     document.body.replaceChildren(...pageEls)
+
+    this.updateWindowBar()
 
     return;
 
@@ -173,6 +168,20 @@ export class NeutralinoApp {
         }))
       })
     }
+  }
+
+  updateWindowBar() {
+    let txt = (this.getData('CURRENT_FILENAME') ? `${this.getData('CURRENT_FILENAME')} - ` : "") + 
+      (this.getData('PROJECT_NAME') ? `${this.getData('PROJECT_NAME')} - ` : "") + 
+      "Jome Editor"
+    
+    if (NL_MODE === 'window') {
+      Neutralino.window.setTitle(txt)
+    } else {
+      let el = document.getElementById('window_bar')
+      el.innerText = txt
+    }
+
   }
 
   async listDirectory(path) {
