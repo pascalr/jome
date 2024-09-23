@@ -30,3 +30,23 @@ export function e(kind, attrs = {}, children = []) {
   })
   return el
 }
+
+/**
+ * Creates an svg element given the loaded svg from esbuild. Right now, simply text. Optimize later.
+ */
+export function svgE(loadedSvg, title) {
+  let titleEl = document.createElement('title')
+  titleEl.innerText = title
+
+  let el = createElementFromHTML(loadedSvg)
+  el.insertBefore(titleEl, el.firstChild)
+  return el
+}
+
+// https://stackoverflow.com/questions/494143/creating-a-new-dom-element-from-an-html-string-using-built-in-dom-methods-or-pro
+function createElementFromHTML(htmlString) {
+  var div = document.createElement('div');
+  div.innerHTML = htmlString.trim();
+  // Change this to div.childNodes to support multiple top-level nodes.
+  return div.firstChild;
+}

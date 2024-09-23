@@ -5,4 +5,5 @@ await esbuild.build({
   bundle: true,
   outfile: 'docs/bundle.js',
   sourcemap: true,
+  loader: {'.svg': 'text'}
 })

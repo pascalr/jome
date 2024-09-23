@@ -75,7 +75,7 @@ blockquote {
   flex-direction: column;
   border-right: 1px solid #222121;
 }
-.context_buttons svg {
+.context_buttons > svg {
   padding: 0.5em;
 }
 
