@@ -7,6 +7,7 @@ import { loadFileProseMirrorEditor } from './prosemirror_editor'
 
 import { getFilenameFromPath, e } from "./utils"
 import { createHomepage } from './pages/homepage'
+import { createEditor } from './pages/editor'
 
 const STORAGE_KEY = 'APP'
 
@@ -144,7 +145,8 @@ export class NeutralinoApp {
     if (NL_MODE === 'browser') {
       pageEls.push(e('div', {id: "window_bar"}))
     }
-    pageEls.push(createHomepage(this))
+    //pageEls.push(createHomepage(this))
+    pageEls.push(createEditor(this))
 
     document.body.replaceChildren(...pageEls)
 
