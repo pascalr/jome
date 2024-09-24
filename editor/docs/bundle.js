@@ -69737,6 +69737,43 @@
     }
   }
 
+  // src/pages/homepage.js
+  function createHomepageList(app, msg) {
+    return e("div", {}, [
+      e("ul", {}, [
+        createHomepageItem(app),
+        createHomepageItem(app),
+        createHomepageItem(app)
+      ]),
+      e("a", { innerText: "Show more..." })
+    ]);
+  }
+  function createHomepageItem(app) {
+    return e("li", { innerText: "WIP" });
+  }
+  function createHomepage(app) {
+    let fileList = [];
+    let projectList = [];
+    return e("div", { style: "max-width: 800px; margin: auto;" }, [
+      e("h1", {}, ["Jome Editor - v0.0.1"]),
+      e("div", { style: "display: flex; align-items: center;" }, [
+        e("h2", { style: "margin-right: 0.5em;" }, ["Recent projects"]),
+        e("div", {}, [e("button", { className: "title-side-button", onclick: () => app.showOpenProjectDialog() }, ["Open"])])
+      ]),
+      projectList.length ? createHomepageList(app, projectList) : e("p", {}, ["No recent projects opened."]),
+      e("div", { style: "display: flex; align-items: center;" }, [
+        e("h2", { style: "margin-right: 0.5em;" }, ["Recent files"]),
+        e("div", {}, [e("button", { className: "title-side-button", onclick: () => app.showOpenFileDialog() }, ["Open"])])
+      ]),
+      fileList.length ? createHomepageList(app, fileList, e1) : e("p", {}, ["No recent files opened."]),
+      e("h2", {}, ["Create project from template"]),
+      e("p", {}, ["No template implemented yet"])
+    ]);
+  }
+  var HomePage = {
+    create: createHomepage
+  };
+
   // node_modules/split.js/dist/split.es.js
   var global = typeof window !== "undefined" ? window : null;
   var ssr = global === null;
@@ -70521,7 +70558,7 @@
       if (NL_MODE === "browser") {
         document.body.prepend(e("div", { id: "window_bar" }));
       }
-      this.show(EditorPage);
+      this.show(HomePage);
       this.updateWindowBar();
       return;
       if (!this.data["CURRENT_FILENAME"]) {
@@ -70586,8 +70623,8 @@
       Neutralino.os.showOpenDialog().then((entries) => {
         let path = entries[0];
         if (path) {
-          this.setData("PROJECT_PATH", path);
-          console.log("open dialog entries", entries);
+          this.setData("CURRENT_FILE", path);
+          this.show(EditorPage);
         }
       }).catch(this.handleError);
     }
@@ -70597,6 +70634,7 @@
           let name = getFilenameFromPath(path);
           this.setData("PROJECT_NAME", name);
           this.setData("PROJECT_PATH", path);
+          this.show(EditorPage);
         }
       }).catch(this.handleError);
     }

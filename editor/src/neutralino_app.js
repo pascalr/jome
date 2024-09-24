@@ -7,8 +7,9 @@ import { loadFileProseMirrorEditor } from './prosemirror_editor'
 
 import { getFilenameFromPath } from "./utils"
 import { e } from "./helpers"
-import { createHomepage } from './pages/homepage'
-import { EditorPage } from './pages/pages'
+
+import { HomePage } from './pages/homepage'
+import { EditorPage } from './pages/editor'
 
 const STORAGE_KEY = 'APP'
 
@@ -156,8 +157,8 @@ export class NeutralinoApp {
     if (NL_MODE === 'browser') {
       document.body.prepend(e('div', {id: "window_bar"}))
     }
-    //pageEls.push(createHomepage(this))
-    this.show(EditorPage)
+    // this.show(EditorPage)
+    this.show(HomePage)
 
     this.updateWindowBar()
 
@@ -244,8 +245,8 @@ export class NeutralinoApp {
     Neutralino.os.showOpenDialog().then(entries => {
       let path = entries[0]
       if (path) {
-        this.setData('PROJECT_PATH', path)
-        console.log('open dialog entries', entries)
+        this.setData('CURRENT_FILE', path)
+        this.show(EditorPage)
       }
     }).catch(this.handleError)
   }
@@ -256,6 +257,7 @@ export class NeutralinoApp {
         let name = getFilenameFromPath(path)
         this.setData('PROJECT_NAME', name)
         this.setData('PROJECT_PATH', path)
+        this.show(EditorPage)
       }
     }).catch(this.handleError)
   }
