@@ -1,24 +1,22 @@
 
 import {e} from '../helpers'
+import { getFilenameFromPath } from '../utils'
 
 // A list of latest projects opened.
 // A list of latest files opened.
 // A list of templates.
-function createHomepageList(app, msg) {
+function createHomepageList(app, list) {
   return e('div', {className: "homepage-list"}, [
-    e('ul', {}, [
-      createHomepageItem(app),
-      createHomepageItem(app),
-      createHomepageItem(app),
-    ]),
+    e('ul', {}, list.map(createHomepageItem)),
     e('a', {innerText: "Show more..."})
   ])
 }
 
-function createHomepageItem(app) {
+function createHomepageItem(path) {
+  let name = getFilenameFromPath(path)
   return e('li', {}, [
-    e('div', {}, ["WIP"]),
-    e('div', {}, ["/wip/wip/wip"]),
+    e('div', {}, [name]),
+    e('div', {}, [path]),
   ])
 }
 
@@ -49,7 +47,7 @@ export function createHomepage(app) {
       e('h2', {style: "margin-right: 0.5em;"}, ["Recent files"]),
       e('div', {}, [e('button', {className: "title-side-button", onclick: () => app.showOpenFileDialog()}, ["Open"])]),
     ]),
-    fileList.length ? createHomepageList(app, fileList, e1) : e('p', {}, ["No files opened recently."]),
+    fileList.length ? createHomepageList(app, fileList) : e('p', {}, ["No files opened recently."]),
     e('h2', {}, ["Create project from template"]),
     e('p', {}, ["No template implemented yet"]),
   ])
