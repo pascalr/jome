@@ -140,8 +140,12 @@ export class NeutralinoApp {
   }
 
   show(page) {
+    // create
     let el = page.create(this)
+    // render
     this.rootDOM.replaceChildren(el)
+    // after render
+    if (page.afterRender) {page.afterRender(this)}
   }
 
   async setup() {

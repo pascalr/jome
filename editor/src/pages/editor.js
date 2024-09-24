@@ -1,4 +1,6 @@
 
+import Split from 'split.js'
+
 import {e, svgE} from '../helpers'
 
 import iconFolder2Open from '../../assets/icons/folder2-open.svg'
@@ -17,6 +19,14 @@ function contextIcon(icon, title) {
   // I could modify the size of the icons here
   // One day far far away, allow a settings to specify the size of the icons.
   return svgE(icon, title)
+}
+
+function afterRender(app) {
+  // FIXME: Do this inside editor page only
+  Split(['#split-0', '#split-1', '#split-2'], {
+    gutterSize: 4,
+    sizes: [20, 60, 20]
+  })
 }
 
 function createEditor() {
@@ -60,6 +70,7 @@ function createEditor() {
 
 export const EditorPage = {
   create: createEditor,
+  afterRender
 }
 
 
