@@ -1,3 +1,7 @@
+## UML inside README.md on github
+
+I really want that. svg? canvas?
+
 ## Code personalisé
 
 Le projet devrait avoir un fichier avec des paramètres pour linter le code

@@ -70381,6 +70381,14 @@
     ]);
   }
 
+  // src/partials/actions_project.js
+  function createActionsProject(app) {
+    return e("div", {}, [
+      e("div", { className: "panel-main-header" }, ["Project \u2022 FIXME"]),
+      e("p", {}, ["TODO"])
+    ]);
+  }
+
   // src/pages/editor.js
   function contextIcon(icon, title) {
     return svgE(icon, title);
@@ -70415,7 +70423,8 @@
         ]),
         e("div", { id: "split-2", className: "selection_panel" }, [
           createActionsSelection(this),
-          createActionsFile(this)
+          createActionsFile(this),
+          createActionsProject(this)
         ])
       ])
     ]);
@@ -70584,10 +70593,6 @@
 
   // src/light_editor.js
   document.addEventListener("DOMContentLoaded", async () => {
-    split_es_default(["#split-0", "#split-1", "#split-2"], {
-      gutterSize: 4,
-      sizes: [20, 60, 20]
-    });
     let app = new NeutralinoApp();
     await app.setup();
     split_es_default(["#split-0", "#split-1", "#split-2"], {

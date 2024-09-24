@@ -11,6 +11,7 @@ import iconQuestionCircle from '../../assets/icons/question-circle.svg'
 import iconTerminal from '../../assets/icons/terminal.svg'
 import { createActionsSelection } from '../partials/actions_selection'
 import { createActionsFile } from '../partials/actions_file'
+import { createActionsProject } from '../partials/actions_project'
 
 function contextIcon(icon, title) {
   // I could modify the size of the icons here
@@ -50,6 +51,7 @@ export function createEditor(app) {
       e('div', {id: 'split-2', className: "selection_panel"}, [
         createActionsSelection(this),
         createActionsFile(this),
+        createActionsProject(this)
       ])
     ])
   ])
