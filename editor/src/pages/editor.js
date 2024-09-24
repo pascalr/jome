@@ -19,7 +19,11 @@ function contextIcon(icon, title) {
   return svgE(icon, title)
 }
 
-export function createEditor(app) {
+export function renderEditor(app) {
+  app.rootDOM.replaceChildren(createEditor())
+}
+
+function createEditor() {
 
   return e('div', {className: "window"}, [
     e('div', {className: "split-content"}, [

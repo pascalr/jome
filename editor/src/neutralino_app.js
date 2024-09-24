@@ -8,7 +8,7 @@ import { loadFileProseMirrorEditor } from './prosemirror_editor'
 import { getFilenameFromPath } from "./utils"
 import { e } from "./helpers"
 import { createHomepage } from './pages/homepage'
-import { createEditor } from './pages/editor'
+import { renderEditor } from './pages/editor'
 
 const STORAGE_KEY = 'APP'
 
@@ -127,6 +127,8 @@ export class NeutralinoApp {
      */
     this.data = {}
 
+    this.rootDOM = document.getElementById('root')
+
     /**
      * DOM References to the main parts of the applications.
      */
@@ -142,14 +144,11 @@ export class NeutralinoApp {
 
     // TODO: A window bar only in the browser. In the app, the window bar is done with Neutralino.
 
-    let pageEls = []
     if (NL_MODE === 'browser') {
-      pageEls.push(e('div', {id: "window_bar"}))
+      document.body.prepend(e('div', {id: "window_bar"}))
     }
     //pageEls.push(createHomepage(this))
-    pageEls.push(createEditor(this))
-
-    document.body.replaceChildren(...pageEls)
+    renderEditor(this)
 
     this.updateWindowBar()
 

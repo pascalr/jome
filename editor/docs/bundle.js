@@ -70393,7 +70393,10 @@
   function contextIcon(icon, title) {
     return svgE(icon, title);
   }
-  function createEditor(app) {
+  function renderEditor(app) {
+    app.rootDOM.replaceChildren(createEditor());
+  }
+  function createEditor() {
     return e("div", { className: "window" }, [
       e("div", { className: "split-content" }, [
         e("div", { id: "split-0", className: "context_panel" }, [
@@ -70493,6 +70496,7 @@
   var NeutralinoApp = class {
     constructor() {
       this.data = {};
+      this.rootDOM = document.getElementById("root");
       this.refs = {
         mainPanel: document.getElementById("main-panel"),
         explorerTree: document.getElementById("explorer-tree")
@@ -70500,12 +70504,10 @@
     }
     async setup() {
       await this.loadFromStorage();
-      let pageEls = [];
       if (NL_MODE === "browser") {
-        pageEls.push(e("div", { id: "window_bar" }));
+        document.body.prepend(e("div", { id: "window_bar" }));
       }
-      pageEls.push(createEditor(this));
-      document.body.replaceChildren(...pageEls);
+      renderEditor(this);
       this.updateWindowBar();
       return;
       if (!this.data["CURRENT_FILENAME"]) {
