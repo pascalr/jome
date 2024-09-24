@@ -1,5 +1,5 @@
 import { parse } from './parser'
-import { JomeDocument } from "./jome_document"
+import { JomeDocument } from "./models/jome_document"
 import { createHtmlTree } from "./lib/renderHtmlTree"
 import { createNoPageOpened } from "./partials/no_page_opened"
 import { forEach } from "./utils"

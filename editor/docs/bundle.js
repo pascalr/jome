@@ -57068,7 +57068,7 @@
   // src/neutralino_app.js
   var import_parser2 = __toESM(require_parser());
 
-  // src/jome_document.js
+  // src/models/jome_document.js
   var JomeDocument = class {
     constructor(filename, content) {
       this.filename = filename;
