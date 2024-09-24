@@ -69739,7 +69739,7 @@
 
   // src/pages/homepage.js
   function createHomepageList(app, msg) {
-    return e("div", {}, [
+    return e("div", { className: "homepage-list" }, [
       e("ul", {}, [
         createHomepageItem(app),
         createHomepageItem(app),
@@ -69749,23 +69749,26 @@
     ]);
   }
   function createHomepageItem(app) {
-    return e("li", { innerText: "WIP" });
+    return e("li", { innerText: "" }, [
+      e("div", {}, ["WIP"]),
+      e("div", {}, ["/wip/wip/wip"])
+    ]);
   }
   function createHomepage(app) {
-    let fileList = [];
-    let projectList = [];
+    let fileList = app.getData("RECENT_FILES") || [];
+    let projectList = app.getData("RECENT_FOLDERS") || [];
     return e("div", { style: "max-width: 800px; margin: auto;" }, [
       e("h1", {}, ["Jome Editor - v0.0.1"]),
       e("div", { style: "display: flex; align-items: center;" }, [
-        e("h2", { style: "margin-right: 0.5em;" }, ["Recent projects"]),
+        e("h2", { style: "margin-right: 0.5em;" }, ["Recent folders"]),
         e("div", {}, [e("button", { className: "title-side-button", onclick: () => app.showOpenProjectDialog() }, ["Open"])])
       ]),
-      projectList.length ? createHomepageList(app, projectList) : e("p", {}, ["No recent projects opened."]),
+      projectList.length ? createHomepageList(app, projectList) : e("p", {}, ["No folders opened recently."]),
       e("div", { style: "display: flex; align-items: center;" }, [
         e("h2", { style: "margin-right: 0.5em;" }, ["Recent files"]),
         e("div", {}, [e("button", { className: "title-side-button", onclick: () => app.showOpenFileDialog() }, ["Open"])])
       ]),
-      fileList.length ? createHomepageList(app, fileList, e1) : e("p", {}, ["No recent files opened."]),
+      fileList.length ? createHomepageList(app, fileList, e1) : e("p", {}, ["No files opened recently."]),
       e("h2", {}, ["Create project from template"]),
       e("p", {}, ["No template implemented yet"])
     ]);
@@ -70636,6 +70639,7 @@
         let path = entries[0];
         if (path) {
           this.setData("CURRENT_FILE", path);
+          this.setData("RECENT_FILES", [path, ...(this.data.RECENT_FOLDERS || []).slice(0, 9)]);
           this.show(EditorPage);
         }
       }).catch(this.handleError);
@@ -70646,6 +70650,7 @@
           let name = getFilenameFromPath(path);
           this.setData("PROJECT_NAME", name);
           this.setData("PROJECT_PATH", path);
+          this.setData("RECENT_FOLDERS", [path, ...(this.data.RECENT_FOLDERS || []).slice(0, 9)]);
           this.show(EditorPage);
         }
       }).catch(this.handleError);

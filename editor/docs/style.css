@@ -322,4 +322,13 @@ body {
 
 
 
-
+.homepage-list ul {
+  padding: 0;
+  margin-top: 0;
+}
+.homepage-list li {
+  list-style-type: none;
+  border: 1px solid white;
+  padding: 1em;
+  margin: 0;
+}

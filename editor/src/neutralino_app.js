@@ -122,6 +122,8 @@ export class NeutralinoApp {
      * 
      * PROJECT_NAME
      * PROJECT_PATH
+     * RECENT_FOLDERS
+     * RECENT_FILES
      * CURRENT_FILENAME
      * FILES_OPENED
      * DIR_LISTING // Used to know what's under a folder and to know if a folder is opened or not (remove the key when closing the folder, maybe sometimes a little less efficient, but simpler)
@@ -249,6 +251,7 @@ export class NeutralinoApp {
       let path = entries[0]
       if (path) {
         this.setData('CURRENT_FILE', path)
+        this.setData('RECENT_FILES', [path, ...(this.data.RECENT_FOLDERS || []).slice(0, 9)])
         this.show(EditorPage)
       }
     }).catch(this.handleError)
@@ -260,6 +263,7 @@ export class NeutralinoApp {
         let name = getFilenameFromPath(path)
         this.setData('PROJECT_NAME', name)
         this.setData('PROJECT_PATH', path)
+        this.setData('RECENT_FOLDERS', [path, ...(this.data.RECENT_FOLDERS || []).slice(0, 9)])
         this.show(EditorPage)
       }
     }).catch(this.handleError)
