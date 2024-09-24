@@ -1,4 +1,4 @@
-import { e } from "../utils"
+import { e } from "../helpers"
 
 // DEPRECATED
 export default function renderHtmlTreePath(tree, root=true) {

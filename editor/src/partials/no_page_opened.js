@@ -1,4 +1,4 @@
-import {e} from '../utils'
+import {e} from '../helpers'
 
 // The page you see when there is no file opened.
 export function createNoPageOpened(app) {

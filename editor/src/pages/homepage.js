@@ -1,5 +1,5 @@
 
-import {e} from '../utils'
+import {e} from '../helpers'
 
 // A list of latest projects opened.
 // A list of latest files opened.

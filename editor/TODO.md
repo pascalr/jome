@@ -1,3 +1,35 @@
+## Code personalisé
+
+Le projet devrait avoir un fichier avec des paramètres pour linter le code
+
+ET
+
+chaque utilisateur a des paramètres de préférences de code.
+
+Quand tu ouvres un fichier, le code est converti selon tes préférences.
+
+Tu fais des modifications avec ton code.
+
+Tu enregistres, ça enregistre selon les paramètres de lintage de code du projet dans le fichier,
+
+et ça modifie le code que tu vois si tu ne l'a pas écrit parfaitement comme selon tes préférences à toi.
+
+## Optional curly braces
+
+Un feature que j'aimerais bien, c'est l'option de cacher les curly braces, un peu comme dans ruby. Ça ne modifirait pas le code, ce serait
+purement visuel.
+
+## Optional parentheses
+
+Un feature que j'aimerais bien, c'est l'option de cacher les parenthèses, un peu comme dans ruby. Ça ne modifirait pas le code, ce serait
+purement visuel.
+
+## XML tags
+
+TODO
+
+## Autre
+
 Les boutons à droite, faire un effet Hover
 Les boutons à droite, affiché plus blanc le menu qui est actif? Ou bien background?
 

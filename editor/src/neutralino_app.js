@@ -5,7 +5,8 @@ import { createNoPageOpened } from "./partials/no_page_opened"
 import { forEach } from "./utils"
 import { loadFileProseMirrorEditor } from './prosemirror_editor'
 
-import { getFilenameFromPath, e } from "./utils"
+import { getFilenameFromPath } from "./utils"
+import { e } from "./helpers"
 import { createHomepage } from './pages/homepage'
 import { createEditor } from './pages/editor'
 

@@ -1,5 +1,5 @@
 
-import {e, svgE} from '../utils'
+import {e, svgE} from '../helpers'
 
 import iconFolder2Open from '../../assets/icons/folder2-open.svg'
 import iconBoxes from '../../assets/icons/boxes.svg'
@@ -9,6 +9,8 @@ import iconGear from '../../assets/icons/gear.svg'
 import iconGit from '../../assets/icons/git.svg'
 import iconQuestionCircle from '../../assets/icons/question-circle.svg'
 import iconTerminal from '../../assets/icons/terminal.svg'
+import { createActionsSelection } from '../partials/actions_selection'
+import { createActionsFile } from '../partials/actions_file'
 
 function contextIcon(icon, title) {
   // I could modify the size of the icons here
@@ -46,7 +48,8 @@ export function createEditor(app) {
         e('div', {id: "prosemirror_editor"})
       ]),
       e('div', {id: 'split-2', className: "selection_panel"}, [
-        e('div', {className: "panel-main-header"}, ["Selection • Md"]),
+        createActionsSelection(this),
+        createActionsFile(this),
       ])
     ])
   ])
