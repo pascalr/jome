@@ -3,6 +3,7 @@ import Split from 'split.js'
 
 import {e, svgE} from '../helpers'
 
+import iconHouse from '../../assets/icons/house.svg'
 import iconFolder2Open from '../../assets/icons/folder2-open.svg'
 import iconBoxes from '../../assets/icons/boxes.svg'
 import iconBracesAsterisk from '../../assets/icons/braces-asterisk.svg'
@@ -18,7 +19,10 @@ import { createActionsProject } from '../partials/actions_project'
 function contextIcon(icon, title) {
   // I could modify the size of the icons here
   // One day far far away, allow a settings to specify the size of the icons.
-  return svgE(icon, title)
+  let el = svgE(icon, title)
+  el.setAttribute('width', 26)
+  el.setAttribute('height', 26)
+  return el
 }
 
 function afterRender(app) {
@@ -35,6 +39,7 @@ function createEditor() {
     e('div', {className: "split-content"}, [
       e('div', {id: 'split-0', className: "context_panel"}, [
         e('div', {className: "context_buttons"}, [
+          contextIcon(iconHouse, "Home"),
           contextIcon(iconFolder2Open, "File explorer"),
           contextIcon(iconBug, "Run & Debug"),
           contextIcon(iconGit, "Git"),
