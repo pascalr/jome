@@ -58,3 +58,7 @@ export function createHomepage(app) {
 //  e('button', {innerText: "Open", onclick: () => app.showOpenFileDialog()}),
 //  e('button', {innerText: "Open Folder", onclick: () => app.showOpenFolderDialog()}),
 //]),
+
+export const HomePage = {
+  create: createHomepage,
+}

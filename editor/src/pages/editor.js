@@ -19,10 +19,6 @@ function contextIcon(icon, title) {
   return svgE(icon, title)
 }
 
-export function renderEditor(app) {
-  app.rootDOM.replaceChildren(createEditor())
-}
-
 function createEditor() {
 
   return e('div', {className: "window"}, [
@@ -64,7 +60,6 @@ function createEditor() {
 
 export const EditorPage = {
   create: createEditor,
-  render: renderEditor,
 }
 
 

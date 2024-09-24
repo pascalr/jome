@@ -70393,9 +70393,6 @@
   function contextIcon(icon, title) {
     return svgE(icon, title);
   }
-  function renderEditor(app) {
-    app.rootDOM.replaceChildren(createEditor());
-  }
   function createEditor() {
     return e("div", { className: "window" }, [
       e("div", { className: "split-content" }, [
@@ -70433,8 +70430,7 @@
     ]);
   }
   var EditorPage = {
-    create: createEditor,
-    render: renderEditor
+    create: createEditor
   };
 
   // src/neutralino_app.js
@@ -70507,7 +70503,8 @@
       };
     }
     show(page) {
-      page.render(this);
+      let el = page.create(this);
+      this.rootDOM.replaceChildren(el);
     }
     async setup() {
       await this.loadFromStorage();
