@@ -70430,10 +70430,14 @@
   }
 
   // src/pages/editor.js
-  function contextIcon(icon, title) {
+  function contextIcon(icon, title, onClick) {
     let el = svgE(icon, title);
     el.setAttribute("width", 26);
     el.setAttribute("height", 26);
+    if (onClick) {
+      el.onclick = onClick;
+      el.style.cursor = "pointer";
+    }
     return el;
   }
   function afterRender(app) {
@@ -70442,12 +70446,12 @@
       sizes: [20, 60, 20]
     });
   }
-  function createEditor() {
+  function createEditor(app) {
     return e("div", { className: "window" }, [
       e("div", { className: "split-content" }, [
         e("div", { id: "split-0", className: "context_panel" }, [
           e("div", { className: "context_buttons" }, [
-            contextIcon(house_default, "Home"),
+            contextIcon(house_default, "Home", () => app.show(HomePage)),
             contextIcon(folder2_open_default, "File explorer"),
             contextIcon(bug_default, "Run & Debug"),
             contextIcon(git_default, "Git"),
@@ -70554,6 +70558,7 @@
       };
     }
     show(page) {
+      console.log("HERE");
       let el = page.create(this);
       this.rootDOM.replaceChildren(el);
       if (page.afterRender) {

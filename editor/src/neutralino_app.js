@@ -141,6 +141,9 @@ export class NeutralinoApp {
   }
 
   show(page) {
+
+    console.log('HERE')
+
     // create
     let el = page.create(this)
     // render
