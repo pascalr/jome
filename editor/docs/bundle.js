@@ -70432,6 +70432,10 @@
       ])
     ]);
   }
+  var EditorPage = {
+    create: createEditor,
+    render: renderEditor
+  };
 
   // src/neutralino_app.js
   var STORAGE_KEY = "APP";
@@ -70502,12 +70506,15 @@
         explorerTree: document.getElementById("explorer-tree")
       };
     }
+    show(page) {
+      page.render(this);
+    }
     async setup() {
       await this.loadFromStorage();
       if (NL_MODE === "browser") {
         document.body.prepend(e("div", { id: "window_bar" }));
       }
-      renderEditor(this);
+      this.show(EditorPage);
       this.updateWindowBar();
       return;
       if (!this.data["CURRENT_FILENAME"]) {

@@ -62,6 +62,11 @@ function createEditor() {
   
 }
 
+export const EditorPage = {
+  create: createEditor,
+  render: renderEditor,
+}
+
 
 //   <body>
 //     <!-- Error Modal -->

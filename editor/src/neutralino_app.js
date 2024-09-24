@@ -8,7 +8,7 @@ import { loadFileProseMirrorEditor } from './prosemirror_editor'
 import { getFilenameFromPath } from "./utils"
 import { e } from "./helpers"
 import { createHomepage } from './pages/homepage'
-import { renderEditor } from './pages/editor'
+import { EditorPage } from './pages/pages'
 
 const STORAGE_KEY = 'APP'
 
@@ -139,6 +139,10 @@ export class NeutralinoApp {
     // Should validate that all refs exists?
   }
 
+  show(page) {
+    page.render(this)
+  }
+
   async setup() {
     await this.loadFromStorage()
 
@@ -148,7 +152,7 @@ export class NeutralinoApp {
       document.body.prepend(e('div', {id: "window_bar"}))
     }
     //pageEls.push(createHomepage(this))
-    renderEditor(this)
+    this.show(EditorPage)
 
     this.updateWindowBar()
 
