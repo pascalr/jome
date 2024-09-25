@@ -1,6 +1,9 @@
 body {
   background-color: #080e14;
   color: #fff;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
 
 a {
@@ -65,7 +68,9 @@ blockquote {
 
 
 
-
+.context_content {
+  min-width: 0;
+}
 
 .context_panel {
   display: flex;
@@ -250,6 +255,11 @@ body {
 
 #explorer-tree .leaf:hover {
   background-color: #27211e;
+}
+
+#explorer-tree {
+  height: 100%;
+  overflow-y: scroll;
 }
 
 
