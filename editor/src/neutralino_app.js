@@ -126,6 +126,7 @@ export class NeutralinoApp {
      * RECENT_FOLDERS deprecated
      * RECENT_FILES deprecated
      * CURRENT_FILENAME
+     * CURRENT_FILEPATH
      * FILES_OPENED
      * DIR_LISTING // Used to know what's under a folder and to know if a folder is opened or not (remove the key when closing the folder, maybe sometimes a little less efficient, but simpler)
      */
@@ -145,7 +146,7 @@ export class NeutralinoApp {
 
   show(page) {
 
-    console.log('HERE')
+    this.updateWindowBar()
 
     // create
     let el = page.create(this)
@@ -165,8 +166,6 @@ export class NeutralinoApp {
     }
     // this.show(EditorPage)
     this.show(HomePage)
-
-    this.updateWindowBar()
 
     return;
 
@@ -246,8 +245,13 @@ export class NeutralinoApp {
     if (data.isDirectory) {
       this.setData('PROJECT_NAME', data.name)
       this.setData('PROJECT_PATH', data.path)
+      this.setData('CURRENT_FILENAME', null)
+      this.setData('CURRENT_FILEPATH', null)
     } else {
-      this.setData('CURRENT_FILE', data.path)
+      this.setData('PROJECT_NAME', null)
+      this.setData('PROJECT_PATH', null)
+      this.setData('CURRENT_FILENAME', data.name)
+      this.setData('CURRENT_FILEPATH', data.path)
     }
     this.show(EditorPage)
   }

@@ -31,7 +31,7 @@ function openRecent(app, data) {
 function createHomepageItem(app, data) {
   // TODO: Show last modified data, wait, the last modified here is stored, which is not true if modified since
   // Maybe show size of item?
-  return e('li', {style: "cursor: pointer;", onclick: () => {openRecent(app, data.path)}}, [
+  return e('li', {style: "cursor: pointer;", onclick: () => {openRecent(app, data)}}, [
     e('div', {style: "display: flex;"}, [
       e('div', {}, [sideIcon(data.isDirectory ? IconFolder : IconFile)]),
       e('div', {}, [

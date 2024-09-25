@@ -69764,7 +69764,7 @@
   }
   function createHomepageItem(app, data) {
     return e("li", { style: "cursor: pointer;", onclick: () => {
-      openRecent(app, data.path);
+      openRecent(app, data);
     } }, [
       e("div", { style: "display: flex;" }, [
         e("div", {}, [sideIcon(data.isDirectory ? folder2_open_default : file_earmark_default)]),
@@ -70575,7 +70575,7 @@
       };
     }
     show(page) {
-      console.log("HERE");
+      this.updateWindowBar();
       let el = page.create(this);
       this.rootDOM.replaceChildren(el);
       if (page.afterRender) {
@@ -70588,7 +70588,6 @@
         document.body.prepend(e("div", { id: "window_bar" }));
       }
       this.show(HomePage);
-      this.updateWindowBar();
       return;
       if (!this.data["CURRENT_FILENAME"]) {
         this.refs.mainPanel.replaceChildren(createNoPageOpened(this));
@@ -70650,8 +70649,13 @@
       if (data.isDirectory) {
         this.setData("PROJECT_NAME", data.name);
         this.setData("PROJECT_PATH", data.path);
+        this.setData("CURRENT_FILENAME", null);
+        this.setData("CURRENT_FILEPATH", null);
       } else {
-        this.setData("CURRENT_FILE", data.path);
+        this.setData("PROJECT_NAME", null);
+        this.setData("PROJECT_PATH", null);
+        this.setData("CURRENT_FILENAME", data.name);
+        this.setData("CURRENT_FILEPATH", data.path);
       }
       this.show(EditorPage);
     }
