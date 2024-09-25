@@ -3,6 +3,7 @@ import {e, svgE} from '../helpers'
 import { getFilenameFromPath } from '../utils'
 
 import IconFolder from '../../assets/icons/folder2-open.svg'
+import IconFile from '../../assets/icons/file-earmark.svg'
 
 function sideIcon(icon) {
   let el = svgE(icon)
@@ -17,19 +18,25 @@ function sideIcon(icon) {
 // A list of templates.
 function createHomepageList(app, list) {
   return e('div', {className: "homepage-list"}, [
-    e('ul', {}, list.map(createHomepageItem)),
+    e('ul', {}, list.map(data => createHomepageItem(app, data))),
     e('a', {innerText: "Show more..."})
   ])
 }
 
-function createHomepageItem(path) {
-  let name = getFilenameFromPath(path)
-  return e('li', {}, [
+function openRecent(app, data) {
+  // TODO: Move the item to the top of RECENT
+  app.openFileOrProject(data)
+}
+
+function createHomepageItem(app, data) {
+  // TODO: Show last modified data, wait, the last modified here is stored, which is not true if modified since
+  // Maybe show size of item?
+  return e('li', {onclick: () => {openRecent(app, data.path)}}, [
     e('div', {style: "display: flex;"}, [
-      e('div', {}, [sideIcon(IconFolder)]),
+      e('div', {}, [sideIcon(data.isDirectory ? IconFolder : IconFile)]),
       e('div', {}, [
-        e('div', {}, [name]),
-        e('div', {className: "path"}, [path]),
+        e('div', {}, [data.name]),
+        e('div', {className: "path"}, [data.path]),
       ])
     ])
   ])
@@ -47,22 +54,17 @@ I like that.
 // The page you see when there is no file opened.
 export function createHomepage(app) {
 
-  // TODO: Read the history from storage
-  let fileList = app.getData('RECENT_FILES') || []
-  let projectList = app.getData('RECENT_FOLDERS') || []
+  let list = app.getData('RECENT') || []
 
   return e('div', {style: "max-width: 800px; margin: auto;"}, [
     e('h1', {}, ["Jome Editor - v0.0.1"]),
     e('div', {style: "display: flex; align-items: center;"}, [
-      e('h2', {style: "margin-right: 0.5em;"}, ["Recent folders"]),
-      e('div', {}, [e('button', {className: "title-side-button", onclick: () => app.showOpenProjectDialog()}, ["Open"])]),
+      e('div', {}, [e('button', {className: "title-side-button", onclick: () => app.showOpenProjectDialog()}, ["Open Folder"])]),
+      e('div', {}, [e('button', {className: "title-side-button", onclick: () => app.showOpenFileDialog()}, ["Open File"])]),
+      e('div', {}, [e('button', {className: "title-side-button", onclick: () => app.showSaveDialog()}, ["New"])]),
     ]),
-    projectList.length ? createHomepageList(app, projectList) : e('p', {}, ["No folders opened recently."]),
-    e('div', {style: "display: flex; align-items: center;"}, [
-      e('h2', {style: "margin-right: 0.5em;"}, ["Recent files"]),
-      e('div', {}, [e('button', {className: "title-side-button", onclick: () => app.showOpenFileDialog()}, ["Open"])]),
-    ]),
-    fileList.length ? createHomepageList(app, fileList) : e('p', {}, ["No files opened recently."]),
+    e('h2', {style: "margin-right: 0.5em;"}, ["Recent"]),
+    list.length ? createHomepageList(app, list) : e('p', {}, ["No files or folders opened recently."]),
     e('h2', {}, ["Create project from template"]),
     e('p', {}, ["No template implemented yet"]),
   ])

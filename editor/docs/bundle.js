@@ -69742,6 +69742,9 @@
   // assets/icons/folder2-open.svg
   var folder2_open_default = '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-folder2-open" viewBox="0 0 16 16">\n  <path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v.64c.57.265.94.876.856 1.546l-.64 5.124A2.5 2.5 0 0 1 12.733 15H3.266a2.5 2.5 0 0 1-2.481-2.19l-.64-5.124A1.5 1.5 0 0 1 1 6.14zM2 6h12v-.5a.5.5 0 0 0-.5-.5H9c-.964 0-1.71-.629-2.174-1.154C6.374 3.334 5.82 3 5.264 3H2.5a.5.5 0 0 0-.5.5zm-.367 1a.5.5 0 0 0-.496.562l.64 5.124A1.5 1.5 0 0 0 3.266 14h9.468a1.5 1.5 0 0 0 1.489-1.314l.64-5.124A.5.5 0 0 0 14.367 7z"/>\n</svg>\n';
 
+  // assets/icons/file-earmark.svg
+  var file_earmark_default = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark" viewBox="0 0 16 16">\n  <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>\n</svg>';
+
   // src/pages/homepage.js
   function sideIcon(icon) {
     let el = svgE(icon);
@@ -69752,37 +69755,37 @@
   }
   function createHomepageList(app, list) {
     return e("div", { className: "homepage-list" }, [
-      e("ul", {}, list.map(createHomepageItem)),
+      e("ul", {}, list.map((data) => createHomepageItem(app, data))),
       e("a", { innerText: "Show more..." })
     ]);
   }
-  function createHomepageItem(path) {
-    let name = getFilenameFromPath(path);
-    return e("li", {}, [
+  function openRecent(app, data) {
+    app.openFileOrProject(data);
+  }
+  function createHomepageItem(app, data) {
+    return e("li", { onclick: () => {
+      openRecent(app, data.path);
+    } }, [
       e("div", { style: "display: flex;" }, [
-        e("div", {}, [sideIcon(folder2_open_default)]),
+        e("div", {}, [sideIcon(data.isDirectory ? folder2_open_default : file_earmark_default)]),
         e("div", {}, [
-          e("div", {}, [name]),
-          e("div", { className: "path" }, [path])
+          e("div", {}, [data.name]),
+          e("div", { className: "path" }, [data.path])
         ])
       ])
     ]);
   }
   function createHomepage(app) {
-    let fileList = app.getData("RECENT_FILES") || [];
-    let projectList = app.getData("RECENT_FOLDERS") || [];
+    let list = app.getData("RECENT") || [];
     return e("div", { style: "max-width: 800px; margin: auto;" }, [
       e("h1", {}, ["Jome Editor - v0.0.1"]),
       e("div", { style: "display: flex; align-items: center;" }, [
-        e("h2", { style: "margin-right: 0.5em;" }, ["Recent folders"]),
-        e("div", {}, [e("button", { className: "title-side-button", onclick: () => app.showOpenProjectDialog() }, ["Open"])])
+        e("div", {}, [e("button", { className: "title-side-button", onclick: () => app.showOpenProjectDialog() }, ["Open Folder"])]),
+        e("div", {}, [e("button", { className: "title-side-button", onclick: () => app.showOpenFileDialog() }, ["Open File"])]),
+        e("div", {}, [e("button", { className: "title-side-button", onclick: () => app.showSaveDialog() }, ["New"])])
       ]),
-      projectList.length ? createHomepageList(app, projectList) : e("p", {}, ["No folders opened recently."]),
-      e("div", { style: "display: flex; align-items: center;" }, [
-        e("h2", { style: "margin-right: 0.5em;" }, ["Recent files"]),
-        e("div", {}, [e("button", { className: "title-side-button", onclick: () => app.showOpenFileDialog() }, ["Open"])])
-      ]),
-      fileList.length ? createHomepageList(app, fileList) : e("p", {}, ["No files opened recently."]),
+      e("h2", { style: "margin-right: 0.5em;" }, ["Recent"]),
+      list.length ? createHomepageList(app, list) : e("p", {}, ["No files or folders opened recently."]),
       e("h2", {}, ["Create project from template"]),
       e("p", {}, ["No template implemented yet"])
     ]);
@@ -70643,28 +70646,32 @@
     handleError(error) {
       console.error(error);
     }
-    openProject() {
+    openFileOrProject(data) {
+      if (data.isDirectory) {
+        this.setData("PROJECT_NAME", data.name);
+        this.setData("PROJECT_PATH", data.path);
+      } else {
+        this.setData("CURRENT_FILE", data.path);
+      }
+      this.show(EditorPage);
+    }
+    openPath(path) {
+      if (path) {
+        Neutralino.filesystem.getStats(path).then((stats) => {
+          let data = { ...stats, path, name: getFilenameFromPath(path) };
+          this.setData("RECENT", [data, ...(this.data.RECENT || []).slice(0, 9)]);
+          this.openFileOrProject(data);
+        }).catch(this.handleError);
+      }
     }
     showOpenFileDialog() {
       Neutralino.os.showOpenDialog().then((entries) => {
         let path = entries[0];
-        if (path) {
-          this.setData("CURRENT_FILE", path);
-          this.setData("RECENT_FILES", [path, ...(this.data.RECENT_FOLDERS || []).slice(0, 9)]);
-          this.show(EditorPage);
-        }
+        this.openPath(path);
       }).catch(this.handleError);
     }
     showOpenProjectDialog() {
-      Neutralino.os.showFolderDialog().then((path) => {
-        if (path) {
-          let name = getFilenameFromPath(path);
-          this.setData("PROJECT_NAME", name);
-          this.setData("PROJECT_PATH", path);
-          this.setData("RECENT_FOLDERS", [path, ...(this.data.RECENT_FOLDERS || []).slice(0, 9)]);
-          this.show(EditorPage);
-        }
-      }).catch(this.handleError);
+      Neutralino.os.showFolderDialog().then(this.openPath.bind(this)).catch(this.handleError);
     }
     showSaveDialog() {
       Neutralino.os.showSaveDialog().then((entry) => {

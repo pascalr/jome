@@ -1,4 +1,3 @@
-
 import Split from 'split.js'
 
 import {e, svgE} from '../helpers'
