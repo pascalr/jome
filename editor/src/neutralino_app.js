@@ -214,8 +214,8 @@ export class NeutralinoApp {
     }
   }
 
-  loadFileTree(callback) {
-    return this.getDirectoryTree('.').then(callback).catch(logError)
+  loadFileTree(path, callback) {
+    return this.getDirectoryTree(path).then(callback).catch(logError)
     //return getDirectoryTree('.').then(callback).catch(logError)
     // Neutralino.filesystem.readDirectory('.', {recursive: true}).then(callback).catch(logError)
   }

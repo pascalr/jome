@@ -43,8 +43,8 @@ function afterRender(app) {
 async function showExplorer(app) {
   // Load the navigation tree
   if (app.data['PROJECT_PATH']) {
-    await app.listDirectory(app.data['PROJECT_PATH'])
-    app.loadFileTree(tree => {
+    // await app.listDirectory(app.data['PROJECT_PATH'])
+    app.loadFileTree(app.data['PROJECT_PATH'], tree => {
       let ref = document.getElementById('explorer-tree')
       // explorerList.innerHTML = renderHtmlTree(tree)
       ref.replaceChildren(createHtmlTree(tree, leaf => {

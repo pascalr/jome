@@ -1,8 +1,10 @@
 ./node_modules
 *.swp
 
-
-
+# Don't save to git every bundle
+# TODO: Create a release task, that saves the bundle under a different name to be used by Github Pages
+/docs/bundle.js
+/docs/bundle.js.map
 
 # Developer tools' files
 .lite_workspace.lua
