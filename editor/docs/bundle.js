@@ -56666,22 +56666,6 @@
     return el;
   }
 
-  // src/partials/no_page_opened.js
-  function createNoPageOpened(app) {
-    return e("div", {}, [
-      e("div", { className: "homepage-btns" }, [
-        e("button", { innerText: "New", onclick: () => app.showSaveDialog() }),
-        e("button", { innerText: "Open File", onclick: () => app.showOpenFileDialog() }),
-        e("button", { innerText: "Open Folder", onclick: () => app.showOpenFolderDialog() })
-      ]),
-      e("h2", { innerText: "Previously opened:" }),
-      e("p", { innerText: "No folder previously opened." }),
-      e("h2", { innerText: "Templates:" }),
-      e("p", { innerText: "No template found." }),
-      e("a", { innerText: "Add templates" })
-    ]);
-  }
-
   // src/utils.js
   function forEach(list, callback) {
     for (let i = 0; i < list.length; i++) {
@@ -70462,6 +70446,20 @@
       gutterSize: 4,
       sizes: [20, 60, 20]
     });
+    showExplorer(app);
+  }
+  async function showExplorer(app) {
+    if (app.data["PROJECT_PATH"]) {
+      await app.listDirectory(app.data["PROJECT_PATH"]);
+      app.loadFileTree((tree) => {
+        let ref = document.getElementById("explorer-tree");
+        ref.replaceChildren(createHtmlTree(tree, (leaf) => {
+          return { id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
+            app.openFile(leaf.path);
+          } };
+        }));
+      });
+    }
   }
   function createEditor(app) {
     return e("div", { className: "window" }, [
@@ -70518,53 +70516,6 @@
   function entryToBranch(entry) {
     return { name: entry.entry, path: entry.path, type: entry.type === "DIRECTORY" ? "directory" : "file", children: [] };
   }
-  async function getDirectoryTreeWIP(dirPath) {
-    let subs = await Neutralino.filesystem.readDirectory(dirPath);
-    let sorted = subs.sort((a, b) => {
-      if (a.type === b.type) {
-        return a.entry.localeCompare(b.entry);
-      }
-      return a.type === "FILE";
-    });
-    console.log("subs", subs);
-    console.log("sorted", sorted);
-    return {
-      name: "WIP",
-      path: dirPath,
-      type: "directory",
-      children: sorted.map((s) => entryToBranch(s))
-    };
-  }
-  function loadFileTree(callback) {
-    return getDirectoryTreeWIP(".").then(callback).catch(logError);
-  }
-  function openFile(filepath) {
-    loadFile(filepath, (file) => {
-      console.log("file", file);
-      let filesTabs = document.getElementById("files_tabs");
-      forEach(filesTabs.children, (c) => {
-        if (c.classList.contains("active")) {
-          c.classList.remove("active");
-        }
-      });
-      let btn = document.createElement("button");
-      btn.className = "tab-button active";
-      btn.innerText = file.name;
-      filesTabs.prepend(btn);
-      forEach(document.querySelectorAll("#explorer-tree .leaf[selected]"), (el) => {
-        el.removeAttribute("selected");
-      });
-      const leaf = document.querySelector(`#explorer-tree .leaf[data-path="${filepath}"]`);
-      leaf.setAttribute("selected", "");
-      forEach(document.getElementsByClassName("active_filename"), (el) => {
-        el.innerText = file.name;
-      });
-      let doc3 = new JomeDocument(filepath, file.content);
-      let parts = (0, import_parser2.parse)(doc3);
-      console.log("parts", parts);
-      loadFileProseMirrorEditor("#prosemirror_editor", doc3);
-    });
-  }
   var NeutralinoApp = class {
     constructor() {
       this.data = {};
@@ -70588,20 +70539,6 @@
         document.body.prepend(e("div", { id: "window_bar" }));
       }
       this.show(HomePage);
-      return;
-      if (!this.data["CURRENT_FILENAME"]) {
-        this.refs.mainPanel.replaceChildren(createNoPageOpened(this));
-      }
-      if (this.data["PROJECT_PATH"]) {
-        await this.listDirectory(this.data["PROJECT_PATH"]);
-        loadFileTree((tree) => {
-          this.refs.explorerTree.replaceChildren(createHtmlTree(tree, (leaf) => {
-            return { id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
-              openFile(leaf.path);
-            } };
-          }));
-        });
-      }
     }
     updateWindowBar() {
       let txt = (this.getData("CURRENT_FILENAME") ? `${this.getData("CURRENT_FILENAME")} - ` : "") + (this.getData("PROJECT_NAME") ? `${this.getData("PROJECT_NAME")} - ` : "") + "Jome Editor";
@@ -70681,6 +70618,54 @@
       Neutralino.os.showSaveDialog().then((entry) => {
         console.log("TODO save: ", entry);
       }).catch(this.handleError);
+    }
+    // TODO: Only read directories that are opened. I have barely nothing in my project, but still have over 4000 files because of node_modules...
+    async getDirectoryTree(dirPath) {
+      let subs = await Neutralino.filesystem.readDirectory(dirPath);
+      let sorted = subs.sort((a, b) => {
+        if (a.type === b.type) {
+          return a.entry.localeCompare(b.entry);
+        }
+        return a.type === "FILE";
+      });
+      console.log("subs", subs);
+      console.log("sorted", sorted);
+      return {
+        name: "WIP",
+        path: dirPath,
+        type: "directory",
+        children: sorted.map((s) => entryToBranch(s))
+      };
+    }
+    loadFileTree(callback) {
+      return this.getDirectoryTree(".").then(callback).catch(logError);
+    }
+    openFile(filepath) {
+      loadFile(filepath, (file) => {
+        console.log("file", file);
+        let filesTabs = document.getElementById("files_tabs");
+        forEach(filesTabs.children, (c) => {
+          if (c.classList.contains("active")) {
+            c.classList.remove("active");
+          }
+        });
+        let btn = document.createElement("button");
+        btn.className = "tab-button active";
+        btn.innerText = file.name;
+        filesTabs.prepend(btn);
+        forEach(document.querySelectorAll("#explorer-tree .leaf[selected]"), (el) => {
+          el.removeAttribute("selected");
+        });
+        const leaf = document.querySelector(`#explorer-tree .leaf[data-path="${filepath}"]`);
+        leaf.setAttribute("selected", "");
+        forEach(document.getElementsByClassName("active_filename"), (el) => {
+          el.innerText = file.name;
+        });
+        let doc3 = new JomeDocument(filepath, file.content);
+        let parts = (0, import_parser2.parse)(doc3);
+        console.log("parts", parts);
+        loadFileProseMirrorEditor("#prosemirror_editor", doc3);
+      });
     }
   };
 

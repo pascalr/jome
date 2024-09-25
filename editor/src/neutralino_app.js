@@ -33,76 +33,6 @@ function entryToBranch(entry) {
   return {name: entry.entry, path: entry.path, type: entry.type === "DIRECTORY" ? 'directory' : 'file', children: []}
 }
 
-// TODO: Only read directories that are opened. I have barely nothing in my project, but still have over 4000 files because of node_modules...
-async function getDirectoryTreeWIP(dirPath) {
-
-  let subs = await Neutralino.filesystem.readDirectory(dirPath)
-  let sorted = subs.sort((a,b) => {
-    if (a.type === b.type) {
-      return a.entry.localeCompare(b.entry)
-    }
-    return a.type === 'FILE'
-  })
-
-  console.log('subs', subs)
-  console.log('sorted', sorted)
-
-  return {
-    name: 'WIP',
-    path: dirPath,
-    type: 'directory',
-    children: sorted.map(s => entryToBranch(s))
-  }
-}
-
-function loadFileTree(callback) {
-  return getDirectoryTreeWIP('.').then(callback).catch(logError)
-  //return getDirectoryTree('.').then(callback).catch(logError)
-  // Neutralino.filesystem.readDirectory('.', {recursive: true}).then(callback).catch(logError)
-}
-
-
-function openFile(filepath) {
-  loadFile(filepath, (file) => {
-    console.log('file', file)
-    // update state
-    //_opened_files[filepath] = file.content
-    //_active_filepath = filepath
-
-    // update files tabs
-    let filesTabs = document.getElementById("files_tabs")
-    forEach(filesTabs.children, c => {
-      if (c.classList.contains("active")) {c.classList.remove("active")}
-    })
-    let btn = document.createElement('button')
-    btn.className = "tab-button active"
-    btn.innerText = file.name
-    filesTabs.prepend(btn)
-
-    // update active in explorer tree
-    // FIXME: DON'T DO THIS HERE. THE SELCTION SHOULD BE HANDLED ELSEWHERE AND IT IS THE SELECTION THAT SHOULD CALL openFile when needed
-    forEach(document.querySelectorAll("#explorer-tree .leaf[selected]"), el => {
-      el.removeAttribute('selected')
-      // el.classList.remove("active")
-    })
-    const leaf = document.querySelector(`#explorer-tree .leaf[data-path="${filepath}"]`);
-    leaf.setAttribute('selected', "")
-
-    // update active filename
-    forEach(document.getElementsByClassName('active_filename'), el => {
-      el.innerText = file.name; 
-    });
-
-    // update the main source view
-    let doc = new JomeDocument(filepath, file.content)
-    let parts = parse(doc)
-    console.log("parts", parts)
-    loadFileProseMirrorEditor('#prosemirror_editor', doc)
-    // document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
-    // document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)
-  })
-}
-
 
 
 
@@ -159,32 +89,10 @@ export class NeutralinoApp {
   async setup() {
     await this.loadFromStorage()
 
-    // TODO: A window bar only in the browser. In the app, the window bar is done with Neutralino.
-
     if (NL_MODE === 'browser') {
       document.body.prepend(e('div', {id: "window_bar"}))
     }
-    // this.show(EditorPage)
     this.show(HomePage)
-
-    return;
-
-    if (!this.data['CURRENT_FILENAME']) {
-      this.refs.mainPanel.replaceChildren(createNoPageOpened(this))
-    }
-
-    // Load the navigation tree
-    if (this.data['PROJECT_PATH']) {
-      await this.listDirectory(this.data['PROJECT_PATH'])
-      loadFileTree(tree => {
-        // explorerList.innerHTML = renderHtmlTree(tree)
-        this.refs.explorerTree.replaceChildren(createHtmlTree(tree, leaf => {
-          return {id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
-            openFile(leaf.path)
-          }}
-        }))
-      })
-    }
   }
 
   updateWindowBar() {
@@ -282,6 +190,76 @@ export class NeutralinoApp {
     Neutralino.os.showSaveDialog().then(entry => {
       console.log('TODO save: ', entry)
     }).catch(this.handleError)
+  }
+
+  // TODO: Only read directories that are opened. I have barely nothing in my project, but still have over 4000 files because of node_modules...
+  async getDirectoryTree(dirPath) {
+
+    let subs = await Neutralino.filesystem.readDirectory(dirPath)
+    let sorted = subs.sort((a,b) => {
+      if (a.type === b.type) {
+        return a.entry.localeCompare(b.entry)
+      }
+      return a.type === 'FILE'
+    })
+
+    console.log('subs', subs)
+    console.log('sorted', sorted)
+
+    return {
+      name: 'WIP',
+      path: dirPath,
+      type: 'directory',
+      children: sorted.map(s => entryToBranch(s))
+    }
+  }
+
+  loadFileTree(callback) {
+    return this.getDirectoryTree('.').then(callback).catch(logError)
+    //return getDirectoryTree('.').then(callback).catch(logError)
+    // Neutralino.filesystem.readDirectory('.', {recursive: true}).then(callback).catch(logError)
+  }
+
+
+  openFile(filepath) {
+    loadFile(filepath, (file) => {
+      console.log('file', file)
+      // update state
+      //_opened_files[filepath] = file.content
+      //_active_filepath = filepath
+
+      // update files tabs
+      let filesTabs = document.getElementById("files_tabs")
+      forEach(filesTabs.children, c => {
+        if (c.classList.contains("active")) {c.classList.remove("active")}
+      })
+      let btn = document.createElement('button')
+      btn.className = "tab-button active"
+      btn.innerText = file.name
+      filesTabs.prepend(btn)
+
+      // update active in explorer tree
+      // FIXME: DON'T DO THIS HERE. THE SELCTION SHOULD BE HANDLED ELSEWHERE AND IT IS THE SELECTION THAT SHOULD CALL openFile when needed
+      forEach(document.querySelectorAll("#explorer-tree .leaf[selected]"), el => {
+        el.removeAttribute('selected')
+        // el.classList.remove("active")
+      })
+      const leaf = document.querySelector(`#explorer-tree .leaf[data-path="${filepath}"]`);
+      leaf.setAttribute('selected', "")
+
+      // update active filename
+      forEach(document.getElementsByClassName('active_filename'), el => {
+        el.innerText = file.name; 
+      });
+
+      // update the main source view
+      let doc = new JomeDocument(filepath, file.content)
+      let parts = parse(doc)
+      console.log("parts", parts)
+      loadFileProseMirrorEditor('#prosemirror_editor', doc)
+      // document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
+      // document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)
+    })
   }
 
 }

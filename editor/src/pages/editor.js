@@ -15,6 +15,7 @@ import { createActionsSelection } from '../partials/actions_selection'
 import { createActionsFile } from '../partials/actions_file'
 import { createActionsProject } from '../partials/actions_project'
 import { HomePage } from './homepage'
+import { createHtmlTree } from '../lib/renderHtmlTree'
 
 function contextIcon(icon, title, onClick) {
   // I could modify the size of the icons here
@@ -35,9 +36,32 @@ function afterRender(app) {
     gutterSize: 4,
     sizes: [20, 60, 20]
   })
+
+  showExplorer(app)
+}
+
+async function showExplorer(app) {
+  // Load the navigation tree
+  if (app.data['PROJECT_PATH']) {
+    await app.listDirectory(app.data['PROJECT_PATH'])
+    app.loadFileTree(tree => {
+      let ref = document.getElementById('explorer-tree')
+      // explorerList.innerHTML = renderHtmlTree(tree)
+      ref.replaceChildren(createHtmlTree(tree, leaf => {
+        return {id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
+          app.openFile(leaf.path)
+        }}
+      }))
+    })
+  }
 }
 
 function createEditor(app) {
+
+  // TODO: Show NoPageOpened if no page is opened
+  // if (!this.data['CURRENT_FILENAME']) {
+  //   this.refs.mainPanel.replaceChildren(createNoPageOpened(this))
+  // }
 
   return e('div', {className: "window"}, [
     e('div', {className: "split-content"}, [
