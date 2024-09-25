@@ -24,7 +24,9 @@ export function e(kind, attrs = {}, children = []) {
  */
 export function svgE(loadedSvg, title) {
   let titleEl = document.createElement('title')
-  titleEl.innerText = title
+  if (title) {
+    titleEl.innerText = title
+  }
 
   let el = createElementFromHTML(loadedSvg)
   el.insertBefore(titleEl, el.firstChild)

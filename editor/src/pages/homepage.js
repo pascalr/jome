@@ -1,6 +1,16 @@
 
-import {e} from '../helpers'
+import {e, svgE} from '../helpers'
 import { getFilenameFromPath } from '../utils'
+
+import IconFolder from '../../assets/icons/folder2-open.svg'
+
+function sideIcon(icon) {
+  let el = svgE(icon)
+  el.setAttribute('width', 36)
+  el.setAttribute('height', 36)
+  el.style = "margin-right: 0.8em;"
+  return el
+}
 
 // A list of latest projects opened.
 // A list of latest files opened.
@@ -15,8 +25,13 @@ function createHomepageList(app, list) {
 function createHomepageItem(path) {
   let name = getFilenameFromPath(path)
   return e('li', {}, [
-    e('div', {}, [name]),
-    e('div', {}, [path]),
+    e('div', {style: "display: flex;"}, [
+      e('div', {}, [sideIcon(IconFolder)]),
+      e('div', {}, [
+        e('div', {}, [name]),
+        e('div', {className: "path"}, [path]),
+      ])
+    ])
   ])
 }
 
