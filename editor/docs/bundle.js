@@ -69763,7 +69763,7 @@
     app.openFileOrProject(data);
   }
   function createHomepageItem(app, data) {
-    return e("li", { onclick: () => {
+    return e("li", { style: "cursor: pointer;", onclick: () => {
       openRecent(app, data.path);
     } }, [
       e("div", { style: "display: flex;" }, [
