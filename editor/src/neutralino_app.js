@@ -19,7 +19,6 @@ function joinPaths(path1, path2) {
 }
 
 // const EPHEMERAL_DATA_KEYS = {
-//   PROJECT_NAME,
 //   PROJECT_PATH,
 // }
 
@@ -29,7 +28,6 @@ export class NeutralinoApp {
     /**
      * Data that is kept when the program is closed.
      * 
-     * PROJECT_NAME
      * PROJECT_PATH
      * RECENT
      * RECENT_FOLDERS deprecated
@@ -74,8 +72,9 @@ export class NeutralinoApp {
 
   updateWindowBar() {
     let name = getFilenameFromPath(this.getData('CURRENT_FILEPATH'))
+    let projectName = getFilenameFromPath(this.getData('PROJECT_PATH'))
     let txt = (name ? `${name} - ` : "") + 
-      (this.getData('PROJECT_NAME') ? `${this.getData('PROJECT_NAME')} - ` : "") + 
+      (projectName ? `${projectName} - ` : "") + 
       "Jome Editor"
     
     if (NL_MODE === 'window') {
@@ -126,11 +125,9 @@ export class NeutralinoApp {
 
   openFileOrProject(data) {
     if (data.isDirectory) {
-      this.setData('PROJECT_NAME', data.name)
       this.setData('PROJECT_PATH', data.path)
       this.setData('CURRENT_FILEPATH', null)
     } else {
-      this.setData('PROJECT_NAME', null)
       this.setData('PROJECT_PATH', null)
       this.setData('CURRENT_FILEPATH', data.path)
     }
