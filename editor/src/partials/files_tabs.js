@@ -10,9 +10,9 @@ export function renderFilesTabs(app) {
 
   ref.replaceChildren(...filesOpened.map(f => {
     if (f === currentFilepath) {
-      return e('button', {className: "tab-button active"}, [getFilenameFromPath(f)])
+      return e('button', {className: "tab-button active", title: f}, [getFilenameFromPath(f)])
     } else {
-      return e('button', {className: "tab-button", onclick: () => app.openFile(f)}, [getFilenameFromPath(f)])
+      return e('button', {className: "tab-button", title: f, onclick: () => app.openFile(f)}, [getFilenameFromPath(f)])
     }
   }))
 }
