@@ -16,6 +16,7 @@ import { createActionsFile } from '../partials/actions_file'
 import { createActionsProject } from '../partials/actions_project'
 import { HomePage } from './homepage'
 import { showExplorer } from '../partials/explorer'
+import { createFilesTabs } from '../partials/files_tabs'
 
 function contextIcon(icon, title, onClick) {
   // I could modify the size of the icons here
@@ -40,12 +41,17 @@ function afterRender(app) {
   showExplorer(app)
 }
 
+export function updateMainPanelContent(app) {
+  let ref = document.getElementById('split-1')
+  ref.replaceChildren(...createMainPanelContent(app))
+}
+
 function createMainPanelContent(app) {
   let anyFileOpened = !!app.getData("CURRENT_FILEPATH")
 
   if (anyFileOpened) {
     return [
-      e('div', {id: "files_tabs", className: "tab-buttons"}),
+      createFilesTabs(app),
       e('div', {id: "prosemirror_editor"})
     ]
   } else {

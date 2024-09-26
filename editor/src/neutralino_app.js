@@ -7,7 +7,7 @@ import { getFilenameFromPath } from "./utils"
 import { e } from "./helpers"
 
 import { HomePage } from './pages/homepage'
-import { EditorPage } from './pages/editor'
+import { EditorPage, updateMainPanelContent } from './pages/editor'
 import { renderFilesTabs } from './partials/files_tabs'
 
 const STORAGE_KEY = 'APP'
@@ -171,7 +171,7 @@ export class NeutralinoApp {
     Neutralino.filesystem.readFile(filepath).then(content => {
 
       this.data.CURRENT_FILEPATH = filepath
-      let filesOpenedByProject = this.data.FILES_OPENED_BY_PROJECT || []
+      let filesOpenedByProject = this.data.FILES_OPENED_BY_PROJECT || {}
       if ((filesOpenedByProject[this.data.PROJECT_PATH] || []).includes(filepath)) {
         // Do nothing, already opened
       } else {
@@ -182,13 +182,15 @@ export class NeutralinoApp {
 
       this.updateWindowBar()
 
+      updateMainPanelContent(this)
+
       let name = getFilenameFromPath(filepath)
       // update state
       //_opened_files[filepath] = file.content
       //_active_filepath = filepath
 
       // update files tabs
-      renderFilesTabs(this)
+      // renderFilesTabs(this)
 
       // update active in explorer tree
       // FIXME: DON'T DO THIS HERE. THE SELCTION SHOULD BE HANDLED ELSEWHERE AND IT IS THE SELECTION THAT SHOULD CALL openFile when needed
