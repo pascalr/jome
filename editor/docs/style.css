@@ -61,7 +61,7 @@ blockquote {
 }
 
 #prosemirror_editor {
-  border: 1px solid white;
+  background-color: #0c141c;
   padding: 0.8em;
 }
 
@@ -92,21 +92,21 @@ blockquote {
 
 .tab-buttons {
   display: flex;
-  border-bottom: 2px solid #ddd;
+  border-bottom: 2px solid #222121;
+  height: 2em;
 }
 
 .tab-button {
   padding: 2px 1em;
-  background-color: #f1f1f1;
-  border: none;
+  border: 1px solid #222121;
   cursor: pointer;
   text-align: center;
   outline: none;
-  transition: background-color 0.3s;
+  color: white;
+  background-color: #080e14;
 }
 
 .tab-button.active {
-  background-color: #ddd;
   border-bottom: 2px solid #2196F3;
 }
 
@@ -345,4 +345,13 @@ body {
 .homepage-list .path {
   color: gray;
   font-size: 0.95em;
+}
+
+
+
+
+
+.ProseMirror {
+  outline: none;
+  padding-bottom: 90vh;
 }

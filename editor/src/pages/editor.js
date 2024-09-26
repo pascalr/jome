@@ -86,9 +86,6 @@ function createEditor(app) {
       ]),
       e('div', {id: 'split-1', className: "main_panel"}, [
         e('div', {id: "files_tabs", className: "tab-buttons"}),
-        e('div', {}, [
-          e('h2', {}, ["TODO"])
-        ]),
         e('div', {id: "prosemirror_editor"})
       ]),
       e('div', {id: 'split-2', className: "selection_panel"}, [
