@@ -1,3 +1,5 @@
+## On wheel click on tab close it
+
 ## Show NoPageOpened when no page is opened.
 
 ## Sidebar on homepage

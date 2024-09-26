@@ -63,7 +63,8 @@ export class NeutralinoApp {
     if (NL_MODE === 'browser') {
       document.body.prepend(e('div', {id: "window_bar"}))
     }
-    this.show(HomePage)
+
+    this.show(this.data.PROJECT_PATH ? EditorPage : HomePage)
   }
 
   updateWindowBar() {
