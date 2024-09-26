@@ -58,7 +58,6 @@ export class NeutralinoApp {
      * CURRENT_FILENAME
      * CURRENT_FILEPATH
      * FILES_OPENED
-     * DIR_LISTING // Used to know what's under a folder and to know if a folder is opened or not (remove the key when closing the folder, maybe sometimes a little less efficient, but simpler)
      */
     this.data = {}
 
@@ -117,10 +116,7 @@ export class NeutralinoApp {
       }
       return a.type === 'FILE'
     })
-
-    this.data['DIR_LISTING'] = this.data['DIR_LISTING'] || {}
-    this.data['DIR_LISTING'][path] = sorted
-    this.saveToStorage() // OPTIMIZE: Probably not good to do this here
+    return sorted
   }
 
   async loadFromStorage() {

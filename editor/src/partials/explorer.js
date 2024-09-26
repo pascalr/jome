@@ -1,5 +1,8 @@
 import { createHtmlTree } from "../lib/renderHtmlTree"
 
+// this.data['DIR_LISTING'][path] = sorted // deprecated
+// app.dirListings[path] = sorted
+
 export async function showExplorer(app) {
   // Load the navigation tree
   if (app.data['PROJECT_PATH']) {
