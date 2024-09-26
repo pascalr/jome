@@ -11,16 +11,6 @@ import { EditorPage } from './pages/editor'
 
 const STORAGE_KEY = 'APP'
 
-function logError(error) {
-  console.error(error)
-}
-
-function loadFile(filepath, callback) {
-  Neutralino.filesystem.readFile(filepath).then(content => {
-    callback({name: getFilenameFromPath(filepath), path: filepath, content})
-  }).catch(logError)
-}
-
 function joinPaths(path1, path2) {
   // FIXME: On windows it's not /, path.join not working here because not bundling for node
   // TODO: Get info from the system to know what to use
@@ -45,7 +35,7 @@ export class NeutralinoApp {
      * RECENT_FILES deprecated
      * CURRENT_FILENAME
      * CURRENT_FILEPATH
-     * FILES_OPENED
+     * FILES_OPENED_BY_PROJECT
      */
     this.data = {}
 
@@ -181,8 +171,9 @@ export class NeutralinoApp {
   }
 
   openFile(filepath) {
-    loadFile(filepath, (file) => {
-      console.log('file', file)
+
+    Neutralino.filesystem.readFile(filepath).then(content => {
+      let name = getFilenameFromPath(filepath)
       // update state
       //_opened_files[filepath] = file.content
       //_active_filepath = filepath
@@ -194,7 +185,7 @@ export class NeutralinoApp {
       })
       let btn = document.createElement('button')
       btn.className = "tab-button active"
-      btn.innerText = file.name
+      btn.innerText = name
       filesTabs.prepend(btn)
 
       // update active in explorer tree
@@ -208,17 +199,17 @@ export class NeutralinoApp {
 
       // update active filename
       forEach(document.getElementsByClassName('active_filename'), el => {
-        el.innerText = file.name; 
+        el.innerText = name; 
       });
 
       // update the main source view
-      let doc = new JomeDocument(filepath, file.content)
+      let doc = new JomeDocument(filepath, content)
       let parts = parse(doc)
       console.log("parts", parts)
       loadFileProseMirrorEditor('#prosemirror_editor', doc)
       // document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
       // document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)
-    })
+    }).catch(this.handleError)
   }
 
 }
