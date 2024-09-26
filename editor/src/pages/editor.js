@@ -15,7 +15,7 @@ import { createActionsSelection } from '../partials/actions_selection'
 import { createActionsFile } from '../partials/actions_file'
 import { createActionsProject } from '../partials/actions_project'
 import { HomePage } from './homepage'
-import { createHtmlTree } from '../lib/renderHtmlTree'
+import { showExplorer } from '../partials/explorer'
 
 function contextIcon(icon, title, onClick) {
   // I could modify the size of the icons here
@@ -38,22 +38,6 @@ function afterRender(app) {
   })
 
   showExplorer(app)
-}
-
-async function showExplorer(app) {
-  // Load the navigation tree
-  if (app.data['PROJECT_PATH']) {
-    // await app.listDirectory(app.data['PROJECT_PATH'])
-    app.loadFileTree(app.data['PROJECT_PATH'], tree => {
-      let ref = document.getElementById('explorer-tree')
-      // explorerList.innerHTML = renderHtmlTree(tree)
-      ref.replaceChildren(createHtmlTree(tree, leaf => {
-        return {id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
-          app.openFile(leaf.path)
-        }}
-      }))
-    })
-  }
 }
 
 function createEditor(app) {
