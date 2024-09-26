@@ -108,6 +108,7 @@ blockquote {
 
 .tab-button.active {
   border-bottom: 2px solid #2196F3;
+  cursor: auto;
 }
 
 

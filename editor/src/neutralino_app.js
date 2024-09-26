@@ -8,6 +8,7 @@ import { e } from "./helpers"
 
 import { HomePage } from './pages/homepage'
 import { EditorPage } from './pages/editor'
+import { renderFilesTabs } from './partials/files_tabs'
 
 const STORAGE_KEY = 'APP'
 
@@ -173,20 +174,24 @@ export class NeutralinoApp {
   openFile(filepath) {
 
     Neutralino.filesystem.readFile(filepath).then(content => {
+
+      this.data.CURRENT_FILEPATH = filepath
+      let filesOpenedByProject = this.data.FILES_OPENED_BY_PROJECT || []
+      if ((filesOpenedByProject[this.data.PROJECT_PATH] || []).includes(filepath)) {
+        // Do nothing, already opened
+      } else {
+        filesOpenedByProject[this.data.PROJECT_PATH] = [filepath, ...(filesOpenedByProject[this.data.PROJECT_PATH] || [])]
+      }
+      this.data.FILES_OPENED_BY_PROJECT = filesOpenedByProject      
+      this.saveToStorage()
+
       let name = getFilenameFromPath(filepath)
       // update state
       //_opened_files[filepath] = file.content
       //_active_filepath = filepath
 
       // update files tabs
-      let filesTabs = document.getElementById("files_tabs")
-      forEach(filesTabs.children, c => {
-        if (c.classList.contains("active")) {c.classList.remove("active")}
-      })
-      let btn = document.createElement('button')
-      btn.className = "tab-button active"
-      btn.innerText = name
-      filesTabs.prepend(btn)
+      renderFilesTabs(this)
 
       // update active in explorer tree
       // FIXME: DON'T DO THIS HERE. THE SELCTION SHOULD BE HANDLED ELSEWHERE AND IT IS THE SELECTION THAT SHOULD CALL openFile when needed

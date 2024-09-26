@@ -1,10 +1,20 @@
-export function renderFilesTabs() {
+import { e } from "../helpers"
+import { getFilenameFromPath } from "../utils"
+
+export function renderFilesTabs(app) {
 
   let currentFilepath = app.getData('CURRENT_FILEPATH')
-  let filesOpened = app.getData('FILES_OPENED_BY_PROJECT')
+  let filesOpened = app.getData('FILES_OPENED_BY_PROJECT')[app.getData('PROJECT_PATH')]
 
   let ref = document.getElementById("files_tabs")
 
+  ref.replaceChildren(...filesOpened.map(f => {
+    if (f === currentFilepath) {
+      return e('button', {className: "tab-button active"}, [getFilenameFromPath(f)])
+    } else {
+      return e('button', {className: "tab-button", onclick: () => app.openFile(f)}, [getFilenameFromPath(f)])
+    }
+  }))
 }
 
 // openFile(filepath) {
