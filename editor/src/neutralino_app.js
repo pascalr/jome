@@ -34,7 +34,6 @@ export class NeutralinoApp {
      * RECENT
      * RECENT_FOLDERS deprecated
      * RECENT_FILES deprecated
-     * CURRENT_FILENAME
      * CURRENT_FILEPATH
      * FILES_OPENED_BY_PROJECT
      */
@@ -74,7 +73,8 @@ export class NeutralinoApp {
   }
 
   updateWindowBar() {
-    let txt = (this.getData('CURRENT_FILENAME') ? `${this.getData('CURRENT_FILENAME')} - ` : "") + 
+    let name = getFilenameFromPath(this.getData('CURRENT_FILEPATH'))
+    let txt = (name ? `${name} - ` : "") + 
       (this.getData('PROJECT_NAME') ? `${this.getData('PROJECT_NAME')} - ` : "") + 
       "Jome Editor"
     
@@ -128,12 +128,10 @@ export class NeutralinoApp {
     if (data.isDirectory) {
       this.setData('PROJECT_NAME', data.name)
       this.setData('PROJECT_PATH', data.path)
-      this.setData('CURRENT_FILENAME', null)
       this.setData('CURRENT_FILEPATH', null)
     } else {
       this.setData('PROJECT_NAME', null)
       this.setData('PROJECT_PATH', null)
-      this.setData('CURRENT_FILENAME', data.name)
       this.setData('CURRENT_FILEPATH', data.path)
     }
     this.show(EditorPage)
@@ -184,6 +182,8 @@ export class NeutralinoApp {
       }
       this.data.FILES_OPENED_BY_PROJECT = filesOpenedByProject      
       this.saveToStorage()
+
+      this.updateWindowBar()
 
       let name = getFilenameFromPath(filepath)
       // update state

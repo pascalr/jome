@@ -1,3 +1,9 @@
+## Show NoPageOpened when no page is opened.
+
+## Sidebar on homepage
+
+Essayer d'afficher la sidebar sur le homepage. Petite ligne bleue pour afficher que tu es sur maison. Tu peux cliquer sur explorer pour aller sur l'éditeur.
+
 ## UML inside README.md on github
 
 I really want that. svg? canvas?

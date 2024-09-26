@@ -7,5 +7,5 @@ export function forEach(list, callback) {
 
 // https://stackoverflow.com/questions/423376/how-to-get-the-file-name-from-a-full-path-using-javascript
 export function getFilenameFromPath(path) {
-  return path.split('\\').pop().split('/').pop()
+  return path ? path.split('\\').pop().split('/').pop() : path
 }
