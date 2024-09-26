@@ -188,6 +188,10 @@ export class NeutralinoApp {
     }).catch(this.handleError)
   }
 
+  isFolderExpanded() {
+    return false
+  }
+
   // TODO: Only read directories that are opened. I have barely nothing in my project, but still have over 4000 files because of node_modules...
   async getDirectoryTree(dirPath) {
 

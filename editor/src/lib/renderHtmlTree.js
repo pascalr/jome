@@ -5,7 +5,7 @@ export default function renderHtmlTreePath(tree, root=true) {
   let html = root ? "<ul class='tree'>" : "<ul>"
   tree.children.forEach(c => {
     html += "<li>"
-    if (c.type === "file") {
+    if (!c.isDirectory) {
       html += `<div class="leaf" data-path="${c.path}">📄&nbsp;${c.name}</div>`
     } else {
       html += "<details>"
@@ -22,7 +22,7 @@ export default function renderHtmlTreePath(tree, root=true) {
 export function createHtmlTree(tree, transformLeaf=()=>({}), root=true) {
   let el = e('ul', root ? {className: 'tree'} : {}, tree.children.map(c => {
     let cs = []
-    if (c.type === "file") {
+    if (!c.isDirectory) {
       cs = [e('div', {...transformLeaf(c), innerText: `📄 ${c.name}`})]
     } else {
       cs = [e('details', {}, [
@@ -44,7 +44,7 @@ function renderHtmlTreeUl(tree, root=true) {
   let html = root ? "<ul class='tree'>" : "<ul>"
   tree.children.forEach(c => {
     html += "<li>"
-    if (c.type === "file") {
+    if (!c.isDirectory) {
       html += `<div class="leaf" selected>📄&nbsp;${c.name}</div>`
     } else {
       html += "<details>"
@@ -62,7 +62,7 @@ function renderHtmlTreeUl(tree, root=true) {
 function renderHtmlTreeDiv(tree, root=true) {
   let html = root ? "<div class='linear-tree'>" : ""
   tree.children.forEach(c => {
-    if (c.type === "file") {
+    if (!c.isDirectory) {
       html += `<div data-depth="0.6rem" selected>📄&nbsp;${c.name}</div>`
     } else {
       html += "<details>"
