@@ -1,7 +1,5 @@
 import { parse } from './parser'
 import { JomeDocument } from "./models/jome_document"
-import { createHtmlTree } from "./lib/renderHtmlTree"
-import { createNoPageOpened } from "./partials/no_page_opened"
 import { forEach } from "./utils"
 import { loadFileProseMirrorEditor } from './prosemirror_editor'
 
@@ -28,16 +26,6 @@ function joinPaths(path1, path2) {
   // TODO: Get info from the system to know what to use
   return path1+'/'+path2
 }
-
-function entryToBranch(entry) {
-  return {name: entry.entry, path: entry.path, type: entry.type === "DIRECTORY" ? 'directory' : 'file', children: []}
-}
-
-
-
-
-
-
 
 // const EPHEMERAL_DATA_KEYS = {
 //   PROJECT_NAME,
@@ -189,37 +177,8 @@ export class NeutralinoApp {
   }
 
   isFolderExpanded() {
-    return false
+    return false // TODO
   }
-
-  // TODO: Only read directories that are opened. I have barely nothing in my project, but still have over 4000 files because of node_modules...
-  async getDirectoryTree(dirPath) {
-
-    let subs = await Neutralino.filesystem.readDirectory(dirPath)
-    let sorted = subs.sort((a,b) => {
-      if (a.type === b.type) {
-        return a.entry.localeCompare(b.entry)
-      }
-      return a.type === 'FILE'
-    })
-
-    console.log('subs', subs)
-    console.log('sorted', sorted)
-
-    return {
-      name: 'WIP',
-      path: dirPath,
-      type: 'directory',
-      children: sorted.map(s => entryToBranch(s))
-    }
-  }
-
-  loadFileTree(path, callback) {
-    return this.getDirectoryTree(path).then(callback).catch(logError)
-    //return getDirectoryTree('.').then(callback).catch(logError)
-    // Neutralino.filesystem.readDirectory('.', {recursive: true}).then(callback).catch(logError)
-  }
-
 
   openFile(filepath) {
     loadFile(filepath, (file) => {
