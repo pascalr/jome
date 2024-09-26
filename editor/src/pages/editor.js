@@ -40,6 +40,21 @@ function afterRender(app) {
   showExplorer(app)
 }
 
+function createMainPanelContent(app) {
+  let anyFileOpened = !!app.getData("CURRENT_FILEPATH")
+
+  if (anyFileOpened) {
+    return [
+      e('div', {id: "files_tabs", className: "tab-buttons"}),
+      e('div', {id: "prosemirror_editor"})
+    ]
+  } else {
+    return [e('div', {}, [
+      e('p', {}, ["No pages opened."]),
+    ])]
+  }
+}
+
 function createEditor(app) {
 
   // TODO: Show NoPageOpened if no page is opened
@@ -68,14 +83,11 @@ function createEditor(app) {
           e('div', {id: "explorer-tree"})
         ])
       ]),
-      e('div', {id: 'split-1', className: "main_panel"}, [
-        e('div', {id: "files_tabs", className: "tab-buttons"}),
-        e('div', {id: "prosemirror_editor"})
-      ]),
+      e('div', {id: 'split-1', className: "main_panel"}, createMainPanelContent(app)),
       e('div', {id: 'split-2', className: "selection_panel"}, [
-        createActionsSelection(this),
-        createActionsFile(this),
-        createActionsProject(this)
+        createActionsSelection(app),
+        createActionsFile(app),
+        createActionsProject(app)
       ])
     ])
   ])
