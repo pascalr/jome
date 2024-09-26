@@ -27,9 +27,14 @@ export async function showExplorer(app) {
     // app.loadFileTree(app.data['PROJECT_PATH'], tree => {
       let ref = document.getElementById('explorer-tree')
       // explorerList.innerHTML = renderHtmlTree(tree)
-      ref.replaceChildren(createHtmlTree(tree, leaf => {
-        return {id: leaf.path, className: "leaf", "data-path": leaf.path, onclick: () => {
-          app.openFile(leaf.path)
+      ref.replaceChildren(createHtmlTree(tree, node => {
+        return {id: node.path, className: "leaf", "data-path": node.path, open: app.isFolderExpanded(node.path), onclick: () => {
+          if (node.isDirectory) {
+            app.toggleDirectoryExpansion(node.path)
+            showExplorer(app)
+          } else {
+            app.openFile(node.path)
+          }
         }}
       }))
     // })

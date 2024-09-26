@@ -18,10 +18,6 @@ function joinPaths(path1, path2) {
   return path1+'/'+path2
 }
 
-// const EPHEMERAL_DATA_KEYS = {
-//   PROJECT_PATH,
-// }
-
 export class NeutralinoApp {
 
   constructor() {
@@ -30,12 +26,12 @@ export class NeutralinoApp {
      * 
      * PROJECT_PATH
      * RECENT
-     * RECENT_FOLDERS deprecated
-     * RECENT_FILES deprecated
      * CURRENT_FILEPATH
      * FILES_OPENED_BY_PROJECT
      */
     this.data = {}
+
+    this.foldersExpanded = {}
 
     this.rootDOM = document.getElementById('root')
 
@@ -162,8 +158,11 @@ export class NeutralinoApp {
     }).catch(this.handleError)
   }
 
-  isFolderExpanded() {
-    return false // TODO
+  toggleDirectoryExpansion(path) {
+    this.foldersExpanded[path] = !this.foldersExpanded[path]
+  }
+  isFolderExpanded(path) {
+    return !!this.foldersExpanded[path]
   }
 
   openFile(filepath) {

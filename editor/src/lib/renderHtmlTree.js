@@ -19,15 +19,16 @@ export default function renderHtmlTreePath(tree, root=true) {
   return html
 }
 
-export function createHtmlTree(tree, transformLeaf=()=>({}), root=true) {
+export function createHtmlTree(tree, transformNode=()=>({}), root=true) {
   let el = e('ul', root ? {className: 'tree'} : {}, tree.children.map(c => {
     let cs = []
     if (!c.isDirectory) {
-      cs = [e('div', {...transformLeaf(c), innerText: `📄 ${c.name}`})]
+      cs = [e('div', {innerText: `📄 ${c.name}`, ...transformNode(c)})]
     } else {
-      cs = [e('details', {}, [
-        e('summary', {...transformLeaf(c), innerText: `📁 ${c.name}`}),
-        createHtmlTree(c, transformLeaf, false)
+      let {open, ...result} = transformNode(c)
+      cs = [e('details', {open}, [
+        e('summary', {innerText: `📁 ${c.name}`, ...result}),
+        createHtmlTree(c, transformNode, false)
       ])]
     }
     return e('li', {}, cs)
