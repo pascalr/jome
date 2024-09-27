@@ -169,10 +169,16 @@ export class NeutralinoApp {
 
   openFile(filepath) {
 
+    if (!filepath) {
+      this.updateWindowBar()
+      updateMainPanelContent(this, filepath, null)
+      return;
+    }
+
     Neutralino.filesystem.readFile(filepath).then(content => {
 
       this.data.CURRENT_FILEPATH = filepath
-      
+
       let filesOpened = this.getProjectData('FILES_OPENED') || []
       if (!filesOpened.includes(filepath)) {
         this.setProjectData('FILES_OPENED', [filepath, ...filesOpened])
@@ -185,7 +191,13 @@ export class NeutralinoApp {
   }
 
   closeFile(filepath) {
-
+    let filesOpened = this.getProjectData('FILES_OPENED') || []
+    let filtered = filesOpened.filter(f => f !== filepath)
+    if (filepath === this.data.CURRENT_FILEPATH) {
+      this.data.CURRENT_FILEPATH = filtered[0] // TODO: Keep an history of the files opened, open the previous one
+    }
+    this.setProjectData('FILES_OPENED', filtered)
+    this.openFile(this.data.CURRENT_FILEPATH)
   }
 
 }
