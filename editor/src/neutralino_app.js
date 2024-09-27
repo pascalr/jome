@@ -53,6 +53,10 @@ export class NeutralinoApp {
     }
 
     this.show(this.data.PROJECT_PATH ? EditorPage : HomePage)
+
+    if (this.data.CURRENT_FILEPATH) {
+      this.openFile(this.data.CURRENT_FILEPATH)
+    }
   }
 
   updateWindowBar() {
@@ -177,7 +181,7 @@ export class NeutralinoApp {
 
     Neutralino.filesystem.readFile(filepath).then(content => {
 
-      this.data.CURRENT_FILEPATH = filepath
+      this.setData('CURRENT_FILEPATH', filepath)
 
       let filesOpened = this.getProjectData('FILES_OPENED') || []
       if (!filesOpened.includes(filepath)) {
