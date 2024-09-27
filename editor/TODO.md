@@ -1,3 +1,5 @@
+## Add x besides opened files to allow closing them
+
 ## On wheel click on tab close it
 
 ## Show NoPageOpened when no page is opened.
