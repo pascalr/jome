@@ -1,6 +1,6 @@
 import {DOMParser} from "prosemirror-model"
 
-import {BlockType} from './parser'
+import {BlockType} from '../parser'
 
 import mdToHtml from "@jome/md-to-html"
 

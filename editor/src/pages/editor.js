@@ -19,7 +19,7 @@ import { createActionsProject } from '../partials/actions_project'
 import { HomePage } from './homepage'
 import { showExplorer } from '../partials/explorer'
 import { createFilesTabs } from '../partials/files_tabs'
-import { loadFileProseMirrorEditor } from '../prosemirror_editor'
+import { loadFileProseMirrorEditor } from '../prosemirror/prosemirror_editor'
 import { JomeDocument } from '../models/jome_document'
 import { forEach } from '../utils'
 
@@ -57,7 +57,7 @@ export function updateMainPanelContent(app, filepath, content) {
     // el.classList.remove("active")
   })
   const leaf = document.querySelector(`#explorer-tree .leaf[data-path="${filepath}"]`);
-  leaf.setAttribute('selected', "")
+  if (leaf) {leaf.setAttribute('selected', "")}
 
   // update the main source view
   let doc = new JomeDocument(filepath, content)

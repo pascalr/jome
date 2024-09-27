@@ -1,3 +1,21 @@
+## TODO: Code mirror & Prose mirror
+
+Code mirror pour le code (le contenu raw), et prose mirror pour le reste.
+
+Soit contenir code mirror dans prose mirror (il y a une example sur le site de prosemirror),
+ou une instance par segments.
+
+## TODO: Refactor parser, rename
+
+Un fichier serait séparer en segment.
+
+Les types principaux de segments sont:
+
+- SourceSegment: As is. Ça peut être du code (.js, .rb, ...), du texte (.txt), de l'information (.json), du contenu (.md), ...
+- JomeSegment: Meta data used to generate source automatically.
+
+Un fichier est premièrement séparer par segments par: JomeParser
+
 ## Add x besides opened files to allow closing them
 
 ## On wheel click on tab close it
