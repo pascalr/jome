@@ -54,11 +54,11 @@ function createState(jomeDoc) {
 export function loadFileProseMirrorEditor(selector, jomeDoc) {
   let state = createState(jomeDoc)
   editorRef = document.querySelector(selector)
-  if (editorView) {
-    editorView.updateState(state)
-  } else {
+  // if (editorView) {
+  //   editorView.updateState(state)
+  // } else {
     editorView = new EditorView(editorRef, {state})
-  }
+  // }
   editorRef.setAttribute("autocomplete", "off")
   editorRef.setAttribute("autocorrect", "off")
   editorRef.setAttribute("autocapitalize", "off")
