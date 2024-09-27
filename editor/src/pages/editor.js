@@ -2,6 +2,8 @@ import Split from 'split.js'
 
 import {e, svgE} from '../helpers'
 
+import { parse } from '../parser'
+
 import iconHouse from '../../assets/icons/house.svg'
 import iconFolder2Open from '../../assets/icons/folder2-open.svg'
 import iconBoxes from '../../assets/icons/boxes.svg'
@@ -17,6 +19,9 @@ import { createActionsProject } from '../partials/actions_project'
 import { HomePage } from './homepage'
 import { showExplorer } from '../partials/explorer'
 import { createFilesTabs } from '../partials/files_tabs'
+import { loadFileProseMirrorEditor } from '../prosemirror_editor'
+import { JomeDocument } from '../models/jome_document'
+import { forEach } from '../utils'
 
 function contextIcon(icon, title, onClick) {
   // I could modify the size of the icons here
@@ -41,9 +46,26 @@ function afterRender(app) {
   showExplorer(app)
 }
 
-export function updateMainPanelContent(app) {
+export function updateMainPanelContent(app, filepath, content) {
   let ref = document.getElementById('split-1')
   ref.replaceChildren(...createMainPanelContent(app))
+
+  // update active in explorer tree
+  // FIXME: DON'T DO THIS HERE. THE SELCTION SHOULD BE HANDLED ELSEWHERE AND IT IS THE SELECTION THAT SHOULD CALL openFile when needed
+  forEach(document.querySelectorAll("#explorer-tree .leaf[selected]"), el => {
+    el.removeAttribute('selected')
+    // el.classList.remove("active")
+  })
+  const leaf = document.querySelector(`#explorer-tree .leaf[data-path="${filepath}"]`);
+  leaf.setAttribute('selected', "")
+
+  // update the main source view
+  let doc = new JomeDocument(filepath, content)
+  let parts = parse(doc) // FIXME: Make this clear that this modifies doc. Refactor
+  // console.log("parts", parts)
+  loadFileProseMirrorEditor('#prosemirror_editor', doc)
+  // document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
+  // document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)
 }
 
 function createMainPanelContent(app) {

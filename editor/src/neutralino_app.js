@@ -1,22 +1,10 @@
-import { parse } from './parser'
-import { JomeDocument } from "./models/jome_document"
-import { forEach } from "./utils"
-import { loadFileProseMirrorEditor } from './prosemirror_editor'
-
 import { getFilenameFromPath } from "./utils"
 import { e } from "./helpers"
 
 import { HomePage } from './pages/homepage'
 import { EditorPage, updateMainPanelContent } from './pages/editor'
-import { renderFilesTabs } from './partials/files_tabs'
 
 const STORAGE_KEY = 'APP'
-
-function joinPaths(path1, path2) {
-  // FIXME: On windows it's not /, path.join not working here because not bundling for node
-  // TODO: Get info from the system to know what to use
-  return path1+'/'+path2
-}
 
 export class NeutralinoApp {
 
@@ -182,37 +170,7 @@ export class NeutralinoApp {
 
       this.updateWindowBar()
 
-      updateMainPanelContent(this)
-
-      let name = getFilenameFromPath(filepath)
-      // update state
-      //_opened_files[filepath] = file.content
-      //_active_filepath = filepath
-
-      // update files tabs
-      // renderFilesTabs(this)
-
-      // update active in explorer tree
-      // FIXME: DON'T DO THIS HERE. THE SELCTION SHOULD BE HANDLED ELSEWHERE AND IT IS THE SELECTION THAT SHOULD CALL openFile when needed
-      forEach(document.querySelectorAll("#explorer-tree .leaf[selected]"), el => {
-        el.removeAttribute('selected')
-        // el.classList.remove("active")
-      })
-      const leaf = document.querySelector(`#explorer-tree .leaf[data-path="${filepath}"]`);
-      leaf.setAttribute('selected', "")
-
-      // update active filename
-      forEach(document.getElementsByClassName('active_filename'), el => {
-        el.innerText = name; 
-      });
-
-      // update the main source view
-      let doc = new JomeDocument(filepath, content)
-      let parts = parse(doc)
-      console.log("parts", parts)
-      loadFileProseMirrorEditor('#prosemirror_editor', doc)
-      // document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
-      // document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)
+      updateMainPanelContent(this, filepath, content)
     }).catch(this.handleError)
   }
 
