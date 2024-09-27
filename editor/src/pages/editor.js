@@ -22,6 +22,7 @@ import { createFilesTabs } from '../partials/files_tabs'
 import { loadFileProseMirrorEditor } from '../prosemirror/prosemirror_editor'
 import { JomeDocument } from '../models/jome_document'
 import { forEach } from '../utils'
+import { createCodemirrorEditor } from '../codemirror/codemirror_editor'
 
 function contextIcon(icon, title, onClick) {
   // I could modify the size of the icons here
@@ -66,6 +67,8 @@ export function updateMainPanelContent(app, filepath, content) {
   loadFileProseMirrorEditor('#prosemirror_editor', doc)
   // document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
   // document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)
+
+  createCodemirrorEditor(app, content)
 }
 
 function createMainPanelContent(app) {
@@ -74,6 +77,7 @@ function createMainPanelContent(app) {
   if (anyFileOpened) {
     return [
       createFilesTabs(app),
+      e('div', {id: "codemirror_editor"}),
       e('div', {id: "prosemirror_editor"})
     ]
   } else {
