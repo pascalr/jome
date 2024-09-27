@@ -154,24 +154,38 @@ export class NeutralinoApp {
     return !!this.foldersExpanded[path]
   }
 
+  getProjectData(key) {
+    this.data.PROJECTS ||= {}
+    this.data.PROJECTS[this.data.PROJECT_PATH] ||= {}
+    return this.data.PROJECTS[this.data.PROJECT_PATH][key]
+  }
+
+  setProjectData(key, data) {
+    this.data.PROJECTS ||= {}
+    this.data.PROJECTS[this.data.PROJECT_PATH] ||= {}
+    this.data.PROJECTS[this.data.PROJECT_PATH][key] = data
+    this.saveToStorage()
+  }
+
   openFile(filepath) {
 
     Neutralino.filesystem.readFile(filepath).then(content => {
 
       this.data.CURRENT_FILEPATH = filepath
-      let filesOpenedByProject = this.data.FILES_OPENED_BY_PROJECT || {}
-      if ((filesOpenedByProject[this.data.PROJECT_PATH] || []).includes(filepath)) {
-        // Do nothing, already opened
-      } else {
-        filesOpenedByProject[this.data.PROJECT_PATH] = [filepath, ...(filesOpenedByProject[this.data.PROJECT_PATH] || [])]
+      
+      let filesOpened = this.getProjectData('FILES_OPENED') || []
+      if (!filesOpened.includes(filepath)) {
+        this.setProjectData('FILES_OPENED', [filepath, ...filesOpened])
       }
-      this.data.FILES_OPENED_BY_PROJECT = filesOpenedByProject      
-      this.saveToStorage()
 
       this.updateWindowBar()
 
       updateMainPanelContent(this, filepath, content)
     }).catch(this.handleError)
+  }
+
+  closeFile(filepath) {
+
   }
 
 }

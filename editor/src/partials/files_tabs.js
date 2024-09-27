@@ -11,7 +11,7 @@ function handleMouseDown(app, filepath, isActive, evt) {
       app.openFile(filepath)
     }
   } else if (evt.button === 1) { // middle (wheel) click
-    // TODO: app.closeFile(filepath)
+    app.closeFile(filepath)
   }
 }
 
