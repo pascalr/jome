@@ -1,3 +1,8 @@
+@font-face {
+  font-family: inconsolata;
+  src: url(./Inconsolata-Regular.ttf);
+}
+
 body {
   background-color: #080e14;
   color: #fff;
@@ -371,5 +376,11 @@ body {
   background-color: #1c1f24;
 }
 .cm-editor .cm-content {
-  font-size: 1.2em;
+  font-size: 1.05em;
+  font-family: 'inconsolata';
 }
+
+
+
+
+
