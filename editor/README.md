@@ -78,3 +78,47 @@ Ne pas me casser la tête et simplement reproduire le UI pour l'instant.
 
 Mais j'aimerais faire mieux en proposant des templates un jour.
 
+
+
+## Syntax
+
+/*~ <h1>title</h1> This is text. <input label="Some label">*/let outCodeGoesHere;/*</input> ~*/
+/*~ <h1>title</h1> This is text. {input({label: "Some label"}, */let outCodeGoesHere;/*)} ~*/
+/*~ <h1>title</h1> This is text. {
+  input({label: "Some label"}, */let outCodeGoesHere;/*)
+  input({label: "Some other label"}, */let outCodeGoesHere;/*)
+} ~*/
+
+Correct one:
+/*~ <h1>title</h1> This is text. {input(id: "outCodeGoesHere", label: "Some label") {*/
+  let outCodeGoesHere;
+/*}} ~*/
+
+Inside the parens is simply JSON. Add curly braces before and after and do JSON.parse
+
+Maybe at some point do parameters instead of only JSON, like:
+input("outCodeGoesHere", label: "Some label")
+input(id: "outCodeGoesHere", label: "Some label")
+
+But this is premature optimization and is less flexible to change. Only do this very late.
+
+## .jome
+
+.jome is HTML partial with jome blocks
+
+<h1>title</h1> This is text. {
+  input(label: "Some label") {*/let outCodeGoesHere;/*}
+  input(label: "Some other label") {*/
+    let outCodeGoesHere;
+  /*}
+}
+
+
+## spreadsheet
+
+/*~ {sheet({id: "foo", C1: "=A1+B1"}, */let foo = [[1, 10, 11]];/*)} ~*/
+
+
+## comments
+
+Jome comments are not supported because you should use an editor and not program jome blocks directly. You can use HTML comments if you really need it. Or comments from the language.
