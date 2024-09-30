@@ -3,7 +3,7 @@ export const CORE_FORMATS_WIP = {
   js: {
     contains: [
       {begin: "//~", end: "\n|$", capture: true},
-      {begin: "/\\*~", end: "~\\*/", capture: true},
+      {begin: "\\s*/\\*~", end: "~\\*/\\s*", capture: true},
       {begin: "/\\*", end: "\\*/"},
       {begin: '"', end: '"'},
       {begin: "'", end: "'"},

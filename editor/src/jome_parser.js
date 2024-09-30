@@ -11,7 +11,7 @@ export class JomeParser {
       return [{isRaw: true, str: doc.content}]
     }
 
-    let parts = []
+    let jomeBlocks = []
 
     for (let i = 0; i < doc.content.length; i++) {
 
@@ -26,7 +26,7 @@ export class JomeParser {
           let endMatch = new RegExp(attempt.end).exec(after)
           let strMatch = str.slice(0, endMatch ? (match[0].length+endMatch.index+endMatch[0].length) : undefined)
           if (attempt.capture) {
-            parts.push({
+            jomeBlocks.push({
               startIdx: i,
               endIdx: i+strMatch.length,
               matchBegin: match[0],
@@ -34,10 +34,28 @@ export class JomeParser {
               data: strMatch.slice(match[0].length, -endMatch[0].length)
             })
           }
+          i = i+strMatch.length-1 // fixme not sure -1
         }
       })
     }
-    console.log("Parsing parts found: ", parts)
+
+    if (!jomeBlocks.length) {
+      return [{isRaw: true, str: doc.content}]
+    }
+
+    let segments = []
+    let i = 0
+    jomeBlocks.forEach(block => {
+      if (i !== block.startIdx) {
+        segments.push({isRaw: true, str: doc.content.slice(i, block.startIdx)})
+      }
+      segments.push({isRaw: false, str: doc.content.slice(block.startIdx, block.endIdx)})
+      i = block.endIdx
+    })
+
+    console.log("Segments found: ", segments)
+
+    return segments
   }
 }
 
