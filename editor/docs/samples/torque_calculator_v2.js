@@ -1,5 +1,7 @@
 //~jome("v": "0.0.1")
 
+let thisIsSomeCodeBefore;
+
 /*~
 <h1>Torque Calculator Example</h1>
 
@@ -26,3 +28,5 @@ calc("id": "torque", "data": "=force*distance") {*/
   let torque = force * distance;
 /*}
 ~*/
+
+let thisIsSomeCodeAfter;

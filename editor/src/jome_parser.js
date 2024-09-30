@@ -52,6 +52,9 @@ export class JomeParser {
       segments.push({isRaw: false, str: doc.content.slice(block.startIdx, block.endIdx)})
       i = block.endIdx
     })
+    if (i != doc.content.length) {
+      segments.push({isRaw: true, str: doc.content.slice(i)})
+    }
 
     console.log("Segments found: ", segments)
 
