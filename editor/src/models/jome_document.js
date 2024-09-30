@@ -17,6 +17,6 @@ export class JomeDocument {
         this.config = null // the language config
 
         // Result
-        this.parts = []
+        this.parts = [] // Maybe rename this to segments instead of parts?
     }
 }

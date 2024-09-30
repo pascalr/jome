@@ -23,6 +23,7 @@ import { loadFileProseMirrorEditor } from '../prosemirror/prosemirror_editor'
 import { JomeDocument } from '../models/jome_document'
 import { forEach } from '../utils'
 import { createCodemirrorEditor } from '../codemirror/codemirror_editor'
+import { JomeParser } from '../jome_parser'
 
 function contextIcon(icon, title, onClick) {
   // I could modify the size of the icons here
@@ -67,6 +68,9 @@ export function updateMainPanelContent(app, filepath, content) {
   loadFileProseMirrorEditor('#prosemirror_editor', doc)
   // document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
   // document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)
+
+  let parser = new JomeParser()
+  let segments = parser.parse(doc)
 
   createCodemirrorEditor(app, content)
 }

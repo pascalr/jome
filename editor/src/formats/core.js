@@ -1,3 +1,24 @@
+export const CORE_FORMATS_WIP = {
+
+  js: {
+    contains: [
+      {begin: "//~", end: "\n|$", capture: true},
+      {begin: "/\\*~", end: "~\\*/", capture: true},
+      {begin: "/\\*", end: "\\*/"},
+      {begin: '"', end: '"'},
+      {begin: "'", end: "'"},
+      {begin: "`", end: "`", contains: [
+        {begin: "\\$\\{", end: "\\}", contains: ["*"]} // Star means anything from the top contains
+      ]},
+    ]
+  }
+
+  // TODO: interpolates
+
+  // TODO: Ruby heredocs %Q(...) or <<-(\w+) ... (\1)
+
+}
+
 export const CORE_FORMATS = {
   js: {
     inlineComment: "//",
