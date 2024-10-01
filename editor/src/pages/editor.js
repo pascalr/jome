@@ -65,7 +65,6 @@ export function updateMainPanelContent(app, filepath, content) {
   let doc = new JomeDocument(filepath, content)
   let parts = parse(doc) // FIXME: Make this clear that this modifies doc. Refactor
   // console.log("parts", parts)
-  loadFileProseMirrorEditor('#prosemirror_editor', doc)
   // document.getElementById('output-editor').innerHTML = renderOutputCode(doc, parts)
   // document.getElementById('notebook-editor').innerHTML = renderNotebookView(doc, parts)
 
@@ -77,6 +76,8 @@ export function updateMainPanelContent(app, filepath, content) {
   segments.forEach(segment => {
     if (segment.isRaw) {
       createCodemirrorEditor(app, contentRef, segment.str)
+    } else {
+      loadFileProseMirrorEditor(contentRef, doc)
     }
   })
 }

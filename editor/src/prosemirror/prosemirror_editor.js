@@ -26,9 +26,6 @@ const mySchema = new Schema({
   marks: schema.spec.marks
 })
 
-let editorView = null
-let editorRef = null
-
 // (The null arguments are where you can specify attributes, if necessary.)
 // let doc = schema.node("doc", null, [
 //     schema.node("paragraph", null, [schema.text("One.")]),
@@ -51,13 +48,14 @@ function createState(jomeDoc) {
   return state
 }
 
-export function loadFileProseMirrorEditor(selector, jomeDoc) {
+export function loadFileProseMirrorEditor(ref, jomeDoc) {
   let state = createState(jomeDoc)
-  editorRef = document.querySelector(selector)
+  let editorRef = document.createElement('div')
+  ref.appendChild(editorRef)
   // if (editorView) {
   //   editorView.updateState(state)
   // } else {
-    editorView = new EditorView(editorRef, {state})
+    let editorView = new EditorView(editorRef, {state})
   // }
   editorRef.setAttribute("autocomplete", "off")
   editorRef.setAttribute("autocorrect", "off")
