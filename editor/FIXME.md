@@ -1,1 +1,3 @@
 > In the Explorer, the flex with the file names is not shrinking... It overflows...
+
+> Safety. I don't know where to sanitize user data. When rendering, I must always sanitize the output to avoid code injection.

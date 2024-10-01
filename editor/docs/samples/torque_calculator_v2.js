@@ -13,13 +13,12 @@ input("id": "distance", "unit": "m", "enableEquivalentUnits": "true", "type": "n
   let distance = 2;
 /*}
 
-svg("data": "<!-- Draw the rectangle (beam) -->
-  <rect x=\"50\" y=\"50\" width=\"200\" height=\"20\" fill=\"steelblue\" />
-  <!-- Draw the triangle (pivot point) -->
-  <polygon points=\"150,80 140,100 160,100\" fill=\"gray\" />
-  <!-- Draw the vertical red arrow pointing downward -->
-  <line x1=\"30\" y1=\"50\" x2=\"30\" y2=\"80\" stroke=\"red\" stroke-width=\"2\" />
-  <polygon points=\"30,80 25,70 35,70\" fill=\"red\" />")
+canvas("width": 600, "height": 400, "background-color": "#ffffff") {
+  rect("p1": [100, 100], "p2": [500, 300])
+}
+
+img("src": "./img/torque.svg")
+img("src": "./img/boxes.svg")
 
 Torque is the result of a force multiplied by a distance from a pivot point.
 
