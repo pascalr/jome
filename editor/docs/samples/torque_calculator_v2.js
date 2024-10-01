@@ -5,11 +5,11 @@ let thisIsSomeCodeBefore;
 /*~
 <h1>Torque Calculator Example</h1>
 
-input("id": "force", "unit": "N*", "type": "number", "defaultValue": "10", "comment": "Newtons or equivalent", "onSave": "setValue") {*/
+input("id": "force", "unit": "N", "enableEquivalentUnits": "true", "type": "number", "defaultValue": "10", "comment": "Newtons or equivalent", "onSave": "setValue") {*/
   let force = 10;
 /*}
 
-input("id": "distance", "unit": "m*", "type": "number", "defaultValue": "2", "comment": "meters or equivalent", "onSave": "setValue") {*/
+input("id": "distance", "unit": "m", "enableEquivalentUnits": "true", "type": "number", "defaultValue": "2", "comment": "meters or equivalent", "onSave": "setValue") {*/
   let distance = 2;
 /*}
 

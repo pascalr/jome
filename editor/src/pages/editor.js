@@ -24,6 +24,7 @@ import { JomeDocument } from '../models/jome_document'
 import { forEach } from '../utils'
 import { createCodemirrorEditor } from '../codemirror/codemirror_editor'
 import { JomeParser } from '../jome_parser'
+import { renderCommand } from '../jome_renderer'
 
 function contextIcon(icon, title, onClick) {
   // I could modify the size of the icons here
@@ -77,7 +78,10 @@ export function updateMainPanelContent(app, filepath, content) {
     if (segment.isRaw) {
       createCodemirrorEditor(app, contentRef, segment.str)
     } else {
-      loadFileProseMirrorEditor(contentRef, doc)
+      ;(segment.commands||[]).forEach(cmd => {
+        renderCommand(contentRef, cmd)
+      })
+      // loadFileProseMirrorEditor(contentRef, doc)
     }
   })
 }

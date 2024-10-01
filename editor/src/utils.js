@@ -9,3 +9,8 @@ export function forEach(list, callback) {
 export function getFilenameFromPath(path) {
   return path ? path.split('\\').pop().split('/').pop() : path
 }
+
+// https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
+export function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
