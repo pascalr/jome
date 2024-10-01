@@ -10,12 +10,6 @@ export class JomeDocument {
         this.content = content
         this.extension = /(?:\.([^.]+))?$/.exec(filename)[1];
 
-        // For parsing
-        this.cursor = 0
-        this.length = content.length
-        this._currCodeBlock = ""
-        this.config = null // the language config
-
         // Result
         this.parts = [] // Maybe rename this to segments instead of parts?
     }

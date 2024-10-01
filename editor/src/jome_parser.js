@@ -5,7 +5,6 @@ export class JomeParser {
   parse(doc) {
 
     let config = CORE_FORMATS_WIP[doc.extension]
-    doc.config = config
     if (!config) {
       // don't know how to detect comments for this file type, push a single code block
       return [{isRaw: true, str: doc.content}]
