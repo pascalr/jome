@@ -72,7 +72,13 @@ export function updateMainPanelContent(app, filepath, content) {
   let parser = new JomeParser()
   let segments = parser.parse(doc)
 
-  createCodemirrorEditor(app, content)
+  let contentRef = document.getElementById('editor_content')
+
+  segments.forEach(segment => {
+    if (segment.isRaw) {
+      createCodemirrorEditor(app, contentRef, segment.str)
+    }
+  })
 }
 
 function createMainPanelContent(app) {
@@ -81,6 +87,7 @@ function createMainPanelContent(app) {
   if (anyFileOpened) {
     return [
       createFilesTabs(app),
+      e('div', {id: "editor_content"}),
       e('div', {id: "codemirror_editor"}),
       e('div', {id: "prosemirror_editor"})
     ]
