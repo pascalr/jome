@@ -1,5 +1,9 @@
 import { NeutralinoApp } from './neutralino_app'
 
+import { HelloWorld } from './components/HelloWorld';
+
+customElements.define("jome-hello-world", HelloWorld)
+
 document.addEventListener('DOMContentLoaded', async () => {
 
   let app = new NeutralinoApp()

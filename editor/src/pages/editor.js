@@ -92,6 +92,7 @@ function createMainPanelContent(app) {
   if (anyFileOpened) {
     return [
       createFilesTabs(app),
+      e('jome-hello-world'),
       e('div', {id: "editor_content"}),
       e('div', {id: "codemirror_editor"}),
       e('div', {id: "prosemirror_editor"})
