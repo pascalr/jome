@@ -78,9 +78,12 @@ export function updateMainPanelContent(app, filepath, content) {
     if (segment.isRaw) {
       createCodemirrorEditor(app, contentRef, segment.str)
     } else {
-      ;(segment.commands||[]).forEach(cmd => {
-        renderCommand(contentRef, cmd)
-      })
+      let el = e("div")
+      el.innerHTML = segment.str
+      contentRef.appendChild(el)
+      // ;(segment.commands||[]).forEach(cmd => {
+      //   renderCommand(contentRef, cmd)
+      // })
       // loadFileProseMirrorEditor(contentRef, doc)
     }
   })
@@ -92,7 +95,6 @@ function createMainPanelContent(app) {
   if (anyFileOpened) {
     return [
       createFilesTabs(app),
-      e('jome-hello-world'),
       e('div', {id: "editor_content"}),
       e('div', {id: "codemirror_editor"}),
       e('div', {id: "prosemirror_editor"})

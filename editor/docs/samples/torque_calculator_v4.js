@@ -1,3 +1,5 @@
+//~jome~0.0.1
+
 let thisIsSomeCodeBefore;
 
 // TODO: afficher sur le dessin la force et la distance.
@@ -6,11 +8,11 @@ let thisIsSomeCodeBefore;
 /*~
 <h1>Torque Calculator Example</h1>
 
-<jome-field name="force" type="number" unit="N" enableEquivalentUnits="true" defaultValue=10 comment="Newtons or equivalent">
+<jome-field name="force" type="number" unit="N" enable-equivalent-units="true" value=10 comment="Newtons or equivalent">
   */let force = 10;/*
 </jome-field>
 
-<jome-field name="distance" type="number" unit="m" enableEquivalentUnits="true" defaultValue=2 comment="Newtons or equivalent">
+<jome-field name="distance" type="number" unit="m" enableEquivalentUnits="true" value=2 comment="Newtons or equivalent">
   */let distance = 2;/*
 </jome-field>
 
