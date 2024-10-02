@@ -2,15 +2,28 @@ export const CORE_FORMATS_WIP = {
 
   jome: {
     contains: [
-      {begin: "\\w+\\(", end: ")\\s*", capture: true, contains: [
+      {include: "command"},
+      {include: "html_comment"},
+      // TODO: Add other HTML things that capture like pre or code?
+    ],
+    repository: {
+      code: [
+        // FIXMEEEEEEEEEEEEEEEEEEEEEEE * /
+        {begin: "\\{\\*/", end: "/\\*\\{\\s*", capture: true, contains: ["lang*"]},
+      ],
+      command: [
+        {begin: "\\w+\\(", end: ")\\s*", capture: true, matchAfter: ["code", "nested"], contains: ["string"]}
+      ],
+      nested: [
+        {begin: "\\{", end: "\\}", capture: true, contains: ["command", "nested", "code"]}
+      ],
+      string: [
         {begin: '"', end: '"'},
-        {begin: "'", end: "'"},
-        {begin: "`", end: "`", contains: [
-          {begin: "\\$\\{", end: "\\}", contains: ["*"]} // Star means anything from the top contains
-        ]},
-      ]},
-      {begin: "\\{\\*/", end: "/\\*\\{\\s*", capture: true}, // FIXME: Contains code from any other language
-    ]
+      ],
+      html_comment: [
+        {begin: '<!--', end: '-->'},
+      ]
+    }
   },
 
   js: {
