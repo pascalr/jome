@@ -13,6 +13,7 @@ import iconGear from '../../assets/icons/gear.svg'
 import iconGit from '../../assets/icons/git.svg'
 import iconQuestionCircle from '../../assets/icons/question-circle.svg'
 import iconTerminal from '../../assets/icons/terminal.svg'
+import iconTree from '../../assets/icons/tree.svg'
 import { createActionsSelection } from '../partials/actions_selection'
 import { createActionsFile } from '../partials/actions_file'
 import { createActionsProject } from '../partials/actions_project'
@@ -120,6 +121,7 @@ function createEditor(app) {
         e('div', {className: "context_buttons"}, [
           contextIcon(iconHouse, "Home", () => app.show(HomePage)),
           contextIcon(iconFolder2Open, "File explorer"),
+          contextIcon(iconTree, "Object Tree"),
           contextIcon(iconBug, "Run & Debug"),
           contextIcon(iconGit, "Git"),
           contextIcon(iconBracesAsterisk, "Snippets"),
