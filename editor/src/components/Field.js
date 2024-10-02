@@ -4,7 +4,7 @@ import { capitalize } from "../utils";
 export class Field extends HTMLElement {
 
   static get observedAttributes() {
-    return ['name', 'type', 'unit', 'enable-equivalent-units', 'value', 'comment'];
+    return ['name', 'type', 'unit', 'enableEquivalentUnits', 'value', 'comment'];
   }
 
   attributeChangedCallback(property, oldValue, newValue) {

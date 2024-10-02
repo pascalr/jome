@@ -12,16 +12,16 @@ let thisIsSomeCodeBefore;
   */let force = 10;/*
 </jome-field>
 
-<jome-field name="distance" type="number" unit="m" enableEquivalentUnits="true" value=2 comment="Newtons or equivalent">
+<jome-field name="distance" type="number" unit="m" enable-equivalent-units="true" value=2 comment="Newtons or equivalent">
   */let distance = 2;/*
 </jome-field>
 
-<jome-drawing width=600 height=400 background-color="#ffffff">
+<jome-drawing width=600 height=400 fill="#ffffff">
   <jome-text x=100 y=50 content="{force}" />
   <jome-rect x=100 y=100 width=400 height=300 />
 </jome-drawing>
 
-Torque is the result of a force multiplied by a distance from a pivot point.
+<p>Torque is the result of a force multiplied by a distance from a pivot point.</p>
 
 <!-- Calc is like a single cell sheet -->
 <jome-calc name="torque" formula="=force*distance">
