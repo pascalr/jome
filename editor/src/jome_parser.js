@@ -79,7 +79,8 @@ export class JomeParser {
       if (i !== block.startIdx) {
         segments.push({isRaw: true, str: doc.content.slice(i, block.startIdx)})
       }
-      segments.push({isRaw: false, str: doc.content.slice(block.startIdx, block.endIdx)})
+      // segments.push({isRaw: false, str: doc.content.slice(block.startIdx, block.endIdx)})
+      segments.push({isRaw: false, str: block.data})
       i = block.endIdx
     })
     if (i != doc.content.length) {

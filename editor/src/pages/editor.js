@@ -79,7 +79,7 @@ export function updateMainPanelContent(app, filepath, content) {
       createCodemirrorEditor(app, contentRef, segment.str)
     } else {
       let el = e("div")
-      console.log("debug", segment.str)
+      console.log("debug", segment)
       el.innerHTML = segment.str
       contentRef.appendChild(el)
       // ;(segment.commands||[]).forEach(cmd => {

@@ -1,4 +1,4 @@
-//~jome~0.0.1
+//~<jome-rc v="0.0.1" />
 
 let thisIsSomeCodeBefore;
 
