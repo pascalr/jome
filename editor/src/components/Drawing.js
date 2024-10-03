@@ -34,7 +34,7 @@ export class Drawing extends JomeComponent {
     super()
     this.attachShadow({mode: 'open'});
     // this.shadowRoot.appendChild(template.content.cloneNode(true));
-    this.shadowRoot.adoptedStyleSheets = [BASE_STYLESHEET]
+    // this.shadowRoot.adoptedStyleSheets = [BASE_STYLESHEET]
   }
 
   static get allAttributes() {

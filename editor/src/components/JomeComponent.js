@@ -4,10 +4,6 @@ export const BASE_ATTRIBUTES = {
     default: 'block',
     values: ["inline", "block"] // inline-block or block
   },
-  hidden: { // Is this already part of HTML standard?
-    type: 'bool',
-    default: false
-  },
   margin: {
     type: '[dim]',
     default: "0",
@@ -21,7 +17,7 @@ export const BASE_ATTRIBUTES = {
 export const BASE_STYLESHEET = new CSSStyleSheet();
 BASE_STYLESHEET.replaceSync(`
 :host {
-  display: block;
+  display: inline;
 }
 :host([hidden]) {
   display: none;
@@ -56,6 +52,7 @@ function parseAttribute(el, attr, attrName) {
 }
 
 export function applyBaseStyle(el) {
+  el.style.display = el.hasAttribute('hidden') ? 'none' : 'block'
   if (el.hasAttribute('margin')) {
     el.style.margin = el.getAttribute('margin') || BASE_ATTRIBUTES.margin.default;
   } else if (el.hasAttribute('padding')) {
