@@ -10,11 +10,11 @@ export const BASE_ATTRIBUTES = {
   },
   margin: {
     type: '[dim]',
-    default: 0,
+    default: "0",
   },
   padding: {
     type: '[dim]',
-    default: 0,
+    default: "0",
   }
 }
 
@@ -37,6 +37,9 @@ function validateType(type, value) {
   throw `Don't know how to validate attribute of type ${type}.`
 }
 
+// Wait, I don't even need to validate?
+// This is useless?
+// Or maybe will be used in UI, so keep for now.
 function parseAttribute(el, attr, attrName) {
 
   let value = el.getAttribute(attrName)
@@ -54,9 +57,9 @@ function parseAttribute(el, attr, attrName) {
 
 export function applyBaseStyle(el) {
   if (el.hasAttribute('margin')) {
-    el.style.margin = parseAttribute(el, BASE_ATTRIBUTES.margin, 'margin')
+    el.style.margin = el.getAttribute('margin') || BASE_ATTRIBUTES.margin.default;
   } else if (el.hasAttribute('padding')) {
-    el.style.padding = parseAttribute(el, BASE_ATTRIBUTES.padding, 'padding')
+    el.style.padding = el.getAttribute('padding') || BASE_ATTRIBUTES.padding.default;
   }
 }
 
