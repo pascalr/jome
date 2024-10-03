@@ -28,23 +28,31 @@ export class Polygon extends JomeComponent {
     thickness: {
       type: "int",
       default: 2,
-    }
+    },
+    rotate: {
+      type: "float",
+      unit: "deg",
+      default: 0,
+    },
   }
 
   draw(ctx) {
+
+    let rot = this.rotate * 2 * Math.PI / 360
 
     ctx.save();
     ctx.beginPath();
     ctx.strokeStyle = this.color;
     ctx.lineWidth = this.thickness;
-    console.log('1 x', this.x + this.radius * Math.cos(0))
-    console.log('1 y', this.y + this.radius * Math.sin(0))
-    ctx.moveTo(this.x + this.radius * Math.cos(0), this.y + this.radius * Math.sin(0));          
+    ctx.moveTo(this.x + this.radius * Math.cos(rot), this.y + this.radius * Math.sin(rot));          
+
+    let debug = this.rotate
 
     for (var i = 1; i <= this.sides; i += 1) {
-      console.log('n x', this.x + this.radius * Math.cos(i * 2 * Math.PI / this.sides))
-      console.log('n y', this.y + this.radius * Math.sin(i * 2 * Math.PI / this.sides))
-      ctx.lineTo(this.x + this.radius * Math.cos(i * 2 * Math.PI / this.sides), this.y + this.radius * Math.sin(i * 2 * Math.PI / this.sides));
+      ctx.lineTo(
+        this.x + this.radius * Math.cos(i * 2 * Math.PI / this.sides + rot),
+        this.y + this.radius * Math.sin(i * 2 * Math.PI / this.sides + rot)
+      );
     }
 
     ctx.stroke();

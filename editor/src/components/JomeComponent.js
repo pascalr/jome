@@ -16,13 +16,11 @@ export const BASE_ATTRIBUTES = {
 
 function getterForAttr(attr, attrName) {
   if (attr.type === 'int') {
-    return function() {
-      return parseInt(this.getAttribute(attrName))
-    }
+    return function() { return parseInt(this.getAttribute(attrName)) }
+  } else if (attr.type === 'float') {
+    return function() { return parseFloat(this.getAttribute(attrName)) }
   } else {
-    return function() {
-      return this.getAttribute(attrName)
-    }
+    return function() { return this.getAttribute(attrName) }
   }
 }
 
@@ -48,7 +46,7 @@ export class JomeComponent extends HTMLElement {
 
     let attrs = this.constructor.allAttributes
     Object.keys(attrs).forEach(k => {
-      if (attrs[k].default) {
+      if (attrs[k].hasOwnProperty('default')) {
         this[k] = attrs[k].default
       }
     })
@@ -69,7 +67,11 @@ export class JomeComponent extends HTMLElement {
 
   static register() {
 
+    console.log("register this", this)
+
     Object.keys(this.ownAttributes||{}).forEach(attrName => {
+
+      console.log("forEach", this)
 
       let attr = this.ownAttributes[attrName]
 
