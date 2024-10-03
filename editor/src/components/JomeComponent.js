@@ -87,7 +87,36 @@ export class JomeComponent extends HTMLElement {
   }
 
   static register() {
+
+    Object.keys(this.ownAttributes||{}).forEach(attrName => {
+
+      let attr = this.ownAttributes[attrName]
+      Object.defineProperty(this.prototype, attrName, {
+        get: function() {
+          // TODO: Do other types
+          if (attr.type === 'int') {
+            return parseInt(this.getAttribute(attrName))
+          } else {
+            return this.getAttribute(attrName)
+          }
+        },
+        set: function(newValue) {
+          // TODO: Check for bool and do this.removeAttribute if false
+          this.setAttribute(attrName, newValue)
+        }
+      })
+
+    })
+
     customElements.define(this.elementName, this)
+
+    // customElements.define(this.elementName, new Proxy(this, {
+    //   get(target, prop, receiver) {
+    //     console.log('get!!!', prop)
+    //     return Reflect.get(...arguments)
+    //   },
+    // }))
+    
   }
 
 }
