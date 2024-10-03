@@ -17,7 +17,7 @@ export class Polygon extends JomeComponent {
       type: "dim",
       default: 5,
     },
-    size: {
+    radius: {
       type: "int",
       default: 10,
     },
@@ -37,14 +37,14 @@ export class Polygon extends JomeComponent {
     ctx.beginPath();
     ctx.strokeStyle = this.color;
     ctx.lineWidth = this.thickness;
-    console.log('1 x', this.x + this.size * Math.cos(0))
-    console.log('1 y', this.y + this.size * Math.sin(0))
-    ctx.moveTo(this.x + this.size * Math.cos(0), this.y + this.size * Math.sin(0));          
+    console.log('1 x', this.x + this.radius * Math.cos(0))
+    console.log('1 y', this.y + this.radius * Math.sin(0))
+    ctx.moveTo(this.x + this.radius * Math.cos(0), this.y + this.radius * Math.sin(0));          
 
     for (var i = 1; i <= this.sides; i += 1) {
-      console.log('n x', this.x + this.size * Math.cos(i * 2 * Math.PI / this.sides))
-      console.log('n y', this.y + this.size * Math.sin(i * 2 * Math.PI / this.sides))
-      ctx.lineTo(this.x + this.size * Math.cos(i * 2 * Math.PI / this.sides), this.y + this.size * Math.sin(i * 2 * Math.PI / this.sides));
+      console.log('n x', this.x + this.radius * Math.cos(i * 2 * Math.PI / this.sides))
+      console.log('n y', this.y + this.radius * Math.sin(i * 2 * Math.PI / this.sides))
+      ctx.lineTo(this.x + this.radius * Math.cos(i * 2 * Math.PI / this.sides), this.y + this.radius * Math.sin(i * 2 * Math.PI / this.sides));
     }
 
     ctx.stroke();

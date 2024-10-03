@@ -14,43 +14,6 @@ export const BASE_ATTRIBUTES = {
   }
 }
 
-export const BASE_STYLESHEET = new CSSStyleSheet();
-BASE_STYLESHEET.replaceSync(`
-:host {
-  display: inline;
-}
-:host([hidden]) {
-  display: none;
-}
-`)
-
-function validateType(type, value) {
-  if (type === 'dim') {
-    return CSS.supports('width', value)
-  } else if (type === '[dim]') {
-    return CSS.supports('margin', value)
-  }
-  throw `Don't know how to validate attribute of type ${type}.`
-}
-
-// Wait, I don't even need to validate?
-// This is useless?
-// Or maybe will be used in UI, so keep for now.
-function parseAttribute(el, attr, attrName) {
-
-  let value = el.getAttribute(attrName)
-
-  if (!value) {
-    return attr.default
-  }
-
-  if (!validateType(attr.type, value)) {
-    throw `Invalid ${attrName}: ${value}`
-  }
-
-  return value
-}
-
 export function applyBaseStyle(el) {
   el.style.display = el.hasAttribute('hidden') ? 'none' : 'block'
   if (el.hasAttribute('margin')) {
@@ -109,14 +72,45 @@ export class JomeComponent extends HTMLElement {
     })
 
     customElements.define(this.elementName, this)
-
-    // customElements.define(this.elementName, new Proxy(this, {
-    //   get(target, prop, receiver) {
-    //     console.log('get!!!', prop)
-    //     return Reflect.get(...arguments)
-    //   },
-    // }))
-    
   }
 
 }
+
+
+// export const BASE_STYLESHEET = new CSSStyleSheet();
+// BASE_STYLESHEET.replaceSync(`
+// :host {
+//   display: inline;
+// }
+// :host([hidden]) {
+//   display: none;
+// }
+// `)
+
+// function validateType(type, value) {
+//   if (type === 'dim') {
+//     return CSS.supports('width', value)
+//   } else if (type === '[dim]') {
+//     return CSS.supports('margin', value)
+//   }
+//   throw `Don't know how to validate attribute of type ${type}.`
+// }
+
+// // Wait, I don't even need to validate?
+// // This is useless?
+// // Or maybe will be used in UI, so keep for now.
+// function parseAttribute(el, attr, attrName) {
+
+//   let value = el.getAttribute(attrName)
+
+//   if (!value) {
+//     return attr.default
+//   }
+
+//   if (!validateType(attr.type, value)) {
+//     throw `Invalid ${attrName}: ${value}`
+//   }
+
+//   return value
+// }
+
