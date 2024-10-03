@@ -14,6 +14,24 @@ export const BASE_ATTRIBUTES = {
   }
 }
 
+function getterForAttr(attr, attrName) {
+  if (attr.type === 'int') {
+    return function() {
+      return parseInt(this.getAttribute(attrName))
+    }
+  } else {
+    return function() {
+      return this.getAttribute(attrName)
+    }
+  }
+}
+
+function setterForAttr(attr, attrName) {
+  return function (newValue) {
+    this.setAttribute(attrName, newValue)
+  }
+}
+
 export function applyBaseStyle(el) {
   el.style.display = el.hasAttribute('hidden') ? 'none' : 'block'
   if (el.hasAttribute('margin')) {
@@ -54,21 +72,12 @@ export class JomeComponent extends HTMLElement {
     Object.keys(this.ownAttributes||{}).forEach(attrName => {
 
       let attr = this.ownAttributes[attrName]
-      Object.defineProperty(this.prototype, attrName, {
-        get: function() {
-          // TODO: Do other types
-          if (attr.type === 'int') {
-            return parseInt(this.getAttribute(attrName))
-          } else {
-            return this.getAttribute(attrName)
-          }
-        },
-        set: function(newValue) {
-          // TODO: Check for bool and do this.removeAttribute if false
-          this.setAttribute(attrName, newValue)
-        }
-      })
 
+      // Object.defineProperty(this.prototype, attrName, { get: getter, set: setter })
+      Object.defineProperty(this.prototype, attrName, {
+        get: getterForAttr(attr, attrName),
+        set: setterForAttr(attr, attrName)
+      })
     })
 
     customElements.define(this.elementName, this)
