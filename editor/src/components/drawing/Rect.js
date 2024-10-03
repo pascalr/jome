@@ -36,8 +36,8 @@ export class Rect extends JomeComponent {
     ctx.beginPath();
     ctx.strokeStyle = this.color;
     ctx.lineWidth = this.thickness;
-    ctx.rect(this.x, this.y, this.width, this.height);
-    ctx.stroke();
+    ctx.strokeRect(this.x, this.y, this.width, this.height);
+    // ctx.stroke();
     ctx.restore();
   }
   
