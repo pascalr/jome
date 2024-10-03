@@ -1,7 +1,10 @@
 import { e } from "../helpers";
 import { capitalize } from "../utils";
+import { JomeComponent } from "./JomeComponent";
 
-export class Field extends HTMLElement {
+export class Field extends JomeComponent {
+
+  static elementName = "jome-field"
 
   static get observedAttributes() {
     return ['name', 'type', 'unit', 'enableEquivalentUnits', 'value', 'comment'];

@@ -2,6 +2,8 @@ import { JomeComponent } from "../JomeComponent";
 
 export class Line extends JomeComponent {
 
+  static elementName = "jome-line"
+
   static ownAttributes = {
     x1: {
       type: "int",

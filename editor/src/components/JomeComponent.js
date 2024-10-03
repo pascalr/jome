@@ -86,4 +86,8 @@ export class JomeComponent extends HTMLElement {
     this[ property ] = newValue;
   }
 
+  static register() {
+    customElements.define(this.elementName, this)
+  }
+
 }

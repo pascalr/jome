@@ -2,6 +2,8 @@ import { JomeComponent } from "../JomeComponent";
 
 export class Rect extends JomeComponent {
 
+  static elementName = "jome-rect"
+
   static ownAttributes = {
     x: {
       type: "int",

@@ -30,6 +30,8 @@ const OBSERVED_ATTRIBUTES = Object.keys({...DRAWING_ATTRIBUTES, ...BASE_ATTRIBUT
 
 export class Drawing extends JomeComponent {
 
+  static elementName = "jome-drawing"
+
   constructor() {
     super()
     this.attachShadow({mode: 'open'});

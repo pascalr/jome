@@ -1,7 +1,10 @@
 import { e } from "../helpers";
 import { capitalize } from "../utils";
+import { JomeComponent } from "./JomeComponent";
 
-export class Calc extends HTMLElement {
+export class Calc extends JomeComponent {
+
+  static elementName = "jome-calc"
 
   static get observedAttributes() {
     return ['name', 'formula', 'comment'];

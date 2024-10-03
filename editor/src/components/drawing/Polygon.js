@@ -2,6 +2,8 @@ import { JomeComponent } from "../JomeComponent";
 
 export class Polygon extends JomeComponent {
 
+  static elementName = "jome-polygon"
+
   static ownAttributes = {
     x: {
       type: "int",
