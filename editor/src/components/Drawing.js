@@ -49,8 +49,19 @@ export class Drawing extends JomeComponent {
 
     applyBaseStyle(this)
 
+    console.log('THIS', this)
+
     let el = e('canvas', {width: this.width, height: this.height})
     el.style.backgroundColor = this.fill
+
+    let ctx = el.getContext("2d");
+
+    ;[...this.children].forEach(c => {
+      if (c.draw) {
+        c.draw(ctx)
+      }
+    })
+
     this.shadowRoot.appendChild(el)
   }
 

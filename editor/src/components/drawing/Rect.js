@@ -1,12 +1,35 @@
-export class Rect extends HTMLElement {
+import { JomeComponent } from "../JomeComponent";
 
-  static get observedAttributes() {
-    return ['x', 'y', 'width', 'height'];
+export class Rect extends JomeComponent {
+
+  static ownAttributes = {
+    x: {
+      type: "int",
+      required: true
+    },
+    y: {
+      type: "int",
+      required: true
+    },
+    width: {
+      type: "dim",
+      required: true
+    },
+    height: {
+      type: "dim",
+      required: true
+    },
+    thickness: {
+      type: "int",
+      default: 2,
+    }
   }
 
-  attributeChangedCallback(property, oldValue, newValue) {
-    if (oldValue === newValue) return;
-    this[ property ] = newValue;
+  draw(ctx) {
+    ctx.beginPath();
+    ctx.lineWidth = this.thickness;
+    ctx.rect(this.x, this.y, this.width, this.height);
+    ctx.stroke();
   }
-
+  
 }

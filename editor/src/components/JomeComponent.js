@@ -73,6 +73,14 @@ export class JomeComponent extends HTMLElement {
     })
   }
 
+  static get allAttributes() {
+    return {...this.constructor.ownAttributes, ...BASE_ATTRIBUTES}
+  }
+
+  static get observedAttributes() {
+    return Object.keys(this.constructor.allAttributes || {})
+  }
+
   attributeChangedCallback(property, oldValue, newValue) {
     if (oldValue === newValue) return;
     this[ property ] = newValue;
