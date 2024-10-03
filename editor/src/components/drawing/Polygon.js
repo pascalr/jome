@@ -25,6 +25,10 @@ export class Polygon extends JomeComponent {
       type: "color",
       default: "#000",
     },
+    fill: {
+      type: "color",
+      default: "#000",
+    },
     thickness: {
       type: "int",
       default: 2,
@@ -41,22 +45,23 @@ export class Polygon extends JomeComponent {
     let rot = this.rotate * 2 * Math.PI / 360
 
     ctx.save();
-    ctx.beginPath();
-    ctx.strokeStyle = this.color;
-    ctx.lineWidth = this.thickness;
-    ctx.moveTo(this.x + this.radius * Math.cos(rot), this.y + this.radius * Math.sin(rot));          
-
-    let debug = this.rotate
-
-    for (var i = 1; i <= this.sides; i += 1) {
-      ctx.lineTo(
-        this.x + this.radius * Math.cos(i * 2 * Math.PI / this.sides + rot),
-        this.y + this.radius * Math.sin(i * 2 * Math.PI / this.sides + rot)
-      );
-    }
-
-    ctx.stroke();
+    ctx.fillStyle = this.fill;
+    drawPolygon(ctx, this.x, this.y, this.radius, this.sides, rot)
+    // drawPolygon(ctx, this.x, this.y, this.radius-this.thickness, this.sides, rot)
     ctx.restore();
   }
   
+}
+
+function drawPolygon(ctx, x, y, radius, sides, rot) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius * Math.cos(rot), y + radius * Math.sin(rot));          
+
+  for (var i = 1; i <= sides; i += 1) {
+    ctx.lineTo(
+      x + radius * Math.cos(i * 2 * Math.PI / sides + rot),
+      y + radius * Math.sin(i * 2 * Math.PI / sides + rot)
+    );
+  }
+  ctx.fill();
 }
