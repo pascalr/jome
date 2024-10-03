@@ -1,22 +1,22 @@
 import { JomeComponent } from "../JomeComponent";
 
-export class Rect extends JomeComponent {
+export class Line extends JomeComponent {
 
   static ownAttributes = {
-    x: {
+    x1: {
       type: "int",
       required: true
     },
-    y: {
+    x2: {
       type: "int",
       required: true
     },
-    width: {
-      type: "dim",
+    y1: {
+      type: "int",
       required: true
     },
-    height: {
-      type: "dim",
+    y2: {
+      type: "int",
       required: true
     },
     thickness: {
@@ -32,9 +32,10 @@ export class Rect extends JomeComponent {
   draw(ctx) {
     ctx.save();
     ctx.beginPath();
-    ctx.strokeStyle = this.color;
     ctx.lineWidth = this.thickness;
-    ctx.rect(this.x, this.y, this.width, this.height);
+    ctx.strokeStyle = this.color;
+    ctx.moveTo(this.x1, this.y1);
+    ctx.lineTo(this.x2, this.y2);
     ctx.stroke();
     ctx.restore();
   }
