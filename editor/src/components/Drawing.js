@@ -1,5 +1,17 @@
 import { e } from "../helpers";
-import { capitalize } from "../utils";
+
+const template = document.createElement('template');
+
+template.innerHTML = `
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+`;
+
+const style = new CSSStyleSheet();
+style.replaceSync(":host { display: block; }")
 
 export class Drawing extends HTMLElement {
 
@@ -8,6 +20,9 @@ export class Drawing extends HTMLElement {
     this.width = 192
     this.height = 108
     this.fill = "#FFF"
+    this.attachShadow({mode: 'open'});
+    // this.shadowRoot.appendChild(template.content.cloneNode(true));
+    this.shadowRoot.adoptedStyleSheets = [style]
   }
 
   static get observedAttributes() {
@@ -23,7 +38,7 @@ export class Drawing extends HTMLElement {
 
     let el = e('canvas', {width: this.width, height: this.height})
     el.style.backgroundColor = this.fill
-    this.replaceChildren(el)
+    this.shadowRoot.appendChild(el)
   }
 
 }
