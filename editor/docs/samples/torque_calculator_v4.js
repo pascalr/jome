@@ -16,7 +16,7 @@ let thisIsSomeCodeBefore;
   */let distance = 2;/*
 </jome-field>
 
-<jome-drawing width=600 height=400 fill="#ffffff" margin="1em 0 0 0">
+<jome-drawing width=600 height=400 margin="1em 0 0 0">
   <jome-text x=100 y=50 content="{force}" />
   <jome-rect x=100 y=100 width=400 height=300 />
 </jome-drawing>

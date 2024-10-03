@@ -1,4 +1,5 @@
 import { e } from "../helpers";
+import { applyBaseStyle, BASE_ATTRIBUTES, BASE_STYLESHEET, JomeComponent } from "./JomeComponent";
 
 const template = document.createElement('template');
 
@@ -9,36 +10,6 @@ template.innerHTML = `
     }
   </style>
 `;
-
-const baseStylesheet = new CSSStyleSheet();
-baseStylesheet.replaceSync(`
-:host {
-  display: block;
-}
-:host([hidden]) {
-  display: none;
-}
-`)
-
-export const BASE_ATTRIBUTES = {
-  display: {
-    type: 'enum',
-    default: 'block',
-    values: ["inline", "block"] // inline-block or block
-  },
-  hidden: { // Is this already part of HTML standard?
-    type: 'bool',
-    default: false
-  },
-  margin: {
-    type: '[dim]',
-    default: 0,
-  },
-  padding: {
-    type: '[dim]',
-    default: 0,
-  }
-}
 
 const DRAWING_ATTRIBUTES = {
   width: {
@@ -57,48 +28,13 @@ const DRAWING_ATTRIBUTES = {
 
 const OBSERVED_ATTRIBUTES = Object.keys({...DRAWING_ATTRIBUTES, ...BASE_ATTRIBUTES})
 
-function validateType(type, value) {
-  if (type === 'dim') {
-    return CSS.supports('width', value)
-  } else if (type === '[dim]') {
-    return CSS.supports('margin', value)
-  }
-  throw `Don't know how to validate attribute of type ${type}.`
-}
-
-function parseAttribute(el, attr, attrName) {
-
-  let value = el.getAttribute(attrName)
-
-  if (!value) {
-    return attr.default
-  }
-
-  if (!validateType(attr.type, value)) {
-    throw `Invalid ${attrName}: ${value}`
-  }
-
-  return value
-}
-
-function applyStyle(el) {
-  if (el.hasAttribute('margin')) {
-    el.style.margin = parseAttribute(el, BASE_ATTRIBUTES.margin, 'margin')
-  } else if (el.hasAttribute('padding')) {
-    el.style.padding = parseAttribute(el, BASE_ATTRIBUTES.padding, 'padding')
-  }
-}
-
-export class Drawing extends HTMLElement {
+export class Drawing extends JomeComponent {
 
   constructor() {
     super()
-    this.width = 192
-    this.height = 108
-    this.fill = "#FFF"
     this.attachShadow({mode: 'open'});
     // this.shadowRoot.appendChild(template.content.cloneNode(true));
-    this.shadowRoot.adoptedStyleSheets = [baseStylesheet]
+    this.shadowRoot.adoptedStyleSheets = [BASE_STYLESHEET]
   }
 
   static get allAttributes() {
@@ -108,15 +44,10 @@ export class Drawing extends HTMLElement {
   static get observedAttributes() {
     return OBSERVED_ATTRIBUTES;
   }
-
-  attributeChangedCallback(property, oldValue, newValue) {
-    if (oldValue === newValue) return;
-    this[ property ] = newValue;
-  }
   
   connectedCallback() {
 
-    applyStyle(this)
+    applyBaseStyle(this)
 
     let el = e('canvas', {width: this.width, height: this.height})
     el.style.backgroundColor = this.fill
