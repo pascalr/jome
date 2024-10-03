@@ -19,7 +19,7 @@ let thisIsSomeCodeBefore;
 <jome-drawing width=600 height=300 margin="1em 0 0 0">
   <rect width="200" height="100" x="10" y="10" rx="20" ry="20" fill="blue"></rect>
   <jome-text x=100 y=50 content="{force}"></jome-text>
-  <jome-rect x=100 y=130 width=400 height=60 thickness=8></jome-rect>
+  <jome-rect x=100 y=150 width=400 height=50 thickness=8></jome-rect>
 </jome-drawing>
 
 <p>Torque is the result of a force multiplied by a distance from a pivot point.</p>

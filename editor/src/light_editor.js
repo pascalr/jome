@@ -6,6 +6,8 @@ import { Field } from './components/Field';
 import { Calc } from './components/Calc';
 import { Rect } from './components/drawing/Rect';
 
+console.log('own', Rect.constructor.ownAttributes)
+
 customElements.define("jome-hello-world", HelloWorld)
 customElements.define("jome-drawing", Drawing)
 customElements.define("jome-field", Field)

@@ -74,11 +74,11 @@ export class JomeComponent extends HTMLElement {
   }
 
   static get allAttributes() {
-    return {...this.constructor.ownAttributes, ...BASE_ATTRIBUTES}
+    return {...this.ownAttributes, ...BASE_ATTRIBUTES}
   }
 
   static get observedAttributes() {
-    return Object.keys(this.constructor.allAttributes || {})
+    return Object.keys(this.allAttributes || {})
   }
 
   attributeChangedCallback(property, oldValue, newValue) {
