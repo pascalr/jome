@@ -1,9 +1,12 @@
 import { DRAWING_ATTRIBUTES } from "../abstract/DrawingComponent";
 import { JomeComponent } from "../abstract/JomeComponent";
 
+// FIXME deprecated??? use primitive tag <rect> instead?
+
 export class Rect extends JomeComponent {
 
   static componentName = "rect"
+  static primitiveName = "rect"
 
   static ownAttributes = {
     x: {
@@ -30,6 +33,15 @@ export class Rect extends JomeComponent {
     // ctx.beginPath();
     ctx.strokeRect(this.x, this.y, this.width, this.height);
     // ctx.stroke();
+
+    // if (this.hasAttribute("fill")) {
+    //   ctx.beginPath();
+    //   ctx.rect(parseInt(this.getAttribute("x")), parseInt(this.getAttribute("y")), parseInt(this.getAttribute("width")), parseInt(this.getAttribute("height")));
+    //   ctx.fill();
+    // }
+    // if (this.hasAttribute("color")) {
+    //   ctx.strokeRect(parseInt(this.getAttribute("x")), parseInt(this.getAttribute("y")), parseInt(this.getAttribute("width")), parseInt(this.getAttribute("height")));
+    // }  
   }
   
 }

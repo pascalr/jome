@@ -67,11 +67,7 @@ export class JomeComponent extends HTMLElement {
 
   static register() {
 
-    console.log("register this", this)
-
     Object.keys(this.ownAttributes||{}).forEach(attrName => {
-
-      console.log("forEach", this)
 
       let attr = this.ownAttributes[attrName]
 

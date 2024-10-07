@@ -26,6 +26,19 @@ const DRAWING_ATTRIBUTES = {
   }
 }
 
+const DRAW_PRIMITIVES = {
+  rect(ctx, el) {
+    if (el.hasAttribute("fill")) {
+      ctx.beginPath();
+      ctx.rect(parseInt(el.getAttribute("x")), parseInt(el.getAttribute("y")), parseInt(el.getAttribute("width")), parseInt(el.getAttribute("height")));
+      ctx.fill();
+    }
+    if (el.hasAttribute("color")) {
+      ctx.strokeRect(parseInt(el.getAttribute("x")), parseInt(el.getAttribute("y")), parseInt(el.getAttribute("width")), parseInt(el.getAttribute("height")));
+    }    
+  }
+}
+
 const OBSERVED_ATTRIBUTES = Object.keys({...DRAWING_ATTRIBUTES, ...BASE_ATTRIBUTES})
 
 export class Canvas extends JomeComponent {
@@ -59,14 +72,19 @@ export class Canvas extends JomeComponent {
     let ctx = el.getContext("2d");
 
     ;[...this.children].forEach(c => {
+      ctx.save();
+      if (c.hasAttribute("thickness")) { ctx.lineWidth = parseInt(c.getAttribute("thickness")); }
+      if (c.hasAttribute("color")) { ctx.strokeStyle = c.getAttribute("color"); }
+      if (c.hasAttribute("fill")) { ctx.fillStyle = c.getAttribute("fill"); }
       if (c.drawOnCanvas) {
-        ctx.save();
-        ctx.lineWidth = c.thickness;
-        ctx.strokeStyle = c.color;
-        ctx.fillStyle = c.fill;
         c.drawOnCanvas(ctx)
-        ctx.restore();
+      } else {
+        let drawingFunc = DRAW_PRIMITIVES[c.tagName.toLowerCase()]
+        if (drawingFunc) {
+          drawingFunc(ctx, c)
+        }
       }
+      ctx.restore();
     })
 
     this.shadowRoot.appendChild(el)
