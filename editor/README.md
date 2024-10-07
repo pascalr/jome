@@ -1,8 +1,29 @@
-# Jome editor
+# Jome
 
-Jome is code that is inserted into other languages in order to add more information or give more advanced features.
+Jome adds HTML5 code inside comments of other languages.
 
-Jome uses the extension of the base language and is added in the shape of a comment.
+The idea is to see and document code in a more visual way and to add complex functionalities not possible with the language.
+
+Jome code is delimited by a tilde at the beginning and the end of a comment block.
+
+```js
+/*~
+<h1>This is a javascript file</h1>
+
+<p>The field below will generate js code automatically when changed.</p>
+
+<jome-field name="force" type="number" unit="N" value=10>
+  */let force = 10;/*
+</jome-field>
+~*/
+```
+
+Jome is composed of many parts.
+
+- Jome code: HTML5 code that is inserted inside comments
+- Jome Editor: An editor to see and modify Jome code
+- JomeScript: A scripting language used inside Jome code
+- Jome components: Tags that can be inserted inside Jome code
 
 <!--~begin dir_list(".", comments: {"REFERENCE.md": "Jome format reference"})-->
 <pre style="background-color: #242426; padding: 0.5em;">
