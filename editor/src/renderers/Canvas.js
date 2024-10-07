@@ -1,5 +1,5 @@
 import { e } from "../helpers";
-import { applyBaseStyle, BASE_ATTRIBUTES, JomeComponent } from "../components/JomeComponent";
+import { applyBaseStyle, BASE_ATTRIBUTES, JomeComponent } from "../components/abstract/JomeComponent";
 
 const template = document.createElement('template');
 
@@ -61,6 +61,9 @@ export class Canvas extends JomeComponent {
     ;[...this.children].forEach(c => {
       if (c.drawOnCanvas) {
         ctx.save();
+        ctx.lineWidth = c.thickness;
+        ctx.strokeStyle = c.color;
+        ctx.fillStyle = c.fill;
         c.drawOnCanvas(ctx)
         ctx.restore();
       }

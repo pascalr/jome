@@ -1,6 +1,6 @@
 import { e } from "../helpers";
 import { capitalize } from "../utils";
-import { JomeComponent } from "./JomeComponent";
+import { JomeComponent } from "./abstract/JomeComponent";
 
 export class Field extends JomeComponent {
 

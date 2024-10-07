@@ -1,4 +1,5 @@
-import { JomeComponent } from "../JomeComponent";
+import { DRAWING_ATTRIBUTES } from "../abstract/DrawingComponent";
+import { JomeComponent } from "../abstract/JomeComponent";
 
 export class Rect extends JomeComponent {
 
@@ -21,21 +22,12 @@ export class Rect extends JomeComponent {
       type: "dim",
       required: true
     },
-    thickness: {
-      type: "int",
-      default: 2,
-    },
-    color: {
-      type: "color",
-      default: "#000",
-    },
+    ...DRAWING_ATTRIBUTES
   }
 
   // TODO move this inside renderer (canvas, svg, css), here it is just the model
   drawOnCanvas(ctx) {
     // ctx.beginPath();
-    ctx.strokeStyle = this.color;
-    ctx.lineWidth = this.thickness;
     ctx.strokeRect(this.x, this.y, this.width, this.height);
     // ctx.stroke();
   }

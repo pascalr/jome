@@ -1,4 +1,5 @@
-import { JomeComponent } from "../JomeComponent";
+import { DRAWING_ATTRIBUTES } from "../abstract/DrawingComponent";
+import { JomeComponent } from "../abstract/JomeComponent";
 
 export class Line extends JomeComponent {
 
@@ -21,20 +22,11 @@ export class Line extends JomeComponent {
       type: "int",
       required: true
     },
-    thickness: {
-      type: "int",
-      default: 2,
-    },
-    color: {
-      type: "color",
-      default: "#000",
-    },
+    ...DRAWING_ATTRIBUTES
   }
 
   drawOnCanvas(ctx) {
     ctx.beginPath();
-    ctx.lineWidth = this.thickness;
-    ctx.strokeStyle = this.color;
     ctx.moveTo(this.x1, this.y1);
     ctx.lineTo(this.x2, this.y2);
     ctx.stroke();

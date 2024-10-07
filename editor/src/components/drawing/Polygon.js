@@ -1,4 +1,5 @@
-import { JomeComponent } from "../JomeComponent";
+import { DRAWING_ATTRIBUTES } from "../abstract/DrawingComponent";
+import { JomeComponent } from "../abstract/JomeComponent";
 
 export class Polygon extends JomeComponent {
 
@@ -21,30 +22,17 @@ export class Polygon extends JomeComponent {
       type: "int",
       default: 10,
     },
-    color: {
-      type: "color",
-      default: "#000",
-    },
-    fill: {
-      type: "color",
-      default: "#000",
-    },
-    thickness: {
-      type: "int",
-      default: 2,
-    },
     rotate: {
       type: "float",
       unit: "deg",
       default: 0,
     },
+    ...DRAWING_ATTRIBUTES
   }
 
   drawOnCanvas(ctx) {
 
     let rot = this.rotate * 2 * Math.PI / 360
-
-    ctx.fillStyle = this.fill;
     drawPolygon(ctx, this.x, this.y, this.radius, this.sides, rot)
     // drawPolygon(ctx, this.x, this.y, this.radius-this.thickness, this.sides, rot)
   }
