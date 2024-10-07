@@ -5,9 +5,9 @@ import { Field } from './components/Field';
 import { Calc } from './components/Calc';
 import { Rect } from './components/drawing/Rect';
 import { Line } from './components/drawing/Line';
-import { Polygon } from './components/drawing/Polygon';
+import { Isogon } from './components/drawing/Isogon';
 
-;[Canvas, Field, Calc, Rect, Line, Polygon].map(k => k.register())
+;[Canvas, Field, Calc, Rect, Line, Isogon].map(k => k.register())
 
 document.addEventListener('DOMContentLoaded', async () => {
 

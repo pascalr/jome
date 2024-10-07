@@ -1,7 +1,7 @@
 import { DRAWING_ATTRIBUTES } from "../abstract/DrawingComponent";
 import { JomeComponent } from "../abstract/JomeComponent";
 
-export class Polygon extends JomeComponent {
+export class Isogon extends JomeComponent {
 
   static componentName = "polygon"
 
