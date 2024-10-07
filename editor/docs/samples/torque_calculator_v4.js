@@ -17,9 +17,9 @@ let thisIsSomeCodeBefore;
 </jome-field>
 
 <jome-canvas width=600 height=300 margin="1em 0 0 0">
-  <rect width="200" height="100" x="10" y="10" fill="blue"></rect>
+  <jome-rect width="200" height="100" x="10" y="10" fill="blue"></jome-rect>
   <jome-text x=100 y=50 content="{force}"></jome-text>
-  <rect x=100 y=150 width=400 height=50 thickness=4 color="black"></rect>
+  <jome-rect x=100 y=150 width=400 height=50 thickness=4 color="black"></jome-rect>
   <jome-polygon x=499 y=220 sides=3 radius=20 thickness=4 rotate=30></jome-polygon>
 </jome-canvas>
 

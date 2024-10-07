@@ -7,11 +7,9 @@ export const DRAWING_ATTRIBUTES = {
   },
   color: {
     type: "color",
-    default: "#000",
   },
   fill: {
     type: "color",
-    default: "#000",
   },
 }
 

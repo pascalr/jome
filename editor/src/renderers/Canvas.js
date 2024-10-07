@@ -1,5 +1,6 @@
 import { e } from "../helpers";
 import { applyBaseStyle, BASE_ATTRIBUTES, JomeComponent } from "../components/abstract/JomeComponent";
+import { Rect } from "../components/drawing/Rect";
 
 const template = document.createElement('template');
 

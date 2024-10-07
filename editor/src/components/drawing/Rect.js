@@ -28,20 +28,16 @@ export class Rect extends JomeComponent {
     ...DRAWING_ATTRIBUTES
   }
 
-  // TODO move this inside renderer (canvas, svg, css), here it is just the model
   drawOnCanvas(ctx) {
-    // ctx.beginPath();
-    ctx.strokeRect(this.x, this.y, this.width, this.height);
-    // ctx.stroke();
 
-    // if (this.hasAttribute("fill")) {
-    //   ctx.beginPath();
-    //   ctx.rect(parseInt(this.getAttribute("x")), parseInt(this.getAttribute("y")), parseInt(this.getAttribute("width")), parseInt(this.getAttribute("height")));
-    //   ctx.fill();
-    // }
-    // if (this.hasAttribute("color")) {
-    //   ctx.strokeRect(parseInt(this.getAttribute("x")), parseInt(this.getAttribute("y")), parseInt(this.getAttribute("width")), parseInt(this.getAttribute("height")));
-    // }  
+    if (this.hasAttribute("fill")) {
+      ctx.beginPath();
+      ctx.rect(parseInt(this.getAttribute("x")), parseInt(this.getAttribute("y")), parseInt(this.getAttribute("width")), parseInt(this.getAttribute("height")));
+      ctx.fill();
+    }
+    if (this.hasAttribute("color")) {
+      ctx.strokeRect(parseInt(this.getAttribute("x")), parseInt(this.getAttribute("y")), parseInt(this.getAttribute("width")), parseInt(this.getAttribute("height")));
+    }  
   }
   
 }
