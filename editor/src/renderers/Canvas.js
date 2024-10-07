@@ -59,8 +59,10 @@ export class Canvas extends JomeComponent {
     let ctx = el.getContext("2d");
 
     ;[...this.children].forEach(c => {
-      if (c.draw) {
-        c.draw(ctx)
+      if (c.drawOnCanvas) {
+        ctx.save();
+        c.drawOnCanvas(ctx)
+        ctx.restore();
       }
     })
 

@@ -40,15 +40,13 @@ export class Polygon extends JomeComponent {
     },
   }
 
-  draw(ctx) {
+  drawOnCanvas(ctx) {
 
     let rot = this.rotate * 2 * Math.PI / 360
 
-    ctx.save();
     ctx.fillStyle = this.fill;
     drawPolygon(ctx, this.x, this.y, this.radius, this.sides, rot)
     // drawPolygon(ctx, this.x, this.y, this.radius-this.thickness, this.sides, rot)
-    ctx.restore();
   }
   
 }

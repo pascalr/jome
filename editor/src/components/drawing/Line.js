@@ -31,15 +31,13 @@ export class Line extends JomeComponent {
     },
   }
 
-  draw(ctx) {
-    ctx.save();
+  drawOnCanvas(ctx) {
     ctx.beginPath();
     ctx.lineWidth = this.thickness;
     ctx.strokeStyle = this.color;
     ctx.moveTo(this.x1, this.y1);
     ctx.lineTo(this.x2, this.y2);
     ctx.stroke();
-    ctx.restore();
   }
   
 }
