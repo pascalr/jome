@@ -1,5 +1,5 @@
 import { e } from "../helpers";
-import { applyBaseStyle, BASE_ATTRIBUTES, JomeComponent } from "./JomeComponent";
+import { applyBaseStyle, BASE_ATTRIBUTES, JomeComponent } from "../components/JomeComponent";
 
 const template = document.createElement('template');
 
@@ -28,9 +28,9 @@ const DRAWING_ATTRIBUTES = {
 
 const OBSERVED_ATTRIBUTES = Object.keys({...DRAWING_ATTRIBUTES, ...BASE_ATTRIBUTES})
 
-export class Drawing extends JomeComponent {
+export class Canvas extends JomeComponent {
 
-  static elementName = "jome-drawing"
+  static elementName = "jome-canvas"
 
   constructor() {
     super()

@@ -31,6 +31,7 @@ export class Rect extends JomeComponent {
     },
   }
 
+  // TODO move this inside renderer (canvas, svg, css), here it is just the model
   draw(ctx) {
     ctx.save();
     ctx.beginPath();
