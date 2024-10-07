@@ -4,7 +4,7 @@ import { JomeComponent } from "./JomeComponent";
 
 export class Field extends JomeComponent {
 
-  static elementName = "jome-field"
+  static componentName = "field"
 
   static get observedAttributes() {
     return ['name', 'type', 'unit', 'enableEquivalentUnits', 'value', 'comment'];

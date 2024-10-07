@@ -4,7 +4,7 @@ import { JomeComponent } from "./JomeComponent";
 
 export class Calc extends JomeComponent {
 
-  static elementName = "jome-calc"
+  static componentName = "calc"
 
   static get observedAttributes() {
     return ['name', 'formula', 'comment'];

@@ -2,7 +2,7 @@ import { JomeComponent } from "../JomeComponent";
 
 export class Polygon extends JomeComponent {
 
-  static elementName = "jome-polygon"
+  static componentName = "polygon"
 
   static ownAttributes = {
     x: {

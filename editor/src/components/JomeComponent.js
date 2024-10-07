@@ -82,7 +82,8 @@ export class JomeComponent extends HTMLElement {
       })
     })
 
-    customElements.define(this.elementName, this)
+    customElements.define('jome-'+this.componentName, this)
+    // customElements.define('j-'+this.componentName, this)
   }
 
 }

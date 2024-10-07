@@ -30,7 +30,7 @@ const OBSERVED_ATTRIBUTES = Object.keys({...DRAWING_ATTRIBUTES, ...BASE_ATTRIBUT
 
 export class Canvas extends JomeComponent {
 
-  static elementName = "jome-canvas"
+  static componentName = "canvas"
 
   constructor() {
     super()
