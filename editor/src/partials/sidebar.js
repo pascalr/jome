@@ -60,6 +60,11 @@ export function createSideBar(app) {
   let currentView = app.getCurrentSideView()
   let sideViews = app.sideViews
 
+  let contentDiv = e('div', {className: "context_content"}, null)
+  if (currentView && currentView.render) {
+    currentView.render(app, contentDiv)
+  }
+
   return [
     e('div', {className: "context_buttons"}, [
       sidebarIcon(iconHouse, "Home", () => app.show(HomePage), currentName === SIDEBAR_TABS.HOME),
@@ -74,6 +79,6 @@ export function createSideBar(app) {
       sidebarIcon(iconGear, "Settings"),
       e('div', {style: "height: 0.5em;"})
     ]),
-    e('div', {className: "context_content"}, currentView && currentView.render ? currentView.render() : null)
+    contentDiv
   ]
 }

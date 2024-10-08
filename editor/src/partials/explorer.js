@@ -57,11 +57,11 @@ class ExplorerView extends SideView {
   load() {
   }
 
-  render() {
-    return [
+  render(app, ref) {
+    ref.replaceChildren(...[
       e('div', {className: "panel-header"}, ["Explorer"]),
       e('div', {id: "explorer-tree"})
-    ]
+    ])
   }
 
 }
