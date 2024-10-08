@@ -1,7 +1,6 @@
 import { getFilenameFromPath } from "./utils"
 import { e } from "./helpers"
 
-import { HomePage } from './pages/homepage'
 import { EditorPage, updateMainPanelContent } from './pages/editor'
 import { createSideBar, SIDEBAR_TABS } from "./partials/sidebar"
 import { registerExplorer } from "./partials/explorer"
@@ -9,14 +8,20 @@ import { registerObjectTree } from "./partials/object_tree"
 import { createSkeleton, getRef, REF } from "./views/skeleton"
 import { registerWindowBar } from "./views/window_bar"
 import { registerWindowView } from "./views/window"
+import { registerHomePage } from "./views/homepage"
 
 const STORAGE_KEY = 'APP'
 
-const EVENT = {
+export const EVENT = {
   FILE_CHANGE: "onFileChange",
   PROJECT_CHANGE: "onProjectChange",
   SIDEBAR_TAB_CHANGE: "onSidebarTabChange",
   WINDOW_CHANGE: "onWindowChange"
+}
+
+export const WINDOW = {
+  HOME: "home",
+  EDITOR: "editor"
 }
 
 export class NeutralinoApp {
@@ -75,8 +80,9 @@ export class NeutralinoApp {
 
     registerWindowBar(this)
     registerWindowView(this)
+    registerHomePage(this)
 
-    this.show(this.data.CURRENT_SIDEVIEW && this.data.CURRENT_SIDEVIEW !== SIDEBAR_TABS.HOME ? EditorPage : HomePage)
+    this.show(EditorPage)
     this.emit(EVENT.SIDEBAR_TAB_CHANGE, {tabName: this.data.CURRENT_SIDEVIEW})
     this.emit(EVENT.WINDOW_CHANGE, {windowName: this.data.CURRENT_SIDEVIEW && this.data.CURRENT_SIDEVIEW !== SIDEBAR_TABS.HOME ? "editor" : "home"})
 
@@ -99,6 +105,10 @@ export class NeutralinoApp {
         view[eventHandlerName](...data)
       }
     })
+  }
+
+  changeWindow(windowName) {
+    this.emit(EVENT.WINDOW_CHANGE, {windowName})
   }
 
   registerSideView(sideView) {

@@ -7,8 +7,8 @@ import iconGit from '../../assets/icons/git.svg'
 import iconQuestionCircle from '../../assets/icons/question-circle.svg'
 import iconTerminal from '../../assets/icons/terminal.svg'
 
-import { HomePage } from '../pages/homepage'
 import { e, svgE } from '../helpers'
+import { WINDOW } from '../neutralino_app'
 
 export const SIDEBAR_TABS = {
   HOME: "home",
@@ -62,7 +62,7 @@ export function createSideBar(app) {
 
   return [
     e('div', {className: "context_buttons"}, [
-      sidebarIcon(iconHouse, "Home", () => app.show(HomePage), currentName === SIDEBAR_TABS.HOME),
+      sidebarIcon(iconHouse, "Home", () => app.changeWindow(WINDOW.HOME), currentName === SIDEBAR_TABS.HOME),
       ...(sideViews.map(v => sidebarIconV2(app, v, currentName))),
       sidebarIcon(iconBug, "Run & Debug"),
       sidebarIcon(iconGit, "Git"),

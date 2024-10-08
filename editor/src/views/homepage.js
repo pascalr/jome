@@ -4,6 +4,8 @@ import {e, svgE} from '../helpers'
 import IconFolder from '../../assets/icons/folder2-open.svg'
 import IconFile from '../../assets/icons/file-earmark.svg'
 import { getRef, REF } from './skeleton'
+import { WINDOW } from '../neutralino_app'
+import { View } from '../view'
 
 function sideIcon(icon) {
   let el = svgE(icon)
@@ -62,6 +64,10 @@ class HomePage extends View {
       e('h2', {}, ["Create project from template"]),
       e('p', {}, ["No template implemented yet"]),
     ]))
+  }
+
+  onWindowChange({windowName}) {
+    if (windowName === WINDOW.HOME) { this.render() }
   }
 
 }
