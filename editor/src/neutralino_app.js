@@ -3,6 +3,7 @@ import { e } from "./helpers"
 
 import { HomePage } from './pages/homepage'
 import { EditorPage, updateMainPanelContent } from './pages/editor'
+import { SIDEBAR_TABS } from "./partials/sidebar"
 
 const STORAGE_KEY = 'APP'
 
@@ -16,6 +17,7 @@ export class NeutralinoApp {
      * RECENT
      * CURRENT_FILEPATH
      * FILES_OPENED_BY_PROJECT
+     * CURRENT_SIDEBAR
      */
     this.data = {}
 
@@ -52,7 +54,7 @@ export class NeutralinoApp {
       document.body.prepend(e('div', {id: "window_bar"}))
     }
 
-    this.show(this.data.PROJECT_PATH ? EditorPage : HomePage)
+    this.show(this.data.CURRENT_SIDEBAR && this.data.CURRENT_SIDEBAR !== SIDEBAR_TABS.HOME ? EditorPage : HomePage)
 
     if (this.data.CURRENT_FILEPATH) {
       this.openFile(this.data.CURRENT_FILEPATH)
@@ -120,6 +122,7 @@ export class NeutralinoApp {
       this.setData('PROJECT_PATH', null)
       this.setData('CURRENT_FILEPATH', data.path)
     }
+    this.setData('CURRENT_SIDEBAR', SIDEBAR_TABS.EXPLORER)
     this.show(EditorPage)
   }
 

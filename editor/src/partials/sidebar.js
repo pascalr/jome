@@ -12,7 +12,12 @@ import iconTree from '../../assets/icons/tree.svg'
 import { HomePage } from '../pages/homepage'
 import { e, svgE } from '../helpers'
 
-function contextIcon(icon, title, onClick) {
+export const SIDEBAR_TABS = {
+  HOME: "home",
+  EXPLORER: "explorer",
+}
+
+function sidebarIcon(icon, title, onClick, isCurrent) {
   // I could modify the size of the icons here
   // One day far far away, allow a settings to specify the size of the icons.
   let el = svgE(icon, title)
@@ -22,24 +27,29 @@ function contextIcon(icon, title, onClick) {
     el.onclick = onClick
     el.style.cursor = "pointer"
   }
+  if (isCurrent) {
+    el.style.backgroundColor = "#1b3346"
+  }
   return el
 }
 
 export function createSideBar(app) {
 
+  let current = app.getData("CURRENT_SIDEBAR")
+
   return [
     e('div', {className: "context_buttons"}, [
-      contextIcon(iconHouse, "Home", () => app.show(HomePage)),
-      contextIcon(iconFolder2Open, "File explorer"),
-      contextIcon(iconTree, "Object Tree"),
-      contextIcon(iconBug, "Run & Debug"),
-      contextIcon(iconGit, "Git"),
-      contextIcon(iconBracesAsterisk, "Snippets"),
-      contextIcon(iconBoxes, "Extensions"),
+      sidebarIcon(iconHouse, "Home", () => app.show(HomePage), current === SIDEBAR_TABS.HOME),
+      sidebarIcon(iconFolder2Open, "File explorer", null, current === SIDEBAR_TABS.EXPLORER),
+      sidebarIcon(iconTree, "Object Tree"),
+      sidebarIcon(iconBug, "Run & Debug"),
+      sidebarIcon(iconGit, "Git"),
+      sidebarIcon(iconBracesAsterisk, "Snippets"),
+      sidebarIcon(iconBoxes, "Extensions"),
       e('div', {style: "flex-grow: 1;"}),
-      contextIcon(iconTerminal, "Console"),
-      contextIcon(iconQuestionCircle, "Documentation"),
-      contextIcon(iconGear, "Settings"),
+      sidebarIcon(iconTerminal, "Console"),
+      sidebarIcon(iconQuestionCircle, "Documentation"),
+      sidebarIcon(iconGear, "Settings"),
       e('div', {style: "height: 0.5em;"})
     ]),
     e('div', {className: "context_content"}, [

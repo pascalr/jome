@@ -17,7 +17,7 @@ import { createCodemirrorEditor } from '../codemirror/codemirror_editor'
 import { JomeParser } from '../jome_parser'
 import { renderCommand } from '../jome_renderer'
 import mdToHtml from '@jome/md-to-html'
-import { createSideBar } from '../partials/side_bar'
+import { createSideBar } from '../partials/sidebar'
 
 function afterRender(app) {
   // FIXME: Do this inside editor page only
