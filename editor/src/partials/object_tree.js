@@ -21,5 +21,7 @@ class ObjectTreeView extends SideView {
 }
 
 export function registerObjectTree(app) {
-  app.registerSideView(new ObjectTreeView())
+  let view = new ObjectTreeView()
+  app.registerSideView(view)
+  // app.addListener(view.getName(), 'file_changed', () => app.)
 }

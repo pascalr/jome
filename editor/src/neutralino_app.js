@@ -197,6 +197,11 @@ export class NeutralinoApp {
     this.saveToStorage()
   }
 
+  getDocument() {
+    let filepath = this.data.CURRENT_FILEPATH
+    // TODO
+  }
+
   openFile(filepath) {
 
     if (!filepath) {
