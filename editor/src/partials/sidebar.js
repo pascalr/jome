@@ -1,5 +1,4 @@
 import iconHouse from '../../assets/icons/house.svg'
-import iconFolder2Open from '../../assets/icons/folder2-open.svg'
 import iconBoxes from '../../assets/icons/boxes.svg'
 import iconBracesAsterisk from '../../assets/icons/braces-asterisk.svg'
 import iconBug from '../../assets/icons/bug.svg'
@@ -7,7 +6,6 @@ import iconGear from '../../assets/icons/gear.svg'
 import iconGit from '../../assets/icons/git.svg'
 import iconQuestionCircle from '../../assets/icons/question-circle.svg'
 import iconTerminal from '../../assets/icons/terminal.svg'
-import iconTree from '../../assets/icons/tree.svg'
 
 import { HomePage } from '../pages/homepage'
 import { e, svgE } from '../helpers'
@@ -65,7 +63,6 @@ export function createSideBar(app) {
     e('div', {className: "context_buttons"}, [
       sidebarIcon(iconHouse, "Home", () => app.show(HomePage), current === SIDEBAR_TABS.HOME),
       ...(sideViews.map(v => sidebarIconV2(app, v, current))),
-      sidebarIcon(iconTree, "Object Tree"),
       sidebarIcon(iconBug, "Run & Debug"),
       sidebarIcon(iconGit, "Git"),
       sidebarIcon(iconBracesAsterisk, "Snippets"),

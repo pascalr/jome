@@ -5,6 +5,7 @@ import { HomePage } from './pages/homepage'
 import { EditorPage, updateMainPanelContent } from './pages/editor'
 import { SIDEBAR_TABS } from "./partials/sidebar"
 import { registerExplorer } from "./partials/explorer"
+import { registerObjectTree } from "./partials/object_tree"
 
 const STORAGE_KEY = 'APP'
 
@@ -58,6 +59,7 @@ export class NeutralinoApp {
     }
 
     registerExplorer(this)
+    registerObjectTree(this)
 
     this.show(this.data.CURRENT_SIDEBAR && this.data.CURRENT_SIDEBAR !== SIDEBAR_TABS.HOME ? EditorPage : HomePage)
 
