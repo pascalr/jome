@@ -8,13 +8,15 @@ import { registerExplorer } from "./partials/explorer"
 import { registerObjectTree } from "./partials/object_tree"
 import { createSkeleton, getRef, REF } from "./views/skeleton"
 import { registerWindowBar } from "./views/window_bar"
+import { registerWindowView } from "./views/window"
 
 const STORAGE_KEY = 'APP'
 
 const EVENT = {
   FILE_CHANGE: "onFileChange",
   PROJECT_CHANGE: "onProjectChange",
-  SIDEBAR_TAB_CHANGE: "onSidebarTabChange"
+  SIDEBAR_TAB_CHANGE: "onSidebarTabChange",
+  WINDOW_CHANGE: "onWindowChange"
 }
 
 export class NeutralinoApp {
@@ -72,8 +74,11 @@ export class NeutralinoApp {
     this.rootDOM.replaceChildren(createSkeleton())
 
     registerWindowBar(this)
+    registerWindowView(this)
 
     this.show(this.data.CURRENT_SIDEVIEW && this.data.CURRENT_SIDEVIEW !== SIDEBAR_TABS.HOME ? EditorPage : HomePage)
+    this.emit(EVENT.SIDEBAR_TAB_CHANGE, {tabName: this.data.CURRENT_SIDEVIEW})
+    this.emit(EVENT.WINDOW_CHANGE, {windowName: this.data.CURRENT_SIDEVIEW && this.data.CURRENT_SIDEVIEW !== SIDEBAR_TABS.HOME ? "editor" : "home"})
 
     if (this.data.CURRENT_FILEPATH) {
       this.openFile(this.data.CURRENT_FILEPATH)
@@ -88,11 +93,10 @@ export class NeutralinoApp {
     this.views.push(view)
   }
 
-  emit(eventType, ...data) {
-    let onEvt = EVENT[eventType]
+  emit(eventHandlerName, ...data) {
     this.views.forEach(view => {
-      if (view[onEvt]) {
-        view[onEvt](...data)
+      if (view[eventHandlerName]) {
+        view[eventHandlerName](...data)
       }
     })
   }
@@ -107,7 +111,7 @@ export class NeutralinoApp {
     if (ref) {
       ref.replaceChildren(...createSideBar(this))
     }
-    this.emit(EVENT.SIDEBAR_TAB_CHANGE, null)
+    this.emit(EVENT.SIDEBAR_TAB_CHANGE, {tabName: sideView.getName()})
   }
 
   getCurrentSideView() {
@@ -168,6 +172,7 @@ export class NeutralinoApp {
     }
     this.setData('CURRENT_SIDEVIEW', SIDEBAR_TABS.EXPLORER)
     this.show(EditorPage)
+    this.emit(EVENT.SIDEBAR_TAB_CHANGE, {tabName: sideView.getName()})
   }
 
   openPath(path) {
