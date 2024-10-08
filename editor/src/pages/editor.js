@@ -25,8 +25,6 @@ function afterRender(app) {
     gutterSize: 4,
     sizes: [20, 60, 20]
   })
-
-  showExplorer(app)
 }
 
 export function updateMainPanelContent(app, filepath, content) {

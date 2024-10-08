@@ -62,6 +62,7 @@ class ExplorerView extends SideView {
       e('div', {className: "panel-header"}, ["Explorer"]),
       e('div', {id: "explorer-tree"})
     ])
+    showExplorer(app)
   }
 
 }
