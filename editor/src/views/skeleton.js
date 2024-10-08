@@ -16,7 +16,7 @@ export function createSkeleton() {
   return e("div", {id: REF.WINDOW, style: "width: 100%; height: 100%; display: flex; flex-direction: column;"}, [
     e("div", {id: REF.WINDOW_BAR}),
     e("div", {id: REF.WINDOW_CONTENT, style: "flex-grow: 1;"}, [
-      e("div", {id: REF.HOME, style: "height: 100%;"}, [
+      e("div", {id: REF.HOME, style: "height: 100%; display: none;"}, [
         e("h1", {id: "tmp_palceholder_home"}, ["Home"])
       ]),
       e("div", {id: REF.EDITOR, style: "height: 100%;"}, [

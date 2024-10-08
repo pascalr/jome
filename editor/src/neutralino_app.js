@@ -6,7 +6,7 @@ import { EditorPage, updateMainPanelContent } from './pages/editor'
 import { createSideBar, SIDEBAR_TABS } from "./partials/sidebar"
 import { registerExplorer } from "./partials/explorer"
 import { registerObjectTree } from "./partials/object_tree"
-import { createSkeleton } from "./views/skeleton"
+import { createSkeleton, getRef, REF } from "./views/skeleton"
 
 const STORAGE_KEY = 'APP'
 
@@ -47,7 +47,8 @@ export class NeutralinoApp {
     // create
     let el = page.create(this)
     // render
-    this.rootDOM.replaceChildren(el)
+    let ref = getRef(this.data.CURRENT_SIDEVIEW && this.data.CURRENT_SIDEVIEW !== SIDEBAR_TABS.HOME ? REF.EDITOR : REF.HOME)
+    ref.replaceChildren(el)
     // after render
     if (page.afterRender) {page.afterRender(this)}
   }
@@ -66,11 +67,11 @@ export class NeutralinoApp {
     // TODO: Window bar should be a view on it's own
     this.updateWindowBar()
 
-    // this.show(this.data.CURRENT_SIDEVIEW && this.data.CURRENT_SIDEVIEW !== SIDEBAR_TABS.HOME ? EditorPage : HomePage)
+    this.show(this.data.CURRENT_SIDEVIEW && this.data.CURRENT_SIDEVIEW !== SIDEBAR_TABS.HOME ? EditorPage : HomePage)
 
-    // if (this.data.CURRENT_FILEPATH) {
-    //   this.openFile(this.data.CURRENT_FILEPATH)
-    // }
+    if (this.data.CURRENT_FILEPATH) {
+      this.openFile(this.data.CURRENT_FILEPATH)
+    }
   }
 
   registerSideView(sideView) {
