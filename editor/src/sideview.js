@@ -8,8 +8,12 @@ export class SideView {
     return this.ref
   }
 
-  update() {
+  updateRef() {
     
+  }
+
+  update() {
+
   }
   
 }

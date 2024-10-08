@@ -23,20 +23,10 @@ class ObjectTreeView extends SideView {
     ])
   }
 
-  getListeners() {
-    return {
-      documentChanged(document) {
-        this.document = document
-        this.update()
-      }
-    }
+  onDocumentChange(document) {
+    this.document = document
+    this.update()
   }
-
-  // listen(event) {
-  //   if (event.type === 'file_changed') {
-
-  //   }
-  // }
 
 }
 
