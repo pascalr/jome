@@ -19,7 +19,7 @@ export class NeutralinoApp {
      * RECENT
      * CURRENT_FILEPATH
      * FILES_OPENED_BY_PROJECT
-     * CURRENT_SIDEBAR
+     * CURRENT_SIDEVIEW
      */
     this.data = {}
 
@@ -61,7 +61,7 @@ export class NeutralinoApp {
     registerExplorer(this)
     registerObjectTree(this)
 
-    this.show(this.data.CURRENT_SIDEBAR && this.data.CURRENT_SIDEBAR !== SIDEBAR_TABS.HOME ? EditorPage : HomePage)
+    this.show(this.data.CURRENT_SIDEVIEW && this.data.CURRENT_SIDEVIEW !== SIDEBAR_TABS.HOME ? EditorPage : HomePage)
 
     if (this.data.CURRENT_FILEPATH) {
       this.openFile(this.data.CURRENT_FILEPATH)
@@ -70,6 +70,14 @@ export class NeutralinoApp {
 
   registerSideView(sideView) {
     this.sideViews.push(sideView)
+  }
+
+  changeSideView(sideView) {
+    this.setData("CURRENT_SIDEVIEW", sideView.getName())
+  }
+
+  getCurrentSideView() {
+    return this.sideViews.find(v => v.getName() === this.data.CURRENT_SIDEVIEW)
   }
 
   updateWindowBar() {
@@ -133,7 +141,7 @@ export class NeutralinoApp {
       this.setData('PROJECT_PATH', null)
       this.setData('CURRENT_FILEPATH', data.path)
     }
-    this.setData('CURRENT_SIDEBAR', SIDEBAR_TABS.EXPLORER)
+    this.setData('CURRENT_SIDEVIEW', SIDEBAR_TABS.EXPLORER)
     this.show(EditorPage)
   }
 

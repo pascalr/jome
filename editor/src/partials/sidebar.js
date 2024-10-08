@@ -41,7 +41,7 @@ function sidebarIconV2(app, sideView, current) {
     if (sideView.load) {
       let err = sideView.load()
       if (!err) {
-        app.setData("CURRENT_SIDEBAR", sideView.getName())
+        app.changeSideView(sideView)
       }
     }
   }
@@ -56,13 +56,14 @@ function sidebarIconV2(app, sideView, current) {
 
 export function createSideBar(app) {
 
-  let current = app.getData("CURRENT_SIDEBAR")
+  let currentName = app.getData("CURRENT_SIDEVIEW")
+  let currentView = app.getCurrentSideView()
   let sideViews = app.sideViews
 
   return [
     e('div', {className: "context_buttons"}, [
-      sidebarIcon(iconHouse, "Home", () => app.show(HomePage), current === SIDEBAR_TABS.HOME),
-      ...(sideViews.map(v => sidebarIconV2(app, v, current))),
+      sidebarIcon(iconHouse, "Home", () => app.show(HomePage), currentName === SIDEBAR_TABS.HOME),
+      ...(sideViews.map(v => sidebarIconV2(app, v, currentName))),
       sidebarIcon(iconBug, "Run & Debug"),
       sidebarIcon(iconGit, "Git"),
       sidebarIcon(iconBracesAsterisk, "Snippets"),
@@ -73,9 +74,6 @@ export function createSideBar(app) {
       sidebarIcon(iconGear, "Settings"),
       e('div', {style: "height: 0.5em;"})
     ]),
-    e('div', {className: "context_content"}, [
-      e('div', {className: "panel-header"}, ["Explorer"]),
-      e('div', {id: "explorer-tree"})
-    ])
+    e('div', {className: "context_content"}, currentView && currentView.render ? currentView.render() : null)
   ]
 }

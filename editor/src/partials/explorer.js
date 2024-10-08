@@ -2,7 +2,7 @@ import { createHtmlTree } from "../lib/renderHtmlTree"
 import { SideView } from "../sideview"
 
 import iconFolder2Open from '../../assets/icons/folder2-open.svg'
-import { svgE } from "../helpers"
+import { e, svgE } from "../helpers"
 
 // this.data['DIR_LISTING'][path] = sorted // deprecated
 // app.dirListings[path] = sorted
@@ -55,6 +55,13 @@ class ExplorerView extends SideView {
   }
 
   load() {
+  }
+
+  render() {
+    return [
+      e('div', {className: "panel-header"}, ["Explorer"]),
+      e('div', {id: "explorer-tree"})
+    ]
   }
 
 }
