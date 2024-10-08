@@ -183,6 +183,7 @@ export class NeutralinoApp {
     this.setData('CURRENT_SIDEVIEW', SIDEBAR_TABS.EXPLORER)
     this.show(EditorPage)
     this.emit(EVENT.SIDEBAR_TAB_CHANGE, {tabName: SIDEBAR_TABS.EXPLORER})
+    this.emit(EVENT.WINDOW_CHANGE, {windowName: WINDOW.EDITOR})
   }
 
   openPath(path) {
