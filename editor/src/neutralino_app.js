@@ -6,6 +6,7 @@ import { EditorPage, updateMainPanelContent } from './pages/editor'
 import { createSideBar, SIDEBAR_TABS } from "./partials/sidebar"
 import { registerExplorer } from "./partials/explorer"
 import { registerObjectTree } from "./partials/object_tree"
+import { createSkeleton } from "./views/skeleton"
 
 const STORAGE_KEY = 'APP'
 
@@ -57,18 +58,20 @@ export class NeutralinoApp {
 
     await this.loadFromStorage()
 
-    if (NL_MODE === 'browser') {
-      document.body.prepend(e('div', {id: "window_bar"}))
-    }
+    // if (NL_MODE === 'browser') {
+    //   document.body.prepend(e('div', {id: "window_bar"}))
+    // }
 
     registerExplorer(this)
     registerObjectTree(this)
 
-    this.show(this.data.CURRENT_SIDEVIEW && this.data.CURRENT_SIDEVIEW !== SIDEBAR_TABS.HOME ? EditorPage : HomePage)
+    this.rootDOM.replaceChildren(createSkeleton())
 
-    if (this.data.CURRENT_FILEPATH) {
-      this.openFile(this.data.CURRENT_FILEPATH)
-    }
+    // this.show(this.data.CURRENT_SIDEVIEW && this.data.CURRENT_SIDEVIEW !== SIDEBAR_TABS.HOME ? EditorPage : HomePage)
+
+    // if (this.data.CURRENT_FILEPATH) {
+    //   this.openFile(this.data.CURRENT_FILEPATH)
+    // }
   }
 
   registerSideView(sideView) {
