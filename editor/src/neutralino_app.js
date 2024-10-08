@@ -58,14 +58,13 @@ export class NeutralinoApp {
 
     await this.loadFromStorage()
 
-    // if (NL_MODE === 'browser') {
-    //   document.body.prepend(e('div', {id: "window_bar"}))
-    // }
-
     registerExplorer(this)
     registerObjectTree(this)
 
     this.rootDOM.replaceChildren(createSkeleton())
+
+    // TODO: Window bar should be a view on it's own
+    this.updateWindowBar()
 
     // this.show(this.data.CURRENT_SIDEVIEW && this.data.CURRENT_SIDEVIEW !== SIDEBAR_TABS.HOME ? EditorPage : HomePage)
 
@@ -99,6 +98,8 @@ export class NeutralinoApp {
     
     if (NL_MODE === 'window') {
       Neutralino.window.setTitle(txt)
+      let el = document.getElementById('window_bar')
+      el.style.display = "none"
     } else {
       let el = document.getElementById('window_bar')
       el.innerText = txt
