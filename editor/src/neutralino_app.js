@@ -4,6 +4,7 @@ import { e } from "./helpers"
 import { HomePage } from './pages/homepage'
 import { EditorPage, updateMainPanelContent } from './pages/editor'
 import { SIDEBAR_TABS } from "./partials/sidebar"
+import { registerExplorer } from "./partials/explorer"
 
 const STORAGE_KEY = 'APP'
 
@@ -24,6 +25,8 @@ export class NeutralinoApp {
     this.foldersExpanded = {}
 
     this.rootDOM = document.getElementById('root')
+
+    this.sideViews = []
 
     /**
      * DOM References to the main parts of the applications.
@@ -54,11 +57,17 @@ export class NeutralinoApp {
       document.body.prepend(e('div', {id: "window_bar"}))
     }
 
+    registerExplorer(this)
+
     this.show(this.data.CURRENT_SIDEBAR && this.data.CURRENT_SIDEBAR !== SIDEBAR_TABS.HOME ? EditorPage : HomePage)
 
     if (this.data.CURRENT_FILEPATH) {
       this.openFile(this.data.CURRENT_FILEPATH)
     }
+  }
+
+  registerSideView(sideView) {
+    this.sideViews.push(sideView)
   }
 
   updateWindowBar() {

@@ -1,5 +1,8 @@
 import { createHtmlTree } from "../lib/renderHtmlTree"
-import { getFilenameFromPath } from "../utils"
+import { SideView } from "../sideview"
+
+import iconFolder2Open from '../../assets/icons/folder2-open.svg'
+import { svgE } from "../helpers"
 
 // this.data['DIR_LISTING'][path] = sorted // deprecated
 // app.dirListings[path] = sorted
@@ -39,4 +42,24 @@ export async function showExplorer(app) {
       }))
     // })
   }
+}
+
+class ExplorerView extends SideView {
+
+  getName() {
+    return "explorer"
+  }
+
+  getIcon() {
+    return svgE(iconFolder2Open, "File explorer")
+  }
+
+  load() {
+    
+  }
+
+}
+
+export function registerExplorer(app) {
+  app.registerSideView(new ExplorerView())
 }

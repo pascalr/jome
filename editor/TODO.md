@@ -51,6 +51,10 @@ et ça modifie le code que tu vois si tu ne l'a pas écrit parfaitement comme se
 Un feature que j'aimerais bien, c'est l'option de cacher les curly braces, un peu comme dans ruby. Ça ne modifirait pas le code, ce serait
 purement visuel.
 
+## Back button on home
+
+Simply save state before getting to home and restore if back is pressed?
+
 ## Optional parentheses
 
 Un feature que j'aimerais bien, c'est l'option de cacher les parenthèses, un peu comme dans ruby. Ça ne modifirait pas le code, ce serait

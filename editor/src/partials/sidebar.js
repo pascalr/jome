@@ -33,14 +33,31 @@ function sidebarIcon(icon, title, onClick, isCurrent) {
   return el
 }
 
+function sidebarIconV2(sideView, current) {
+  // I could modify the size of the icons here
+  // One day far far away, allow a settings to specify the size of the icons.
+  let el = sideView.getIcon()
+  el.setAttribute('width', 26)
+  el.setAttribute('height', 26)
+  if (sideView.load) {
+    el.onclick = sideView.load
+    el.style.cursor = "pointer"
+  }
+  if (current === sideView.getName()) {
+    el.style.backgroundColor = "#1b3346"
+  }
+  return el
+}
+
 export function createSideBar(app) {
 
   let current = app.getData("CURRENT_SIDEBAR")
+  let sideViews = app.sideViews
 
   return [
     e('div', {className: "context_buttons"}, [
       sidebarIcon(iconHouse, "Home", () => app.show(HomePage), current === SIDEBAR_TABS.HOME),
-      sidebarIcon(iconFolder2Open, "File explorer", null, current === SIDEBAR_TABS.EXPLORER),
+      ...(sideViews.map(v => sidebarIconV2(v, current))),
       sidebarIcon(iconTree, "Object Tree"),
       sidebarIcon(iconBug, "Run & Debug"),
       sidebarIcon(iconGit, "Git"),
