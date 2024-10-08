@@ -22,24 +22,26 @@ async function buildTree(app, path) {
   return { children } // path, name: getFilenameFromPath(path)
 }
 
-export async function showExplorer(app) {
+async function showExplorer(app) {
   // Load the navigation tree
   if (app.data['PROJECT_PATH']) {
     let tree = await buildTree(app, app.data['PROJECT_PATH'])
     // // await app.listDirectory(app.data['PROJECT_PATH'])
     // app.loadFileTree(app.data['PROJECT_PATH'], tree => {
       let ref = document.getElementById('explorer-tree')
-      // explorerList.innerHTML = renderHtmlTree(tree)
-      ref.replaceChildren(createHtmlTree(tree, node => {
-        return {id: node.path, className: "leaf", "data-path": node.path, open: app.isFolderExpanded(node.path), onclick: () => {
-          if (node.isDirectory) {
-            app.toggleDirectoryExpansion(node.path)
-            showExplorer(app)
-          } else {
-            app.openFile(node.path)
-          }
-        }}
-      }))
+      if (ref) {
+        // explorerList.innerHTML = renderHtmlTree(tree)
+        ref.replaceChildren(createHtmlTree(tree, node => {
+          return {id: node.path, className: "leaf", "data-path": node.path, open: app.isFolderExpanded(node.path), onclick: () => {
+            if (node.isDirectory) {
+              app.toggleDirectoryExpansion(node.path)
+              showExplorer(app)
+            } else {
+              app.openFile(node.path)
+            }
+          }}
+        }))
+      }
     // })
   }
 }
