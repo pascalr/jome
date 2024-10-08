@@ -7,6 +7,7 @@ import { createSideBar, SIDEBAR_TABS } from "./partials/sidebar"
 import { registerExplorer } from "./partials/explorer"
 import { registerObjectTree } from "./partials/object_tree"
 import { createSkeleton, getRef, REF } from "./views/skeleton"
+import { registerWindowBar } from "./views/window_bar"
 
 const STORAGE_KEY = 'APP'
 
@@ -64,14 +65,18 @@ export class NeutralinoApp {
 
     this.rootDOM.replaceChildren(createSkeleton())
 
-    // TODO: Window bar should be a view on it's own
-    this.updateWindowBar()
+    registerWindowBar(this)
 
     this.show(this.data.CURRENT_SIDEVIEW && this.data.CURRENT_SIDEVIEW !== SIDEBAR_TABS.HOME ? EditorPage : HomePage)
 
     if (this.data.CURRENT_FILEPATH) {
       this.openFile(this.data.CURRENT_FILEPATH)
     }
+  }
+
+  registerView(view) {
+    view.setApp(this)
+    view.render()
   }
 
   registerSideView(sideView) {
@@ -91,21 +96,28 @@ export class NeutralinoApp {
   }
 
   updateWindowBar() {
-    let name = getFilenameFromPath(this.getData('CURRENT_FILEPATH'))
-    let projectName = getFilenameFromPath(this.getData('PROJECT_PATH'))
-    let txt = (name ? `${name} - ` : "") + 
-      (projectName ? `${projectName} - ` : "") + 
-      "Jome Editor"
+    // let name = getFilenameFromPath(this.getData('CURRENT_FILEPATH'))
+    // let projectName = getFilenameFromPath(this.getData('PROJECT_PATH'))
+    // let txt = (name ? `${name} - ` : "") + 
+    //   (projectName ? `${projectName} - ` : "") + 
+    //   "Jome Editor"
     
-    if (NL_MODE === 'window') {
-      Neutralino.window.setTitle(txt)
-      let el = document.getElementById('window_bar')
-      el.style.display = "none"
-    } else {
-      let el = document.getElementById('window_bar')
-      el.innerText = txt
-    }
+    // if (NL_MODE === 'window') {
+    //   Neutralino.window.setTitle(txt)
+    //   let el = document.getElementById('window_bar')
+    //   el.style.display = "none"
+    // } else {
+    //   let el = document.getElementById('window_bar')
+    //   el.innerText = txt
+    // }
 
+  }
+
+  setWindowTitle(title) {
+    Neutralino.window.setTitle(title)
+  }
+  getWindowMode() {
+    return NL_MODE
   }
 
   async listDirectory(path) {
