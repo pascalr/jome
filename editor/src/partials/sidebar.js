@@ -33,14 +33,21 @@ function sidebarIcon(icon, title, onClick, isCurrent) {
   return el
 }
 
-function sidebarIconV2(sideView, current) {
+function sidebarIconV2(app, sideView, current) {
   // I could modify the size of the icons here
   // One day far far away, allow a settings to specify the size of the icons.
   let el = sideView.getIcon()
   el.setAttribute('width', 26)
   el.setAttribute('height', 26)
+  el.onclick = () => {
+    if (sideView.load) {
+      let err = sideView.load()
+      if (!err) {
+        app.setData("CURRENT_SIDEBAR", sideView.getName())
+      }
+    }
+  }
   if (sideView.load) {
-    el.onclick = sideView.load
     el.style.cursor = "pointer"
   }
   if (current === sideView.getName()) {
@@ -57,7 +64,7 @@ export function createSideBar(app) {
   return [
     e('div', {className: "context_buttons"}, [
       sidebarIcon(iconHouse, "Home", () => app.show(HomePage), current === SIDEBAR_TABS.HOME),
-      ...(sideViews.map(v => sidebarIconV2(v, current))),
+      ...(sideViews.map(v => sidebarIconV2(app, v, current))),
       sidebarIcon(iconTree, "Object Tree"),
       sidebarIcon(iconBug, "Run & Debug"),
       sidebarIcon(iconGit, "Git"),

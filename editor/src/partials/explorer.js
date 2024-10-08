@@ -55,7 +55,6 @@ class ExplorerView extends SideView {
   }
 
   load() {
-    
   }
 
 }
