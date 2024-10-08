@@ -12,8 +12,9 @@ import { registerWindowBar } from "./views/window_bar"
 const STORAGE_KEY = 'APP'
 
 const EVENT = {
-  FILE_CHANGE: "file_change",
-  PROJECT_CHANGE: "project_change"
+  FILE_CHANGE: "onFileChange",
+  PROJECT_CHANGE: "onProjectChange",
+  SIDEBAR_TAB_CHANGE: "onSidebarTabChange"
 }
 
 export class NeutralinoApp {
@@ -81,16 +82,17 @@ export class NeutralinoApp {
 
   registerView(view) {
     view.setApp(this)
-    view.render()
+    if (view.render) {
+      view.render()
+    }
     this.views.push(view)
   }
 
   emit(eventType, ...data) {
+    let onEvt = EVENT[eventType]
     this.views.forEach(view => {
-      if (eventType === EVENT.FILE_CHANGE && view.onFileChange) {
-        view.onFileChange(...data)
-      } else if (eventType === EVENT.PROJECT_CHANGE && view.onProjectChange) {
-        view.onProjectChange(...data)
+      if (view[onEvt]) {
+        view[onEvt](...data)
       }
     })
   }
@@ -105,6 +107,7 @@ export class NeutralinoApp {
     if (ref) {
       ref.replaceChildren(...createSideBar(this))
     }
+    this.emit(EVENT.SIDEBAR_TAB_CHANGE, null)
   }
 
   getCurrentSideView() {
