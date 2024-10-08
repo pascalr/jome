@@ -7,5 +7,9 @@ export class SideView {
   getRef() {
     return this.ref
   }
+
+  update() {
+    
+  }
   
 }

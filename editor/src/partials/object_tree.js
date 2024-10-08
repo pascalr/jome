@@ -27,6 +27,7 @@ class ObjectTreeView extends SideView {
     return {
       documentChanged(document) {
         this.document = document
+        this.update()
       }
     }
   }
