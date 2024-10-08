@@ -11,6 +11,11 @@ import { registerWindowBar } from "./views/window_bar"
 
 const STORAGE_KEY = 'APP'
 
+const EVENT = {
+  FILE_CHANGE: "file_change",
+  PROJECT_CHANGE: "project_change"
+}
+
 export class NeutralinoApp {
 
   constructor() {
@@ -31,6 +36,8 @@ export class NeutralinoApp {
 
     this.sideViews = []
 
+    this.views = []
+
     /**
      * DOM References to the main parts of the applications.
      */
@@ -42,8 +49,6 @@ export class NeutralinoApp {
   }
 
   show(page) {
-
-    this.updateWindowBar()
 
     // create
     let el = page.create(this)
@@ -77,6 +82,17 @@ export class NeutralinoApp {
   registerView(view) {
     view.setApp(this)
     view.render()
+    this.views.push(view)
+  }
+
+  emit(eventType, ...data) {
+    this.views.forEach(view => {
+      if (eventType === EVENT.FILE_CHANGE && view.onFileChange) {
+        view.onFileChange(...data)
+      } else if (eventType === EVENT.PROJECT_CHANGE && view.onProjectChange) {
+        view.onProjectChange(...data)
+      }
+    })
   }
 
   registerSideView(sideView) {
@@ -93,24 +109,6 @@ export class NeutralinoApp {
 
   getCurrentSideView() {
     return this.sideViews.find(v => v.getName() === this.data.CURRENT_SIDEVIEW)
-  }
-
-  updateWindowBar() {
-    // let name = getFilenameFromPath(this.getData('CURRENT_FILEPATH'))
-    // let projectName = getFilenameFromPath(this.getData('PROJECT_PATH'))
-    // let txt = (name ? `${name} - ` : "") + 
-    //   (projectName ? `${projectName} - ` : "") + 
-    //   "Jome Editor"
-    
-    // if (NL_MODE === 'window') {
-    //   Neutralino.window.setTitle(txt)
-    //   let el = document.getElementById('window_bar')
-    //   el.style.display = "none"
-    // } else {
-    //   let el = document.getElementById('window_bar')
-    //   el.innerText = txt
-    // }
-
   }
 
   setWindowTitle(title) {
@@ -229,7 +227,7 @@ export class NeutralinoApp {
   openFile(filepath) {
 
     if (!filepath) {
-      this.updateWindowBar()
+      this.emit(EVENT.FILE_CHANGE, null)
       updateMainPanelContent(this, filepath, null)
       return;
     }
@@ -243,7 +241,7 @@ export class NeutralinoApp {
         this.setProjectData('FILES_OPENED', [filepath, ...filesOpened])
       }
 
-      this.updateWindowBar()
+      this.emit(EVENT.FILE_CHANGE, filepath)
 
       updateMainPanelContent(this, filepath, content)
     }).catch(this.handleError)

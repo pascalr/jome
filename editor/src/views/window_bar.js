@@ -21,6 +21,9 @@ class WindowBar extends View {
     }
   }
 
+  onFileChange() {this.render()}
+  onProjectChange() {this.render()}
+
 }
 
 export function registerWindowBar(app) {
