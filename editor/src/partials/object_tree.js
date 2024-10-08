@@ -4,9 +4,10 @@ import { SideView } from '../sideview'
 
 class ObjectTreeView extends SideView {
 
-  // constructor() {
-  //   super()
-  // }
+  constructor() {
+    super()
+    this.document = null
+  }
 
   getName() {
     return "obj_tree"
@@ -20,6 +21,14 @@ class ObjectTreeView extends SideView {
     ref.replaceChildren(...[
       e('div', {className: "panel-header"}, ["Object Tree"])
     ])
+  }
+
+  getListeners() {
+    return {
+      documentChanged(document) {
+        this.document = document
+      }
+    }
   }
 
   // listen(event) {
