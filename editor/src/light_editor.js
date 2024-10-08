@@ -12,8 +12,7 @@ import { Isogon } from './components/drawing/Isogon';
 document.addEventListener('DOMContentLoaded', async () => {
 
   let app = new NeutralinoApp()
-
-  await app.setup()
+  await app.setup(document.getElementById('root')) // TODO: Rename this
 });
 
 //function highlight(doc, code) {

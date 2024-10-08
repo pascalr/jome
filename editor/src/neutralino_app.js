@@ -25,7 +25,7 @@ export class NeutralinoApp {
 
     this.foldersExpanded = {}
 
-    this.rootDOM = document.getElementById('root')
+    this.rootDOM = null
 
     this.sideViews = []
 
@@ -51,7 +51,10 @@ export class NeutralinoApp {
     if (page.afterRender) {page.afterRender(this)}
   }
 
-  async setup() {
+  async setup(ref) {
+
+    this.rootDOM = ref
+
     await this.loadFromStorage()
 
     if (NL_MODE === 'browser') {
