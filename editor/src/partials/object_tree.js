@@ -4,6 +4,10 @@ import { SideView } from '../sideview'
 
 class ObjectTreeView extends SideView {
 
+  // constructor() {
+  //   super()
+  // }
+
   getName() {
     return "obj_tree"
   }
@@ -18,10 +22,19 @@ class ObjectTreeView extends SideView {
     ])
   }
 
+  // listen(event) {
+  //   if (event.type === 'file_changed') {
+
+  //   }
+  // }
+
 }
 
 export function registerObjectTree(app) {
   let view = new ObjectTreeView()
   app.registerSideView(view)
-  // app.addListener(view.getName(), 'file_changed', () => app.)
+  // // This will only be called for the active SideView
+  // app.addListener('file_changed', view.getName(), (filepath, content) => {
+
+  // })
 }

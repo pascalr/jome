@@ -202,6 +202,10 @@ export class NeutralinoApp {
     // TODO
   }
 
+  // addListener(eventType, listenerId, callback) {
+
+  // }
+
   openFile(filepath) {
 
     if (!filepath) {
