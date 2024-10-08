@@ -3,7 +3,7 @@ import { e } from "./helpers"
 
 import { HomePage } from './pages/homepage'
 import { EditorPage, updateMainPanelContent } from './pages/editor'
-import { SIDEBAR_TABS } from "./partials/sidebar"
+import { createSideBar, SIDEBAR_TABS } from "./partials/sidebar"
 import { registerExplorer } from "./partials/explorer"
 import { registerObjectTree } from "./partials/object_tree"
 
@@ -74,6 +74,10 @@ export class NeutralinoApp {
 
   changeSideView(sideView) {
     this.setData("CURRENT_SIDEVIEW", sideView.getName())
+    let ref = document.getElementById('split-0')
+    if (ref) {
+      ref.replaceChildren(...createSideBar(this))
+    }
   }
 
   getCurrentSideView() {

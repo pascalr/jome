@@ -38,14 +38,9 @@ function sidebarIconV2(app, sideView, current) {
   el.setAttribute('width', 26)
   el.setAttribute('height', 26)
   el.onclick = () => {
-    if (sideView.load) {
-      let err = sideView.load()
-      if (!err) {
-        app.changeSideView(sideView)
-      }
-    }
+    app.changeSideView(sideView)
   }
-  if (sideView.load) {
+  if (sideView.render) {
     el.style.cursor = "pointer"
   }
   if (current === sideView.getName()) {

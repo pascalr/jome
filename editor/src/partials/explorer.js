@@ -56,9 +56,6 @@ class ExplorerView extends SideView {
     return svgE(iconFolder2Open, "File explorer")
   }
 
-  load() {
-  }
-
   render(app, ref) {
     ref.replaceChildren(...[
       e('div', {className: "panel-header"}, ["Explorer"]),

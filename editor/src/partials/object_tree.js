@@ -1,5 +1,5 @@
 import iconTree from '../../assets/icons/tree.svg'
-import { svgE } from '../helpers'
+import { e, svgE } from '../helpers'
 import { SideView } from '../sideview'
 
 class ObjectTreeView extends SideView {
@@ -12,7 +12,10 @@ class ObjectTreeView extends SideView {
     return svgE(iconTree, "Object Tree")
   }
 
-  load() {
+  render(app, ref) {
+    ref.replaceChildren(...[
+      e('div', {className: "panel-header"}, ["Object Tree"])
+    ])
   }
 
 }
