@@ -1,6 +1,7 @@
 
-import {e, svgE} from '../helpers'
+import {addDockIcon, dockIcon, e, svgE} from '../helpers'
 
+import iconHouse from '../../assets/icons/house.svg'
 import IconFolder from '../../assets/icons/folder2-open.svg'
 import IconFile from '../../assets/icons/file-earmark.svg'
 import { getRef, REF } from './skeleton'
@@ -46,6 +47,10 @@ function createHomepageItem(app, data) {
 
 // The page you see when there is no file opened.
 class HomePage extends View {
+
+  setup() {
+    this.app.addDockIcon("home", svgE(iconHouse, "Home"))
+  }
 
   render() {
     let ref = getRef(REF.HOME)

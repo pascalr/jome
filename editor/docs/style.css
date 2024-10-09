@@ -192,6 +192,12 @@ body {
 
 
 
+.context_buttons > .active {
+  background-color: #1b3346;
+}
+
+
+
 
 
 

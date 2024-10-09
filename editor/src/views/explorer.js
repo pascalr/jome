@@ -1,7 +1,7 @@
 import { View } from "../view"
 import iconFolder2Open from '../../assets/icons/folder2-open.svg'
 import { createHtmlTree } from "../lib/renderHtmlTree"
-import { dockIcon, e, svgE } from "../helpers"
+import { addDockIcon, dockIcon, e, svgE } from "../helpers"
 import { getRef, REF } from "./skeleton"
 
 async function buildTreeSub(app, listingEntry) {
@@ -46,9 +46,7 @@ async function showExplorer(app) {
 class Explorer extends View {
 
   setup() {
-    let refButtons = getRef(REF.DOCK_BUTTONS)
-    let el = dockIcon(this.app, svgE(iconFolder2Open, "File explorer"), false)
-    refButtons.appendChild(el)
+    this.app.addDockIcon("explorer", svgE(iconFolder2Open, "File explorer"))
   }
 
   render() {

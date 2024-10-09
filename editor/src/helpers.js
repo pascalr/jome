@@ -1,3 +1,6 @@
+import { EVENT } from "./neutralino_app";
+import { getRef, REF } from "./views/skeleton";
+
 /**
  * Shorthand to create an HTML element.
  * Attrs:
@@ -56,6 +59,23 @@ export function createToolSection(title, groups) {
       ))
     )
   ])
+}
+
+export function addDockIcon(app, id, svgEl, onClick) {
+  let ref = getRef(REF.DOCK_BUTTONS)
+  svgEl.setAttribute('width', 26)
+  svgEl.setAttribute('height', 26)
+  svgEl.onclick = (evt) => {
+    app.changeDock(id)
+    if (onClick) {onClick(evt)}
+  }
+  svgEl.style.cursor = "pointer"
+  svgEl.dataset.id = id
+  // if (current) {
+  //   el.style.backgroundColor = "#1b3346"
+  // }
+  ref.appendChild(svgEl)
+  return svgEl  
 }
 
 export function dockIcon(app, svgE, current) {

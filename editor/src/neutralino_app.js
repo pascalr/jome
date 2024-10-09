@@ -1,5 +1,5 @@
 import { getFilenameFromPath } from "./utils"
-import { e } from "./helpers"
+import { addDockIcon, e } from "./helpers"
 
 import { EditorPage, updateMainPanelContent } from './pages/editor'
 import { createSideBar, SIDEBAR_TABS } from "./partials/sidebar"
@@ -11,6 +11,7 @@ import { registerWindowView } from "./views/window"
 import { registerHomePage } from "./views/homepage"
 import { registerExplorerView } from "./views/explorer"
 import { registerObjectTreeView } from "./views/object_tree"
+import { registerDock } from "./views/dock"
 
 const STORAGE_KEY = 'APP'
 
@@ -90,10 +91,12 @@ export class NeutralinoApp {
     registerExplorerView(this)
     registerObjectTreeView(this)
 
-    // this.show(EditorPage)
-    this.emit(EVENT.DOCK_CHANGE, {tabName: this.data.CURRENT_SIDEVIEW})
+    registerDock(this)
 
-    this.show(EditorPage)
+    // this.show(EditorPage)
+    // this.emit(EVENT.DOCK_CHANGE, {tabName: this.data.CURRENT_SIDEVIEW})
+
+    // this.show(EditorPage)
 
     // Set the current window
     this.changeWindow(this.data.PROJECT_PATH ? WINDOW.EDITOR : WINDOW.HOME)
@@ -104,6 +107,7 @@ export class NeutralinoApp {
   }
 
   registerView(view) {
+    this.views.push(view)
     view.setApp(this)
     if (view.setup) {
       view.setup()
@@ -113,7 +117,6 @@ export class NeutralinoApp {
     if (view.render) {
       view.render()
     }
-    this.views.push(view)
   }
 
   emit(eventHandlerName, ...data) {
@@ -132,13 +135,22 @@ export class NeutralinoApp {
     this.sideViews.push(sideView)
   }
 
+  changeDock(id) {
+    this.emit(EVENT.DOCK_CHANGE, {itemId: id})
+    // TODO: Maybe save state so reopens when closing and opening app
+  }
+
+  addDockIcon(...args) {
+    addDockIcon(this, ...args)
+  }
+
   changeSideView(sideView) {
     this.setData("CURRENT_SIDEVIEW", sideView.getName())
     let ref = document.getElementById('split-0')
     if (ref) {
       ref.replaceChildren(...createSideBar(this))
     }
-    this.emit(EVENT.DOCK_CHANGE, {tabName: sideView.getName()})
+    // this.emit(EVENT.DOCK_CHANGE, {tabName: sideView.getName()})
   }
 
   getCurrentSideView() {
@@ -199,7 +211,7 @@ export class NeutralinoApp {
     }
     this.setData('CURRENT_SIDEVIEW', SIDEBAR_TABS.EXPLORER)
     this.show(EditorPage)
-    this.emit(EVENT.DOCK_CHANGE, {tabName: SIDEBAR_TABS.EXPLORER})
+    // this.emit(EVENT.DOCK_CHANGE, {tabName: SIDEBAR_TABS.EXPLORER})
     this.emit(EVENT.WINDOW_CHANGE, {windowName: WINDOW.EDITOR})
   }
 
