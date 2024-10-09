@@ -13,6 +13,8 @@ export const REF = {
   DOCK_BUTTONS: "dock_buttons",
   DOCK_CONTENT: "dock_buttons",
   FILE_TABS: "file_tabs",
+  EDITOR_CONTENT: "editor_content",
+  SELECTION_PANEL: "tool_panel"
 }
 
 export function createSkeleton() {
@@ -28,11 +30,11 @@ export function createSkeleton() {
           ]),
           e('div', {id: 'split-1', className: "main_panel"}, [
             e('div', {id: REF.FILE_TABS, className: "tab-buttons"}),
-            e('div', {id: "editor_content"}), // FIXME
-            e('div', {id: "codemirror_editor"}), // FIXME
-            e('div', {id: "prosemirror_editor"}) // FIXME
+            e('div', {id: REF.EDITOR_CONTENT}),
           ]),
-          e('div', {id: 'split-2', className: "selection_panel"})
+          e('div', {id: 'split-2', className: "selection_panel"}, [
+            e('div', {id: REF.SELECTION_PANEL})
+          ])
         ]),
         e("h1", {id: "tmp_palceholder_editor"}, ["Editor"])
       ])
