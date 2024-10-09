@@ -3,8 +3,6 @@ import { addDockIcon, e } from "./helpers"
 
 import { updateMainPanelContent } from './pages/editor'
 import { createSideBar, SIDEBAR_TABS } from "./partials/sidebar"
-import { registerExplorer } from "./partials/explorer"
-import { registerObjectTree } from "./partials/object_tree"
 import { getRef, REF, renderSkeleton } from "./views/skeleton"
 import { registerWindowBar } from "./views/window_bar"
 import { registerWindowView } from "./views/window"
@@ -85,9 +83,6 @@ export class NeutralinoApp {
     this.rootDOM = ref
 
     await this.loadFromStorage()
-
-    registerExplorer(this)
-    registerObjectTree(this)
 
     renderSkeleton(this.rootDOM)
 
