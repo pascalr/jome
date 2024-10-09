@@ -11,7 +11,7 @@ export const REF = {
   WINDOW_BAR: "window_bar",
   WINDOW_CONTENT: "window_content",
   DOCK_BUTTONS: "dock_buttons",
-  DOCK_CONTENT: "dock_buttons",
+  DOCK_CONTENT: "dock_content",
   FILE_TABS: "file_tabs",
   EDITOR_CONTENT: "editor_content",
   SELECTION_PANEL: "tool_panel"
