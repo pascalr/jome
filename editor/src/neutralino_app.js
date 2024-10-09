@@ -12,6 +12,8 @@ import { registerHomePage } from "./views/homepage"
 import { registerExplorerView } from "./views/explorer"
 import { registerObjectTreeView } from "./views/object_tree"
 import { registerDock } from "./views/dock"
+import { registerActionsFile } from "./views/actions_file"
+import { registerActionsProject } from "./views/actions_project"
 
 const STORAGE_KEY = 'APP'
 
@@ -91,6 +93,9 @@ export class NeutralinoApp {
     registerExplorerView(this)
     registerObjectTreeView(this)
 
+    registerActionsFile(this)
+    registerActionsProject(this)
+
     registerDock(this)
 
     // this.show(EditorPage)
@@ -100,6 +105,9 @@ export class NeutralinoApp {
 
     // Set the current window
     this.changeWindow(this.data.PROJECT_PATH ? WINDOW.EDITOR : WINDOW.HOME)
+    if (this.data.PROJECT_PATH) {
+      this.changeProject(this.data.PROJECT_PATH)
+    }
 
     if (this.data.CURRENT_FILEPATH) {
       this.openFile(this.data.CURRENT_FILEPATH)
@@ -122,12 +130,12 @@ export class NeutralinoApp {
     })
   }
 
-  changeWindow(windowName) {
-    this.emit(EVENT.WINDOW_CHANGE, {windowName})
+  changeProject(path) {
+    this.emit(EVENT.PROJECT_CHANGE, {path})
   }
 
-  registerSideView(sideView) {
-    this.sideViews.push(sideView)
+  changeWindow(windowName) {
+    this.emit(EVENT.WINDOW_CHANGE, {windowName})
   }
 
   changeDock(id) {
@@ -139,6 +147,12 @@ export class NeutralinoApp {
     addDockIcon(this, ...args)
   }
 
+  // deprecated
+  registerSideView(sideView) {
+    this.sideViews.push(sideView)
+  }
+
+  // deprecated
   changeSideView(sideView) {
     this.setData("CURRENT_SIDEVIEW", sideView.getName())
     let ref = document.getElementById('split-0')
@@ -148,6 +162,7 @@ export class NeutralinoApp {
     // this.emit(EVENT.DOCK_CHANGE, {tabName: sideView.getName()})
   }
 
+  // deprecated
   getCurrentSideView() {
     return this.sideViews.find(v => v.getName() === this.data.CURRENT_SIDEVIEW)
   }

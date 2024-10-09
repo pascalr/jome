@@ -15,7 +15,7 @@ export const REF = {
   DOCK_CONTENT: "dock_content",
   FILE_TABS: "file_tabs",
   EDITOR_CONTENT: "editor_content",
-  SELECTION_PANEL: "tool_panel"
+  ACTION_PANEL: "action_panel"
 }
 
 function createSkeleton() {
@@ -34,7 +34,7 @@ function createSkeleton() {
             e('div', {id: REF.EDITOR_CONTENT}),
           ]),
           e('div', {id: 'split-2', className: "selection_panel"}, [
-            e('div', {id: REF.SELECTION_PANEL})
+            e('div', {id: REF.ACTION_PANEL})
           ])
         ]),
         e("h1", {id: "tmp_palceholder_editor"}, ["Editor"])
