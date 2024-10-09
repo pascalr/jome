@@ -1,4 +1,4 @@
-import { View } from "../view"
+import { DockView } from "../view"
 import iconFolder2Open from '../../assets/icons/folder2-open.svg'
 import { createHtmlTree } from "../lib/renderHtmlTree"
 import { addDockIcon, dockIcon, e, svgE } from "../helpers"
@@ -43,10 +43,12 @@ async function showExplorer(app) {
   }
 }
 
-class Explorer extends View {
+class Explorer extends DockView {
+
+  static itemId = "explorer"
 
   setup() {
-    this.app.addDockIcon("explorer", svgE(iconFolder2Open, "File explorer"))
+    this.app.addDockIcon(Explorer.itemId, svgE(iconFolder2Open, "File explorer"))
   }
 
   render() {

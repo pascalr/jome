@@ -112,11 +112,6 @@ export class NeutralinoApp {
     if (view.setup) {
       view.setup()
     }
-    // FIXME: Remove this
-    // Call render from setup if needed
-    if (view.render) {
-      view.render()
-    }
   }
 
   emit(eventHandlerName, ...data) {

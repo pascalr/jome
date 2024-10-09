@@ -1,12 +1,14 @@
 import iconTree from '../../assets/icons/tree.svg'
 import { addDockIcon, dockIcon, e, svgE } from '../helpers'
-import { View } from '../view'
+import { DockView } from '../view'
 import { getRef, REF } from './skeleton'
 
-class ObjectTree extends View {
+class ObjectTree extends DockView {
+
+  static itemId = "obj_tree"
 
   setup() {
-    this.app.addDockIcon("obj_tree", svgE(iconTree, "Object Tree"))
+    this.app.addDockIcon(ObjectTree.itemId, svgE(iconTree, "Object Tree"))
   }
 
   render() {
