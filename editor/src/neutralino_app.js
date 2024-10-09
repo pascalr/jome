@@ -90,11 +90,6 @@ export class NeutralinoApp {
 
     this.emit(EVENT.TEXT_SELECTION_CHANGE) // tmp for testing
 
-    // this.show(EditorPage)
-    // this.emit(EVENT.DOCK_CHANGE, {tabName: this.data.CURRENT_SIDEVIEW})
-
-    // this.show(EditorPage)
-
     // Set the current window
     this.changeWindow(this.data.PROJECT_PATH ? WINDOW.EDITOR : WINDOW.HOME)
     if (this.data.PROJECT_PATH) {
