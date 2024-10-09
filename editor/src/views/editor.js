@@ -29,6 +29,7 @@ class EditorView extends View {
     let segments = parser.parse(doc)
 
     let ref = getRef(REF.EDITOR_CONTENT)
+    ref.replaceChildren()
 
     segments.forEach(segment => {
       if (segment.isRaw) {
