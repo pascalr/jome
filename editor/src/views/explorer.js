@@ -61,6 +61,17 @@ class Explorer extends DockView {
     showExplorer(this.app)
   }
 
+  onFileChange({filepath, content}) {
+    // update active in explorer tree
+    // FIXME: DON'T DO THIS HERE. THE SELCTION SHOULD BE HANDLED ELSEWHERE AND IT IS THE SELECTION THAT SHOULD CALL openFile when needed
+    ;[...document.querySelectorAll("#explorer-tree .leaf[selected]")].forEach(el => {
+      el.removeAttribute('selected')
+      // el.classList.remove("active")
+    })
+    const leaf = document.querySelector(`#explorer-tree .leaf[data-path="${filepath}"]`);
+    if (leaf) {leaf.setAttribute('selected', "")}
+  }
+
 }
 
 export function registerExplorerView(app) {
