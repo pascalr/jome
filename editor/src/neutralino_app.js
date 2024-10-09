@@ -1,7 +1,7 @@
 import { getFilenameFromPath } from "./utils"
 import { addDockIcon, e } from "./helpers"
 
-import { EditorPage, updateMainPanelContent } from './pages/editor'
+import { updateMainPanelContent } from './pages/editor'
 import { createSideBar, SIDEBAR_TABS } from "./partials/sidebar"
 import { registerExplorer } from "./partials/explorer"
 import { registerObjectTree } from "./partials/object_tree"
@@ -15,6 +15,7 @@ import { registerDock } from "./views/dock"
 import { registerActionsFile } from "./views/actions_file"
 import { registerActionsProject } from "./views/actions_project"
 import { registerActionsTextSelection } from "./views/actions_text_selection"
+import { registerFilesTabs } from "./views/files_tabs"
 
 const STORAGE_KEY = 'APP'
 
@@ -24,6 +25,8 @@ export const EVENT = {
   DOCK_CHANGE: "onDockChange",
   WINDOW_CHANGE: "onWindowChange",
   TEXT_SELECTION_CHANGE: "onTextSelectionChange",
+  FILE_OPEN: "onFileOpen",
+  FILE_CLOSE: "onFileClose"
 }
 
 export const WINDOW = {
@@ -91,6 +94,7 @@ export class NeutralinoApp {
     registerWindowBar(this)
     registerWindowView(this)
     registerHomePage(this)
+    registerFilesTabs(this)
 
     registerExplorerView(this)
     registerObjectTreeView(this)
@@ -305,6 +309,7 @@ export class NeutralinoApp {
       }
 
       this.emit(EVENT.FILE_CHANGE, filepath)
+      this.emit(EVENT.FILE_OPEN, filepath)
 
       updateMainPanelContent(this, filepath, content)
     }).catch(this.handleError)
@@ -318,6 +323,7 @@ export class NeutralinoApp {
     }
     this.setProjectData('FILES_OPENED', filtered)
     this.openFile(this.data.CURRENT_FILEPATH)
+    this.emit(EVENT.FILE_CLOSE, filepath)
   }
 
 }
