@@ -5,11 +5,12 @@ import { EditorPage, updateMainPanelContent } from './pages/editor'
 import { createSideBar, SIDEBAR_TABS } from "./partials/sidebar"
 import { registerExplorer } from "./partials/explorer"
 import { registerObjectTree } from "./partials/object_tree"
-import { createSkeleton, getRef, REF } from "./views/skeleton"
+import { getRef, REF, renderSkeleton } from "./views/skeleton"
 import { registerWindowBar } from "./views/window_bar"
 import { registerWindowView } from "./views/window"
 import { registerHomePage } from "./views/homepage"
 import { registerExplorerView } from "./views/explorer"
+import { registerObjectTreeView } from "./views/object_tree"
 
 const STORAGE_KEY = 'APP'
 
@@ -80,12 +81,14 @@ export class NeutralinoApp {
     registerExplorer(this)
     registerObjectTree(this)
 
-    this.rootDOM.replaceChildren(createSkeleton())
+    renderSkeleton(this.rootDOM)
 
     registerWindowBar(this)
     registerWindowView(this)
     registerHomePage(this)
+
     registerExplorerView(this)
+    registerObjectTreeView(this)
 
     // this.show(EditorPage)
     this.emit(EVENT.DOCK_CHANGE, {tabName: this.data.CURRENT_SIDEVIEW})

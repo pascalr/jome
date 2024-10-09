@@ -1,3 +1,4 @@
+import Split from "split.js";
 import { e } from "../helpers";
 
 export function getRef(id) {
@@ -17,7 +18,7 @@ export const REF = {
   SELECTION_PANEL: "tool_panel"
 }
 
-export function createSkeleton() {
+function createSkeleton() {
   return e("div", {id: REF.WINDOW, style: "width: 100%; height: 100%; display: flex; flex-direction: column;"}, [
     e("div", {id: REF.WINDOW_BAR}),
     e("div", {id: REF.WINDOW_CONTENT, style: "flex-grow: 1;"}, [
@@ -40,4 +41,12 @@ export function createSkeleton() {
       ])
     ])
   ])
+}
+
+export function renderSkeleton(ref) {
+  ref.replaceChildren(createSkeleton())
+  Split(['#split-0', '#split-1', '#split-2'], {
+    gutterSize: 4,
+    sizes: [20, 60, 20]
+  })
 }
