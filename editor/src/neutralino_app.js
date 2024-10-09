@@ -14,6 +14,7 @@ import { registerObjectTreeView } from "./views/object_tree"
 import { registerDock } from "./views/dock"
 import { registerActionsFile } from "./views/actions_file"
 import { registerActionsProject } from "./views/actions_project"
+import { registerActionsTextSelection } from "./views/actions_text_selection"
 
 const STORAGE_KEY = 'APP'
 
@@ -21,7 +22,8 @@ export const EVENT = {
   FILE_CHANGE: "onFileChange",
   PROJECT_CHANGE: "onProjectChange",
   DOCK_CHANGE: "onDockChange",
-  WINDOW_CHANGE: "onWindowChange"
+  WINDOW_CHANGE: "onWindowChange",
+  TEXT_SELECTION_CHANGE: "onTextSelectionChange",
 }
 
 export const WINDOW = {
@@ -93,10 +95,13 @@ export class NeutralinoApp {
     registerExplorerView(this)
     registerObjectTreeView(this)
 
+    registerActionsTextSelection(this)
     registerActionsFile(this)
     registerActionsProject(this)
 
     registerDock(this)
+
+    this.emit(EVENT.TEXT_SELECTION_CHANGE) // tmp for testing
 
     // this.show(EditorPage)
     // this.emit(EVENT.DOCK_CHANGE, {tabName: this.data.CURRENT_SIDEVIEW})
