@@ -57,3 +57,19 @@ export function createToolSection(title, groups) {
     )
   ])
 }
+
+export function dockIcon(app, svgE, current) {
+  let el = svgE
+  el.setAttribute('width', 26)
+  el.setAttribute('height', 26)
+  // el.onclick = () => {
+  //   app.changeSideView(sideView)
+  // }
+  // if (sideView.render) {
+    el.style.cursor = "pointer"
+  // }
+  if (current) {
+    el.style.backgroundColor = "#1b3346"
+  }
+  return el
+}

@@ -96,6 +96,11 @@ export class NeutralinoApp {
 
   registerView(view) {
     view.setApp(this)
+    // TODO: Add this
+    // if (view.setup) {
+    //   view.setup()
+    // }
+    // FIXME: Remove this
     if (view.render) {
       view.render()
     }
