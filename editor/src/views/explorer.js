@@ -46,10 +46,9 @@ async function showExplorer(app) {
 class Explorer extends View {
 
   setup() {
-    // TODO: app.addDockItem
-    this.app.addDockItem('explorer', svgE(iconFolder2Open, "File explorer"))
-    // let refButtons = getRef(REF.DOCK_BUTTONS)
-    // let el = dockIcon(this.app, svgE(iconFolder2Open, "File explorer"), false)
+    let refButtons = getRef(REF.DOCK_BUTTONS)
+    let el = dockIcon(this.app, svgE(iconFolder2Open, "File explorer"), false)
+    refButtons.appendChild(el)
   }
 
   render() {
