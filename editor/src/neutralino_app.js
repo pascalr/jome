@@ -1,7 +1,6 @@
 import { getFilenameFromPath } from "./utils"
 import { addDockIcon } from "./helpers"
 
-import { updateMainPanelContent } from './pages/editor'
 import { renderSkeleton } from "./views/skeleton"
 import { registerWindowBar } from "./views/window_bar"
 import { registerWindowView } from "./views/window"
@@ -13,6 +12,7 @@ import { registerActionsFile } from "./views/actions_file"
 import { registerActionsProject } from "./views/actions_project"
 import { registerActionsTextSelection } from "./views/actions_text_selection"
 import { registerFilesTabs } from "./views/files_tabs"
+import { registerEditorView } from "./views/editor"
 
 const STORAGE_KEY = 'APP'
 
@@ -78,6 +78,7 @@ export class NeutralinoApp {
     registerWindowView(this)
     registerHomePage(this)
     registerFilesTabs(this)
+    registerEditorView(this)
 
     registerExplorerView(this)
     registerObjectTreeView(this)
@@ -251,8 +252,7 @@ export class NeutralinoApp {
   openFile(filepath) {
 
     if (!filepath) {
-      this.emit(EVENT.FILE_CHANGE, null)
-      updateMainPanelContent(this, filepath, null)
+      this.emit(EVENT.FILE_CHANGE, {filepath, content: null})
       return;
     }
 
@@ -265,10 +265,8 @@ export class NeutralinoApp {
         this.setProjectData('FILES_OPENED', [filepath, ...filesOpened])
       }
 
-      this.emit(EVENT.FILE_CHANGE, filepath)
+      this.emit(EVENT.FILE_CHANGE, {filepath, content})
       this.emit(EVENT.FILE_OPEN, filepath)
-
-      updateMainPanelContent(this, filepath, content)
     }).catch(this.handleError)
   }
 
