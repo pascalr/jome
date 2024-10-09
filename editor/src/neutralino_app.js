@@ -1,9 +1,8 @@
 import { getFilenameFromPath } from "./utils"
-import { addDockIcon, e } from "./helpers"
+import { addDockIcon } from "./helpers"
 
 import { updateMainPanelContent } from './pages/editor'
-import { createSideBar, SIDEBAR_TABS } from "./partials/sidebar"
-import { getRef, REF, renderSkeleton } from "./views/skeleton"
+import { renderSkeleton } from "./views/skeleton"
 import { registerWindowBar } from "./views/window_bar"
 import { registerWindowView } from "./views/window"
 import { registerHomePage } from "./views/homepage"
@@ -65,17 +64,6 @@ export class NeutralinoApp {
       explorerTree: document.getElementById('explorer-tree'),
     }
     // Should validate that all refs exists?
-  }
-
-  show(page) {
-
-    // create
-    let el = page.create(this)
-    // render
-    let ref = getRef(this.data.CURRENT_SIDEVIEW && this.data.CURRENT_SIDEVIEW !== SIDEBAR_TABS.HOME ? REF.EDITOR : REF.HOME)
-    ref.replaceChildren(el)
-    // after render
-    if (page.afterRender) {page.afterRender(this)}
   }
 
   async setup(ref) {
@@ -151,26 +139,6 @@ export class NeutralinoApp {
     addDockIcon(this, ...args)
   }
 
-  // deprecated
-  registerSideView(sideView) {
-    this.sideViews.push(sideView)
-  }
-
-  // deprecated
-  changeSideView(sideView) {
-    this.setData("CURRENT_SIDEVIEW", sideView.getName())
-    let ref = document.getElementById('split-0')
-    if (ref) {
-      ref.replaceChildren(...createSideBar(this))
-    }
-    // this.emit(EVENT.DOCK_CHANGE, {tabName: sideView.getName()})
-  }
-
-  // deprecated
-  getCurrentSideView() {
-    return this.sideViews.find(v => v.getName() === this.data.CURRENT_SIDEVIEW)
-  }
-
   setWindowTitle(title) {
     Neutralino.window.setTitle(title)
   }
@@ -223,7 +191,6 @@ export class NeutralinoApp {
       this.setData('PROJECT_PATH', null)
       this.setData('CURRENT_FILEPATH', data.path)
     }
-    this.setData('CURRENT_SIDEVIEW', SIDEBAR_TABS.EXPLORER)
     this.show(EditorPage)
     // this.emit(EVENT.DOCK_CHANGE, {tabName: SIDEBAR_TABS.EXPLORER})
     this.emit(EVENT.WINDOW_CHANGE, {windowName: WINDOW.EDITOR})
