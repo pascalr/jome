@@ -15,13 +15,16 @@ const STORAGE_KEY = 'APP'
 export const EVENT = {
   FILE_CHANGE: "onFileChange",
   PROJECT_CHANGE: "onProjectChange",
-  SIDEBAR_TAB_CHANGE: "onSidebarTabChange",
+  DOCK_CHANGE: "onDockChange",
   WINDOW_CHANGE: "onWindowChange"
 }
 
 export const WINDOW = {
   HOME: "home",
-  EDITOR: "editor"
+  EDITOR: "editor",
+  // settings
+  // help
+  // ...
 }
 
 export class NeutralinoApp {
@@ -83,7 +86,7 @@ export class NeutralinoApp {
     registerHomePage(this)
 
     this.show(EditorPage)
-    this.emit(EVENT.SIDEBAR_TAB_CHANGE, {tabName: this.data.CURRENT_SIDEVIEW})
+    this.emit(EVENT.DOCK_CHANGE, {tabName: this.data.CURRENT_SIDEVIEW})
     this.emit(EVENT.WINDOW_CHANGE, {windowName: this.data.CURRENT_SIDEVIEW && this.data.CURRENT_SIDEVIEW !== SIDEBAR_TABS.HOME ? "editor" : "home"})
 
     if (this.data.CURRENT_FILEPATH) {
@@ -121,7 +124,7 @@ export class NeutralinoApp {
     if (ref) {
       ref.replaceChildren(...createSideBar(this))
     }
-    this.emit(EVENT.SIDEBAR_TAB_CHANGE, {tabName: sideView.getName()})
+    this.emit(EVENT.DOCK_CHANGE, {tabName: sideView.getName()})
   }
 
   getCurrentSideView() {
@@ -182,7 +185,7 @@ export class NeutralinoApp {
     }
     this.setData('CURRENT_SIDEVIEW', SIDEBAR_TABS.EXPLORER)
     this.show(EditorPage)
-    this.emit(EVENT.SIDEBAR_TAB_CHANGE, {tabName: SIDEBAR_TABS.EXPLORER})
+    this.emit(EVENT.DOCK_CHANGE, {tabName: SIDEBAR_TABS.EXPLORER})
     this.emit(EVENT.WINDOW_CHANGE, {windowName: WINDOW.EDITOR})
   }
 
