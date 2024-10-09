@@ -58,11 +58,11 @@ class Explorer extends View {
       e('div', {className: "panel-header"}, ["Explorer"]),
       e('div', {id: "explorer-tree"})
     ])
-    showExplorer(app)
+    showExplorer(this.app)
   }
 
 }
 
-export function registerExplorer(app) {
+export function registerExplorerView(app) {
   app.registerView(new Explorer())
 }

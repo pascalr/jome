@@ -9,6 +9,7 @@ import { createSkeleton, getRef, REF } from "./views/skeleton"
 import { registerWindowBar } from "./views/window_bar"
 import { registerWindowView } from "./views/window"
 import { registerHomePage } from "./views/homepage"
+import { registerExplorerView } from "./views/explorer"
 
 const STORAGE_KEY = 'APP'
 
@@ -84,10 +85,15 @@ export class NeutralinoApp {
     registerWindowBar(this)
     registerWindowView(this)
     registerHomePage(this)
+    registerExplorerView(this)
+
+    // this.show(EditorPage)
+    this.emit(EVENT.DOCK_CHANGE, {tabName: this.data.CURRENT_SIDEVIEW})
 
     this.show(EditorPage)
-    this.emit(EVENT.DOCK_CHANGE, {tabName: this.data.CURRENT_SIDEVIEW})
-    this.emit(EVENT.WINDOW_CHANGE, {windowName: this.data.CURRENT_SIDEVIEW && this.data.CURRENT_SIDEVIEW !== SIDEBAR_TABS.HOME ? "editor" : "home"})
+
+    // Set the current window
+    this.changeWindow(this.data.PROJECT_PATH ? WINDOW.EDITOR : WINDOW.HOME)
 
     if (this.data.CURRENT_FILEPATH) {
       this.openFile(this.data.CURRENT_FILEPATH)
