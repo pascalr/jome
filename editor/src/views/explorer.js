@@ -21,8 +21,8 @@ async function buildTree(app, path) {
 
 async function showExplorer(app) {
   // Load the navigation tree
-  if (app.data['PROJECT_PATH']) {
-    let tree = await buildTree(app, app.data['PROJECT_PATH'])
+  if (app.getProjectPath()) {
+    let tree = await buildTree(app, app.getProjectPath())
     // // await app.listDirectory(app.data['PROJECT_PATH'])
     // app.loadFileTree(app.data['PROJECT_PATH'], tree => {
       let ref = document.getElementById('explorer-tree')

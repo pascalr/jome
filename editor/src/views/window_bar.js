@@ -7,8 +7,8 @@ class WindowBar extends View {
   render() {
     let ref = getRef(REF.WINDOW_BAR)
 
-    let name = getFilenameFromPath(this.app.getData('CURRENT_FILEPATH'))
-    let projectName = getFilenameFromPath(this.app.getData('PROJECT_PATH'))
+    let name = getFilenameFromPath(this.app.getCurrentFilepath())
+    let projectName = getFilenameFromPath(this.app.getProjectPath())
     let txt = (name ? `${name} - ` : "") + 
       (projectName ? `${projectName} - ` : "") + 
       "Jome Editor"

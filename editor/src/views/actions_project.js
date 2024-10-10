@@ -6,7 +6,7 @@ import { ActionView } from '../view'
 class ActionsProject extends ActionView {
 
   render() {
-    let path = this.app.getData("PROJECT_PATH")
+    let path = this.app.getProjectPath()
     if (!path) {return this.getRef().replaceChildren()}
     
     let name = getFilenameFromPath(path)

@@ -7,7 +7,7 @@ class Dock extends View {
 
   setup() {
     // TODO: Maybe save the state of the current dock
-    this.app.changeDock(this.app.getData("PROJECT_PATH") ? "explorer" : "home")
+    this.app.changeDock(this.app.getProjectPath() ? "explorer" : "home")
   }
 
   onDockChange({itemId}) {

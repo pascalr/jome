@@ -13,6 +13,7 @@ import { registerActionsProject } from "./views/actions_project"
 import { registerActionsTextSelection } from "./views/actions_text_selection"
 import { registerFilesTabs } from "./views/files_tabs"
 import { registerEditorView } from "./views/editor"
+import { withStateMethods } from "./state"
 
 const STORAGE_KEY = 'APP'
 
@@ -34,7 +35,7 @@ export const WINDOW = {
   // ...
 }
 
-export class NeutralinoApp {
+class BaseNeutralinoApp {
 
   constructor() {
     /**
@@ -282,3 +283,5 @@ export class NeutralinoApp {
   }
 
 }
+
+export const NeutralinoApp = withStateMethods(BaseNeutralinoApp)
