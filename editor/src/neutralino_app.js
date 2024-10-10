@@ -14,6 +14,7 @@ import { registerActionsTextSelection } from "./views/actions_text_selection"
 import { registerFilesTabs } from "./views/files_tabs"
 import { registerEditorView } from "./views/editor"
 import { withStateMethods } from "./state"
+import { registerDocumentParser } from "./workers/document_parser"
 
 const STORAGE_KEY = 'APP'
 
@@ -24,7 +25,8 @@ export const EVENT = {
   WINDOW_CHANGE: "onWindowChange",
   TEXT_SELECTION_CHANGE: "onTextSelectionChange",
   FILE_OPEN: "onFileOpen",
-  FILE_CLOSE: "onFileClose"
+  FILE_CLOSE: "onFileClose",
+  DOCUMENT_CHANGE: "onDocumentChange",
 }
 
 export const WINDOW = {
@@ -73,22 +75,28 @@ class BaseNeutralinoApp {
 
     await this.loadFromStorage()
 
+    // skeleton
     renderSkeleton(this.rootDOM)
 
+    // main views
     registerWindowBar(this)
     registerWindowView(this)
     registerHomePage(this)
     registerFilesTabs(this)
     registerEditorView(this)
 
+    // dock views
     registerExplorerView(this)
     registerObjectTreeView(this)
+    registerDock(this) // must be last I think
 
+    // action views
     registerActionsTextSelection(this)
     registerActionsFile(this)
     registerActionsProject(this)
 
-    registerDock(this)
+    // workers
+    registerDocumentParser(this)
 
     this.emit(EVENT.TEXT_SELECTION_CHANGE) // tmp for testing
 

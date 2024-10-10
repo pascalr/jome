@@ -1,3 +1,28 @@
+// How about simply persisting the whole state when closing the app?
+// Save at every state change?
+
+const APP_DATA = {
+  PROJECT_PATH: {
+    get: 'getProjectPath',
+    persist: true
+  },
+  CURRENT_FILEPATH: {
+    get: 'getCurrentFilepath',
+    persist: true
+  },
+  RECENT: {
+    get: 'getRecentPathsOpened',
+    persist: true
+  },
+}
+
+const PROJECT_DATA = {
+  FILES_OPENED: {
+    get: 'getProjectFilesOpened',
+    persist: true
+  }
+}
+
 export function withStateMethods(klass) {
 
   klass.prototype.getProjectPath = function() {
