@@ -8,7 +8,7 @@ Le modèle définie le schéma, c'est-à-dire la structure permise du document.
 
 import {EditorState} from "prosemirror-state"
 import {EditorView} from "prosemirror-view"
-import {Schema} from "prosemirror-model"
+import {DOMParser, Schema} from "prosemirror-model"
 import {schema} from "prosemirror-schema-basic"
 import {addListNodes} from "prosemirror-schema-list"
 import {history} from "prosemirror-history"
@@ -50,6 +50,36 @@ function createState(jomeDoc) {
 
 export function loadFileProseMirrorEditor(ref, jomeDoc) {
   let state = createState(jomeDoc)
+  let editorRef = document.createElement('div')
+  ref.appendChild(editorRef)
+  // if (editorView) {
+  //   editorView.updateState(state)
+  // } else {
+    let editorView = new EditorView(editorRef, {state})
+  // }
+  editorRef.setAttribute("autocomplete", "off")
+  editorRef.setAttribute("autocorrect", "off")
+  editorRef.setAttribute("autocapitalize", "off")
+  editorRef.setAttribute("spellcheck", false)
+}
+
+export function createProsemirrorEditor(app, ref, segmentStr) {
+
+  let el = document.createElement("div")
+  el.innerHTML = segmentStr
+  let doc = DOMParser.fromSchema(mySchema).parse(el)
+
+  let state = EditorState.create({
+    schema: mySchema,
+    doc,
+    plugins: [
+      history(),
+      buildInputRules(mySchema),
+      keymap(buildKeymap(mySchema)),
+      keymap(baseKeymap) // handle enter key, delete, etc
+      ]
+  })
+
   let editorRef = document.createElement('div')
   ref.appendChild(editorRef)
   // if (editorView) {

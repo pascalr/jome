@@ -4,6 +4,7 @@ import { JomeDocument } from "../models/jome_document"
 import { View } from "../view"
 import { getRef, REF } from "./skeleton"
 import { createCodemirrorEditor } from "../codemirror/codemirror_editor"
+import { createProsemirrorEditor } from "../prosemirror/prosemirror_editor"
 
 class EditorView extends View {
 
@@ -22,6 +23,7 @@ class EditorView extends View {
           createCodemirrorEditor(this.app, ref, segment.str)
         }
       } else {
+        // createProsemirrorEditor(this.app, ref, segment.str)
         let el = document.createElement("div")
         el.innerHTML = segment.str
         ref.appendChild(el)

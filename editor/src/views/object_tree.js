@@ -35,6 +35,11 @@ class ObjectTree extends DockView {
     ref.appendChild(tree)
   }
 
+  // TODO: Don't listen to document change
+  // Listen to the DOM change,
+  // then simply read the DOM and show what's in it.
+  // Wait probably not a good idea, depends how it's implemented...
+
   onDocumentChange({doc}) {
     this.doc = doc
     if (this.isActive()) {this.render()}
