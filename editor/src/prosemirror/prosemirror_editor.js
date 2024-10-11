@@ -8,9 +8,7 @@ Le modèle définie le schéma, c'est-à-dire la structure permise du document.
 
 import {EditorState} from "prosemirror-state"
 import {EditorView} from "prosemirror-view"
-import {DOMParser, Schema} from "prosemirror-model"
-import {schema} from "prosemirror-schema-basic"
-import {addListNodes} from "prosemirror-schema-list"
+import {DOMParser} from "prosemirror-model"
 import {history} from "prosemirror-history"
 import {keymap} from "prosemirror-keymap"
 import {baseKeymap} from "prosemirror-commands"
@@ -18,13 +16,7 @@ import {baseKeymap} from "prosemirror-commands"
 import {buildKeymap} from "./prosemirror_keymap"
 import {buildInputRules} from "./prosemirror_inputrules"
 import { deserialize } from "./prosemirror_deserializer"
-
-// Mix the nodes from prosemirror-schema-list into the basic schema to
-// create a schema with list support.
-const mySchema = new Schema({
-  nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block"),
-  marks: schema.spec.marks
-})
+import { schema } from "./prosemirror_schema"
 
 // (The null arguments are where you can specify attributes, if necessary.)
 // let doc = schema.node("doc", null, [
@@ -34,14 +26,14 @@ const mySchema = new Schema({
 // ])
 
 function createState(jomeDoc) {
-  let doc = deserialize(mySchema, jomeDoc)
+  let doc = deserialize(schema, jomeDoc)
   let state = EditorState.create({
-    schema: mySchema,
+    schema: schema,
     doc,
     plugins: [
       history(),
-      buildInputRules(mySchema),
-      keymap(buildKeymap(mySchema)),
+      buildInputRules(schema),
+      keymap(buildKeymap(schema)),
       keymap(baseKeymap) // handle enter key, delete, etc
       ]
   })
@@ -67,15 +59,15 @@ export function createProsemirrorEditor(app, ref, segmentStr) {
 
   let el = document.createElement("div")
   el.innerHTML = segmentStr
-  let doc = DOMParser.fromSchema(mySchema).parse(el)
+  let doc = DOMParser.fromSchema(schema).parse(el)
 
   let state = EditorState.create({
-    schema: mySchema,
+    schema: schema,
     doc,
     plugins: [
       history(),
-      buildInputRules(mySchema),
-      keymap(buildKeymap(mySchema)),
+      buildInputRules(schema),
+      keymap(buildKeymap(schema)),
       keymap(baseKeymap) // handle enter key, delete, etc
       ]
   })
