@@ -1,5 +1,6 @@
 import iconTree from '../../assets/icons/tree.svg'
 import { addDockIcon, dockIcon, e, svgE } from '../helpers'
+import { analyzeJomeSegment } from '../jome_analyzer'
 import { DockView } from '../view'
 import { getRef, REF } from './skeleton'
 
@@ -18,11 +19,20 @@ class ObjectTree extends DockView {
       e('div', {className: "panel-header"}, ["Object Tree"])
     ])
 
+    let tree = e('div', {className: "object-tree"})
+
     if (this.doc) {
-      ref.appendChild(e('div', {className: "object-tree"}, this.doc.segments.map(segment => {
-        return e('div', {}, ["Segment"])
-      })))
+      this.doc.segments.forEach(segment => {
+        if (!segment.isRaw) {
+          let tags = analyzeJomeSegment(segment.str)
+          tags.forEach(tag => {
+            tree.appendChild(e('div', {}, [tag.name]))
+          })
+        }
+      })
     }
+
+    ref.appendChild(tree)
   }
 
   onDocumentChange({doc}) {

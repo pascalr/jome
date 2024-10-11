@@ -1,6 +1,8 @@
 // How about simply persisting the whole state when closing the app?
 // Save at every state change?
 
+// Maybe use SQLite, this way save every change in an efficient way instead? Premature optimization for now.
+
 const APP_DATA = {
   PROJECT_PATH: {
     get: 'getProjectPath',
