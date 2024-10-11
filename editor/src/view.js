@@ -11,7 +11,12 @@ export class View {
 export class DockView extends View {
 
   onDockChange({itemId}) {
-    if (itemId === this.constructor.itemId) {this.render()}
+    this._active = itemId === this.constructor.itemId
+    if (this._active) {this.render()}
+  }
+
+  isActive() {
+    return this._active
   }
 
 }

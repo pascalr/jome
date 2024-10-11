@@ -17,12 +17,18 @@ class ObjectTree extends DockView {
     ref.replaceChildren(...[
       e('div', {className: "panel-header"}, ["Object Tree"])
     ])
+
+    if (this.doc) {
+      ref.appendChild(e('div', {className: "object-tree"}, this.doc.segments.map(segment => {
+        return e('div', {}, ["Segment"])
+      })))
+    }
   }
 
-  // onDocumentChange(document) {
-  //   this.document = document
-  //   this.update()
-  // }
+  onDocumentChange({doc}) {
+    this.doc = doc
+    if (this.isActive()) {this.render()}
+  }
 
 }
 
