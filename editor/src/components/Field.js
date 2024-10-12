@@ -6,6 +6,11 @@ export class Field extends JomeComponent {
 
   static componentName = "field"
 
+  constructor() {
+    super()
+    this.attachShadow({mode: 'open'});
+  }
+
   static ownAttributes = {
     name: {
       type: "string",
@@ -51,7 +56,7 @@ export class Field extends JomeComponent {
       el.appendChild(e('span', {style: "font-size: 0.8em; color: gray; margin-left: 1.5em;"}, [' '+this.comment]))
     }
 
-    this.replaceChildren(el)
+    this.shadowRoot.appendChild(el)
   }
 
 }

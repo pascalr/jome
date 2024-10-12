@@ -52,6 +52,10 @@ export class JomeComponent extends HTMLElement {
     })
   }
 
+  static get tagName() {
+    return 'jome-'+this.componentName
+  }
+
   static get allAttributes() {
     return {...this.ownAttributes, ...BASE_ATTRIBUTES}
   }
@@ -78,7 +82,7 @@ export class JomeComponent extends HTMLElement {
       })
     })
 
-    customElements.define('jome-'+this.componentName, this)
+    customElements.define(this.tagName, this)
     // customElements.define('j-'+this.componentName, this)
   }
 
