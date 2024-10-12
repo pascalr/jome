@@ -6,8 +6,26 @@ export class Field extends JomeComponent {
 
   static componentName = "field"
 
-  static get observedAttributes() {
-    return ['name', 'type', 'unit', 'enableEquivalentUnits', 'value', 'comment'];
+  static ownAttributes = {
+    name: {
+      type: "string",
+      required: true
+    },
+    type: {
+      type: "string",
+    },
+    unit: {
+      type: "string",
+    },
+    value: {
+      type: "any",
+    },
+    comment: {
+      type: "string"
+    },
+    enableEquivalentUnits: {
+      type: "bool"
+    }
   }
 
   attributeChangedCallback(property, oldValue, newValue) {

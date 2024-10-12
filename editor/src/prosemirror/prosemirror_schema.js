@@ -1,5 +1,6 @@
 import { Schema } from "prosemirror-model"
 import {addListNodes} from "prosemirror-schema-list"
+import { Field } from "../components/Field"
 
 // Copied basic nodes and marks from https://github.com/ProseMirror/prosemirror-schema-basic/blob/master/src/schema-basic.ts
 
@@ -98,6 +99,51 @@ const nodes = {
     selectable: false,
     parseDOM: [{tag: "br"}],
     toDOM() { return ["br"] }
+  },
+
+
+  // *** Jome nodes ***
+
+
+  canvas: {
+    content: "block*",
+    group: "block",
+    parseDOM: [{tag: "jome-canvas"}],
+    toDOM() { return ["jome-canvas", 0] }
+  },
+
+  field: {
+    content: "text*",
+    group: "block",
+    attrs: attrsForComponent(Field),
+    parseDOM: [{tag: "jome-field", getAttrs: getAttrsForComponent(Field)}],
+    toDOM(node) {
+      console.log('node', node);
+      return ["jome-field", {name: node.attrs.name}, 0]
+    },
+    // parseDOM: [{tag: "jome-field", getAttrs(dom) { console.log('dom', dom); return {name: dom.name, type: dom.type, unit: dom.unit, value: dom.value, comment: dom.comment} }}],
+    // toDOM(node) { console.log('node', node); return ["jome-field", {name: node.attrs.name, type: node.attrs.type, unit: node.attrs.unit, value: node.attrs.value, comment: node.attrs.value}, 0] }
+  },
+}
+
+function attrsForComponent(klass) {
+  let out = Object.keys(klass.allAttributes).reduce((acc, curr) => {
+    acc[curr] = {validate: "string|null", default: null} // FIXME map my types and defaults to prosemirror types and defaults
+    // acc[curr] = {validate: klass.allAttributes[curr].type, default: klass.allAttributes[curr].default}
+    return acc
+  }, {})
+  console.log('attrs', out)
+  return out
+}
+
+function getAttrsForComponent(klass) {
+  return (dom) => {
+    let out = Object.keys(klass.allAttributes).reduce((acc, curr) => {
+      acc[curr] = dom.getAttribute(curr)
+      return acc
+    }, {})
+    console.log('out', out)
+    return out
   }
 }
 
@@ -150,7 +196,7 @@ export const marks = {
   code: {
     parseDOM: [{tag: "code"}],
     toDOM() { return codeDOM }
-  }
+  },
 }
 
 

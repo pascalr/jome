@@ -23,10 +23,10 @@ class EditorView extends View {
           createCodemirrorEditor(this.app, ref, segment.str)
         }
       } else {
-        // createProsemirrorEditor(this.app, ref, segment.str)
-        let el = document.createElement("div")
-        el.innerHTML = segment.str
-        ref.appendChild(el)
+        createProsemirrorEditor(this.app, ref, segment.str)
+        // let el = document.createElement("div")
+        // el.innerHTML = segment.str
+        // ref.appendChild(el)
       }
     })
   }
