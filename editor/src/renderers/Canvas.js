@@ -1,6 +1,5 @@
 import { e } from "../helpers";
-import { applyBaseStyle, BASE_ATTRIBUTES, JomeComponent } from "../components/abstract/JomeComponent";
-import { Rect } from "../components/drawing/Rect";
+import { JomeComponent } from "../components/abstract/JomeComponent";
 
 const template = document.createElement('template');
 
@@ -40,8 +39,6 @@ const DRAW_PRIMITIVES = {
   }
 }
 
-const OBSERVED_ATTRIBUTES = Object.keys({...DRAWING_ATTRIBUTES, ...BASE_ATTRIBUTES})
-
 export class Canvas extends JomeComponent {
 
   static componentName = "canvas"
@@ -53,19 +50,12 @@ export class Canvas extends JomeComponent {
     // this.shadowRoot.adoptedStyleSheets = [BASE_STYLESHEET]
   }
 
-  static get allAttributes() {
-    return {...DRAWING_ATTRIBUTES, ...BASE_ATTRIBUTES}
-  }
-
-  static get observedAttributes() {
-    return OBSERVED_ATTRIBUTES;
+  static get ownAttributes() {
+    return DRAWING_ATTRIBUTES
   }
   
   connectedCallback() {
-
-    applyBaseStyle(this)
-
-    console.log('THIS', this)
+    super.connectedCallback()
 
     let el = e('canvas', {width: this.width, height: this.height})
     el.style.backgroundColor = this.fill

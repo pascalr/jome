@@ -39,6 +39,7 @@ export class Field extends JomeComponent {
   }
   
   connectedCallback() {
+    super.connectedCallback()
 
     let el = e('div', {}, [
       e('input', {id: this.name || undefined, type: this.type||'text', value: this.value})

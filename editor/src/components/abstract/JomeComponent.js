@@ -43,13 +43,6 @@ export class JomeComponent extends HTMLElement {
 
   constructor() {
     super()
-
-    let attrs = this.constructor.allAttributes
-    Object.keys(attrs).forEach(k => {
-      if (attrs[k].hasOwnProperty('default')) {
-        this[k] = attrs[k].default
-      }
-    })
   }
 
   static get tagName() {
@@ -67,6 +60,17 @@ export class JomeComponent extends HTMLElement {
   attributeChangedCallback(property, oldValue, newValue) {
     if (oldValue === newValue) return;
     this[ property ] = newValue;
+  }
+
+  connectedCallback() {
+    let attrs = this.constructor.allAttributes
+    Object.keys(attrs).forEach(k => {
+      if (attrs[k].hasOwnProperty('default') && !this.hasAttribute(k)) {
+        this[k] = attrs[k].default
+      }
+    })
+
+    applyBaseStyle(this)
   }
 
   static register() {
