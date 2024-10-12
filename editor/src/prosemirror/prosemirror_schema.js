@@ -119,11 +119,20 @@ const nodes = {
     parseDOM: [{tag: "jome-field", getAttrs: getAttrsForComponent(Field)}],
     toDOM(node) {
       console.log('node', node);
-      return ["jome-field", {name: node.attrs.name}, 0]
+      return ["jome-field", extractAttrsForComponent(node.attrs, Field), 0]
     },
     // parseDOM: [{tag: "jome-field", getAttrs(dom) { console.log('dom', dom); return {name: dom.name, type: dom.type, unit: dom.unit, value: dom.value, comment: dom.comment} }}],
     // toDOM(node) { console.log('node', node); return ["jome-field", {name: node.attrs.name, type: node.attrs.type, unit: node.attrs.unit, value: node.attrs.value, comment: node.attrs.value}, 0] }
   },
+}
+
+function extractAttrsForComponent(attrs, klass) {
+  let out = Object.keys(klass.allAttributes).reduce((acc, curr) => {
+    acc[curr] = attrs[curr]
+    return acc
+  }, {})
+  console.log('extracted', out)
+  return out
 }
 
 function attrsForComponent(klass) {
