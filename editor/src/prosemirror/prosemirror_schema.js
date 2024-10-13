@@ -116,7 +116,7 @@ const nodes = {
 
 function nodeSpecForComponent(klass) {
   return {
-    content: "text*",
+    content: "block*",
     group: "block",
     atom: true,
     attrs: attrsForComponent(klass),
