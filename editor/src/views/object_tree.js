@@ -6,9 +6,9 @@ import { getRef, REF } from './skeleton'
 
 function extractComponentName(tagName) {
   // FIXME: hardcoded string
-  if (tagName.startsWith('jome-')) {
+  if (tagName.toLowerCase().startsWith('jome-')) {
     return tagName.slice(5)
-  } else if (tagName.startsWith('j-')) {
+  } else if (tagName.toLowerCase().startsWith('j-')) {
     return tagName.slice(2)
   }
   return tagName
