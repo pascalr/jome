@@ -4,6 +4,16 @@ import { analyzeJomeSegment } from '../jome_analyzer'
 import { DockView } from '../view'
 import { getRef, REF } from './skeleton'
 
+function extractComponentName(tagName) {
+  // FIXME: hardcoded string
+  if (tagName.startsWith('jome-')) {
+    return tagName.slice(5)
+  } else if (tagName.startsWith('j-')) {
+    return tagName.slice(2)
+  }
+  return tagName
+}
+
 class ObjectTree extends DockView {
 
   static itemId = "obj_tree"
@@ -26,7 +36,8 @@ class ObjectTree extends DockView {
         if (!segment.isRaw) {
           let tags = analyzeJomeSegment(segment.str)
           tags.forEach(tag => {
-            tree.appendChild(e('div', {}, [tag.name]))
+            console.log('tag', tag)
+            tree.appendChild(e('div', {}, [tag.getComponentLabel ? tag.getComponentLabel() : (extractComponentName(tag.tagName))]))
           })
         }
       })

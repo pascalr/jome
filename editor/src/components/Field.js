@@ -60,4 +60,8 @@ export class Field extends JomeComponent {
     this.shadowRoot.appendChild(el)
   }
 
+  getComponentLabel() {
+    return `field • ${this.name}`
+  }
+
 }
