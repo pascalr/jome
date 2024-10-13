@@ -17,6 +17,7 @@ import {buildKeymap} from "./prosemirror_keymap"
 import {buildInputRules} from "./prosemirror_inputrules"
 import { deserialize } from "./prosemirror_deserializer"
 import { schema } from "./prosemirror_schema"
+import { arrowHandlers, CodeBlockView } from "./CodeBlockView"
 
 // (The null arguments are where you can specify attributes, if necessary.)
 // let doc = schema.node("doc", null, [
@@ -68,16 +69,19 @@ export function createProsemirrorEditor(app, ref, segmentStr) {
       history(),
       buildInputRules(schema),
       keymap(buildKeymap(schema)),
-      keymap(baseKeymap) // handle enter key, delete, etc
+      keymap(baseKeymap), // handle enter key, delete, etc
+      arrowHandlers
       ]
   })
+
+  let nodeViews = {code_block: (node, view, getPos) => new CodeBlockView(node, view, getPos)}
 
   let editorRef = document.createElement('div')
   ref.appendChild(editorRef)
   // if (editorView) {
   //   editorView.updateState(state)
   // } else {
-    let editorView = new EditorView(editorRef, {state})
+    let editorView = new EditorView(editorRef, {state, nodeViews})
   // }
   editorRef.setAttribute("autocomplete", "off")
   editorRef.setAttribute("autocorrect", "off")

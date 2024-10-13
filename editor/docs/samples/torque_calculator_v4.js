@@ -8,6 +8,12 @@ let thisIsSomeCodeBefore;
 /*~
 <h1>Torque Calculator Example</h1>
 
+<p>Some text before</p>
+
+<pre><code>let thisIsSomeTestCode;</pre></code>
+
+<p>Some text after</p>
+
 <jome-field name="force" type="number" unit="N" enable-equivalent-units="true" value="10" comment="Newtons or equivalent">
   */let force = 10;/*
 </jome-field>
