@@ -2,6 +2,8 @@ import { Schema } from "prosemirror-model"
 import {addListNodes} from "prosemirror-schema-list"
 import { Field } from "../components/Field"
 import { Canvas } from "../renderers/Canvas"
+import { Isogon } from "../components/drawing/Isogon"
+import { Rect } from "../components/drawing/Rect"
 
 // Copied basic nodes and marks from https://github.com/ProseMirror/prosemirror-schema-basic/blob/master/src/schema-basic.ts
 
@@ -108,6 +110,8 @@ const nodes = {
 
   canvas: nodeSpecForComponent(Canvas), 
   field: nodeSpecForComponent(Field),
+  rect: nodeSpecForComponent(Rect),
+  isogon: nodeSpecForComponent(Isogon),
 }
 
 function nodeSpecForComponent(klass) {

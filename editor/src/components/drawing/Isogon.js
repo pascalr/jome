@@ -3,7 +3,7 @@ import { JomeComponent } from "../abstract/JomeComponent";
 
 export class Isogon extends JomeComponent {
 
-  static componentName = "polygon"
+  static componentName = "isogon"
 
   static ownAttributes = {
     x: {
