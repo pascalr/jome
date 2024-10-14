@@ -60,6 +60,8 @@ class BaseNeutralinoApp {
     this.sideViews = []
 
     this.views = []
+
+    this.components = []
   }
 
   async setup(ref) {
@@ -282,6 +284,11 @@ class BaseNeutralinoApp {
     this.setProjectData('FILES_OPENED', filtered)
     this.openFile(this.data.CURRENT_FILEPATH)
     this.emit(EVENT.FILE_CLOSE, filepath)
+  }
+
+  registerComponents(components) {
+    components.forEach(k => k.register())
+    this.components = [...this.components, ...components]
   }
 
 }
