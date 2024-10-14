@@ -199,21 +199,17 @@ export const marks = {
   },
 }
 
-// Mix the nodes from prosemirror-schema-list into the basic schema to
-// create a schema with list support.
-export const schema = new Schema({
-  nodes: addListNodes(OrderedMap.from(nodes), "paragraph block*", "block"),
-  marks: marks
-})
-
 export function schemaWithComponents(components) {
-  let allNodes = schema.spec.nodes.append(components.reduce((acc, curr) => {
+
+  let allNodes = addListNodes(OrderedMap.from(nodes), "paragraph block*", "block")
+  allNodes = allNodes.append(components.reduce((acc, curr) => {
     // TODO: Add safety check not overriding something previously already inside the schema
     acc[curr.componentName] = nodeSpecForComponent(curr)
     return acc
   }, {}))
+  
   return new Schema({
     nodes: allNodes,
-    marks: schema.spec.marks
+    marks: marks
   })
 }

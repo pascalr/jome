@@ -15,7 +15,7 @@ import {baseKeymap} from "prosemirror-commands"
 
 import {buildKeymap} from "./prosemirror_keymap"
 import {buildInputRules} from "./prosemirror_inputrules"
-import { schema as baseSchema, schemaWithComponents } from "./prosemirror_schema"
+import { schemaWithComponents } from "./prosemirror_schema"
 import { arrowHandlers, CodeBlockView } from "./CodeBlockView"
 import { EVENT } from "../neutralino_app"
 import { ProseMirrorJomeDocument } from "./prosemirror_jome_document"

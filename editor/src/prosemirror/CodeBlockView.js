@@ -13,8 +13,6 @@ import {undo, redo} from "prosemirror-history"
 import {keymap} from "prosemirror-keymap"
 import { Selection, TextSelection } from "prosemirror-state"
 
-import { schema } from "./prosemirror_schema"
-
 import {basicSetup} from "codemirror"
 import { materialDarkStyle, materialDarkThemeOptions } from "../codemirror/codemirror_theme_material_dark";
 
@@ -62,7 +60,7 @@ export class CodeBlockView {
     if (update.docChanged || pmSel.from != selFrom || pmSel.to != selTo) {
       let tr = this.view.state.tr
       update.changes.iterChanges((fromA, toA, fromB, toB, text) => {
-        if (text.length)
+        if (text.length) // FIXME: schema.text!!!!!!!!!!!!!!!! How to do without schema?
           tr.replaceWith(offset + fromA, offset + toA,
                          schema.text(text.toString()))
         else
