@@ -5,7 +5,7 @@ import {
 } from "@codemirror/view"
 import {javascript} from "@codemirror/lang-javascript"
 import {defaultKeymap} from "@codemirror/commands"
-import {syntaxHighlighting, defaultHighlightStyle} from "@codemirror/language"
+import {HighlightStyle, syntaxHighlighting, defaultHighlightStyle} from "@codemirror/language"
 
 import {exitCode} from "prosemirror-commands"
 import {undo, redo} from "prosemirror-history"
@@ -15,12 +15,19 @@ import { Selection, TextSelection } from "prosemirror-state"
 
 import { schema } from "./prosemirror_schema"
 
+import {basicSetup} from "codemirror"
+import { materialDarkStyle, materialDarkThemeOptions } from "../codemirror/codemirror_theme_material_dark";
+
 export class CodeBlockView {
   constructor(node, view, getPos) {
     // Store for later
     this.node = node
     this.view = view
     this.getPos = getPos
+
+    let themeExtension = CodeMirror.theme(materialDarkThemeOptions, {dark: true})
+    const highlightStyle = HighlightStyle.define(materialDarkStyle);
+    let highlightExtension = syntaxHighlighting(highlightStyle)
 
     // Create a CodeMirror instance
     this.cm = new CodeMirror({
@@ -31,7 +38,9 @@ export class CodeBlockView {
           ...defaultKeymap
         ]),
         drawSelection(),
-        syntaxHighlighting(defaultHighlightStyle),
+        basicSetup,
+        themeExtension,
+        highlightExtension,
         javascript(),
         CodeMirror.updateListener.of(update => this.forwardUpdate(update))
       ]
