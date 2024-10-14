@@ -15,7 +15,7 @@ import {baseKeymap} from "prosemirror-commands"
 
 import {buildKeymap} from "./prosemirror_keymap"
 import {buildInputRules} from "./prosemirror_inputrules"
-import { schema } from "./prosemirror_schema"
+import { schema as baseSchema, schemaWithComponents } from "./prosemirror_schema"
 import { arrowHandlers, CodeBlockView } from "./CodeBlockView"
 import { EVENT } from "../neutralino_app"
 import { ProseMirrorJomeDocument } from "./prosemirror_jome_document"
@@ -68,12 +68,14 @@ function batchNotifier(app, schema, debounceTimeMs = 600) {
 
 export function createProsemirrorEditor(app, ref, segmentStr) {
 
+  let schema = schemaWithComponents(app.components)
+
   let el = document.createElement("div")
   el.innerHTML = segmentStr
   let doc = DOMParser.fromSchema(schema).parse(el)
 
   let state = EditorState.create({
-    schema: schema,
+    schema,
     doc,
     plugins: [
       history(),

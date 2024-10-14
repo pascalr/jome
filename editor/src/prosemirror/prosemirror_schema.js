@@ -220,3 +220,10 @@ export const schema = new Schema({
   nodes: addListNodes(fixmeNodes, "paragraph block*", "block"),
   marks: marks
 })
+
+export function schemaWithComponents(components) {
+  return new Schema({
+    nodes: schema.spec.nodes,
+    marks: schema.spec.marks
+  })
+}
