@@ -6,7 +6,7 @@ Le modèle définie le schéma, c'est-à-dire la structure permise du document.
 
 */
 
-import {EditorState} from "prosemirror-state"
+import {EditorState, Plugin} from "prosemirror-state"
 import {EditorView} from "prosemirror-view"
 import {DOMParser} from "prosemirror-model"
 import {history} from "prosemirror-history"
@@ -18,6 +18,7 @@ import {buildInputRules} from "./prosemirror_inputrules"
 import { deserialize } from "./prosemirror_deserializer"
 import { schema } from "./prosemirror_schema"
 import { arrowHandlers, CodeBlockView } from "./CodeBlockView"
+import { EVENT } from "../neutralino_app"
 
 // (The null arguments are where you can specify attributes, if necessary.)
 // let doc = schema.node("doc", null, [
@@ -56,6 +57,32 @@ export function loadFileProseMirrorEditor(ref, jomeDoc) {
   editorRef.setAttribute("spellcheck", false)
 }
 
+function batchNotifier(app, debounceTimeMs = 600) {
+
+  let timeout = null;
+
+  return new Plugin({
+    state: {
+      init(config, instance) {
+      },
+      // This is the `apply` method, which is triggered when the editor's state changes.
+      apply(tr, value, oldState, newState) {
+        // Check if the transaction caused a change to the document
+        // FIXME: docChanged is true even is simply clicking on some text, I want real doc changes, not selection change
+        if (tr.docChanged) {
+          app.emit(EVENT.DOM_CHANGE, {content: newState.doc.content})
+
+          if (timeout) {clearTimeout(timeout)}
+
+          timeout = setTimeout(() => {
+            app.emit(EVENT.DOM_BATCH_CHANGE, {content: newState.doc.content})
+          }, debounceTimeMs)
+        }
+      }
+    }
+  })
+}
+
 export function createProsemirrorEditor(app, ref, segmentStr) {
 
   let el = document.createElement("div")
@@ -70,7 +97,8 @@ export function createProsemirrorEditor(app, ref, segmentStr) {
       buildInputRules(schema),
       keymap(buildKeymap(schema)),
       keymap(baseKeymap), // handle enter key, delete, etc
-      arrowHandlers
+      arrowHandlers,
+      batchNotifier(app), // Last so it gets the modifications from previous plugins
       ]
   })
 
@@ -81,7 +109,7 @@ export function createProsemirrorEditor(app, ref, segmentStr) {
   // if (editorView) {
   //   editorView.updateState(state)
   // } else {
-    let editorView = new EditorView(editorRef, {state, nodeViews})
+    let editorView = new EditorView(editorRef, { state, nodeViews })
   // }
   editorRef.setAttribute("autocomplete", "off")
   editorRef.setAttribute("autocorrect", "off")

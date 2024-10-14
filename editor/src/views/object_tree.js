@@ -56,6 +56,10 @@ class ObjectTree extends DockView {
     if (this.isActive()) {this.render()}
   }
 
+  onDOMBatchChange({content}) {
+    console.log('DOM Change!!!')
+  }
+
 }
 
 export function registerObjectTreeView(app) {

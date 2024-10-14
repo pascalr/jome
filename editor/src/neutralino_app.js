@@ -27,6 +27,8 @@ export const EVENT = {
   FILE_OPEN: "onFileOpen",
   FILE_CLOSE: "onFileClose",
   DOCUMENT_CHANGE: "onDocumentChange",
+  DOM_CHANGE: "onDOMChange",
+  DOM_BATCH_CHANGE: "onDOMBatchChange", // Wait some time (like 1s) that no more changes are done. Maybe a maximum amount of time too. If always changing, then every 5s.
 }
 
 export const WINDOW = {
@@ -120,6 +122,7 @@ class BaseNeutralinoApp {
   }
 
   emit(eventHandlerName, ...data) {
+    console.debug("Emitting: "+eventHandlerName)
     this.views.forEach(view => {
       if (view[eventHandlerName]) {
         view[eventHandlerName](...data)
