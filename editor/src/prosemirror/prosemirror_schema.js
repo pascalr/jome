@@ -1,9 +1,6 @@
 import { Schema } from "prosemirror-model"
 import {addListNodes} from "prosemirror-schema-list"
-import { Field } from "../components/Field"
-import { Canvas } from "../renderers/Canvas"
-import { Isogon } from "../components/drawing/Isogon"
-import { Rect } from "../components/drawing/Rect"
+import OrderedMap from 'orderedmap';
 
 // Copied basic nodes and marks from https://github.com/ProseMirror/prosemirror-schema-basic/blob/master/src/schema-basic.ts
 
@@ -111,15 +108,6 @@ const nodes = {
     parseDOM: [{tag: "br"}],
     toDOM() { return ["br"] }
   },
-
-
-  // *** Jome nodes ***
-
-
-  canvas: nodeSpecForComponent(Canvas), 
-  field: nodeSpecForComponent(Field),
-  rect: nodeSpecForComponent(Rect),
-  isogon: nodeSpecForComponent(Isogon),
 }
 
 function nodeSpecForComponent(klass) {
@@ -211,19 +199,21 @@ export const marks = {
   },
 }
 
-
-let fixmeNodes = new Schema({nodes, marks}).spec.nodes
-
 // Mix the nodes from prosemirror-schema-list into the basic schema to
 // create a schema with list support.
 export const schema = new Schema({
-  nodes: addListNodes(fixmeNodes, "paragraph block*", "block"),
+  nodes: addListNodes(OrderedMap.from(nodes), "paragraph block*", "block"),
   marks: marks
 })
 
 export function schemaWithComponents(components) {
+  let allNodes = schema.spec.nodes.append(components.reduce((acc, curr) => {
+    // TODO: Add safety check not overriding something previously already inside the schema
+    acc[curr.componentName] = nodeSpecForComponent(curr)
+    return acc
+  }, {}))
   return new Schema({
-    nodes: schema.spec.nodes,
+    nodes: allNodes,
     marks: schema.spec.marks
   })
 }
