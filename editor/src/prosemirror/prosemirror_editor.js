@@ -19,6 +19,7 @@ import { deserialize } from "./prosemirror_deserializer"
 import { schema } from "./prosemirror_schema"
 import { arrowHandlers, CodeBlockView } from "./CodeBlockView"
 import { EVENT } from "../neutralino_app"
+import { ProseMirrorJomeDocument } from "./prosemirror_jome_document"
 
 // (The null arguments are where you can specify attributes, if necessary.)
 // let doc = schema.node("doc", null, [
@@ -88,7 +89,7 @@ function batchNotifier(app, schema, debounceTimeMs = 600) {
           if (timeout) {clearTimeout(timeout)}
 
           timeout = setTimeout(() => {
-            app.emit(EVENT.DOM_BATCH_CHANGE, {html: getHTML(schema, newState.doc.content)})
+            app.emit(EVENT.DOM_BATCH_CHANGE, new ProseMirrorJomeDocument(newState.doc))
           }, debounceTimeMs)
         }
       }

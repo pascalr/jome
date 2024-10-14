@@ -56,8 +56,10 @@ class ObjectTree extends DockView {
     if (this.isActive()) {this.render()}
   }
 
-  onDOMBatchChange({html}) {
-    console.log('DOM Change!!!', html)
+  // TODO: This will be onDocumentChange later when this works
+  onDOMBatchChange(doc) {
+    let segments = doc.getSegments()
+    console.log('DOM Change!!!', doc)
   }
 
 }
