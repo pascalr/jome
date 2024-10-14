@@ -15,7 +15,6 @@ import {baseKeymap} from "prosemirror-commands"
 
 import {buildKeymap} from "./prosemirror_keymap"
 import {buildInputRules} from "./prosemirror_inputrules"
-import { deserialize } from "./prosemirror_deserializer"
 import { schema } from "./prosemirror_schema"
 import { arrowHandlers, CodeBlockView } from "./CodeBlockView"
 import { EVENT } from "../neutralino_app"
@@ -27,36 +26,6 @@ import { ProseMirrorJomeDocument } from "./prosemirror_jome_document"
 //     schema.node("horizontal_rule"),
 //     schema.node("paragraph", null, [schema.text("Two!")])
 // ])
-
-function createState(jomeDoc) {
-  let doc = deserialize(schema, jomeDoc)
-  let state = EditorState.create({
-    schema: schema,
-    doc,
-    plugins: [
-      history(),
-      buildInputRules(schema),
-      keymap(buildKeymap(schema)),
-      keymap(baseKeymap) // handle enter key, delete, etc
-      ]
-  })
-  return state
-}
-
-export function loadFileProseMirrorEditor(ref, jomeDoc) {
-  let state = createState(jomeDoc)
-  let editorRef = document.createElement('div')
-  ref.appendChild(editorRef)
-  // if (editorView) {
-  //   editorView.updateState(state)
-  // } else {
-    let editorView = new EditorView(editorRef, {state})
-  // }
-  editorRef.setAttribute("autocomplete", "off")
-  editorRef.setAttribute("autocorrect", "off")
-  editorRef.setAttribute("autocapitalize", "off")
-  editorRef.setAttribute("spellcheck", false)
-}
 
 function getJSON(state) {
   return state.doc.toJSON()
