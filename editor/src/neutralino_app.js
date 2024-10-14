@@ -60,15 +60,6 @@ class BaseNeutralinoApp {
     this.sideViews = []
 
     this.views = []
-
-    /**
-     * DOM References to the main parts of the applications.
-     */
-    this.refs = {
-      mainPanel: document.getElementById('main-panel'),
-      explorerTree: document.getElementById('explorer-tree'),
-    }
-    // Should validate that all refs exists?
   }
 
   async setup(ref) {
