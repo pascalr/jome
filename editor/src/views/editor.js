@@ -5,6 +5,7 @@ import { View } from "../view"
 import { getRef, REF } from "./skeleton"
 import { createCodemirrorEditor } from "../codemirror/codemirror_editor"
 import { createProsemirrorEditor } from "../prosemirror/prosemirror_editor"
+import { escapeHTML } from "../utils"
 
 class EditorView extends View {
 
@@ -13,22 +14,37 @@ class EditorView extends View {
     let ref = getRef(REF.EDITOR_CONTENT)
     ref.replaceChildren()
 
+    let htmlDoc = ""
     doc.segments.forEach(segment => {
       if (segment.isRaw) {
         if (doc.extension === 'md') {
-          let el = document.createElement("div")
-          el.innerHTML = mdToHtml(segment.str)
-          ref.appendChild(el)
+          htmlDoc += mdToHtml(segment.str)
         } else {
-          createCodemirrorEditor(this.app, ref, segment.str)
+          htmlDoc += `<pre><code>${escapeHTML(segment.str)}</code></pre>`
         }
       } else {
-        createProsemirrorEditor(this.app, ref, segment.str)
-        // let el = document.createElement("div")
-        // el.innerHTML = segment.str
-        // ref.appendChild(el)
+        htmlDoc += segment.str
       }
     })
+
+    createProsemirrorEditor(this.app, ref, htmlDoc)
+
+    // doc.segments.forEach(segment => {
+    //   if (segment.isRaw) {
+    //     if (doc.extension === 'md') {
+    //       let el = document.createElement("div")
+    //       el.innerHTML = mdToHtml(segment.str)
+    //       ref.appendChild(el)
+    //     } else {
+    //       createCodemirrorEditor(this.app, ref, segment.str)
+    //     }
+    //   } else {
+    //     createProsemirrorEditor(this.app, ref, segment.str)
+    //     // let el = document.createElement("div")
+    //     // el.innerHTML = segment.str
+    //     // ref.appendChild(el)
+    //   }
+    // })
   }
 
 }

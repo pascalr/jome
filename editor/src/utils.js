@@ -14,3 +14,9 @@ export function getFilenameFromPath(path) {
 export function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+// https://stackoverflow.com/questions/3043775/how-to-escape-html
+export function escapeHTML(str){
+  return new Option(str).innerHTML;
+
+}

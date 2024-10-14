@@ -58,18 +58,19 @@ const nodes = {
   /// A code listing. Disallows marks or non-text inline
   /// nodes by default. Represented as a `<pre>` element with a
   /// `<code>` element inside of it.
-
+  // A code block would symply have syntax highligthing more.
+  // Maybe use CodeMirror too, so to have smart indentation, ...
+  // But it's purely visual.
+  // Use raw_block to have code that will be executed.
+  // Nooooooo, use code_block for everything, but add an attribute that specifies
+  // if the code is to be executed or not. This way the editing works for
+  // both kinds of code, and simply make it visually different so we know the difference.
   // Wait I am confused between code_block and code mark???
-
-  /// A code block for real code that is in the file.
-  // TODO: Create another tag for code that is just code, or simply an attribute on the code to know if the code is real code or not?
-  // Maybe later allow to show code (in another language for example, that is just showned and not part of the code)
   code_block: {
     content: "text*",
     marks: "",
     group: "block",
     code: true,
-    isolating: true,
     defining: true,
     parseDOM: [{tag: "pre", preserveWhitespace: "full"}],
     toDOM() { return ["pre", ["code", 0]] }
