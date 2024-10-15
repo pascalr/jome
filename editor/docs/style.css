@@ -397,3 +397,18 @@ body {
   width: 100vw;
   height: 100vh;
 }
+
+
+
+
+.component-label {
+  font-size: 0.95em;
+}
+.component-description {
+  font-size: 0.75em;
+  color: gray;
+  margin-left: 0.5em;
+}
+.object-tree {
+  padding: 0.4em;
+}

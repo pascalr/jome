@@ -58,7 +58,7 @@ function batchNotifier(app, schema, debounceTimeMs = 600) {
           if (timeout) {clearTimeout(timeout)}
 
           timeout = setTimeout(() => {
-            app.emit(EVENT.DOM_BATCH_CHANGE, new ProseMirrorJomeDocument(newState.doc))
+            app.emit(EVENT.DOM_BATCH_CHANGE, new ProseMirrorJomeDocument(app, newState.doc))
           }, debounceTimeMs)
         }
       }

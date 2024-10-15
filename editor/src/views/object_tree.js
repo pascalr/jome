@@ -32,14 +32,14 @@ class ObjectTree extends DockView {
     let tree = e('div', {className: "object-tree"})
 
     if (this.doc) {
-      this.doc.segments.forEach(segment => {
-        if (!segment.isRaw) {
-          let tags = analyzeJomeSegment(segment.str)
-          tags.forEach(tag => {
-            console.log('tag', tag)
-            tree.appendChild(e('div', {}, [tag.getComponentLabel ? tag.getComponentLabel() : (extractComponentName(tag.tagName))]))
-          })
-        }
+      let roots = this.doc.getRootComponents()
+      roots.forEach(root => {
+        window.debugRoot = root
+        console.log('description', root.getDescription())
+        tree.appendChild(e('div', {}, [
+          e('span', {className: "component-label"}, [root.getLabel()]),
+          e('span', {className: "component-description"}, [root.getDescription()||""])
+        ]))
       })
     }
 
@@ -51,15 +51,15 @@ class ObjectTree extends DockView {
   // then simply read the DOM and show what's in it.
   // Wait probably not a good idea, depends how it's implemented...
 
-  onDocumentChange({doc}) {
-    this.doc = doc
-    if (this.isActive()) {this.render()}
-  }
+  // onDocumentChange({doc}) {
+  //   this.doc = doc
+  //   if (this.isActive()) {this.render()}
+  // }
 
   // TODO: This will be onDocumentChange later when this works
   onDOMBatchChange(doc) {
-    let segments = doc.getSegments()
-    console.log('DOM Change!!!', doc)
+    this.doc = doc
+    if (this.isActive()) {this.render()}
   }
 
 }
