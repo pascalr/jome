@@ -1,17 +1,18 @@
 import iconTree from '../../assets/icons/tree.svg'
-import { addDockIcon, dockIcon, e, svgE } from '../helpers'
-import { analyzeJomeSegment } from '../jome_analyzer'
+import { e, svgE } from '../helpers'
 import { DockView } from '../view'
 import { getRef, REF } from './skeleton'
 
-function extractComponentName(tagName) {
-  // FIXME: hardcoded string
-  if (tagName.toLowerCase().startsWith('jome-')) {
-    return tagName.slice(5)
-  } else if (tagName.toLowerCase().startsWith('j-')) {
-    return tagName.slice(2)
-  }
-  return tagName
+function createComponentBranchDivs(component, depth=0) {
+  let divs = [e('div', {}, [
+    e('span', {style: `display: inline-block; width: ${depth}em;`}, [""]),
+    e('span', {className: "component-label"}, [component.getLabel()]),
+    e('span', {className: "component-description"}, [component.getDescription()||""])
+  ])]
+  component.children.forEach(c => {
+    divs = [...divs, ...createComponentBranchDivs(c, depth+1)]
+  })
+  return divs
 }
 
 class ObjectTree extends DockView {
@@ -33,30 +34,12 @@ class ObjectTree extends DockView {
 
     if (this.doc) {
       let roots = this.doc.getRootComponents()
-      roots.forEach(root => {
-        window.debugRoot = root
-        console.log('description', root.getDescription())
-        tree.appendChild(e('div', {}, [
-          e('span', {className: "component-label"}, [root.getLabel()]),
-          e('span', {className: "component-description"}, [root.getDescription()||""])
-        ]))
-      })
+      tree.replaceChildren(...roots.map(r => createComponentBranchDivs(r)).flat())
     }
 
     ref.appendChild(tree)
   }
 
-  // TODO: Don't listen to document change
-  // Listen to the DOM change,
-  // then simply read the DOM and show what's in it.
-  // Wait probably not a good idea, depends how it's implemented...
-
-  // onDocumentChange({doc}) {
-  //   this.doc = doc
-  //   if (this.isActive()) {this.render()}
-  // }
-
-  // TODO: This will be onDocumentChange later when this works
   onDocumentBatchChange(doc) {
     this.doc = doc
     if (this.isActive()) {this.render()}
