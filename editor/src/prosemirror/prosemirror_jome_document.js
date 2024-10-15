@@ -16,6 +16,10 @@ export class ProseMirrorJomeComponent {
   getDescription() {
     return this.node.attrs.name
   }
+
+  getIconUrl() {
+    return "./img/box.svg"
+  }
   
 }
 
@@ -37,6 +41,10 @@ export class ProseMirrorTextComponent {
     return this.nodes[0].textContent.trimStart().slice(0,20)
   }
 
+  getIconUrl() {
+    return "./img/body-text.svg"
+  }
+
 }
 
 export class ProseMirrorCodeComponent {
@@ -54,6 +62,10 @@ export class ProseMirrorCodeComponent {
 
   getDescription() {
     return this.node.textContent.trimStart().slice(0,20)
+  }
+
+  getIconUrl() {
+    return "./img/code-square.svg"
   }
 
 }

@@ -16,7 +16,7 @@ function createComponentBranchDivs(component, depth=0) {
   let divs = [e('div', {className: "component-node"}, [
     ...caret,
     ...createNestingLines(depth),
-    e('span', {className: "component-icon", style: `background-image: url('${"./img/box.svg"}')`}), // component.getIconUrl()
+    e('span', {className: "component-icon", style: `background-image: url('${component.getIconUrl()}')`}),
     e('span', {className: "component-label"}, [component.getLabel()]),
     e('span', {className: "component-description"}, [component.getDescription()||""])
   ])]
