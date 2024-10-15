@@ -6,8 +6,21 @@ export class Calc extends JomeComponent {
 
   static componentName = "calc"
 
-  static get observedAttributes() {
-    return ['name', 'formula', 'comment'];
+  static ownAttributes = {
+    name: {
+      type: "string",
+    },
+    formula: {
+      type: "string",
+    },
+    comment: {
+      type: "int",
+    },
+  }
+
+  constructor() {
+    super()
+    this.attachShadow({mode: 'open'});
   }
 
   attributeChangedCallback(property, oldValue, newValue) {
@@ -26,9 +39,11 @@ export class Calc extends JomeComponent {
     }
     if (this.comment) {
       el.appendChild(e('span', {style: "font-size: 0.8em; color: gray; margin-left: 1.5em;"}, [' '+this.comment]))
+    } else if (this.formula) {
+      el.appendChild(e('span', {style: "font-size: 0.8em; color: gray; margin-left: 1.5em;"}, [' ('+this.formula+')']))
     }
 
-    this.replaceChildren(el)
+    this.shadowRoot.replaceChildren(el)
   }
 
 }
