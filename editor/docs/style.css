@@ -399,8 +399,39 @@ body {
 }
 
 
-
-
+.component-icon {
+  display: inline-block;
+  height: 0.8em;
+  width: 0.8em;
+  background-size: contain;
+  background-repeat: no-repeat;
+  filter: invert(1);
+  padding-right: 0.3em;
+}
+.component-node {
+  height: 1.2em;
+}
+.component-no-caret {
+  padding-left: 0.8em;
+}
+.component-caret-right {
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 8px solid white; /* Adjust the size and color */
+  display: inline-block;
+  margin-right: 0.2em;
+}
+.component-caret-down {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 8px solid white; /* Adjust the size and color */
+  display: inline-block;
+  margin-right: 0.2em;
+}
 .component-label {
   font-size: 0.95em;
 }
@@ -408,6 +439,11 @@ body {
   font-size: 0.75em;
   color: gray;
   margin-left: 0.5em;
+}
+.component-nesting-line {
+  margin-left: 0.15em;
+  padding-left: 0.5em;
+  border-left: 2px solid #999;
 }
 .object-tree {
   padding: 0.4em;

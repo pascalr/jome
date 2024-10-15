@@ -3,9 +3,20 @@ import { e, svgE } from '../helpers'
 import { DockView } from '../view'
 import { getRef, REF } from './skeleton'
 
+function createNestingLines(depth) {
+  let els = []
+  for (let i = 0; i < depth; i++) {
+    els.push(e('span', {className: "component-nesting-line"}))
+  }
+  return els
+}
+
 function createComponentBranchDivs(component, depth=0) {
-  let divs = [e('div', {}, [
-    e('span', {style: `display: inline-block; width: ${depth}em;`}, [""]),
+  let caret = component.children.length ? [e('span', {className: "component-caret-down"})] : []
+  let divs = [e('div', {className: "component-node"}, [
+    ...caret,
+    ...createNestingLines(depth),
+    e('span', {className: "component-icon", style: `background-image: url('${"./img/box.svg"}')`}), // component.getIconUrl()
     e('span', {className: "component-label"}, [component.getLabel()]),
     e('span', {className: "component-description"}, [component.getDescription()||""])
   ])]
