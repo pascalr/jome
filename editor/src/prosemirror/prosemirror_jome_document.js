@@ -5,6 +5,8 @@ export class ProseMirrorJomeComponent {
   constructor(node) {
     // this.component = component
     this.node = node
+    this.childrenAllowed = false
+    this.children = []
   }
 
   getLabel() {
@@ -23,6 +25,8 @@ export class ProseMirrorTextComponent {
   constructor(nodes) {
     this.nodes = nodes
     this.isTextBlock = true
+    this.childrenAllowed = true
+    this.children = []
   }
 
   getLabel() {
@@ -40,6 +44,8 @@ export class ProseMirrorCodeComponent {
   constructor(node) {
     this.node = node
     this.isCodeBlock = true
+    this.childrenAllowed = true
+    this.children = []
   }
 
   getLabel() {
@@ -52,6 +58,44 @@ export class ProseMirrorCodeComponent {
 
 }
 
+function contentToComponents(app, content) {
+  let components = []
+
+  // OPTIMIZE: set instead of list, and don't recalculate every time
+  let jomeComponentList = app.components.map(c => c.componentName)
+
+  let textElements = [] // Group together h1, p, ul, ...
+  function checkPushTextComponent() {
+    if (textElements.length) {
+      components.push(new ProseMirrorTextComponent([...textElements]))
+      textElements.splice(0)
+    }
+  }
+
+  content.forEach((node) => {
+
+    // TODO: Check that it has the attribute that says that it is raw code
+    if (node.type.name === 'code_block') {
+      checkPushTextComponent()
+      components.push(new ProseMirrorCodeComponent(node))
+    } else if (jomeComponentList.includes(node.type.name)) {
+      checkPushTextComponent()
+      components.push(new ProseMirrorJomeComponent(node))
+    } else {
+      textElements.push(node)
+    }
+  })
+  checkPushTextComponent()
+
+  components.forEach(c => {
+    if (!c.childrenAllowed) {
+      c.children = contentToComponents(app, c.node.content)
+    }
+  })
+
+  return components
+}
+
 export class ProseMirrorJomeDocument {
 
   constructor(app, doc) {
@@ -60,36 +104,8 @@ export class ProseMirrorJomeDocument {
   }
 
   getRootComponents() {
-    let roots = []
-
-    // OPTIMIZE: set instead of list
-    let jomeComponentList = this.app.components.map(c => c.componentName)
-
-    let textElements = [] // Group together h1, p, ul, ...
-    function checkPushTextComponent() {
-      if (textElements.length) {
-        roots.push(new ProseMirrorTextComponent([...textElements]))
-        textElements.splice(0)
-      }
-    }
-
-    this.doc.content.forEach((node) => {
-
-      // TODO: Check that it has the attribute that says that it is raw code
-      if (node.type.name === 'code_block') {
-        checkPushTextComponent()
-        roots.push(new ProseMirrorCodeComponent(node))
-      } else if (jomeComponentList.includes(node.type.name)) {
-        checkPushTextComponent()
-        roots.push(new ProseMirrorJomeComponent(node))
-      } else {
-        textElements.push(node)
-      }
-    })
-    checkPushTextComponent()
-
+    let roots = contentToComponents(this.app, this.doc.content)
     console.log('roots', roots)
-
     return roots
   }
 
