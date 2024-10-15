@@ -51,14 +51,16 @@ function batchNotifier(app, schema, debounceTimeMs = 600) {
       },
       // This is the `apply` method, which is triggered when the editor's state changes.
       apply(tr, value, oldState, newState) {
+        // app.emit(EVENT.DOCUMENT_EVENT, {content: newState.doc.content})
+
         // Check if the transaction caused a change to the document
         if (tr.docChanged) {
-          app.emit(EVENT.DOM_CHANGE, {content: newState.doc.content})
+          app.emit(EVENT.DOCUMENT_CHANGE, new ProseMirrorJomeDocument(app, newState.doc))
 
           if (timeout) {clearTimeout(timeout)}
 
           timeout = setTimeout(() => {
-            app.emit(EVENT.DOM_BATCH_CHANGE, new ProseMirrorJomeDocument(app, newState.doc))
+            app.emit(EVENT.DOCUMENT_BATCH_CHANGE, new ProseMirrorJomeDocument(app, newState.doc))
           }, debounceTimeMs)
         }
       }
@@ -100,4 +102,8 @@ export function createProsemirrorEditor(app, ref, segmentStr) {
   editorRef.setAttribute("autocorrect", "off")
   editorRef.setAttribute("autocapitalize", "off")
   editorRef.setAttribute("spellcheck", false)
+
+  // Send initial events
+  app.emit(EVENT.DOCUMENT_CHANGE, new ProseMirrorJomeDocument(app, state.doc))
+  app.emit(EVENT.DOCUMENT_BATCH_CHANGE, new ProseMirrorJomeDocument(app, state.doc))
 }

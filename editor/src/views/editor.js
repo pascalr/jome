@@ -9,7 +9,11 @@ import { escapeHTML } from "../utils"
 
 class EditorView extends View {
 
-  onDocumentChange({doc}) {
+  onFileChange({filepath, content}) {
+
+    let doc = new JomeDocument(filepath, content)
+    let parser = new JomeParser()
+    doc.segments = parser.parse(doc)
 
     let ref = getRef(REF.EDITOR_CONTENT)
     ref.replaceChildren()
@@ -28,6 +32,7 @@ class EditorView extends View {
     })
 
     createProsemirrorEditor(this.app, ref, htmlDoc)
+  }
 
     // doc.segments.forEach(segment => {
     //   if (segment.isRaw) {
@@ -45,7 +50,6 @@ class EditorView extends View {
     //     // ref.appendChild(el)
     //   }
     // })
-  }
 
 }
 

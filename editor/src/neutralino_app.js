@@ -14,7 +14,6 @@ import { registerActionsTextSelection } from "./views/actions_text_selection"
 import { registerFilesTabs } from "./views/files_tabs"
 import { registerEditorView } from "./views/editor"
 import { withStateMethods } from "./state"
-import { registerDocumentParser } from "./workers/document_parser"
 
 const STORAGE_KEY = 'APP'
 
@@ -27,8 +26,8 @@ export const EVENT = {
   FILE_OPEN: "onFileOpen",
   FILE_CLOSE: "onFileClose",
   DOCUMENT_CHANGE: "onDocumentChange",
-  DOM_CHANGE: "onDOMChange",
-  DOM_BATCH_CHANGE: "onDOMBatchChange", // Wait some time (like 1s) that no more changes are done. Maybe a maximum amount of time too. If always changing, then every 5s.
+  // Waits some time (like 0.5s-1s) that no more changes are done. Maybe a maximum amount of time too. If always changing, then every 5s?
+  DOCUMENT_BATCH_CHANGE: "onDocumentBatchChange",
 }
 
 export const WINDOW = {
@@ -91,7 +90,7 @@ class BaseNeutralinoApp {
     registerActionsProject(this)
 
     // workers
-    registerDocumentParser(this)
+    // registerDocumentParser(this)
 
     this.emit(EVENT.TEXT_SELECTION_CHANGE) // tmp for testing
 

@@ -57,7 +57,7 @@ class ObjectTree extends DockView {
   // }
 
   // TODO: This will be onDocumentChange later when this works
-  onDOMBatchChange(doc) {
+  onDocumentBatchChange(doc) {
     this.doc = doc
     if (this.isActive()) {this.render()}
   }

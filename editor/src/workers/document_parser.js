@@ -5,6 +5,8 @@ import { View } from "../view"
 
 // FIXME: Currently a view in order to get callbacks functions. I am not sure yet how I want to do this so this way forn now.
 
+// DEPRECATED ?
+
 class DocumentParser extends View {
 
   onFileChange({filepath, content}) {
