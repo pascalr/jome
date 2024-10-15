@@ -11,15 +11,24 @@ function createNestingLines(depth) {
   return els
 }
 
+function handleComponentNodeClick(component, evt) {
+  
+}
+
 function createComponentBranchDivs(component, depth=0) {
   let caret = component.children.length ? [e('span', {className: "component-caret-down"})] : []
-  let divs = [e('div', {className: "component-node"}, [
+  let div = e('div', {className: "component-node", onclick: (evt) => handleComponentNodeClick(component, evt)}, [
     ...caret,
     ...createNestingLines(depth),
-    e('span', {className: "component-icon", style: `background-image: url('${component.getIconUrl()}')`}),
-    e('span', {className: "component-label"}, [component.getLabel()]),
-    e('span', {className: "component-description"}, [component.getDescription()||""])
-  ])]
+    e('span', {className: "component-icon", style: `background-image: url('${component.getIconUrl()}')`})
+  ])
+  if (component.isTextBlock || component.isCodeBlock) {
+    div.appendChild(e('span', {className: "component-quote"}, [component.getQuote()]))
+  } else {
+    div.appendChild(e('span', {className: "component-label"}, [component.getLabel()]))
+    div.appendChild(e('span', {className: "component-description"}, [component.getDescription()||""]))
+  }
+  let divs = [div]
   component.children.forEach(c => {
     divs = [...divs, ...createComponentBranchDivs(c, depth+1)]
   })

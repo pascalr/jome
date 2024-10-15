@@ -33,11 +33,7 @@ export class ProseMirrorTextComponent {
     this.children = []
   }
 
-  getLabel() {
-    return "Aa"
-  }
-
-  getDescription() {
+  getQuote() {
     return this.nodes[0].textContent.trimStart().slice(0,20)
   }
 
@@ -55,12 +51,8 @@ export class ProseMirrorCodeComponent {
     this.childrenAllowed = true
     this.children = []
   }
-
-  getLabel() {
-    return "<>"
-  }
-
-  getDescription() {
+  
+  getQuote() {
     return this.node.textContent.trimStart().slice(0,20)
   }
 

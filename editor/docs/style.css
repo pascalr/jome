@@ -410,6 +410,8 @@ body {
 }
 .component-node {
   height: 1.2em;
+  overflow: hidden;
+  /* text-overflow: ellipsis; FIXME: Does not work... */
 }
 .component-no-caret {
   padding-left: 0.8em;
@@ -436,14 +438,24 @@ body {
   font-size: 0.95em;
 }
 .component-description {
-  font-size: 0.75em;
-  color: gray;
+  font-size: 0.95em;
   margin-left: 0.5em;
 }
 .component-nesting-line {
   margin-left: 0.15em;
   padding-left: 0.5em;
   border-left: 2px solid #999;
+}
+.component-quote {
+  font-style: italic;
+  font-size: 0.95em;
+  opacity: 0.6;
+}
+.component-quote::before {
+  content: '"'
+}
+.component-quote::after {
+  content: '"'
 }
 .object-tree {
   padding: 0.4em;
