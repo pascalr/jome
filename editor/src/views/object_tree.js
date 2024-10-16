@@ -1,6 +1,7 @@
 import iconTree from '../../assets/icons/tree.svg'
 import { e, svgE } from '../helpers'
 import { Selection, SELECTION_TYPE } from '../models/selection'
+import { createObjectLabelParts } from '../partials/object_label'
 import { DockView } from '../view'
 import { getRef, REF } from './skeleton'
 
@@ -58,14 +59,8 @@ class ObjectTree extends DockView {
     let div = e('div', {className: "component-node", onclick: (evt) => this.handleComponentNodeClick(component, evt)}, [
       ...caret,
       ...createNestingLines(depth),
-      e('span', {className: "component-icon", style: `background-image: url('${component.getIconUrl()}')`})
+      ...createObjectLabelParts(component)
     ])
-    if (component.isTextBlock || component.isCodeBlock) {
-      div.appendChild(e('span', {className: "component-quote"}, [component.getQuote()]))
-    } else {
-      div.appendChild(e('span', {className: "component-label"}, [component.getLabel()]))
-      div.appendChild(e('span', {className: "component-description"}, [component.getDescription()||""]))
-    }
     let divs = [div]
     if (expanded) {
       component.children.forEach(c => {

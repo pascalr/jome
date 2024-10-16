@@ -9,7 +9,7 @@ class ActionsObjects extends ActionView {
     if (!path) {return this.getRef().replaceChildren()}
     
     this.getRef().replaceChildren(e('div', {}, [
-      e('div', {className: "panel-main-header"}, [this.selection.getLabel()]),
+      e('div', {className: "panel-main-header"}, this.selection.getLabelParts()),
       e('p', {}, ["TODO"])
     ]))
   }

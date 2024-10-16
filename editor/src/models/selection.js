@@ -1,3 +1,5 @@
+import { createObjectLabelParts } from "../partials/object_label"
+
 export const SELECTION_TYPE = {
   OBJECT: "Object",
   TEXT: "Text",
@@ -14,13 +16,13 @@ export class Selection {
     this.list = this.isEmpty ? [] : (this.isMany ? itemOrList : [itemOrList])
   }
 
-  getLabel() {
-    if (this.isEmpty) {return ""}
-    if (this.isMany) {return `${this.list.length} ${this.type}s selected`}
+  getLabelParts() {
+    if (this.isEmpty) {return [""]}
+    if (this.isMany) {return [`${this.list.length} ${this.type}s selected`]}
     if (this.type === SELECTION_TYPE.OBJECT) {
-      return `Object ${this.list[0].getLabel()} ${this.list[0].getDescription()}`
+      return createObjectLabelParts(this.list[0])
     }
-    return "TODO"
+    return ["TODO"]
   }
 
   getType() {
