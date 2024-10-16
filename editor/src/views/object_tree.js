@@ -11,12 +11,17 @@ function createNestingLines(depth) {
   return els
 }
 
+function keyForComponent(component) {
+
+}
+
 class ObjectTree extends DockView {
 
   static itemId = "obj_tree"
 
   setup() {
     this.app.addDockIcon(ObjectTree.itemId, svgE(iconTree, "Object Tree"))
+    this.objectsExpanded = {}
   }
 
   render() {
@@ -43,9 +48,7 @@ class ObjectTree extends DockView {
 
   handleComponentNodeClick(component, evt) {
     if (component.children) {
-      //let state = this.app.getCurrentFileState()
-      //state.update()
-      // this.objectsExpanded[path] = !this.objectsExpanded[path]
+      // this.objectsExpanded[component]
     }
   }
   

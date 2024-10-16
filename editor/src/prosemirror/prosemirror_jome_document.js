@@ -63,7 +63,7 @@ export class ProseMirrorCodeComponent {
 }
 
 // Only at the top of document there is text and code components.
-function contentToComponents(app, content, topOfDocument=true) {
+function contentToComponents(app, content, parentComponent=null) {
   let components = []
 
   // OPTIMIZE: set instead of list, and don't recalculate every time
@@ -80,21 +80,24 @@ function contentToComponents(app, content, topOfDocument=true) {
   content.forEach((node) => {
 
     // TODO: Check that it has the attribute that says that it is raw code
-    if (topOfDocument && node.type.name === 'code_block') {
+    if (!parentComponent && node.type.name === 'code_block') {
       checkPushTextComponent()
       components.push(new ProseMirrorCodeComponent(node))
     } else if (jomeComponentList.includes(node.type.name)) {
       checkPushTextComponent()
       components.push(new ProseMirrorJomeComponent(node))
-    } else if (topOfDocument) {
+    } else if (!parentComponent) {
       textElements.push(node)
     }
   })
   checkPushTextComponent()
 
   components.forEach(c => {
+    if (parentComponent) {
+      c.parent = parentComponent;
+    }
     if (!c.childrenAllowed) {
-      c.children = contentToComponents(app, c.node.content, false)
+      c.children = contentToComponents(app, c.node.content, c)
     }
   })
 
