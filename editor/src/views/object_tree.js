@@ -11,13 +11,13 @@ function createNestingLines(depth) {
   return els
 }
 
-function handleComponentNodeClick(component, evt) {
+function handleComponentNodeClick(app, component, evt) {
   
 }
 
-function createComponentBranchDivs(component, depth=0) {
+function createComponentBranchDivs(app, component, depth=0) {
   let caret = component.children.length ? [e('span', {className: "component-caret-down"})] : []
-  let div = e('div', {className: "component-node", onclick: (evt) => handleComponentNodeClick(component, evt)}, [
+  let div = e('div', {className: "component-node", onclick: (evt) => handleComponentNodeClick(app, component, evt)}, [
     ...caret,
     ...createNestingLines(depth),
     e('span', {className: "component-icon", style: `background-image: url('${component.getIconUrl()}')`})
@@ -30,7 +30,7 @@ function createComponentBranchDivs(component, depth=0) {
   }
   let divs = [div]
   component.children.forEach(c => {
-    divs = [...divs, ...createComponentBranchDivs(c, depth+1)]
+    divs = [...divs, ...createComponentBranchDivs(app, c, depth+1)]
   })
   return divs
 }
@@ -54,7 +54,7 @@ class ObjectTree extends DockView {
 
     if (this.doc) {
       let roots = this.doc.getRootComponents()
-      tree.replaceChildren(...roots.map(r => createComponentBranchDivs(r)).flat())
+      tree.replaceChildren(...roots.map(r => createComponentBranchDivs(this.app, r)).flat())
     }
 
     ref.appendChild(tree)
