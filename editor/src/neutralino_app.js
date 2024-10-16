@@ -295,6 +295,11 @@ class BaseNeutralinoApp {
     this.components = [...this.components, ...components]
   }
 
+  getObjectComponent(obj) {
+    if (!obj.getComponentName) { return null }
+    return this.components.find(c => c.componentName === obj.getComponentName())
+  }
+
   select(selection) {
     this.selection = selection
     this.emit(EVENT.SELECT, {selection})

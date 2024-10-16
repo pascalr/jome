@@ -1,12 +1,20 @@
 import { capitalize } from "../utils"
 
-export class ProseMirrorJomeComponent {
+export class ProseMirrorJomeComponent { // TODO: Rename to Object and not Component, Component is the class, Object is the instance
  
   constructor(node) {
     // this.component = component
     this.node = node
     this.childrenAllowed = true
     this.children = []
+  }
+
+  getAttribute(name) {
+    return this.node.attrs[name]
+  }
+
+  getComponentName() {
+    return this.node.attrs._component
   }
 
   getKey() {

@@ -137,7 +137,10 @@ function attrsForComponent(klass) {
     acc[curr] = {validate: "string|null", default: null} // FIXME map my types and defaults to prosemirror types and defaults
     // acc[curr] = {validate: klass.allAttributes[curr].type, default: klass.allAttributes[curr].default}
     return acc
-  }, {_key: {validate: "string"}}) // is validate here necessary?
+  }, {
+    _key: {validate: "string"}, // is validate here necessary?
+    _component: {validate: "string"}, // is validate here necessary?
+  })
 }
 
 function getAttrsForComponent(klass) {
@@ -145,7 +148,10 @@ function getAttrsForComponent(klass) {
     return Object.keys(klass.allAttributes).reduce((acc, curr) => {
       acc[curr] = dom.getAttribute(curr)
       return acc
-    }, {_key: uuidv4()})
+    }, {
+      _key: uuidv4(),
+      _component: klass.componentName,
+    })
   }
 }
 

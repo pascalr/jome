@@ -25,6 +25,10 @@ export class Selection {
     return ["TODO"]
   }
 
+  getItem() {
+    return this.list[0]
+  }
+
   getType() {
     return this.type
   }
