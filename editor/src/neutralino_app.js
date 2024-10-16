@@ -14,6 +14,7 @@ import { registerActionsTextSelection } from "./views/actions_text_selection"
 import { registerFilesTabs } from "./views/files_tabs"
 import { registerEditorView } from "./views/editor"
 import { withStateMethods } from "./state"
+import { Selection, SELECTION_TYPE } from "./models/selection"
 
 const STORAGE_KEY = 'APP'
 
@@ -22,12 +23,13 @@ export const EVENT = {
   PROJECT_CHANGE: "onProjectChange",
   DOCK_CHANGE: "onDockChange",
   WINDOW_CHANGE: "onWindowChange",
-  TEXT_SELECTION_CHANGE: "onTextSelectionChange",
+  TEXT_SELECTION_CHANGE: "onTextSelectionChange", // deprecated? onSelect?
   FILE_OPEN: "onFileOpen",
   FILE_CLOSE: "onFileClose",
   DOCUMENT_CHANGE: "onDocumentChange",
   // Waits some time (like 0.5s-1s) that no more changes are done. Maybe a maximum amount of time too. If always changing, then every 5s?
   DOCUMENT_BATCH_CHANGE: "onDocumentBatchChange",
+  SELECT: "onSelect"
 }
 
 export const WINDOW = {
@@ -66,6 +68,7 @@ class BaseNeutralinoApp {
   async setup(ref) {
 
     this.rootDOM = ref
+    this.selection = new Selection(SELECTION_TYPE.NONE)
 
     await this.loadFromStorage()
 
@@ -288,6 +291,16 @@ class BaseNeutralinoApp {
   registerComponents(components) {
     components.forEach(k => k.register())
     this.components = [...this.components, ...components]
+  }
+
+  select(selection) {
+    this.selection = selection
+    this.emit(EVENT.SELECT, {selection})
+  }
+  // When shift clicking or right clicking, try to add the selection to the current selection if of same type
+  selectMerge(selection) {
+    this.selection = this.selection.merge(selection)
+    this.emit(EVENT.SELECT, {selection})
   }
 
 }

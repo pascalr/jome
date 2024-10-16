@@ -1,5 +1,6 @@
 import iconTree from '../../assets/icons/tree.svg'
 import { e, svgE } from '../helpers'
+import { Selection, SELECTION_TYPE } from '../models/selection'
 import { DockView } from '../view'
 import { getRef, REF } from './skeleton'
 
@@ -43,15 +44,15 @@ class ObjectTree extends DockView {
   }
 
   handleComponentNodeClick(component, evt) {
-    if (component.children) {
+    if (component.childrenAllowed) {
       let key = component.getKey()
       this.objectsExpanded[key] = !this.objectsExpanded[key]
+      this.app.select(new Selection(SELECTION_TYPE.OBJECT, component))
       this.render()
     }
   }
   
   createComponentBranchDivs(component, depth=0) {
-    if (component.getKey) {console.log('key', component.getKey())}
     let expanded = component.childrenAllowed && this.objectsExpanded[component.getKey()]
     let caret = component.children.length ? [e('span', {className: expanded ? "component-caret-down" : "component-caret-right"})] : []
     let div = e('div', {className: "component-node", onclick: (evt) => this.handleComponentNodeClick(component, evt)}, [
