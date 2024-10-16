@@ -411,6 +411,7 @@ body {
 .component-node {
   height: 1.2em;
   overflow: hidden;
+  cursor: pointer;
   /* text-overflow: ellipsis; FIXME: Does not work... */
 }
 .component-no-caret {
