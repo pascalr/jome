@@ -5,8 +5,12 @@ export class ProseMirrorJomeComponent {
   constructor(node) {
     // this.component = component
     this.node = node
-    this.childrenAllowed = false
+    this.childrenAllowed = true
     this.children = []
+  }
+
+  getKey() {
+    return this.node.attrs._key
   }
 
   getLabel() {
@@ -29,7 +33,7 @@ export class ProseMirrorTextComponent {
   constructor(nodes) {
     this.nodes = nodes
     this.isTextBlock = true
-    this.childrenAllowed = true
+    this.childrenAllowed = false
     this.children = []
   }
 
@@ -48,7 +52,7 @@ export class ProseMirrorCodeComponent {
   constructor(node) {
     this.node = node
     this.isCodeBlock = true
-    this.childrenAllowed = true
+    this.childrenAllowed = false
     this.children = []
   }
   
@@ -96,7 +100,7 @@ function contentToComponents(app, content, parentComponent=null) {
     if (parentComponent) {
       c.parent = parentComponent;
     }
-    if (!c.childrenAllowed) {
+    if (c.childrenAllowed) {
       c.children = contentToComponents(app, c.node.content, c)
     }
   })

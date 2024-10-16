@@ -1,6 +1,7 @@
 import { Schema } from "prosemirror-model"
 import {addListNodes} from "prosemirror-schema-list"
 import OrderedMap from 'orderedmap';
+import { v4 as uuidv4 } from 'uuid';
 
 // Copied basic nodes and marks from https://github.com/ProseMirror/prosemirror-schema-basic/blob/master/src/schema-basic.ts
 
@@ -136,7 +137,7 @@ function attrsForComponent(klass) {
     acc[curr] = {validate: "string|null", default: null} // FIXME map my types and defaults to prosemirror types and defaults
     // acc[curr] = {validate: klass.allAttributes[curr].type, default: klass.allAttributes[curr].default}
     return acc
-  }, {})
+  }, {_key: {validate: "string"}}) // is validate here necessary?
 }
 
 function getAttrsForComponent(klass) {
@@ -144,7 +145,7 @@ function getAttrsForComponent(klass) {
     return Object.keys(klass.allAttributes).reduce((acc, curr) => {
       acc[curr] = dom.getAttribute(curr)
       return acc
-    }, {})
+    }, {_key: uuidv4()})
   }
 }
 

@@ -20,7 +20,8 @@
     "prosemirror-schema-basic": "^1.2.3",
     "prosemirror-schema-list": "^1.4.1",
     "prosemirror-state": "^1.4.3",
-    "split.js": "^1.6.5"
+    "split.js": "^1.6.5",
+    "uuid": "^10.0.0"
   },
   "scripts": {
     "build": "node build.mjs && neu build"

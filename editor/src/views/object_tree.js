@@ -11,10 +11,6 @@ function createNestingLines(depth) {
   return els
 }
 
-function keyForComponent(component) {
-
-}
-
 class ObjectTree extends DockView {
 
   static itemId = "obj_tree"
@@ -48,12 +44,16 @@ class ObjectTree extends DockView {
 
   handleComponentNodeClick(component, evt) {
     if (component.children) {
-      // this.objectsExpanded[component]
+      let key = component.getKey()
+      this.objectsExpanded[key] = !this.objectsExpanded[key]
+      this.render()
     }
   }
   
   createComponentBranchDivs(component, depth=0) {
-    let caret = component.children.length ? [e('span', {className: "component-caret-down"})] : []
+    if (component.getKey) {console.log('key', component.getKey())}
+    let expanded = component.childrenAllowed && this.objectsExpanded[component.getKey()]
+    let caret = component.children.length ? [e('span', {className: expanded ? "component-caret-down" : "component-caret-right"})] : []
     let div = e('div', {className: "component-node", onclick: (evt) => this.handleComponentNodeClick(component, evt)}, [
       ...caret,
       ...createNestingLines(depth),
@@ -66,9 +66,11 @@ class ObjectTree extends DockView {
       div.appendChild(e('span', {className: "component-description"}, [component.getDescription()||""]))
     }
     let divs = [div]
-    component.children.forEach(c => {
-      divs = [...divs, ...this.createComponentBranchDivs(c, depth+1)]
-    })
+    if (expanded) {
+      component.children.forEach(c => {
+        divs = [...divs, ...this.createComponentBranchDivs(c, depth+1)]
+      })
+    }
     return divs
   }
 
