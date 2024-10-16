@@ -15,6 +15,7 @@ import { registerFilesTabs } from "./views/files_tabs"
 import { registerEditorView } from "./views/editor"
 import { withStateMethods } from "./state"
 import { Selection, SELECTION_TYPE } from "./models/selection"
+import { registerActionsObjects } from "./views/actions_objects"
 
 const STORAGE_KEY = 'APP'
 
@@ -88,6 +89,7 @@ class BaseNeutralinoApp {
     registerDock(this) // must be last I think
 
     // action views
+    registerActionsObjects(this)
     registerActionsTextSelection(this)
     registerActionsFile(this)
     registerActionsProject(this)

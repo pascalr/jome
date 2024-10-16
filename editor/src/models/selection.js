@@ -1,7 +1,7 @@
 export const SELECTION_TYPE = {
-  OBJECT: "object",
-  TEXT: "text",
-  FILE: "file",
+  OBJECT: "Object",
+  TEXT: "Text",
+  FILE: "File",
   NONE: "none",
 }
 
@@ -12,6 +12,15 @@ export class Selection {
     this.isEmpty = !itemOrList
     this.isMany = itemOrList && Array.isArray(itemOrList)
     this.list = this.isEmpty ? [] : (this.isMany ? itemOrList : [itemOrList])
+  }
+
+  getLabel() {
+    if (this.isEmpty) {return ""}
+    if (this.isMany) {return `${this.list.length} ${this.type}s selected`}
+    if (this.type === SELECTION_TYPE.OBJECT) {
+      return `Object ${this.list[0].getLabel()} ${this.list[0].getDescription()}`
+    }
+    return "TODO"
   }
 
   getType() {
