@@ -19,6 +19,7 @@ import { schemaWithComponents } from "./prosemirror_schema"
 import { arrowHandlers, CodeBlockView } from "./CodeBlockView"
 import { EVENT } from "../neutralino_app"
 import { ProseMirrorJomeDocument } from "./prosemirror_jome_document"
+import { View } from "../view"
 
 // (The null arguments are where you can specify attributes, if necessary.)
 // let doc = schema.node("doc", null, [
@@ -52,6 +53,26 @@ function batchNotifier(app, schema, debounceTimeMs = 600) {
       }
     }
   })
+}
+
+class ProsemirrorEditorWorker extends View {
+
+  static workerName = "ProsemirrorEditorWorker"
+
+  onSelect() {
+    if (this.editorView) {
+      console.log('TODO ProsemirrorEditorWorker#onSelect')
+    }
+  }
+
+  setEditorView(editorView) {
+    this.editorView = editorView
+  }
+
+}
+
+export function registerProsemirrorEditorWorker(app) {
+  app.registerView(new ProsemirrorEditorWorker())
 }
 
 export function createProsemirrorEditor(app, ref, segmentStr) {
@@ -88,6 +109,9 @@ export function createProsemirrorEditor(app, ref, segmentStr) {
   editorRef.setAttribute("autocorrect", "off")
   editorRef.setAttribute("autocapitalize", "off")
   editorRef.setAttribute("spellcheck", false)
+
+  let worker = app.findView(v => v.constructor.workerName === ProsemirrorEditorWorker.workerName)
+  worker.setEditorView(editorView)
 
   // Send initial events
   app.emit(EVENT.DOCUMENT_CHANGE, new ProseMirrorJomeDocument(app, state.doc))

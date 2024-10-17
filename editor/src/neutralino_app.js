@@ -16,6 +16,7 @@ import { registerEditorView } from "./views/editor"
 import { withStateMethods } from "./state"
 import { Selection, SELECTION_TYPE } from "./models/selection"
 import { registerActionsObjects } from "./views/actions_objects"
+import { registerProsemirrorEditorWorker } from "./prosemirror/prosemirror_editor"
 
 const STORAGE_KEY = 'APP'
 
@@ -96,6 +97,7 @@ class BaseNeutralinoApp {
 
     // workers
     // registerDocumentParser(this)
+    registerProsemirrorEditorWorker(this)
 
     this.emit(EVENT.TEXT_SELECTION_CHANGE) // tmp for testing
 
@@ -116,6 +118,9 @@ class BaseNeutralinoApp {
     if (view.setup) {
       view.setup()
     }
+  }
+  findView(cond) {
+    return this.views.find(cond)
   }
 
   emit(eventHandlerName, ...data) {
