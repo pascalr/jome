@@ -14,7 +14,7 @@ import { registerActionsTextSelection } from "./views/actions_text_selection"
 import { registerFilesTabs } from "./views/files_tabs"
 import { registerEditorView } from "./views/editor"
 import { withStateMethods } from "./state"
-import { Selection, SELECTION_TYPE } from "./models/selection"
+import { SelectionV2 } from "./models/selection"
 import { registerActionsObjects } from "./views/actions_objects"
 import { registerProsemirrorEditorWorker } from "./prosemirror/prosemirror_editor"
 
@@ -76,7 +76,7 @@ class BaseNeutralinoApp {
   async setup(ref) {
 
     this.rootDOM = ref
-    this.selection = new Selection(SELECTION_TYPE.NONE)
+    this.selection = SelectionV2.selectNone()
 
     await this.loadFromStorage()
 

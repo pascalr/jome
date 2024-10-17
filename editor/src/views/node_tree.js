@@ -1,6 +1,6 @@
 import iconTree from '../../assets/icons/tree.svg'
 import { e, svgE } from '../helpers'
-import { Selection, SELECTION_TYPE, SelectionV2 } from '../models/selection'
+import { SelectionV2 } from '../models/selection'
 import { createObjectLabelParts } from '../partials/object_label'
 import { DockView } from '../view'
 import { getRef, REF } from './skeleton'

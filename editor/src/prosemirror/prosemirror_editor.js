@@ -20,7 +20,7 @@ import { arrowHandlers, CodeBlockView } from "./CodeBlockView"
 import { EVENT } from "../neutralino_app"
 import { ProseMirrorJomeComponent, ProseMirrorJomeDocument } from "./prosemirror_jome_document"
 import { View } from "../view"
-import { Selection, SELECTION_TYPE } from "../models/selection"
+import { SelectionV2 } from "../models/selection"
 import { selectObject, updateObjectAttribute } from "./prosemirror_commands"
 
 // (The null arguments are where you can specify attributes, if necessary.)
@@ -72,7 +72,9 @@ function selectionChangePlugin(app) {
         // Check if the selection has changed
         if (!newState.selection.eq(oldState.selection)) {
           if (newState.selection instanceof NodeSelection) {
-            app.select(new Selection(SELECTION_TYPE.OBJECT, new ProseMirrorJomeComponent(newState.selection.node), SELECTION_SOURCE_TEXT_EDITOR))
+            let selection = SelectionV2.selectNode(new ProseMirrorJomeComponent(newState.selection.node))
+            selection.sourceOfChange = SELECTION_SOURCE_TEXT_EDITOR
+            app.select(selection)
           } else {
             // TODO
             // app.select(new Selection(SELECTION_TYPE.TEXT, ))
