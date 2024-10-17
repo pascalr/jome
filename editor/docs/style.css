@@ -484,3 +484,7 @@ body {
   min-width: 100px;
   font-size: 1em;
 }
+.object-edit-field > input[type="checkbox"] {
+  flex: 0;
+  min-width: auto;
+}
