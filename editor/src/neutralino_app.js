@@ -14,7 +14,7 @@ import { registerActionsTextSelection } from "./views/actions_text_selection"
 import { registerFilesTabs } from "./views/files_tabs"
 import { registerEditorView } from "./views/editor"
 import { withStateMethods } from "./state"
-import { SelectionV2 } from "./models/selection"
+import { Selection } from "./models/selection"
 import { registerActionsObjects } from "./views/actions_objects"
 import { registerProsemirrorEditorWorker } from "./prosemirror/prosemirror_editor"
 
@@ -76,7 +76,7 @@ class BaseNeutralinoApp {
   async setup(ref) {
 
     this.rootDOM = ref
-    this.selection = SelectionV2.selectNone()
+    this.selection = Selection.none()
 
     await this.loadFromStorage()
 
@@ -317,7 +317,7 @@ class BaseNeutralinoApp {
   }
   // When shift clicking or right clicking, try to add the selection to the current selection if of same type
   selectMerge(selection) {
-    this.selection = this.selection.merge(selection)
+    this.selection = Selection.merge(this.selection, selection)
     this.emit(EVENT.SELECT, {selection})
   }
   getSelection() {

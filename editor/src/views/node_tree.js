@@ -1,6 +1,6 @@
 import iconTree from '../../assets/icons/tree.svg'
 import { e, svgE } from '../helpers'
-import { SelectionV2 } from '../models/selection'
+import { Selection } from '../models/selection'
 import { createObjectLabelParts } from '../partials/object_label'
 import { DockView } from '../view'
 import { getRef, REF } from './skeleton'
@@ -48,7 +48,7 @@ class NodeTree extends DockView {
     if (node.childrenAllowed) {
       let key = node.getKey()
       this.objectsExpanded[key] = !this.objectsExpanded[key]
-      this.app.select(SelectionV2.selectNode(node))
+      this.app.select(Selection.node(node))
     }
   }
   
