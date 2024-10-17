@@ -65,6 +65,10 @@ function selectionChangePlugin(app) {
       init(config, instance) {
       },
       apply(tr, value, oldState, newState) {
+
+        let isEcho = tr.getMeta('sourceOfChange') === "selectObject"
+        if (isEcho) {return;} // Don't re-emit the event
+
         // Check if the selection has changed
         if (!newState.selection.eq(oldState.selection)) {
           // Callback logic for selection change

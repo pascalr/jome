@@ -32,7 +32,7 @@ export function selectObject(state, dispatch, node) {
 
   // Create a NodeSelection at that position
   const nodeSelection = NodeSelection.create(state.doc, pos);
-  const transaction = state.tr.setSelection(nodeSelection);
+  const transaction = state.tr.setSelection(nodeSelection).setMeta('sourceOfChange', 'selectObject');
   if (dispatch) {dispatch(transaction)}
   return true;
 }
