@@ -53,10 +53,8 @@ export class Canvas extends JomeComponent {
   static get ownAttributes() {
     return DRAWING_ATTRIBUTES
   }
-  
-  connectedCallback() {
-    super.connectedCallback()
 
+  render() {
     let el = e('canvas', {width: this.width, height: this.height})
     el.style.backgroundColor = this.fill
 
@@ -78,7 +76,34 @@ export class Canvas extends JomeComponent {
       ctx.restore();
     })
 
-    this.shadowRoot.appendChild(el)
+    this.shadowRoot.replaceChildren(el)
+  }
+  
+  connectedCallback() {
+    super.connectedCallback()
+    this.render()
+    this.observeChildren()
+  }
+
+  observeChildren() {
+    this.observer = new MutationObserver((mutationsList) => {
+      for (const mutation of mutationsList) {
+        console.log('mutation', mutation)
+        // There seems to be two mutations when modifying the children
+        // It seems the previous child is removed and a new is added
+        // So only rerender when added
+        if (mutation.type === 'childList' && mutation.addedNodes.length) {
+          this.render()
+        }
+      }
+    });
+
+    // Observe changes to the parent element's children
+    this.observer.observe(this, { childList: true });
+  }
+
+  disconnectedCallback() {
+    this.observer.disconnect();
   }
 
 }
