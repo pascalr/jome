@@ -43,6 +43,11 @@ https://github.com/pascalr/jome/tree/main/editor
 </pre>
 <!--~end-->
 
+## Lexical
+
+Node: A building block. An instance of a component. 
+Component: A kind of node. Field, Calc, ...
+
 ## See also
 
 - [The language documentation](REFERENCE.md)

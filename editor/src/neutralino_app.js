@@ -6,7 +6,7 @@ import { registerWindowBar } from "./views/window_bar"
 import { registerWindowView } from "./views/window"
 import { registerHomePage } from "./views/homepage"
 import { registerExplorerView } from "./views/explorer"
-import { registerObjectTreeView } from "./views/object_tree"
+import { registerNodeTreeView } from "./views/node_tree"
 import { registerDock } from "./views/dock"
 import { registerActionsFile } from "./views/actions_file"
 import { registerActionsProject } from "./views/actions_project"
@@ -87,7 +87,7 @@ class BaseNeutralinoApp {
 
     // dock views
     registerExplorerView(this)
-    registerObjectTreeView(this)
+    registerNodeTreeView(this)
     registerDock(this) // must be last I think
 
     // action views
@@ -314,6 +314,9 @@ class BaseNeutralinoApp {
   selectMerge(selection) {
     this.selection = this.selection.merge(selection)
     this.emit(EVENT.SELECT, {selection})
+  }
+  getSelection() {
+    return this.selection
   }
 
 }

@@ -15,12 +15,12 @@ function createNestingLines(depth) {
 
 const SELECTION_SOURCE_OBJ_TREE = 'obj_tree'
 
-class ObjectTree extends DockView {
+class NodeTree extends DockView {
 
   static itemId = "obj_tree"
 
   setup() {
-    this.app.addDockIcon(ObjectTree.itemId, svgE(iconTree, "Object Tree"))
+    this.app.addDockIcon(NodeTree.itemId, svgE(iconTree, "Object Tree"))
     this.objectsExpanded = {}
   }
 
@@ -77,6 +77,6 @@ class ObjectTree extends DockView {
 
 }
 
-export function registerObjectTreeView(app) {
-  app.registerView(new ObjectTree())
+export function registerNodeTreeView(app) {
+  app.registerView(new NodeTree())
 }

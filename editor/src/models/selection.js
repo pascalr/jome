@@ -7,6 +7,26 @@ export const SELECTION_TYPE = {
   NONE: "none",
 }
 
+// export class ObjectSelection {
+
+// }
+
+// export class TextSelection {
+
+// }
+
+// export class FileSelection {
+
+// }
+
+// export class ObjectListSelection {
+
+// }
+
+// export class FileListSelection {
+
+// }
+
 export class Selection {
 
   // Source of change: Does it come from clicking in the side menu? From the text editor?
