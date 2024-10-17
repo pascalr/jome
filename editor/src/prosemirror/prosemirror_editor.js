@@ -6,7 +6,7 @@ Le modèle définie le schéma, c'est-à-dire la structure permise du document.
 
 */
 
-import {EditorState, Plugin} from "prosemirror-state"
+import {EditorState, NodeSelection, Plugin} from "prosemirror-state"
 import {EditorView} from "prosemirror-view"
 import {DOMParser, DOMSerializer} from "prosemirror-model"
 import {history} from "prosemirror-history"
@@ -20,7 +20,7 @@ import { arrowHandlers, CodeBlockView } from "./CodeBlockView"
 import { EVENT } from "../neutralino_app"
 import { ProseMirrorJomeDocument } from "./prosemirror_jome_document"
 import { View } from "../view"
-import { SELECTION_TYPE } from "../models/selection"
+import { Selection, SELECTION_TYPE } from "../models/selection"
 import { selectObject, updateObjectAttribute } from "./prosemirror_commands"
 
 // (The null arguments are where you can specify attributes, if necessary.)
@@ -69,6 +69,13 @@ function selectionChangePlugin(app) {
         if (!newState.selection.eq(oldState.selection)) {
           // Callback logic for selection change
           console.log("Selection has changed:", newState.selection);
+
+          if (newState.selection instanceof NodeSelection) {
+            app.select(new Selection(SELECTION_TYPE.OBJECT, newState.selection.node, SELECTION_SOURCE_TEXT_EDITOR))
+          } else {
+            // TODO
+            // app.select(new Selection(SELECTION_TYPE.TEXT, ))
+          }
         }
       },
     },
@@ -80,7 +87,7 @@ class ProsemirrorEditorWorker extends View {
   static workerName = "ProsemirrorEditorWorker"
 
   onSelect({selection}) {
-    if (this.editorView) {
+    if (this.editorView && selection.sourceOfChange !== SELECTION_SOURCE_TEXT_EDITOR) {
       if (selection.type === SELECTION_TYPE.OBJECT) {
         selectObject(this.editorView.state, this.editorView.dispatch, selection.getItem().node)
       }
@@ -121,7 +128,7 @@ export function createProsemirrorEditor(app, ref, segmentStr) {
       keymap(buildKeymap(schema)),
       keymap(baseKeymap), // handle enter key, delete, etc
       arrowHandlers,
-      selectionChangePlugin(app),
+      // selectionChangePlugin(app),
       batchNotifier(app, schema), // Last so it gets the modifications from previous plugins
       ]
   })
