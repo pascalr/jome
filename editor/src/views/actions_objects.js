@@ -38,7 +38,7 @@ class ActionsObjects extends ActionView {
             id: fieldId,
             type: getInputTypeForAttr(attr),
             value: node.getAttribute(attrName),
-            oninput: (evt) => this.handleInputChange(node, attrName, attr, evt)})
+            onchange: (evt) => this.handleInputChange(node, attrName, attr, evt)})
         ]))
       })
     }
