@@ -18,7 +18,7 @@ import {buildInputRules} from "./prosemirror_inputrules"
 import { schemaWithComponents } from "./prosemirror_schema"
 import { arrowHandlers, CodeBlockView } from "./CodeBlockView"
 import { EVENT } from "../neutralino_app"
-import { ProseMirrorJomeDocument } from "./prosemirror_jome_document"
+import { ProseMirrorJomeComponent, ProseMirrorJomeDocument } from "./prosemirror_jome_document"
 import { View } from "../view"
 import { Selection, SELECTION_TYPE } from "../models/selection"
 import { selectObject, updateObjectAttribute } from "./prosemirror_commands"
@@ -71,12 +71,8 @@ function selectionChangePlugin(app) {
 
         // Check if the selection has changed
         if (!newState.selection.eq(oldState.selection)) {
-          // Callback logic for selection change
-          console.log("Selection has changed:", newState.selection);
-
           if (newState.selection instanceof NodeSelection) {
-            console.log('HERE!!!!!!!!!!!!!!!')
-            app.select(new Selection(SELECTION_TYPE.OBJECT, newState.selection.node, SELECTION_SOURCE_TEXT_EDITOR))
+            app.select(new Selection(SELECTION_TYPE.OBJECT, new ProseMirrorJomeComponent(newState.selection.node), SELECTION_SOURCE_TEXT_EDITOR))
           } else {
             // TODO
             // app.select(new Selection(SELECTION_TYPE.TEXT, ))

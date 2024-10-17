@@ -119,7 +119,6 @@ function nodeSpecForComponent(klass) {
     attrs: attrsForComponent(klass),
     parseDOM: [{tag: klass.tagName, getAttrs: getAttrsForComponent(klass)}],
     toDOM(node) {
-      console.log('node', node);
       return [klass.tagName, extractAttrsForComponent(node.attrs, klass), 0]
     },
   }

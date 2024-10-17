@@ -1,35 +1,35 @@
 import { CORE_FORMATS_WIP } from "./formats/core"
 
-function parseCommand(match) {
+// function parseCommand(match) {
 
-  let name = match[1]
-  try {
-    let args = JSON.parse('{'+match[2].slice(1,-1)+'}')
-    let output = match[3]
-    return {name, args, output}
-  } catch (e) {
-    console.error(e)
-    return {error: e, str: match[0]} 
-  }
-}
+//   let name = match[1]
+//   try {
+//     let args = JSON.parse('{'+match[2].slice(1,-1)+'}')
+//     let output = match[3]
+//     return {name, args, output}
+//   } catch (e) {
+//     console.error(e)
+//     return {error: e, str: match[0]} 
+//   }
+// }
 
-function parseJomeBlock(block) {
+// function parseJomeBlock(block) {
 
-  // Let's do dumb parsing for now
-  // TODO: Smart parsing, check for strings, comments, heredocs, regexes, ...
-  // FIXME: Use the comment from the language, not always * and /
+//   // Let's do dumb parsing for now
+//   // TODO: Smart parsing, check for strings, comments, heredocs, regexes, ...
+//   // FIXME: Use the comment from the language, not always * and /
 
-  //let commands = [...block.str.matchAll(/\w+\(.*?\)(\s*\{\*\/.*?\/\*\})?/g)].map(o => o[0])
-  let rawCommands = [...block.str.matchAll(/(\w+)(\(.*?\))(\s*\{\*\/.*?\/\*\})?/gs)]
+//   //let commands = [...block.str.matchAll(/\w+\(.*?\)(\s*\{\*\/.*?\/\*\})?/g)].map(o => o[0])
+//   let rawCommands = [...block.str.matchAll(/(\w+)(\(.*?\))(\s*\{\*\/.*?\/\*\})?/gs)]
 
-  console.log('raw commands found', rawCommands)
+//   console.log('raw commands found', rawCommands)
 
-  let commands = rawCommands.map(c => parseCommand(c))
+//   let commands = rawCommands.map(c => parseCommand(c))
 
-  console.log('commands found', commands)
+//   console.log('commands found', commands)
 
-  block.commands = commands
-}
+//   block.commands = commands
+// }
 
 export class JomeParser {
 
@@ -89,11 +89,11 @@ export class JomeParser {
 
     console.log("Segments found: ", segments)
 
-    segments.forEach(segment => {
-      if (!segment.isRaw) {
-        parseJomeBlock(segment)
-      }
-    })
+    // segments.forEach(segment => {
+    //   if (!segment.isRaw) {
+    //     parseJomeBlock(segment)
+    //   }
+    // })
 
     return segments
   }

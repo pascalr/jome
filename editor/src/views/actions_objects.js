@@ -13,8 +13,6 @@ class ActionsObjects extends ActionView {
     let path = this.app.getProjectPath()
     if (!path) {return this.getRef().replaceChildren()}
 
-    console.log('selection', this.selection)
-
     let el = e('div', {}, [
       e('div', {className: "panel-main-header"}, this.selection.getLabelParts())
     ])
@@ -23,8 +21,6 @@ class ActionsObjects extends ActionView {
     let component = this.app.getObjectComponent(item)
     if (component) {
       let attrs = component.ownAttributes
-      console.log('here item', item)
-      console.log('here attrs', attrs)
       Object.keys(attrs).forEach(attrName => {
         let fieldId = 'obj-field-'+attrName
         let attr = attrs[attrName]
