@@ -75,6 +75,7 @@ function selectionChangePlugin(app) {
           console.log("Selection has changed:", newState.selection);
 
           if (newState.selection instanceof NodeSelection) {
+            console.log('HERE!!!!!!!!!!!!!!!')
             app.select(new Selection(SELECTION_TYPE.OBJECT, newState.selection.node, SELECTION_SOURCE_TEXT_EDITOR))
           } else {
             // TODO
@@ -132,7 +133,7 @@ export function createProsemirrorEditor(app, ref, segmentStr) {
       keymap(buildKeymap(schema)),
       keymap(baseKeymap), // handle enter key, delete, etc
       arrowHandlers,
-      // selectionChangePlugin(app),
+      selectionChangePlugin(app),
       batchNotifier(app, schema), // Last so it gets the modifications from previous plugins
       ]
   })
