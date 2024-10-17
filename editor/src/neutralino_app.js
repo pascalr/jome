@@ -20,11 +20,6 @@ import { registerProsemirrorEditorWorker } from "./prosemirror/prosemirror_edito
 
 const STORAGE_KEY = 'APP'
 
-// TODO: Refactor
-// I think it would be better if you can emit each directly from the app instead of
-// having to import and link to this EVENT constant.
-// so App#emitFileChange(...) directly
-// TODO: withEventMethods on the app object
 export const EVENT = {
   FILE_CHANGE: "onFileChange",
   PROJECT_CHANGE: "onProjectChange",

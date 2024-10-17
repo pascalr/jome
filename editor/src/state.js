@@ -27,11 +27,13 @@ const PROJECT_DATA = {
 
 export function withStateMethods(klass) {
 
-  klass.prototype.getProjectPath = function() {
+  let proto = klass.prototype
+
+  proto.getProjectPath = function() {
     return this.data.PROJECT_PATH
   }
 
-  klass.prototype.getCurrentFilepath = function() {
+  proto.getCurrentFilepath = function() {
     return this.data.CURRENT_FILEPATH
   }
 
