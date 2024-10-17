@@ -89,8 +89,8 @@ class ProsemirrorEditorWorker extends View {
 
   onSelect({selection}) {
     if (this.editorView && selection.sourceOfChange !== SELECTION_SOURCE_TEXT_EDITOR) {
-      if (selection.type === SELECTION_TYPE.OBJECT) {
-        selectObject(this.editorView.state, this.editorView.dispatch, selection.getItem().node)
+      if (selection.isNode) {
+        selectObject(this.editorView.state, this.editorView.dispatch, selection.node.node)
       }
     }
   }

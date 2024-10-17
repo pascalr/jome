@@ -29,6 +29,10 @@ export const SELECTION_TYPE = {
 
 export const SelectionV2 = {
 
+  selectNone() {
+    return { isEmpty: true }
+  },
+
   selectNode(node) {
     return { isNode: true, node }
   },

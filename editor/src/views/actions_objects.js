@@ -1,5 +1,6 @@
 import {e} from '../helpers'
 import { EVENT } from '../neutralino_app'
+import { createObjectLabelParts } from '../partials/object_label';
 
 import { ActionView } from '../view'
 
@@ -10,15 +11,22 @@ class ActionsObjects extends ActionView {
   }
 
   render() {
+    // TODO: Handle nodeList too, it would be nice to be able to change the field of multiple nodes at once
+    if (!this.selection.isNode) {
+      this.getRef().replaceChildren();
+      return;
+    }
+
     let path = this.app.getProjectPath()
     if (!path) {return this.getRef().replaceChildren()}
 
+    let node = this.selection.node
+    let component = this.app.getObjectComponent(node)
+
     let el = e('div', {}, [
-      e('div', {className: "panel-main-header"}, this.selection.getLabelParts())
+      e('div', {className: "panel-main-header"}, createObjectLabelParts(node))
     ])
 
-    let item = this.selection.getItem()
-    let component = this.app.getObjectComponent(item)
     if (component) {
       let attrs = component.ownAttributes
       Object.keys(attrs).forEach(attrName => {
@@ -29,8 +37,8 @@ class ActionsObjects extends ActionView {
           e('input', {
             id: fieldId,
             type: getInputTypeForAttr(attr),
-            value: item.getAttribute(attrName),
-            oninput: (evt) => this.handleInputChange(item, attrName, attr, evt)})
+            value: node.getAttribute(attrName),
+            oninput: (evt) => this.handleInputChange(node, attrName, attr, evt)})
         ]))
       })
     }

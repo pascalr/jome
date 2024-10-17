@@ -1,6 +1,6 @@
 import iconTree from '../../assets/icons/tree.svg'
 import { e, svgE } from '../helpers'
-import { Selection, SELECTION_TYPE } from '../models/selection'
+import { Selection, SELECTION_TYPE, SelectionV2 } from '../models/selection'
 import { createObjectLabelParts } from '../partials/object_label'
 import { DockView } from '../view'
 import { getRef, REF } from './skeleton'
@@ -12,8 +12,6 @@ function createNestingLines(depth) {
   }
   return els
 }
-
-const SELECTION_SOURCE_OBJ_TREE = 'obj_tree'
 
 class NodeTree extends DockView {
 
@@ -35,7 +33,7 @@ class NodeTree extends DockView {
 
     if (this.doc) {
       let roots = this.doc.getRootComponents()
-      tree.replaceChildren(...roots.map(r => this.createComponentBranchDivs(r)).flat())
+      tree.replaceChildren(...roots.map(r => this.createNodesDivs(r)).flat())
     }
 
     ref.appendChild(tree)
@@ -46,26 +44,26 @@ class NodeTree extends DockView {
     if (this.isActive()) {this.render()}
   }
 
-  handleComponentNodeClick(component, evt) {
-    if (component.childrenAllowed) {
-      let key = component.getKey()
+  handleComponentNodeClick(node, evt) {
+    if (node.childrenAllowed) {
+      let key = node.getKey()
       this.objectsExpanded[key] = !this.objectsExpanded[key]
-      this.app.select(new Selection(SELECTION_TYPE.OBJECT, component, SELECTION_SOURCE_OBJ_TREE))
+      this.app.select(SelectionV2.selectNode(node))
     }
   }
   
-  createComponentBranchDivs(component, depth=0) {
-    let expanded = component.childrenAllowed && this.objectsExpanded[component.getKey()]
-    let caret = component.children.length ? [e('span', {className: expanded ? "component-caret-down" : "component-caret-right"})] : []
-    let div = e('div', {className: "component-node", onclick: (evt) => this.handleComponentNodeClick(component, evt)}, [
+  createNodesDivs(node, depth=0) {
+    let expanded = node.childrenAllowed && this.objectsExpanded[node.getKey()]
+    let caret = node.children.length ? [e('span', {className: expanded ? "component-caret-down" : "component-caret-right"})] : []
+    let div = e('div', {className: "component-node", onclick: (evt) => this.handleComponentNodeClick(node, evt)}, [
       ...caret,
       ...createNestingLines(depth),
-      ...createObjectLabelParts(component)
+      ...createObjectLabelParts(node)
     ])
     let divs = [div]
     if (expanded) {
-      component.children.forEach(c => {
-        divs = [...divs, ...this.createComponentBranchDivs(c, depth+1)]
+      node.children.forEach(c => {
+        divs = [...divs, ...this.createNodesDivs(c, depth+1)]
       })
     }
     return divs
