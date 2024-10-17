@@ -20,6 +20,8 @@ import { arrowHandlers, CodeBlockView } from "./CodeBlockView"
 import { EVENT } from "../neutralino_app"
 import { ProseMirrorJomeDocument } from "./prosemirror_jome_document"
 import { View } from "../view"
+import { SELECTION_TYPE } from "../models/selection"
+import { selectObject } from "./prosemirror_commands"
 
 // (The null arguments are where you can specify attributes, if necessary.)
 // let doc = schema.node("doc", null, [
@@ -59,9 +61,11 @@ class ProsemirrorEditorWorker extends View {
 
   static workerName = "ProsemirrorEditorWorker"
 
-  onSelect() {
+  onSelect({selection}) {
     if (this.editorView) {
-      console.log('TODO ProsemirrorEditorWorker#onSelect')
+      if (selection.type === SELECTION_TYPE.OBJECT) {
+        selectObject(this.editorView.state, this.editorView.dispatch, selection.getItem().node)
+      }
     }
   }
 
