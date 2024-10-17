@@ -2,8 +2,26 @@ import { NodeSelection } from "prosemirror-state";
 
 import { findNodePosition } from "./prosemirror_helpers";
 
-export function updateObjectAttribute(state, dispatch) {
-  return false
+export function updateObjectAttribute(state, dispatch, field, value) {
+  const {selection} = state;
+
+  if (!(selection instanceof NodeSelection)) {return false;}
+
+  const selectedNode = selection.node;
+  const pos = selection.from; // Get the position of the selected node
+
+  // Define the new attributes
+  const newAttrs = {
+    ...selectedNode.attrs, // Keep existing attributes
+    [field]: value, // Update or add the attribute
+  };
+
+  // Create a transaction to update the node's markup
+  const transaction = state.tr.setNodeMarkup(pos, selectedNode.type, newAttrs, selectedNode.marks);
+
+  // Dispatch the transaction
+  dispatch(transaction);
+  return true
 }
 
 export function selectObject(state, dispatch, node) {

@@ -31,7 +31,8 @@ export const EVENT = {
   DOCUMENT_CHANGE: "onDocumentChange",
   // Waits some time (like 0.5s-1s) that no more changes are done. Maybe a maximum amount of time too. If always changing, then every 5s?
   DOCUMENT_BATCH_CHANGE: "onDocumentBatchChange",
-  SELECT: "onSelect"
+  SELECT: "onSelect",
+  UPDATE_FIELD: "onUpdateField"
 }
 
 export const WINDOW = {

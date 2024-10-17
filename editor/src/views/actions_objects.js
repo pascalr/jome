@@ -1,11 +1,12 @@
 import {e} from '../helpers'
+import { EVENT } from '../neutralino_app'
 
 import { ActionView } from '../view'
 
 class ActionsObjects extends ActionView {
 
-  handleInputChange(item, attr, evt) {
-
+  handleInputChange(item, attrName, attr, evt) {
+    this.app.emit(EVENT.UPDATE_FIELD, {obj: item, field: attrName, value: evt.target.value})
   }
 
   render() {
@@ -33,7 +34,7 @@ class ActionsObjects extends ActionView {
             id: fieldId,
             type: getInputTypeForAttr(attr),
             value: item.getAttribute(attrName),
-            oninput: (evt) => this.handleInputChange(item, attr, evt)})
+            oninput: (evt) => this.handleInputChange(item, attrName, attr, evt)})
         ]))
       })
     }
