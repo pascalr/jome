@@ -57,6 +57,24 @@ function batchNotifier(app, schema, debounceTimeMs = 600) {
   })
 }
 
+const SELECTION_SOURCE_TEXT_EDITOR = "prosemirror"
+
+function selectionChangePlugin(app) {
+  return new Plugin({
+    state: {
+      init(config, instance) {
+      },
+      apply(tr, value, oldState, newState) {
+        // Check if the selection has changed
+        if (!newState.selection.eq(oldState.selection)) {
+          // Callback logic for selection change
+          console.log("Selection has changed:", newState.selection);
+        }
+      },
+    },
+  });
+}
+
 class ProsemirrorEditorWorker extends View {
 
   static workerName = "ProsemirrorEditorWorker"
@@ -103,6 +121,7 @@ export function createProsemirrorEditor(app, ref, segmentStr) {
       keymap(buildKeymap(schema)),
       keymap(baseKeymap), // handle enter key, delete, etc
       arrowHandlers,
+      selectionChangePlugin(app),
       batchNotifier(app, schema), // Last so it gets the modifications from previous plugins
       ]
   })
