@@ -27,20 +27,6 @@ import { ProseMirrorJomeDocument } from "./prosemirror_jome_document"
 //     schema.node("paragraph", null, [schema.text("Two!")])
 // ])
 
-function getJSON(state) {
-  return state.doc.toJSON()
-}
-
-function getHTML(schema, content) {
-  const div = document.createElement('div')
-  const fragment = DOMSerializer
-    .fromSchema(schema)
-    .serializeFragment(content)
-
-  div.appendChild(fragment)
-  return div.innerHTML
-}
-
 function batchNotifier(app, schema, debounceTimeMs = 600) {
 
   let timeout = null;

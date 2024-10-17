@@ -13,6 +13,8 @@ function createNestingLines(depth) {
   return els
 }
 
+const SELECTION_SOURCE_OBJ_TREE = 'obj_tree'
+
 class ObjectTree extends DockView {
 
   static itemId = "obj_tree"
@@ -48,8 +50,7 @@ class ObjectTree extends DockView {
     if (component.childrenAllowed) {
       let key = component.getKey()
       this.objectsExpanded[key] = !this.objectsExpanded[key]
-      this.app.select(new Selection(SELECTION_TYPE.OBJECT, component))
-      this.render()
+      this.app.select(new Selection(SELECTION_TYPE.OBJECT, component, SELECTION_SOURCE_OBJ_TREE))
     }
   }
   
@@ -68,6 +69,10 @@ class ObjectTree extends DockView {
       })
     }
     return divs
+  }
+
+  onSelect() {
+    this.render()
   }
 
 }

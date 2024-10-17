@@ -9,11 +9,14 @@ export const SELECTION_TYPE = {
 
 export class Selection {
 
-  constructor(type, itemOrList) {
+  // Source of change: Does it come from clicking in the side menu? From the text editor?
+  // Used to avoid handling the event if the source of change is itself
+  constructor(type, itemOrList, sourceOfChange) {
     this.type = type
     this.isEmpty = !itemOrList
     this.isMany = itemOrList && Array.isArray(itemOrList)
     this.list = this.isEmpty ? [] : (this.isMany ? itemOrList : [itemOrList])
+    this.sourceOfChange = sourceOfChange
   }
 
   getLabelParts() {
