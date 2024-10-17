@@ -23,7 +23,7 @@ class ActionsObjects extends ActionView {
       Object.keys(attrs).forEach(attrName => {
         let fieldId = 'obj-field-'+attrName
         el.appendChild(e('div', {className: "object-edit-field"}, [
-          e('label', {for: fieldId}, [attrName+': ']),
+          e('label', {htmlFor: fieldId}, [attrName+': ']),
           e('input', {id: fieldId, type: 'text', value: item.getAttribute(attrName)})
         ]))
       })

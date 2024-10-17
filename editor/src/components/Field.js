@@ -1,5 +1,4 @@
 import { e } from "../helpers";
-import { capitalize } from "../utils";
 import { JomeComponent } from "./abstract/JomeComponent";
 
 export class Field extends JomeComponent {
@@ -45,7 +44,7 @@ export class Field extends JomeComponent {
       e('input', {id: this.name || undefined, type: this.type||'text', value: this.value})
     ])
     if (this.name) {
-      el.prepend(e('label', {for: this.name}, [capitalize(this.name)+': ']))
+      el.prepend(e('label', {for: this.name}, [this.name+' = ']))
     }
     if (this.enableEquivalentUnits) {
       // TODO
