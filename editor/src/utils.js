@@ -20,3 +20,7 @@ export function escapeHTML(str){
   return new Option(str).innerHTML;
 
 }
+
+export function isComponent(component) {
+  return !!component.componentName
+}
