@@ -2,6 +2,8 @@
 
 export class PrimitiveComponent {
 
-
+  static get allAttributes() {
+    return {...this.ownAttributes}
+  }
 
 }

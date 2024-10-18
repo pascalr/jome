@@ -143,14 +143,13 @@ function attrsForComponent(klass) {
 }
 
 function getAttrsForComponent(klass) {
+  let o = {_key: uuidv4()}
+  if (klass.componentName) {o._component = klass.componentName}
   return (dom) => {
     return Object.keys(klass.allAttributes).reduce((acc, curr) => {
       acc[curr] = dom.getAttribute(curr)
       return acc
-    }, {
-      _key: uuidv4(),
-      _component: klass.componentName,
-    })
+    }, o)
   }
 }
 
@@ -207,19 +206,18 @@ export const marks = {
 
 export function schemaWithComponents(app) {
 
-  let components = app.components
-
   let allNodes = addListNodes(OrderedMap.from(nodes), "paragraph block*", "block")
 
-  allNodes = allNodes.append(components.reduce((acc, curr) => {
+  allNodes = allNodes.append(app.components.reduce((acc, curr) => {
     // TODO: Add safety check not overriding something previously already inside the schema
     acc[curr.componentName] = nodeSpecForComponent(curr)
     return acc
   }, {}))
 
-  // allNodes = allNodes.append(primitives.reduce((acc, tagName) => {
-  //   return acc
-  // }), {})
+  allNodes = allNodes.append(app.primitives.reduce((acc, curr) => {
+    acc[curr.tagName] = nodeSpecForComponent(curr)
+    return acc
+  }), {})
   
   return new Schema({
     nodes: allNodes,
