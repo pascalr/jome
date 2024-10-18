@@ -22,7 +22,7 @@ export class ProseMirrorJomeComponent { // TODO: Rename to Object and not Compon
   }
 
   getLabel() {
-    return this.node.type.name.toUpperCase()
+    return this.getComponentName().toUpperCase()
   }
 
   getDescription() {
