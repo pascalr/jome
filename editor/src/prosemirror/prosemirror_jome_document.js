@@ -79,7 +79,7 @@ function contentToComponents(app, content, parentComponent=null) {
   let components = []
 
   // OPTIMIZE: set instead of list, and don't recalculate every time
-  let jomeComponentList = app.components.map(c => c.componentName)
+  let jomeComponentList = app.components.map(c => c.tagName)
 
   let textElements = [] // Group together h1, p, ul, ...
   function checkPushTextComponent() {
