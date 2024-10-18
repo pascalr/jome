@@ -1,6 +1,6 @@
 import { capitalize } from "../utils"
 
-export class ProseMirrorJomeComponent { // TODO: Rename to Object and not Component, Component is the class, Object is the instance
+export class ProseMirrorJomeTag {
  
   constructor(node) {
     // this.component = component
@@ -13,24 +13,48 @@ export class ProseMirrorJomeComponent { // TODO: Rename to Object and not Compon
     return this.node.attrs[name]
   }
 
-  getComponentName() {
-    return this.node.attrs._component
-  }
-
   getKey() {
     return this.node.attrs._key
+  }
+
+  getDescription() {
+    return this.node.attrs.name
+  }
+  
+}
+
+export class ProseMirrorJomeComponent extends ProseMirrorJomeTag { // TODO: Rename to Object and not Component, Component is the class, Object is the instance
+ 
+  constructor(node) {
+    super(node)
+  }
+
+  getComponentName() {
+    return this.node.attrs._component
   }
 
   getLabel() {
     return this.getComponentName().toUpperCase()
   }
 
-  getDescription() {
-    return this.node.attrs.name
+  getIconUrl() {
+    return "./img/box.svg"
+  }
+  
+}
+
+export class ProseMirrorJomePrimitive extends ProseMirrorJomeTag {
+ 
+  constructor(node) {
+    super(node)
+  }
+
+  getLabel() {
+    return this.node.type.name.toLowerCase()
   }
 
   getIconUrl() {
-    return "./img/box.svg"
+    return "./img/triangle.svg"
   }
   
 }
@@ -80,6 +104,7 @@ function contentToComponents(app, content, parentComponent=null) {
 
   // OPTIMIZE: set instead of list, and don't recalculate every time
   let jomeComponentList = app.components.map(c => c.tagName)
+  let jomePrimitiveList = app.primitives.map(c => c.tagName)
 
   let textElements = [] // Group together h1, p, ul, ...
   function checkPushTextComponent() {
@@ -98,6 +123,9 @@ function contentToComponents(app, content, parentComponent=null) {
     } else if (jomeComponentList.includes(node.type.name)) {
       checkPushTextComponent()
       components.push(new ProseMirrorJomeComponent(node))
+    } else if (parentComponent && jomePrimitiveList.includes(node.type.name)) {
+      checkPushTextComponent()
+      components.push(new ProseMirrorJomePrimitive(node))
     } else if (!parentComponent) {
       textElements.push(node)
     }
