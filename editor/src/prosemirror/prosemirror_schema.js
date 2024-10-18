@@ -132,14 +132,13 @@ function extractAttrsForComponent(attrs, klass) {
 }
 
 function attrsForComponent(klass) {
+  let o = {_key: {validate: "string"}} // is validate here necessary?
+  if (klass.componentName) {o._component = {validate: "string"}}
   return Object.keys(klass.allAttributes).reduce((acc, curr) => {
     acc[curr] = {validate: "string|null", default: null} // FIXME map my types and defaults to prosemirror types and defaults
     // acc[curr] = {validate: klass.allAttributes[curr].type, default: klass.allAttributes[curr].default}
     return acc
-  }, {
-    _key: {validate: "string"}, // is validate here necessary?
-    _component: {validate: "string"}, // is validate here necessary?
-  })
+  }, o)
 }
 
 function getAttrsForComponent(klass) {
@@ -216,8 +215,9 @@ export function schemaWithComponents(app) {
 
   allNodes = allNodes.append(app.primitives.reduce((acc, curr) => {
     acc[curr.tagName] = nodeSpecForComponent(curr)
+    console.log('adding primitive', curr)
     return acc
-  }), {})
+  }, {}))
   
   return new Schema({
     nodes: allNodes,
