@@ -142,9 +142,9 @@ function attrsForComponent(klass) {
 }
 
 function getAttrsForComponent(klass) {
-  let o = {_key: uuidv4()}
-  if (klass.componentName) {o._component = klass.componentName}
   return (dom) => {
+    let o = {_key: uuidv4()}
+    if (klass.componentName) {o._component = klass.componentName}
     return Object.keys(klass.allAttributes).reduce((acc, curr) => {
       acc[curr] = dom.getAttribute(curr)
       return acc
