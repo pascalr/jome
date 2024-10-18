@@ -66,7 +66,7 @@ You can register primitives to the app to let it know that it is possible to cre
 
 Or you must register them so they are allowed in the schema?
 
-What would be a world for Primitive AND Component? Tag?
+What would be a world for Primitive AND Component? TagDefinition?
 
 ## See also
 

@@ -306,9 +306,13 @@ class BaseNeutralinoApp {
     this.components = [...this.components, ...components]
   }
 
-  getObjectComponent(obj) {
-    if (!obj.getComponentName) { return null }
-    return this.components.find(c => c.componentName === obj.getComponentName())
+  getTagDefinition(obj) {
+    if (obj.getComponentName) {
+      return this.components.find(c => c.componentName === obj.getComponentName())
+    } else if (obj.getTagName) {
+      return this.primitives.find(c => c.tagName === obj.getTagName())
+    }
+    return null
   }
 
   select(selection) {

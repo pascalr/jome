@@ -49,6 +49,10 @@ export class ProseMirrorJomePrimitive extends ProseMirrorJomeTag {
     super(node)
   }
 
+  getTagName() {
+    return this.node.type.name
+  }
+
   getLabel() {
     return this.node.type.name.toLowerCase()
   }

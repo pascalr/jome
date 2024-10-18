@@ -21,7 +21,7 @@ class ActionsObjects extends ActionView {
     if (!path) {return this.getRef().replaceChildren()}
 
     let node = this.selection.node
-    let component = this.app.getObjectComponent(node)
+    let component = this.app.getTagDefinition(node)
 
     let el = e('div', {}, [
       e('div', {className: "panel-main-header"}, createObjectLabelParts(node))
