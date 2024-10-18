@@ -209,7 +209,7 @@ export function schemaWithComponents(app) {
 
   allNodes = allNodes.append(app.components.reduce((acc, curr) => {
     // TODO: Add safety check not overriding something previously already inside the schema
-    acc[curr.componentName] = nodeSpecForComponent(curr)
+    acc[curr.tagName] = nodeSpecForComponent(curr)
     return acc
   }, {}))
 
