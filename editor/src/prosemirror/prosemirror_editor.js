@@ -116,7 +116,7 @@ export function registerProsemirrorEditorWorker(app) {
 
 export function createProsemirrorEditor(app, ref, segmentStr) {
 
-  let schema = schemaWithComponents(app.components)
+  let schema = schemaWithComponents(app)
 
   let el = document.createElement("div")
   el.innerHTML = segmentStr

@@ -48,6 +48,26 @@ https://github.com/pascalr/jome/tree/main/editor
 Node: A building block. An instance of a component. 
 Component: A kind of node. Field, Calc, ...
 
+## WIP: Primitive vs Component
+
+Est-ce que ça fait du sens de faire une distinction?
+
+La différence c'est qu'un component c'est un Web Component. jome-...
+
+JomeComponent extends HTMLElement
+
+Sinon j'aimerais garder la même même structure pour les attributs
+
+A primitive is a regular html tag. It can be anything. < foo > < / foo >
+
+It is any html tag under a component that is not itself a component.
+
+You can register primitives to the app to let it know that it is possible to create them.
+
+Or you must register them so they are allowed in the schema?
+
+What would be a world for Primitive AND Component? Tag?
+
 ## See also
 
 - [The language documentation](REFERENCE.md)

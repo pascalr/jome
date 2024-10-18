@@ -65,6 +65,7 @@ class BaseNeutralinoApp {
 
     this.views = []
 
+    this.primitives = []
     this.components = []
   }
 
@@ -294,6 +295,10 @@ class BaseNeutralinoApp {
     this.setProjectData('FILES_OPENED', filtered)
     this.openFile(this.data.CURRENT_FILEPATH)
     this.emit(EVENT.FILE_CLOSE, filepath)
+  }
+
+  registerPrimitives(primitives) {
+    this.primitives = [...this.primitives, ...primitives]
   }
 
   registerComponents(components) {
