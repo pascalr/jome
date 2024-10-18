@@ -5,6 +5,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Copied basic nodes and marks from https://github.com/ProseMirror/prosemirror-schema-basic/blob/master/src/schema-basic.ts
 
+let keyCounter = 0
+function nextKey() {
+  return `key${keyCounter++}`
+  // return uuidv4()
+}
+
 const nodes = {
   /// NodeSpec The top level document node.
   doc: {
@@ -143,7 +149,7 @@ function attrsForComponent(klass) {
 
 function getAttrsForComponent(klass) {
   return (dom) => {
-    let o = {_key: uuidv4()}
+    let o = {_key: nextKey()}
     if (klass.componentName) {o._component = klass.componentName}
     return Object.keys(klass.allAttributes).reduce((acc, curr) => {
       acc[curr] = dom.getAttribute(curr)
