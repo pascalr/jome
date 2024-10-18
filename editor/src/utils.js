@@ -24,9 +24,3 @@ export function escapeHTML(str){
 export function isComponent(component) {
   return !!component.componentName
 }
-
-export function isPrimitive(tag) {
-  // isogon
-  // TODO: set
-  return ["TECT", "TEXT", "CIRCLE", "ELLIPSE", "LINE", "PATH", "POLYGON", "POLYLINE"].includes(tag.tagName.toUpperCase())
-}

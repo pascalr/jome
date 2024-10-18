@@ -27,7 +27,7 @@ const DRAWING_ATTRIBUTES = {
 }
 
 const DRAW_PRIMITIVES = {
-  rect(ctx, el) {
+  RECT(el, ctx) {
     if (el.hasAttribute("fill")) {
       ctx.beginPath();
       ctx.rect(parseInt(el.getAttribute("x")), parseInt(el.getAttribute("y")), parseInt(el.getAttribute("width")), parseInt(el.getAttribute("height")));
@@ -68,9 +68,9 @@ export class Canvas extends JomeComponent {
       if (c.drawOnCanvas) {
         c.drawOnCanvas(ctx)
       } else {
-        let drawingFunc = DRAW_PRIMITIVES[c.tagName.toLowerCase()]
+        let drawingFunc = DRAW_PRIMITIVES[c.tagName.toUpperCase()]
         if (drawingFunc) {
-          drawingFunc(ctx, c)
+          drawingFunc(c, ctx)
         }
       }
       ctx.restore();

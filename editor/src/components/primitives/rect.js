@@ -31,17 +31,5 @@ export class Rect extends PrimitiveComponent {
     // TODO: pathLength, I don't get that one
     ...DRAWING_ATTRIBUTES
   }
-
-  static drawOnCanvas(el, ctx) {
-
-    if (el.hasAttribute("fill")) {
-      ctx.beginPath();
-      ctx.rect(parseInt(el.getAttribute("x")), parseInt(el.getAttribute("y")), parseInt(el.getAttribute("width")), parseInt(el.getAttribute("height")));
-      ctx.fill();
-    }
-    if (el.hasAttribute("color")) {
-      ctx.strokeRect(parseInt(el.getAttribute("x")), parseInt(el.getAttribute("y")), parseInt(el.getAttribute("width")), parseInt(el.getAttribute("height")));
-    }  
-  }
   
 }

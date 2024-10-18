@@ -2,6 +2,7 @@ import { Schema } from "prosemirror-model"
 import {addListNodes} from "prosemirror-schema-list"
 import OrderedMap from 'orderedmap';
 import { v4 as uuidv4 } from 'uuid';
+import { PRIMITIVES } from "../components/primitives";
 
 // Copied basic nodes and marks from https://github.com/ProseMirror/prosemirror-schema-basic/blob/master/src/schema-basic.ts
 
@@ -208,11 +209,16 @@ export const marks = {
 export function schemaWithComponents(components) {
 
   let allNodes = addListNodes(OrderedMap.from(nodes), "paragraph block*", "block")
+
   allNodes = allNodes.append(components.reduce((acc, curr) => {
     // TODO: Add safety check not overriding something previously already inside the schema
     acc[curr.componentName] = nodeSpecForComponent(curr)
     return acc
   }, {}))
+
+  // allNodes = allNodes.append(Object.keys(PRIMITIVES).reduce((acc, tagName) => {
+  //   return acc
+  // }), {})
   
   return new Schema({
     nodes: allNodes,
