@@ -16,11 +16,25 @@ export const BASE_ATTRIBUTES = {
 
 export function getterForAttr(attr, attrName) {
   if (attr.type === 'int') {
-    return function() { return parseInt(this.getAttribute(attrName)) }
+    // FIXME: How to handle required???
+    // Well I think don't handle it here. Don't throw an exception in the getter. It should throw an exception or an error message when loading the document.
+    if (attr.hasOwnProperty('default')) {
+      return function() { return this.hasAttribute(attrName) ? parseInt(this.getAttribute(attrName)) : attr.default }
+    } else {
+      return function() { return parseInt(this.getAttribute(attrName)) }
+    }
   } else if (attr.type === 'float') {
-    return function() { return parseFloat(this.getAttribute(attrName)) }
+    if (attr.hasOwnProperty('default')) {
+      return function() { return this.hasAttribute(attrName) ? parseFloat(this.getAttribute(attrName)) : attr.default }
+    } else {
+      return function() { return parseFloat(this.getAttribute(attrName)) }
+    }
   } else {
-    return function() { return this.getAttribute(attrName) }
+    if (attr.hasOwnProperty('default')) {
+      return function() { return this.hasAttribute(attrName) ? this.getAttribute(attrName) : attr.default }
+    } else {
+      return function() { return this.getAttribute(attrName) }
+    }
   }
 }
 
@@ -63,12 +77,12 @@ export class JomeComponent extends HTMLElement {
   }
 
   connectedCallback() {
-    let attrs = this.constructor.allAttributes
-    Object.keys(attrs).forEach(k => {
-      if (attrs[k].hasOwnProperty('default') && !this.hasAttribute(k)) {
-        this[k] = attrs[k].default
-      }
-    })
+    // let attrs = this.constructor.allAttributes
+    // Object.keys(attrs).forEach(k => {
+    //   if (attrs[k].hasOwnProperty('default') && !this.hasAttribute(k)) {
+    //     this[k] = attrs[k].default
+    //   }
+    // })
 
     applyBaseStyle(this)
   }

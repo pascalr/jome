@@ -26,40 +26,41 @@ const DRAWING_ATTRIBUTES = {
   }
 }
 
+function getInt(el, attr) { return parseInt(el.getAttribute(attr)) }
+function getFloat(el, attr) { return parseFloat(el.getAttribute(attr)) }
+
 const DRAW_PRIMITIVES = {
 
   RECT(el, ctx) {
     if (el.hasAttribute("fill")) {
       ctx.beginPath();
-      ctx.rect(parseInt(el.getAttribute("x")), parseInt(el.getAttribute("y")), parseInt(el.getAttribute("width")), parseInt(el.getAttribute("height")));
+      ctx.rect(getInt(el, "x"), getInt(el, "y"), getInt(el, "width"), getInt(el, "height"));
       ctx.fill();
     }
     if (el.hasAttribute("color")) {
-      ctx.strokeRect(parseInt(el.getAttribute("x")), parseInt(el.getAttribute("y")), parseInt(el.getAttribute("width")), parseInt(el.getAttribute("height")));
+      ctx.strokeRect(getInt(el, "x"), getInt(el, "y"), getInt(el, "width"), getInt(el, "height"));
     }    
   },
 
   TXT(el, ctx) {
     if (el.hasAttribute("fill")) {
-      ctx.fillText(el.textContent, el.getAttribute("x"), parseInt(el.getAttribute("y")))
+      ctx.fillText(el.textContent, getInt(el, "x"), getInt(el, "y"))
     }
     if (el.hasAttribute("color")) {
-      ctx.strokeText(el.textContent, el.getAttribute("x"), parseInt(el.getAttribute("y")))
+      ctx.strokeText(el.textContent, getInt(el, "x"), getInt(el, "y"))
     }    
   },
 
   ISOGON(el, ctx) {
-    let rot = el.rotate * 2 * Math.PI / 360
-    window.foo = el
-    console.log("ISOGON", el)
-    drawPolygon(ctx, x, y, radius, sides, rot)
+    let rot = getInt(el, "rotate") * 2 * Math.PI / 360
+    drawPolygon(ctx, getInt(el, "x"), getInt(el, "y"), getInt(el, "radius"), getInt(el, "sides"), rot)
     // drawPolygon(ctx, el.x, el.y, el.radius-el.thickness, el.sides, rot)
   },
 
   LINE(el, ctx) {
     ctx.beginPath();
-    ctx.moveTo(el.x1, el.y1);
-    ctx.lineTo(el.x2, el.y2);
+    ctx.moveTo(getInt(el, "x1"), getInt(el, "y1"));
+    ctx.lineTo(getInt(el, "x2"), getInt(el, "y2"));
     ctx.stroke();
   }
   

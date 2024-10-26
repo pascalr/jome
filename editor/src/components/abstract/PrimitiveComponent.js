@@ -5,6 +5,7 @@ import { getterForAttr, setterForAttr } from "./JomeComponent"
 export class PrimitiveComponent {
 
   constructor(el) {
+    this.el = el
     // let attrs = this.constructor.allAttributes
     // Object.keys(attrs).forEach(k => {
     //   if (attrs[k].hasOwnProperty('default')) {
@@ -12,6 +13,11 @@ export class PrimitiveComponent {
     //   }
     // })
   }
+
+  // Wrapper functions for the html element
+  hasAttribute(attr) { return this.el.hasAttribute(attr) }
+  getAttribute(attr) { return this.el.getAttribute(attr) }
+  setAttribute(attr, val) { return this.el.setAttribute(attr, val) }
 
   static get allAttributes() {
     return {...this.ownAttributes}
