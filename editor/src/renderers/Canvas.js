@@ -36,6 +36,14 @@ const DRAW_PRIMITIVES = {
     if (el.hasAttribute("color")) {
       ctx.strokeRect(parseInt(el.getAttribute("x")), parseInt(el.getAttribute("y")), parseInt(el.getAttribute("width")), parseInt(el.getAttribute("height")));
     }    
+  },
+  TXT(el, ctx) {
+    if (el.hasAttribute("fill")) {
+      ctx.fillText(el.textContent, el.getAttribute("x"), parseInt(el.getAttribute("y")))
+    }
+    if (el.hasAttribute("color")) {
+      ctx.strokeText(el.textContent, el.getAttribute("x"), parseInt(el.getAttribute("y")))
+    }    
   }
 }
 

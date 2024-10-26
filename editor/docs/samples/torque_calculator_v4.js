@@ -12,14 +12,13 @@ let thisIsSomeCodeBefore;
   */let force = 10;/*
 </jome-field>
 
-<jome-field name="distance" type="number" unit="m" enable-equivalent-units="true" value="2" comment="Newtons or equivalent">
+<jome-field name="distance" type="number" unit="m" enable-equivalent-units="true" value="2" comment="meters or equivalent">
   */let distance = 2;/*
 </jome-field>
 
 <jome-canvas width="600" height="300" margin="1em 0 0 0">
-  <rect width="200" height="100" x="10" y="10" fill="blue"></rect>
-  <jome-text x="100" y="50" content="{force}"></jome-text>
-  <jome-rect x="100" y="150" width="400" height="50" thickness="4" color="black"></jome-rect>
+  <txt x="100" y="50" fill="black">XX N</txt>
+  <rect x="100" y="150" width="400" height="50" thickness="4" color="black"></rect>
   <jome-isogon x="499" y="220" sides="3" radius="20" thickness="4" rotate="30"></jome-isogon>
 </jome-canvas>
 
