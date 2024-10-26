@@ -11,11 +11,15 @@ export class Text extends PrimitiveComponent {
   static ownAttributes = {
     x: {
       type: "int",
-      required: true
+      default: 0
     },
     y: {
       type: "int",
-      required: true
+      default: 0
+    },
+    text: {
+      type: "string",
+      storeInContent: true, // TODO: Do this? Premature optimization for now.
     },
     dx: {
       type: "dim", // is it?

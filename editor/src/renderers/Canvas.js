@@ -43,11 +43,13 @@ const DRAW_PRIMITIVES = {
   },
 
   TXT(el, ctx) {
+    // let content = el.textContent
+    let content = el.getAttribute("text")
     if (el.hasAttribute("fill")) {
-      ctx.fillText(el.textContent, getInt(el, "x"), getInt(el, "y"))
+      ctx.fillText(content, getInt(el, "x"), getInt(el, "y"))
     }
     if (el.hasAttribute("color")) {
-      ctx.strokeText(el.textContent, getInt(el, "x"), getInt(el, "y"))
+      ctx.strokeText(content, getInt(el, "x"), getInt(el, "y"))
     }    
   },
 
