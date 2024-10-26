@@ -297,7 +297,17 @@ class BaseNeutralinoApp {
     this.emit(EVENT.FILE_CLOSE, filepath)
   }
 
+  wrap(htmlPrimitive) {
+    let tag = htmlPrimitive.tagName.toLowerCase()
+    let primitive = this.primitives.find(p => p.tagName === tag)
+    if (primitive) {
+      return new primitive(htmlPrimitive)
+    }
+    return htmlPrimitive
+  }
+
   registerPrimitives(primitives) {
+    primitives.forEach(k => k.register())
     this.primitives = [...this.primitives, ...primitives]
   }
 

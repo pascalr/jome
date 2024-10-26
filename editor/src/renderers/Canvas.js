@@ -49,9 +49,10 @@ const DRAW_PRIMITIVES = {
   },
 
   ISOGON(el, ctx) {
-    console.log('ISOGON')
     let rot = el.rotate * 2 * Math.PI / 360
-    drawPolygon(ctx, el.x, el.y, el.radius, el.sides, rot)
+    window.foo = el
+    console.log("ISOGON", el)
+    drawPolygon(ctx, x, y, radius, sides, rot)
     // drawPolygon(ctx, el.x, el.y, el.radius-el.thickness, el.sides, rot)
   },
 

@@ -14,7 +14,7 @@ export const BASE_ATTRIBUTES = {
   }
 }
 
-function getterForAttr(attr, attrName) {
+export function getterForAttr(attr, attrName) {
   if (attr.type === 'int') {
     return function() { return parseInt(this.getAttribute(attrName)) }
   } else if (attr.type === 'float') {
@@ -24,7 +24,7 @@ function getterForAttr(attr, attrName) {
   }
 }
 
-function setterForAttr(attr, attrName) {
+export function setterForAttr(attr, attrName) {
   return function (newValue) {
     this.setAttribute(attrName, newValue)
   }
