@@ -72,7 +72,11 @@ blockquote {
 }
 
 
-
+.filter-input {
+  background-color: transparent;
+  border: 1px solid gray;
+  color: gray;
+}
 
 .context_content {
   min-width: 0;
@@ -141,6 +145,11 @@ blockquote {
   padding: 0.5em;
 }
 
+.panel-toolbar {
+  height: 1.5em;
+  border-bottom: 1px solid #222121;
+}
+
 .main_panel {
   overflow: auto;
   flex-grow: 2;
@@ -187,6 +196,10 @@ body {
   font-size: 1.3em;
   padding: 0.2em;
   text-align: center;
+}
+
+#dock_content {
+  width: 100%;
 }
 
 

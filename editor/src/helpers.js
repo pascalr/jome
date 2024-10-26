@@ -53,12 +53,28 @@ export function toolIcon(icon, title) {
 export function createToolSection(title, groups) {
   return e('div', {className: "tool-section"}, [
     e('div', {className: "panel-header"}, [title]),
-    e('div', {className: "tool-buttons"},
-      groups.map(group => (
-        e('div', {className: "tool-group"}, group)
-      ))
-    )
+    e('div', {}, [
+      e('div', {className: "tool-buttons"},
+        groups.map(group => (
+          e('div', {className: "tool-group"}, group)
+        ))
+      )
+    ])
   ])
+}
+
+export function createBtn(loadedSvg, title, onClick) {
+  let svgEl = svgE(loadedSvg, title)
+  svgEl.setAttribute('width', 26)
+  svgEl.setAttribute('height', 26)
+  svgEl.onclick = (evt) => {
+    if (onClick) {onClick(evt)}
+  }
+  svgEl.style.cursor = "pointer"
+  // if (current) {
+  //   el.style.backgroundColor = "#1b3346"
+  // }
+  return svgEl
 }
 
 export function addDockIcon(app, id, svgEl, onClick) {

@@ -1,5 +1,6 @@
 import iconTree from '../../assets/icons/tree.svg'
-import { e, svgE } from '../helpers'
+import iconPlus from '../../assets/icons/plus.svg'
+import { createBtn, e, svgE } from '../helpers'
 import { Selection } from '../models/selection'
 import { createObjectLabelParts } from '../partials/object_label'
 import { DockView } from '../view'
@@ -18,7 +19,7 @@ class NodeTree extends DockView {
   static itemId = "obj_tree"
 
   setup() {
-    this.app.addDockIcon(NodeTree.itemId, svgE(iconTree, "Object Tree"))
+    this.app.addDockIcon(NodeTree.itemId, svgE(iconTree, "Node Tree"))
     this.objectsExpanded = {}
   }
 
@@ -26,7 +27,13 @@ class NodeTree extends DockView {
     let ref = getRef(REF.DOCK_CONTENT)
   
     ref.replaceChildren(...[
-      e('div', {className: "panel-header"}, ["Object Tree"])
+      e('div', {className: "panel-header"}, ["Object Tree"]),
+      e('div', {className: "panel-toolbar"}, [
+        e('input', {className: "filter-input", placeholder: "Filter..."}),
+        e('div', {style: "float: right;"}, [
+          createBtn(iconPlus, "Add node", () => {})
+        ])
+      ])
     ])
 
     let tree = e('div', {className: "object-tree"})
