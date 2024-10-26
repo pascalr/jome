@@ -1,16 +1,12 @@
 import { DRAWING_ATTRIBUTES } from "../abstract/DrawingComponent";
-import { JomeComponent } from "../abstract/JomeComponent";
+import { PrimitiveComponent } from "../abstract/PrimitiveComponent";
 
-export class Line extends JomeComponent {
+export class Line extends PrimitiveComponent {
 
-  static componentName = "line"
+  static tagName = "line"
 
   static ownAttributes = {
     x1: {
-      type: "int",
-      required: true
-    },
-    x2: {
       type: "int",
       required: true
     },
@@ -18,18 +14,16 @@ export class Line extends JomeComponent {
       type: "int",
       required: true
     },
+    x2: {
+      type: "int",
+      required: true
+    },
     y2: {
       type: "int",
       required: true
     },
+    // TODO: pathLength
     ...DRAWING_ATTRIBUTES
-  }
-
-  drawOnCanvas(ctx) {
-    ctx.beginPath();
-    ctx.moveTo(this.x1, this.y1);
-    ctx.lineTo(this.x2, this.y2);
-    ctx.stroke();
   }
   
 }

@@ -19,7 +19,7 @@ let thisIsSomeCodeBefore;
 <jome-canvas width="600" height="300" margin="1em 0 0 0">
   <txt x="100" y="50" fill="black">XX N</txt>
   <rect x="100" y="150" width="400" height="50" thickness="4" color="black"></rect>
-  <jome-isogon x="499" y="220" sides="3" radius="20" thickness="4" rotate="30"></jome-isogon>
+  <isogon x="499" y="220" sides="3" radius="20" thickness="4" rotate="30"></isogon>
 </jome-canvas>
 
 <p>Torque is the result of a force multiplied by a distance from a pivot point.</p>

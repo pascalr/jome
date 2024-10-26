@@ -27,6 +27,7 @@ const DRAWING_ATTRIBUTES = {
 }
 
 const DRAW_PRIMITIVES = {
+
   RECT(el, ctx) {
     if (el.hasAttribute("fill")) {
       ctx.beginPath();
@@ -37,6 +38,7 @@ const DRAW_PRIMITIVES = {
       ctx.strokeRect(parseInt(el.getAttribute("x")), parseInt(el.getAttribute("y")), parseInt(el.getAttribute("width")), parseInt(el.getAttribute("height")));
     }    
   },
+
   TXT(el, ctx) {
     if (el.hasAttribute("fill")) {
       ctx.fillText(el.textContent, el.getAttribute("x"), parseInt(el.getAttribute("y")))
@@ -44,7 +46,22 @@ const DRAW_PRIMITIVES = {
     if (el.hasAttribute("color")) {
       ctx.strokeText(el.textContent, el.getAttribute("x"), parseInt(el.getAttribute("y")))
     }    
+  },
+
+  ISOGON(el, ctx) {
+    console.log('ISOGON')
+    let rot = el.rotate * 2 * Math.PI / 360
+    drawPolygon(ctx, el.x, el.y, el.radius, el.sides, rot)
+    // drawPolygon(ctx, el.x, el.y, el.radius-el.thickness, el.sides, rot)
+  },
+
+  LINE(el, ctx) {
+    ctx.beginPath();
+    ctx.moveTo(el.x1, el.y1);
+    ctx.lineTo(el.x2, el.y2);
+    ctx.stroke();
   }
+  
 }
 
 export class Canvas extends JomeComponent {
@@ -114,4 +131,18 @@ export class Canvas extends JomeComponent {
     this.observer.disconnect();
   }
 
+}
+
+
+function drawPolygon(ctx, x, y, radius, sides, rot) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius * Math.cos(rot), y + radius * Math.sin(rot));          
+
+  for (var i = 1; i <= sides; i += 1) {
+    ctx.lineTo(
+      x + radius * Math.cos(i * 2 * Math.PI / sides + rot),
+      y + radius * Math.sin(i * 2 * Math.PI / sides + rot)
+    );
+  }
+  ctx.fill();
 }
