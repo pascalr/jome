@@ -1,5 +1,15 @@
 import { CORE_FORMATS_WIP } from "./formats/core"
 
+
+
+// TODO: JomeParser should parse the processing inscructions
+//~<?jome v="0.0.1" l="fr" ?> // FIRST LINE
+/*~<?jome-links [ // LASTS LINES
+  {"o": "objKey", "k": "attributeName", "v": "formula"}
+]?>~*/
+
+
+
 // function parseCommand(match) {
 
 //   let name = match[1]

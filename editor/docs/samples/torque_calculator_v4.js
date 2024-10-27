@@ -1,12 +1,4 @@
-/*~
-<jome-meta>
-  "v": "0.0.1",
-  "links": [
-    {"t": "txt1", "k": "text", "v": "=force"},
-    {"t": "txt2", "k": "text", "v": "=distance"},
-  ]
-</jome-meta>
-~*/
+//~<?jome v="0.0.1"?>
 
 let thisIsSomeCodeBefore;
 
@@ -40,3 +32,8 @@ let thisIsSomeCodeBefore;
 ~*/
 
 let thisIsSomeCodeAfter;
+
+/*~<?jome-links [
+  {"t": "txt1", "k": "text", "v": "=force"},
+  {"t": "txt2", "k": "text", "v": "=distance"}
+]?>~*/
