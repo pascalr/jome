@@ -5,6 +5,24 @@ Code mirror pour le code (le contenu raw), et prose mirror pour le reste.
 Soit contenir code mirror dans prose mirror (il y a une example sur le site de prosemirror),
 ou une instance par segments.
 
+## TODO: Key
+
+Add key attribute to all objects. They will be unique identifiers.
+
+The keys restrict the usage of variable names inside the language, it must not be the same.
+Or what about using something different inside Jome code to differentiate between the two?
+@variableName and objKey OR variableName and @objKey? Or #objKey
+
+## TODO: Escaping
+
+The end of comment sequence could come normally inside the html. In this case, use the unicode enconding.
+
+Ex: For js, use \u002A\u002F instead of */
+
+It could also be inside strings. In this case, use the escape character "\".
+
+Ex: For js use "\*\/" or "*\/".
+
 ## TODO: Refactor parser, rename
 
 Un fichier serait séparer en segment.

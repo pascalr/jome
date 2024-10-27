@@ -1,5 +1,3 @@
-//~<jome-rc v="0.0.1" />
-
 let thisIsSomeCodeBefore;
 
 // TODO: afficher sur le dessin la force et la distance.
@@ -32,3 +30,13 @@ let thisIsSomeCodeBefore;
 ~*/
 
 let thisIsSomeCodeAfter;
+
+/*~
+<jome-meta>
+  "v": "0.0.1",
+  "links": [
+    {"t": "txt1", "k": "text", "v": "=force"},
+    {"t": "txt2", "k": "text", "v": "=distance"},
+  ]
+</jome-meta>
+~*/

@@ -87,6 +87,7 @@ export class JomeParser {
       segments.push({isRaw: true, str: doc.content.slice(i)})
     }
 
+    console.log("jomeBlocks: ", jomeBlocks)
     console.log("Segments found: ", segments)
 
     // segments.forEach(segment => {

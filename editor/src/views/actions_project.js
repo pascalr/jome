@@ -12,7 +12,10 @@ class ActionsProject extends ActionView {
     let name = getFilenameFromPath(path)
     this.getRef().replaceChildren(e('div', {}, [
       e('div', {className: "panel-main-header"}, [`Project • ${name}`]),
-      e('p', {}, ["TODO"])
+      e('div', {style: "display: flex;"}, [
+        e('btn', {}, ["Open File"]),
+        e('btn', {}, ["Open Project"])
+      ])
     ]))
   }
 
