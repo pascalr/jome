@@ -48,8 +48,8 @@ export class JomeParser {
       let str = doc.content.slice(i)
 
       let contains = config.contains
-      contains.forEach(attempt => {
-
+      for (let j = 0; j < contains.length; j++) {
+        let attempt = contains[j]
         let match = str.match(new RegExp('^'+attempt.begin))
         if (match) {
           let after = str.slice(match[0].length)
@@ -64,11 +64,12 @@ export class JomeParser {
               data: strMatch.slice(match[0].length, -endMatch[0].length)
             })
           }
-          console.log('JomeParser: Found a match. Begin:', attempt.begin)
-          console.log('Matches: ', strMatch)
+          // console.log('JomeParser: Found a match. Begin:', attempt.begin)
+          // console.log('Matches: ', strMatch)
           i = i+strMatch.length-1 // fixme not sure -1
+          break;
         }
-      })
+      }
     }
 
     if (!jomeBlocks.length) {
