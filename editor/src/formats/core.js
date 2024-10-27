@@ -31,6 +31,7 @@ export const CORE_FORMATS_WIP = {
     codeBlockEnd: "/\\*\\{\\s*",
     contains: [
       {begin: "//~", end: "\n|$", capture: true},
+      {begin: "//", end: "\n|$"},
       {begin: "\\s*/\\*~", end: "~\\*/\\s*", capture: true},
       {begin: "/\\*", end: "\\*/"},
       {begin: '"', end: '"'},

@@ -64,6 +64,8 @@ export class JomeParser {
               data: strMatch.slice(match[0].length, -endMatch[0].length)
             })
           }
+          console.log('JomeParser: Found a match. Begin:', attempt.begin)
+          console.log('Matches: ', strMatch)
           i = i+strMatch.length-1 // fixme not sure -1
         }
       })
