@@ -1,4 +1,4 @@
-/*~
+/*<jome>
 
   <h1>Test Jome Parser</h1>
 
@@ -8,13 +8,13 @@
 
   <p>It is using Jome code to interact with the existing code and to output javascript code.</p>
 
-~*/
+</jome>*/
 
 import { JomeParser } from "../src/jome_parser";
 
 let parser = new JomeParser()
 
-/*~
+/*<jome>
   <p>The parser should not detect a jome block with regular code.</p>
 
   <jome-code key="Code1">parser.parse('let x = 0')</jome-code>
@@ -24,7 +24,7 @@ let parser = new JomeParser()
   <p>TODO: Inside jome-meta, link actual attribute to be a formula of "=Code1+'.segments.length'"</p>
 
   <p>What will the output look like?</p>
-~*/
+</jome>*/
 
 /*
 The parser should not detect a jome block with regular code.

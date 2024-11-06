@@ -1,3 +1,7 @@
+/*<jome></jome>*/ instead of /*~ ~*/
+
+test_jome_parser, create my own group component, composed of the parts I want
+
 ## TODO: Code mirror & Prose mirror
 
 Code mirror pour le code (le contenu raw), et prose mirror pour le reste.

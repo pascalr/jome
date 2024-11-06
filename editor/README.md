@@ -43,6 +43,20 @@ https://github.com/pascalr/jome/tree/main/editor
 </pre>
 <!--~end-->
 
+## Rich HTML
+
+Jome is rich HTML
+
+## .html
+
+The main format for serving a Jome app is .html.
+
+When you double click on a .jome, it should be opened inside an editor. It is meant to be edited.
+
+To serve Jome code directly, you should use .html.
+
+You can also of course serve in other language by using a kernel like in javascript, python, md, css, ...
+
 ## Lexical
 
 Node: A building block. An instance of a component. 
